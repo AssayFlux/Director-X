@@ -1,8 +1,8 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.net.Uri
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import com.kaleyra.noise_filter.DeepFilterNet
 import com.rikorose.deepfilternet.NativeDeepFilterNet
 import dagger.hilt.android.qualifiers.ApplicationContext

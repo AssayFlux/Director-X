@@ -1,9 +1,9 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.os.Build
-import com.novacut.editor.engine.AppLog
-import com.novacut.editor.BuildConfig
+import com.directorx.editor.engine.AppLog
+import com.directorx.editor.BuildConfig
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton

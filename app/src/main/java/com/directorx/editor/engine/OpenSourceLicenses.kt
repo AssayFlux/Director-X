@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 data class OpenSourceLicenseNotice(
     val name: String,

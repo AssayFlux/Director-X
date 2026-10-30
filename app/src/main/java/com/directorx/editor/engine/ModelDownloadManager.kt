@@ -1,9 +1,9 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.CancellationException
@@ -318,7 +318,7 @@ class ModelDownloadManager @Inject constructor(
         private const val BUFFER_SIZE = 8192
         private const val MAX_REDIRECTS = 5
         private const val STORAGE_HEADROOM_BYTES = 16L * 1024L * 1024L
-        private val USER_AGENT = "Director X/${com.novacut.editor.ClearCutApp.VERSION.removePrefix("v")}"
+        private val USER_AGENT = "Director X/${com.directorx.editor.ClearCutApp.VERSION.removePrefix("v")}"
 
         internal fun estimateTotalBytes(files: List<ModelFile>): Long {
             return files.fold(0L) { total, request ->

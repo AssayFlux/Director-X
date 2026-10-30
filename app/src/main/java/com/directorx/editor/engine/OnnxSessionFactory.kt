@@ -1,8 +1,8 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import ai.onnxruntime.OrtEnvironment
 import ai.onnxruntime.OrtSession
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import java.io.File
 
 /**

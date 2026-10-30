@@ -1,6 +1,6 @@
 @file:androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import androidx.media3.common.Metadata
 import androidx.media3.muxer.BufferInfo

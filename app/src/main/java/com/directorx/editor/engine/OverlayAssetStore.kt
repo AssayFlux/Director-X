@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -8,9 +8,9 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Typeface
 import android.net.Uri
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import android.webkit.MimeTypeMap
-import com.novacut.editor.model.ImageOverlayType
+import com.directorx.editor.model.ImageOverlayType
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -276,7 +276,7 @@ class OverlayAssetStore @Inject constructor(
 
     companion object {
         private const val TAG = "OverlayAssetStore"
-        const val BUNDLED_STICKER_AUTHORITY = "com.novacut.editor.stickers"
+        const val BUNDLED_STICKER_AUTHORITY = "com.directorx.editor.stickers"
         private const val OVERLAY_ROOT = "media/overlays"
         private const val STICKER_BITMAP_SIZE = 512
         private const val MAX_OVERLAY_BYTES = 25L * 1024L * 1024L

@@ -1,10 +1,10 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import android.webkit.MimeTypeMap
 import java.io.File
 import java.util.Locale

@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 /**
  * B.5 mixed-segment composer plan.
