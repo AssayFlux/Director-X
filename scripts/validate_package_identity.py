@@ -239,7 +239,7 @@ def validate_app_labels(root: Path, registry: dict[str, Any]) -> None:
             if element.get("name") == "app_name"
         ]
         if labels != [registry["publicProductName"]]:
-            raise PackageIdentityError(f"{rel(strings_path, root)} must expose the ClearCut app label")
+            raise PackageIdentityError(f"{rel(strings_path, root)} must expose the registered public product label")
 
 
 def validate_public_surfaces(root: Path, registry: dict[str, Any]) -> None:
@@ -301,7 +301,7 @@ def run_self_test(root: Path = ROOT) -> None:
         shortcuts_path.parent.mkdir(parents=True)
         actions = registry["shortcutTarget"]["actions"]
         placeholder_xml = f'''<shortcuts xmlns:android="{ANDROID_NS}">
-    <shortcut><intent android:action="{actions[0]}" android:targetPackage="${{applicationId}}" android:targetClass="${{applicationId}}.MainActivity" /></shortcut>
+    <shortcut><intent android:action="{actions[0]}" android:targetPackage="${{applicationId}}" android:targetClass="{registry["namespace"]}.MainActivity" /></shortcut>
     <shortcut><intent android:action="{actions[1]}" android:targetPackage="${{applicationId}}" android:targetClass="${{applicationId}}.MainActivity" /></shortcut>
 </shortcuts>
 '''
