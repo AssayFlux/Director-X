@@ -1,0 +1,26 @@
+{
+  "assets": [
+    {
+      "altText": "Director X app icon",
+      "caption": "High-resolution Play Store icon.",
+      "height": 512,
+      "path": "icon.png",
+      "source": "_source/icon.svg",
+      "sourceSha256": "a90d636bcba3723f22e267f6978f180acd0538f6845f39068d8f12d7a8bcb1c3",
+      "sourceType": "generated-svg",
+      "width": 512
+    },
+    {
+      "altText": "Director X feature graphic",
+      "caption": "Feature graphic for the main store listing.",
+      "height": 500,
+      "path": "featureGraphic.png",
+      "source": "_source/featureGraphic.svg",
+      "sourceSha256": "4a5ea8a3f870576691fe1edc43ada2ae822f176d8a436f6143dd62f542eb92a0",
+      "sourceType": "generated-svg",
+      "width": 1024
+    }
+  ],
+  "schema": "org.assayflux.directorx.play-listing-assets.v1",
+  "updated": "2026-08-11"
+}

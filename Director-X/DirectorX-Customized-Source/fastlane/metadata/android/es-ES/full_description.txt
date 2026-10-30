@@ -1,0 +1,3 @@
+Director X es un editor de vídeo para Android con una estética inspirada en el cuarto oscuro analógico. Edita vídeo y audio sobre una interfaz color crema, tipografía carbón, acentos ámbar y acciones verde salvia.
+
+Diseñado por AssayFlux. Esta versión derivada de código abierto conserva los avisos de licencia y las referencias de código fuente de terceros. La disponibilidad de funciones depende del dispositivo, los modelos instalados y la versión de la aplicación.
