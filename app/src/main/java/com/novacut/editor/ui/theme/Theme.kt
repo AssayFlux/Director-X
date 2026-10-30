@@ -190,111 +190,91 @@ val LocalClearCutColors = staticCompositionLocalOf {
     ClearCutThemeDefaults.colorsFor(AppearanceMode.DARK)
 }
 
+/**
+ * Ten independent Director X palettes. Semantic roles are deliberately centralized so
+ * every Compose screen using LocalClearCutColors / MaterialTheme follows the selection.
+ */
+private data class DirectorXPalette(
+    val canvas: Color, val panel: Color, val raised: Color, val highest: Color,
+    val text: Color, val subtext: Color, val accent: Color, val secondary: Color,
+    val tertiary: Color, val dark: Boolean = false
+)
+
 object ClearCutThemeDefaults {
-    /**
-     * Director X ships a warm-cream editorial scheme and a high-contrast cream variant.
-     * The legacy enum names remain for preference compatibility; labels are rebranded in UI.
-     */
+    val availableThemes: List<AppearanceMode> = listOf(
+        AppearanceMode.PRIMARY_BRAND, AppearanceMode.MIDNIGHT_CINEMA,
+        AppearanceMode.FOREST_ATELIER, AppearanceMode.BURGUNDY_EDITORIAL,
+        AppearanceMode.OCEAN_STUDIO, AppearanceMode.GRAPHITE_LUXE,
+        AppearanceMode.SANDSTONE, AppearanceMode.LAVENDER_FILM,
+        AppearanceMode.COPPER_STUDIO, AppearanceMode.ARCTIC_MINIMAL
+    )
+
+    private fun palette(mode: AppearanceMode): DirectorXPalette = when (mode) {
+        AppearanceMode.MIDNIGHT_CINEMA -> DirectorXPalette(Color(0xFF11151D),Color(0xFF1C2330),Color(0xFF283344),Color(0xFF344257),Color(0xFFF1F3F7),Color(0xFFB5C0D0),Color(0xFFD5A84B),Color(0xFF79A7B8),Color(0xFFB18BC4),true)
+        AppearanceMode.FOREST_ATELIER -> DirectorXPalette(Color(0xFFF0F3EA),Color(0xFFE1E9D9),Color(0xFFD0DDC8),Color(0xFFBECEB4),Color(0xFF243126),Color(0xFF526653),Color(0xFF52734F),Color(0xFF9A7847),Color(0xFF668B83))
+        AppearanceMode.BURGUNDY_EDITORIAL -> DirectorXPalette(Color(0xFFF7EFED),Color(0xFFEEDFDA),Color(0xFFE2CBC6),Color(0xFFD6B7B1),Color(0xFF352321),Color(0xFF70534E),Color(0xFF873F4C),Color(0xFFB18A62),Color(0xFF6D596C))
+        AppearanceMode.OCEAN_STUDIO -> DirectorXPalette(Color(0xFFEDF4F5),Color(0xFFDCEAEC),Color(0xFFC8DDE1),Color(0xFFB4D0D6),Color(0xFF1D3036),Color(0xFF4D6870),Color(0xFF286D7A),Color(0xFF4F8E91),Color(0xFFB28A55))
+        AppearanceMode.GRAPHITE_LUXE -> DirectorXPalette(Color(0xFF17191C),Color(0xFF22262B),Color(0xFF2D333A),Color(0xFF3A424B),Color(0xFFF2F2EF),Color(0xFFBEC3C7),Color(0xFFC6A15B),Color(0xFF8C9BA7),Color(0xFF9A8C7C),true)
+        AppearanceMode.SANDSTONE -> DirectorXPalette(Color(0xFFF4EBDD),Color(0xFFE9DCC8),Color(0xFFDDCBB1),Color(0xFFD0B995),Color(0xFF332B22),Color(0xFF6D5D4B),Color(0xFF9A6B35),Color(0xFF6E7660),Color(0xFF9B7665))
+        AppearanceMode.LAVENDER_FILM -> DirectorXPalette(Color(0xFFF2EFF7),Color(0xFFE5DFEF),Color(0xFFD8CFE6),Color(0xFFCABFDB),Color(0xFF30283B),Color(0xFF665A76),Color(0xFF75618F),Color(0xFF9B7185),Color(0xFF647D91))
+        AppearanceMode.COPPER_STUDIO -> DirectorXPalette(Color(0xFFF5EEE8),Color(0xFFE9DCD0),Color(0xFFDDC9B8),Color(0xFFD0B6A0),Color(0xFF332720),Color(0xFF70594B),Color(0xFF9A5838),Color(0xFFB17A48),Color(0xFF65766B))
+        AppearanceMode.ARCTIC_MINIMAL -> DirectorXPalette(Color(0xFFF1F5F8),Color(0xFFE2EAF0),Color(0xFFD2DEE7),Color(0xFFC1D1DE),Color(0xFF202D38),Color(0xFF536675),Color(0xFF426F91),Color(0xFF5E8F9B),Color(0xFF8A789D))
+        else -> DirectorXPalette(Color(0xFFF5F0E6),Color(0xFFEAE3D2),Color(0xFFE2D8C5),Color(0xFFD9CDB7),Color(0xFF2C2621),Color(0xFF655B50),Color(0xFFC29B38),Color(0xFF5A6B57),Color(0xFF96775C))
+    }
+
+    /** Legacy DARK identifiers resolve to the new primary brand theme. */
     fun resolveMode(mode: AppearanceMode): AppearanceMode = when (mode) {
-        AppearanceMode.PRIMARY_BRAND,
-        AppearanceMode.MIDNIGHT_CINEMA,
-        AppearanceMode.DARK -> AppearanceMode.DARK
-        AppearanceMode.HIGH_CONTRAST,
-        AppearanceMode.HIGH_CONTRAST_DARK -> AppearanceMode.HIGH_CONTRAST_DARK
+        AppearanceMode.DARK, AppearanceMode.HIGH_CONTRAST_DARK, AppearanceMode.HIGH_CONTRAST -> AppearanceMode.PRIMARY_BRAND
+        else -> mode
     }
 
-    fun colorSchemeFor(resolvedMode: AppearanceMode) = when (resolvedMode) {
-        AppearanceMode.HIGH_CONTRAST_DARK -> ClearCutHighContrastColorScheme
-        else -> ClearCutDarkColorScheme
-    }
-
-    fun colorsFor(resolvedMode: AppearanceMode): ClearCutSemanticColors = when (resolvedMode) {
-        AppearanceMode.HIGH_CONTRAST_DARK -> ClearCutSemanticColors(
-            mode = resolvedMode,
-            highContrast = true,
-            background = Color(0xFFF5F0E6),
-            backgroundMid = Color(0xFFF0E9DB),
-            panel = Color(0xFFF5F0E6),
-            panelRaised = Color(0xFFF0E9DB),
-            panelHighest = Color(0xFFEAE3D2),
-            cardStroke = Color(0xFF665D52),
-            cardStrokeStrong = Color(0xFF554D45),
-            text = Color(0xFF1D1915),
-            subtext = Color(0xFF302922),
-            subtextStrong = Color(0xFF2C2621),
-            disabledText = Color(0xFF4B4238),
-            accent = Color(0xFFA77C14),
-            accentSecondary = Color(0xFF5A6B57),
-            success = Color(0xFF5A6B57),
-            warning = Color(0xFF946B12),
-            danger = Color(0xFF8F2E24),
-            focusRing = Color(0xFF2C2621),
-            canvas = Color(0xFFF5F0E6),
-            selectedSurface = Color(0xFFE7D6A4),
-            disabledSurface = Color(0xFFD4C8B3),
-            surfaceBase = Color(0xFFF5F0E6),
-            surfaceLow = Color(0xFFEAE3D2),
-            surface = Color(0xFFE2D8C5),
-            surfaceHigh = Color(0xFFD9CDB7),
-            overlay = Color(0xFF665D52),
-            overlayStrong = Color(0xFF2C2621),
-            onAccent = Color(0xFF1D1915),
+    fun colorSchemeFor(resolvedMode: AppearanceMode) : androidx.compose.material3.ColorScheme {
+        val p = palette(resolveMode(resolvedMode))
+        val onAccent = if (contrastRatio(p.text,p.accent) >= 4.5) p.text else Color.White
+        return if (p.dark) androidx.compose.material3.darkColorScheme(
+            primary=p.accent,onPrimary=if (contrastRatio(Color.Black,p.accent)>contrastRatio(Color.White,p.accent)) Color.Black else Color.White,
+            secondary=p.secondary,onSecondary=Color(0xFF101418),tertiary=p.tertiary,onTertiary=Color(0xFF101418),
+            background=p.canvas,onBackground=p.text,surface=p.panel,onSurface=p.text,
+            surfaceVariant=p.raised,onSurfaceVariant=p.subtext,outline=p.subtext,outlineVariant=p.highest,
+            error=Color(0xFFFF8A80),onError=Color(0xFF2B0906),
+            surfaceContainerLowest=p.canvas,surfaceContainerLow=p.panel,surfaceContainer=p.panel,
+            surfaceContainerHigh=p.raised,surfaceContainerHighest=p.highest
+        ) else lightColorScheme(
+            primary=p.accent,onPrimary=onAccent,primaryContainer=p.highest,onPrimaryContainer=p.text,
+            secondary=p.secondary,onSecondary=Color.White,secondaryContainer=p.raised,onSecondaryContainer=p.text,
+            tertiary=p.tertiary,onTertiary=Color.White,tertiaryContainer=p.highest,onTertiaryContainer=p.text,
+            error=Color(0xFFB3261E),onError=Color.White,background=p.canvas,onBackground=p.text,
+            surface=p.canvas,onSurface=p.text,surfaceVariant=p.panel,onSurfaceVariant=p.subtext,
+            outline=p.subtext,outlineVariant=p.highest,inverseSurface=p.text,inverseOnSurface=p.canvas,
+            surfaceContainerLowest=p.canvas,surfaceContainerLow=p.canvas,surfaceContainer=p.panel,
+            surfaceContainerHigh=p.raised,surfaceContainerHighest=p.highest
         )
-        else -> ClearCutSemanticColors(
-            mode = resolvedMode,
-            highContrast = false,
-            background = Color(0xFFF5F0E6),
-            backgroundMid = Color(0xFFF0E9DB),
-            panel = Color(0xFFEAE3D2),
-            panelRaised = Color(0xFFE2D8C5),
-            panelHighest = Color(0xFFD9CDB7),
-            cardStroke = Color(0xFFD3C8B7),
-            cardStrokeStrong = Color(0xFFC9BEAC),
-            text = Color(0xFF2C2621),
-            subtext = Color(0xFF655B50),
-            subtextStrong = Color(0xFF5B5147),
-            disabledText = Color(0xFF817669),
-            accent = Color(0xFFC29B38),
-            accentSecondary = Color(0xFF5A6B57),
-            success = Color(0xFF5A6B57),
-            warning = Color(0xFFA98432),
-            danger = Color(0xFFA7473A),
-            focusRing = Color(0xFF8C6F23),
-            canvas = Color(0xFFF5F0E6),
-            selectedSurface = Color(0x33C29B38),
-            disabledSurface = Color(0xFFE4DDCF),
-            surfaceBase = Color(0xFFF5F0E6),
-            surfaceLow = Color(0xFFEAE3D2),
-            surface = Color(0xFFE2D8C5),
-            surfaceHigh = Color(0xFFD9CDB7),
-            overlay = Color(0xFFB9AF9F),
-            overlayStrong = Color(0xFF8C8275),
-            onAccent = Color(0xFF2C2621),
+    }
+
+    fun colorsFor(resolvedMode: AppearanceMode): ClearCutSemanticColors {
+        val mode=resolveMode(resolvedMode); val p=palette(mode)
+        val hc=resolvedMode==AppearanceMode.HIGH_CONTRAST || resolvedMode==AppearanceMode.HIGH_CONTRAST_DARK
+        val text=if(hc) Color(0xFF17130F) else p.text
+        val sub=if(hc) Color(0xFF302922) else p.subtext
+        val stroke=if(hc) Color(0xFF554D45) else p.highest
+        return ClearCutSemanticColors(
+            mode=mode,highContrast=hc,background=p.canvas,backgroundMid=p.panel,panel=p.panel,
+            panelRaised=p.raised,panelHighest=p.highest,cardStroke=stroke,cardStrokeStrong=if(hc) text else p.subtext,
+            text=text,subtext=sub,subtextStrong=p.subtext,disabledText=if(hc) Color(0xFF4B4238) else p.subtext,
+            accent=p.accent,accentSecondary=p.secondary,success=Color(0xFF47734B),warning=Color(0xFF946B12),
+            danger=Color(0xFFB3261E),focusRing=if(hc) text else p.accent,canvas=p.canvas,
+            selectedSurface=p.raised,disabledSurface=p.panel,surfaceBase=p.canvas,surfaceLow=p.panel,
+            surface=p.panel,surfaceHigh=p.raised,overlay=stroke,overlayStrong=text,onAccent=if(contrastRatio(text,p.accent)>=4.5) text else Color.White
         )
     }
 
     fun contrastRatio(foreground: Color, background: Color): Double {
-        val fg = relativeLuminance(foreground)
-        val bg = relativeLuminance(background)
-        val lighter = maxOf(fg, bg)
-        val darker = minOf(fg, bg)
-        return (lighter + 0.05) / (darker + 0.05)
+        val fg=relativeLuminance(foreground); val bg=relativeLuminance(background)
+        return (maxOf(fg,bg)+0.05)/(minOf(fg,bg)+0.05)
     }
-
     private fun relativeLuminance(color: Color): Double {
-        val r = linearizedChannel(color.red)
-        val g = linearizedChannel(color.green)
-        val b = linearizedChannel(color.blue)
-        return 0.2126 * r + 0.7152 * g + 0.0722 * b
-    }
-
-    private fun linearizedChannel(channel: Float): Double {
-        val srgb = channel.toDouble()
-        return if (srgb <= 0.03928) {
-            srgb / 12.92
-        } else {
-            Math.pow((srgb + 0.055) / 1.055, 2.4)
-        }
+        fun channel(v: Float): Double { val c=v.toDouble(); return if(c<=0.04045)c/12.92 else Math.pow((c+0.055)/1.055,2.4) }
+        return 0.2126*channel(color.red)+0.7152*channel(color.green)+0.0722*channel(color.blue)
     }
 }
 
@@ -400,9 +380,9 @@ fun ClearCutTheme(
     content: @Composable () -> Unit
 ) {
     val resolvedMode = ClearCutThemeDefaults.resolveMode(appearanceMode)
-    CompositionLocalProvider(LocalClearCutColors provides ClearCutThemeDefaults.colorsFor(resolvedMode)) {
+    CompositionLocalProvider(LocalClearCutColors provides ClearCutThemeDefaults.colorsFor(appearanceMode)) {
         MaterialTheme(
-            colorScheme = ClearCutThemeDefaults.colorSchemeFor(resolvedMode),
+            colorScheme = ClearCutThemeDefaults.colorSchemeFor(if (appearanceMode == AppearanceMode.HIGH_CONTRAST || appearanceMode == AppearanceMode.HIGH_CONTRAST_DARK) appearanceMode else resolvedMode),
             typography = ClearCutTypography,
             shapes = ClearCutShapes,
             content = content
