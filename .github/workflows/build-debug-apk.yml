@@ -66,6 +66,8 @@ jobs:
           set -euo pipefail
           python scripts/validate_package_identity.py
           python scripts/generate_capability_registry.py --check
+          python scripts/validate_public_claims.py
+          python scripts/validate_android_audio_api_policy.py
 
       - name: Select build task
         id: task
@@ -89,7 +91,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ./gradlew --no-daemon --write-verification-metadata sha256 --stacktrace "${{ steps.task.outputs.gradle_task }}"
+          ./gradlew --no-daemon --write-verification-metadata sha256 --stacktrace "${{ steps.task.outputs.gradle_task }}" :app:testDebugUnitTest
+
+      - name: Run JVM unit tests with strict dependency verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./gradlew --no-daemon --dependency-verification strict --stacktrace :app:testDebugUnitTest
 
       - name: Build APK with strict dependency verification
         shell: bash
