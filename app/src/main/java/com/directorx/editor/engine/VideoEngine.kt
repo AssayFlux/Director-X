@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.app.ActivityManager
 import android.content.Context
@@ -13,7 +13,7 @@ import android.media.MediaMetadataRetriever
 import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import android.webkit.MimeTypeMap
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
@@ -27,10 +27,10 @@ import androidx.media3.effect.*
 import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.transformer.*
 import androidx.core.content.ContextCompat
-import com.novacut.editor.engine.EffectBuilder.addColorGradingEffects
-import com.novacut.editor.engine.EffectBuilder.addOpacityAndTransformEffects
-import com.novacut.editor.engine.segmentation.SegmentationEngine
-import com.novacut.editor.model.*
+import com.directorx.editor.engine.EffectBuilder.addColorGradingEffects
+import com.directorx.editor.engine.EffectBuilder.addOpacityAndTransformEffects
+import com.directorx.editor.engine.segmentation.SegmentationEngine
+import com.directorx.editor.model.*
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -768,7 +768,7 @@ class VideoEngine @Inject constructor(
         outputFile: File,
         timelineDurationMsOverride: Long? = null,
         resumeFromFile: File? = null,
-        textOverlays: List<com.novacut.editor.model.TextOverlay> = emptyList(),
+        textOverlays: List<com.directorx.editor.model.TextOverlay> = emptyList(),
         imageOverlays: List<ImageOverlay> = emptyList(),
         lottieOverlays: List<LottieOverlaySpec> = emptyList(),
         trackedObjects: List<TrackedObject> = emptyList(),
@@ -1333,7 +1333,7 @@ class VideoEngine @Inject constructor(
         tracks: List<Track>,
         config: ExportConfig,
         outputFile: File,
-        textOverlays: List<com.novacut.editor.model.TextOverlay> = emptyList(),
+        textOverlays: List<com.directorx.editor.model.TextOverlay> = emptyList(),
         imageOverlays: List<ImageOverlay> = emptyList(),
         lottieOverlays: List<LottieOverlaySpec> = emptyList(),
         trackedObjects: List<TrackedObject> = emptyList(),
@@ -1722,7 +1722,7 @@ class VideoEngine @Inject constructor(
     private fun buildTransformerExportPlan(
         tracks: List<Track>,
         config: ExportConfig,
-        textOverlays: List<com.novacut.editor.model.TextOverlay>,
+        textOverlays: List<com.directorx.editor.model.TextOverlay>,
         imageOverlays: List<ImageOverlay>,
         lottieOverlays: List<LottieOverlaySpec>,
         trackedObjects: List<TrackedObject>,
@@ -1923,7 +1923,7 @@ class VideoEngine @Inject constructor(
         targetW: Int,
         globalTransitions: List<GlobalTransition> = emptyList(),
         targetH: Int,
-        textOverlays: List<com.novacut.editor.model.TextOverlay>,
+        textOverlays: List<com.directorx.editor.model.TextOverlay>,
         imageOverlays: List<ImageOverlay>,
         lottieOverlays: List<LottieOverlaySpec>,
         trackedObjects: List<TrackedObject>,
@@ -1984,7 +1984,7 @@ class VideoEngine @Inject constructor(
         config: ExportConfig,
         targetW: Int,
         targetH: Int,
-        textOverlays: List<com.novacut.editor.model.TextOverlay>,
+        textOverlays: List<com.directorx.editor.model.TextOverlay>,
         imageOverlays: List<ImageOverlay>,
         lottieOverlays: List<LottieOverlaySpec>,
         trackedObjects: List<TrackedObject>,
@@ -2053,7 +2053,7 @@ class VideoEngine @Inject constructor(
         config: ExportConfig,
         targetW: Int,
         targetH: Int,
-        textOverlays: List<com.novacut.editor.model.TextOverlay>,
+        textOverlays: List<com.directorx.editor.model.TextOverlay>,
         imageOverlays: List<ImageOverlay>,
         lottieOverlays: List<LottieOverlaySpec>,
         trackedObjects: List<TrackedObject>,
@@ -2090,7 +2090,7 @@ class VideoEngine @Inject constructor(
             for (mask in clip.masks) {
                 val points = KeyframeEngine.interpolateMaskPoints(mask, maskTimeMs)
                 when (mask.type) {
-                    com.novacut.editor.model.MaskType.RECTANGLE -> {
+                    com.directorx.editor.model.MaskType.RECTANGLE -> {
                         if (points.size >= 2) {
                             val cx = (points[0].x + points[1].x) / 2f
                             val cy = (points[0].y + points[1].y) / 2f
@@ -2099,7 +2099,7 @@ class VideoEngine @Inject constructor(
                             add(EffectShaders.rectangleMask(cx, cy, w, h, mask.feather / 100f, if (mask.inverted) 1f else 0f))
                         }
                     }
-                    com.novacut.editor.model.MaskType.ELLIPSE -> {
+                    com.directorx.editor.model.MaskType.ELLIPSE -> {
                         if (points.size >= 2) {
                             add(EffectShaders.ellipseMask(
                                 points[0].x, points[0].y,
@@ -2112,7 +2112,7 @@ class VideoEngine @Inject constructor(
                 }
             }
 
-            if (clip.blendMode != com.novacut.editor.model.BlendMode.NORMAL) {
+            if (clip.blendMode != com.directorx.editor.model.BlendMode.NORMAL) {
                 add(EffectShaders.blendMode(clip.blendMode, clip.opacity))
             }
 

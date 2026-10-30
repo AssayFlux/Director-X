@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 /**
  * Pure decision layer for the passive update check (sideload / GitHub-release

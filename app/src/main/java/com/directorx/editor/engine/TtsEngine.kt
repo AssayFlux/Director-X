@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.media.AudioFocusRequest
@@ -6,7 +6,7 @@ import android.media.AudioManager
 import android.os.Build
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine

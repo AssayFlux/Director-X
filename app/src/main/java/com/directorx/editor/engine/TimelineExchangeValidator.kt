@@ -1,13 +1,13 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.Uri
-import com.novacut.editor.engine.TimelineExchangeEngine.TimelineExchangeFormat
-import com.novacut.editor.model.BlendMode
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.TextOverlay
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
-import com.novacut.editor.model.TransitionType
+import com.directorx.editor.engine.TimelineExchangeEngine.TimelineExchangeFormat
+import com.directorx.editor.model.BlendMode
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.TextOverlay
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
+import com.directorx.editor.model.TransitionType
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -21,7 +21,7 @@ import javax.inject.Singleton
  * modes, and effect chains without telling the user.
  *
  * The validator is intentionally pure: it does not touch the filesystem, never
- * mutates the input, and depends only on data classes from [com.novacut.editor.model].
+ * mutates the input, and depends only on data classes from [com.directorx.editor.model].
  * That makes it safe to call from a worker thread or from inside an export
  * pipeline that already holds locks on the shared player.
  */

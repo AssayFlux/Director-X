@@ -1,11 +1,11 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.net.Uri
-import com.novacut.editor.engine.TimelineExchangeEngine.TimelineExchangeFormat
-import com.novacut.editor.model.Project
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.TimelineTimebase
+import com.directorx.editor.engine.TimelineExchangeEngine.TimelineExchangeFormat
+import com.directorx.editor.model.Project
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.TimelineTimebase
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

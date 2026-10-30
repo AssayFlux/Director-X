@@ -1,8 +1,8 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.Effect
-import com.novacut.editor.model.EffectType
-import com.novacut.editor.model.TrackedObject
+import com.directorx.editor.model.Effect
+import com.directorx.editor.model.EffectType
+import com.directorx.editor.model.TrackedObject
 
 internal object TrackedObjectEffectBinding {
     data class Sample(
@@ -65,7 +65,7 @@ internal object TrackedObjectEffectBinding {
         )
     }
 
-    private fun com.novacut.editor.model.TrackedObjectKeyframe.toSample() = Sample(
+    private fun com.directorx.editor.model.TrackedObjectKeyframe.toSample() = Sample(
         centerX = centerX.coerceIn(0f, 1f),
         centerY = centerY.coerceIn(0f, 1f),
         width = width.coerceIn(0.001f, 1f),

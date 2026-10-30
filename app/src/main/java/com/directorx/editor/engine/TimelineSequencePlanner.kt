@@ -1,6 +1,6 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.Clip
+import com.directorx.editor.model.Clip
 
 internal sealed class TimelineSequenceStep {
     abstract val timelineStartMs: Long

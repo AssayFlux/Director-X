@@ -1,9 +1,9 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.TextOverlay
-import com.novacut.editor.model.TimelineMarker
-import com.novacut.editor.model.TimelineTimebase
-import com.novacut.editor.model.Track
+import com.directorx.editor.model.TextOverlay
+import com.directorx.editor.model.TimelineMarker
+import com.directorx.editor.model.TimelineTimebase
+import com.directorx.editor.model.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File

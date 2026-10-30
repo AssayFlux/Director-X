@@ -1,7 +1,7 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.BlendMode
-import com.novacut.editor.model.Track
+import com.directorx.editor.model.BlendMode
+import com.directorx.editor.model.Track
 
 /**
  * Single source of truth for track-level blend-mode support.

@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.media.AudioFocusRequest
@@ -6,7 +6,7 @@ import android.media.AudioManager
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
