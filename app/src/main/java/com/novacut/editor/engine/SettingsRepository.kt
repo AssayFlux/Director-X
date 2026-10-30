@@ -60,7 +60,7 @@ data class AppSettings(
      */
     val includeDiagnosticRawErrorText: Boolean = false,
     val includeDiagnosticHeapDump: Boolean = false,
-    val appearanceMode: AppearanceMode = AppearanceMode.DARK,
+    val appearanceMode: AppearanceMode = AppearanceMode.PRIMARY_BRAND,
     // Opt-in passive update check for sideload / GitHub-release installs. Off by
     // default so no network request is ever made without explicit consent.
     val updateCheckEnabled: Boolean = false,
@@ -84,6 +84,10 @@ enum class DesktopOverride { AUTO, FORCE_ON, FORCE_OFF }
  * no "System" entry because that setting previously behaved as a no-op.
  */
 enum class AppearanceMode {
+    PRIMARY_BRAND,
+    MIDNIGHT_CINEMA,
+    HIGH_CONTRAST,
+    // Legacy persisted identifiers retained for source compatibility.
     DARK,
     HIGH_CONTRAST_DARK,
 }
@@ -152,8 +156,13 @@ internal fun mapPreferencesToAppSettings(prefs: Preferences): AppSettings = AppS
     includeDiagnosticTimelineShape = prefs[SettingsPreferenceKeys.INCLUDE_DIAGNOSTIC_TIMELINE_SHAPE] ?: false,
     includeDiagnosticRawErrorText = prefs[SettingsPreferenceKeys.INCLUDE_DIAGNOSTIC_RAW_ERROR_TEXT] ?: false,
     includeDiagnosticHeapDump = prefs[SettingsPreferenceKeys.INCLUDE_DIAGNOSTIC_HEAP_DUMP] ?: false,
-    appearanceMode = prefs[SettingsPreferenceKeys.APPEARANCE_MODE]?.enumOrNull<AppearanceMode>()
-        ?: AppearanceMode.DARK,
+    appearanceMode = when (prefs[SettingsPreferenceKeys.APPEARANCE_MODE]) {
+        "DARK" -> AppearanceMode.PRIMARY_BRAND
+        "HIGH_CONTRAST_DARK" -> AppearanceMode.HIGH_CONTRAST
+        else -> prefs[SettingsPreferenceKeys.APPEARANCE_MODE]?.enumOrNull<AppearanceMode>()
+            ?.takeIf { it == AppearanceMode.PRIMARY_BRAND || it == AppearanceMode.MIDNIGHT_CINEMA || it == AppearanceMode.HIGH_CONTRAST }
+            ?: AppearanceMode.PRIMARY_BRAND
+    },
     updateCheckEnabled = prefs[SettingsPreferenceKeys.UPDATE_CHECK_ENABLED] ?: false,
     mediaPipeConsentVersion = prefs[SettingsPreferenceKeys.MEDIA_PIPE_CONSENT_VERSION]?.takeIf { it >= 0 } ?: 0,
 )
