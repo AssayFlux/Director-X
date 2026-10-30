@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.graphics.Bitmap
 import androidx.media3.common.OverlaySettings

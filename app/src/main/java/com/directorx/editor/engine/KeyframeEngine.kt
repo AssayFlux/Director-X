@@ -1,6 +1,6 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.*
+import com.directorx.editor.model.*
 import kotlin.math.*
 
 /**

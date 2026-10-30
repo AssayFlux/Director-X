@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -7,7 +7,7 @@ import android.net.Uri
 import android.opengl.GLES30
 import android.opengl.GLUtils
 import android.provider.Settings
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.LottieCompositionFactory
 import com.airbnb.lottie.LottieDrawable

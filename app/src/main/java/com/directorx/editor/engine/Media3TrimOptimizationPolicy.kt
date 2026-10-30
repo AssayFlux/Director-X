@@ -1,13 +1,13 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import androidx.media3.transformer.ExportResult
 import androidx.media3.common.util.UnstableApi
-import com.novacut.editor.model.AudioCodec
-import com.novacut.editor.model.BlendMode
-import com.novacut.editor.model.EffectType
-import com.novacut.editor.model.ExportConfig
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.model.AudioCodec
+import com.directorx.editor.model.BlendMode
+import com.directorx.editor.model.EffectType
+import com.directorx.editor.model.ExportConfig
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
 
 /**
  * Conservative gate for Media3's trim-only optimizations.

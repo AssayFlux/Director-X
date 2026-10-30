@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 /**
  * Specification for a Lottie animated overlay in the export pipeline.

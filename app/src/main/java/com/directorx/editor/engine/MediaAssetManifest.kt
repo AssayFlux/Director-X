@@ -1,14 +1,14 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.webkit.MimeTypeMap
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.ImageOverlay
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.ImageOverlay
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
 import org.json.JSONObject
 import java.io.File
 import java.io.RandomAccessFile
@@ -114,7 +114,7 @@ internal fun writeManagedMediaAssetSidecar(
         )
         true
     }.getOrElse { err ->
-        com.novacut.editor.engine.AppLog.w(MEDIA_ASSET_TAG, "Failed to write media asset sidecar for ${managedUri.redacted()}", err)
+        com.directorx.editor.engine.AppLog.w(MEDIA_ASSET_TAG, "Failed to write media asset sidecar for ${managedUri.redacted()}", err)
         false
     }
 }
@@ -151,7 +151,7 @@ internal fun writeManagedMediaAssetAnnotations(
         )
         true
     }.getOrElse { err ->
-        com.novacut.editor.engine.AppLog.w(
+        com.directorx.editor.engine.AppLog.w(
             MEDIA_ASSET_TAG,
             "Failed to update media asset annotations for ${Uri.parse(asset.managedUri).redacted()}",
             err,
