@@ -19,7 +19,7 @@ on:
           - streaming
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: director-x-apk-${{ github.ref }}
@@ -60,6 +60,13 @@ jobs:
           test -d "$ANDROID_SDK_ROOT/platforms/android-37.0"
           ln -sfn android-37.0 "$ANDROID_SDK_ROOT/platforms/android-37"
 
+      - name: Validate repository identity and generated metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_package_identity.py
+          python scripts/generate_capability_registry.py --check
+
       - name: Select build task
         id: task
         shell: bash
@@ -90,26 +97,9 @@ jobs:
           set -euo pipefail
           ./gradlew --no-daemon --dependency-verification strict --stacktrace "${{ steps.task.outputs.gradle_task }}"
 
-      - name: Review and commit generated verification metadata
-        shell: bash
-        run: |
-          set -euo pipefail
-          git add gradle/verification-metadata.xml
-          if git diff --cached --quiet; then
-            echo "Dependency verification metadata is already current."
-          else
-            echo "New SHA-256 verification entries generated:"
-            git diff --cached -- gradle/verification-metadata.xml
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git commit -m "build: update verified dependency checksums"
-            # The README or another commit may reach main while this build runs.
-            # Rebase the metadata update on the latest main before pushing.
-            git fetch origin main
-            git rebase origin/main
-            git push origin "HEAD:main"
-          fi
-
+      # The verification bootstrap updates only this runner's workspace. Do not
+      # push generated metadata from the build job: a concurrent main-branch
+      # update must never prevent collection and upload of a successfully built APK.
       - name: Collect APK files
         shell: bash
         run: |
