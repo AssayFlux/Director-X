@@ -1,7 +1,7 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.*
-import com.novacut.editor.ui.editor.EditorState
+import com.directorx.editor.model.*
+import com.directorx.editor.ui.editor.EditorState
 
 /**
  * Serializable edit commands for reliable undo/redo.

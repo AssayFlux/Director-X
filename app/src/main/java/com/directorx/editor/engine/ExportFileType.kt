@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 private val stillImageExtensions = setOf("gif", "png", "jpg", "jpeg", "webp")
 private val audioExtensions = setOf("m4a", "aac")

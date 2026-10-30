@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.media.MediaCodecList
@@ -495,7 +495,7 @@ class DiagnosticExportEngine @Inject constructor(
          * at the timeline).
          */
         fun summarizeTimelineShape(
-            tracks: List<com.novacut.editor.model.Track>,
+            tracks: List<com.directorx.editor.model.Track>,
         ): TimelineShape {
             val perTrack = mutableListOf<TimelineShape.TrackClipCount>()
             val effectCounts = mutableMapOf<String, Int>()

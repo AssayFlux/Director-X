@@ -1,9 +1,9 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.EffectType
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.EffectType
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
 import javax.inject.Inject
 import javax.inject.Singleton
 

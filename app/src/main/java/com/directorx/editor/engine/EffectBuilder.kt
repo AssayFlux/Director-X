@@ -1,9 +1,9 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.effect.*
-import com.novacut.editor.engine.segmentation.SegmentationEngine
-import com.novacut.editor.model.*
+import com.directorx.editor.engine.segmentation.SegmentationEngine
+import com.directorx.editor.model.*
 
 /**
  * Pure mapping from ClearCut model types to Media3 Effect instances.
@@ -441,7 +441,7 @@ internal object EffectBuilder {
             TransitionType.SQUARES_WIRE -> EffectShaders.transitionSquaresWire(durationUs)
             TransitionType.COLOR_PHASE -> EffectShaders.transitionColorPhase(durationUs)
         }
-        val eased = if (transition.easing != com.novacut.editor.model.TransitionEasing.LINEAR) {
+        val eased = if (transition.easing != com.directorx.editor.model.TransitionEasing.LINEAR) {
             (effect as ShaderEffect).withEasing(transition.easing)
         } else effect
         return if (eased is ShaderEffect && degradationLedger != null) {
@@ -486,7 +486,7 @@ internal object EffectBuilder {
                 EffectShaders.transitionCircleClose(durationUs, clipDurationUs)
             else -> EffectShaders.transitionFadeOut(durationUs, clipDurationUs)
         }
-        val eased = if (transition.easing != com.novacut.editor.model.TransitionEasing.LINEAR) {
+        val eased = if (transition.easing != com.directorx.editor.model.TransitionEasing.LINEAR) {
             (effect as ShaderEffect).withEasing(transition.easing)
         } else effect
         return if (eased is ShaderEffect && degradationLedger != null) {

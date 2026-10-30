@@ -1,11 +1,11 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
-import com.novacut.editor.model.EffectType
+import com.directorx.editor.model.EffectType
 
 object EffectPreviewRenderer {
 

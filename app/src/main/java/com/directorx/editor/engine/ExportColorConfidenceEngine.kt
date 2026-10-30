@@ -1,10 +1,10 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.ExportConfig
-import com.novacut.editor.model.ProjectColorPolicy
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
-import com.novacut.editor.model.VideoCodec
+import com.directorx.editor.model.ExportConfig
+import com.directorx.editor.model.ProjectColorPolicy
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
+import com.directorx.editor.model.VideoCodec
 
 /**
  * Pure pre-flight analyzer for export color and HDR confidence.

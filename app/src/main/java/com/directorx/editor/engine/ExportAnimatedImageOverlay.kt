@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -8,12 +8,12 @@ import android.graphics.Matrix
 import android.graphics.drawable.AnimatedImageDrawable
 import android.net.Uri
 import android.os.Build
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import androidx.media3.common.OverlaySettings
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.effect.BitmapOverlay
 import androidx.media3.effect.StaticOverlaySettings
-import com.novacut.editor.model.ImageOverlay
+import com.directorx.editor.model.ImageOverlay
 
 @UnstableApi
 internal class ExportAnimatedImageOverlay private constructor(

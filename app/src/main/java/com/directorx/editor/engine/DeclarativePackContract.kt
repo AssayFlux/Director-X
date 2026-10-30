@@ -1,6 +1,6 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.BuildConfig
+import com.directorx.editor.BuildConfig
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File

@@ -1,8 +1,8 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.os.Build
 import android.os.StrictMode
-import com.novacut.editor.BuildConfig
+import com.directorx.editor.BuildConfig
 import java.util.concurrent.Executor
 
 /**

@@ -1,12 +1,12 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.media.MediaCodecInfo
 import android.media.MediaCodecInfo.CodecProfileLevel
 import android.media.MediaCodecList
 import android.media.MediaFormat
 import android.os.Build
-import com.novacut.editor.engine.AppLog
-import com.novacut.editor.model.VideoCodec
+import com.directorx.editor.engine.AppLog
+import com.directorx.editor.model.VideoCodec
 
 /**
  * Device-aware encoder capability probe. Answers the question
