@@ -14,9 +14,25 @@ A native Android video-editing studio combining media creation, intelligent tool
 
 <br/>
 
-[![APK build](https://img.shields.io/github/actions/workflow/status/AssayFlux/Director-X/build-debug-apk.yml?branch=main&label=APK%20BUILD&logo=githubactions&style=for-the-badge)](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml)
+<!-- LIVE STATUS BADGES: keep workflow badges tied to real workflows only. -->
+[![APK build](https://img.shields.io/github/actions/workflow/status/AssayFlux/Director-X/build-debug-apk.yml?branch=main&label=APK%20BUILD&logo=android&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml)
+[![Repository hygiene](https://img.shields.io/github/actions/workflow/status/AssayFlux/Director-X/repository-hygiene.yml?branch=main&label=REPOSITORY%20HYGIENE&logo=githubactions&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X/actions/workflows/repository-hygiene.yml)
+[![Latest commit](https://img.shields.io/github/last-commit/AssayFlux/Director-X/main?label=LATEST%20COMMIT&logo=git&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X/commits/main)
+
+[![Version](https://img.shields.io/badge/VERSION-3.82.0-B18B5E?logo=semver&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X)
 [![Android](https://img.shields.io/badge/PLATFORM-ANDROID-3DDC84?logo=android&logoColor=white&style=for-the-badge)](https://developer.android.com/)
-[![Version](https://img.shields.io/badge/VERSION-3.82.0-B18B5E?style=for-the-badge)](https://github.com/AssayFlux/Director-X)
+[![Minimum SDK](https://img.shields.io/badge/MIN%20SDK-26-52796F?logo=android&logoColor=white&style=for-the-badge)](https://developer.android.com/about/versions)
+[![Target SDK](https://img.shields.io/badge/TARGET%20SDK-37-52796F?logo=android&logoColor=white&style=for-the-badge)](https://developer.android.com/about/versions)
+
+[![Kotlin](https://img.shields.io/badge/KOTLIN-2.4.10-7F52FF?logo=kotlin&logoColor=white&style=for-the-badge)](https://kotlinlang.org/)
+[![Java](https://img.shields.io/badge/JAVA-17-ED8B00?logo=openjdk&logoColor=white&style=for-the-badge)](https://openjdk.org/)
+[![Gradle](https://img.shields.io/badge/GRADLE-9.8.0-02303A?logo=gradle&logoColor=white&style=for-the-badge)](https://gradle.org/)
+[![License](https://img.shields.io/github/license/AssayFlux/Director-X?label=LICENSE&style=for-the-badge)](https://github.com/AssayFlux/Director-X/blob/main/LICENSE)
+
+[![Stars](https://img.shields.io/github/stars/AssayFlux/Director-X?label=STARS&style=for-the-badge)](https://github.com/AssayFlux/Director-X/stargazers)
+[![Forks](https://img.shields.io/github/forks/AssayFlux/Director-X?label=FORKS&style=for-the-badge)](https://github.com/AssayFlux/Director-X/network/members)
+[![Open issues](https://img.shields.io/github/issues/AssayFlux/Director-X?label=OPEN%20ISSUES&style=for-the-badge)](https://github.com/AssayFlux/Director-X/issues)
+[![Repo size](https://img.shields.io/github/repo-size/AssayFlux/Director-X?label=REPOSITORY%20SIZE&style=for-the-badge)](https://github.com/AssayFlux/Director-X)
 
 </div>
 
@@ -154,7 +170,7 @@ The application separates presentation, application state, persistence, and medi
 
 ### Package identity and upgrade policy
 
-The current application ID and Kotlin namespace are `com.directorx.editor`. The previous package identity, `com.novacut.editor`, is retained in migration history. Android treats a different application ID as a separate app: transferring projects from an installation under the old ID requires an export/import path. Future Director X updates must preserve the release signing identity.
+The current application ID and Kotlin namespace are `com.directorx.editor`. The previous package identity, `com.novacut.editor`, is retained in migration history. Android treats a different application ID as a separate app: moving projects from the previous package requires a new install with an explicit export/import path. Future Director X updates must preserve the release signing identity.
 
 ## Build from source
 
