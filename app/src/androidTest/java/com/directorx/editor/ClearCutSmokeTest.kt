@@ -1,4 +1,4 @@
-package com.novacut.editor
+package com.directorx.editor
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.captureToImage
@@ -9,9 +9,9 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import com.novacut.editor.ui.ClearCutTestTags
-import com.novacut.editor.engine.AppearanceMode
-import com.novacut.editor.engine.DesktopOverride
+import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.engine.AppearanceMode
+import com.directorx.editor.engine.DesktopOverride
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
