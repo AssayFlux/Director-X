@@ -195,11 +195,17 @@ object ClearCutThemeDefaults {
      * Director X ships a warm-cream editorial scheme and a high-contrast cream variant.
      * The legacy enum names remain for preference compatibility; labels are rebranded in UI.
      */
-    fun resolveMode(mode: AppearanceMode): AppearanceMode = mode
+    fun resolveMode(mode: AppearanceMode): AppearanceMode = when (mode) {
+        AppearanceMode.PRIMARY_BRAND,
+        AppearanceMode.MIDNIGHT_CINEMA,
+        AppearanceMode.DARK -> AppearanceMode.DARK
+        AppearanceMode.HIGH_CONTRAST,
+        AppearanceMode.HIGH_CONTRAST_DARK -> AppearanceMode.HIGH_CONTRAST_DARK
+    }
 
     fun colorSchemeFor(resolvedMode: AppearanceMode) = when (resolvedMode) {
         AppearanceMode.HIGH_CONTRAST_DARK -> ClearCutHighContrastColorScheme
-        AppearanceMode.DARK -> ClearCutDarkColorScheme
+        else -> ClearCutDarkColorScheme
     }
 
     fun colorsFor(resolvedMode: AppearanceMode): ClearCutSemanticColors = when (resolvedMode) {
@@ -234,7 +240,7 @@ object ClearCutThemeDefaults {
             overlayStrong = Color(0xFF2C2621),
             onAccent = Color(0xFF1D1915),
         )
-        AppearanceMode.DARK -> ClearCutSemanticColors(
+        else -> ClearCutSemanticColors(
             mode = resolvedMode,
             highContrast = false,
             background = Color(0xFFF5F0E6),
