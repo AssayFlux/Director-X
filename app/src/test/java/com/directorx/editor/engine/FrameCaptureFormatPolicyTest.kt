@@ -1,7 +1,7 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.graphics.Bitmap
-import com.novacut.editor.model.FrameCaptureFormat
+import com.directorx.editor.model.FrameCaptureFormat
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

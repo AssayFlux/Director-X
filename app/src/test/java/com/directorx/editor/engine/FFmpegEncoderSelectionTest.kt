@@ -1,7 +1,7 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.ContextWrapper
-import com.novacut.editor.engine.FFmpegEngine.H264Encoder
+import com.directorx.editor.engine.FFmpegEngine.H264Encoder
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

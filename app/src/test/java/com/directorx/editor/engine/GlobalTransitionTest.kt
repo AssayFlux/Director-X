@@ -1,8 +1,8 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.GlobalTransition
-import com.novacut.editor.model.GlobalTransitionType
-import com.novacut.editor.model.TransitionEasing
+import com.directorx.editor.model.GlobalTransition
+import com.directorx.editor.model.GlobalTransitionType
+import com.directorx.editor.model.TransitionEasing
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
