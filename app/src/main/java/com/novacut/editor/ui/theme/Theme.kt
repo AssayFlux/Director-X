@@ -205,7 +205,7 @@ object ClearCutThemeDefaults {
 
     fun colorSchemeFor(resolvedMode: AppearanceMode) = when (resolvedMode) {
         AppearanceMode.HIGH_CONTRAST_DARK -> ClearCutHighContrastColorScheme
-        AppearanceMode.DARK -> ClearCutDarkColorScheme
+        else -> ClearCutDarkColorScheme
     }
 
     fun colorsFor(resolvedMode: AppearanceMode): ClearCutSemanticColors = when (resolvedMode) {
