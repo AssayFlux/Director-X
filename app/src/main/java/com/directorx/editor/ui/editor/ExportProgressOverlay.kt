@@ -1,6 +1,6 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.ClearCutAccents
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
@@ -26,14 +26,14 @@ import androidx.compose.ui.semantics.progressBarRangeInfo
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
-import com.novacut.editor.R
-import com.novacut.editor.engine.ExportState
-import com.novacut.editor.ui.theme.ClearCutChromeIconButton
-import com.novacut.editor.ui.theme.Elevation
-import com.novacut.editor.ui.theme.LocalClearCutColors
-import com.novacut.editor.ui.theme.Motion
-import com.novacut.editor.ui.theme.Radius
-import com.novacut.editor.ui.theme.Spacing
+import com.directorx.editor.R
+import com.directorx.editor.engine.ExportState
+import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.Elevation
+import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.Motion
+import com.directorx.editor.ui.theme.Radius
+import com.directorx.editor.ui.theme.Spacing
 import kotlinx.coroutines.delay
 
 /**

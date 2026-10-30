@@ -1,11 +1,11 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.content.Context
 import android.content.Intent
-import com.novacut.editor.R
-import com.novacut.editor.engine.AppLog
-import com.novacut.editor.engine.ExportHistoryEntry
-import com.novacut.editor.model.ExportConfig
+import com.directorx.editor.R
+import com.directorx.editor.engine.AppLog
+import com.directorx.editor.engine.ExportHistoryEntry
+import com.directorx.editor.model.ExportConfig
 import java.io.File
 
 /** The resumable export in flight: its output, and the partial it resumed from. */

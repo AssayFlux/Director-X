@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 /**
  * A held-back export. Preflight found warnings — most importantly render intents

@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 data class GestureFinishResult(
     val hadMutation: Boolean,

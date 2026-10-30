@@ -1,19 +1,19 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.content.Context
-import com.novacut.editor.engine.ColorHdrMode
-import com.novacut.editor.engine.ColorPlanIssue
-import com.novacut.editor.engine.ColorRenderPlanner
-import com.novacut.editor.engine.EncoderCapabilityProbe
-import com.novacut.editor.engine.HdrDeviceSupport
-import com.novacut.editor.engine.HdrOverlayAssetInspector
-import com.novacut.editor.engine.HdrOverlayPolicy
-import com.novacut.editor.engine.MediaImportEngine
-import com.novacut.editor.engine.messageRes
-import com.novacut.editor.engine.renderCodec
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.ExportConfig
-import com.novacut.editor.model.SourceColorMetadata
+import com.directorx.editor.engine.ColorHdrMode
+import com.directorx.editor.engine.ColorPlanIssue
+import com.directorx.editor.engine.ColorRenderPlanner
+import com.directorx.editor.engine.EncoderCapabilityProbe
+import com.directorx.editor.engine.HdrDeviceSupport
+import com.directorx.editor.engine.HdrOverlayAssetInspector
+import com.directorx.editor.engine.HdrOverlayPolicy
+import com.directorx.editor.engine.MediaImportEngine
+import com.directorx.editor.engine.messageRes
+import com.directorx.editor.engine.renderCodec
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.ExportConfig
+import com.directorx.editor.model.SourceColorMetadata
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -35,17 +35,17 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.novacut.editor.R
-import com.novacut.editor.ui.ClearCutTestTags
-import com.novacut.editor.model.BatchExportSourceRange
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.ImageOverlayType
-import com.novacut.editor.model.TrackType
-import com.novacut.editor.ui.export.BatchExportPanel
-import com.novacut.editor.ui.theme.ClearCutDialogIcon
-import com.novacut.editor.ui.theme.ClearCutPrimaryButton
-import com.novacut.editor.ui.theme.ClearCutSecondaryButton
-import com.novacut.editor.ui.theme.Radius
+import com.directorx.editor.R
+import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.model.BatchExportSourceRange
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.ImageOverlayType
+import com.directorx.editor.model.TrackType
+import com.directorx.editor.ui.export.BatchExportPanel
+import com.directorx.editor.ui.theme.ClearCutDialogIcon
+import com.directorx.editor.ui.theme.ClearCutPrimaryButton
+import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.Radius
 import java.io.File
 
 @Composable

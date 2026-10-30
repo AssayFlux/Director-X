@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.content.ContentValues
 import android.content.Context
@@ -7,67 +7,67 @@ import android.media.MediaScannerConnection
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import androidx.core.content.FileProvider
-import com.novacut.editor.BuildConfig
-import com.novacut.editor.R
-import com.novacut.editor.engine.AiUsageLedger
-import com.novacut.editor.engine.BatchExportPlanContext
-import com.novacut.editor.engine.BatchExportPlanStore
-import com.novacut.editor.engine.C2paExportEngine
-import com.novacut.editor.engine.ContactSheetExporter
-import com.novacut.editor.engine.ExportHistoryEntry
-import com.novacut.editor.engine.ExportInterruptedException
-import com.novacut.editor.engine.keepsResumablePartial
-import com.novacut.editor.engine.ExportHistoryStatus
-import com.novacut.editor.engine.ExportHistoryStore
-import com.novacut.editor.engine.ExportIncidentBuilder
-import com.novacut.editor.engine.ExportIncidentStore
-import com.novacut.editor.engine.ExportOutputVerifier
-import com.novacut.editor.engine.ExportVerificationException
-import com.novacut.editor.engine.deliveryStatus
-import com.novacut.editor.engine.expectedContainerForExtension
-import com.novacut.editor.engine.ExportService
-import com.novacut.editor.engine.ExportStoragePolicy
-import com.novacut.editor.engine.ExportStageException
-import com.novacut.editor.engine.RenderDegradationException
-import com.novacut.editor.engine.ExportStorageException
-import com.novacut.editor.engine.ExportState
-import com.novacut.editor.engine.ExportResumePolicy
-import com.novacut.editor.engine.HdrOverlaySummary
-import com.novacut.editor.engine.GifStreamEncoder
-import com.novacut.editor.engine.MAX_REVERSE_CLIP_DURATION_MS
-import com.novacut.editor.engine.MediaHealthReport
-import com.novacut.editor.engine.Media3ExportRobustnessPolicy
-import com.novacut.editor.engine.MixedRenderExportPlanner
-import com.novacut.editor.engine.ProjectDependencyManifest
-import com.novacut.editor.engine.SmartRenderEngine
-import com.novacut.editor.engine.StreamCopyExportEngine
-import com.novacut.editor.engine.TimelineRangeExportEngine
-import com.novacut.editor.engine.TrackBlendModeCapability
-import com.novacut.editor.engine.VideoEngine
-import com.novacut.editor.engine.reverseRenderFallbackMessage
-import com.novacut.editor.engine.gifLogicalScreenSize
-import com.novacut.editor.engine.buildExportHistoryEntry
-import com.novacut.editor.engine.exportMimeTypeFor
-import com.novacut.editor.engine.exportUsesAudioCollection
-import com.novacut.editor.engine.exportUsesImageCollection
-import com.novacut.editor.engine.exportStorageFailureMessage
-import com.novacut.editor.engine.exportConfigFingerprint
-import com.novacut.editor.engine.finalizeFilenameSize
-import com.novacut.editor.engine.querySourceSize
-import com.novacut.editor.engine.reorderBatchExportItems
-import com.novacut.editor.engine.sanitizeFileName
-import com.novacut.editor.engine.timelineHasAudibleAudio
-import com.novacut.editor.engine.writeFileAtomically
-import com.novacut.editor.engine.writeUtf8TextAtomically
-import com.novacut.editor.model.BatchExportItem
-import com.novacut.editor.model.BatchExportSourceRange
-import com.novacut.editor.model.BatchExportStatus
-import com.novacut.editor.model.ChapterMarker
-import com.novacut.editor.model.ExportConfig
-import com.novacut.editor.model.requiresStreamSafeOutput
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.BuildConfig
+import com.directorx.editor.R
+import com.directorx.editor.engine.AiUsageLedger
+import com.directorx.editor.engine.BatchExportPlanContext
+import com.directorx.editor.engine.BatchExportPlanStore
+import com.directorx.editor.engine.C2paExportEngine
+import com.directorx.editor.engine.ContactSheetExporter
+import com.directorx.editor.engine.ExportHistoryEntry
+import com.directorx.editor.engine.ExportInterruptedException
+import com.directorx.editor.engine.keepsResumablePartial
+import com.directorx.editor.engine.ExportHistoryStatus
+import com.directorx.editor.engine.ExportHistoryStore
+import com.directorx.editor.engine.ExportIncidentBuilder
+import com.directorx.editor.engine.ExportIncidentStore
+import com.directorx.editor.engine.ExportOutputVerifier
+import com.directorx.editor.engine.ExportVerificationException
+import com.directorx.editor.engine.deliveryStatus
+import com.directorx.editor.engine.expectedContainerForExtension
+import com.directorx.editor.engine.ExportService
+import com.directorx.editor.engine.ExportStoragePolicy
+import com.directorx.editor.engine.ExportStageException
+import com.directorx.editor.engine.RenderDegradationException
+import com.directorx.editor.engine.ExportStorageException
+import com.directorx.editor.engine.ExportState
+import com.directorx.editor.engine.ExportResumePolicy
+import com.directorx.editor.engine.HdrOverlaySummary
+import com.directorx.editor.engine.GifStreamEncoder
+import com.directorx.editor.engine.MAX_REVERSE_CLIP_DURATION_MS
+import com.directorx.editor.engine.MediaHealthReport
+import com.directorx.editor.engine.Media3ExportRobustnessPolicy
+import com.directorx.editor.engine.MixedRenderExportPlanner
+import com.directorx.editor.engine.ProjectDependencyManifest
+import com.directorx.editor.engine.SmartRenderEngine
+import com.directorx.editor.engine.StreamCopyExportEngine
+import com.directorx.editor.engine.TimelineRangeExportEngine
+import com.directorx.editor.engine.TrackBlendModeCapability
+import com.directorx.editor.engine.VideoEngine
+import com.directorx.editor.engine.reverseRenderFallbackMessage
+import com.directorx.editor.engine.gifLogicalScreenSize
+import com.directorx.editor.engine.buildExportHistoryEntry
+import com.directorx.editor.engine.exportMimeTypeFor
+import com.directorx.editor.engine.exportUsesAudioCollection
+import com.directorx.editor.engine.exportUsesImageCollection
+import com.directorx.editor.engine.exportStorageFailureMessage
+import com.directorx.editor.engine.exportConfigFingerprint
+import com.directorx.editor.engine.finalizeFilenameSize
+import com.directorx.editor.engine.querySourceSize
+import com.directorx.editor.engine.reorderBatchExportItems
+import com.directorx.editor.engine.sanitizeFileName
+import com.directorx.editor.engine.timelineHasAudibleAudio
+import com.directorx.editor.engine.writeFileAtomically
+import com.directorx.editor.engine.writeUtf8TextAtomically
+import com.directorx.editor.model.BatchExportItem
+import com.directorx.editor.model.BatchExportSourceRange
+import com.directorx.editor.model.BatchExportStatus
+import com.directorx.editor.model.ChapterMarker
+import com.directorx.editor.model.ExportConfig
+import com.directorx.editor.model.requiresStreamSafeOutput
+import com.directorx.editor.model.TrackType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
@@ -83,7 +83,7 @@ import java.io.File
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.math.roundToInt
-import com.novacut.editor.engine.RedactedLog
+import com.directorx.editor.engine.RedactedLog
 
 internal class ExportSaveGate {
     private val inFlight = AtomicBoolean(false)
@@ -114,10 +114,10 @@ class ExportDelegate(
     private val projectDependencyManifest: (EditorState) -> ProjectDependencyManifest = {
         ProjectDependencyManifest(emptyList())
     },
-    private val audioEngine: com.novacut.editor.engine.AudioEngine? = null,
+    private val audioEngine: com.directorx.editor.engine.AudioEngine? = null,
     private val exportIncidentStore: ExportIncidentStore? = null,
     private val appVersion: String = "unknown",
-    private val ffmpegEngine: com.novacut.editor.engine.FFmpegEngine? = null,
+    private val ffmpegEngine: com.directorx.editor.engine.FFmpegEngine? = null,
     private val includeDiagnosticRawErrorText: () -> Boolean = { false },
     private val projectFingerprint: (EditorState) -> String = { "" },
 ) {
@@ -190,12 +190,12 @@ class ExportDelegate(
         stateFlow.update { it.copyExport(transform) }
     }
 
-    private suspend fun buildAudioConformance(state: EditorState): com.novacut.editor.engine.AudioConformanceReport? {
+    private suspend fun buildAudioConformance(state: EditorState): com.directorx.editor.engine.AudioConformanceReport? {
         val engine = audioEngine ?: return null
         val allClips = state.tracks.flatMap { it.clips }
         if (allClips.isEmpty()) return null
         return kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-            val formats = mutableMapOf<String, com.novacut.editor.engine.AudioFormatInfo>()
+            val formats = mutableMapOf<String, com.directorx.editor.engine.AudioFormatInfo>()
             for (clip in allClips) {
                 val extractor = android.media.MediaExtractor()
                 try {
@@ -211,7 +211,7 @@ class ExportDelegate(
                             val dur = if (fmt.containsKey(android.media.MediaFormat.KEY_DURATION))
                                 fmt.getLong(android.media.MediaFormat.KEY_DURATION) else 0L
                             if (sr > 0 && ch > 0) {
-                                formats[clip.id] = com.novacut.editor.engine.AudioFormatInfo(sr, ch, mime, dur)
+                                formats[clip.id] = com.directorx.editor.engine.AudioFormatInfo(sr, ch, mime, dur)
                             }
                             break
                         }
@@ -448,7 +448,7 @@ class ExportDelegate(
     private fun applyFilenameTemplate(
         template: String,
         baseName: String,
-        config: com.novacut.editor.model.ExportConfig,
+        config: com.directorx.editor.model.ExportConfig,
         templateState: EditorState? = null,
     ): String {
         val now = java.util.Calendar.getInstance()
@@ -518,9 +518,9 @@ class ExportDelegate(
      * case the caller should fall through to the Transformer path.
      */
     private suspend fun tryStreamCopy(
-        tracks: List<com.novacut.editor.model.Track>,
+        tracks: List<com.directorx.editor.model.Track>,
         config: ExportConfig,
-        textOverlays: List<com.novacut.editor.model.TextOverlay>,
+        textOverlays: List<com.directorx.editor.model.TextOverlay>,
         state: EditorState,
         outputFile: File,
         startedAtMs: Long,
@@ -588,7 +588,7 @@ class ExportDelegate(
             updateExport { it.copy(progress = progress) }
         }
         if (!ok) {
-            com.novacut.editor.engine.AppLog.w("ExportDelegate", "stream-copy failed, falling back to Transformer")
+            com.directorx.editor.engine.AppLog.w("ExportDelegate", "stream-copy failed, falling back to Transformer")
             runCatching { outputFile.delete() }
             return false
         }
@@ -600,7 +600,7 @@ class ExportDelegate(
         val verification = ExportOutputVerifier.verify(
             outputFile = outputFile,
             expectVideo = true,
-            expectedAudioMimeType = com.novacut.editor.model.AudioCodec.AAC.mimeType,
+            expectedAudioMimeType = com.directorx.editor.model.AudioCodec.AAC.mimeType,
             expectedVideoMimeType = config.codec.mimeType,
             expectedVideoWidth = safeDimensions.width,
             expectedVideoHeight = safeDimensions.height,
@@ -613,7 +613,7 @@ class ExportDelegate(
                 "Stream-copy output rejected (${verification.deliveryStatus}); falling back to Transformer: " +
                     (verification.reason ?: "output contract mismatch")
             )
-            com.novacut.editor.engine.AppLog.w(
+            com.directorx.editor.engine.AppLog.w(
                 "ExportDelegate",
                 "stream-copy output contract rejected: ${verification.reason}",
             )
@@ -645,9 +645,9 @@ class ExportDelegate(
     }
 
     private fun buildMixedRenderPlan(
-        tracks: List<com.novacut.editor.model.Track>,
+        tracks: List<com.directorx.editor.model.Track>,
         config: ExportConfig,
-        textOverlays: List<com.novacut.editor.model.TextOverlay>,
+        textOverlays: List<com.directorx.editor.model.TextOverlay>,
         state: EditorState,
         outputFile: File
     ) = if (config.timelineRange == null && tracks.none { it.timelineOffsetMs != 0L }) MixedRenderExportPlanner.buildPlan(
@@ -1193,7 +1193,7 @@ class ExportDelegate(
                     )
                     val targetSheetFile = sheetFile ?: return@launch
                     val allClips = tracks
-                        .filter { it.type == com.novacut.editor.model.TrackType.VIDEO || it.type == com.novacut.editor.model.TrackType.OVERLAY }
+                        .filter { it.type == com.directorx.editor.model.TrackType.VIDEO || it.type == com.directorx.editor.model.TrackType.OVERLAY }
                         .flatMap { it.clips }
                         .sortedBy { it.timelineStartMs }
                     if (allClips.isEmpty()) {
@@ -1284,7 +1284,7 @@ class ExportDelegate(
                         healthReport = healthReport
                     )
                 } catch (e: Exception) {
-                    com.novacut.editor.engine.AppLog.w("ExportDelegate", "Contact sheet export failed", e)
+                    com.directorx.editor.engine.AppLog.w("ExportDelegate", "Contact sheet export failed", e)
                     sheetFile?.delete()
                     val message = e.message ?: "Contact sheet export failed"
                     updateExport {
@@ -1485,7 +1485,7 @@ class ExportDelegate(
                     )
                     showToast(appContext.getString(R.string.export_gif_complete_toast, finalizedGifFile.name))
                 } catch (e: kotlinx.coroutines.CancellationException) {
-                    com.novacut.editor.engine.AppLog.d("ExportDelegate", "GIF export cancelled")
+                    com.directorx.editor.engine.AppLog.d("ExportDelegate", "GIF export cancelled")
                     gifFile?.delete()
                     updateExport {
                         it.copy(
@@ -1507,7 +1507,7 @@ class ExportDelegate(
                 } catch (e: Exception) {
                     val noFramesExtracted = e is NoGifFramesException
                     if (!noFramesExtracted) {
-                        com.novacut.editor.engine.AppLog.w("ExportDelegate", "GIF export failed", e)
+                        com.directorx.editor.engine.AppLog.w("ExportDelegate", "GIF export failed", e)
                     }
                     gifFile?.delete()
                     val message = if (noFramesExtracted) "No frames extracted" else {
@@ -1690,7 +1690,7 @@ class ExportDelegate(
                         )
                         writeUtf8TextAtomically(sidecar, notes)
                     } catch (e: Exception) {
-                        com.novacut.editor.engine.AppLog.w("ExportDelegate", "Scratchpad sidecar write failed", e)
+                        com.directorx.editor.engine.AppLog.w("ExportDelegate", "Scratchpad sidecar write failed", e)
                     }
                 }
                 // Subtitle sidecar. Written next to the video with a matching
@@ -1717,12 +1717,12 @@ class ExportDelegate(
                                 outputFile.parentFile,
                                 "${outputFile.nameWithoutExtension}.${subtitleFormat.extension}"
                             )
-                            com.novacut.editor.engine.SubtitleExporter.export(
+                            com.directorx.editor.engine.SubtitleExporter.export(
                                 captions, subtitleFormat, sidecar
                             )
                         }
                     } catch (e: Exception) {
-                        com.novacut.editor.engine.AppLog.w("ExportDelegate", "Subtitle sidecar write failed", e)
+                        com.directorx.editor.engine.AppLog.w("ExportDelegate", "Subtitle sidecar write failed", e)
                     }
                 }
 
@@ -1745,8 +1745,8 @@ class ExportDelegate(
                                 outputFile.parentFile,
                                 "${outputFile.nameWithoutExtension}_burn.ass"
                             )
-                            check(com.novacut.editor.engine.SubtitleExporter.export(
-                                burnCaptions, com.novacut.editor.model.SubtitleFormat.ASS, assFile
+                            check(com.directorx.editor.engine.SubtitleExporter.export(
+                                burnCaptions, com.directorx.editor.model.SubtitleFormat.ASS, assFile
                             )) { "Could not create the ASS burn-in document" }
                             burnedFile = java.io.File(
                                 outputFile.parentFile,
@@ -1768,7 +1768,7 @@ class ExportDelegate(
                             outputFile.delete()
                             throw e
                         } catch (e: Exception) {
-                            com.novacut.editor.engine.AppLog.e("ExportDelegate", "Requested subtitle burn-in failed", e)
+                            com.directorx.editor.engine.AppLog.e("ExportDelegate", "Requested subtitle burn-in failed", e)
                             assFile?.delete()
                             burnedFile?.delete()
                             outputFile.delete()
@@ -2107,7 +2107,7 @@ class ExportDelegate(
             writeC2paManifestSidecar(outputFile, entries, state)
             return true
         } catch (e: Exception) {
-            com.novacut.editor.engine.AppLog.w("ExportDelegate", "AI disclosure sidecar write failed", e)
+            com.directorx.editor.engine.AppLog.w("ExportDelegate", "AI disclosure sidecar write failed", e)
             return false
         }
     }
@@ -2166,7 +2166,7 @@ class ExportDelegate(
             FileProvider.getUriForFile(appContext, "${appContext.packageName}.fileprovider", file)
         }.getOrElse { error ->
             AppLog.w("ExportDelegate", "Export share FileProvider handoff failed for ${RedactedLog.path(filePath)}", error)
-            showToast(appContext.getString(com.novacut.editor.R.string.editor_share_location_failed))
+            showToast(appContext.getString(com.directorx.editor.R.string.editor_share_location_failed))
             return null
         }
         return Intent(Intent.ACTION_SEND).apply {
@@ -2800,7 +2800,7 @@ class ExportDelegate(
             )
         }
         val technicalMessage = e.message ?: e::class.java.simpleName
-        com.novacut.editor.engine.AppLog.w("ExportDelegate", "Audio export failed", e)
+        com.directorx.editor.engine.AppLog.w("ExportDelegate", "Audio export failed", e)
         updateExport {
             it.copy(
                 state = ExportState.ERROR,
@@ -2944,8 +2944,8 @@ class ExportDelegate(
     fun renderQuickPreview() {
         val savedConfig = stateFlow.value.exportConfig
         val previewConfig = savedConfig.copy(
-            resolution = com.novacut.editor.model.Resolution.SD_480P,
-            quality = com.novacut.editor.model.ExportQuality.LOW
+            resolution = com.directorx.editor.model.Resolution.SD_480P,
+            quality = com.directorx.editor.model.ExportQuality.LOW
         )
         updateExport {
             it.copy(
@@ -2962,7 +2962,7 @@ class ExportDelegate(
 
     private fun createGapGifFrame(
         maxWidth: Int,
-        aspectRatio: com.novacut.editor.model.AspectRatio
+        aspectRatio: com.directorx.editor.model.AspectRatio
     ): android.graphics.Bitmap {
         val width = maxWidth.coerceAtLeast(1)
         val height = (width / aspectRatio.toFloat()).roundToInt().coerceAtLeast(1)

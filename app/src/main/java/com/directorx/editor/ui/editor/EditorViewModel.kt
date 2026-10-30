@@ -1,115 +1,115 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.SystemClock
 import android.provider.OpenableColumns
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.novacut.editor.R
-import com.novacut.editor.ai.AiFeatures
-import com.novacut.editor.ai.AutoEditClip
-import com.novacut.editor.ai.AutoEditIntent
-import com.novacut.editor.ai.AutoEditResult
-import com.novacut.editor.engine.AiUsageLedger
-import com.novacut.editor.engine.AppSettings
-import com.novacut.editor.engine.AudioEngine
-import com.novacut.editor.engine.AutoSaveState
-import com.novacut.editor.engine.AutoSaveRequest
-import com.novacut.editor.engine.projectStateFingerprint
-import com.novacut.editor.engine.ExportIncidentStore
-import com.novacut.editor.engine.ExportState
-import com.novacut.editor.engine.ExportStoragePolicy
-import com.novacut.editor.engine.ExportStoragePreflight
-import com.novacut.editor.engine.FRAME_CAPTURE_DIR_NAME
-import com.novacut.editor.engine.exportStorageFailureMessage
-import com.novacut.editor.engine.FontRegistry
-import com.novacut.editor.engine.ProjectAutoSave
-import com.novacut.editor.engine.ProductHealthLedger
-import com.novacut.editor.engine.ProjectArchive
-import com.novacut.editor.engine.ProjectDocument
-import com.novacut.editor.engine.ProjectDocumentApplicator
-import com.novacut.editor.engine.ProjectDocumentReadResult
-import com.novacut.editor.engine.AndroidProjectDependencyProbe
-import com.novacut.editor.engine.ProjectDependencyEditorInputs
-import com.novacut.editor.engine.ProjectDependencyManifest
-import com.novacut.editor.engine.SEGMENTATION_MODEL_DEPENDENCY
-import com.novacut.editor.engine.ProxyEngine
-import com.novacut.editor.engine.ProxyResolutionPolicy
-import com.novacut.editor.engine.SettingsRepository
-import com.novacut.editor.engine.SmartRenderEngine
-import com.novacut.editor.engine.SpeakerSwitchPlanner
-import com.novacut.editor.engine.SubtitleExporter
-import com.novacut.editor.engine.CaptionImportEngine
-import com.novacut.editor.engine.ConnectivityObserver
-import com.novacut.editor.engine.IncomingDocumentImportRouter
-import com.novacut.editor.engine.IncomingDocumentIntentParser
-import com.novacut.editor.engine.IncomingDocumentItem
-import com.novacut.editor.engine.TextBasedEditEngine
-import com.novacut.editor.engine.AutoChapterEngine
-import com.novacut.editor.engine.TalkingHeadFramingEngine
-import com.novacut.editor.engine.KaraokeCaptionEngine
-import com.novacut.editor.engine.StreamCopyExportEngine
-import com.novacut.editor.engine.ContentIdEngine
-import com.novacut.editor.engine.DirectPublishEngine
-import com.novacut.editor.engine.FlashSafetyEngine
-import com.novacut.editor.engine.ColorBlindPreviewEngine
-import com.novacut.editor.engine.AiThumbnailEngine
-import com.novacut.editor.engine.AudioDescriptionEngine
-import com.novacut.editor.engine.C2paExportEngine
-import com.novacut.editor.engine.StylusMidiEngine
-import com.novacut.editor.engine.BeatDetectionEngine
-import com.novacut.editor.engine.cleanupFrameOutputFiles
-import com.novacut.editor.engine.createFrameCaptureOutputFiles
-import com.novacut.editor.engine.finalizeFrameOutputFile
-import com.novacut.editor.engine.LoudnessEngine
-import com.novacut.editor.engine.NoiseReductionEngine
-import com.novacut.editor.engine.FrameInterpolationEngine
-import com.novacut.editor.engine.InpaintingEngine
-import com.novacut.editor.engine.UpscaleEngine
-import com.novacut.editor.engine.VideoMattingEngine
-import com.novacut.editor.engine.StabilizationEngine
-import com.novacut.editor.engine.StabilizationProfileManager
-import com.novacut.editor.engine.StyleTransferEngine
-import com.novacut.editor.engine.SmartReframeEngine
-import com.novacut.editor.engine.TimelineExportCoordinator
-import com.novacut.editor.engine.TrackBlendModeCapability
-import com.novacut.editor.engine.TimelineExchangeValidator
-import com.novacut.editor.engine.SilenceDetectionEngine
-import com.novacut.editor.engine.ProxyWorkflowEngine
-import com.novacut.editor.engine.MultiCamEngine
-import com.novacut.editor.engine.MediaImportEngine
-import com.novacut.editor.engine.MediaHealth
-import com.novacut.editor.engine.MediaDiagnosticsProbe
-import com.novacut.editor.engine.MediaRelinkProbe
-import com.novacut.editor.engine.Media3TrimOptimizationPolicy
-import com.novacut.editor.engine.MetadataSidecarEngine
-import com.novacut.editor.engine.MetadataSidecarExportResult
-import com.novacut.editor.engine.MetadataSidecarFormat
-import com.novacut.editor.engine.MetadataSidecarTrack
-import com.novacut.editor.engine.SyncFrameDirection
-import com.novacut.editor.engine.TimelineMediaJobIdentity
-import com.novacut.editor.engine.shouldApplyMediaJobResult
-import com.novacut.editor.engine.timelineMediaJobIdentity
-import com.novacut.editor.engine.OverlayAssetImportResult
-import com.novacut.editor.engine.OverlayAssetStore
-import com.novacut.editor.engine.ProjectMediaAsset
-import com.novacut.editor.engine.normalizeMediaAssetNotes
-import com.novacut.editor.engine.normalizeMediaAssetTags
-import com.novacut.editor.engine.writeManagedMediaAssetAnnotations
-import com.novacut.editor.engine.VideoEngine
-import com.novacut.editor.engine.VoiceoverRecorderEngine
-import com.novacut.editor.engine.TemplateManager
-import com.novacut.editor.engine.attachMediaAssetIdsToTracks
-import com.novacut.editor.engine.backfillManagedMediaAssetSidecars
-import com.novacut.editor.engine.buildProjectMediaAssets
-import com.novacut.editor.engine.sanitizeFileName
-import com.novacut.editor.engine.resolveMediaDisplayName
-import com.novacut.editor.model.*
+import com.directorx.editor.R
+import com.directorx.editor.ai.AiFeatures
+import com.directorx.editor.ai.AutoEditClip
+import com.directorx.editor.ai.AutoEditIntent
+import com.directorx.editor.ai.AutoEditResult
+import com.directorx.editor.engine.AiUsageLedger
+import com.directorx.editor.engine.AppSettings
+import com.directorx.editor.engine.AudioEngine
+import com.directorx.editor.engine.AutoSaveState
+import com.directorx.editor.engine.AutoSaveRequest
+import com.directorx.editor.engine.projectStateFingerprint
+import com.directorx.editor.engine.ExportIncidentStore
+import com.directorx.editor.engine.ExportState
+import com.directorx.editor.engine.ExportStoragePolicy
+import com.directorx.editor.engine.ExportStoragePreflight
+import com.directorx.editor.engine.FRAME_CAPTURE_DIR_NAME
+import com.directorx.editor.engine.exportStorageFailureMessage
+import com.directorx.editor.engine.FontRegistry
+import com.directorx.editor.engine.ProjectAutoSave
+import com.directorx.editor.engine.ProductHealthLedger
+import com.directorx.editor.engine.ProjectArchive
+import com.directorx.editor.engine.ProjectDocument
+import com.directorx.editor.engine.ProjectDocumentApplicator
+import com.directorx.editor.engine.ProjectDocumentReadResult
+import com.directorx.editor.engine.AndroidProjectDependencyProbe
+import com.directorx.editor.engine.ProjectDependencyEditorInputs
+import com.directorx.editor.engine.ProjectDependencyManifest
+import com.directorx.editor.engine.SEGMENTATION_MODEL_DEPENDENCY
+import com.directorx.editor.engine.ProxyEngine
+import com.directorx.editor.engine.ProxyResolutionPolicy
+import com.directorx.editor.engine.SettingsRepository
+import com.directorx.editor.engine.SmartRenderEngine
+import com.directorx.editor.engine.SpeakerSwitchPlanner
+import com.directorx.editor.engine.SubtitleExporter
+import com.directorx.editor.engine.CaptionImportEngine
+import com.directorx.editor.engine.ConnectivityObserver
+import com.directorx.editor.engine.IncomingDocumentImportRouter
+import com.directorx.editor.engine.IncomingDocumentIntentParser
+import com.directorx.editor.engine.IncomingDocumentItem
+import com.directorx.editor.engine.TextBasedEditEngine
+import com.directorx.editor.engine.AutoChapterEngine
+import com.directorx.editor.engine.TalkingHeadFramingEngine
+import com.directorx.editor.engine.KaraokeCaptionEngine
+import com.directorx.editor.engine.StreamCopyExportEngine
+import com.directorx.editor.engine.ContentIdEngine
+import com.directorx.editor.engine.DirectPublishEngine
+import com.directorx.editor.engine.FlashSafetyEngine
+import com.directorx.editor.engine.ColorBlindPreviewEngine
+import com.directorx.editor.engine.AiThumbnailEngine
+import com.directorx.editor.engine.AudioDescriptionEngine
+import com.directorx.editor.engine.C2paExportEngine
+import com.directorx.editor.engine.StylusMidiEngine
+import com.directorx.editor.engine.BeatDetectionEngine
+import com.directorx.editor.engine.cleanupFrameOutputFiles
+import com.directorx.editor.engine.createFrameCaptureOutputFiles
+import com.directorx.editor.engine.finalizeFrameOutputFile
+import com.directorx.editor.engine.LoudnessEngine
+import com.directorx.editor.engine.NoiseReductionEngine
+import com.directorx.editor.engine.FrameInterpolationEngine
+import com.directorx.editor.engine.InpaintingEngine
+import com.directorx.editor.engine.UpscaleEngine
+import com.directorx.editor.engine.VideoMattingEngine
+import com.directorx.editor.engine.StabilizationEngine
+import com.directorx.editor.engine.StabilizationProfileManager
+import com.directorx.editor.engine.StyleTransferEngine
+import com.directorx.editor.engine.SmartReframeEngine
+import com.directorx.editor.engine.TimelineExportCoordinator
+import com.directorx.editor.engine.TrackBlendModeCapability
+import com.directorx.editor.engine.TimelineExchangeValidator
+import com.directorx.editor.engine.SilenceDetectionEngine
+import com.directorx.editor.engine.ProxyWorkflowEngine
+import com.directorx.editor.engine.MultiCamEngine
+import com.directorx.editor.engine.MediaImportEngine
+import com.directorx.editor.engine.MediaHealth
+import com.directorx.editor.engine.MediaDiagnosticsProbe
+import com.directorx.editor.engine.MediaRelinkProbe
+import com.directorx.editor.engine.Media3TrimOptimizationPolicy
+import com.directorx.editor.engine.MetadataSidecarEngine
+import com.directorx.editor.engine.MetadataSidecarExportResult
+import com.directorx.editor.engine.MetadataSidecarFormat
+import com.directorx.editor.engine.MetadataSidecarTrack
+import com.directorx.editor.engine.SyncFrameDirection
+import com.directorx.editor.engine.TimelineMediaJobIdentity
+import com.directorx.editor.engine.shouldApplyMediaJobResult
+import com.directorx.editor.engine.timelineMediaJobIdentity
+import com.directorx.editor.engine.OverlayAssetImportResult
+import com.directorx.editor.engine.OverlayAssetStore
+import com.directorx.editor.engine.ProjectMediaAsset
+import com.directorx.editor.engine.normalizeMediaAssetNotes
+import com.directorx.editor.engine.normalizeMediaAssetTags
+import com.directorx.editor.engine.writeManagedMediaAssetAnnotations
+import com.directorx.editor.engine.VideoEngine
+import com.directorx.editor.engine.VoiceoverRecorderEngine
+import com.directorx.editor.engine.TemplateManager
+import com.directorx.editor.engine.attachMediaAssetIdsToTracks
+import com.directorx.editor.engine.backfillManagedMediaAssetSidecars
+import com.directorx.editor.engine.buildProjectMediaAssets
+import com.directorx.editor.engine.sanitizeFileName
+import com.directorx.editor.engine.resolveMediaDisplayName
+import com.directorx.editor.model.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -121,14 +121,14 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.novacut.editor.engine.EditingSuggestionEngine
-import com.novacut.editor.engine.EffectPreviewRenderer
+import com.directorx.editor.engine.EditingSuggestionEngine
+import com.directorx.editor.engine.EffectPreviewRenderer
 import java.io.File
 import java.security.MessageDigest
 import java.util.UUID
 import javax.inject.Inject
 import kotlin.math.roundToLong
-import com.novacut.editor.engine.redacted
+import com.directorx.editor.engine.redacted
 
 private const val TIMELINE_BASE_SCALE = 0.15f
 // Min zoom lowered from 0.1 → 0.01 so a ~10-minute video fits the phone viewport
@@ -388,7 +388,7 @@ data class EditorState(
     val isRecordingVoiceover: Boolean = false,
     val voiceoverDurationMs: Long = 0L,
     val isLooping: Boolean = false,
-    val activeScopeType: com.novacut.editor.ui.editor.ScopeType = com.novacut.editor.ui.editor.ScopeType.HISTOGRAM,
+    val activeScopeType: com.directorx.editor.ui.editor.ScopeType = com.directorx.editor.ui.editor.ScopeType.HISTOGRAM,
     // Chapter markers
     val chapterMarkers: List<ChapterMarker> = emptyList(),
     // Multi-select
@@ -410,10 +410,10 @@ data class EditorState(
     // Proxy
     val proxySettings: ProxySettings = ProxySettings(),
     // Auto-save indicator
-    val saveIndicator: com.novacut.editor.model.SaveIndicatorState = com.novacut.editor.model.SaveIndicatorState.HIDDEN,
+    val saveIndicator: com.directorx.editor.model.SaveIndicatorState = com.directorx.editor.model.SaveIndicatorState.HIDDEN,
     val isProjectDirty: Boolean = false,
     // Undo history
-    val undoHistoryEntries: List<com.novacut.editor.model.UndoHistoryEntry> = emptyList(),
+    val undoHistoryEntries: List<com.directorx.editor.model.UndoHistoryEntry> = emptyList(),
     // Beat sync
     val isAnalyzingBeats: Boolean = false,
     // Editor mode
@@ -423,7 +423,7 @@ data class EditorState(
     // Split-screen before/after comparison
     val isSplitPreviewEnabled: Boolean = false,
     // Drawing overlay
-    val drawingPaths: List<com.novacut.editor.model.DrawingPath> = emptyList(),
+    val drawingPaths: List<com.directorx.editor.model.DrawingPath> = emptyList(),
     val isDrawingMode: Boolean = false,
     val drawingColor: Long = 0xFFF38BA8L,
     val drawingStrokeWidth: Float = 4f,
@@ -432,14 +432,14 @@ data class EditorState(
     // v3.71 object-aware editing scaffolding. The list lives in editor state so
     // the timeline can light up tracked-subject lanes the moment a tracker
     // populates them; persistence flows through AutoSaveState.trackedObjects.
-    val trackedObjects: List<com.novacut.editor.model.TrackedObject> = emptyList(),
-    val storyboardCards: List<com.novacut.editor.model.StoryboardCard> = emptyList(),
+    val trackedObjects: List<com.directorx.editor.model.TrackedObject> = emptyList(),
+    val storyboardCards: List<com.directorx.editor.model.StoryboardCard> = emptyList(),
     /**
      * Set when the project on screen is not the project on disk: the restore dropped
      * elements. Autosave stays blocked while this is non-null, because the next write
      * would make the truncation permanent. Cleared by an explicit user decision.
      */
-    val partialRestore: com.novacut.editor.engine.ProjectRestoreReport? = null,
+    val partialRestore: com.directorx.editor.engine.ProjectRestoreReport? = null,
     /**
      * The requested project is not in the database. The editor used to create a blank
      * project under the same id, which read as "your work is gone" with no explanation.
@@ -463,18 +463,18 @@ data class EditorState(
     val renderSummary: SmartRenderEngine.SmartRenderSummary? get() = export.renderSummary
     val batchExportQueue: List<BatchExportItem> get() = export.batchQueue
     val savedExportConfig: ExportConfig? get() = export.savedConfig
-    val exportHistory: List<com.novacut.editor.engine.ExportHistoryEntry> get() = export.history
+    val exportHistory: List<com.directorx.editor.engine.ExportHistoryEntry> get() = export.history
     val aiRequirementPrompt: AiRequirementPrompt? get() = ai.requirementPrompt
-    val aiModelRequirement: com.novacut.editor.engine.AiToolRequirements.ToolRequirement?
+    val aiModelRequirement: com.directorx.editor.engine.AiToolRequirements.ToolRequirement?
         get() = ai.modelRequirement
     val aiProcessingTool: String? get() = ai.processingTool
     val aiProcessingProgress: Float get() = ai.processingProgress
     val stabilizationPreview: StabilizationPreview? get() = ai.stabilizationPreview
-    val stabilizationProfileImportPreview: com.novacut.editor.engine.StabilizationProfileValidation?
+    val stabilizationProfileImportPreview: com.directorx.editor.engine.StabilizationProfileValidation?
         get() = ai.stabilizationProfileImportPreview
     val aiSuggestion: AiSuggestion? get() = ai.suggestion
     val aiUsageLedger: List<AiUsageLedger.Entry> get() = ai.usageLedger
-    val cutAssistantReview: com.novacut.editor.engine.CutAssistantEngine.ReviewSet?
+    val cutAssistantReview: com.directorx.editor.engine.CutAssistantEngine.ReviewSet?
         get() = ai.cutAssistantReview
     val autoEditProposal: AutoEditResult? get() = ai.autoEditProposal
     val isReframing: Boolean get() = ai.isReframing
@@ -488,13 +488,13 @@ data class EditorState(
     val mediaRelinkReports: Map<String, MediaRelinkProbe.ClipRelinkReport> get() = media.relinkReports
     val compoundNavDepth: Int get() = compound.depth
     val compoundBreadcrumbText: String get() = compound.breadcrumbText
-    val captionTranslationRows: List<com.novacut.editor.engine.CaptionTranslationEngine.EditorRow>
+    val captionTranslationRows: List<com.directorx.editor.engine.CaptionTranslationEngine.EditorRow>
         get() = caption.translationRows
     val captionTranslationSourceLang: String get() = caption.sourceLang
     val captionTranslationTargetLang: String? get() = caption.targetLang
-    val captionTranslationQuality: com.novacut.editor.engine.CaptionTranslationEngine.LanguagePairQuality?
+    val captionTranslationQuality: com.directorx.editor.engine.CaptionTranslationEngine.LanguagePairQuality?
         get() = caption.quality
-    val captionTranslationVariant: com.novacut.editor.engine.CaptionTranslationEngine.ModelVariant
+    val captionTranslationVariant: com.directorx.editor.engine.CaptionTranslationEngine.ModelVariant
         get() = caption.variant
     val captionTranslationUnavailable: Boolean get() = caption.translationUnavailable
     val captionTranslationOffline: Boolean get() = caption.translationOffline
@@ -509,17 +509,17 @@ data class EditorState(
  */
 @androidx.compose.runtime.Immutable
 data class V369State(
-    val transcript: com.novacut.editor.model.Transcript? = null,
+    val transcript: com.directorx.editor.model.Transcript? = null,
     val selectedWordIndices: Set<Int> = emptySet(),
-    val chapterCandidates: List<com.novacut.editor.engine.AutoChapterEngine.ChapterCandidate> = emptyList(),
-    val flashWarnings: List<com.novacut.editor.engine.FlashSafetyEngine.Warning> = emptyList(),
-    val thumbnailCandidates: List<com.novacut.editor.engine.AiThumbnailEngine.Candidate> = emptyList(),
-    val colorBlindMode: com.novacut.editor.engine.ColorBlindPreviewEngine.Mode =
-        com.novacut.editor.engine.ColorBlindPreviewEngine.Mode.OFF,
-    val karaokeStyle: com.novacut.editor.engine.KaraokeCaptionEngine.KaraokeStyle =
-        com.novacut.editor.engine.KaraokeCaptionEngine.KaraokeStyle.MRBEAST,
-    val streamCopyEligibility: com.novacut.editor.engine.StreamCopyExportEngine.Eligibility? = null,
-    val contentIdResult: com.novacut.editor.engine.ContentIdEngine.Match? = null,
+    val chapterCandidates: List<com.directorx.editor.engine.AutoChapterEngine.ChapterCandidate> = emptyList(),
+    val flashWarnings: List<com.directorx.editor.engine.FlashSafetyEngine.Warning> = emptyList(),
+    val thumbnailCandidates: List<com.directorx.editor.engine.AiThumbnailEngine.Candidate> = emptyList(),
+    val colorBlindMode: com.directorx.editor.engine.ColorBlindPreviewEngine.Mode =
+        com.directorx.editor.engine.ColorBlindPreviewEngine.Mode.OFF,
+    val karaokeStyle: com.directorx.editor.engine.KaraokeCaptionEngine.KaraokeStyle =
+        com.directorx.editor.engine.KaraokeCaptionEngine.KaraokeStyle.MRBEAST,
+    val streamCopyEligibility: com.directorx.editor.engine.StreamCopyExportEngine.Eligibility? = null,
+    val contentIdResult: com.directorx.editor.engine.ContentIdEngine.Match? = null,
     val isAnalyzingFlashes: Boolean = false,
     val isScoringThumbnails: Boolean = false,
     val isTrackingFaces: Boolean = false,
@@ -560,9 +560,9 @@ data class UndoAction(
     val imageOverlays: List<ImageOverlay> = emptyList(),
     val timelineMarkers: List<TimelineMarker> = emptyList(),
     val chapterMarkers: List<ChapterMarker> = emptyList(),
-    val drawingPaths: List<com.novacut.editor.model.DrawingPath> = emptyList(),
+    val drawingPaths: List<com.directorx.editor.model.DrawingPath> = emptyList(),
     val beatMarkers: List<Long> = emptyList(),
-    val trackedObjects: List<com.novacut.editor.model.TrackedObject> = emptyList(),
+    val trackedObjects: List<com.directorx.editor.model.TrackedObject> = emptyList(),
     val globalTransitions: List<GlobalTransition> = emptyList(),
     val storyboardCards: List<StoryboardCard> = emptyList(),
     val transcript: Transcript? = null,
@@ -663,13 +663,13 @@ class EditorViewModel @Inject constructor(
     private val incomingDocumentImportRouter: IncomingDocumentImportRouter,
     private val proxyEngine: ProxyEngine,
     private val settingsRepo: SettingsRepository,
-    private val ttsEngine: com.novacut.editor.engine.TtsEngine,
-    private val effectShareEngine: com.novacut.editor.engine.EffectShareEngine,
-    private val stylePackManager: com.novacut.editor.engine.StylePackManager,
+    private val ttsEngine: com.directorx.editor.engine.TtsEngine,
+    private val effectShareEngine: com.directorx.editor.engine.EffectShareEngine,
+    private val stylePackManager: com.directorx.editor.engine.StylePackManager,
     private val noiseReductionEngine: NoiseReductionEngine,
     private val beatDetectionEngine: BeatDetectionEngine,
     private val loudnessEngine: LoudnessEngine,
-    private val audioMasteringEngine: com.novacut.editor.engine.AudioMasteringEngine,
+    private val audioMasteringEngine: com.directorx.editor.engine.AudioMasteringEngine,
     private val frameInterpolationEngine: FrameInterpolationEngine,
     private val inpaintingEngine: InpaintingEngine,
     private val upscaleEngine: UpscaleEngine,
@@ -679,7 +679,7 @@ class EditorViewModel @Inject constructor(
     private val smartReframeEngine: SmartReframeEngine,
     private val editingSuggestionEngine: EditingSuggestionEngine,
     private val timelineExportCoordinator: TimelineExportCoordinator,
-    private val cutAssistantEngine: com.novacut.editor.engine.CutAssistantEngine,
+    private val cutAssistantEngine: com.directorx.editor.engine.CutAssistantEngine,
     private val proxyWorkflowEngine: ProxyWorkflowEngine,
     private val multiCamEngine: MultiCamEngine,
     private val mediaImportEngine: MediaImportEngine,
@@ -701,11 +701,11 @@ class EditorViewModel @Inject constructor(
     private val aiThumbnailEngine: AiThumbnailEngine,
     private val audioDescriptionEngine: AudioDescriptionEngine,
     private val stylusMidiEngine: StylusMidiEngine,
-    private val captionTranslationEngine: com.novacut.editor.engine.CaptionTranslationEngine,
+    private val captionTranslationEngine: com.directorx.editor.engine.CaptionTranslationEngine,
     private val fontRegistry: FontRegistry,
-    private val lutRegistry: com.novacut.editor.engine.LutRegistry,
+    private val lutRegistry: com.directorx.editor.engine.LutRegistry,
     private val exportIncidentStore: ExportIncidentStore,
-    private val ffmpegEngine: com.novacut.editor.engine.FFmpegEngine,
+    private val ffmpegEngine: com.directorx.editor.engine.FFmpegEngine,
     private val editorCoordinatorSet: EditorCoordinatorSet,
     @ApplicationContext private val appContext: Context,
     private val savedStateHandle: SavedStateHandle,
@@ -807,7 +807,7 @@ class EditorViewModel @Inject constructor(
         },
         audioEngine = audioEngine,
         exportIncidentStore = exportIncidentStore,
-        appVersion = com.novacut.editor.ClearCutApp.VERSION,
+        appVersion = com.directorx.editor.ClearCutApp.VERSION,
         ffmpegEngine = ffmpegEngine,
         includeDiagnosticRawErrorText = { latestSettings?.includeDiagnosticRawErrorText == true },
         projectFingerprint = ::currentProjectFingerprint,
@@ -935,8 +935,8 @@ class EditorViewModel @Inject constructor(
     private val _oneHandedMode = MutableStateFlow(false)
     val oneHandedMode: StateFlow<Boolean> = _oneHandedMode.asStateFlow()
     private val _desktopOverride =
-        MutableStateFlow(com.novacut.editor.engine.DesktopOverride.AUTO)
-    val desktopOverride: StateFlow<com.novacut.editor.engine.DesktopOverride> =
+        MutableStateFlow(com.directorx.editor.engine.DesktopOverride.AUTO)
+    val desktopOverride: StateFlow<com.directorx.editor.engine.DesktopOverride> =
         _desktopOverride.asStateFlow()
 
     fun setOneHandedMode(enabled: Boolean) {
@@ -944,7 +944,7 @@ class EditorViewModel @Inject constructor(
         viewModelScope.launch { settingsRepo.updateOneHandedMode(enabled) }
     }
 
-    fun setDesktopOverride(value: com.novacut.editor.engine.DesktopOverride) {
+    fun setDesktopOverride(value: com.directorx.editor.engine.DesktopOverride) {
         _desktopOverride.value = value
         viewModelScope.launch { settingsRepo.updateDesktopOverride(value) }
     }
@@ -1067,7 +1067,7 @@ class EditorViewModel @Inject constructor(
             // missing and overwritten by the next autosave tick.
             handleRecoveryOpenOutcome(requireNotNull(openResult.recovery))
             exportDelegate.restoreBatchExportQueue(
-                com.novacut.editor.engine.BatchExportPlanContext(
+                com.directorx.editor.engine.BatchExportPlanContext(
                     projectId = _state.value.project.id,
                     projectFingerprint = currentProjectFingerprint(),
                 )
@@ -1254,7 +1254,7 @@ class EditorViewModel @Inject constructor(
         autoSaveBlockedByRecovery = shouldBlockAutoSaveForRecoveryOutcome(outcome)
         recoveryOpenComplete = true
         if (autoSaveBlockedByRecovery) {
-            showSaveIndicator(com.novacut.editor.model.SaveIndicatorState.ERROR)
+            showSaveIndicator(com.directorx.editor.model.SaveIndicatorState.ERROR)
         } else {
             applySavedStateStatus(savedStateTracker.establishBaseline(currentProjectFingerprint()))
         }
@@ -1479,7 +1479,7 @@ class EditorViewModel @Inject constructor(
                 val state = buildAutoSaveState(s, project.id)
                 val fingerprint = projectStateFingerprint(project, state)
                 val (attempt, _) = savedStateTracker.beginSave(fingerprint)
-                showSaveIndicator(com.novacut.editor.model.SaveIndicatorState.SAVING)
+                showSaveIndicator(com.directorx.editor.model.SaveIndicatorState.SAVING)
                 AutoSaveRequest(
                     project = project,
                     state = state,
@@ -2582,7 +2582,7 @@ class EditorViewModel @Inject constructor(
     fun addBatchExportItem(config: ExportConfig, name: String) = exportDelegate.addBatchExportItem(config, name)
     fun addBatchExportSourceCut(
         config: ExportConfig,
-        sourceRange: com.novacut.editor.model.BatchExportSourceRange,
+        sourceRange: com.directorx.editor.model.BatchExportSourceRange,
     ) = exportDelegate.addBatchExportSourceCut(config, sourceRange)
     fun removeBatchExportItem(id: String) = exportDelegate.removeBatchExportItem(id)
     fun moveBatchExportItem(id: String, targetIndex: Int) = exportDelegate.moveBatchExportItem(id, targetIndex)
@@ -2743,8 +2743,8 @@ class EditorViewModel @Inject constructor(
         val mimeType = runCatching { appContext.contentResolver.getType(uri) }.getOrNull()
         val kind = IncomingDocumentIntentParser.classify(displayName, mimeType)
             ?.takeIf {
-                it == com.novacut.editor.engine.IncomingDocumentKind.CAPTION_SRT ||
-                    it == com.novacut.editor.engine.IncomingDocumentKind.CAPTION_WEBVTT
+                it == com.directorx.editor.engine.IncomingDocumentKind.CAPTION_SRT ||
+                    it == com.directorx.editor.engine.IncomingDocumentKind.CAPTION_WEBVTT
             }
             ?: return null
         val sizeBytes = runCatching {
@@ -3110,13 +3110,13 @@ class EditorViewModel @Inject constructor(
     // --- Auto-save indicator ---
     @Volatile
     private var saveIndicatorJob: Job? = null
-    fun showSaveIndicator(state: com.novacut.editor.model.SaveIndicatorState) {
+    fun showSaveIndicator(state: com.directorx.editor.model.SaveIndicatorState) {
         saveIndicatorJob?.cancel()
         _state.update { it.copy(saveIndicator = state) }
-        if (state == com.novacut.editor.model.SaveIndicatorState.SAVED) {
+        if (state == com.directorx.editor.model.SaveIndicatorState.SAVED) {
             saveIndicatorJob = viewModelScope.launch {
                 delay(2000)
-                _state.update { it.copy(saveIndicator = com.novacut.editor.model.SaveIndicatorState.HIDDEN) }
+                _state.update { it.copy(saveIndicator = com.directorx.editor.model.SaveIndicatorState.HIDDEN) }
             }
         }
     }
@@ -3125,7 +3125,7 @@ class EditorViewModel @Inject constructor(
     fun showUndoHistory() {
         pauseIfPlaying()
         val entries = _state.value.undoStack.mapIndexed { i, a ->
-            com.novacut.editor.model.UndoHistoryEntry(i, a.description)
+            com.directorx.editor.model.UndoHistoryEntry(i, a.description)
         }.reversed()
         _state.update {
             dismissedPanelState(it)
@@ -3289,9 +3289,9 @@ class EditorViewModel @Inject constructor(
     // --- Caption Style Gallery ---
     fun showCaptionStyleGallery() = showPanel(PanelId.CAPTION_STYLE_GALLERY)
     fun hideCaptionStyleGallery() = hidePanel(PanelId.CAPTION_STYLE_GALLERY)
-    fun installedCaptionStyles(): List<com.novacut.editor.model.CaptionStyleTemplate> =
+    fun installedCaptionStyles(): List<com.directorx.editor.model.CaptionStyleTemplate> =
         stylePackManager.listInstalledStyles()
-    fun applyCaptionStyle(template: com.novacut.editor.model.CaptionStyleTemplate) {
+    fun applyCaptionStyle(template: com.directorx.editor.model.CaptionStyleTemplate) {
         hideCaptionStyleGallery()
         saveUndoState("Apply caption style")
         _state.update { s ->
@@ -3341,7 +3341,7 @@ class EditorViewModel @Inject constructor(
                 // Waveform is mono (1 channel) at ~4000 samples, estimate effective sample rate
                 val clipDurationSec = audioClip.sourceDurationMs / 1000.0
                 val effectiveSampleRate = if (clipDurationSec > 0) (waveform.size / clipDurationSec).toInt().coerceAtLeast(1) else 4000
-                val sourceBeats = com.novacut.editor.engine.AudioEffectsEngine.detectBeats(pcm, effectiveSampleRate, 1)
+                val sourceBeats = com.directorx.editor.engine.AudioEffectsEngine.detectBeats(pcm, effectiveSampleRate, 1)
                 val beats = mapSourceMarkersToTimeline(audioClip, sourceBeats)
                     .map(_state.value.project.timelineTimebase::snapMs)
                     .distinct()
@@ -3713,7 +3713,7 @@ class EditorViewModel @Inject constructor(
     }
     fun hideTts() { ttsEngine.stopPreview(); hidePanel(PanelId.TTS) }
 
-    fun synthesizeTts(text: String, style: com.novacut.editor.engine.TtsEngine.VoiceStyle) {
+    fun synthesizeTts(text: String, style: com.directorx.editor.engine.TtsEngine.VoiceStyle) {
         _state.update { it.copyAi { ai -> ai.copy(isSynthesizingTts = true) } }
         viewModelScope.launch {
             val file = ttsEngine.synthesize(text, style)
@@ -3739,7 +3739,7 @@ class EditorViewModel @Inject constructor(
         }
     }
 
-    fun previewTts(text: String, style: com.novacut.editor.engine.TtsEngine.VoiceStyle) {
+    fun previewTts(text: String, style: com.directorx.editor.engine.TtsEngine.VoiceStyle) {
         pauseIfPlaying()
         viewModelScope.launch { ttsEngine.preview(text, style) }
     }
@@ -3747,15 +3747,15 @@ class EditorViewModel @Inject constructor(
     fun stopTtsPreview() { ttsEngine.stopPreview() }
 
     // --- Effect Previews ---
-    private val _effectPreviews = MutableStateFlow<Map<com.novacut.editor.model.EffectType, android.graphics.Bitmap>>(emptyMap())
-    val effectPreviews: StateFlow<Map<com.novacut.editor.model.EffectType, android.graphics.Bitmap>> = _effectPreviews.asStateFlow()
+    private val _effectPreviews = MutableStateFlow<Map<com.directorx.editor.model.EffectType, android.graphics.Bitmap>>(emptyMap())
+    val effectPreviews: StateFlow<Map<com.directorx.editor.model.EffectType, android.graphics.Bitmap>> = _effectPreviews.asStateFlow()
 
     fun generateEffectPreviews() {
         val clip = getSelectedClip() ?: return
         viewModelScope.launch(Dispatchers.Default) {
             val sourceFrame = videoEngine.extractThumbnail(clip.sourceUri, clip.trimStartMs * 1000L, 80, 45)
                 ?: return@launch
-            val previews = mutableMapOf<com.novacut.editor.model.EffectType, android.graphics.Bitmap>()
+            val previews = mutableMapOf<com.directorx.editor.model.EffectType, android.graphics.Bitmap>()
             for (effectType in EffectPreviewRenderer.PREVIEWABLE_EFFECTS) {
                 val preview = EffectPreviewRenderer.renderPreview(sourceFrame, effectType)
                 if (preview != null) previews[effectType] = preview
@@ -3829,7 +3829,7 @@ class EditorViewModel @Inject constructor(
                 .copyPanel { panel -> panel.copy(panels = panel.panels.close(PanelId.DRAWING)) }
         }
     }
-    fun addDrawingPath(path: com.novacut.editor.model.DrawingPath) {
+    fun addDrawingPath(path: com.directorx.editor.model.DrawingPath) {
         _state.update { it.copy(drawingPaths = it.drawingPaths + path) }
         saveProject()
     }
@@ -3995,7 +3995,7 @@ class EditorViewModel @Inject constructor(
         // Refuse degenerate inputs that would otherwise violate Clip's `trimEndMs <= sourceDurationMs`
         // invariant the moment the user touched the new clip (e.g., a TTS file reporting 0 ms).
         if (durationMs <= 0L) {
-            com.novacut.editor.engine.AppLog.w("EditorViewModel", "addClipToTrack ignored: non-positive durationMs=$durationMs for ${uri.redacted()}")
+            com.directorx.editor.engine.AppLog.w("EditorViewModel", "addClipToTrack ignored: non-positive durationMs=$durationMs for ${uri.redacted()}")
             return
         }
         val currentTracks = _state.value.tracks
@@ -4184,7 +4184,7 @@ class EditorViewModel @Inject constructor(
                         val sampleRate = if (clip.sourceDurationMs > 0L) {
                             (waveform.size * 1000L / clip.sourceDurationMs).coerceAtLeast(1L).toInt()
                         } else 20
-                        clip.id to com.novacut.editor.engine.CutAssistantEngine.ClipAudio(
+                        clip.id to com.directorx.editor.engine.CutAssistantEngine.ClipAudio(
                             clipId = clip.id,
                             waveform = waveform,
                             sampleRate = sampleRate,
@@ -4261,7 +4261,7 @@ class EditorViewModel @Inject constructor(
         }
         val applicableOps = ops.filter { op ->
             when (op) {
-                is com.novacut.editor.engine.CutAssistantEngine.CutOperation.RippleDelete -> {
+                is com.directorx.editor.engine.CutAssistantEngine.CutOperation.RippleDelete -> {
                     val state = _state.value
                     val splitIds = linkedClipIds(state.tracks, op.clipId)
                     val groupedIds = regroupedClipIdsForSplit(state.tracks, splitIds, op.timelineStartMs)
@@ -4285,7 +4285,7 @@ class EditorViewModel @Inject constructor(
         var appliedCount = 0
         applicableOps.forEach { op ->
             when (op) {
-                is com.novacut.editor.engine.CutAssistantEngine.CutOperation.RippleDelete -> {
+                is com.directorx.editor.engine.CutAssistantEngine.CutOperation.RippleDelete -> {
                     val originalClip = _state.value.tracks
                         .flatMap { it.clips }
                         .firstOrNull { it.id == op.clipId } ?: return@forEach
@@ -4352,11 +4352,11 @@ class EditorViewModel @Inject constructor(
     private fun perClipWordsFor(
         clipId: String,
         state: EditorState
-    ): List<com.novacut.editor.engine.whisper.SherpaAsrEngine.WordTimestamp> {
+    ): List<com.directorx.editor.engine.whisper.SherpaAsrEngine.WordTimestamp> {
         val transcript = state.v369.transcript ?: return emptyList()
         if (transcript.clipId != clipId) return emptyList()
         return transcript.words.map { w ->
-            com.novacut.editor.engine.whisper.SherpaAsrEngine.WordTimestamp(
+            com.directorx.editor.engine.whisper.SherpaAsrEngine.WordTimestamp(
                 word = w.text,
                 startTimeMs = w.startMs,
                 endTimeMs = w.endMs,
@@ -4372,7 +4372,7 @@ class EditorViewModel @Inject constructor(
      * track survives app restart even before SAM 2 / MediaPipe are wired up
      * (manual placements still ride this same surface).
      */
-    fun upsertTrackedObject(obj: com.novacut.editor.model.TrackedObject) {
+    fun upsertTrackedObject(obj: com.directorx.editor.model.TrackedObject) {
         saveUndoState("Update tracked object")
         _state.update { s ->
             val existingIdx = s.trackedObjects.indexOfFirst { it.id == obj.id }
@@ -4465,7 +4465,7 @@ class EditorViewModel @Inject constructor(
         saveUndoState("Add storyboard card")
         _state.update { s ->
             val nextOrdinal = (s.storyboardCards.maxOfOrNull { it.ordinal } ?: -1) + 1
-            s.copy(storyboardCards = s.storyboardCards + com.novacut.editor.model.StoryboardCard(
+            s.copy(storyboardCards = s.storyboardCards + com.directorx.editor.model.StoryboardCard(
                 ordinal = nextOrdinal,
                 shotText = shotText
             ))
@@ -4473,7 +4473,7 @@ class EditorViewModel @Inject constructor(
         saveProject()
     }
 
-    fun updateStoryboardCard(cardId: String, shotText: String? = null, status: com.novacut.editor.model.StoryboardCardStatus? = null, targetDurationMs: Long? = null) {
+    fun updateStoryboardCard(cardId: String, shotText: String? = null, status: com.directorx.editor.model.StoryboardCardStatus? = null, targetDurationMs: Long? = null) {
         _state.update { s ->
             s.copy(storyboardCards = s.storyboardCards.map { card ->
                 if (card.id == cardId) card.copy(
@@ -4790,7 +4790,7 @@ class EditorViewModel @Inject constructor(
 
     // --- Export ---
     fun cancelExport() = exportDelegate.cancelExport()
-    fun resumeExport(entry: com.novacut.editor.engine.ExportHistoryEntry) = exportDelegate.resumeExport(entry)
+    fun resumeExport(entry: com.directorx.editor.engine.ExportHistoryEntry) = exportDelegate.resumeExport(entry)
     fun confirmPendingExport() = exportDelegate.confirmPendingExport()
     fun dismissPendingExport() = exportDelegate.dismissPendingExport()
 
@@ -5098,10 +5098,10 @@ class EditorViewModel @Inject constructor(
             // Frame analysis uses a blocking MediaMetadataRetriever — keep it off the
             // main thread so the UI doesn't ANR on long/large source files.
             val (refStats, targetStats) = withContext(Dispatchers.IO) {
-                val ref = com.novacut.editor.engine.ColorMatchEngine.analyzeFrame(
+                val ref = com.directorx.editor.engine.ColorMatchEngine.analyzeFrame(
                     appContext, refClip.sourceUri, refClip.trimStartMs + refClip.durationMs / 2
                 )
-                val target = com.novacut.editor.engine.ColorMatchEngine.analyzeFrame(
+                val target = com.directorx.editor.engine.ColorMatchEngine.analyzeFrame(
                     appContext, targetClip.sourceUri, targetClip.trimStartMs + targetClip.durationMs / 2
                 )
                 ref to target
@@ -5115,7 +5115,7 @@ class EditorViewModel @Inject constructor(
                     return@launch
                 }
                 saveUndoState("Color match")
-                val grade = com.novacut.editor.engine.ColorMatchEngine.generateColorMatch(refStats, targetStats)
+                val grade = com.directorx.editor.engine.ColorMatchEngine.generateColorMatch(refStats, targetStats)
                 updateClipById(targetClipId) { it.copy(colorGrade = grade) }
                 updatePreview()
                 saveProject()
@@ -5193,7 +5193,7 @@ class EditorViewModel @Inject constructor(
     fun showTextTemplates() = showPanel(PanelId.TEXT_TEMPLATES)
     fun hideTextTemplates() = hidePanel(PanelId.TEXT_TEMPLATES)
 
-    fun applyTextTemplate(template: com.novacut.editor.model.TextTemplate) {
+    fun applyTextTemplate(template: com.directorx.editor.model.TextTemplate) {
         saveUndoState("Apply text template")
         val playhead = _state.value.playheadMs
         template.layers.forEachIndexed { index, layer ->
@@ -5699,7 +5699,7 @@ class EditorViewModel @Inject constructor(
     }
 
     // --- PiP ---
-    fun applyPipPreset(preset: com.novacut.editor.ui.editor.PipPreset) {
+    fun applyPipPreset(preset: com.directorx.editor.ui.editor.PipPreset) {
         if (_state.value.selectedClipId == null) return
         saveUndoState("PiP preset")
         updateSelectedClip { it.copy(positionX = preset.posX, positionY = preset.posY, scaleX = preset.scaleX, scaleY = preset.scaleY) }
@@ -5750,7 +5750,7 @@ class EditorViewModel @Inject constructor(
         }
     }
 
-    fun setScopeType(type: com.novacut.editor.ui.editor.ScopeType) {
+    fun setScopeType(type: com.directorx.editor.ui.editor.ScopeType) {
         _state.update { it.copy(activeScopeType = type) }
     }
 
@@ -5787,7 +5787,7 @@ class EditorViewModel @Inject constructor(
                 }
                 val pcm = ShortArray(waveform.size) { (waveform[it] * 32767).toInt().toShort() }
                 val speechRegions = withContext(Dispatchers.Default) {
-                    com.novacut.editor.engine.AudioEffectsEngine.detectSpeechRegions(pcm, 44100, 1)
+                    com.directorx.editor.engine.AudioEffectsEngine.detectSpeechRegions(pcm, 44100, 1)
                 }
 
                 if (speechRegions.isEmpty()) {
@@ -5802,10 +5802,10 @@ class EditorViewModel @Inject constructor(
                     state.copy(tracks = state.tracks.map { track ->
                         if (track.type == TrackType.AUDIO) {
                             track.copy(clips = track.clips.map { clip ->
-                                val duckKeyframes = mutableListOf<com.novacut.editor.model.Keyframe>()
+                                val duckKeyframes = mutableListOf<com.directorx.editor.model.Keyframe>()
                                 for ((start, end) in speechRegions) {
                                     duckKeyframes.addAll(
-                                        com.novacut.editor.engine.KeyframeEngine.createVolumeDuck(
+                                        com.directorx.editor.engine.KeyframeEngine.createVolumeDuck(
                                             startMs = start, endMs = end,
                                             normalVolume = clip.volume, duckVolume = clip.volume * 0.15f
                                         )
@@ -6329,7 +6329,7 @@ class EditorViewModel @Inject constructor(
 
     private fun analyzeMediaHealthForState(
         state: EditorState = _state.value,
-        diagnostics: Collection<com.novacut.editor.engine.MediaDiagnostic> = state.media.diagnostics.values,
+        diagnostics: Collection<com.directorx.editor.engine.MediaDiagnostic> = state.media.diagnostics.values,
     ) = MediaHealth.analyze(buildAutoSaveState(state), diagnostics.toList())
 
     private fun analyzeMediaHealthForRecovery(recovery: AutoSaveState) =
@@ -6430,15 +6430,15 @@ class EditorViewModel @Inject constructor(
         val allClips = s.tracks.flatMap { it.clips }
         val storageInfo = documentCoordinator.getStorageInfo(s.project.id)
         val missingCount = s.media.relinkReports
-            .values.count { it.state == com.novacut.editor.engine.MediaRelinkProbe.RelinkState.MISSING }
+            .values.count { it.state == com.directorx.editor.engine.MediaRelinkProbe.RelinkState.MISSING }
         return ProjectInspectorData(
             projectName = s.project.name,
             clipCount = allClips.size,
-            videoTrackCount = s.tracks.count { it.type == com.novacut.editor.model.TrackType.VIDEO },
-            audioTrackCount = s.tracks.count { it.type == com.novacut.editor.model.TrackType.AUDIO },
+            videoTrackCount = s.tracks.count { it.type == com.directorx.editor.model.TrackType.VIDEO },
+            audioTrackCount = s.tracks.count { it.type == com.directorx.editor.model.TrackType.AUDIO },
             overlayTrackCount = s.tracks.count {
-                it.type == com.novacut.editor.model.TrackType.OVERLAY ||
-                    it.type == com.novacut.editor.model.TrackType.TEXT
+                it.type == com.directorx.editor.model.TrackType.OVERLAY ||
+                    it.type == com.directorx.editor.model.TrackType.TEXT
             },
             textOverlayCount = s.textOverlays.size,
             totalDurationMs = s.totalDurationMs,
@@ -6723,7 +6723,7 @@ class EditorViewModel @Inject constructor(
                     sourceLang = sourceLang,
                     targetLang = targetLang,
                 )
-            } catch (e: com.novacut.editor.engine.CaptionTranslationEngine.TranslationUnavailableException) {
+            } catch (e: com.directorx.editor.engine.CaptionTranslationEngine.TranslationUnavailableException) {
                 _state.update { current ->
                     current.copyCaption { caption ->
                         caption.copy(
@@ -6788,12 +6788,12 @@ class EditorViewModel @Inject constructor(
             state.copyCaption { caption ->
                 caption.copy(
                     translationRows = updatedSegments.mapIndexed { i, seg ->
-                        com.novacut.editor.engine.CaptionTranslationEngine.EditorRow(
+                        com.directorx.editor.engine.CaptionTranslationEngine.EditorRow(
                             index = i,
                             segment = seg,
                             quality = rows.getOrNull(i)?.quality
                                 ?: state.captionTranslationQuality
-                                ?: com.novacut.editor.engine.CaptionTranslationEngine.LanguagePairQuality.UNKNOWN,
+                                ?: com.directorx.editor.engine.CaptionTranslationEngine.LanguagePairQuality.UNKNOWN,
                         )
                     },
                 )
@@ -6839,12 +6839,12 @@ class EditorViewModel @Inject constructor(
             state.copyCaption { caption ->
                 caption.copy(
                     translationRows = updated.mapIndexed { i, seg ->
-                        com.novacut.editor.engine.CaptionTranslationEngine.EditorRow(
+                        com.directorx.editor.engine.CaptionTranslationEngine.EditorRow(
                             index = i,
                             segment = seg,
                             quality = rows.getOrNull(i)?.quality
                                 ?: state.captionTranslationQuality
-                                ?: com.novacut.editor.engine.CaptionTranslationEngine.LanguagePairQuality.UNKNOWN,
+                                ?: com.directorx.editor.engine.CaptionTranslationEngine.LanguagePairQuality.UNKNOWN,
                         )
                     },
                 )
@@ -6869,7 +6869,7 @@ class EditorViewModel @Inject constructor(
     // EditorState carries the depth + breadcrumb-text signals the UI reads
     // (PredictiveBackHandler predicate + CompoundNavBreadcrumb chip).
 
-    private val compoundNavStack = com.novacut.editor.engine.CompoundNavStack()
+    private val compoundNavStack = com.directorx.editor.engine.CompoundNavStack()
 
     fun openCompoundClip(clipId: String): Boolean {
         val state = _state.value
@@ -6918,12 +6918,12 @@ class EditorViewModel @Inject constructor(
             state.copyCaption { caption ->
                 caption.copy(
                     translationRows = updated.mapIndexed { i, seg ->
-                        com.novacut.editor.engine.CaptionTranslationEngine.EditorRow(
+                        com.directorx.editor.engine.CaptionTranslationEngine.EditorRow(
                             index = i,
                             segment = seg,
                             quality = rows.getOrNull(i)?.quality
                                 ?: state.captionTranslationQuality
-                                ?: com.novacut.editor.engine.CaptionTranslationEngine.LanguagePairQuality.UNKNOWN,
+                                ?: com.directorx.editor.engine.CaptionTranslationEngine.LanguagePairQuality.UNKNOWN,
                         )
                     },
                 )

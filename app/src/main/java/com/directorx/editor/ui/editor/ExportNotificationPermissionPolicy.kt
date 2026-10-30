@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 internal data class ExportNotificationPermissionDecision(
     val shouldPrompt: Boolean,

@@ -1,12 +1,12 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.engine.AudioConformanceReport
-import com.novacut.editor.engine.MediaHealthReport
-import com.novacut.editor.engine.MediaHealthSeverity
-import com.novacut.editor.engine.MediaRelinkProbe
-import com.novacut.editor.engine.ProjectDependency
-import com.novacut.editor.engine.ProjectDependencyManifest
-import com.novacut.editor.engine.ProjectDependencyStatus
+import com.directorx.editor.engine.AudioConformanceReport
+import com.directorx.editor.engine.MediaHealthReport
+import com.directorx.editor.engine.MediaHealthSeverity
+import com.directorx.editor.engine.MediaRelinkProbe
+import com.directorx.editor.engine.ProjectDependency
+import com.directorx.editor.engine.ProjectDependencyManifest
+import com.directorx.editor.engine.ProjectDependencyStatus
 
 /**
  * A render intent the export cannot honour. Accepting one changes what the file

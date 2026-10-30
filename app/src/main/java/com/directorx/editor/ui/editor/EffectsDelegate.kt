@@ -1,10 +1,10 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.content.Context
-import com.novacut.editor.R
-import com.novacut.editor.model.Effect
-import com.novacut.editor.model.Transition
-import com.novacut.editor.model.TransitionEasing
+import com.directorx.editor.R
+import com.directorx.editor.model.Effect
+import com.directorx.editor.model.Transition
+import com.directorx.editor.model.TransitionEasing
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.UUID
 
@@ -15,7 +15,7 @@ class EffectsDelegate(
     private val updatePreview: () -> Unit,
     private val rebuildPlayerTimeline: () -> Unit,
     private val saveProject: () -> Unit,
-    private val getSelectedClip: () -> com.novacut.editor.model.Clip?,
+    private val getSelectedClip: () -> com.directorx.editor.model.Clip?,
     private val recalculateDuration: (EditorState) -> EditorState,
     private val appContext: Context
 ) {
