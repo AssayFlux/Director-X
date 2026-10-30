@@ -1,17 +1,17 @@
-package com.novacut.editor.engine.db
+package com.directorx.editor.engine.db
 
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import androidx.room3.*
 import androidx.room3.migration.Migration
 import androidx.sqlite.SQLiteConnection
 import androidx.sqlite.execSQL
-import com.novacut.editor.engine.ProjectMediaAsset
-import com.novacut.editor.engine.decodeMediaAssetTags
-import com.novacut.editor.engine.encodeMediaAssetTags
-import com.novacut.editor.engine.normalizeMediaAssetNotes
-import com.novacut.editor.model.Project
-import com.novacut.editor.model.AspectRatio
-import com.novacut.editor.model.Resolution
+import com.directorx.editor.engine.ProjectMediaAsset
+import com.directorx.editor.engine.decodeMediaAssetTags
+import com.directorx.editor.engine.encodeMediaAssetTags
+import com.directorx.editor.engine.normalizeMediaAssetNotes
+import com.directorx.editor.model.Project
+import com.directorx.editor.model.AspectRatio
+import com.directorx.editor.model.Resolution
 import kotlinx.coroutines.flow.Flow
 
 @Database(entities = [Project::class, ProjectMediaAssetEntity::class], version = 10, exportSchema = true)

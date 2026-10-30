@@ -1,8 +1,8 @@
-package com.novacut.editor.engine.whisper
+package com.directorx.editor.engine.whisper
 
 import android.content.Context
 import android.net.Uri
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,13 +1,13 @@
-package com.novacut.editor.engine.segmentation
+package com.directorx.editor.engine.segmentation
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.net.Uri
-import com.novacut.editor.engine.MediaPipeUsageGate
-import com.novacut.editor.engine.MemoryBudgetLedger
-import com.novacut.editor.engine.CodecInstanceBudget
-import com.novacut.editor.engine.ModelDownloadManager
+import com.directorx.editor.engine.MediaPipeUsageGate
+import com.directorx.editor.engine.MemoryBudgetLedger
+import com.directorx.editor.engine.CodecInstanceBudget
+import com.directorx.editor.engine.ModelDownloadManager
 import com.google.mediapipe.framework.image.BitmapImageBuilder
 import com.google.mediapipe.framework.image.ByteBufferExtractor
 import com.google.mediapipe.tasks.core.BaseOptions
@@ -175,7 +175,7 @@ class SegmentationEngine @Inject constructor(
             _downloadProgress.value = 0f
             throw e
         } catch (e: Exception) {
-            com.novacut.editor.engine.AppLog.w("SegmentationEngine", "Model download failed", e)
+            com.directorx.editor.engine.AppLog.w("SegmentationEngine", "Model download failed", e)
             _modelState.value = if (hasVerifiedModelFile()) {
                 SegmentationModelState.READY
             } else {
@@ -268,7 +268,7 @@ class SegmentationEngine @Inject constructor(
 
             segment(scaled)
         } catch (e: Exception) {
-            com.novacut.editor.engine.AppLog.w("SegmentationEngine", "Frame segmentation failed for $videoUri", e)
+            com.directorx.editor.engine.AppLog.w("SegmentationEngine", "Frame segmentation failed for $videoUri", e)
             null
         } finally {
             try { scaled?.takeIf { it !== frame }?.recycle() } catch (_: Exception) { /* already recycled */ }
@@ -283,7 +283,7 @@ class SegmentationEngine @Inject constructor(
     @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
     fun createExportEffect(
         threshold: Float = 0.5f,
-        degradationLedger: com.novacut.editor.engine.RenderDegradationLedger? = null,
+        degradationLedger: com.directorx.editor.engine.RenderDegradationLedger? = null,
         effectName: String = "Background removal",
     ): SegmentationGlEffect {
         return SegmentationGlEffect(this, threshold, degradationLedger, effectName)

@@ -1,18 +1,18 @@
-package com.novacut.editor.engine.whisper
+package com.directorx.editor.engine.whisper
 
 import android.content.Context
 import android.media.MediaCodec
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import android.media.MediaExtractor
 import android.media.MediaFormat
 import android.net.Uri
 import ai.onnxruntime.OnnxTensor
 import ai.onnxruntime.OrtEnvironment
 import ai.onnxruntime.OrtSession
-import com.novacut.editor.engine.AudioDecodeBudget
-import com.novacut.editor.engine.CodecInstanceBudget
-import com.novacut.editor.engine.ModelDownloadManager
-import com.novacut.editor.engine.OnnxSessionFactory
+import com.directorx.editor.engine.AudioDecodeBudget
+import com.directorx.editor.engine.CodecInstanceBudget
+import com.directorx.editor.engine.ModelDownloadManager
+import com.directorx.editor.engine.OnnxSessionFactory
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +32,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.abs
 import kotlin.math.roundToInt
-import com.novacut.editor.engine.redacted
+import com.directorx.editor.engine.redacted
 
 data class WhisperSegment(
     val startMs: Long,
@@ -398,14 +398,14 @@ class WhisperEngine @Inject constructor(
                 // transcription silently. Bail cleanly instead.
                 val shape = logits.info.shape
                 if (shape.size < 3) {
-                    com.novacut.editor.engine.AppLog.e("WhisperEngine", "Decoder logits have unexpected rank ${shape.size}; aborting")
+                    com.directorx.editor.engine.AppLog.e("WhisperEngine", "Decoder logits have unexpected rank ${shape.size}; aborting")
                     break
                 }
                 val logitsData = logits.floatBuffer
                 val vocabSize = shape[2].toInt()
                 val seqLen = shape[1].toInt()
                 if (vocabSize <= 0 || seqLen <= 0) {
-                    com.novacut.editor.engine.AppLog.e("WhisperEngine", "Decoder logits have non-positive dims: shape=${shape.toList()}")
+                    com.directorx.editor.engine.AppLog.e("WhisperEngine", "Decoder logits have non-positive dims: shape=${shape.toList()}")
                     break
                 }
 

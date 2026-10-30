@@ -1,4 +1,4 @@
-package com.novacut.editor.engine.segmentation
+package com.directorx.editor.engine.segmentation
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -8,8 +8,8 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.effect.BaseGlShaderProgram
 import androidx.media3.effect.GlEffect
 import androidx.media3.effect.GlShaderProgram
-import com.novacut.editor.engine.RenderDegradationLedger
-import com.novacut.editor.engine.RenderDegradationType
+import com.directorx.editor.engine.RenderDegradationLedger
+import com.directorx.editor.engine.RenderDegradationType
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
@@ -96,7 +96,7 @@ private class SegmentationShaderProgram(
             val result = try {
                 engine.segment(segBitmap)
             } catch (e: Exception) {
-                com.novacut.editor.engine.AppLog.w("SegmentationGlEffect", "segment() failed for export frame", e)
+                com.directorx.editor.engine.AppLog.w("SegmentationGlEffect", "segment() failed for export frame", e)
                 null
             } finally {
                 try { segBitmap.recycle() } catch (_: Exception) { /* already recycled */ }

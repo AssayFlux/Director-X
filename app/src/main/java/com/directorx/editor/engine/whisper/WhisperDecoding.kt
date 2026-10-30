@@ -1,4 +1,4 @@
-package com.novacut.editor.engine.whisper
+package com.directorx.editor.engine.whisper
 
 import kotlin.math.exp
 import kotlin.math.ln
