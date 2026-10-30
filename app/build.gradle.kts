@@ -27,7 +27,7 @@ val bundleTaskRequested = gradle.startParameter.taskNames.any { taskName ->
 }
 
 android {
-    namespace = "com.novacut.editor"
+    namespace = "com.directorx.editor"
     compileSdk = 37
 
     defaultConfig {
