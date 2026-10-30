@@ -1,6 +1,6 @@
-# ClearCut: Model Registry
+# Director X: Model Registry
 
-Authoritative list of every ML model and native AAR that ClearCut may fetch or bundle. Pairs with the [ModelDownloadManager](../app/src/main/java/com/novacut/editor/engine/ModelDownloadManager.kt) and is the single reference for F-Droid `NonFreeNet` audits, license review, reproducible build verification, and 16 KB page-size compliance tracking.
+Authoritative list of every ML model and native AAR that Director X may fetch or bundle. Pairs with the [ModelDownloadManager](../app/src/main/java/com/directorx/editor/engine/ModelDownloadManager.kt) and is the single reference for F-Droid `NonFreeNet` audits, license review, reproducible build verification, and 16 KB page-size compliance tracking.
 
 **Last refresh:** 2026-08-23. Runtime activation requirements are recorded in the AI tool activation gate matrix below.
 
@@ -18,7 +18,7 @@ Authoritative list of every ML model and native AAR that ClearCut may fetch or b
 
 ## 2. Native AARs (bundled or planned): 16 KB compliance gates
 
-Every native AAR shipped with ClearCut must pass the repository's 16 KB page-size checks. Verify ELF segment alignment with `python scripts/check_16kb_alignment.py app/build/outputs/apk/qa/app-arm64-v8a-qa.apk` and APK packaging with SDK Build Tools `zipalign -c -P 16 -v 4 <apk>` before each release. The local release artifact gate repeats these checks for every packaged ABI.
+Every native AAR shipped with Director X must pass the repository's 16 KB page-size checks. Verify ELF segment alignment with `python scripts/check_16kb_alignment.py app/build/outputs/apk/qa/app-arm64-v8a-qa.apk` and APK packaging with SDK Build Tools `zipalign -c -P 16 -v 4 <apk>` before each release. The local release artifact gate repeats these checks for every packaged ABI.
 
 | AAR | Status | Source | 16 KB aligned? | License | Notes |
 |---|---|---|---|---|---|
@@ -41,7 +41,7 @@ encode/decode ISO 21496-1 metadata for JPEG `Bitmap` objects; Android 16 adds
 `Gainmap.getGainmapDirection()` so apps can distinguish the legacy SDR-base +
 HDR-gainmap direction from the HDR-base + SDR-gainmap direction.
 
-| Variant | Android evidence | ClearCut status |
+| Variant | Android evidence | Director X status |
 |---|---|---|
 | Ultra HDR v1 / SDR base + HDR gain map | `Gainmap.GAINMAP_DIRECTION_SDR_TO_HDR` means applying the gainmap to an SDR base produces HDR. Older Android 14/15 gainmap images are treated as this direction when the direction API is unavailable. | `MediaImportEngine` records `SourceHdrFormat.ULTRA_HDR_GAIN_MAP`; ExportSheet shows the Ultra HDR source chip through color confidence. |
 | ISO 21496-1 v2-style HDR base + SDR gain map | Android 16 `Gainmap.GAINMAP_DIRECTION_HDR_TO_SDR` means the base image is HDR and applying the gainmap produces SDR. | R6.12a records `SourceHdrFormat.ULTRA_HDR_HDR_BASE_GAIN_MAP` during import and persists it through autosave via the existing `hdrFormats` list. |
