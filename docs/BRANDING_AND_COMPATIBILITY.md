@@ -13,16 +13,26 @@ This policy distinguishes user-visible product branding from technical identifie
 - Use `DirectorX` for new internal helper filenames and symbols where a product-specific name is useful.
 - Keep repository paths descriptive, lowercase, and purpose-based. Do not add branding to generic folders such as `app/`, `docs/`, `scripts/`, or `fastlane/` merely to make their names look branded.
 
+## Current Android identity
+
+The current Android build uses the same product package for its installed identity and Kotlin namespace:
+
+- Product name: **Director X**
+- Maintainer: **AssayFlux**
+- Application ID: `com.directorx.editor`
+- Kotlin namespace and source package: `com.directorx.editor`
+- Previous application/source package recorded for migration history: `com.novacut.editor`
+- Version name/code: read from `app/build.gradle.kts`; do not duplicate or independently increment these values in scripts.
+
+The move from the previous NovaCut package identity to `com.directorx.editor` is a new-install migration, not an Android in-place package update. Existing users of the previous package must export projects from that installation and import them into Director X. Future updates to Director X must retain the pinned release signing identity.
+
 ## Compatibility identifiers intentionally retained
 
-The Android application ID is now `com.directorx.editor`. This is a new install identity, not an in-place update of `com.directorx.editor`; existing users must install separately and use an explicit export/import path for project transfer. The source namespace remains `com.directorx.editor` for this migration stage, so Kotlin source packages and generated-code namespace remain stable. Provider authorities are generated from `${applicationId}` and therefore follow the new installed identity. The existing signing key must still be retained for future updates to Director X builds.
+The following identifiers are legacy data/API compatibility surfaces, not public product branding:
 
-The following legacy identifiers are data/API compatibility surfaces, not user-facing brand claims:
-
-- `com.directorx.editor` source namespace and source-directory paths (internal implementation namespace, not the installed app ID).
 - `com.clearcut.*` serialized schema identifiers, metadata keys, and benchmark namespace.
 - `.clearcut` and `.clearcut-template` archive extensions and their MIME associations.
-- Existing database, project, backup, export, and interchange formats.
+- Existing database names, project, backup, export, and interchange formats.
 - Upstream source names, attribution, copyright statements, and required licence notices.
 
 Do not rename or rewrite these values without a versioned, backwards-compatible migration, import/export tests, and a documented release strategy. Do not remove upstream attribution or required third-party licence/source notices to make the repository appear wholly AssayFlux-authored.
