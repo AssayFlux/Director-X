@@ -71,7 +71,7 @@ jobs:
             *) echo "Unsupported build variant: $BUILD_VARIANT"; exit 2 ;;
           esac
           chmod +x ./gradlew
-          ./gradlew --no-daemon --stacktrace --write-verification-metadata sha256 "$TASK"
+          ./gradlew --no-daemon --stacktrace "$TASK"
 
       - name: Collect APK files
         shell: bash
