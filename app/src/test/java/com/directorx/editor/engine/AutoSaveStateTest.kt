@@ -1,24 +1,24 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.FakeUri
 import android.net.TestUri
-import com.novacut.editor.model.AudioEffect
-import com.novacut.editor.model.AudioEffectType
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.Effect
-import com.novacut.editor.model.EffectKeyframe
-import com.novacut.editor.model.EffectType
-import com.novacut.editor.model.Keyframe
-import com.novacut.editor.model.KeyframeInterpolation
-import com.novacut.editor.model.KeyframeProperty
-import com.novacut.editor.model.ProjectColorPolicy
-import com.novacut.editor.model.SpeedCurve
-import com.novacut.editor.model.SpeedPoint
-import com.novacut.editor.model.TextOverlay
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
-import com.novacut.editor.model.Watermark
-import com.novacut.editor.model.WatermarkPosition
+import com.directorx.editor.model.AudioEffect
+import com.directorx.editor.model.AudioEffectType
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.Effect
+import com.directorx.editor.model.EffectKeyframe
+import com.directorx.editor.model.EffectType
+import com.directorx.editor.model.Keyframe
+import com.directorx.editor.model.KeyframeInterpolation
+import com.directorx.editor.model.KeyframeProperty
+import com.directorx.editor.model.ProjectColorPolicy
+import com.directorx.editor.model.SpeedCurve
+import com.directorx.editor.model.SpeedPoint
+import com.directorx.editor.model.TextOverlay
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
+import com.directorx.editor.model.Watermark
+import com.directorx.editor.model.WatermarkPosition
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
@@ -360,7 +360,7 @@ class AutoSaveStateTest {
                 )
             ),
             drawingPaths = listOf(
-                com.novacut.editor.model.DrawingPath(
+                com.directorx.editor.model.DrawingPath(
                     points = listOf(Float.NaN to Float.POSITIVE_INFINITY, 1f to 1f),
                     color = 0xFFFFFFFF,
                     strokeWidth = Float.NaN

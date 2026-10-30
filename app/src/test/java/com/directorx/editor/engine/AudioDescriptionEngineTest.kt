@@ -1,7 +1,7 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.Caption
-import com.novacut.editor.model.WordTimestamp
+import com.directorx.editor.model.Caption
+import com.directorx.editor.model.WordTimestamp
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
