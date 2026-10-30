@@ -1,15 +1,15 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.content.Context
 import android.net.Uri
-import com.novacut.editor.engine.AppLog
-import com.novacut.editor.R
-import com.novacut.editor.engine.MediaImportEngine
-import com.novacut.editor.engine.VideoEngine
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.SourceColorMetadata
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.engine.AppLog
+import com.directorx.editor.R
+import com.directorx.editor.engine.MediaImportEngine
+import com.directorx.editor.engine.VideoEngine
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.SourceColorMetadata
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

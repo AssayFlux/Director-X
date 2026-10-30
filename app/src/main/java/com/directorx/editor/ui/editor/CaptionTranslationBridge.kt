@@ -1,8 +1,8 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.engine.CaptionTranslationEngine
-import com.novacut.editor.engine.whisper.SherpaAsrEngine
-import com.novacut.editor.model.Caption
+import com.directorx.editor.engine.CaptionTranslationEngine
+import com.directorx.editor.engine.whisper.SherpaAsrEngine
+import com.directorx.editor.model.Caption
 
 internal fun captionsToTranslationSegments(
     captions: List<Caption>

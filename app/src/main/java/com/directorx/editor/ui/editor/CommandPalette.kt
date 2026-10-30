@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
@@ -40,7 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
-import com.novacut.editor.R
+import com.directorx.editor.R
 
 data class CommandEntry(
     val actionId: String,

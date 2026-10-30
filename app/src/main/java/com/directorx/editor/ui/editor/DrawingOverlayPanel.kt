@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -30,13 +30,13 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.stringResource
-import com.novacut.editor.R
-import com.novacut.editor.model.DrawingPath
-import com.novacut.editor.ui.theme.ClearCutChromeIconButton
-import com.novacut.editor.ui.theme.ClearCutPrimaryButton
-import com.novacut.editor.ui.theme.Radius
-import com.novacut.editor.ui.theme.Spacing
-import com.novacut.editor.ui.theme.TouchTarget
+import com.directorx.editor.R
+import com.directorx.editor.model.DrawingPath
+import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.ClearCutPrimaryButton
+import com.directorx.editor.ui.theme.Radius
+import com.directorx.editor.ui.theme.Spacing
+import com.directorx.editor.ui.theme.TouchTarget
 
 private val drawingColors = listOf(
     0xFFF38BA8L to R.string.drawing_color_red,

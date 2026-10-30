@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
 import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -28,8 +28,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.novacut.editor.R
-import com.novacut.editor.model.*
+import com.directorx.editor.R
+import com.directorx.editor.model.*
 import kotlin.math.*
 
 enum class ColorGradingTab {

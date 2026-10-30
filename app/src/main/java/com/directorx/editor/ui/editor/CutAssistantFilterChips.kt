@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,11 +20,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.novacut.editor.R
-import com.novacut.editor.engine.CutAssistantEngine
-import com.novacut.editor.engine.SilenceDetectionEngine.CutProposal
-import com.novacut.editor.engine.SilenceDetectionEngine.ProposalCategory
-import com.novacut.editor.ui.theme.Radius
+import com.directorx.editor.R
+import com.directorx.editor.engine.CutAssistantEngine
+import com.directorx.editor.engine.SilenceDetectionEngine.CutProposal
+import com.directorx.editor.engine.SilenceDetectionEngine.ProposalCategory
+import com.directorx.editor.ui.theme.Radius
 
 /**
  * Classify a Cut Assistant [CutAssistantEngine.ReviewProposal] into a filter

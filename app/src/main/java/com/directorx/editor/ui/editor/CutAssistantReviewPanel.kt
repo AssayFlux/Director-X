@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -50,15 +50,15 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.novacut.editor.R
-import com.novacut.editor.engine.CutAssistantEngine
-import com.novacut.editor.engine.SilenceDetectionEngine.CutProposal
-import com.novacut.editor.engine.SilenceDetectionEngine.ProposalCategory
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.Track
-import com.novacut.editor.ui.theme.ClearCutPrimaryButton
-import com.novacut.editor.ui.theme.ClearCutSecondaryButton
-import com.novacut.editor.ui.theme.Radius
+import com.directorx.editor.R
+import com.directorx.editor.engine.CutAssistantEngine
+import com.directorx.editor.engine.SilenceDetectionEngine.CutProposal
+import com.directorx.editor.engine.SilenceDetectionEngine.ProposalCategory
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.Track
+import com.directorx.editor.ui.theme.ClearCutPrimaryButton
+import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.Radius
 import java.util.Locale
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -70,7 +70,7 @@ fun CutAssistantReviewPanel(
     onAcceptAll: () -> Unit,
     onRejectAll: () -> Unit,
     onApply: () -> Unit,
-    onReanalyze: (com.novacut.editor.engine.SilenceDetectionEngine.AutoCutConfig) -> Unit,
+    onReanalyze: (com.directorx.editor.engine.SilenceDetectionEngine.AutoCutConfig) -> Unit,
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -277,8 +277,8 @@ fun CutAssistantReviewPanel(
 
 @Composable
 private fun CutAssistantTuningCard(
-    config: com.novacut.editor.engine.SilenceDetectionEngine.AutoCutConfig,
-    onReanalyze: (com.novacut.editor.engine.SilenceDetectionEngine.AutoCutConfig) -> Unit,
+    config: com.directorx.editor.engine.SilenceDetectionEngine.AutoCutConfig,
+    onReanalyze: (com.directorx.editor.engine.SilenceDetectionEngine.AutoCutConfig) -> Unit,
 ) {
     val semanticColors = LocalClearCutColors.current
     var threshold by remember(config) { mutableFloatStateOf(config.silenceThreshold) }

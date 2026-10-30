@@ -1,11 +1,11 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.content.Context
 import android.net.Uri
-import com.novacut.editor.engine.AppLog
-import com.novacut.editor.R
-import com.novacut.editor.engine.LutRegistry
-import com.novacut.editor.model.ColorGrade
+import com.directorx.editor.engine.AppLog
+import com.directorx.editor.R
+import com.directorx.editor.engine.LutRegistry
+import com.directorx.editor.model.ColorGrade
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +26,7 @@ class ColorGradingDelegate(
     private val showToast: (String) -> Unit,
     private val pauseIfPlaying: () -> Unit,
     private val dismissedPanelState: (EditorState) -> EditorState,
-    private val getSelectedClip: () -> com.novacut.editor.model.Clip?,
+    private val getSelectedClip: () -> com.directorx.editor.model.Clip?,
     private val updatePreview: () -> Unit,
     private val saveProject: () -> Unit
 ) {

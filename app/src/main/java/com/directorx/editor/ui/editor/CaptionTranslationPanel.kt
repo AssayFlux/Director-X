@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -36,11 +36,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.novacut.editor.R
-import com.novacut.editor.engine.CaptionTranslationEngine.EditorRow
-import com.novacut.editor.engine.CaptionTranslationEngine.EditorRowState
-import com.novacut.editor.engine.CaptionTranslationEngine.LanguagePairQuality
-import com.novacut.editor.ui.theme.Radius
+import com.directorx.editor.R
+import com.directorx.editor.engine.CaptionTranslationEngine.EditorRow
+import com.directorx.editor.engine.CaptionTranslationEngine.EditorRowState
+import com.directorx.editor.engine.CaptionTranslationEngine.LanguagePairQuality
+import com.directorx.editor.ui.theme.Radius
 
 /**
  * Caption translation panel (R5.4a UI / RESEARCH_FEATURE_PLAN_2026-05-25
