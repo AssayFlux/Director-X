@@ -1,10 +1,10 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.Uri
 import androidx.media3.common.C
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

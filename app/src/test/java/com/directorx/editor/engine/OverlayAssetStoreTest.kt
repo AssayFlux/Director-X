@@ -1,6 +1,6 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.ImageOverlayType
+import com.directorx.editor.model.ImageOverlayType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -13,7 +13,7 @@ class OverlayAssetStoreTest {
     @Test
     fun parseBundledStickerUri_acceptsShelfUris() {
         val ref = OverlayAssetStore.parseBundledStickerUri(
-            "content://com.novacut.editor.stickers/emoji/0"
+            "content://com.directorx.editor.stickers/emoji/0"
         )
         assertNotNull(ref)
         assertEquals("emoji", ref!!.category)
@@ -23,9 +23,9 @@ class OverlayAssetStoreTest {
     @Test
     fun parseBundledStickerUri_rejectsUnknownAuthorityCategoryAndIndex() {
         assertNull(OverlayAssetStore.parseBundledStickerUri("content://x/emoji/0"))
-        assertNull(OverlayAssetStore.parseBundledStickerUri("content://com.novacut.editor.stickers/bad/0"))
-        assertNull(OverlayAssetStore.parseBundledStickerUri("content://com.novacut.editor.stickers/emoji/12"))
-        assertNull(OverlayAssetStore.parseBundledStickerUri("content://com.novacut.editor.stickers/emoji/-1"))
+        assertNull(OverlayAssetStore.parseBundledStickerUri("content://com.directorx.editor.stickers/bad/0"))
+        assertNull(OverlayAssetStore.parseBundledStickerUri("content://com.directorx.editor.stickers/emoji/12"))
+        assertNull(OverlayAssetStore.parseBundledStickerUri("content://com.directorx.editor.stickers/emoji/-1"))
     }
 
     @Test

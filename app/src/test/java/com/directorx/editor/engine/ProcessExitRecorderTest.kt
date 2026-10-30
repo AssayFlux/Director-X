@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import org.json.JSONObject
 import org.junit.After
@@ -39,15 +39,15 @@ class ProcessExitRecorderTest {
 
     @Test
     fun recordsAndDeduplicatesLatestExitReasons() {
-        val duplicate = snapshot(timestamp = 3_000L, reason = 4, pid = 42, processName = "com.novacut.editor")
+        val duplicate = snapshot(timestamp = 3_000L, reason = 4, pid = 42, processName = "com.directorx.editor")
         val recorder = ProcessExitRecorder.forFile(
             historyFile = temp.newFile("process-exit-history.json"),
             source = FakeProcessExitSource(
                 records = listOf(
-                    snapshot(timestamp = 1_000L, reason = 3, pid = 7, processName = "com.novacut.editor:export"),
+                    snapshot(timestamp = 1_000L, reason = 3, pid = 7, processName = "com.directorx.editor:export"),
                     duplicate,
                     duplicate.copy(pssKb = 999L),
-                    snapshot(timestamp = 2_000L, reason = 5, pid = 8, processName = "com.novacut.editor")
+                    snapshot(timestamp = 2_000L, reason = 5, pid = 8, processName = "com.directorx.editor")
                 )
             )
         )
@@ -75,13 +75,13 @@ class ProcessExitRecorderTest {
                         timestamp = 5_000L,
                         reason = 6,
                         pid = 99,
-                        processName = "com.novacut.editor",
+                        processName = "com.directorx.editor",
                         description = "ANR while opening /storage/emulated/0/DCIM/private.mov",
                         traceExcerpt = """
                             main waiting on content://media/external/video/12345
                             caption=Secret spoken words
                             projectName=Client Launch Cut
-                            sourceUri=/data/data/com.novacut.editor/files/projects/p123/source.mp4
+                            sourceUri=/data/data/com.directorx.editor/files/projects/p123/source.mp4
                         """.trimIndent()
                     )
                 )
@@ -120,14 +120,14 @@ class ProcessExitRecorderTest {
                         timestamp = 7_000L,
                         reason = 13, // REASON_OTHER
                         pid = 50,
-                        processName = "com.novacut.editor",
+                        processName = "com.directorx.editor",
                         description = "MemoryLimiter:AnonSwap limit=2048000 used=2100000"
                     ),
                     snapshot(
                         timestamp = 8_000L,
                         reason = 13, // REASON_OTHER — not MemoryLimiter
                         pid = 51,
-                        processName = "com.novacut.editor",
+                        processName = "com.directorx.editor",
                         description = "Unknown other reason"
                     )
                 )
@@ -176,10 +176,10 @@ class ProcessExitRecorderTest {
             history,
             FakeProcessExitSource(
                 records = listOf(
-                    snapshot(timestamp = 7_000L, reason = 13, pid = 50, processName = "com.novacut.editor",
+                    snapshot(timestamp = 7_000L, reason = 13, pid = 50, processName = "com.directorx.editor",
                         description = "MemoryLimiter:AnonSwap limit=2048000 used=2100000"),
-                    snapshot(timestamp = 6_000L, reason = 3, pid = 49, processName = "com.novacut.editor"),
-                    snapshot(timestamp = 5_000L, reason = 4, pid = 48, processName = "com.novacut.editor"),
+                    snapshot(timestamp = 6_000L, reason = 3, pid = 49, processName = "com.directorx.editor"),
+                    snapshot(timestamp = 5_000L, reason = 4, pid = 48, processName = "com.directorx.editor"),
                 ),
                 memory = DeviceMemory(
                     totalBytes = 7_600_000_000L,
@@ -221,9 +221,9 @@ class ProcessExitRecorderTest {
     @Test
     fun aMemoryKillKeepsTheBudgetOfTheRunItEnded() {
         val history = historyFileInAppData()
-        val firstKill = snapshot(timestamp = 7_000L, reason = 13, pid = 50, processName = "com.novacut.editor",
+        val firstKill = snapshot(timestamp = 7_000L, reason = 13, pid = 50, processName = "com.directorx.editor",
             description = "MemoryLimiter:AnonSwap")
-        val secondKill = snapshot(timestamp = 9_000L, reason = 13, pid = 60, processName = "com.novacut.editor",
+        val secondKill = snapshot(timestamp = 9_000L, reason = 13, pid = 60, processName = "com.directorx.editor",
             description = "MemoryLimiter:AnonSwap")
         ProcessExitRecorder.forFile(history, FakeProcessExitSource()).startMemoryCapture()
         AudioDecodeBudget.exceedsBudget(current = 0, incoming = 16_000_000)
@@ -251,7 +251,7 @@ class ProcessExitRecorderTest {
         MemoryBudgetLedger.uninstall()
         val recorder = ProcessExitRecorder.forFile(
             history,
-            FakeProcessExitSource(records = listOf(snapshot(timestamp = 7_000L, reason = 3, pid = 50, processName = "com.novacut.editor")))
+            FakeProcessExitSource(records = listOf(snapshot(timestamp = 7_000L, reason = 3, pid = 50, processName = "com.directorx.editor")))
         )
 
         recorder.recordStartupExitReasons(nowEpochMs = 8_000L)
@@ -286,7 +286,7 @@ class ProcessExitRecorderTest {
         recorder.recordHeapDump(HeapDumpResult(ProcessExitRecorder.TRIGGER_TYPE_OOM, 0, null, older.path), nowEpochMs = 2_000L)
         recorder.recordHeapDump(HeapDumpResult(ProcessExitRecorder.TRIGGER_TYPE_ANOMALY, 0, null, newer.path), nowEpochMs = 3_000L)
         recorder.recordHeapDump(
-            HeapDumpResult(ProcessExitRecorder.TRIGGER_TYPE_ANOMALY, 1, "rate limited for /data/user/0/com.novacut.editor/files", null),
+            HeapDumpResult(ProcessExitRecorder.TRIGGER_TYPE_ANOMALY, 1, "rate limited for /data/user/0/com.directorx.editor/files", null),
             nowEpochMs = 4_000L,
         )
 

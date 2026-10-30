@@ -1,16 +1,16 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.net.Uri
-import com.novacut.editor.model.Caption
-import com.novacut.editor.model.CaptionStyle
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.ColorGrade
-import com.novacut.editor.model.Project
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
-import com.novacut.editor.model.Watermark
-import com.novacut.editor.model.WatermarkPosition
+import com.directorx.editor.model.Caption
+import com.directorx.editor.model.CaptionStyle
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.ColorGrade
+import com.directorx.editor.model.Project
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
+import com.directorx.editor.model.Watermark
+import com.directorx.editor.model.WatermarkPosition
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals

@@ -1,8 +1,8 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.FakeUri
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.SpeedCurve
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.SpeedCurve
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

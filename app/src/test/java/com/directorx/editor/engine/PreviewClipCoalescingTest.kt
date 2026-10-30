@@ -1,9 +1,9 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.Uri
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.Effect
-import com.novacut.editor.model.EffectType
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.Effect
+import com.directorx.editor.model.EffectType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

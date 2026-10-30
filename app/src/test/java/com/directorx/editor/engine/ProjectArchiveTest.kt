@@ -1,16 +1,16 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.TestUri
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.Caption
-import com.novacut.editor.model.CaptionStyle
-import com.novacut.editor.model.ColorGrade
-import com.novacut.editor.model.ImageOverlay
-import com.novacut.editor.model.TextOverlay
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
-import com.novacut.editor.model.Watermark
-import com.novacut.editor.model.WatermarkPosition
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.Caption
+import com.directorx.editor.model.CaptionStyle
+import com.directorx.editor.model.ColorGrade
+import com.directorx.editor.model.ImageOverlay
+import com.directorx.editor.model.TextOverlay
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
+import com.directorx.editor.model.Watermark
+import com.directorx.editor.model.WatermarkPosition
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail

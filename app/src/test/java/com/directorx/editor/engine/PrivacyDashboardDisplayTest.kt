@@ -1,7 +1,7 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.engine.PrivacyDashboard.Section
-import com.novacut.editor.engine.PrivacyDashboard.StorageLocation
+import com.directorx.editor.engine.PrivacyDashboard.Section
+import com.directorx.editor.engine.PrivacyDashboard.StorageLocation
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
