@@ -1,8 +1,8 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
 
 /** Pure timeline selection used by both preview and transformer composition paths. */
 internal data class CompositionTrackPlan(

@@ -1,10 +1,10 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.engine.SilenceDetectionEngine.AutoCutConfig
-import com.novacut.editor.engine.SilenceDetectionEngine.CutProposal
-import com.novacut.editor.engine.whisper.SherpaAsrEngine
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.Track
+import com.directorx.editor.engine.SilenceDetectionEngine.AutoCutConfig
+import com.directorx.editor.engine.SilenceDetectionEngine.CutProposal
+import com.directorx.editor.engine.whisper.SherpaAsrEngine
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.Track
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -149,7 +149,7 @@ class CutAssistantEngine @Inject constructor(
 
     /**
      * Operation type emitted by [planAcceptedOperations]. Kept independent from
-     * [com.novacut.editor.engine.EditCommand] so this engine can stay free of
+     * [com.directorx.editor.engine.EditCommand] so this engine can stay free of
      * ViewModel coupling — the applier translates each op into the right pair
      * of split/delete commands at apply time.
      */

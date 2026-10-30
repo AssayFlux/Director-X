@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -7,8 +7,8 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.net.Uri
-import com.novacut.editor.engine.AppLog
-import com.novacut.editor.model.Clip
+import com.directorx.editor.engine.AppLog
+import com.directorx.editor.model.Clip
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext

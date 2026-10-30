@@ -1,6 +1,6 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.Clip
+import com.directorx.editor.model.Clip
 
 /**
  * C.13 — Compound clip / nested-sequence navigation stack.

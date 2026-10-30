@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.graphics.SurfaceTexture
 import android.media.MediaCodec
@@ -12,13 +12,13 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.media3.common.util.GlUtil
 import androidx.media3.common.util.UnstableApi
-import com.novacut.editor.R
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.ExportConfig
-import com.novacut.editor.model.ProjectColorPolicy
-import com.novacut.editor.model.SourceHdrFormat
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.VideoCodec
+import com.directorx.editor.R
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.ExportConfig
+import com.directorx.editor.model.ProjectColorPolicy
+import com.directorx.editor.model.SourceHdrFormat
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.VideoCodec
 import java.util.Locale
 
 /** The color an output file carries. */
