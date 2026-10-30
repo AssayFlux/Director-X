@@ -1,6 +1,9 @@
 name: Build Debug APK
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       build_variant:
@@ -22,9 +25,11 @@ concurrency:
 
 jobs:
   build-apk:
-    name: Build ${{ inputs.build_variant }} APK
+    name: Build ${{ inputs.build_variant || 'debug' }} APK
     runs-on: ubuntu-latest
     timeout-minutes: 90
+    env:
+      BUILD_VARIANT: ${{ inputs.build_variant || 'debug' }}
     steps:
       - name: Check out source
         uses: actions/checkout@v4
@@ -53,11 +58,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          case "${{ inputs.build_variant }}" in
+          case "$BUILD_VARIANT" in
             debug) TASK=":app:assembleDebug" ;;
             qa) TASK=":app:assembleQa" ;;
             streaming) TASK=":app:assembleStreaming" ;;
-            *) echo "Unsupported build variant"; exit 2 ;;
+            *) echo "Unsupported build variant: $BUILD_VARIANT"; exit 2 ;;
           esac
           chmod +x ./gradlew
           ./gradlew --no-daemon --stacktrace "$TASK"
@@ -73,7 +78,7 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: director-x-${{ inputs.build_variant }}-apk
+          name: director-x-${{ inputs.build_variant || 'debug' }}-apk
           path: artifacts/*.apk
           if-no-files-found: error
           retention-days: 14
