@@ -1,4 +1,4 @@
-package com.novacut.editor.engine.ai
+package com.directorx.editor.engine.ai
 
 /**
  * On-device AI execution boundary for Director X.

@@ -1,4 +1,4 @@
-package com.novacut.editor.engine.billing
+package com.directorx.editor.engine.billing
 
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

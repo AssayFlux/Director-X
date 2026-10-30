@@ -1,4 +1,4 @@
-package com.novacut.editor.engine.ai
+package com.directorx.editor.engine.ai
 
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
