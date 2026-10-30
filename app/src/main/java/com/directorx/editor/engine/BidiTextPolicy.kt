@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 /**
  * R5.4b — Bidirectional text policy for overlay rendering.

@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import java.text.BreakIterator
 import java.util.Locale

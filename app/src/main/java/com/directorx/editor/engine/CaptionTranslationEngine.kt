@@ -1,8 +1,8 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
-import com.novacut.editor.engine.AppLog
-import com.novacut.editor.engine.whisper.SherpaAsrEngine
+import com.directorx.editor.engine.AppLog
+import com.directorx.editor.engine.whisper.SherpaAsrEngine
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

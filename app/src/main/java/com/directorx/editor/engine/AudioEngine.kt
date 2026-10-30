@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.media.*
@@ -14,7 +14,7 @@ import java.nio.ByteOrder
 import java.nio.ShortBuffer
 import javax.inject.Inject
 import javax.inject.Singleton
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import java.io.DataInputStream
 import java.io.DataOutputStream
 import java.io.File

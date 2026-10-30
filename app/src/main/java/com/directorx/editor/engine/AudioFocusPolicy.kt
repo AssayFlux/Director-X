@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.media.AudioAttributes
 import android.media.AudioFocusRequest

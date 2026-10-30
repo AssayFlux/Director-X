@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 /** Public capability state and dependency metadata generated from the checked-in registry. */
 data class CapabilityRecord(

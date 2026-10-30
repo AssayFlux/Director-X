@@ -1,10 +1,10 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.net.Uri
-import com.novacut.editor.engine.AppLog
-import com.novacut.editor.model.ChapterMarker
-import com.novacut.editor.model.WordTimestamp
+import com.directorx.editor.engine.AppLog
+import com.directorx.editor.model.ChapterMarker
+import com.directorx.editor.model.WordTimestamp
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
