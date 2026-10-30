@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 /** Pure Android thermal-signal interpretation for long-running exports. */
 object ThermalHeadroomPolicy {

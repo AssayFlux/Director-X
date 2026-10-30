@@ -1,6 +1,6 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.EffectType
+import com.directorx.editor.model.EffectType
 import org.json.JSONArray
 import org.json.JSONObject
 

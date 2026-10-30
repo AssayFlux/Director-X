@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -10,9 +10,9 @@ import android.text.TextDirectionHeuristics
 import android.text.TextPaint
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.effect.BitmapOverlay
-import com.novacut.editor.model.TextAlignment
-import com.novacut.editor.model.TextAnimation
-import com.novacut.editor.model.TextOverlay
+import com.directorx.editor.model.TextAlignment
+import com.directorx.editor.model.TextAnimation
+import com.directorx.editor.model.TextOverlay
 
 /**
  * Bitmap-based text overlay used when the model's `strokeWidth > 0`.

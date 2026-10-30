@@ -1,12 +1,12 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.Uri
-import com.novacut.editor.engine.AppLog
-import com.novacut.editor.model.BlendMode
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.ProjectColorPolicy
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.engine.AppLog
+import com.directorx.editor.model.BlendMode
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.ProjectColorPolicy
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
 import javax.inject.Inject
 import javax.inject.Singleton
 

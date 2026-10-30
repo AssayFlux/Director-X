@@ -1,13 +1,13 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.net.Uri
-import com.novacut.editor.engine.AppLog
-import com.novacut.editor.model.Easing
-import com.novacut.editor.model.Keyframe
-import com.novacut.editor.model.KeyframeProperty
+import com.directorx.editor.engine.AppLog
+import com.directorx.editor.model.Easing
+import com.directorx.editor.model.Keyframe
+import com.directorx.editor.model.KeyframeProperty
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

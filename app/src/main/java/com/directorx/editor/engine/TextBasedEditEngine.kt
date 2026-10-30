@@ -1,8 +1,8 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.engine.AppLog
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.WordTimestamp
+import com.directorx.editor.engine.AppLog
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.WordTimestamp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

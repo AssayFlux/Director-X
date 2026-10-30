@@ -1,8 +1,8 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.engine.AppLog
-import com.novacut.editor.model.Caption
-import com.novacut.editor.model.SubtitleFormat
+import com.directorx.editor.engine.AppLog
+import com.directorx.editor.model.Caption
+import com.directorx.editor.model.SubtitleFormat
 import java.io.File
 
 /**

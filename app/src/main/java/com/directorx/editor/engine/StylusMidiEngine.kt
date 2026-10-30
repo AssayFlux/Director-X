@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.media.midi.MidiDevice
@@ -6,7 +6,7 @@ import android.media.midi.MidiManager
 import android.media.midi.MidiReceiver
 import android.os.Handler
 import android.os.Looper
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import android.view.MotionEvent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

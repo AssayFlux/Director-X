@@ -1,13 +1,13 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.net.Uri
-import com.novacut.editor.BuildConfig
-import com.novacut.editor.engine.AppLog
-import com.novacut.editor.model.CaptionAccessibilityPreset
-import com.novacut.editor.model.CaptionStyleTemplate
-import com.novacut.editor.model.CaptionTemplateType
-import com.novacut.editor.model.TextAnimation
+import com.directorx.editor.BuildConfig
+import com.directorx.editor.engine.AppLog
+import com.directorx.editor.model.CaptionAccessibilityPreset
+import com.directorx.editor.model.CaptionStyleTemplate
+import com.directorx.editor.model.CaptionTemplateType
+import com.directorx.editor.model.TextAnimation
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
