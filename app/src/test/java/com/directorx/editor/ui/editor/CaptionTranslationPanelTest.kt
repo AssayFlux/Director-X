@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,7 +10,7 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
-import com.novacut.editor.R
+import com.directorx.editor.R
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test

@@ -1,8 +1,8 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.engine.CaptionTranslationEngine
-import com.novacut.editor.model.Caption
-import com.novacut.editor.model.CaptionWord
+import com.directorx.editor.engine.CaptionTranslationEngine
+import com.directorx.editor.model.Caption
+import com.directorx.editor.model.CaptionWord
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

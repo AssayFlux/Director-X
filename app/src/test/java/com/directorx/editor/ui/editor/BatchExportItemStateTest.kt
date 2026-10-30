@@ -1,13 +1,13 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.net.FakeUri
-import com.novacut.editor.engine.ExportState
-import com.novacut.editor.model.BatchExportItem
-import com.novacut.editor.model.BatchExportSourceRange
-import com.novacut.editor.model.ExportConfig
-import com.novacut.editor.model.ProjectColorPolicy
-import com.novacut.editor.model.Resolution
-import com.novacut.editor.model.VideoCodec
+import com.directorx.editor.engine.ExportState
+import com.directorx.editor.model.BatchExportItem
+import com.directorx.editor.model.BatchExportSourceRange
+import com.directorx.editor.model.ExportConfig
+import com.directorx.editor.model.ProjectColorPolicy
+import com.directorx.editor.model.Resolution
+import com.directorx.editor.model.VideoCodec
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

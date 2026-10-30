@@ -1,10 +1,10 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.model.CaptionAccessibilityPreset
-import com.novacut.editor.model.TextAnimation
-import com.novacut.editor.model.isAccessibilityPreset
-import com.novacut.editor.model.toCaptionStyleType
-import com.novacut.editor.model.CaptionStyleType
+import com.directorx.editor.model.CaptionAccessibilityPreset
+import com.directorx.editor.model.TextAnimation
+import com.directorx.editor.model.isAccessibilityPreset
+import com.directorx.editor.model.toCaptionStyleType
+import com.directorx.editor.model.CaptionStyleType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

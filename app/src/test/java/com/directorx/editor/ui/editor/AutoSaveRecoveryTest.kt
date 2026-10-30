@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.engine.AutoSaveState
-import com.novacut.editor.engine.ProjectAutoSave
+import com.directorx.editor.engine.AutoSaveState
+import com.directorx.editor.engine.ProjectAutoSave
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

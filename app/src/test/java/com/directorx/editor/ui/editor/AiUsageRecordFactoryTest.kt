@@ -1,8 +1,8 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.net.FakeUri
-import com.novacut.editor.engine.AiUsageLedger
-import com.novacut.editor.model.Clip
+import com.directorx.editor.engine.AiUsageLedger
+import com.directorx.editor.model.Clip
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

@@ -1,12 +1,12 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.net.TestUri
-import com.novacut.editor.ai.AutoEditBeatSupport
-import com.novacut.editor.ai.AutoEditIntent
-import com.novacut.editor.ai.AutoEditResult
-import com.novacut.editor.ai.AutoEditScoreComponents
-import com.novacut.editor.ai.AutoEditSegment
-import com.novacut.editor.model.Clip
+import com.directorx.editor.ai.AutoEditBeatSupport
+import com.directorx.editor.ai.AutoEditIntent
+import com.directorx.editor.ai.AutoEditResult
+import com.directorx.editor.ai.AutoEditScoreComponents
+import com.directorx.editor.ai.AutoEditSegment
+import com.directorx.editor.model.Clip
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
