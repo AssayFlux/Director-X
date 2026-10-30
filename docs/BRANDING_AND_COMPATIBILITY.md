@@ -45,6 +45,4 @@ Identical file bytes are not sufficient evidence that files are redundant. Andro
 
 ## Current migration note
 
-The benchmark helper filename `ClearCutBenchmarkFlows.kt` was renamed to `DirectorXBenchmarkFlows.kt`. The Android application ID is `com.directorx.editor`; the source namespace remains `com.directorx.editor`. Benchmark launch targets and shortcut actions use the new application ID. The package identity registry records the separate source namespace and new-install migration policy. The signing key must be retained for future Director X updates.
-
-This migration changes source/package and schema snapshot paths only; it does not change the installed Android application ID. Build, instrumentation, signing, and device verification are still required.
+The source tree, generated capability registry, package identity registry, shortcut targets, and QA test identifiers use `com.directorx.editor`. The previous `com.novacut.editor` identity is recorded only as migration history. The application ID changed, so installs from the previous package are separate Android apps and require explicit project export/import. The pinned release signing identity must be retained for subsequent Director X updates. Build, instrumentation, signing, and device verification remain required for each release.
