@@ -1,8 +1,8 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.Mask
-import com.novacut.editor.model.MaskPoint
-import com.novacut.editor.model.MaskType
+import com.directorx.editor.model.Mask
+import com.directorx.editor.model.MaskPoint
+import com.directorx.editor.model.MaskType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

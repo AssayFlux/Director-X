@@ -1,8 +1,8 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.Keyframe
-import com.novacut.editor.model.KeyframeInterpolation
-import com.novacut.editor.model.KeyframeProperty
+import com.directorx.editor.model.Keyframe
+import com.directorx.editor.model.KeyframeInterpolation
+import com.directorx.editor.model.KeyframeProperty
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
