@@ -493,7 +493,7 @@ fun SettingsScreen(
             title = stringResource(R.string.settings_appearance),
             description = stringResource(R.string.settings_appearance_description)
         ) {
-            val appearanceModes = AppearanceMode.entries
+            val appearanceModes = listOf(AppearanceMode.PRIMARY_BRAND, AppearanceMode.MIDNIGHT_CINEMA, AppearanceMode.HIGH_CONTRAST)
             SettingsDropdown(
                 icon = Icons.Default.Contrast,
                 accent = ClearCutAccents.Sky,
@@ -1433,8 +1433,8 @@ private fun SegmentationModelState.displayLabel(): String = when (this) {
 
 @Composable
 private fun AppearanceMode.displayLabel(): String = when (this) {
-    AppearanceMode.DARK -> stringResource(R.string.settings_appearance_dark)
-    AppearanceMode.HIGH_CONTRAST_DARK -> stringResource(R.string.settings_appearance_high_contrast)
+    AppearanceMode.PRIMARY_BRAND, AppearanceMode.MIDNIGHT_CINEMA, AppearanceMode.DARK -> stringResource(R.string.settings_appearance_dark)
+    AppearanceMode.HIGH_CONTRAST, AppearanceMode.HIGH_CONTRAST_DARK -> stringResource(R.string.settings_appearance_high_contrast)
 }
 
 @Composable
