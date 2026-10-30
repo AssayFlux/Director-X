@@ -22,19 +22,21 @@ permissions:
   contents: write
 
 concurrency:
-  group: manual-apk-${{ github.ref }}
+  group: director-x-apk-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
   build-apk:
     name: Build ${{ inputs.build_variant || 'debug' }} APK
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
     env:
       BUILD_VARIANT: ${{ inputs.build_variant || 'debug' }}
     steps:
       - name: Check out source
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v5
@@ -55,12 +57,11 @@ jobs:
         run: |
           set -euo pipefail
           sdkmanager "platforms;android-37.0" "build-tools;37.0.0"
-          # SDK Manager publishes API 37 as android-37.0, while this AGP
-          # build currently resolves compileSdk 37 via the android-37 path.
           test -d "$ANDROID_SDK_ROOT/platforms/android-37.0"
           ln -sfn android-37.0 "$ANDROID_SDK_ROOT/platforms/android-37"
 
-      - name: Build selected APK variant
+      - name: Select build task
+        id: task
         shell: bash
         run: |
           set -euo pipefail
@@ -68,10 +69,42 @@ jobs:
             debug) TASK=":app:assembleDebug" ;;
             qa) TASK=":app:assembleQa" ;;
             streaming) TASK=":app:assembleStreaming" ;;
-            *) echo "Unsupported build variant: $BUILD_VARIANT"; exit 2 ;;
+            *) echo "::error::Unsupported build variant: $BUILD_VARIANT"; exit 2 ;;
           esac
+          echo "gradle_task=$TASK" >> "$GITHUB_OUTPUT"
           chmod +x ./gradlew
-          ./gradlew --no-daemon --stacktrace "$TASK"
+
+      # KSP resolves a detached configuration while the task executes. A normal
+      # dependency scan/help task does not necessarily discover that artifact.
+      # Bootstrap checksums against the configured Google/Maven Central
+      # repositories, then immediately run the identical build in strict mode.
+      - name: Bootstrap dependency verification metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./gradlew --no-daemon --write-verification-metadata sha256 --stacktrace "${{ steps.task.outputs.gradle_task }}"
+
+      - name: Build APK with strict dependency verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./gradlew --no-daemon --dependency-verification strict --stacktrace "${{ steps.task.outputs.gradle_task }}"
+
+      - name: Review and commit generated verification metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add gradle/verification-metadata.xml
+          if git diff --cached --quiet; then
+            echo "Dependency verification metadata is already current."
+          else
+            echo "New SHA-256 verification entries generated:"
+            git diff --cached -- gradle/verification-metadata.xml
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "build: update verified dependency checksums"
+            git push origin "HEAD:main"
+          fi
 
       - name: Collect APK files
         shell: bash
@@ -79,7 +112,10 @@ jobs:
           set -euo pipefail
           mkdir -p artifacts
           find app/build/outputs/apk -type f -name '*.apk' -exec cp '{}' artifacts/ \;
-          test -n "$(find artifacts -maxdepth 1 -type f -name '*.apk' -print -quit)"
+          APK_COUNT="$(find artifacts -maxdepth 1 -type f -name '*.apk' | wc -l)"
+          test "$APK_COUNT" -gt 0
+          echo "Collected $APK_COUNT APK file(s):"
+          ls -lh artifacts/
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
@@ -88,18 +124,3 @@ jobs:
           path: artifacts/*.apk
           if-no-files-found: error
           retention-days: 14
-
-      - name: Commit generated dependency verification metadata
-        if: always()
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add gradle/verification-metadata.xml
-          if ! git diff --cached --quiet; then
-            git commit -m "Update Gradle dependency verification metadata"
-            git push
-          else
-            echo "Dependency verification metadata is unchanged."
-          fi
