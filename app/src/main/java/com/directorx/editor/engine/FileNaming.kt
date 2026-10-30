@@ -28,10 +28,10 @@ internal fun finalizeFilenameSize(outputFile: File): File {
 
 fun sanitizeFileName(
     raw: String,
-    fallback: String = "ClearCut",
+    fallback: String = "Director X",
     maxLength: Int = 80
 ): String {
-    val fallbackCandidate = fallback.trim().ifBlank { "ClearCut" }
+    val fallbackCandidate = fallback.trim().ifBlank { "Director X" }
     val normalized = raw
         .trim()
         .replace(invalidFileNameChars, "_")
@@ -57,7 +57,7 @@ fun sanitizeFileName(
 
 fun sanitizeFileNamePreservingExtension(
     raw: String,
-    fallbackStem: String = "ClearCut",
+    fallbackStem: String = "Director X",
     maxLength: Int = 80
 ): String {
     val trimmed = raw.trim()
