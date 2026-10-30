@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -15,12 +15,12 @@ import androidx.media3.common.util.Size
 import androidx.media3.transformer.CompositionPlayer
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.novacut.editor.engine.segmentation.SegmentationEngine
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.ExportConfig
-import com.novacut.editor.model.Resolution
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.engine.segmentation.SegmentationEngine
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.ExportConfig
+import com.directorx.editor.model.Resolution
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.flowOf

@@ -1,4 +1,4 @@
-package com.novacut.editor
+package com.directorx.editor
 
 import android.content.Intent
 import android.net.Uri
@@ -30,21 +30,21 @@ import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import com.novacut.editor.engine.AppSettings
-import com.novacut.editor.engine.IncomingDocumentIntentParser
-import com.novacut.editor.engine.IncomingDocumentItem
-import com.novacut.editor.engine.IncomingDocumentMetadata
-import com.novacut.editor.engine.IncomingMediaIntentParser
-import com.novacut.editor.engine.IncomingMediaItem
-import com.novacut.editor.engine.ProjectShortcutPlanner
-import com.novacut.editor.engine.SettingsRepository
-import com.novacut.editor.engine.db.ProjectDao
-import com.novacut.editor.engine.resolveMediaDisplayName
-import com.novacut.editor.ui.editor.EditorScreen
-import com.novacut.editor.ui.editor.LocalTabletopPosture
-import com.novacut.editor.ui.projects.ProjectListScreen
-import com.novacut.editor.ui.settings.SettingsScreen
-import com.novacut.editor.ui.theme.ClearCutTheme
+import com.directorx.editor.engine.AppSettings
+import com.directorx.editor.engine.IncomingDocumentIntentParser
+import com.directorx.editor.engine.IncomingDocumentItem
+import com.directorx.editor.engine.IncomingDocumentMetadata
+import com.directorx.editor.engine.IncomingMediaIntentParser
+import com.directorx.editor.engine.IncomingMediaItem
+import com.directorx.editor.engine.ProjectShortcutPlanner
+import com.directorx.editor.engine.SettingsRepository
+import com.directorx.editor.engine.db.ProjectDao
+import com.directorx.editor.engine.resolveMediaDisplayName
+import com.directorx.editor.ui.editor.EditorScreen
+import com.directorx.editor.ui.editor.LocalTabletopPosture
+import com.directorx.editor.ui.projects.ProjectListScreen
+import com.directorx.editor.ui.settings.SettingsScreen
+import com.directorx.editor.ui.theme.ClearCutTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -381,8 +381,8 @@ class MainActivity : ComponentActivity() {
     }
 
     companion object {
-        const val ACTION_NEW_PROJECT = "com.novacut.editor.action.NEW_PROJECT"
-        const val ACTION_OPEN_RECENT = "com.novacut.editor.action.OPEN_RECENT"
+        const val ACTION_NEW_PROJECT = "com.directorx.editor.action.NEW_PROJECT"
+        const val ACTION_OPEN_RECENT = "com.directorx.editor.action.OPEN_RECENT"
     }
 }
 

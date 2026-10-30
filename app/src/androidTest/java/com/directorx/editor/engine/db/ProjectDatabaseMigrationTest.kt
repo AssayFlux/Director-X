@@ -1,4 +1,4 @@
-package com.novacut.editor.engine.db
+package com.directorx.editor.engine.db
 
 import androidx.room3.testing.MigrationTestHelper
 import androidx.sqlite.SQLiteConnection

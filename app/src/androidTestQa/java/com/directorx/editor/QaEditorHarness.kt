@@ -1,4 +1,4 @@
-package com.novacut.editor
+package com.directorx.editor
 
 import android.content.Intent
 import android.view.ViewConfiguration
@@ -18,13 +18,13 @@ import androidx.room3.Room
 import androidx.sqlite.driver.AndroidSQLiteDriver
 import androidx.test.espresso.Espresso
 import androidx.test.platform.app.InstrumentationRegistry
-import com.novacut.editor.engine.AutoSaveState
-import com.novacut.editor.engine.ProjectAutoSave
-import com.novacut.editor.engine.db.ProjectDatabase
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.Project
-import com.novacut.editor.model.TrackType
-import com.novacut.editor.ui.ClearCutTestTags
+import com.directorx.editor.engine.AutoSaveState
+import com.directorx.editor.engine.ProjectAutoSave
+import com.directorx.editor.engine.db.ProjectDatabase
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.Project
+import com.directorx.editor.model.TrackType
+import com.directorx.editor.ui.ClearCutTestTags
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue

@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.getValue
@@ -11,10 +11,10 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.novacut.editor.model.Mask
-import com.novacut.editor.model.MaskPoint
-import com.novacut.editor.model.MaskType
-import com.novacut.editor.ui.ClearCutTestTags
+import com.directorx.editor.model.Mask
+import com.directorx.editor.model.MaskPoint
+import com.directorx.editor.model.MaskType
+import com.directorx.editor.ui.ClearCutTestTags
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule

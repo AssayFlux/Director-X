@@ -1,4 +1,4 @@
-package com.novacut.editor
+package com.directorx.editor
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.test.doubleClick
@@ -12,8 +12,8 @@ import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.pinch
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.novacut.editor.model.Clip
-import com.novacut.editor.ui.ClearCutTestTags
+import com.directorx.editor.model.Clip
+import com.directorx.editor.ui.ClearCutTestTags
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -80,8 +80,8 @@ class StabilizationDeviceAcceptanceTest {
             assertTrue("analysis did not produce shared transform keyframes", keyframes.isNotEmpty())
             assertTrue(
                 "keyframes did not include counter-motion",
-                keyframes.any { it.property == com.novacut.editor.model.KeyframeProperty.POSITION_X } &&
-                    keyframes.any { it.property == com.novacut.editor.model.KeyframeProperty.POSITION_Y },
+                keyframes.any { it.property == com.directorx.editor.model.KeyframeProperty.POSITION_X } &&
+                    keyframes.any { it.property == com.directorx.editor.model.KeyframeProperty.POSITION_Y },
             )
             assertEquals(
                 "stabilization analysis must preserve the source bytes",

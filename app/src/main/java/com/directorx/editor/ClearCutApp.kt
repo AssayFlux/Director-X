@@ -1,4 +1,4 @@
-package com.novacut.editor
+package com.directorx.editor
 
 import android.app.Application
 import android.app.Activity
@@ -7,15 +7,15 @@ import android.app.NotificationManager
 import android.os.Bundle
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
-import com.novacut.editor.BuildConfig
-import com.novacut.editor.engine.CrashRecordStore
-import com.novacut.editor.engine.DebugRuntimePolicy
-import com.novacut.editor.engine.HdrDeviceSupport
-import com.novacut.editor.engine.HealthEvent
-import com.novacut.editor.engine.MemoryTrimDispatcher
-import com.novacut.editor.engine.MediaStorePendingRowSweeper
-import com.novacut.editor.engine.ProcessExitRecorder
-import com.novacut.editor.engine.ProductHealthLedger
+import com.directorx.editor.BuildConfig
+import com.directorx.editor.engine.CrashRecordStore
+import com.directorx.editor.engine.DebugRuntimePolicy
+import com.directorx.editor.engine.HdrDeviceSupport
+import com.directorx.editor.engine.HealthEvent
+import com.directorx.editor.engine.MemoryTrimDispatcher
+import com.directorx.editor.engine.MediaStorePendingRowSweeper
+import com.directorx.editor.engine.ProcessExitRecorder
+import com.directorx.editor.engine.ProductHealthLedger
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

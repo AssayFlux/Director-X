@@ -1,4 +1,4 @@
-package com.novacut.editor.ai
+package com.directorx.editor.ai
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -8,15 +8,15 @@ import android.media.MediaExtractor
 import android.media.MediaFormat
 import android.media.MediaMetadataRetriever
 import android.net.Uri
-import com.novacut.editor.engine.AppLog
-import com.novacut.editor.engine.AudioDecodeBudget
-import com.novacut.editor.engine.CodecInstanceBudget
-import com.novacut.editor.engine.AudioEffectsEngine
-import com.novacut.editor.engine.segmentation.SegmentationEngine
-import com.novacut.editor.engine.whisper.WhisperEngine
-import com.novacut.editor.model.TextOverlay
-import com.novacut.editor.model.TextAlignment
-import com.novacut.editor.model.TextAnimation
+import com.directorx.editor.engine.AppLog
+import com.directorx.editor.engine.AudioDecodeBudget
+import com.directorx.editor.engine.CodecInstanceBudget
+import com.directorx.editor.engine.AudioEffectsEngine
+import com.directorx.editor.engine.segmentation.SegmentationEngine
+import com.directorx.editor.engine.whisper.WhisperEngine
+import com.directorx.editor.model.TextOverlay
+import com.directorx.editor.model.TextAlignment
+import com.directorx.editor.model.TextAnimation
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
@@ -345,7 +345,7 @@ class AiFeatures @Inject constructor(
                 MediaMetadataRetriever.METADATA_KEY_DURATION
             )?.toLongOrNull() ?: return@withContext ColorCorrection()
             // Bound duration so `durationMs * (i*2+1)` cannot overflow Long.
-            val durationMs = com.novacut.editor.engine.MediaDurationPolicy.analyzableDurationMs(rawDurationMs)
+            val durationMs = com.directorx.editor.engine.MediaDurationPolicy.analyzableDurationMs(rawDurationMs)
             if (durationMs <= 0L) return@withContext ColorCorrection()
 
             // Sample 5 frames evenly across the clip
@@ -734,7 +734,7 @@ class AiFeatures @Inject constructor(
                 MediaMetadataRetriever.METADATA_KEY_DURATION
             )?.toLongOrNull() ?: return@withContext emptyList()
             // Skip proportional scanning for non-positive/overflowed/> 24h metadata.
-            val durationMs = com.novacut.editor.engine.MediaDurationPolicy.analyzableDurationMs(rawDurationMs)
+            val durationMs = com.directorx.editor.engine.MediaDurationPolicy.analyzableDurationMs(rawDurationMs)
             if (durationMs <= 0L) return@withContext emptyList()
 
             val intervalMs = 500L
@@ -1154,10 +1154,10 @@ class AiFeatures @Inject constructor(
 
             val sourcePixels = width * height
             val targetResolution = when {
-                sourcePixels <= 480 * 360 -> com.novacut.editor.model.Resolution.HD_720P
-                sourcePixels <= 1280 * 720 -> com.novacut.editor.model.Resolution.FHD_1080P
-                sourcePixels <= 1920 * 1080 -> com.novacut.editor.model.Resolution.QHD_1440P
-                sourcePixels <= 2560 * 1440 -> com.novacut.editor.model.Resolution.UHD_4K
+                sourcePixels <= 480 * 360 -> com.directorx.editor.model.Resolution.HD_720P
+                sourcePixels <= 1280 * 720 -> com.directorx.editor.model.Resolution.FHD_1080P
+                sourcePixels <= 1920 * 1080 -> com.directorx.editor.model.Resolution.QHD_1440P
+                sourcePixels <= 2560 * 1440 -> com.directorx.editor.model.Resolution.UHD_4K
                 else -> null // Already 4K+
             }
 
@@ -1716,7 +1716,7 @@ data class StyleTransferResult(
 data class UpscaleResult(
     val sourceWidth: Int = 0,
     val sourceHeight: Int = 0,
-    val targetResolution: com.novacut.editor.model.Resolution? = null,
+    val targetResolution: com.directorx.editor.model.Resolution? = null,
     val sharpenStrength: Float = 0.5f,
     val confidence: Float = 0f
 )

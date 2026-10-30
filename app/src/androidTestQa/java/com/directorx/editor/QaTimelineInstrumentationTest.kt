@@ -1,4 +1,4 @@
-package com.novacut.editor
+package com.directorx.editor
 
 import android.content.Intent
 import androidx.compose.ui.test.assertIsEnabled
@@ -17,12 +17,12 @@ import androidx.room3.Room
 import androidx.sqlite.driver.AndroidSQLiteDriver
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.novacut.editor.engine.AutoSaveState
-import com.novacut.editor.engine.ProjectAutoSave
-import com.novacut.editor.engine.db.ProjectDatabase
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.Project
-import com.novacut.editor.ui.ClearCutTestTags
+import com.directorx.editor.engine.AutoSaveState
+import com.directorx.editor.engine.ProjectAutoSave
+import com.directorx.editor.engine.db.ProjectDatabase
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.Project
+import com.directorx.editor.ui.ClearCutTestTags
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -236,7 +236,7 @@ class QaTimelineInstrumentationTest {
 
     private fun videoClips(state: AutoSaveState): List<Clip> {
         return state.tracks
-            .filter { track -> track.type == com.novacut.editor.model.TrackType.VIDEO }
+            .filter { track -> track.type == com.directorx.editor.model.TrackType.VIDEO }
             .flatMap { track -> track.clips }
     }
 

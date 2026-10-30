@@ -1,12 +1,12 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.novacut.editor.engine.ProxyResolutionPolicy.Plan
-import com.novacut.editor.model.ProxyResolution
+import com.directorx.editor.engine.ProxyResolutionPolicy.Plan
+import com.directorx.editor.model.ProxyResolution
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import org.junit.After

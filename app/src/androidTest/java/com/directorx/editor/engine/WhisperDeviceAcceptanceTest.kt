@@ -1,10 +1,10 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.novacut.editor.engine.whisper.WhisperEngine
-import com.novacut.editor.engine.whisper.WhisperModelState
+import com.directorx.editor.engine.whisper.WhisperEngine
+import com.directorx.editor.engine.whisper.WhisperModelState
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
 import org.junit.Assume.assumeTrue
