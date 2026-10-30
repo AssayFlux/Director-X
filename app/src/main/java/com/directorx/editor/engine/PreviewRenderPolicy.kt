@@ -1,6 +1,6 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.EffectType
+import com.directorx.editor.model.EffectType
 
 /** Runtime rules shared by the preview composition builder and its tests. */
 internal object PreviewRenderPolicy {

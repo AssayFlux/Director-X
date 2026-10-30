@@ -1,6 +1,6 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.ProxyResolution
+import com.directorx.editor.model.ProxyResolution
 import kotlin.math.abs
 import kotlin.math.roundToInt
 

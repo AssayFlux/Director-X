@@ -1,7 +1,7 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.engine.db.ProjectDao
-import com.novacut.editor.engine.db.toProjectMediaAssetEntities
+import com.directorx.editor.engine.db.ProjectDao
+import com.directorx.editor.engine.db.toProjectMediaAssetEntities
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

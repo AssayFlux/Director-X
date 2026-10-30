@@ -1,12 +1,12 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.net.Uri
 import android.os.StatFs
-import com.novacut.editor.engine.AppLog
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.ImageOverlay
-import com.novacut.editor.model.Watermark
+import com.directorx.editor.engine.AppLog
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.ImageOverlay
+import com.directorx.editor.model.Watermark
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -413,7 +413,7 @@ object ProjectArchive {
      *
      * @param existingProjectIds caller-supplied set used to detect ID
      *     collisions. Empty by default — callers that intend to persist the
-     *     imported project should query [com.novacut.editor.engine.db.ProjectDao]
+     *     imported project should query [com.directorx.editor.engine.db.ProjectDao]
      *     and pass the snapshot.
      * @param idCollisionPolicy how to react when the archive's project ID is
      *     already present in [existingProjectIds].
@@ -1082,7 +1082,7 @@ object ProjectArchive {
     }
 
     private fun clipUsesSegmentationModel(clip: Clip): Boolean =
-        clip.effects.any { it.enabled && it.type == com.novacut.editor.model.EffectType.BG_REMOVAL } ||
+        clip.effects.any { it.enabled && it.type == com.directorx.editor.model.EffectType.BG_REMOVAL } ||
             clip.compoundClips.any(::clipUsesSegmentationModel)
 
     private fun inspectDependency(context: Context, source: ArchivedDependencySource): Pair<Long, String> {

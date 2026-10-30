@@ -1,6 +1,6 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.Clip
+import com.directorx.editor.model.Clip
 
 /** Map an absolute timeline position to ExoPlayer's clip-relative media time. */
 internal fun previewMediaPositionForTimelinePosition(clip: Clip, timelinePositionMs: Long): Long {

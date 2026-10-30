@@ -1,7 +1,7 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.EffectType
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.EffectType
 
 const val SEGMENTATION_MODEL_DEPENDENCY = "mediapipe-selfie-segmenter"
 

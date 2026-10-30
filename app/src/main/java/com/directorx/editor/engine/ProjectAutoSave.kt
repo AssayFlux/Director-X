@@ -1,8 +1,8 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.net.Uri
-import com.novacut.editor.model.*
+import com.directorx.editor.model.*
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import kotlinx.coroutines.cancel
@@ -10,7 +10,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.json.JSONArray
 import org.json.JSONObject
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import java.io.File
 import java.security.MessageDigest
 import javax.inject.Inject
@@ -640,16 +640,16 @@ data class AutoSaveState(
     val chapterMarkers: List<ChapterMarker> = emptyList(),
     val imageOverlays: List<ImageOverlay> = emptyList(),
     val timelineMarkers: List<TimelineMarker> = emptyList(),
-    val globalTransitions: List<com.novacut.editor.model.GlobalTransition> = emptyList(),
-    val drawingPaths: List<com.novacut.editor.model.DrawingPath> = emptyList(),
+    val globalTransitions: List<com.directorx.editor.model.GlobalTransition> = emptyList(),
+    val drawingPaths: List<com.directorx.editor.model.DrawingPath> = emptyList(),
     val beatMarkers: List<Long> = emptyList(),
     // v3.69: transcript cached from Auto Captions. Persisted so text-based
     // editing survives app restart without forcing the user to re-transcribe.
-    val transcript: com.novacut.editor.model.Transcript? = null,
+    val transcript: com.directorx.editor.model.Transcript? = null,
     // v3.71: object-aware editing scaffolding. Tracked objects survive
     // restart so accept/reject decisions about a tracked subject are not
     // re-asked every session even before SAM 2 / MediaPipe trackers ship.
-    val trackedObjects: List<com.novacut.editor.model.TrackedObject> = emptyList(),
+    val trackedObjects: List<com.directorx.editor.model.TrackedObject> = emptyList(),
     // R8.9: per-project AI usage ledger. This drives disclosure defaults
     // during export and survives restarts without involving telemetry.
     val aiUsageLedger: List<AiUsageLedger.Entry> = emptyList(),
@@ -657,7 +657,7 @@ data class AutoSaveState(
     // as the compatibility fallback while new saves can diagnose/repair assets
     // through stable ids.
     val mediaAssets: List<ProjectMediaAsset> = emptyList(),
-    val storyboardCards: List<com.novacut.editor.model.StoryboardCard> = emptyList(),
+    val storyboardCards: List<com.directorx.editor.model.StoryboardCard> = emptyList(),
     /** Project export watermark, persisted so backups and recovery never substitute the brand asset. */
     val exportWatermark: Watermark? = null,
     /** Color intent shared by preview and export. Files written before it existed load as the SDR default. */
@@ -1106,9 +1106,9 @@ data class AutoSaveState(
             val globalTransitions = (0 until globalTransitionsArr.length().coerceAtMost(20)).mapNotNull { i ->
                 try {
                     val gt = globalTransitionsArr.getJSONObject(i)
-                    com.novacut.editor.model.GlobalTransition(
+                    com.directorx.editor.model.GlobalTransition(
                         id = gt.optString("id", java.util.UUID.randomUUID().toString()),
-                        type = safeValueOf(gt.optString("type"), com.novacut.editor.model.GlobalTransitionType.FADE_TO_BLACK),
+                        type = safeValueOf(gt.optString("type"), com.directorx.editor.model.GlobalTransitionType.FADE_TO_BLACK),
                         durationMs = gt.optLong("durationMs", 1000L).coerceIn(100L, 10000L),
                         timelineAnchorMs = gt.optLong("timelineAnchorMs", 0L).coerceAtLeast(0L),
                         easing = safeValueOf(gt.optString("easing", "EASE_IN_OUT"), TransitionEasing.EASE_IN_OUT)
@@ -1131,7 +1131,7 @@ data class AutoSaveState(
                     }
                     if (points.size < 2) return@mapNotNull null
                     val rawStroke = dp.optDouble("strokeWidth", 4.0).toFloat()
-                    com.novacut.editor.model.DrawingPath(
+                    com.directorx.editor.model.DrawingPath(
                         points = points,
                         color = dp.optLong("color", 0xFFCBA6F7L),
                         strokeWidth = (if (rawStroke.isFinite()) rawStroke else 4f).coerceIn(0.5f, 64f)
@@ -1148,7 +1148,7 @@ data class AutoSaveState(
                 maxEntries = MAX_AI_USAGE_ENTRIES
             )
             val transcriptObj = json.optJSONObject("transcript")
-            val transcript: com.novacut.editor.model.Transcript? = transcriptObj?.let { tr ->
+            val transcript: com.directorx.editor.model.Transcript? = transcriptObj?.let { tr ->
                 try {
                     val wordsArr = tr.optJSONArray("words") ?: JSONArray()
                     // Cap at MAX_TRANSCRIPT_WORDS so a corrupt save with a
@@ -1165,7 +1165,7 @@ data class AutoSaveState(
                         val conf = w.optDouble("confidence", 1.0).toFloat().let {
                             if (it.isFinite()) it.coerceIn(0f, 1f) else 1f
                         }
-                        com.novacut.editor.model.WordTimestamp(
+                        com.directorx.editor.model.WordTimestamp(
                             text = text,
                             startMs = s,
                             endMs = if (e > s) e else s + 1L,
@@ -1173,7 +1173,7 @@ data class AutoSaveState(
                         )
                     }
                     if (words.isEmpty()) null
-                    else com.novacut.editor.model.Transcript(
+                    else com.directorx.editor.model.Transcript(
                         id = tr.optString("id", java.util.UUID.randomUUID().toString()),
                         clipId = tr.optString("clipId", ""),
                         language = tr.optString("language", "en").take(8),
@@ -1209,11 +1209,11 @@ data class AutoSaveState(
                                     val x = pt.optDouble("x", Double.NaN).toFloat()
                                     val y = pt.optDouble("y", Double.NaN).toFloat()
                                     if (x.isFinite() && y.isFinite()) {
-                                        com.novacut.editor.model.MaskPoint(x = x, y = y)
+                                        com.directorx.editor.model.MaskPoint(x = x, y = y)
                                     } else null
                                 }
                             } else emptyList()
-                            com.novacut.editor.model.TrackedObjectKeyframe(
+                            com.directorx.editor.model.TrackedObjectKeyframe(
                                 clipTimeMs = kf.optLong("clipTimeMs", 0L).coerceAtLeast(0L),
                                 centerX = kf.optDouble("centerX", 0.5).toFloat().let { if (it.isFinite()) it.coerceIn(0f, 1f) else 0.5f },
                                 centerY = kf.optDouble("centerY", 0.5).toFloat().let { if (it.isFinite()) it.coerceIn(0f, 1f) else 0.5f },
@@ -1228,17 +1228,17 @@ data class AutoSaveState(
                             dropped("tracked-object keyframe", ki, e)
                         }
                     }
-                    com.novacut.editor.model.TrackedObject(
+                    com.directorx.editor.model.TrackedObject(
                         id = obj.optString("id", java.util.UUID.randomUUID().toString()),
                         label = label,
                         sourceClipId = sourceClipId,
                         source = safeValueOf(
                             obj.optString("source", "MANUAL"),
-                            com.novacut.editor.model.TrackedObjectSource.MANUAL
+                            com.directorx.editor.model.TrackedObjectSource.MANUAL
                         ),
                         category = safeValueOf(
                             obj.optString("category", "UNKNOWN"),
-                            com.novacut.editor.model.TrackedObjectCategory.UNKNOWN
+                            com.directorx.editor.model.TrackedObjectCategory.UNKNOWN
                         ),
                         isEnabled = obj.optBoolean("isEnabled", true),
                         keyframes = keyframes
@@ -1251,12 +1251,12 @@ data class AutoSaveState(
             val storyboardCards = (0 until cappedArrayLength(storyboardArr, MAX_STORYBOARD_CARDS, "storyboard cards")).mapNotNull { i ->
                 try {
                     val card = storyboardArr.getJSONObject(i)
-                    com.novacut.editor.model.StoryboardCard(
+                    com.directorx.editor.model.StoryboardCard(
                         id = card.optString("id", java.util.UUID.randomUUID().toString()),
                         ordinal = card.optInt("ordinal", i),
                         shotText = boundedText(card.optString("shotText", ""), MAX_SHORT_TEXT_CHARS),
                         targetDurationMs = card.optLong("targetDurationMs", 5000L).coerceIn(500L, 300_000L),
-                        status = safeValueOf(card.optString("status", "PLANNED"), com.novacut.editor.model.StoryboardCardStatus.PLANNED),
+                        status = safeValueOf(card.optString("status", "PLANNED"), com.directorx.editor.model.StoryboardCardStatus.PLANNED),
                         mediaUri = card.optString("mediaUri", "").takeIf { it.isNotEmpty() }?.let { uriParser(it) }
                     )
                 } catch (e: Exception) { dropped("storyboard card", i, e) }
