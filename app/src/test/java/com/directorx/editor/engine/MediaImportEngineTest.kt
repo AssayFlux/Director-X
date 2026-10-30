@@ -1,8 +1,8 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.media.MediaFormat
 import android.os.Build
-import com.novacut.editor.model.SourceHdrFormat
+import com.directorx.editor.model.SourceHdrFormat
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue

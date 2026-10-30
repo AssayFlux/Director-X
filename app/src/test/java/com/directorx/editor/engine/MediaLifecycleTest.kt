@@ -1,9 +1,9 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.FakeUri
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -33,7 +33,7 @@ class MediaLifecycleTest {
 
     private fun mediaAsset(
         assetId: String = "asset-001",
-        managedUri: String = "file:///data/data/com.novacut.editor/files/media/imports/clip1.mp4",
+        managedUri: String = "file:///data/data/com.directorx.editor/files/media/imports/clip1.mp4",
         originalUri: String = "content://media/external/video/1234",
         sizeBytes: Long = 10_000_000L,
         fingerprint: String? = "abc123"
@@ -74,7 +74,7 @@ class MediaLifecycleTest {
         assertEquals(1, restored.mediaAssets.size)
         val asset = restored.mediaAssets[0]
         assertEquals("asset-001", asset.assetId)
-        assertEquals("file:///data/data/com.novacut.editor/files/media/imports/clip1.mp4", asset.managedUri)
+        assertEquals("file:///data/data/com.directorx.editor/files/media/imports/clip1.mp4", asset.managedUri)
         assertEquals("content://media/external/video/1234", asset.originalUri)
         assertEquals("video/mp4", asset.mimeType)
         assertEquals(10_000_000L, asset.sizeBytes)
