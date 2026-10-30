@@ -1,12 +1,12 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.TestUri
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.TextOverlay
-import com.novacut.editor.model.TimelineMarker
-import com.novacut.editor.model.TimelineTimebase
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.TextOverlay
+import com.directorx.editor.model.TimelineMarker
+import com.directorx.editor.model.TimelineTimebase
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

@@ -1,22 +1,22 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.Uri
 import android.net.TestUri
-import com.novacut.editor.model.BlendMode
-import com.novacut.editor.model.Caption
-import com.novacut.editor.model.CaptionStyleType
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.Effect
-import com.novacut.editor.model.EffectType
-import com.novacut.editor.model.SpeedCurve
-import com.novacut.editor.model.SpeedPoint
-import com.novacut.editor.model.TextOverlay
-import com.novacut.editor.model.TimelineMarker
-import com.novacut.editor.model.TimelineTimebase
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
-import com.novacut.editor.model.Transition
-import com.novacut.editor.model.TransitionType
+import com.directorx.editor.model.BlendMode
+import com.directorx.editor.model.Caption
+import com.directorx.editor.model.CaptionStyleType
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.Effect
+import com.directorx.editor.model.EffectType
+import com.directorx.editor.model.SpeedCurve
+import com.directorx.editor.model.SpeedPoint
+import com.directorx.editor.model.TextOverlay
+import com.directorx.editor.model.TimelineMarker
+import com.directorx.editor.model.TimelineTimebase
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
+import com.directorx.editor.model.Transition
+import com.directorx.editor.model.TransitionType
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -240,7 +240,7 @@ class TimelineExchangeEngineTest {
                     text = "Keep this line",
                     startTimeMs = 600L,
                     endTimeMs = 1_200L,
-                    style = com.novacut.editor.model.CaptionStyle(type = CaptionStyleType.KARAOKE),
+                    style = com.directorx.editor.model.CaptionStyle(type = CaptionStyleType.KARAOKE),
                 )
             ),
         )

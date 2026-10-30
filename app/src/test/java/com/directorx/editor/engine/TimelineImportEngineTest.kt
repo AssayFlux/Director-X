@@ -1,12 +1,12 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.TestUri
 import android.net.Uri
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.Project
-import com.novacut.editor.model.TimelineTimebase
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.Project
+import com.directorx.editor.model.TimelineTimebase
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -111,7 +111,7 @@ class TimelineImportEngineTest {
             timelineStartMs = 250L,
             trimEndMs = 2_000L,
             captions = listOf(
-                com.novacut.editor.model.Caption(
+                com.directorx.editor.model.Caption(
                     id = "portable-caption",
                     text = "Portable caption",
                     startTimeMs = 20L,
@@ -119,7 +119,7 @@ class TimelineImportEngineTest {
                 )
             ),
         )
-        val marker = com.novacut.editor.model.TimelineMarker(id = "portable-marker", timeMs = 500L)
+        val marker = com.directorx.editor.model.TimelineMarker(id = "portable-marker", timeMs = 500L)
         val original = Project(id = "target", name = "Unchanged")
         val json = exchange.exportToEditDecisionJson(
             tracks = listOf(Track(type = TrackType.VIDEO, index = 0, clips = listOf(clip))),

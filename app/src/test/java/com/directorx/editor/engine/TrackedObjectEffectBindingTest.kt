@@ -1,9 +1,9 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.Effect
-import com.novacut.editor.model.EffectType
-import com.novacut.editor.model.TrackedObject
-import com.novacut.editor.model.TrackedObjectKeyframe
+import com.directorx.editor.model.Effect
+import com.directorx.editor.model.EffectType
+import com.directorx.editor.model.TrackedObject
+import com.directorx.editor.model.TrackedObjectKeyframe
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
