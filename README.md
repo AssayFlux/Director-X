@@ -13,6 +13,10 @@ Director X is an Android video-editing application maintained by AssayFlux. It b
 - Android source namespace: `com.novacut.editor` (retained internally to avoid an unsafe bulk source-package migration).
 - This is a new-install identity; it does not update an existing `com.novacut.editor` installation or migrate its private data automatically.
 
+### Package identity and upgrade policy
+
+The installed Android application ID is `com.directorx.editor`. This is a **new install**; it does not replace an existing `com.novacut.editor` installation. Users who need existing projects must export them from the old app and import them into Director X using the documented project-transfer workflow. This is a new install with an explicit export/import path. The internal Kotlin source namespace remains `com.novacut.editor` during this staged migration.
+
 ## Branding and compatibility policy
 
 See [BRANDING_AND_COMPATIBILITY.md](docs/BRANDING_AND_COMPATIBILITY.md) for naming conventions, safe path-renaming rules, and legacy identifiers intentionally retained for Android install/data compatibility.
