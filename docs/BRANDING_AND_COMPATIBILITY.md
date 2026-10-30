@@ -15,11 +15,11 @@ This policy distinguishes user-visible product branding from technical identifie
 
 ## Compatibility identifiers intentionally retained
 
-The current Android namespace and application ID are both `com.novacut.editor`. They are deliberately retained to preserve the existing install/update lineage, signing identity, provider authorities, shortcuts, and app-private user data. Changing the displayed product name does not change the Android package identity.
+The Android application ID is now `com.directorx.editor`. This is a new install identity, not an in-place update of `com.novacut.editor`; existing users must install separately and use an explicit export/import path for project transfer. The source namespace remains `com.novacut.editor` for this migration stage, so Kotlin source packages and generated-code namespace remain stable. Provider authorities are generated from `${applicationId}` and therefore follow the new installed identity. The existing signing key must still be retained for future updates to Director X builds.
 
 The following legacy identifiers are data/API compatibility surfaces, not user-facing brand claims:
 
-- `com.novacut.editor` package and source-directory paths.
+- `com.novacut.editor` source namespace and source-directory paths (internal implementation namespace, not the installed app ID).
 - `com.clearcut.*` serialized schema identifiers, metadata keys, and benchmark namespace.
 - `.clearcut` and `.clearcut-template` archive extensions and their MIME associations.
 - Existing database, project, backup, export, and interchange formats.
@@ -35,6 +35,6 @@ Identical file bytes are not sufficient evidence that files are redundant. Andro
 
 ## Current migration note
 
-The benchmark helper filename `ClearCutBenchmarkFlows.kt` was renamed to `DirectorXBenchmarkFlows.kt`. Its package and test selectors remain unchanged for compatibility. Both Fastlane locale privacy-policy URLs now point to the actual `docs/privacy-policy.md` path. The package identity registry now reports Director X as the public product name while preserving the current Android application ID.
+The benchmark helper filename `ClearCutBenchmarkFlows.kt` was renamed to `DirectorXBenchmarkFlows.kt`. The Android application ID is `com.directorx.editor`; the source namespace remains `com.novacut.editor`. Benchmark launch targets and shortcut actions use the new application ID. The package identity registry records the separate source namespace and new-install migration policy. The signing key must be retained for future Director X updates.
 
-This is a naming and documentation policy, not a claim that a full Android package migration or a complete build verification has occurred.
+This migration changes the installed Android application ID, while retaining the internal Kotlin source namespace. Build, instrumentation, signing, and device verification are still required.

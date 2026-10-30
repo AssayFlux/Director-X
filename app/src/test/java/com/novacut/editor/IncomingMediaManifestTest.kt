@@ -25,10 +25,10 @@ class IncomingMediaManifestTest {
         assertTrue("VIEW imports must remain accepted", "android.intent.action.VIEW" in actions)
         assertTrue("SEND imports must remain accepted", "android.intent.action.SEND" in actions)
         assertTrue("SEND_MULTIPLE imports must remain accepted", "android.intent.action.SEND_MULTIPLE" in actions)
-        assertTrue("Static new-project shortcut must remain accepted", "com.novacut.editor.action.NEW_PROJECT" in actions)
-        assertTrue("Static recent-project shortcut must remain accepted", "com.novacut.editor.action.OPEN_RECENT" in actions)
-        assertTrue("Dynamic recovery shortcut must remain accepted", "com.novacut.editor.action.RESUME_RECOVERED" in actions)
-        assertTrue("Dynamic last-project shortcut must remain accepted", "com.novacut.editor.action.OPEN_LAST_PROJECT" in actions)
+        assertTrue("Static new-project shortcut must remain accepted", "com.directorx.editor.action.NEW_PROJECT" in actions)
+        assertTrue("Static recent-project shortcut must remain accepted", "com.directorx.editor.action.OPEN_RECENT" in actions)
+        assertTrue("Dynamic recovery shortcut must remain accepted", "com.directorx.editor.action.RESUME_RECOVERED" in actions)
+        assertTrue("Dynamic last-project shortcut must remain accepted", "com.directorx.editor.action.OPEN_LAST_PROJECT" in actions)
     }
 
     @Test

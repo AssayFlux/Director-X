@@ -81,7 +81,7 @@ object ProjectShortcutPlanner {
     )
 
     /** Bundled extra key for the project ID payload. */
-    const val EXTRA_PROJECT_ID = "com.novacut.editor.extra.PROJECT_ID"
+    const val EXTRA_PROJECT_ID = "com.directorx.editor.extra.PROJECT_ID"
 
     /**
      * Returns the ordered list of dynamic shortcuts the launcher should
@@ -123,8 +123,8 @@ object ProjectShortcutPlanner {
         return out.take(MAX_DYNAMIC_SHORTCUTS)
     }
 
-    const val ACTION_RESUME_RECOVERED = "com.novacut.editor.action.RESUME_RECOVERED"
-    const val ACTION_OPEN_LAST_PROJECT = "com.novacut.editor.action.OPEN_LAST_PROJECT"
+    const val ACTION_RESUME_RECOVERED = "com.directorx.editor.action.RESUME_RECOVERED"
+    const val ACTION_OPEN_LAST_PROJECT = "com.directorx.editor.action.OPEN_LAST_PROJECT"
 
     private const val OPEN_LABEL_MAX_CHARS = 25
 }

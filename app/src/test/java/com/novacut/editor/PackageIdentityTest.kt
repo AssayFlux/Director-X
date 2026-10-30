@@ -18,7 +18,8 @@ class PackageIdentityTest {
         val readme = locate("README.md").readText()
 
         assertEquals(1, registry.getInt("schemaVersion"))
-        assertEquals(applicationId, namespace)
+        assertEquals(namespace, registry.getString("sourcePackage"))
+        assertFalse(applicationId == namespace)
         assertTrue(build.contains("namespace = \"$namespace\""))
         assertTrue(build.contains("applicationId = \"$applicationId\""))
         assertTrue(build.contains("applicationIdSuffix = \".streaming\""))
@@ -45,7 +46,7 @@ class PackageIdentityTest {
             assertTrue("Manifest must keep shortcut action $action", manifest.contains(action))
         }
         assertTrue(shortcuts.contains("android:targetPackage=\"\${applicationId}\""))
-        assertTrue(shortcuts.contains("android:targetClass=\"\${applicationId}.MainActivity\""))
+        assertTrue(shortcuts.contains("android:targetClass=\"\${namespace}.MainActivity\""))
 
         val associations = registry.getJSONObject("archiveAssociations")
         val extensions = associations.getJSONArray("extensions")
@@ -61,10 +62,10 @@ class PackageIdentityTest {
         }
 
         assertTrue(locate("app/src/main/res/values/strings.xml").readText().contains(
-            "<string name=\"app_name\">ClearCut</string>"
+            "<string name=\"app_name\">Director X</string>"
         ))
         assertTrue(locate("app/src/main/res/values-es/strings.xml").readText().contains(
-            "<string name=\"app_name\">ClearCut</string>"
+            "<string name=\"app_name\">Director X</string>"
         ))
     }
 

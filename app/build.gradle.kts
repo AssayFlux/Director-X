@@ -31,7 +31,7 @@ android {
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.novacut.editor"
+        applicationId = "com.directorx.editor"
         minSdk = 26
         targetSdk = 37
         versionCode = 301

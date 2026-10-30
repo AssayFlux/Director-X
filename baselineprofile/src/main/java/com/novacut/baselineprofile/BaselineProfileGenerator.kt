@@ -14,7 +14,7 @@ class BaselineProfileGenerator {
 
     @Test
     fun generateBaselineProfile() {
-        baselineProfileRule.collect(packageName = CLEARCUT_PACKAGE) {
+        baselineProfileRule.collect(packageName = DIRECTOR_X_PACKAGE) {
             openProjectGallery()
             openBlankEditor()
             openExportSheet()

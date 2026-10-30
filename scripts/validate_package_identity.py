@@ -63,8 +63,8 @@ def validate_registry_shape(data: dict[str, Any]) -> None:
 
     if data["publicProductName"] == data["retiredPublicProductName"]:
         raise PackageIdentityError("public and retired product names must differ")
-    if data["applicationId"] != data["namespace"] or data["namespace"] != data["sourcePackage"]:
-        raise PackageIdentityError("applicationId, namespace, and sourcePackage must remain aligned")
+    if data["namespace"] != data["sourcePackage"]:
+        raise PackageIdentityError("namespace and sourcePackage must remain aligned")
     if not re.fullmatch(r"[a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+", data["applicationId"]):
         raise PackageIdentityError("applicationId is not a valid Android package name")
 
@@ -72,8 +72,8 @@ def validate_registry_shape(data: dict[str, Any]) -> None:
     if not isinstance(policy, dict):
         raise PackageIdentityError("migrationPolicy must be an object")
     expected_policy = {
-        "applicationId": "retain-existing-lineage",
-        "namespace": "retain-existing-lineage",
+        "applicationId": "new-install-with-explicit-export-import",
+        "namespace": "retain-existing-source-namespace",
         "signingCertificate": "retain-pinned-release-identity",
         "identityChange": "new-install-with-explicit-export-import",
     }
@@ -200,7 +200,7 @@ def validate_shortcuts(root: Path, registry: dict[str, Any]) -> None:
     shortcut_root = parse_xml(root / "app/src/main/res/xml/shortcuts.xml", root)
     target = registry["shortcutTarget"]
     expected_package = "${applicationId}"
-    expected_class = "${applicationId}.MainActivity"
+    expected_class = registry["namespace"] + ".MainActivity"
     intents = shortcut_root.findall(".//intent")
     if len(intents) != len(target["actions"]):
         raise PackageIdentityError("shortcuts.xml must keep one intent for each registered static shortcut")
@@ -239,7 +239,7 @@ def validate_app_labels(root: Path, registry: dict[str, Any]) -> None:
             if element.get("name") == "app_name"
         ]
         if labels != [registry["publicProductName"]]:
-            raise PackageIdentityError(f"{rel(strings_path, root)} must expose the ClearCut app label")
+            raise PackageIdentityError(f"{rel(strings_path, root)} must expose the registered public product label")
 
 
 def validate_public_surfaces(root: Path, registry: dict[str, Any]) -> None:
@@ -278,7 +278,7 @@ def run_self_test(root: Path = ROOT) -> None:
     validate_registry_shape(registry)
 
     broken = copy.deepcopy(registry)
-    broken["applicationId"] = "com.clearcut.editor"
+    broken["applicationId"] = "invalid package name"
     try:
         validate_registry_shape(broken)
     except PackageIdentityError:
@@ -301,8 +301,8 @@ def run_self_test(root: Path = ROOT) -> None:
         shortcuts_path.parent.mkdir(parents=True)
         actions = registry["shortcutTarget"]["actions"]
         placeholder_xml = f'''<shortcuts xmlns:android="{ANDROID_NS}">
-    <shortcut><intent android:action="{actions[0]}" android:targetPackage="${{applicationId}}" android:targetClass="${{applicationId}}.MainActivity" /></shortcut>
-    <shortcut><intent android:action="{actions[1]}" android:targetPackage="${{applicationId}}" android:targetClass="${{applicationId}}.MainActivity" /></shortcut>
+    <shortcut><intent android:action="{actions[0]}" android:targetPackage="${{applicationId}}" android:targetClass="{registry["namespace"]}.MainActivity" /></shortcut>
+    <shortcut><intent android:action="{actions[1]}" android:targetPackage="${{applicationId}}" android:targetClass="{registry["namespace"]}.MainActivity" /></shortcut>
 </shortcuts>
 '''
         shortcuts_path.write_text(placeholder_xml, encoding="utf-8")

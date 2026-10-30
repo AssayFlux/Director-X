@@ -25,7 +25,7 @@ class StartupAndEditorMacrobenchmark {
     @Test
     fun aColdStartupDefaultCompilation() {
         benchmarkRule.measureRepeated(
-            packageName = CLEARCUT_PACKAGE,
+            packageName = DIRECTOR_X_PACKAGE,
             metrics = listOf(StartupTimingMetric()),
             compilationMode = CompilationMode.Ignore(),
             startupMode = StartupMode.COLD,

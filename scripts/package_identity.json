@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "publicProductName": "Director X",
   "retiredPublicProductName": "NovaCut",
-  "applicationId": "com.novacut.editor",
+  "applicationId": "com.directorx.editor",
   "namespace": "com.novacut.editor",
   "sourcePackage": "com.novacut.editor",
   "migrationPolicy": {
-    "applicationId": "retain-existing-lineage",
-    "namespace": "retain-existing-lineage",
+    "applicationId": "new-install-with-explicit-export-import",
+    "namespace": "retain-existing-source-namespace",
     "signingCertificate": "retain-pinned-release-identity",
     "identityChange": "new-install-with-explicit-export-import"
   },
@@ -22,11 +22,11 @@
     "${applicationId}.fileprovider"
   ],
   "shortcutTarget": {
-    "package": "com.novacut.editor",
+    "package": "com.directorx.editor",
     "class": "com.novacut.editor.MainActivity",
     "actions": [
-      "com.novacut.editor.action.NEW_PROJECT",
-      "com.novacut.editor.action.OPEN_RECENT"
+      "com.directorx.editor.action.NEW_PROJECT",
+      "com.directorx.editor.action.OPEN_RECENT"
     ]
   },
   "archiveAssociations": {
@@ -56,7 +56,7 @@
   ],
   "readmePolicyPhrases": [
     "### Package identity and upgrade policy",
-    "`com.novacut.editor`",
+    "`com.directorx.editor`",
     "new install with an explicit export/import path"
   ]
 }
