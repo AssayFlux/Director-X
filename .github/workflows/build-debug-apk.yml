@@ -87,6 +87,8 @@ jobs:
           python scripts/generate_capability_registry.py --check
           python scripts/validate_public_claims.py
           python scripts/validate_android_audio_api_policy.py
+          python scripts/validate_package_identity.py --self-test
+          python scripts/validate_android_audio_api_policy.py --self-test
 
       - name: Select build task
         id: task
