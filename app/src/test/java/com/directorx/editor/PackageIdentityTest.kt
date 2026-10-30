@@ -33,6 +33,7 @@ class PackageIdentityTest {
     fun manifestAndArchiveSurfacesStayOnTheFrozenLineage() {
         val registry = JSONObject(locate("scripts/package_identity.json").readText())
         val applicationId = registry.getString("applicationId")
+        val namespace = registry.getString("namespace")
         val manifest = locate("app/src/main/AndroidManifest.xml").readText()
         val shortcuts = locate("app/src/main/res/xml/shortcuts.xml").readText()
         val parser = locate("app/src/main/java/com/directorx/editor/engine/IncomingDocumentIntentParser.kt").readText()
