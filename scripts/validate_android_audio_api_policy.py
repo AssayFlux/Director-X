@@ -164,7 +164,7 @@ def write_valid_fixture(root: Path, export_service: str = "class ExportService {
         "app/build.gradle.kts",
         "android {\n    compileSdk = 37\n    defaultConfig {\n        targetSdk = 37\n    }\n}\n",
     )
-    write_fixture(root, "app/src/main/java/com/novacut/editor/engine/ExportService.kt", export_service)
+    write_fixture(root, "app/src/main/java/com/directorx/editor/engine/ExportService.kt", export_service)
     write_fixture(
         root,
         "app/src/main/AndroidManifest.xml",
@@ -183,13 +183,13 @@ def write_valid_fixture(root: Path, export_service: str = "class ExportService {
     )
     write_fixture(
         root,
-        "app/src/main/java/com/novacut/editor/engine/TtsEngine.kt",
+        "app/src/main/java/com/directorx/editor/engine/TtsEngine.kt",
         "fun preview() { if (!requestPreviewAudioFocus()) return; engine.speak(text, queue, params, id) }\n"
         "AudioManager.AUDIOFOCUS_REQUEST_GRANTED\n",
     )
     write_fixture(
         root,
-        "app/src/main/java/com/novacut/editor/engine/VoiceoverRecorder.kt",
+        "app/src/main/java/com/directorx/editor/engine/VoiceoverRecorder.kt",
         "fun startRecording() { if (!requestVoiceoverAudioFocus()) return; setAudioSource(MediaRecorder.AudioSource.MIC) }\n"
         "AudioManager.AUDIOFOCUS_REQUEST_GRANTED\n",
     )
