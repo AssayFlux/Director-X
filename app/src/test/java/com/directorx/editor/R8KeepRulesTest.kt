@@ -1,4 +1,4 @@
-package com.novacut.editor
+package com.directorx.editor
 
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -12,8 +12,8 @@ class R8KeepRulesTest {
     fun packageWideKeepsAreNotReintroduced() {
         val rules = readRules()
         val forbiddenPatterns = listOf(
-            "com.novacut.editor.engine.**",
-            "com.novacut.editor.ai.**",
+            "com.directorx.editor.engine.**",
+            "com.directorx.editor.ai.**",
             "dagger.hilt.**",
             "javax.inject.**",
             "androidx.compose.runtime.**",

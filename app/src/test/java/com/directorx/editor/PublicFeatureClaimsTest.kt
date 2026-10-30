@@ -1,6 +1,6 @@
-package com.novacut.editor
+package com.directorx.editor
 
-import com.novacut.editor.engine.TimelineExchangeEngine
+import com.directorx.editor.engine.TimelineExchangeEngine
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test

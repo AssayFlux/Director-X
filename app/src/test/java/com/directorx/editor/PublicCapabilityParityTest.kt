@@ -1,7 +1,7 @@
-package com.novacut.editor
+package com.directorx.editor
 
-import com.novacut.editor.engine.AiToolRequirements
-import com.novacut.editor.engine.CapabilityRegistry
+import com.directorx.editor.engine.AiToolRequirements
+import com.directorx.editor.engine.CapabilityRegistry
 import java.io.File
 import org.json.JSONObject
 import org.junit.Assert.assertEquals

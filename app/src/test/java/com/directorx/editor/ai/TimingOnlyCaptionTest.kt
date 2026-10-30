@@ -1,9 +1,9 @@
-package com.novacut.editor.ai
+package com.directorx.editor.ai
 
-import com.novacut.editor.engine.SubtitleExporter
-import com.novacut.editor.model.Caption
-import com.novacut.editor.model.SubtitleFormat
-import com.novacut.editor.model.TextOverlay
+import com.directorx.editor.engine.SubtitleExporter
+import com.directorx.editor.model.Caption
+import com.directorx.editor.model.SubtitleFormat
+import com.directorx.editor.model.TextOverlay
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
