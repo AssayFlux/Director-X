@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.ComponentCallbacks2
 import javax.inject.Inject

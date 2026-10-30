@@ -1,6 +1,6 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import javax.inject.Inject
 import javax.inject.Singleton
 

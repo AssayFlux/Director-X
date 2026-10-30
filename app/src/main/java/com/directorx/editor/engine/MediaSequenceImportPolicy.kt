@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 /** Ordering choices exposed by the multi-asset starter-sequence review. */
 enum class MediaSequenceOrder {

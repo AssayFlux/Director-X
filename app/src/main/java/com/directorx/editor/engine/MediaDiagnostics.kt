@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.media.MediaExtractor
@@ -8,8 +8,8 @@ import android.net.Uri
 import android.os.Build
 import android.webkit.MimeTypeMap
 import androidx.core.net.toUri
-import com.novacut.editor.model.ImageOverlay
-import com.novacut.editor.model.Track
+import com.directorx.editor.model.ImageOverlay
+import com.directorx.editor.model.Track
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -410,7 +410,7 @@ class MediaDiagnosticsProbe @Inject constructor(
     }
 
     private fun collectClipUris(
-        clips: List<com.novacut.editor.model.Clip>,
+        clips: List<com.directorx.editor.model.Clip>,
         destination: MutableList<Uri>,
     ) {
         clips.forEach { clip ->

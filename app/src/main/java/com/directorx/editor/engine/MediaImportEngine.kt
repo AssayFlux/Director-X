@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.graphics.ImageDecoder
@@ -6,10 +6,10 @@ import android.media.MediaExtractor
 import android.media.MediaFormat
 import android.net.Uri
 import android.os.Build
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import android.webkit.MimeTypeMap
-import com.novacut.editor.model.SourceColorMetadata
-import com.novacut.editor.model.SourceHdrFormat
+import com.directorx.editor.model.SourceColorMetadata
+import com.directorx.editor.model.SourceHdrFormat
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.Locale
 import javax.inject.Inject

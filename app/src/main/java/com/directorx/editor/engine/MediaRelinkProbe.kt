@@ -1,12 +1,12 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.content.res.AssetFileDescriptor
 import android.net.Uri
-import com.novacut.editor.engine.AppLog
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.ImageOverlay
-import com.novacut.editor.model.Track
+import com.directorx.editor.engine.AppLog
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.ImageOverlay
+import com.directorx.editor.model.Track
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
