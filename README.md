@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/icon.png" alt="Director X application icon" width="176" />
+<img src="assets/icon.png" alt="Director X application icon" width="500" />
 
 # DIRECTOR X
 
