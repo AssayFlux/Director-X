@@ -29,7 +29,7 @@ class ExportOutputContractTest {
 
     @Test
     fun sanitizeFileName_blankFallsBackToDefault() {
-        assertEquals("ClearCut", sanitizeFileName("   "))
+        assertEquals("Director X", sanitizeFileName("   "))
         // Only dots/spaces -> trimmed to empty -> fallback (path chars like '/'
         // are replaced with '_' and are therefore NOT blank).
         assertEquals("Fallback", sanitizeFileName(". . .", fallback = "Fallback"))
