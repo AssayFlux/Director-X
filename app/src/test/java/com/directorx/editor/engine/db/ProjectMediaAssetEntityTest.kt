@@ -1,6 +1,6 @@
-package com.novacut.editor.engine.db
+package com.directorx.editor.engine.db
 
-import com.novacut.editor.engine.ProjectMediaAsset
+import com.directorx.editor.engine.ProjectMediaAsset
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

@@ -1,8 +1,8 @@
-package com.novacut.editor.engine.db
+package com.directorx.editor.engine.db
 
 import androidx.room3.Room
 import androidx.sqlite.driver.AndroidSQLiteDriver
-import com.novacut.editor.model.Project
+import com.directorx.editor.model.Project
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals

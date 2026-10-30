@@ -1,8 +1,8 @@
-package com.novacut.editor.model
+package com.directorx.editor.model
 
-import com.novacut.editor.model.ProjectColorPolicy.InputColor
-import com.novacut.editor.model.ProjectColorPolicy.OutputColor
-import com.novacut.editor.model.ProjectColorPolicy.WorkingColorSpace
+import com.directorx.editor.model.ProjectColorPolicy.InputColor
+import com.directorx.editor.model.ProjectColorPolicy.OutputColor
+import com.directorx.editor.model.ProjectColorPolicy.WorkingColorSpace
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

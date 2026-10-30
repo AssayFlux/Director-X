@@ -1,10 +1,10 @@
-package com.novacut.editor.engine.whisper
+package com.directorx.editor.engine.whisper
 
-import com.novacut.editor.engine.whisper.WhisperDecoding.EOT
-import com.novacut.editor.engine.whisper.WhisperDecoding.NO_SPEECH
-import com.novacut.editor.engine.whisper.WhisperDecoding.NO_TIMESTAMPS
-import com.novacut.editor.engine.whisper.WhisperDecoding.SOT
-import com.novacut.editor.engine.whisper.WhisperDecoding.TIMESTAMP_BEGIN
+import com.directorx.editor.engine.whisper.WhisperDecoding.EOT
+import com.directorx.editor.engine.whisper.WhisperDecoding.NO_SPEECH
+import com.directorx.editor.engine.whisper.WhisperDecoding.NO_TIMESTAMPS
+import com.directorx.editor.engine.whisper.WhisperDecoding.SOT
+import com.directorx.editor.engine.whisper.WhisperDecoding.TIMESTAMP_BEGIN
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

@@ -1,4 +1,4 @@
-package com.novacut.editor.model
+package com.directorx.editor.model
 
 import android.net.FakeUri
 import org.junit.Assert.assertEquals

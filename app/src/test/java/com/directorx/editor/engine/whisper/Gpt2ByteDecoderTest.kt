@@ -1,4 +1,4 @@
-package com.novacut.editor.engine.whisper
+package com.directorx.editor.engine.whisper
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
