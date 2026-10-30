@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - gradle/verification-metadata.xml
   workflow_dispatch:
     inputs:
       build_variant:
@@ -17,7 +19,7 @@ on:
           - streaming
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: manual-apk-${{ github.ref }}
@@ -87,11 +89,17 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-      - name: Upload generated dependency verification metadata
+      - name: Commit generated dependency verification metadata
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: director-x-gradle-verification-metadata
-          path: gradle/verification-metadata.xml
-          if-no-files-found: warn
-          retention-days: 7
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add gradle/verification-metadata.xml
+          if ! git diff --cached --quiet; then
+            git commit -m "Update Gradle dependency verification metadata"
+            git push
+          else
+            echo "Dependency verification metadata is unchanged."
+          fi
