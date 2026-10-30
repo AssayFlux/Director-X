@@ -1,13 +1,13 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStoreFile
-import com.novacut.editor.model.*
+import com.directorx.editor.model.*
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.IOException
 import kotlinx.coroutines.CoroutineScope

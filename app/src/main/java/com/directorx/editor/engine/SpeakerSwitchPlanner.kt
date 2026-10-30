@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 /**
  * R6.14 — Multicam SmartSwitch planner.

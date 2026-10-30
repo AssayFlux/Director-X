@@ -1,6 +1,6 @@
 @file:androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.media.MediaExtractor
@@ -12,8 +12,8 @@ import androidx.media3.container.MdtaMetadataEntry
 import androidx.media3.container.Mp4LocationData
 import androidx.media3.container.Mp4OrientationData
 import androidx.media3.container.Mp4TimestampData
-import com.novacut.editor.model.ExportConfig
-import com.novacut.editor.model.Track
+import com.directorx.editor.model.ExportConfig
+import com.directorx.editor.model.Track
 import java.nio.charset.StandardCharsets
 import java.time.Instant
 import java.time.LocalDate

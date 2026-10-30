@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 /** A render fallback that changes the pixels the user asked to export. */
 enum class RenderDegradationType {

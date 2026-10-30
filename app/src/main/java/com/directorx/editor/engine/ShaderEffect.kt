@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.opengl.GLES30
@@ -7,8 +7,8 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.effect.BaseGlShaderProgram
 import androidx.media3.effect.GlEffect
 import androidx.media3.effect.GlShaderProgram
-import com.novacut.editor.model.TrackedObject
-import com.novacut.editor.model.TransitionEasing
+import com.directorx.editor.model.TrackedObject
+import com.directorx.editor.model.TransitionEasing
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
@@ -1017,25 +1017,25 @@ object EffectShaders {
 
     // ─── Blend Mode shaders ──────────────────────────────────────────
 
-    fun blendMode(mode: com.novacut.editor.model.BlendMode, opacity: Float = 1f) = ShaderEffect(
+    fun blendMode(mode: com.directorx.editor.model.BlendMode, opacity: Float = 1f) = ShaderEffect(
         when (mode) {
-            com.novacut.editor.model.BlendMode.MULTIPLY -> FRAG_BLEND_MULTIPLY
-            com.novacut.editor.model.BlendMode.SCREEN -> FRAG_BLEND_SCREEN
-            com.novacut.editor.model.BlendMode.OVERLAY -> FRAG_BLEND_OVERLAY
-            com.novacut.editor.model.BlendMode.DARKEN -> FRAG_BLEND_DARKEN
-            com.novacut.editor.model.BlendMode.LIGHTEN -> FRAG_BLEND_LIGHTEN
-            com.novacut.editor.model.BlendMode.COLOR_DODGE -> FRAG_BLEND_COLOR_DODGE
-            com.novacut.editor.model.BlendMode.COLOR_BURN -> FRAG_BLEND_COLOR_BURN
-            com.novacut.editor.model.BlendMode.HARD_LIGHT -> FRAG_BLEND_HARD_LIGHT
-            com.novacut.editor.model.BlendMode.SOFT_LIGHT -> FRAG_BLEND_SOFT_LIGHT
-            com.novacut.editor.model.BlendMode.DIFFERENCE -> FRAG_BLEND_DIFFERENCE
-            com.novacut.editor.model.BlendMode.EXCLUSION -> FRAG_BLEND_EXCLUSION
-            com.novacut.editor.model.BlendMode.HUE -> FRAG_BLEND_HUE
-            com.novacut.editor.model.BlendMode.SATURATION_BLEND -> FRAG_BLEND_SATURATION
-            com.novacut.editor.model.BlendMode.COLOR -> FRAG_BLEND_COLOR
-            com.novacut.editor.model.BlendMode.LUMINOSITY -> FRAG_BLEND_LUMINOSITY
-            com.novacut.editor.model.BlendMode.ADD -> FRAG_BLEND_ADD
-            com.novacut.editor.model.BlendMode.SUBTRACT -> FRAG_BLEND_SUBTRACT
+            com.directorx.editor.model.BlendMode.MULTIPLY -> FRAG_BLEND_MULTIPLY
+            com.directorx.editor.model.BlendMode.SCREEN -> FRAG_BLEND_SCREEN
+            com.directorx.editor.model.BlendMode.OVERLAY -> FRAG_BLEND_OVERLAY
+            com.directorx.editor.model.BlendMode.DARKEN -> FRAG_BLEND_DARKEN
+            com.directorx.editor.model.BlendMode.LIGHTEN -> FRAG_BLEND_LIGHTEN
+            com.directorx.editor.model.BlendMode.COLOR_DODGE -> FRAG_BLEND_COLOR_DODGE
+            com.directorx.editor.model.BlendMode.COLOR_BURN -> FRAG_BLEND_COLOR_BURN
+            com.directorx.editor.model.BlendMode.HARD_LIGHT -> FRAG_BLEND_HARD_LIGHT
+            com.directorx.editor.model.BlendMode.SOFT_LIGHT -> FRAG_BLEND_SOFT_LIGHT
+            com.directorx.editor.model.BlendMode.DIFFERENCE -> FRAG_BLEND_DIFFERENCE
+            com.directorx.editor.model.BlendMode.EXCLUSION -> FRAG_BLEND_EXCLUSION
+            com.directorx.editor.model.BlendMode.HUE -> FRAG_BLEND_HUE
+            com.directorx.editor.model.BlendMode.SATURATION_BLEND -> FRAG_BLEND_SATURATION
+            com.directorx.editor.model.BlendMode.COLOR -> FRAG_BLEND_COLOR
+            com.directorx.editor.model.BlendMode.LUMINOSITY -> FRAG_BLEND_LUMINOSITY
+            com.directorx.editor.model.BlendMode.ADD -> FRAG_BLEND_ADD
+            com.directorx.editor.model.BlendMode.SUBTRACT -> FRAG_BLEND_SUBTRACT
             else -> FRAG_BLEND_NORMAL
         },
         mapOf("uOpacity" to opacity)

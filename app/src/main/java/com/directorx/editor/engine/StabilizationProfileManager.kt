@@ -1,11 +1,11 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.net.Uri
-import com.novacut.editor.BuildConfig
-import com.novacut.editor.model.StabilizationLensProfile
-import com.novacut.editor.model.StabilizationMotionProfile
-import com.novacut.editor.model.StabilizationProfile
+import com.directorx.editor.BuildConfig
+import com.directorx.editor.model.StabilizationLensProfile
+import com.directorx.editor.model.StabilizationMotionProfile
+import com.directorx.editor.model.StabilizationProfile
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

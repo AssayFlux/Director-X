@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.app.ActivityManager
 import android.content.Context
@@ -7,12 +7,12 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import androidx.core.graphics.scale
-import com.novacut.editor.model.Easing
-import com.novacut.editor.model.Keyframe
-import com.novacut.editor.model.KeyframeInterpolation
-import com.novacut.editor.model.KeyframeProperty
+import com.directorx.editor.model.Easing
+import com.directorx.editor.model.Keyframe
+import com.directorx.editor.model.KeyframeInterpolation
+import com.directorx.editor.model.KeyframeProperty
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
