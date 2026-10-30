@@ -120,7 +120,7 @@ class RedactedLoggingRatchetTest {
         var dir: File? = File(userDir).absoluteFile
         repeat(6) {
             val current = dir ?: return null
-            val candidate = File(current, "app/src/main/java/com/novacut/editor")
+            val candidate = File(current, "app/src/main/java/com/directorx/editor")
             if (candidate.isDirectory) return candidate
             dir = current.parentFile
         }
