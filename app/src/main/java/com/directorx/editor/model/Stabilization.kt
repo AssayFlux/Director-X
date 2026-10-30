@@ -1,4 +1,4 @@
-package com.novacut.editor.model
+package com.directorx.editor.model
 
 /**
  * Non-destructive stabilization data attached to a clip. The source pixels are

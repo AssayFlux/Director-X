@@ -1,4 +1,4 @@
-package com.novacut.editor.ui
+package com.directorx.editor.ui
 
 object ClearCutTestTags {
     const val PROJECTS_SCREEN = "projects.screen"

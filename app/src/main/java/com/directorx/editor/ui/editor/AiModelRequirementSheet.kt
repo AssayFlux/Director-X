@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,21 +31,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.novacut.editor.R
-import com.novacut.editor.engine.AiToolRequirements
-import com.novacut.editor.engine.AiToolRequirements.Availability
-import com.novacut.editor.engine.AiToolRequirements.Runtime
-import com.novacut.editor.engine.AiToolRequirements.ToolRequirement
-import com.novacut.editor.ui.theme.ClearCutDialogIcon
-import com.novacut.editor.ui.theme.ClearCutPrimaryButton
-import com.novacut.editor.ui.theme.ClearCutSecondaryButton
-import com.novacut.editor.ui.theme.Radius
+import com.directorx.editor.R
+import com.directorx.editor.engine.AiToolRequirements
+import com.directorx.editor.engine.AiToolRequirements.Availability
+import com.directorx.editor.engine.AiToolRequirements.Runtime
+import com.directorx.editor.engine.AiToolRequirements.ToolRequirement
+import com.directorx.editor.ui.theme.ClearCutDialogIcon
+import com.directorx.editor.ui.theme.ClearCutPrimaryButton
+import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.Radius
 
 /**
  * Pre-flight sheet shown before an AI tool runs (Highest-Value #10).
  *
  * Consumes [AiToolRequirements.ToolRequirement] directly so the data
- * contract stays frozen and tested under [com.novacut.editor.engine.AiToolRequirementsTest].
+ * contract stays frozen and tested under [com.directorx.editor.engine.AiToolRequirementsTest].
  *
  * Three primary CTAs depending on [ToolRequirement.availability]:
  *  - READY → "Use now" (no download, no cloud)

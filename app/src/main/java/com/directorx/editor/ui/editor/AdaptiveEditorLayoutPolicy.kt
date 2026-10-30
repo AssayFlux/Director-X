@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 /**
  * R8.8 adaptive layout policy for Android 16 forced-resizable screens.

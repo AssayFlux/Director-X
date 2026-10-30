@@ -1,4 +1,4 @@
-package com.novacut.editor.model
+package com.directorx.editor.model
 
 /**
  * Reusable offline stabilization assumptions. This is deliberately data-only:

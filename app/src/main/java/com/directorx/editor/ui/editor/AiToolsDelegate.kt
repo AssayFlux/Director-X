@@ -1,17 +1,17 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
-import com.novacut.editor.engine.AppLog
-import com.novacut.editor.R
-import com.novacut.editor.ai.AiFeatures
-import com.novacut.editor.ai.CaptionEntry
-import com.novacut.editor.ai.CaptionOutcome
-import com.novacut.editor.ai.CaptionSource
-import com.novacut.editor.engine.*
+import com.directorx.editor.engine.AppLog
+import com.directorx.editor.R
+import com.directorx.editor.ai.AiFeatures
+import com.directorx.editor.ai.CaptionEntry
+import com.directorx.editor.ai.CaptionOutcome
+import com.directorx.editor.ai.CaptionSource
+import com.directorx.editor.engine.*
 
-import com.novacut.editor.model.*
+import com.directorx.editor.model.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -740,7 +740,7 @@ class AiToolsDelegate(
 
     private suspend fun runTrackMotion(clip: Clip) {
         try {
-            val region = com.novacut.editor.ai.TrackingRegion()
+            val region = com.directorx.editor.ai.TrackingRegion()
             val results = withContext(Dispatchers.Default) { aiFeatures.trackMotion(clip.sourceUri, region, clip.trimStartMs, clip.trimEndMs) }
             if (results.isEmpty()) {
                 showToast(text(R.string.ai_motion_tracking_empty_toast))
@@ -817,7 +817,7 @@ class AiToolsDelegate(
     private suspend fun runFaceTrack(clip: Clip) {
         try {
             showToast(text(R.string.ai_face_tracking_detecting_toast))
-            val region = com.novacut.editor.ai.TrackingRegion(centerX = 0.5f, centerY = 0.35f, width = 0.3f, height = 0.3f)
+            val region = com.directorx.editor.ai.TrackingRegion(centerX = 0.5f, centerY = 0.35f, width = 0.3f, height = 0.3f)
             val results = withContext(Dispatchers.Default) { aiFeatures.trackMotion(clip.sourceUri, region, clip.trimStartMs, clip.trimEndMs) }
             if (results.isNotEmpty()) {
                 saveUndoState("AI face track")
@@ -838,7 +838,7 @@ class AiToolsDelegate(
      * Shared between runTrackMotion and runFaceTrack to avoid duplication.
      */
     private fun buildTrackingKeyframes(
-        results: List<com.novacut.editor.ai.TrackingResult>,
+        results: List<com.directorx.editor.ai.TrackingResult>,
         clip: Clip,
         invertSign: Boolean,
         yBaseline: Float
