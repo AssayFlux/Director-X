@@ -59,8 +59,8 @@ No copyright assignment, transfer, waiver, or new permission from SysAdminDoc or
 
 The current `app/build.gradle.kts` declares:
 
-- Android namespace: `com.novacut.editor`
-- Android application ID: `com.novacut.editor`
+- Android source namespace: `com.novacut.editor`
+- Android application ID: `com.directorx.editor` (new-install identity; not an in-place update of the former package)
 - Compile SDK: 37
 - Target SDK: 37
 - Minimum SDK: 26
@@ -69,7 +69,7 @@ The current `app/build.gradle.kts` declares:
 - Version name: 3.82.0
 - Main UI/build technology: Kotlin and Jetpack Compose
 
-Some earlier branding-planning documents recorded proposed values `com.assayflux.directorx` and `org.assayflux.directorx`. Those values do **not** match the current Gradle configuration and must not be represented as the live application identity until the build files, source packages, manifest references, tests, signing/update strategy and migration plan are deliberately changed and verified.
+The installed application ID is `com.directorx.editor`. The Kotlin source namespace remains `com.novacut.editor` as an internal implementation namespace for this staged migration. Existing installations under the previous application ID are separate apps; project transfer requires export/import. Keep the existing signing key for future updates to the Director X package.
 
 The current project also retains legacy identifiers in source paths and data/schema names. Do not bulk-rename persisted database schemas, serialization keys, media/project formats, protocol fields or package identifiers without a backwards-compatible migration plan.
 
