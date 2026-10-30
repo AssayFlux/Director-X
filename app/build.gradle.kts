@@ -786,6 +786,9 @@ dependencies {
     // Lifecycle otherwise constrains Android tests to 1.7.3, which crashes
     // MigrationTestHelper before migrations can run (AbstractMethodError).
     implementation(platform("org.jetbrains.kotlinx:kotlinx-serialization-bom:1.8.1"))
+    // Google Play subscriptions and purchase lifecycle.
+    implementation(libs.google.play.billing)
+
     // Core
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.exifinterface)
