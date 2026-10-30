@@ -2756,7 +2756,7 @@ class ExportDelegate(
                     // break the batch (each item is independent and the user may want
                     // partial-success behaviour for a long queue).
                     if (result == ExportState.CANCELLED) break
-                    // Android won't start the service again until ClearCut is in front,
+                    // Android won't start the service again until Director X is in front,
                     // so the rest of the plan stays queued for the user to resume.
                     if (interrupted) break
                     activeBatchItemId = null
