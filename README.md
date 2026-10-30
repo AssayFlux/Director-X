@@ -1,12 +1,14 @@
-# Director X
-
 <div align="center">
+
+<img src="assets/icon.png" alt="Director X app icon" width="180" />
+
+# Director X
 
 **A powerful Android video-editing studio built for precise creative workflows.**
 
-Director X combines a modern native Android interface with a capable media-processing foundation and on-device intelligent tools.
+Director X combines a native Android interface with a capable media-processing foundation and on-device intelligent tools.
 
-[![Download Debug APK](https://img.shields.io/badge/Download-Debug%20APK-2ea44f?logo=android&logoColor=white)](https://github.com/AssayFlux/Director-X/actions/runs/41049985412/artifacts/12973892841)
+[![Download Debug APK](https://img.shields.io/badge/Download-Debug%20APK-2ea44f?logo=android&logoColor=white)](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml)
 [![Android](https://img.shields.io/badge/Platform-Android-3DDC84?logo=android&logoColor=white)](https://developer.android.com/)
 [![Min SDK](https://img.shields.io/badge/Min%20SDK-26-blue)](https://developer.android.com/)
 [![Target SDK](https://img.shields.io/badge/Target%20SDK-37-blue)](https://developer.android.com/)
@@ -21,43 +23,64 @@ Director X combines a modern native Android interface with a capable media-proce
 
 ---
 
+<div align="center">
+
 ## Overview
 
-Director X is a native Android video editor built with Kotlin and Jetpack Compose. It brings together media playback, editing and export infrastructure, local project data, and on-device intelligent media capabilities in one application.
+Director X is a native Android video editor built with Kotlin and Jetpack Compose. It brings media playback, editing and export infrastructure, local project data, and on-device intelligent media capabilities together in one application.
 
 ## Key Features
 
 ### Editing and Media
-- **Media playback** — Native playback foundation for previewing media during editing.
-- **Media transformation** — Video transformation and export workflows using Android media APIs.
-- **Effects pipeline** — Media effects infrastructure for visual processing.
-- **Media muxing** — Output composition and media muxing support.
-- **Media import and sharing** — Android content intents for opening and receiving supported media and project-related files.
+
+**Media playback** · Native playback foundation for previewing media during editing.
+
+**Media transformation** · Video transformation and export workflows using Android media APIs.
+
+**Effects pipeline** · Media effects infrastructure for visual processing.
+
+**Media muxing** · Output composition and media muxing support.
+
+**Media import and sharing** · Android content intents for opening and receiving supported media and project-related files.
 
 ### AI and Audio
-- **On-device inference** — Local model execution through the integrated inference stack.
-- **Media intelligence** — Vision and media-processing capabilities for supported workflows.
-- **Audio enhancement** — Integrated audio-processing functionality.
-- **Local-first AI** — AI functionality is designed around locally integrated engines, without requiring a cloud AI service.
+
+**On-device inference** · Local model execution through the integrated inference stack.
+
+**Media intelligence** · Vision and media-processing capabilities for supported workflows.
+
+**Audio enhancement** · Integrated audio-processing functionality.
+
+**Local-first AI** · AI functionality is designed around locally integrated engines, without requiring a cloud AI service.
 
 ### Application Experience
-- **Modern interface** — Jetpack Compose and Material 3.
-- **Persistent data** — Room database and DataStore preferences.
-- **Background work** — WorkManager and Android foreground-service infrastructure.
-- **Dependency injection** — Hilt-based application dependency management.
-- **Performance tooling** — Baseline profile and performance measurement infrastructure.
+
+**Modern interface** · Jetpack Compose and Material 3.
+
+**Persistent data** · Room database and DataStore preferences.
+
+**Background work** · WorkManager and Android foreground-service infrastructure.
+
+**Dependency injection** · Hilt-based application dependency management.
+
+**Performance tooling** · Baseline profile and performance measurement infrastructure.
 
 ### Security and Offline Functionality
-- **Private app storage** — App-managed data is stored within Android application storage.
-- **Local processing** — Core media and AI workflows are designed to run on-device.
-- **Network policy** — Network permissions and cleartext-traffic policy are declared explicitly.
-- **Build integrity** — Build-time integrity checks are included for pinned build inputs.
-- **Free application** — Billing functionality is not part of the current product plan.
 
-## Tech Stack and Architecture
+**Private app storage** · App-managed data is stored within Android application storage.
+
+**Local processing** · Core media and AI workflows are designed to run on-device.
+
+**Network policy** · Network permissions and cleartext-traffic policy are declared explicitly.
+
+**Build integrity** · Build-time integrity checks are included for pinned build inputs.
+
+**Free application** · Billing functionality is not part of the current product plan.
+
+## Technology
 
 | Area | Technology |
-|---|---|
+|:---:|:---:|
 | Language | Kotlin |
 | UI | Jetpack Compose |
 | Design system | Material 3 |
@@ -77,35 +100,45 @@ Director X is a native Android video editor built with Kotlin and Jetpack Compos
 | Kotlin plugin | 2.4.10 |
 | Java toolchain | 17 |
 
-### Architecture
+## Architecture
 
 The codebase separates UI, application state, persistence, and media-processing responsibilities.
 
+</div>
+
+<div align="center">
+
 ```text
-Presentation
-  Jetpack Compose · Material 3
-          |
-          v
-Application and UI State
-  Screens · ViewModels · Flows
-          |
-          v
-Data
-  Repositories · Room · DataStore
-          |
-          v
-Media and AI Processing
-  Media3 · Native processing · AI engines
-          |
-          v
-Android Platform
-  Storage · Services · WorkManager
+              Presentation
+       Jetpack Compose · Material 3
+                     |
+                     v
+         Application and UI State
+            Screens · ViewModels
+                     |
+                     v
+                  Data
+          Repositories · Room
+               · DataStore
+                     |
+                     v
+         Media and AI Processing
+       Media3 · Native processing
+                 · AI engines
+                     |
+                     v
+             Android Platform
+       Storage · Services · WorkManager
 ```
+
+</div>
+
+<div align="center">
 
 ## Build Configuration
 
 | Setting | Value |
-|---|---|
+|:---:|:---:|
 | Application ID | `com.directorx.editor` |
 | Kotlin namespace | `com.directorx.editor` |
 | Version | `v0.1.0` |
@@ -121,22 +154,31 @@ Android Platform
 ## Getting Started
 
 ### Requirements
-- JDK 17
-- Android SDK Platform 37
-- Android SDK Build Tools compatible with the project
-- Git
-- Android device or emulator running API 26 or newer
 
-### 1. Clone the repository
+JDK 17 · Android SDK Platform 37 · Compatible Android SDK Build Tools · Git · Android device or emulator running API 26 or newer.
+
+### Clone the Repository
+
+</div>
+
+<div align="center">
 
 ```bash
 git clone https://github.com/AssayFlux/Director-X.git
 cd Director-X
 ```
 
-### 2. Configure the Android SDK
+</div>
+
+<div align="center">
+
+### Configure the Android SDK
 
 Set `ANDROID_HOME` or `ANDROID_SDK_ROOT`. If needed, create `local.properties`:
+
+</div>
+
+<div align="center">
 
 ```properties
 sdk.dir=/absolute/path/to/Android/Sdk
@@ -144,7 +186,11 @@ sdk.dir=/absolute/path/to/Android/Sdk
 
 Do not commit machine-specific SDK paths.
 
-### 3. Verify Java and Gradle
+### Verify Java and Gradle
+
+</div>
+
+<div align="center">
 
 ```bash
 java -version
@@ -153,43 +199,52 @@ java -version
 
 Use JDK 17. On Windows, use `gradlew.bat` instead of `./gradlew`.
 
-### 4. Build the debug APK
+### Build the Debug APK
+
+</div>
+
+<div align="center">
 
 ```bash
 ./gradlew :app:assembleDebug
 ```
 
-APK output:
-
-```text
-app/build/outputs/apk/
-```
+APK output: `app/build/outputs/apk/`
 
 The configured ABI split may produce multiple APK files, including a universal APK.
 
-### 5. Run unit tests
+### Run Unit Tests
+
+</div>
+
+<div align="center">
 
 ```bash
 ./gradlew :app:testDebugUnitTest
 ```
 
-### 6. Install on a connected device
+### Install on a Connected Device
 
 Enable USB debugging, connect the device, and run:
+
+</div>
+
+<div align="center">
 
 ```bash
 ./gradlew :app:installDebug
 ```
 
-## Build an APK with GitHub Actions
+## Download the Android APK
 
-The GitHub Actions workflow builds a debug APK automatically when changes are pushed to `main`, and can also be started manually.
+The GitHub Actions workflow builds a debug APK when changes are pushed to `main`, and can also be started manually.
 
-**[Open the latest build runs and download the APK artifact](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml).**
+**[OPEN BUILDS & DOWNLOAD THE LATEST APK](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml)**
 
-For the current successful build, open [Build Debug APK run #10](https://github.com/AssayFlux/Director-X/actions/runs/41046091269), scroll to **Artifacts**, and download `director-x-debug-apk`.
+After a successful run, open the workflow run, scroll to **Artifacts**, and download `director-x-debug-apk`.
 
-To start another build manually:
+### Start a Build Manually
+
 1. Open the repository's **Actions** tab.
 2. Select **Build Debug APK**.
 3. Select **Run workflow** and choose the build variant.
@@ -198,6 +253,10 @@ To start another build manually:
 Artifacts are temporary GitHub Actions downloads and expire after 14 days. The workflow does not publish a permanent GitHub Release.
 
 ## Project Structure
+
+</div>
+
+<div align="center">
 
 ```text
 Director-X/
@@ -238,6 +297,10 @@ Director-X/
 └── README.md
 ```
 
+</div>
+
+<div align="center">
+
 ## Roadmap
 
 - [x] Native Android application foundation
@@ -254,19 +317,13 @@ Director-X/
 
 ## Contributing
 
-1. Search [existing issues](https://github.com/AssayFlux/Director-X/issues) before reporting a problem.
-2. Include reproduction steps, device model, Android version, and relevant logs.
-3. Discuss substantial changes in an issue before implementation.
-4. Submit focused pull requests against `main`.
-5. Include tests or verification steps for behavior changes.
+Please search [existing issues](https://github.com/AssayFlux/Director-X/issues) before reporting a problem. Include reproduction steps, device model, Android version, and relevant logs. Discuss substantial changes in an issue before implementation. Submit focused pull requests against `main`, and include tests or verification steps for behavior changes.
 
 ## License
 
 See the repository's `LICENSE` file for the terms that apply to this project.
 
 ---
-
-<div align="center">
 
 **Director X — Designed by AssayFlux**
 
