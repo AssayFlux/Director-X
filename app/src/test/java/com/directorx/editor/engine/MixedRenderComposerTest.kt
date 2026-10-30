@@ -1,9 +1,9 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.engine.MixedRenderComposer.Benefit
-import com.novacut.editor.engine.MixedRenderComposer.Engine
-import com.novacut.editor.engine.MixedRenderComposer.IssueSeverity
-import com.novacut.editor.engine.SmartRenderEngine.RenderRun
+import com.directorx.editor.engine.MixedRenderComposer.Benefit
+import com.directorx.editor.engine.MixedRenderComposer.Engine
+import com.directorx.editor.engine.MixedRenderComposer.IssueSeverity
+import com.directorx.editor.engine.SmartRenderEngine.RenderRun
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull

@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import java.io.File
 import org.junit.Assert.assertNotNull
