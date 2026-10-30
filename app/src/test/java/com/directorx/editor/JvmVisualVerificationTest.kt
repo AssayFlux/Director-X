@@ -1,4 +1,4 @@
-package com.novacut.editor
+package com.directorx.editor
 
 import android.net.Uri
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
@@ -13,15 +13,15 @@ import androidx.compose.ui.test.tryPerformAccessibilityChecks
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResult
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import com.github.takahirom.roborazzi.captureRoboImage
-import com.novacut.editor.engine.AutoSaveState
-import com.novacut.editor.engine.AppearanceMode
-import com.novacut.editor.engine.ProjectAutoSave
-import com.novacut.editor.engine.ProjectDocumentApplicator
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.TextOverlay
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
-import com.novacut.editor.ui.ClearCutTestTags
+import com.directorx.editor.engine.AutoSaveState
+import com.directorx.editor.engine.AppearanceMode
+import com.directorx.editor.engine.ProjectAutoSave
+import com.directorx.editor.engine.ProjectDocumentApplicator
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.TextOverlay
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
+import com.directorx.editor.ui.ClearCutTestTags
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule

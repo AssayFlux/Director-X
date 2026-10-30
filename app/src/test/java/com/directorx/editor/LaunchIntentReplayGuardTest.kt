@@ -1,4 +1,4 @@
-package com.novacut.editor
+package com.directorx.editor
 
 import android.content.Intent
 import org.junit.Assert.assertFalse

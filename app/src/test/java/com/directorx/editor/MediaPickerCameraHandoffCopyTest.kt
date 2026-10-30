@@ -1,4 +1,4 @@
-package com.novacut.editor
+package com.directorx.editor
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

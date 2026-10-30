@@ -1,4 +1,4 @@
-package com.novacut.editor
+package com.directorx.editor
 
 import org.json.JSONObject
 import org.junit.Assert.assertFalse
