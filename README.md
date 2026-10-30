@@ -180,6 +180,10 @@
 
 <img src="https://img.shields.io/badge/06-GETTING_STARTED-B18B5E?style=for-the-badge" alt="Getting started">
 
+### Package identity and upgrade policy
+
+The current Android application ID and Kotlin namespace are both `com.directorx.editor`. The app version is `3.82.0` (version code `301`), defined in `app/build.gradle.kts`. The previous NovaCut package identity was `com.novacut.editor`; this is a new install with an explicit export/import path for transferring projects, not an in-place Android package update. Future Director X updates must retain the pinned release signing identity.
+
 <h2>Build Director X from Source</h2>
 
 <h3>Prerequisites</h3>
