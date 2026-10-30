@@ -1,0 +1,9 @@
+Director X third-party notices (inherited from the upstream ClearCut project)
+
+FFmpegKitNext / FFmpeg
+
+The project bundles a source-pinned LGPL-3.0-or-later build of FFmpegKitNext 8.1.0 with FFmpeg 8.1.2, OpenH264, libass, and supporting libraries recorded in third_party/ffmpeg-kit-next/native-lock.json. The upstream commit and reproducible build recipe are recorded in the native lock and build scripts. Keep upstream license resources, source.txt, source-offer text, and corresponding-source access available with redistributed builds.
+
+DeepFilterNet
+
+The project may bundle io.github.kaleyravideo:android-deepfilternet:0.0.8 for on-device audio noise reduction. The Android AAR is licensed under Apache License 2.0 and is built on upstream DeepFilterNet, whose code and model weights are available under MIT or Apache License 2.0 at the user's option. Keep the applicable Apache/MIT notices with redistributed builds that include the library and model.
