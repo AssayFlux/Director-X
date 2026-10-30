@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -14,13 +14,13 @@ class MediaRelinkOpenToastTest {
     @Test
     fun mediaRelinkOpenToast_describesMissingAndUnverifiedSources() {
         assertEquals(
-            listOf(MediaRelinkOpenToastPart(1, com.novacut.editor.R.plurals.vm_media_missing_sources)),
+            listOf(MediaRelinkOpenToastPart(1, com.directorx.editor.R.plurals.vm_media_missing_sources)),
             mediaRelinkOpenToast(missingCount = 1, unknownCount = 0)
         )
         assertEquals(
             listOf(
-                MediaRelinkOpenToastPart(2, com.novacut.editor.R.plurals.vm_media_missing_sources),
-                MediaRelinkOpenToastPart(1, com.novacut.editor.R.plurals.vm_media_unverified_sources),
+                MediaRelinkOpenToastPart(2, com.directorx.editor.R.plurals.vm_media_missing_sources),
+                MediaRelinkOpenToastPart(1, com.directorx.editor.R.plurals.vm_media_unverified_sources),
             ),
             mediaRelinkOpenToast(missingCount = 2, unknownCount = 1)
         )
@@ -30,8 +30,8 @@ class MediaRelinkOpenToastTest {
     fun mediaRelinkOpenToast_describesManifestHealthIssues() {
         assertEquals(
             listOf(
-                MediaRelinkOpenToastPart(1, com.novacut.editor.R.plurals.vm_media_repair_items),
-                MediaRelinkOpenToastPart(2, com.novacut.editor.R.plurals.vm_media_warnings),
+                MediaRelinkOpenToastPart(1, com.directorx.editor.R.plurals.vm_media_repair_items),
+                MediaRelinkOpenToastPart(2, com.directorx.editor.R.plurals.vm_media_warnings),
             ),
             mediaRelinkOpenToast(
                 missingCount = 0,

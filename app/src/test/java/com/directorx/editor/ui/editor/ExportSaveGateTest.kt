@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.net.FakeUri
-import com.novacut.editor.engine.MediaRelinkProbe
+import com.directorx.editor.engine.MediaRelinkProbe
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

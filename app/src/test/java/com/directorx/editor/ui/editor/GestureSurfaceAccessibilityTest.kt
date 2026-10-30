@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
@@ -8,10 +8,10 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.unit.dp
-import com.novacut.editor.model.CurvePoint
-import com.novacut.editor.model.Keyframe
-import com.novacut.editor.model.KeyframeProperty
-import com.novacut.editor.ui.theme.ClearCutTheme
+import com.directorx.editor.model.CurvePoint
+import com.directorx.editor.model.Keyframe
+import com.directorx.editor.model.KeyframeProperty
+import com.directorx.editor.ui.theme.ClearCutTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule

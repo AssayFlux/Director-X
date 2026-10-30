@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.net.Uri
-import com.novacut.editor.model.Clip
+import com.directorx.editor.model.Clip
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
