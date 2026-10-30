@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.graphics.Bitmap
 import android.view.PixelCopy
@@ -6,7 +6,7 @@ import android.view.SurfaceView
 import android.os.Handler
 import android.os.Looper
 import kotlinx.coroutines.suspendCancellableCoroutine
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import kotlin.coroutines.resume
 
 /**

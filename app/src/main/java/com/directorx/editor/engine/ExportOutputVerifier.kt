@@ -1,8 +1,8 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.media.MediaExtractor
 import android.media.MediaFormat
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import java.io.File
 import java.io.RandomAccessFile
 

@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.graphics.Typeface
 import android.text.BidiFormatter
@@ -14,9 +14,9 @@ import android.text.TextPaint
 import android.text.TextDirectionHeuristics
 import android.text.style.MetricAffectingSpan
 import androidx.media3.common.util.UnstableApi
-import com.novacut.editor.model.TextAlignment
-import com.novacut.editor.model.TextAnimation
-import com.novacut.editor.model.TextOverlay
+import com.directorx.editor.model.TextAlignment
+import com.directorx.editor.model.TextAnimation
+import com.directorx.editor.model.TextOverlay
 
 /**
  * Text overlay that renders within a specific time range during export.

@@ -1,13 +1,13 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.os.StatFs
 import android.system.Os
-import com.novacut.editor.R
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.ExportConfig
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.R
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.ExportConfig
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
 import java.io.File
 
 object ExportStoragePolicy {
@@ -341,5 +341,5 @@ class ExportStorageException(
  * work starts so the export never silently falls back to a video artifact.
  */
 class UnsupportedAudioExportException(
-    val codec: com.novacut.editor.model.AudioCodec,
+    val codec: com.directorx.editor.model.AudioCodec,
 ) : IllegalStateException("AAC is the only currently supported export audio codec (requested ${codec.label})")

@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.app.*
 import android.content.Intent
@@ -6,12 +6,12 @@ import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import androidx.core.app.NotificationCompat
 import androidx.core.content.FileProvider
-import com.novacut.editor.MainActivity
-import com.novacut.editor.ClearCutApp
-import com.novacut.editor.R
+import com.directorx.editor.MainActivity
+import com.directorx.editor.ClearCutApp
+import com.directorx.editor.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.combine
@@ -29,8 +29,8 @@ class ExportService : Service() {
 
     companion object {
         const val NOTIFICATION_ID = 1001
-        const val ACTION_CANCEL = "com.novacut.editor.CANCEL_EXPORT"
-        const val EXTRA_OUTPUT_PATH = "com.novacut.editor.extra.OUTPUT_PATH"
+        const val ACTION_CANCEL = "com.directorx.editor.CANCEL_EXPORT"
+        const val EXTRA_OUTPUT_PATH = "com.directorx.editor.extra.OUTPUT_PATH"
     }
 
     @Inject lateinit var videoEngine: VideoEngine

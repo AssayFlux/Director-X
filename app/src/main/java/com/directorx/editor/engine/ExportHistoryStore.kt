@@ -1,15 +1,15 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.net.Uri
-import com.novacut.editor.model.ExportConfig
-import com.novacut.editor.model.ResolvedTimelineExportRange
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
-import com.novacut.editor.model.VideoCodec
-import com.novacut.editor.model.effectiveTimelineEndMs
-import com.novacut.editor.model.effectiveTimelineStartMs
-import com.novacut.editor.model.requiresStreamSafeOutput
+import com.directorx.editor.model.ExportConfig
+import com.directorx.editor.model.ResolvedTimelineExportRange
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
+import com.directorx.editor.model.VideoCodec
+import com.directorx.editor.model.effectiveTimelineEndMs
+import com.directorx.editor.model.effectiveTimelineStartMs
+import com.directorx.editor.model.requiresStreamSafeOutput
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File

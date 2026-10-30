@@ -1,10 +1,10 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.EffectType
-import com.novacut.editor.model.AudioCodec
-import com.novacut.editor.model.ExportConfig
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.model.EffectType
+import com.directorx.editor.model.AudioCodec
+import com.directorx.editor.model.ExportConfig
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
 
 /**
  * Conservative gate for Media3's partial-MP4 resume API.

@@ -1,15 +1,15 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.effect.BitmapOverlay
 import androidx.media3.effect.StaticOverlaySettings
-import com.novacut.editor.model.Watermark
-import com.novacut.editor.model.WatermarkPosition
+import com.directorx.editor.model.Watermark
+import com.directorx.editor.model.WatermarkPosition
 
 /**
  * Brand-watermark overlay applied across every clip during export. Decodes
