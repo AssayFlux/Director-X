@@ -742,10 +742,8 @@ fun SettingsScreen(
             title = stringResource(R.string.settings_about),
             description = stringResource(R.string.settings_about_description)
         ) {
-            SettingsInfo(Icons.Default.Info, stringResource(R.string.settings_version), ClearCutApp.VERSION, ClearCutAccents.Sapphire)
-            SettingsInfo(Icons.Default.Movie, stringResource(R.string.settings_engine), stringResource(R.string.settings_engine_value), ClearCutAccents.Peach)
-            SettingsInfo(Icons.Default.AutoAwesome, stringResource(R.string.settings_ai_models), stringResource(R.string.settings_ai_models_value), ClearCutAccents.Mauve)
-            SettingsInfo(Icons.Default.Info, stringResource(R.string.brand_credit), stringResource(R.string.app_name), ClearCutAccents.Sapphire)
+            SettingsInfo(Icons.Default.Info, stringResource(R.string.settings_version), "v0.1.0", ClearCutAccents.Sapphire)
+            SettingsInfo(Icons.Default.AutoAwesome, stringResource(R.string.brand_credit), "AssayFlux", ClearCutAccents.Mauve)
         }
 
             Spacer(Modifier.height(Spacing.xxl))
