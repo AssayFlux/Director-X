@@ -1,9 +1,9 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.ImageOverlay
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.ImageOverlay
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
 
 private const val MEDIA_MANIFEST_KEY_SEPARATOR = '\u001F'
 

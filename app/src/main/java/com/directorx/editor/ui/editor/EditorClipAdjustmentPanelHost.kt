@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.content.Context
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -8,11 +8,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.novacut.editor.R
-import com.novacut.editor.model.BlendMode
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.ColorGrade
-import com.novacut.editor.model.EffectType
+import com.directorx.editor.R
+import com.directorx.editor.model.BlendMode
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.ColorGrade
+import com.directorx.editor.model.EffectType
 
 @Composable
 fun BoxScope.EditorClipAdjustmentPanelHost(

@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
@@ -6,9 +6,9 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.novacut.editor.engine.InpaintingModelState
-import com.novacut.editor.engine.segmentation.SegmentationModelState
-import com.novacut.editor.engine.whisper.WhisperModelState
+import com.directorx.editor.engine.InpaintingModelState
+import com.directorx.editor.engine.segmentation.SegmentationModelState
+import com.directorx.editor.engine.whisper.WhisperModelState
 
 @Composable
 fun BoxScope.EditorAiPanelHost(

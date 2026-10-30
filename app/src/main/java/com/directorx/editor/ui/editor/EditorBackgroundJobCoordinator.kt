@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.content.Context
 import android.net.Uri
@@ -10,9 +10,9 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import androidx.work.workDataOf
-import com.novacut.editor.engine.MediaHashWorker
-import com.novacut.editor.engine.MediaIngestWorker
-import com.novacut.editor.engine.ProxyGenerationWorker
+import com.directorx.editor.engine.MediaHashWorker
+import com.directorx.editor.engine.MediaIngestWorker
+import com.directorx.editor.engine.ProxyGenerationWorker
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap

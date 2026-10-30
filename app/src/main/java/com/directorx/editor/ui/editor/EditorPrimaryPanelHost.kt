@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.content.Context
 import android.content.Intent
@@ -14,20 +14,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.zIndex
-import com.novacut.editor.R
-import com.novacut.editor.engine.ExportColorConfidenceEngine
-import com.novacut.editor.engine.SmartRenderEngine
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.Resolution
-import com.novacut.editor.model.Effect
-import com.novacut.editor.model.EffectType
-import com.novacut.editor.model.TrackType
-import com.novacut.editor.model.Transition
-import com.novacut.editor.ui.ClearCutTestTags
-import com.novacut.editor.ui.export.ExportSheet
-import com.novacut.editor.ui.export.ExportSheetPresentation
-import com.novacut.editor.ui.mediapicker.MediaPickerSheet
-import com.novacut.editor.ui.mediapicker.MediaPickerSelection
+import com.directorx.editor.R
+import com.directorx.editor.engine.ExportColorConfidenceEngine
+import com.directorx.editor.engine.SmartRenderEngine
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.Resolution
+import com.directorx.editor.model.Effect
+import com.directorx.editor.model.EffectType
+import com.directorx.editor.model.TrackType
+import com.directorx.editor.model.Transition
+import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.export.ExportSheet
+import com.directorx.editor.ui.export.ExportSheetPresentation
+import com.directorx.editor.ui.mediapicker.MediaPickerSheet
+import com.directorx.editor.ui.mediapicker.MediaPickerSelection
 import java.io.File
 
 @Composable

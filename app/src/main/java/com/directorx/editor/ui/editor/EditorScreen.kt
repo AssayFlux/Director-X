@@ -1,9 +1,9 @@
 @file:OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
 
 import android.Manifest
 import android.content.Context
@@ -45,7 +45,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import android.content.Intent
 import android.net.Uri
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
@@ -56,16 +56,16 @@ import androidx.compose.foundation.focusable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import com.novacut.editor.engine.ExportState
-import com.novacut.editor.model.*
-import com.novacut.editor.ui.ClearCutTestTags
-import com.novacut.editor.ui.theme.ClearCutDialogIcon
-import com.novacut.editor.ui.theme.ClearCutChromeIconButton
-import com.novacut.editor.ui.theme.ClearCutPrimaryButton
-import com.novacut.editor.ui.theme.ClearCutSecondaryButton
-import com.novacut.editor.ui.theme.Radius
-import com.novacut.editor.ui.theme.Spacing
-import com.novacut.editor.ui.theme.TouchTarget
+import com.directorx.editor.engine.ExportState
+import com.directorx.editor.model.*
+import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.theme.ClearCutDialogIcon
+import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.ClearCutPrimaryButton
+import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.Radius
+import com.directorx.editor.ui.theme.Spacing
+import com.directorx.editor.ui.theme.TouchTarget
 import androidx.activity.BackEventCompat
 import androidx.activity.compose.PredictiveBackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -74,7 +74,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
-import com.novacut.editor.R
+import com.directorx.editor.R
 import java.io.File
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.collect
@@ -196,7 +196,7 @@ fun EditorScreen(
         contract = ActivityResultContracts.PickVisualMedia()
     ) { uri ->
         if (uri != null) {
-            viewModel.addImageOverlay(uri, com.novacut.editor.model.ImageOverlayType.STICKER)
+            viewModel.addImageOverlay(uri, com.directorx.editor.model.ImageOverlayType.STICKER)
         }
     }
     val exportNotificationPrefs = remember(context) {
@@ -522,7 +522,7 @@ fun EditorScreen(
     val hapticsEnabled by viewModel.hapticsEnabled.collectAsStateWithLifecycle()
     CompositionLocalProvider(
         LocalLayoutMode provides layoutMode,
-        com.novacut.editor.ui.theme.LocalHapticsEnabled provides hapticsEnabled,
+        com.directorx.editor.ui.theme.LocalHapticsEnabled provides hapticsEnabled,
     ) {
     Box(modifier = Modifier
         .fillMaxSize()

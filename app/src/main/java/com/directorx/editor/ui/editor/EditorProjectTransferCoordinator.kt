@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.content.ContentValues
 import android.content.Context
@@ -6,11 +6,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import com.novacut.editor.engine.AutoSaveState
-import com.novacut.editor.engine.ProjectArchive
-import com.novacut.editor.engine.ProjectDocument
-import com.novacut.editor.engine.db.ProjectDao
-import com.novacut.editor.engine.sanitizeFileName
+import com.directorx.editor.engine.AutoSaveState
+import com.directorx.editor.engine.ProjectArchive
+import com.directorx.editor.engine.ProjectDocument
+import com.directorx.editor.engine.db.ProjectDao
+import com.directorx.editor.engine.sanitizeFileName
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

@@ -1,11 +1,11 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.engine.AutoSaveRequest
-import com.novacut.editor.engine.ProjectAutoSave
-import com.novacut.editor.engine.ProjectDocument
-import com.novacut.editor.engine.ProjectPersistenceCoordinator
-import com.novacut.editor.engine.db.ProjectDao
-import com.novacut.editor.model.Project
+import com.directorx.editor.engine.AutoSaveRequest
+import com.directorx.editor.engine.ProjectAutoSave
+import com.directorx.editor.engine.ProjectDocument
+import com.directorx.editor.engine.ProjectPersistenceCoordinator
+import com.directorx.editor.engine.db.ProjectDao
+import com.directorx.editor.model.Project
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject

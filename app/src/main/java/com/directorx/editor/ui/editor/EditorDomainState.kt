@@ -1,24 +1,24 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.engine.AiToolRequirements
-import com.novacut.editor.engine.AiUsageLedger
-import com.novacut.editor.engine.CaptionTranslationEngine
-import com.novacut.editor.engine.CaptionImportEngine
-import com.novacut.editor.engine.CutAssistantEngine
-import com.novacut.editor.engine.ExportHistoryEntry
-import com.novacut.editor.engine.MediaRelinkProbe
-import com.novacut.editor.engine.MediaHealthReport
-import com.novacut.editor.engine.MediaDiagnostic
-import com.novacut.editor.engine.Media3TrimOptimizationPolicy
-import com.novacut.editor.engine.MetadataSidecarFormat
-import com.novacut.editor.engine.SmartRenderEngine
-import com.novacut.editor.engine.ExportState
-import com.novacut.editor.engine.StabilizationEngine
-import com.novacut.editor.engine.StabilizationProfileValidation
-import com.novacut.editor.model.StabilizationProfile
-import com.novacut.editor.ai.AutoEditResult
-import com.novacut.editor.model.BatchExportItem
-import com.novacut.editor.model.ExportConfig
+import com.directorx.editor.engine.AiToolRequirements
+import com.directorx.editor.engine.AiUsageLedger
+import com.directorx.editor.engine.CaptionTranslationEngine
+import com.directorx.editor.engine.CaptionImportEngine
+import com.directorx.editor.engine.CutAssistantEngine
+import com.directorx.editor.engine.ExportHistoryEntry
+import com.directorx.editor.engine.MediaRelinkProbe
+import com.directorx.editor.engine.MediaHealthReport
+import com.directorx.editor.engine.MediaDiagnostic
+import com.directorx.editor.engine.Media3TrimOptimizationPolicy
+import com.directorx.editor.engine.MetadataSidecarFormat
+import com.directorx.editor.engine.SmartRenderEngine
+import com.directorx.editor.engine.ExportState
+import com.directorx.editor.engine.StabilizationEngine
+import com.directorx.editor.engine.StabilizationProfileValidation
+import com.directorx.editor.model.StabilizationProfile
+import com.directorx.editor.ai.AutoEditResult
+import com.directorx.editor.model.BatchExportItem
+import com.directorx.editor.model.ExportConfig
 
 /**
  * Typed projection of the large editor state bag into domain-owned slices.
@@ -184,7 +184,7 @@ data class EditorMediaState(
      * The persisted local media-bin catalog, including assets no longer used by
      * the timeline so triage can distinguish unused from missing.
      */
-    val mediaAssets: List<com.novacut.editor.engine.ProjectMediaAsset> = emptyList()
+    val mediaAssets: List<com.directorx.editor.engine.ProjectMediaAsset> = emptyList()
 ) : EditorDomainState {
     override val kind: EditorDomainState.Kind = EditorDomainState.Kind.MEDIA
 }

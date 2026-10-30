@@ -1,6 +1,6 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.model.SaveIndicatorState
+import com.directorx.editor.model.SaveIndicatorState
 
 data class EditConfidenceStatus(
     val undoableEdits: Int,

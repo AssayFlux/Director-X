@@ -1,9 +1,9 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
-import com.novacut.editor.engine.VideoEngine
+import com.directorx.editor.engine.VideoEngine
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
