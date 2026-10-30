@@ -1,6 +1,6 @@
-package com.novacut.editor.ui.theme
+package com.directorx.editor.ui.theme
 
-import com.novacut.editor.engine.AppearanceMode
+import com.directorx.editor.engine.AppearanceMode
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

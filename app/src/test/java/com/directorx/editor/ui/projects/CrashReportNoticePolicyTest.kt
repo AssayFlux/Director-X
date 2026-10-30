@@ -1,9 +1,9 @@
-package com.novacut.editor.ui.projects
+package com.directorx.editor.ui.projects
 
-import com.novacut.editor.engine.CrashRecordStore
-import com.novacut.editor.engine.ProcessExitRecorder
-import com.novacut.editor.engine.ProcessExitSnapshot
-import com.novacut.editor.engine.ProcessExitSource
+import com.directorx.editor.engine.CrashRecordStore
+import com.directorx.editor.engine.ProcessExitRecorder
+import com.directorx.editor.engine.ProcessExitSnapshot
+import com.directorx.editor.engine.ProcessExitSource
 import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -222,7 +222,7 @@ class CrashReportNoticePolicyTest {
         reasonCode = reason,
         status = 0,
         pid = (at % 30_000).toInt() + reason,
-        processName = "com.novacut.editor",
+        processName = "com.directorx.editor",
         importance = importance,
         pssKb = 0,
         rssKb = 0,

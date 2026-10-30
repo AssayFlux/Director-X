@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.projects
+package com.directorx.editor.ui.projects
 
 import android.app.Activity
 import android.content.ClipboardManager
@@ -10,11 +10,11 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
-import com.novacut.editor.ClearCutApp
-import com.novacut.editor.MainActivity
-import com.novacut.editor.engine.CrashRecordStore
-import com.novacut.editor.engine.DiagnosticExportEngine
-import com.novacut.editor.ui.ClearCutTestTags
+import com.directorx.editor.ClearCutApp
+import com.directorx.editor.MainActivity
+import com.directorx.editor.engine.CrashRecordStore
+import com.directorx.editor.engine.DiagnosticExportEngine
+import com.directorx.editor.ui.ClearCutTestTags
 import java.io.File
 import java.util.zip.ZipFile
 import org.junit.Assert.assertEquals

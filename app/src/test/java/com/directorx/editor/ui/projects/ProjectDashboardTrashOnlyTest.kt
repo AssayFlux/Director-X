@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.projects
+package com.directorx.editor.ui.projects
 
 import androidx.compose.ui.test.hasScrollToIndexAction
 import androidx.compose.ui.test.hasText
@@ -6,10 +6,10 @@ import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.performScrollToNode
-import com.novacut.editor.ClearCutApp
-import com.novacut.editor.MainActivity
-import com.novacut.editor.model.Project
-import com.novacut.editor.ui.ClearCutTestTags
+import com.directorx.editor.ClearCutApp
+import com.directorx.editor.MainActivity
+import com.directorx.editor.model.Project
+import com.directorx.editor.ui.ClearCutTestTags
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test

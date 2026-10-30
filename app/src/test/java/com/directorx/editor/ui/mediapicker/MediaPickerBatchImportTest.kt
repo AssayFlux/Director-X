@@ -1,10 +1,10 @@
-package com.novacut.editor.ui.mediapicker
+package com.directorx.editor.ui.mediapicker
 
 import android.content.Context
 import android.net.Uri
 import androidx.test.core.app.ApplicationProvider
-import com.novacut.editor.engine.managedMediaDir
-import com.novacut.editor.engine.writeManagedMediaAssetSidecar
+import com.directorx.editor.engine.managedMediaDir
+import com.directorx.editor.engine.writeManagedMediaAssetSidecar
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers

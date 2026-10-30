@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.theme
+package com.directorx.editor.ui.theme
 
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -86,7 +86,7 @@ class SemanticThemeSourcePolicyTest {
     }
 
     private companion object {
-        const val RAW_MOCHA_IMPORT = "import com.novacut.editor.ui.theme.Mocha"
+        const val RAW_MOCHA_IMPORT = "import com.directorx.editor.ui.theme.Mocha"
         val APPROVED_ACCENT = Regex("ClearCutAccents\\.([A-Za-z0-9_]+)")
         val RAW_COLOR_LITERAL = Regex("Color\\(0x[0-9A-Fa-f]+\\)")
         val BLOCK_COMMENT = Regex("/\\*.*?\\*/", RegexOption.DOT_MATCHES_ALL)
