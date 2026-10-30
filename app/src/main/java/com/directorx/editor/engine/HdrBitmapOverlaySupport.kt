@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.annotation.SuppressLint
@@ -8,7 +8,7 @@ import android.graphics.Gainmap
 import android.graphics.Matrix
 import android.net.Uri
 import android.os.Build
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import kotlin.math.roundToInt
 
 /** Android 14+ gain-map helpers shared by HDR preflight and Media3 overlays. */

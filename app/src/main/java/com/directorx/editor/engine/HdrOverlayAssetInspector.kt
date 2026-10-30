@@ -1,10 +1,10 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import androidx.media3.common.util.UnstableApi
-import com.novacut.editor.model.ImageOverlay
-import com.novacut.editor.model.TextOverlay
-import com.novacut.editor.model.Watermark
+import com.directorx.editor.model.ImageOverlay
+import com.directorx.editor.model.TextOverlay
+import com.directorx.editor.model.Watermark
 
 /**
  * Inspects overlay assets once before export. The result is deliberately

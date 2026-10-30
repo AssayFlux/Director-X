@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.opengl.GLES20
 import androidx.media3.common.util.UnstableApi
@@ -6,8 +6,8 @@ import androidx.media3.effect.GlEffect
 import androidx.media3.effect.GlShaderProgram
 import androidx.media3.effect.BaseGlShaderProgram
 import androidx.media3.common.util.Size
-import com.novacut.editor.model.GlobalTransition
-import com.novacut.editor.model.GlobalTransitionType
+import com.directorx.editor.model.GlobalTransition
+import com.directorx.editor.model.GlobalTransitionType
 
 @UnstableApi
 internal class GlobalTransitionEffect(

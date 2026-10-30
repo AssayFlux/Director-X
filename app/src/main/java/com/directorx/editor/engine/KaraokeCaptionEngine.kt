@@ -1,8 +1,8 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.TextAnimation
-import com.novacut.editor.model.TextOverlay
-import com.novacut.editor.model.WordTimestamp
+import com.directorx.editor.model.TextAnimation
+import com.directorx.editor.model.TextOverlay
+import com.directorx.editor.model.WordTimestamp
 import javax.inject.Inject
 import javax.inject.Singleton
 

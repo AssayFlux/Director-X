@@ -1,7 +1,7 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.os.Build
-import com.novacut.editor.model.VideoCodec
+import com.directorx.editor.model.VideoCodec
 
 /** Media3's OverlayShaderProgram refuses more than this many texture samplers. */
 const val MAX_HDR_OVERLAY_SAMPLERS = 15

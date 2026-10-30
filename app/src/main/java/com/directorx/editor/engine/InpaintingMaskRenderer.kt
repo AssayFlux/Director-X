@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.graphics.Bitmap
 import android.graphics.BlurMaskFilter
@@ -7,9 +7,9 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
-import com.novacut.editor.model.Mask
-import com.novacut.editor.model.MaskPoint
-import com.novacut.editor.model.MaskType
+import com.directorx.editor.model.Mask
+import com.directorx.editor.model.MaskPoint
+import com.directorx.editor.model.MaskType
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
