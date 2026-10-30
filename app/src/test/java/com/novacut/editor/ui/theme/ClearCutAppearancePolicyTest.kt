@@ -8,16 +8,22 @@ import org.junit.Test
 class ClearCutAppearancePolicyTest {
 
     @Test
-    fun theAppearanceMenuOffersOnlySchemesThatExist() {
-        // "System" used to sit in this list and resolve to DARK in both branches --
-        // a control that read the platform preference and ignored it.
-        assertEquals(
-            listOf(AppearanceMode.DARK, AppearanceMode.HIGH_CONTRAST_DARK),
-            AppearanceMode.entries.toList(),
-        )
-        AppearanceMode.entries.forEach { mode ->
-            assertEquals(mode, ClearCutThemeDefaults.resolveMode(mode))
+    fun appearanceMenuOffersTenDistinctThemes() {
+        assertEquals(10, ClearCutThemeDefaults.availableThemes.size)
+        assertEquals(10, ClearCutThemeDefaults.availableThemes.distinct().size)
+        assertEquals(AppearanceMode.PRIMARY_BRAND, ClearCutThemeDefaults.availableThemes.first())
+        val schemes = ClearCutThemeDefaults.availableThemes.map { mode ->
+            ClearCutThemeDefaults.colorSchemeFor(mode).background to
+                ClearCutThemeDefaults.colorSchemeFor(mode).primary
         }
+        assertEquals(10, schemes.distinct().size)
+    }
+
+    @Test
+    fun legacyAppearanceValuesResolveWithoutBreakingSavedPreferences() {
+        assertEquals(AppearanceMode.PRIMARY_BRAND, ClearCutThemeDefaults.resolveMode(AppearanceMode.DARK))
+        assertEquals(AppearanceMode.PRIMARY_BRAND, ClearCutThemeDefaults.resolveMode(AppearanceMode.HIGH_CONTRAST_DARK))
+        assertEquals(AppearanceMode.PRIMARY_BRAND, ClearCutThemeDefaults.resolveMode(AppearanceMode.HIGH_CONTRAST))
     }
 
     @Test

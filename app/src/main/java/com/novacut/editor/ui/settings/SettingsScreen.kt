@@ -493,7 +493,7 @@ fun SettingsScreen(
             title = stringResource(R.string.settings_appearance),
             description = stringResource(R.string.settings_appearance_description)
         ) {
-            val appearanceModes = listOf(AppearanceMode.PRIMARY_BRAND, AppearanceMode.MIDNIGHT_CINEMA, AppearanceMode.HIGH_CONTRAST)
+            val appearanceModes = com.novacut.editor.ui.theme.ClearCutThemeDefaults.availableThemes
             SettingsDropdown(
                 icon = Icons.Default.Contrast,
                 accent = ClearCutAccents.Sky,
@@ -1433,8 +1433,18 @@ private fun SegmentationModelState.displayLabel(): String = when (this) {
 
 @Composable
 private fun AppearanceMode.displayLabel(): String = when (this) {
-    AppearanceMode.PRIMARY_BRAND, AppearanceMode.MIDNIGHT_CINEMA, AppearanceMode.DARK -> stringResource(R.string.settings_appearance_dark)
-    AppearanceMode.HIGH_CONTRAST, AppearanceMode.HIGH_CONTRAST_DARK -> stringResource(R.string.settings_appearance_high_contrast)
+    AppearanceMode.PRIMARY_BRAND -> "Primary Brand"
+    AppearanceMode.MIDNIGHT_CINEMA -> "Midnight Cinema"
+    AppearanceMode.FOREST_ATELIER -> "Forest Atelier"
+    AppearanceMode.BURGUNDY_EDITORIAL -> "Burgundy Editorial"
+    AppearanceMode.OCEAN_STUDIO -> "Ocean Studio"
+    AppearanceMode.GRAPHITE_LUXE -> "Graphite Luxe"
+    AppearanceMode.SANDSTONE -> "Sandstone"
+    AppearanceMode.LAVENDER_FILM -> "Lavender Film"
+    AppearanceMode.COPPER_STUDIO -> "Copper Studio"
+    AppearanceMode.ARCTIC_MINIMAL -> "Arctic Minimal"
+    AppearanceMode.HIGH_CONTRAST, AppearanceMode.HIGH_CONTRAST_DARK -> "High Contrast (legacy)"
+    AppearanceMode.DARK -> "Primary Brand (legacy)"
 }
 
 @Composable

@@ -86,8 +86,16 @@ enum class DesktopOverride { AUTO, FORCE_ON, FORCE_OFF }
 enum class AppearanceMode {
     PRIMARY_BRAND,
     MIDNIGHT_CINEMA,
-    HIGH_CONTRAST,
+    FOREST_ATELIER,
+    BURGUNDY_EDITORIAL,
+    OCEAN_STUDIO,
+    GRAPHITE_LUXE,
+    SANDSTONE,
+    LAVENDER_FILM,
+    COPPER_STUDIO,
+    ARCTIC_MINIMAL,
     // Legacy persisted identifiers retained for source compatibility.
+    HIGH_CONTRAST,
     DARK,
     HIGH_CONTRAST_DARK,
 }
@@ -160,7 +168,7 @@ internal fun mapPreferencesToAppSettings(prefs: Preferences): AppSettings = AppS
         "DARK" -> AppearanceMode.PRIMARY_BRAND
         "HIGH_CONTRAST_DARK" -> AppearanceMode.HIGH_CONTRAST
         else -> prefs[SettingsPreferenceKeys.APPEARANCE_MODE]?.enumOrNull<AppearanceMode>()
-            ?.takeIf { it == AppearanceMode.PRIMARY_BRAND || it == AppearanceMode.MIDNIGHT_CINEMA || it == AppearanceMode.HIGH_CONTRAST }
+            ?.takeIf { it in AppearanceMode.entries && it != AppearanceMode.DARK && it != AppearanceMode.HIGH_CONTRAST_DARK }
             ?: AppearanceMode.PRIMARY_BRAND
     },
     updateCheckEnabled = prefs[SettingsPreferenceKeys.UPDATE_CHECK_ENABLED] ?: false,
