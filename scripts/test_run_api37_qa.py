@@ -37,7 +37,7 @@ class Api37QaClassifierTest(unittest.TestCase):
         self.assertEqual(len(gesture_tests), 7)
         self.assertEqual(len(fcpxml_tests), 3)
         self.assertIn(
-            "com.novacut.editor.QaTimelineInstrumentationTest.importEditUndoRedoAndRelaunchStayInsideQaStorage",
+            "com.directorx.editor.QaTimelineInstrumentationTest.importEditUndoRedoAndRelaunchStayInsideQaStorage",
             run_api37_qa.EXPECTED_TESTS,
         )
         self.assertEqual(len(large_text_tests), 6)
@@ -99,13 +99,13 @@ class Api37QaClassifierTest(unittest.TestCase):
 
     def test_cfr_assumption_requires_the_recorded_encoder_fingerprint(self) -> None:
         test_id = (
-            "com.novacut.editor.engine.Media3ExportRobustnessInstrumentationTest."
+            "com.directorx.editor.engine.Media3ExportRobustnessInstrumentationTest."
             "constantFrameRateExportNormalizesVariableInputCadence"
         )
         with tempfile.TemporaryDirectory() as directory:
             result_path = write_results(
                 directory,
-                '<testcase classname="com.novacut.editor.engine.'
+                '<testcase classname="com.directorx.editor.engine.'
                 'Media3ExportRobustnessInstrumentationTest" '
                 'name="constantFrameRateExportNormalizesVariableInputCadence">'
                 '<failure message="CFR export reported an error">'
@@ -113,7 +113,7 @@ class Api37QaClassifierTest(unittest.TestCase):
                 "</failure></testcase>",
             )
             (Path(directory) / (
-                "logcat-com.novacut.editor.engine."
+                "logcat-com.directorx.editor.engine."
                 "Media3ExportRobustnessInstrumentationTest-"
                 "constantFrameRateExportNormalizesVariableInputCadence.txt"
             )).write_text(
