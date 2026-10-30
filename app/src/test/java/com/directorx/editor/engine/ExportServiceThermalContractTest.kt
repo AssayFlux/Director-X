@@ -61,7 +61,7 @@ class ExportServiceThermalContractTest {
     }
 
     private fun serviceSource(): String = locate(
-        "app/src/main/java/com/novacut/editor/engine/ExportService.kt",
+        "app/src/main/java/com/directorx/editor/engine/ExportService.kt",
     ).readText()
 
     private fun locate(relative: String): File {
