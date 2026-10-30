@@ -15,8 +15,8 @@ class StateRestorationCoverageTest {
 
     private val source: String by lazy {
         val candidates = listOf(
-            File("src/main/java/com/novacut/editor/ui/editor/EditorViewModel.kt"),
-            File("app/src/main/java/com/novacut/editor/ui/editor/EditorViewModel.kt"),
+            File("src/main/java/com/directorx/editor/ui/editor/EditorViewModel.kt"),
+            File("app/src/main/java/com/directorx/editor/ui/editor/EditorViewModel.kt"),
         )
         candidates.first { it.isFile }.readText()
     }
