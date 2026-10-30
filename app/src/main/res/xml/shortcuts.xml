@@ -19,7 +19,7 @@
         <intent
             android:action="com.directorx.editor.action.NEW_PROJECT"
             android:targetPackage="${applicationId}"
-            android:targetClass="com.novacut.editor.MainActivity" />
+            android:targetClass="com.directorx.editor.MainActivity" />
         <!-- Not a conversation shortcut — removed android.shortcut.conversation -->
 
     </shortcut>
@@ -33,7 +33,7 @@
         <intent
             android:action="com.directorx.editor.action.OPEN_RECENT"
             android:targetPackage="${applicationId}"
-            android:targetClass="com.novacut.editor.MainActivity" />
+            android:targetClass="com.directorx.editor.MainActivity" />
     </shortcut>
 
 </shortcuts>
