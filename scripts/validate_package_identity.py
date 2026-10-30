@@ -278,7 +278,7 @@ def run_self_test(root: Path = ROOT) -> None:
     validate_registry_shape(registry)
 
     broken = copy.deepcopy(registry)
-    broken["applicationId"] = "com.clearcut.editor"
+    broken["applicationId"] = "invalid package name"
     try:
         validate_registry_shape(broken)
     except PackageIdentityError:
@@ -302,7 +302,7 @@ def run_self_test(root: Path = ROOT) -> None:
         actions = registry["shortcutTarget"]["actions"]
         placeholder_xml = f'''<shortcuts xmlns:android="{ANDROID_NS}">
     <shortcut><intent android:action="{actions[0]}" android:targetPackage="${{applicationId}}" android:targetClass="{registry["namespace"]}.MainActivity" /></shortcut>
-    <shortcut><intent android:action="{actions[1]}" android:targetPackage="${{applicationId}}" android:targetClass="${{applicationId}}.MainActivity" /></shortcut>
+    <shortcut><intent android:action="{actions[1]}" android:targetPackage="${{applicationId}}" android:targetClass="{registry["namespace"]}.MainActivity" /></shortcut>
 </shortcuts>
 '''
         shortcuts_path.write_text(placeholder_xml, encoding="utf-8")
