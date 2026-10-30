@@ -18,7 +18,8 @@ class PackageIdentityTest {
         val readme = locate("README.md").readText()
 
         assertEquals(1, registry.getInt("schemaVersion"))
-        assertEquals(applicationId, namespace)
+        assertEquals(namespace, registry.getString("sourcePackage"))
+        assertFalse(applicationId == namespace)
         assertTrue(build.contains("namespace = \"$namespace\""))
         assertTrue(build.contains("applicationId = \"$applicationId\""))
         assertTrue(build.contains("applicationIdSuffix = \".streaming\""))
