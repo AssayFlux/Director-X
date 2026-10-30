@@ -73,7 +73,7 @@ def validate_registry_shape(data: dict[str, Any]) -> None:
         raise PackageIdentityError("migrationPolicy must be an object")
     expected_policy = {
         "applicationId": "new-install-with-explicit-export-import",
-        "namespace": "retain-existing-source-namespace",
+        "namespace": "migrate-source-namespace-to-directorx",
         "signingCertificate": "retain-pinned-release-identity",
         "identityChange": "new-install-with-explicit-export-import",
     }
@@ -220,8 +220,8 @@ def validate_archive_parser(root: Path, registry: dict[str, Any]) -> None:
     parser_sources = "\n".join(
         read_text(root / relative, root)
         for relative in (
-            "app/src/main/java/com/novacut/editor/engine/IncomingDocumentIntentParser.kt",
-            "app/src/main/java/com/novacut/editor/engine/PluginRegistry.kt",
+            "app/src/main/java/com/directorx/editor/engine/IncomingDocumentIntentParser.kt",
+            "app/src/main/java/com/directorx/editor/engine/PluginRegistry.kt",
         )
     ).lower()
     for extension in registry["archiveAssociations"]["extensions"]:
