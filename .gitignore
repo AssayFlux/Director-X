@@ -42,6 +42,12 @@
 build/
 Build/
 build-*/
+.gradle
+/build
+/app/build
+/baselineprofile/build
+/app/release
+.zombie-build/
 
 # CMake generated files
 CMakeFiles/
@@ -51,11 +57,28 @@ Makefile
 install_manifest.txt
 compile_commands.json
 
+# Android / IDE local files
+*.iml
+/local.properties
+/.idea
+.DS_Store
+/captures
+.externalNativeBuild
+.cxx
+.kotlin/
+local.properties
+
 # Temporary files
 *.tmp
 *.log
 *.bak
 *.swp
+*.jks
+*.keystore
+keystore.properties
+.env
+hs_err_pid*.log
+replay_pid*.log
 
 # vcpkg
 vcpkg_installed/
@@ -66,3 +89,32 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+
+# Local planning docs and AI config
+CLAUDE.md
+.claude/
+RESEARCH.md
+ROADMAP-COMPLETED.md
+qa/
+!app/src/qa/
+!app/src/qa/**
+HostShield-Research-Report.md
+research/
+*.md
+!README.md
+!CHANGELOG.md
+!docs/models.md
+!docs/privacy-policy.md
+!docs/play-data-safety.md
+CODEX_CHANGELOG.md
+AGENTS.md
+.codex/
+.ai/
+PROJECT_CONTEXT.md
+CONTINUATION_PROMPT.md
+__pycache__/
+
+# Build and emulator logs
+work/*.log
+work/*.txt
+work/**/build.log

@@ -2,36 +2,30 @@
 
 **Designed by AssayFlux**
 
-Director X is an Android video-editing application maintained by AssayFlux.
+Director X is an Android video editor maintained by AssayFlux. This fork retains its inherited editing engine and supporting workflows while presenting a distinct Director X product identity and visual system.
 
-## Brand assets
+## Product identity
 
-- Vector app artwork: [assets/branding/director-x-app-icon.svg](assets/branding/director-x-app-icon.svg)
-- Raster launcher artwork: [assets/branding/director-x-app-icon.png](assets/branding/director-x-app-icon.png)
-
-## Android identity
-
-- Namespace: `com.assayflux.directorx`
-- Application ID: `org.assayflux.directorx`
-- Minimum Android version: API 29 (Android 10), subject to build verification.
+- Product: Director X
+- Maintainer / design credit: AssayFlux
+- Android application identity: inherited package lineage is intentionally retained in this compatibility-preserving pass.
+- Brand assets and design tokens are maintained for Director X.
 
 ## Design system
 
-- Canvas: `#F5F0E6`
-- Surface: `#EAE3D2`
-- Primary text: `#2C2621`
-- Secondary text / borders: `#8C8275`
-- Brass accent: `#C29B38`
-- Sage accent: `#5A6B57`
-- White: `#FFFFFF`
-- Dark foundation: `#1D292B`
+- Canvas: `#F5F0E6` — warm cream
+- Surface: `#EAE3D2` — warm beige
+- Primary text: `#2C2621` — charcoal brown
+- Secondary text and borders: `#8C8275` — muted taupe
+- Accent: `#C29B38` — vintage amber
+- Primary action / success: `#5A6B57` — muted sage
+- Typography: serif display headings with sans-serif controls and metadata
+- Interaction: restrained tactile surfaces and phone-friendly touch targets
 
-## Licensing and upstream attribution
+## Source and attribution
 
-This is an AssayFlux-maintained fork. AssayFlux branding identifies the maintainer and product; it does not claim authorship or ownership of upstream or third-party code. Preserve all original copyright notices, licence texts, NOTICE files, source-offer obligations, and required attributions. See `LICENSE`, `NOTICE`, and third-party notices in the full source distribution.
+This is an AssayFlux-maintained fork derived from the upstream ClearCut codebase. AssayFlux branding identifies the current product and maintainer; it does not claim ownership of upstream or third-party contributions. Preserve the upstream MIT copyright notice and all third-party licence texts, NOTICE material, source-offer obligations, and required attributions. The protected source notices are catalogued in [ForD](ForD/README.md), while the legally required notices remain available at their required source/distribution locations.
 
-## Build and verification status
+## Build and verification
 
-Do not treat this repository's branding metadata as proof of a successful Android build. Build, unit/instrumentation tests, API 29+ compatibility, release signing, and data migration must be verified before distribution.
-
-The requested application ID is distinct from any previous package ID. Android will install it as a separate app; it is not an in-place update for an app with a different application ID.
+Open this project in a compatible Android Studio installation and allow Gradle to sync. The project uses Kotlin, Jetpack Compose, Android media APIs, and pinned native FFmpegKitNext dependencies. Run unit tests, lint, and Android builds before distributing it. This branding pass is not a claim that every inherited feature has been independently revalidated.
