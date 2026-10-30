@@ -53,7 +53,6 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.ContextCompat
 import com.directorx.editor.BuildConfig
-import com.directorx.editor.ClearCutApp
 import com.directorx.editor.R
 import com.directorx.editor.engine.AppearanceMode
 import com.directorx.editor.engine.AppSettings
