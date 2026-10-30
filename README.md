@@ -13,7 +13,7 @@ Director X combines a modern native Android interface with a capable media-proce
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.4.10-7F52FF?logo=kotlin&logoColor=white)](https://kotlinlang.org/)
 [![Java](https://img.shields.io/badge/Java-17-orange?logo=openjdk&logoColor=white)](https://openjdk.org/)
 [![Version](https://img.shields.io/badge/Version-v0.1.0-informational)](https://github.com/AssayFlux/Director-X)
-[![Build](https://img.shields.io/badge/Build-Manual%20APK-lightgrey)](https://github.com/AssayFlux/Director-X/actions)
+[![Build](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml/badge.svg?branch=main)](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml)
 
 **Designed by AssayFlux**
 
