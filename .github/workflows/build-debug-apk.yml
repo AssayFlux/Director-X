@@ -41,7 +41,8 @@ permissions:
 
 concurrency:
   group: director-x-apk-${{ github.ref }}
-  cancel-in-progress: false
+  # Prefer the newest structural commit; obsolete queued/running APK builds are superseded.
+  cancel-in-progress: true
 
 jobs:
   build-apk:
