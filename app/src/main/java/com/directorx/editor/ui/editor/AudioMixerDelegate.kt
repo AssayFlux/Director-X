@@ -1,13 +1,13 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.content.Context
-import com.novacut.editor.R
-import com.novacut.editor.engine.AudioMasteringEngine
-import com.novacut.editor.engine.BeatDetectionEngine
-import com.novacut.editor.engine.LoudnessEngine
-import com.novacut.editor.model.AudioEffect
-import com.novacut.editor.model.AudioEffectType
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.R
+import com.directorx.editor.engine.AudioMasteringEngine
+import com.directorx.editor.engine.BeatDetectionEngine
+import com.directorx.editor.engine.LoudnessEngine
+import com.directorx.editor.model.AudioEffect
+import com.directorx.editor.model.AudioEffectType
+import com.directorx.editor.model.TrackType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

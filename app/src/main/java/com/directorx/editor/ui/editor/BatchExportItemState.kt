@@ -1,8 +1,8 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.engine.ExportState
-import com.novacut.editor.model.BatchExportItem
-import com.novacut.editor.model.Track
+import com.directorx.editor.engine.ExportState
+import com.directorx.editor.model.BatchExportItem
+import com.directorx.editor.model.Track
 
 /**
  * The editor state one batch item renders from. Items keep their own export settings,

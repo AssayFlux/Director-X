@@ -1,18 +1,18 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.pm.ActivityInfo
 import android.os.Build
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import android.view.Window
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import com.novacut.editor.engine.Android15MediaPolicy
+import com.directorx.editor.engine.Android15MediaPolicy
 
 private const val TAG = "Android15HdrWindow"
 

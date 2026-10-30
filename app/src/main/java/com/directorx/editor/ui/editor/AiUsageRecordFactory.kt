@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.engine.AiUsageLedger
-import com.novacut.editor.model.Clip
+import com.directorx.editor.engine.AiUsageLedger
+import com.directorx.editor.model.Clip
 
 internal object AiUsageRecordFactory {
     fun forClip(

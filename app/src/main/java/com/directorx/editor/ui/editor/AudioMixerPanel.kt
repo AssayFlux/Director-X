@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -48,11 +48,11 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.novacut.editor.R
-import com.novacut.editor.model.AudioEffect
-import com.novacut.editor.model.AudioEffectType
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.R
+import com.directorx.editor.model.AudioEffect
+import com.directorx.editor.model.AudioEffectType
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
 
 private const val AUDIO_ROUTING_RENDERER_AVAILABLE = true
 

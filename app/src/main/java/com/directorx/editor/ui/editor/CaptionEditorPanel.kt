@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -46,13 +46,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.novacut.editor.R
-import com.novacut.editor.engine.CaptionImportEngine
-import com.novacut.editor.engine.CaptionTranslationEngine.EditorRow
-import com.novacut.editor.engine.CaptionTranslationEngine.LanguagePairQuality
-import com.novacut.editor.model.Caption
-import com.novacut.editor.model.CaptionStyle
-import com.novacut.editor.model.CaptionStyleType
+import com.directorx.editor.R
+import com.directorx.editor.engine.CaptionImportEngine
+import com.directorx.editor.engine.CaptionTranslationEngine.EditorRow
+import com.directorx.editor.engine.CaptionTranslationEngine.LanguagePairQuality
+import com.directorx.editor.model.Caption
+import com.directorx.editor.model.CaptionStyle
+import com.directorx.editor.model.CaptionStyleType
 import java.util.Locale
 import kotlin.math.roundToInt
 

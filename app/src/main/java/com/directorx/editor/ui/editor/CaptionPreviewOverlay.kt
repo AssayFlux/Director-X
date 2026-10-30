@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
@@ -23,12 +23,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.novacut.editor.model.Caption
-import com.novacut.editor.model.CaptionStyle
-import com.novacut.editor.model.CaptionStyleType
-import com.novacut.editor.engine.BidiTextPolicy
-import com.novacut.editor.engine.CaptionFontFallbackPolicy
-import com.novacut.editor.engine.CaptionTextLayoutPolicy
+import com.directorx.editor.model.Caption
+import com.directorx.editor.model.CaptionStyle
+import com.directorx.editor.model.CaptionStyleType
+import com.directorx.editor.engine.BidiTextPolicy
+import com.directorx.editor.engine.CaptionFontFallbackPolicy
+import com.directorx.editor.engine.CaptionTextLayoutPolicy
 
 /**
  * Renders active captions on the video preview during playback.
@@ -262,7 +262,7 @@ private fun textDirectionFor(text: String): TextDirection =
 
 private fun highlightedWords(
     caption: Caption,
-    highlighted: (com.novacut.editor.model.CaptionWord) -> Boolean,
+    highlighted: (com.directorx.editor.model.CaptionWord) -> Boolean,
 ): AnnotatedString = buildAnnotatedString {
     caption.words.forEachIndexed { index, word ->
         val isHighlighted = highlighted(word)
