@@ -71,7 +71,7 @@ The current `app/build.gradle.kts` declares:
 
 The installed application ID is `com.directorx.editor`. The Kotlin source namespace remains `com.directorx.editor` as an internal implementation namespace for this staged migration. Existing installations under the previous application ID are separate apps; project transfer requires export/import. Keep the existing signing key for future updates to the Director X package.
 
-The current project also retains legacy identifiers in source paths and data/schema names. Do not bulk-rename persisted database schemas, serialization keys, media/project formats, protocol fields or package identifiers without a backwards-compatible migration plan.
+The Kotlin source tree and Room schema snapshot directory have been migrated to `com.directorx.editor`. Historical Room schema versions and their contents are preserved. Legacy serialized data identifiers and project formats remain unchanged.
 
 ## 4. Main application technologies and capabilities represented in the source
 
