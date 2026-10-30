@@ -47,7 +47,7 @@ def require_before(source: str, earlier: str, later: str, path: Path) -> None:
 
 
 def verify_export_service_has_no_background_audio(root: Path = ROOT) -> None:
-    path = root / "app" / "src" / "main" / "java" / "com" / "novacut" / "editor" / "engine" / "ExportService.kt"
+    path = root / "app" / "src" / "main" / "java" / "com" / "directorx" / "editor" / "engine" / "ExportService.kt"
     source = read_text(path)
     forbidden_tokens = (
         "TextToSpeech",
@@ -116,8 +116,8 @@ def verify_manifest_foreground_service_type(root: Path = ROOT) -> None:
 
 
 def verify_visible_audio_paths_request_focus(root: Path = ROOT) -> None:
-    tts_path = root / "app" / "src" / "main" / "java" / "com" / "novacut" / "editor" / "engine" / "TtsEngine.kt"
-    voiceover_path = root / "app" / "src" / "main" / "java" / "com" / "novacut" / "editor" / "engine" / "VoiceoverRecorder.kt"
+    tts_path = root / "app" / "src" / "main" / "java" / "com" / "directorx" / "editor" / "engine" / "TtsEngine.kt"
+    voiceover_path = root / "app" / "src" / "main" / "java" / "com" / "directorx" / "editor" / "engine" / "VoiceoverRecorder.kt"
     tts = read_text(tts_path)
     voiceover = read_text(voiceover_path)
     require_before(tts, "requestPreviewAudioFocus()", "engine.speak(", tts_path)
