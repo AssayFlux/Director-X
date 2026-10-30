@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate ClearCut's frozen Android package identity and migration contract."""
+"""Validate Director X's Android package identity and migration contract."""
 from __future__ import annotations
 
 import argparse
