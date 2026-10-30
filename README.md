@@ -19,7 +19,7 @@ A native Android video-editing studio combining media creation, intelligent tool
 [![Repository hygiene](https://img.shields.io/github/actions/workflow/status/AssayFlux/Director-X/repository-hygiene.yml?branch=main&label=REPOSITORY%20HYGIENE&logo=githubactions&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X/actions/workflows/repository-hygiene.yml)
 [![Latest commit](https://img.shields.io/github/last-commit/AssayFlux/Director-X/main?label=LATEST%20COMMIT&logo=git&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X/commits/main)
 
-[![Version](https://img.shields.io/badge/VERSION-3.82.0-B18B5E?logo=semver&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X)
+[![Version](https://img.shields.io/badge/PROJECT%20VERSION-v0.1.0-B18B5E?logo=semver&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X)
 [![Android](https://img.shields.io/badge/PLATFORM-ANDROID-3DDC84?logo=android&logoColor=white&style=for-the-badge)](https://developer.android.com/)
 [![Minimum SDK](https://img.shields.io/badge/MIN%20SDK-26-52796F?logo=android&logoColor=white&style=for-the-badge)](https://developer.android.com/about/versions)
 [![Target SDK](https://img.shields.io/badge/TARGET%20SDK-37-52796F?logo=android&logoColor=white&style=for-the-badge)](https://developer.android.com/about/versions)
@@ -67,23 +67,23 @@ Its visual direction uses a warm, cinematic palette: ivory, charcoal, vintage go
 ## AI capability registry
 
 <!-- capability-registry:ai-tools:begin -->
-| Capability | Implementation | Availability |
-|---|---|---|
-| Auto captions | ONNX Runtime Whisper tiny.en; multilingual path gated | Available |
-| Background removal | MediaPipe Selfie Segmentation | Available |
-| AI green screen | RobustVideoMatting integration | Planned |
-| Object removal | LaMa-Dilated inpainting for stills and motion clips | Available; model download required |
-| Video upscaling | Real-ESRGAN integration | Planned |
-| Frame interpolation | RIFE v4.6 / NCNN integration | Planned |
-| Style transfer | AnimeGANv2 and Fast NST integration | Planned |
-| Stabilization | Offline motion analysis and shared preview/export transforms | Available |
-| Smart reframe | MediaPipe BlazeFace with smoothed crop trajectory | Available |
-| Tap-to-segment | SAM 2.1 / MobileSAM integration | Planned |
-| Scene detection | Frame-difference analysis and auto-split | Available |
-| Auto color | Histogram-based image adjustments | Available |
-| HDR encoder feature gate | Android MediaCodec capability checks | Available |
-| Motion tracking | Template matching and position keyframes | Available |
-| Audio denoise | DeepFilterNet 3 with spectral-gate fallback | Available |
+| Tool | Engine | On-Device? |
+|------|--------|------------|
+| **Auto Captions** | ONNX Runtime Whisper tiny.en (English; multilingual Sherpa/Whisper path gated) | Yes |
+| **Background Removal** | MediaPipe Selfie Segmentation (~1-7MB, ~30fps) | Yes |
+| **AI Green Screen** | Planned: RobustVideoMatting requires model integration | Planned |
+| **Object Removal** | LaMa-Dilated inpainting with rectangle, ellipse, and freehand mask rendering for stills and motion clips | Yes (explicit ~174 MB model download) |
+| **Video Upscaling** | Planned: Real-ESRGAN requires model integration | Planned |
+| **Frame Interpolation** | Planned: RIFE v4.6 requires the NCNN dependency | Planned |
+| **Style Transfer** | Planned: AnimeGANv2 and Fast NST require model integration | Planned |
+| **Stabilization** | Built-in offline motion analysis with bounded translation search and shared preview/export transforms | Yes |
+| **Smart Reframe** | MediaPipe BlazeFace detection, EMA-smoothed crop trajectory, 3 strategies (stationary/pan/track) | Yes |
+| **Tap-to-Segment** | Planned: SAM 2.1 Hiera Tiny with a MobileSAM fallback | Planned |
+| **Scene Detection** | Content-aware frame difference analysis with auto-split | Yes |
+| **Auto Color** | Histogram-based brightness/contrast/saturation/temperature | Yes |
+| **HDR Encoder Feature Gate** | MediaCodecInfo.CodecCapabilities FEATURE_HdrEditing / FEATURE_HlgEditing | Yes |
+| **Motion Tracking** | Template matching with position keyframe generation | Yes |
+| **Audio Denoise** | DeepFilterNet 3 with spectral-gate fallback | Yes |
 <!-- capability-registry:ai-tools:end -->
 
 ## Technology
@@ -112,17 +112,19 @@ Its visual direction uses a warm, cinematic palette: ivory, charcoal, vintage go
 
 <!-- capability-registry:dependencies:begin -->
 | Dependency | Version | Purpose |
-|---|---:|---|
+|-----------|---------|---------|
 | ONNX Runtime | 1.28.0 | Whisper ASR and LaMa inpainting |
-| MediaPipe | 1.0.0 | Segmentation and smart reframe |
+| MediaPipe | 1.0.0 | Selfie segmentation and smart reframe |
 | Lottie Compose | 6.7.1 | Animated title templates |
-| OkHttp | 5.5.0 | Model downloads and network calls |
-| Media3 | 1.11.1 | Playback, transformation, effects and muxing |
+| OkHttp | 5.5.0 | Model downloads and future opt-in provider calls |
+| Media3 | 1.11.1 | Transformer, ExoPlayer, effects, and muxing |
 | Coil Compose | 3.5.0 | Image and video thumbnails |
 | Hilt / Dagger | 2.60.1 | Dependency injection |
-| Android DeepFilterNet | 0.0.8 | Voiceover noise reduction |
-| FFmpegKitNext / FFmpeg | 8.1.0 / 8.1.2 | Additional media processing paths |
-| AndroidX Benchmark / ProfileInstaller | 1.5.0-beta01 / 1.4.1 | Performance and profile support |
+| Android DeepFilterNet | 0.0.8 | On-device voiceover noise reduction |
+| FFmpegKitNext / FFmpeg | 8.1.0 (FFmpeg 8.1.2) | LGPL FFmpeg paths not covered by Media3 Transformer |
+| AndroidX Benchmark/ProfileInstaller | 1.5.0-beta01 / 1.4.1 | Baseline profile generation and installation |
+| Sherpa-ONNX | 1.13.2 target | Future native Moonshine v2 ASR path (target) |
+| SAM 2.1 ONNX | Targeted | Future tracked-mask path; MobileSAM fallback (target) |
 <!-- capability-registry:dependencies:end -->
 
 ## Architecture
