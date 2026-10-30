@@ -1,338 +1,246 @@
 <div align="center">
 
-<img src="assets/icon.png" alt="Director X — official application icon" width="450" />
+<img src="assets/icon.png" alt="Director X application icon" width="176" />
 
-<h1>DIRECTOR X</h1>
+# DIRECTOR X
 
-<p><strong>A CINEMATIC AND INTELLIGENT VIDEO-EDITING STUDIO FOR ANDROID</strong></p>
+### CINEMATIC VIDEO EDITING FOR ANDROID
 
-<p>Designed with precision. Built for creators. Powered by AssayFlux.</p>
+**Designed by AssayFlux**
 
-<p>
-  <a href="https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml"><img src="https://img.shields.io/badge/⬇_DOWNLOAD-ANDROID_APK-C79B2E?style=for-the-badge&logo=android&logoColor=2D2824" alt="Download Android APK"></a>
-  <a href="https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml"><img src="https://img.shields.io/badge/BUILD-GITHUB_ACTIONS-596B57?style=for-the-badge&logo=githubactions&logoColor=white" alt="GitHub Actions build"></a>
-</p>
+A native Android video-editing studio combining media creation, intelligent tools, and local-first processing.
 
-<p>
-  <img src="https://img.shields.io/badge/PLATFORM-ANDROID-3DDC84?style=flat-square&logo=android&logoColor=white" alt="Android">
-  <img src="https://img.shields.io/badge/LANGUAGE-KOTLIN-7F52FF?style=flat-square&logo=kotlin&logoColor=white" alt="Kotlin">
-  <img src="https://img.shields.io/badge/UI-JETPACK_COMPOSE-4285F4?style=flat-square" alt="Jetpack Compose">
-  <img src="https://img.shields.io/badge/MIN_SDK-26-607D8B?style=flat-square" alt="Minimum SDK 26">
-  <img src="https://img.shields.io/badge/TARGET_SDK-37-607D8B?style=flat-square" alt="Target SDK 37">
-  <img src="https://img.shields.io/badge/JAVA-17-ED8B00?style=flat-square&logo=openjdk&logoColor=white" alt="Java 17">
-  <img src="https://img.shields.io/badge/VERSION-3.82.0-B18B5E?style=flat-square" alt="Version 3.82.0">
-  <a href="https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml"><img src="https://img.shields.io/github/actions/workflow/status/AssayFlux/Director-X/build-debug-apk.yml?branch=main&label=APK%20BUILD&style=flat-square" alt="APK build status"></a>
-</p>
+[**View source**](https://github.com/AssayFlux/Director-X) · [**Report an issue**](https://github.com/AssayFlux/Director-X/issues) · [**Builds & APK**](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml)
 
-<p><em>Designed by AssayFlux</em></p>
+<br/>
+
+[![APK build](https://img.shields.io/github/actions/workflow/status/AssayFlux/Director-X/build-debug-apk.yml?branch=main&label=APK%20BUILD&logo=githubactions&style=for-the-badge)](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml)
+[![Android](https://img.shields.io/badge/PLATFORM-ANDROID-3DDC84?logo=android&logoColor=white&style=for-the-badge)](https://developer.android.com/)
+[![Version](https://img.shields.io/badge/VERSION-3.82.0-B18B5E?style=for-the-badge)](https://github.com/AssayFlux/Director-X)
 
 </div>
 
 ---
 
-<div align="center">
+## About Director X
 
-<img src="https://img.shields.io/badge/01-ABOUT_DIRECTOR_X-C79B2E?style=for-the-badge" alt="About Director X">
+Director X is a native Android video editor built with Kotlin and Jetpack Compose. The project brings together media playback, editing and export infrastructure, local project data, and on-device intelligent media capabilities.
 
-<h2>Video creation, reimagined for Android.</h2>
+Its visual direction uses a warm, cinematic palette: ivory, charcoal, vintage gold, and muted sage.
 
-<p>Director X is a native Android video editor built with Kotlin and Jetpack Compose. It brings together media playback, editing and export infrastructure, local project data, and on-device intelligent media capabilities in one application.</p>
+## Creative toolkit
 
-<p>Its visual identity follows a warm cinematic palette: ivory, dark charcoal, vintage gold, and muted sage.</p>
+| Editing & media | AI, audio & intelligence |
+|---|---|
+| Media playback and editing previews | On-device inference through integrated engines |
+| Video transformation and export workflows | Whisper-based captioning path |
+| Visual effects and media processing | Background removal with MediaPipe |
+| Media composition and muxing | Object removal with LaMa inpainting |
+| Media import, project files and sharing | Audio denoising with DeepFilterNet |
+| Stabilization, motion tracking and scene detection | Smart reframe and automatic color adjustments |
 
-</div>
+| Application experience | Privacy & reliability |
+|---|---|
+| Jetpack Compose and Material 3 interface | App-managed private storage |
+| Room database and DataStore preferences | Local processing for supported workflows |
+| WorkManager and Android foreground services | Explicit Android permissions and network policy |
+| Hilt dependency injection | Dependency verification and build integrity |
 
-<div align="center">
+> **Capability status:** Some tools are implemented, some require an explicit model download, and others remain planned. The registry below distinguishes these states; the presence of a tool in the roadmap does not mean it is already available in the app.
 
-<img src="https://img.shields.io/badge/02-CREATIVE_TOOLKIT-596B57?style=for-the-badge" alt="Creative toolkit">
-
-<h2>Core Capabilities</h2>
-
-<table>
-<tr>
-<td align="center" width="50%">
-<h3>🎬 Editing & Media</h3>
-<strong>Media playback</strong><br>Native playback foundation for editing previews.<br><br>
-<strong>Media transformation</strong><br>Video transformation and export workflows.<br><br>
-<strong>Effects pipeline</strong><br>Visual processing and media effects infrastructure.<br><br>
-<strong>Media muxing</strong><br>Output composition and muxing support.<br><br>
-<strong>Import & sharing</strong><br>Android content intents for supported media and project files.
-</td>
-<td align="center" width="50%">
-<h3>✦ AI & Audio</h3>
-<strong>On-device inference</strong><br>Local model execution through the integrated inference stack.<br><br>
-<strong>Media intelligence</strong><br>Vision and media-processing capabilities for supported workflows.<br><br>
-<strong>Audio enhancement</strong><br>Integrated audio-processing functionality.<br><br>
-<strong>Local-first AI</strong><br>Designed around locally integrated engines without requiring a cloud AI service.
-</td>
-</tr>
-<tr>
-<td align="center">
-<h3>◇ Application Experience</h3>
-<strong>Modern interface</strong><br>Jetpack Compose and Material 3.<br><br>
-<strong>Persistent data</strong><br>Room database and DataStore preferences.<br><br>
-<strong>Background work</strong><br>WorkManager and Android foreground services.<br><br>
-<strong>Dependency injection</strong><br>Hilt-based application dependency management.
-</td>
-<td align="center">
-<h3>⬡ Privacy & Reliability</h3>
-<strong>Private app storage</strong><br>App-managed data stored within Android application storage.<br><br>
-<strong>Local processing</strong><br>Core media and AI workflows designed to run on-device.<br><br>
-<strong>Network policy</strong><br>Explicit network permissions and cleartext-traffic policy.<br><br>
-<strong>Build integrity</strong><br>Pinned dependency verification and build-time integrity checks.
-</td>
-</tr>
-</table>
-
-</div>
-
-<div align="center">
-
-<img src="https://img.shields.io/badge/03-TECHNOLOGY-7F52FF?style=for-the-badge" alt="Technology">
-
-<h2>Technology Stack</h2>
-
-<table>
-<tr><th align="center">Layer</th><th align="center">Technology</th></tr>
-<tr><td align="center">Programming language</td><td align="center">Kotlin</td></tr>
-<tr><td align="center">UI framework</td><td align="center">Jetpack Compose</td></tr>
-<tr><td align="center">Design system</td><td align="center">Material 3</td></tr>
-<tr><td align="center">Media playback</td><td align="center">AndroidX Media3 ExoPlayer</td></tr>
-<tr><td align="center">Media transformation</td><td align="center">AndroidX Media3 Transformer</td></tr>
-<tr><td align="center">Effects and output</td><td align="center">Media3 Effects and Muxer</td></tr>
-<tr><td align="center">Local database</td><td align="center">Room</td></tr>
-<tr><td align="center">Preferences</td><td align="center">DataStore</td></tr>
-<tr><td align="center">Background tasks</td><td align="center">WorkManager</td></tr>
-<tr><td align="center">Dependency injection</td><td align="center">Hilt</td></tr>
-<tr><td align="center">Image loading</td><td align="center">Coil</td></tr>
-<tr><td align="center">On-device inference</td><td align="center">ONNX Runtime</td></tr>
-<tr><td align="center">Media and vision</td><td align="center">MediaPipe</td></tr>
-<tr><td align="center">Audio processing</td><td align="center">DeepFilterNet</td></tr>
-<tr><td align="center">Build system</td><td align="center">Gradle 9.8.0</td></tr>
-<tr><td align="center">Android Gradle Plugin</td><td align="center">9.4.1</td></tr>
-<tr><td align="center">Kotlin plugin</td><td align="center">2.4.10</td></tr>
-<tr><td align="center">Java toolchain</td><td align="center">17</td></tr>
-</table>
-
-<h3>AI Capability Registry</h3>
+## AI capability registry
 
 <!-- capability-registry:ai-tools:begin -->
-| Tool | Engine | On-Device? |
-|------|--------|------------|
-| **Auto Captions** | ONNX Runtime Whisper tiny.en (English; multilingual Sherpa/Whisper path gated) | Yes |
-| **Background Removal** | MediaPipe Selfie Segmentation (~1-7MB, ~30fps) | Yes |
-| **AI Green Screen** | Planned: RobustVideoMatting requires model integration | Planned |
-| **Object Removal** | LaMa-Dilated inpainting with rectangle, ellipse, and freehand mask rendering for stills and motion clips | Yes (explicit ~174 MB model download) |
-| **Video Upscaling** | Planned: Real-ESRGAN requires model integration | Planned |
-| **Frame Interpolation** | Planned: RIFE v4.6 requires the NCNN dependency | Planned |
-| **Style Transfer** | Planned: AnimeGANv2 and Fast NST require model integration | Planned |
-| **Stabilization** | Built-in offline motion analysis with bounded translation search and shared preview/export transforms | Yes |
-| **Smart Reframe** | MediaPipe BlazeFace detection, EMA-smoothed crop trajectory, 3 strategies (stationary/pan/track) | Yes |
-| **Tap-to-Segment** | Planned: SAM 2.1 Hiera Tiny with a MobileSAM fallback | Planned |
-| **Scene Detection** | Content-aware frame difference analysis with auto-split | Yes |
-| **Auto Color** | Histogram-based brightness/contrast/saturation/temperature | Yes |
-| **HDR Encoder Feature Gate** | MediaCodecInfo.CodecCapabilities FEATURE_HdrEditing / FEATURE_HlgEditing | Yes |
-| **Motion Tracking** | Template matching with position keyframe generation | Yes |
-| **Audio Denoise** | DeepFilterNet 3 with spectral-gate fallback | Yes |
+| Capability | Implementation | Availability |
+|---|---|---|
+| Auto captions | ONNX Runtime Whisper tiny.en; multilingual path gated | Available |
+| Background removal | MediaPipe Selfie Segmentation | Available |
+| AI green screen | RobustVideoMatting integration | Planned |
+| Object removal | LaMa-Dilated inpainting for stills and motion clips | Available; model download required |
+| Video upscaling | Real-ESRGAN integration | Planned |
+| Frame interpolation | RIFE v4.6 / NCNN integration | Planned |
+| Style transfer | AnimeGANv2 and Fast NST integration | Planned |
+| Stabilization | Offline motion analysis and shared preview/export transforms | Available |
+| Smart reframe | MediaPipe BlazeFace with smoothed crop trajectory | Available |
+| Tap-to-segment | SAM 2.1 / MobileSAM integration | Planned |
+| Scene detection | Frame-difference analysis and auto-split | Available |
+| Auto color | Histogram-based image adjustments | Available |
+| HDR encoder feature gate | Android MediaCodec capability checks | Available |
+| Motion tracking | Template matching and position keyframes | Available |
+| Audio denoise | DeepFilterNet 3 with spectral-gate fallback | Available |
 <!-- capability-registry:ai-tools:end -->
 
-<h3>Dependency Registry</h3>
+## Technology
+
+| Layer | Technology |
+|---|---|
+| Language | Kotlin |
+| UI | Jetpack Compose, Material 3 |
+| Media playback | AndroidX Media3 ExoPlayer |
+| Media transformation | AndroidX Media3 Transformer |
+| Effects and muxing | Media3 Effects and Muxer |
+| Database | Room |
+| Preferences | DataStore |
+| Background work | WorkManager |
+| Dependency injection | Hilt / Dagger |
+| Image loading | Coil |
+| On-device inference | ONNX Runtime |
+| Vision and segmentation | MediaPipe |
+| Audio processing | DeepFilterNet |
+| Build system | Gradle 9.8.0 |
+| Android Gradle Plugin | 9.4.1 |
+| Kotlin plugin | 2.4.10 |
+| Java toolchain | 17 |
+
+### Selected dependency versions
 
 <!-- capability-registry:dependencies:begin -->
 | Dependency | Version | Purpose |
-|-----------|---------|---------|
+|---|---:|---|
 | ONNX Runtime | 1.28.0 | Whisper ASR and LaMa inpainting |
-| MediaPipe | 1.0.0 | Selfie segmentation and smart reframe |
+| MediaPipe | 1.0.0 | Segmentation and smart reframe |
 | Lottie Compose | 6.7.1 | Animated title templates |
-| OkHttp | 5.5.0 | Model downloads and future opt-in provider calls |
-| Media3 | 1.11.1 | Transformer, ExoPlayer, effects, and muxing |
+| OkHttp | 5.5.0 | Model downloads and network calls |
+| Media3 | 1.11.1 | Playback, transformation, effects and muxing |
 | Coil Compose | 3.5.0 | Image and video thumbnails |
 | Hilt / Dagger | 2.60.1 | Dependency injection |
-| Android DeepFilterNet | 0.0.8 | On-device voiceover noise reduction |
-| FFmpegKitNext / FFmpeg | 8.1.0 (FFmpeg 8.1.2) | LGPL FFmpeg paths not covered by Media3 Transformer |
-| AndroidX Benchmark/ProfileInstaller | 1.5.0-beta01 / 1.4.1 | Baseline profile generation and installation |
-| Sherpa-ONNX | 1.13.2 target | Future native Moonshine v2 ASR path (target) |
-| SAM 2.1 ONNX | Targeted | Future tracked-mask path; MobileSAM fallback (target) |
+| Android DeepFilterNet | 0.0.8 | Voiceover noise reduction |
+| FFmpegKitNext / FFmpeg | 8.1.0 / 8.1.2 | Additional media processing paths |
+| AndroidX Benchmark / ProfileInstaller | 1.5.0-beta01 / 1.4.1 | Performance and profile support |
 <!-- capability-registry:dependencies:end -->
 
-</div>
+## Architecture
 
-<div align="center">
-
-<img src="https://img.shields.io/badge/04-ARCHITECTURE-C79B2E?style=for-the-badge" alt="Architecture">
-
-<h2>Application Architecture</h2>
-
-<p>Presentation, application state, persistence, and media-processing responsibilities are separated into focused layers.</p>
-
-</div>
-
-<div align="center">
+The application separates presentation, application state, persistence, and media processing into focused layers.
 
 ```text
                  PRESENTATION
-          Jetpack Compose · Material 3
-                       |
-                       v
-            APPLICATION & UI STATE
-              Screens · ViewModels
-                       |
-                       v
-                    DATA
-           Repositories · Room
-                · DataStore
-                       |
-                       v
-           MEDIA & AI PROCESSING
-          Media3 · Native Processing
-                  · AI Engines
-                       |
-                       v
-              ANDROID PLATFORM
-        Storage · Services · WorkManager
+           Jetpack Compose · Material 3
+                        |
+                        v
+             APPLICATION & UI STATE
+                Screens · ViewModels
+                        |
+                        v
+                      DATA
+              Repositories · Room
+                  · DataStore
+                        |
+                        v
+             MEDIA & AI PROCESSING
+             Media3 · Native Processing
+                    · AI Engines
+                        |
+                        v
+               ANDROID PLATFORM
+          Storage · Services · WorkManager
 ```
 
-</div>
+## Android build configuration
 
-<div align="center">
-
-<img src="https://img.shields.io/badge/05-BUILD_CONFIGURATION-596B57?style=for-the-badge" alt="Build configuration">
-
-<h2>Android Build Configuration</h2>
-
-<table>
-<tr><th align="center">Configuration</th><th align="center">Value</th></tr>
-<tr><td align="center">Application ID</td><td align="center"><code>com.directorx.editor</code></td></tr>
-<tr><td align="center">Kotlin namespace</td><td align="center"><code>com.directorx.editor</code></td></tr>
-<tr><td align="center">Version name</td><td align="center"><code>3.82.0</code></td></tr>
-<tr><td align="center">Version code</td><td align="center"><code>301</code></td></tr>
-<tr><td align="center">Minimum SDK</td><td align="center"><code>26</code></td></tr>
-<tr><td align="center">Target SDK</td><td align="center"><code>37</code></td></tr>
-<tr><td align="center">Compile SDK</td><td align="center"><code>37</code></td></tr>
-<tr><td align="center">Java</td><td align="center"><code>17</code></td></tr>
-<tr><td align="center">Gradle wrapper</td><td align="center"><code>9.8.0</code></td></tr>
-<tr><td align="center">Android Gradle Plugin</td><td align="center"><code>9.4.1</code></td></tr>
-<tr><td align="center">Kotlin</td><td align="center"><code>2.4.10</code></td></tr>
-</table>
-
-</div>
-
-<div align="center">
-
-<img src="https://img.shields.io/badge/06-GETTING_STARTED-B18B5E?style=for-the-badge" alt="Getting started">
+| Setting | Current value |
+|---|---|
+| Application ID | `com.directorx.editor` |
+| Kotlin namespace | `com.directorx.editor` |
+| Version name | `3.82.0` |
+| Version code | `301` |
+| Minimum SDK | API 26 |
+| Compile SDK | API 37 |
+| Target SDK | API 37 |
+| Java | 17 |
+| Gradle wrapper | 9.8.0 |
+| Android Gradle Plugin | 9.4.1 |
+| Kotlin | 2.4.10 |
 
 ### Package identity and upgrade policy
 
-The current Android application ID and Kotlin namespace are both `com.directorx.editor`. The app version is `3.82.0` (version code `301`), defined in `app/build.gradle.kts`. The previous package identity was `com.novacut.editor`; this is a new install with an explicit export/import path for transferring projects, not an in-place Android package update. Future Director X updates must retain the pinned release signing identity.
+The current application ID and Kotlin namespace are `com.directorx.editor`. The previous package identity, `com.novacut.editor`, is retained in migration history. Android treats a different application ID as a separate app: transferring projects from an installation under the old ID requires an export/import path. Future Director X updates must preserve the release signing identity.
 
-<h2>Build Director X from Source</h2>
+## Build from source
 
-<h3>Prerequisites</h3>
+### Requirements
 
-<p>JDK 17 · Android SDK Platform 37 · Compatible Android SDK Build Tools · Git · Android device or emulator running API 26 or newer.</p>
+- JDK 17
+- Android SDK Platform 37 and compatible Build Tools
+- Git
+- Android device or emulator running API 26 or newer
 
-<h3>1. Clone the repository</h3>
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/AssayFlux/Director-X.git
 cd Director-X
 ```
 
-<h3>2. Configure the Android SDK</h3>
+### 2. Configure the Android SDK
 
-<p>Set <code>ANDROID_HOME</code> or <code>ANDROID_SDK_ROOT</code>. If required, create <code>local.properties</code>:</p>
+Set `ANDROID_HOME` or `ANDROID_SDK_ROOT`. If needed, create a local `local.properties` file:
 
 ```properties
 sdk.dir=/absolute/path/to/Android/Sdk
 ```
 
-<p>Do not commit machine-specific SDK paths.</p>
+Do not commit machine-specific SDK paths.
 
-<h3>3. Verify Java and Gradle</h3>
+### 3. Check the toolchain
 
 ```bash
 java -version
 ./gradlew --version
 ```
 
-<p>Use JDK 17. On Windows, use <code>gradlew.bat</code> instead of <code>./gradlew</code>.</p>
+Use JDK 17. On Windows, run `gradlew.bat` instead of `./gradlew`.
 
-<h3>4. Build the debug APK</h3>
+### 4. Build a debug APK
 
 ```bash
 ./gradlew :app:assembleDebug
 ```
 
-<p>APK output: <code>app/build/outputs/apk/</code></p>
-
-<p>The configured ABI split may produce multiple APK files, including a universal APK.</p>
-
-<h3>5. Run unit tests</h3>
+### 5. Run unit tests
 
 ```bash
 ./gradlew :app:testDebugUnitTest
 ```
 
-<h3>6. Install on a connected device</h3>
+### 6. Install on a connected device
 
 ```bash
 ./gradlew :app:installDebug
 ```
 
-</div>
+APK outputs are generated under `app/build/outputs/apk/`. Depending on the configured ABI splits and build variant, the output directory may contain more than one APK.
+
+## Download the Android APK
 
 <div align="center">
 
-<img src="https://img.shields.io/badge/07-DOWNLOAD_DIRECTOR_X-C79B2E?style=for-the-badge" alt="Download Director X">
+### Director X · Android builds
 
-<h3>Android 17 audio hardening smoke test</h3>
+**Download the APK produced by the latest successful workflow run.**
 
-<p>For API 37 device/emulator QA, enable strict audio-policy handling with the command below, then verify TTS preview, voiceover recording, and video export while checking the <code>AudioHardening</code> log tag. This is a manual verification procedure, not a claim that every device has already passed it.</p>
-
-```bash
-adb shell cmd audio set-hardening throw
-```
-
-<h2>Get the Latest Android APK</h2>
-
-<p>Every successful build uploads a downloadable APK artifact to GitHub Actions.</p>
-
-<p>
-  <a href="https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml"><img src="https://img.shields.io/badge/OPEN_LATEST_BUILDS-Download_APK-2D2824?style=for-the-badge&logo=github&logoColor=white" alt="Open latest builds and download APK"></a>
-</p>
-
-<p><strong>How to download:</strong></p>
-
-<p>Open the latest successful <strong>Build Debug APK</strong> run → scroll to <strong>Artifacts</strong> → download <code>director-x-debug-apk</code>.</p>
-
-<p><strong>Build variants:</strong> Debug · QA · Streaming (manual workflow dispatch).</p>
-
-<p><em>GitHub Actions artifacts are temporary downloads with a 14-day retention period. This workflow does not currently publish a permanent GitHub Release.</em></p>
+[![Open APK build history](https://img.shields.io/badge/OPEN_APK_BUILDS-View_downloadable_artifacts-C79B2E?style=for-the-badge&logo=android&logoColor=2D2824)](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml)
 
 </div>
 
-<div align="center">
+1. Open the [Build Debug APK workflow](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml).
+2. Select the latest run marked **Success**.
+3. Scroll to **Artifacts**.
+4. Download the `director-x-debug-apk` artifact.
+5. Extract the ZIP and install the APK on your Android device.
 
-<img src="https://img.shields.io/badge/08-PROJECT_STRUCTURE-596B57?style=for-the-badge" alt="Project structure">
+**Important:** Workflow artifacts are temporary and currently have a 14-day retention period. This is an Actions artifact download, not a permanent GitHub Release. A failed or in-progress run will not provide a successful APK artifact.
 
-<h2>Repository Layout</h2>
+## Repository structure
 
 ```text
 Director-X/
 ├── .github/
 │   └── workflows/
-│       ├── build-debug-apk.yml
-│       └── repository-hygiene.yml
 ├── app/
 │   ├── src/
 │   │   ├── main/
 │   │   │   ├── java/com/directorx/editor/
-│   │   │   │   ├── ai/
-│   │   │   │   ├── engine/
-│   │   │   │   ├── model/
-│   │   │   │   ├── ui/
-│   │   │   │   ├── ClearCutApp.kt
-│   │   │   │   └── MainActivity.kt
 │   │   │   ├── res/
 │   │   │   └── AndroidManifest.xml
 │   │   ├── debug/
@@ -359,61 +267,50 @@ Director-X/
 └── README.md
 ```
 
-</div>
+## Development roadmap
+
+| Status | Milestone |
+|---|---|
+| Complete | Native Android application foundation |
+| Complete | Compose and Material 3 interface foundation |
+| Complete | Media playback, transformation, effects and muxing integration |
+| Complete | Local persistence and background-work infrastructure |
+| Complete | Local AI and audio-processing integrations |
+| Complete | Manual debug APK workflow |
+| Planned | Validate builds across physical Android devices |
+| Planned | Continue refining editing and export workflows |
+| Planned | Unify local AI engine controls and capability management |
+| Planned | Improve performance and memory behavior on constrained devices |
+| Planned | Prepare signed release distribution when credentials are configured |
+
+## Contributing
+
+Contributions, bug reports, and focused improvements are welcome.
+
+Before opening a pull request:
+
+- Search [existing issues](https://github.com/AssayFlux/Director-X/issues).
+- Include reproduction steps, device model, Android version, and relevant logs.
+- Discuss substantial changes before implementation.
+- Submit focused pull requests against `main`.
+- Include tests or verification steps for behavior changes.
+
+## License
+
+See the repository's [LICENSE](LICENSE) file for the terms that apply to this project. Third-party components remain subject to their respective licences and notices.
+
+---
 
 <div align="center">
 
-<img src="https://img.shields.io/badge/09-ROADMAP-B18B5E?style=for-the-badge" alt="Roadmap">
+<img src="assets/icon.svg" alt="Director X icon" width="64" />
 
-<h2>Development Roadmap</h2>
+### DIRECTOR X
 
-<table>
-<tr><th align="center">Status</th><th align="center">Milestone</th></tr>
-<tr><td align="center">✅ Complete</td><td align="center">Native Android application foundation</td></tr>
-<tr><td align="center">✅ Complete</td><td align="center">Jetpack Compose and Material 3 interface foundation</td></tr>
-<tr><td align="center">✅ Complete</td><td align="center">Media playback, transformation, effects, and muxing integration</td></tr>
-<tr><td align="center">✅ Complete</td><td align="center">Local persistence and background-work infrastructure</td></tr>
-<tr><td align="center">✅ Complete</td><td align="center">Local AI and audio-processing integrations</td></tr>
-<tr><td align="center">✅ Complete</td><td align="center">Manual debug APK workflow</td></tr>
-<tr><td align="center">◻ Planned</td><td align="center">Validate debug builds on a range of physical Android devices</td></tr>
-<tr><td align="center">◻ Planned</td><td align="center">Continue refining editing and export workflows</td></tr>
-<tr><td align="center">◻ Planned</td><td align="center">Unify local AI engine controls and capability management</td></tr>
-<tr><td align="center">◻ Planned</td><td align="center">Improve performance and memory behavior on resource-constrained devices</td></tr>
-<tr><td align="center">◻ Planned</td><td align="center">Prepare signed release distribution when release credentials are supplied</td></tr>
-</table>
+**Designed by AssayFlux**
 
-</div>
+[Repository](https://github.com/AssayFlux/Director-X) · [Issues](https://github.com/AssayFlux/Director-X/issues) · [Builds & APK](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml)
 
-<div align="center">
-
-<img src="https://img.shields.io/badge/10-CONTRIBUTE-7F52FF?style=for-the-badge" alt="Contribute">
-
-<h2>Contributing</h2>
-
-<p>Contributions, bug reports, and focused improvements are welcome.</p>
-
-<p>Before opening a pull request:</p>
-
-<p>Search <a href="https://github.com/AssayFlux/Director-X/issues">existing issues</a> · Include reproduction steps, device model, Android version, and relevant logs · Discuss substantial changes before implementation · Submit focused pull requests against <code>main</code> · Include tests or verification steps for behavior changes.</p>
-
-<h2>License</h2>
-
-<p>See the repository's <code>LICENSE</code> file for the terms that apply to this project.</p>
-
-<hr>
-
-<img src="assets/icon.svg" alt="Director X icon" width="76">
-
-<h2>DIRECTOR X</h2>
-
-<p><strong>Designed by AssayFlux</strong></p>
-
-<p>
-  <a href="https://github.com/AssayFlux/Director-X">Repository</a> ·
-  <a href="https://github.com/AssayFlux/Director-X/issues">Issues</a> ·
-  <a href="https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml">Builds & APK</a>
-</p>
-
-<p><sub>Crafted for creators. Engineered for Android.</sub></p>
+*Crafted for creators. Engineered for Android.*
 
 </div>
