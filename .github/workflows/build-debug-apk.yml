@@ -4,8 +4,26 @@ on:
   push:
     branches:
       - main
-    paths-ignore:
-      - gradle/verification-metadata.xml
+    # APK builds are reserved for app/build-structure changes. Documentation,
+    # README, metadata and ordinary repository-maintenance commits do not build.
+    paths:
+      - "app/**"
+      - "third_party/**"
+      - "gradle/**"
+      - "buildSrc/**"
+      - "build-logic/**"
+      - "build.gradle.kts"
+      - "settings.gradle.kts"
+      - "gradle.properties"
+      - "gradlew"
+      - "gradlew.bat"
+      - ".github/workflows/build-debug-apk.yml"
+      - "scripts/capability_registry.json"
+      - "scripts/generate_capability_registry.py"
+      - "scripts/package_identity.json"
+      - "scripts/validate_package_identity.py"
+      - "scripts/validate_public_claims.py"
+      - "scripts/validate_android_audio_api_policy.py"
   workflow_dispatch:
     inputs:
       build_variant:
