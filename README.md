@@ -170,6 +170,19 @@ The application separates presentation, application state, persistence, and medi
 | Android Gradle Plugin | 9.4.1 |
 | Kotlin | 2.4.10 |
 
+### Android 17 audio hardening smoke test
+
+For API 37 devices and emulators, verify that audio capture and playback remain tied to visible user actions:
+
+1. Enable strict audio hardening:
+   `adb shell cmd audio set-hardening throw`
+2. Open Director X and test a **TTS preview** from the visible editing interface.
+3. Start and stop a **voiceover** recording while the app is in the foreground.
+4. Run an **export** and confirm the export foreground service does not request microphone or media-playback service types.
+5. Inspect system logs for `AudioHardening` messages and investigate any thrown policy violations.
+
+This smoke test is separate from the APK compilation and JVM unit-test steps.
+
 ### Package identity and upgrade policy
 
 The current application ID and Kotlin namespace are `com.directorx.editor`. The previous package identity, `com.novacut.editor`, is retained in migration history. Android treats a different application ID as a separate app: moving projects from the previous package requires a new install with an explicit export/import path. Future Director X updates must preserve the release signing identity.
