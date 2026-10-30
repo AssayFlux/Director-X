@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run and classify ClearCut's API 37 managed-device QA baseline."""
+"""Run and classify Director X's API 37 managed-device QA baseline."""
 
 from __future__ import annotations
 
@@ -270,7 +270,7 @@ def write_report(
     summary = report["summary"]
     assert isinstance(summary, dict)
     lines = [
-        f"ClearCut API 37 QA baseline: {str(report['outcome']).upper()}",
+        f"Director X API 37 QA baseline: {str(report['outcome']).upper()}",
         f"Observed: {summary['observed']}",
         f"Passed: {summary['passed']}",
         f"Known assumptions: {summary['knownAssumptions']}",
