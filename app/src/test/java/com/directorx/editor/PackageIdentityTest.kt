@@ -19,7 +19,7 @@ class PackageIdentityTest {
 
         assertEquals(1, registry.getInt("schemaVersion"))
         assertEquals(namespace, registry.getString("sourcePackage"))
-        assertFalse(applicationId == namespace)
+        assertEquals(applicationId, namespace)
         assertTrue(build.contains("namespace = \"$namespace\""))
         assertTrue(build.contains("applicationId = \"$applicationId\""))
         assertTrue(build.contains("applicationIdSuffix = \".streaming\""))
@@ -35,7 +35,7 @@ class PackageIdentityTest {
         val applicationId = registry.getString("applicationId")
         val manifest = locate("app/src/main/AndroidManifest.xml").readText()
         val shortcuts = locate("app/src/main/res/xml/shortcuts.xml").readText()
-        val parser = locate("app/src/main/java/com/novacut/editor/engine/IncomingDocumentIntentParser.kt").readText()
+        val parser = locate("app/src/main/java/com/directorx/editor/engine/IncomingDocumentIntentParser.kt").readText()
         val plugins = locate("app/src/main/java/com/novacut/editor/engine/PluginRegistry.kt").readText()
 
         assertTrue(manifest.contains("\${applicationId}.androidx-startup"))
@@ -46,7 +46,7 @@ class PackageIdentityTest {
             assertTrue("Manifest must keep shortcut action $action", manifest.contains(action))
         }
         assertTrue(shortcuts.contains("android:targetPackage=\"\${applicationId}\""))
-        assertTrue(shortcuts.contains("android:targetClass=\"\${namespace}.MainActivity\""))
+        assertTrue(shortcuts.contains("android:targetClass=\"$namespace.MainActivity\""))
 
         val associations = registry.getJSONObject("archiveAssociations")
         val extensions = associations.getJSONArray("extensions")
