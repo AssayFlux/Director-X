@@ -1,10 +1,10 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.mutablePreferencesOf
-import com.novacut.editor.model.AspectRatio
-import com.novacut.editor.model.ProxyResolution
-import com.novacut.editor.model.Resolution
+import com.directorx.editor.model.AspectRatio
+import com.directorx.editor.model.ProxyResolution
+import com.directorx.editor.model.Resolution
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

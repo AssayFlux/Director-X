@@ -1,11 +1,11 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.AspectRatio
-import com.novacut.editor.model.Project
-import com.novacut.editor.model.Resolution
-import com.novacut.editor.model.TextOverlay
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.model.AspectRatio
+import com.directorx.editor.model.Project
+import com.directorx.editor.model.Resolution
+import com.directorx.editor.model.TextOverlay
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

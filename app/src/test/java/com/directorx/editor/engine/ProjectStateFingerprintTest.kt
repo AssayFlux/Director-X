@@ -1,16 +1,16 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.FakeUri
-import com.novacut.editor.model.AudioEffect
-import com.novacut.editor.model.AudioEffectType
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.Effect
-import com.novacut.editor.model.EffectType
-import com.novacut.editor.model.Project
-import com.novacut.editor.model.SourceColorMetadata
-import com.novacut.editor.model.SourceHdrFormat
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.model.AudioEffect
+import com.directorx.editor.model.AudioEffectType
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.Effect
+import com.directorx.editor.model.EffectType
+import com.directorx.editor.model.Project
+import com.directorx.editor.model.SourceColorMetadata
+import com.directorx.editor.model.SourceHdrFormat
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Test

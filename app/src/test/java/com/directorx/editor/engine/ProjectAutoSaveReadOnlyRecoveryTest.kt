@@ -1,7 +1,7 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.Project
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.model.Project
+import com.directorx.editor.model.TrackType
 import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
 import org.json.JSONObject

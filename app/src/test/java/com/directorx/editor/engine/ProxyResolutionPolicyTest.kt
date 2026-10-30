@@ -1,7 +1,7 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.engine.ProxyResolutionPolicy.Plan
-import com.novacut.editor.model.ProxyResolution
+import com.directorx.editor.engine.ProxyResolutionPolicy.Plan
+import com.directorx.editor.model.ProxyResolution
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

@@ -1,8 +1,8 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.engine.ProjectShortcutPlanner.DynamicShortcut
-import com.novacut.editor.engine.ProjectShortcutPlanner.ShortcutId
-import com.novacut.editor.engine.ProjectShortcutPlanner.State
+import com.directorx.editor.engine.ProjectShortcutPlanner.DynamicShortcut
+import com.directorx.editor.engine.ProjectShortcutPlanner.ShortcutId
+import com.directorx.editor.engine.ProjectShortcutPlanner.State
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull

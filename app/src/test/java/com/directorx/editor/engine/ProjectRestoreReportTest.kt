@@ -1,8 +1,8 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.FakeUri
-import com.novacut.editor.model.TrackType
-import com.novacut.editor.ui.editor.shouldBlockAutoSaveForRecoveryOutcome
+import com.directorx.editor.model.TrackType
+import com.directorx.editor.ui.editor.shouldBlockAutoSaveForRecoveryOutcome
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.Assert.assertEquals

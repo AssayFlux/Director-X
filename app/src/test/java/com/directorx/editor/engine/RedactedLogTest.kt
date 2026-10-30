@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -43,7 +43,7 @@ class RedactedLogTest {
 
     @Test
     fun fileRedactionKeepsOnlyTheExtension() {
-        val redacted = RedactedLog.file(File("/data/user/0/com.novacut.editor/files/wedding speech.m4a"))
+        val redacted = RedactedLog.file(File("/data/user/0/com.directorx.editor/files/wedding speech.m4a"))
 
         assertFalse(redacted.contains("wedding"))
         assertFalse(redacted.contains("speech"))
