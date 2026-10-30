@@ -1,22 +1,22 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.engine.KeyframeEngine
-import com.novacut.editor.model.Caption
-import com.novacut.editor.model.CaptionWord
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.Effect
-import com.novacut.editor.model.EffectKeyframe
-import com.novacut.editor.model.Keyframe
-import com.novacut.editor.model.Mask
-import com.novacut.editor.model.MaskKeyframe
-import com.novacut.editor.model.MotionTrackPoint
-import com.novacut.editor.model.MotionTrackingData
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
-import com.novacut.editor.model.TimelineRange
-import com.novacut.editor.model.TimelineTimebase
-import com.novacut.editor.model.effectiveTimelineEndMs
-import com.novacut.editor.model.effectiveTimelineStartMs
+import com.directorx.editor.engine.KeyframeEngine
+import com.directorx.editor.model.Caption
+import com.directorx.editor.model.CaptionWord
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.Effect
+import com.directorx.editor.model.EffectKeyframe
+import com.directorx.editor.model.Keyframe
+import com.directorx.editor.model.Mask
+import com.directorx.editor.model.MaskKeyframe
+import com.directorx.editor.model.MotionTrackPoint
+import com.directorx.editor.model.MotionTrackingData
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
+import com.directorx.editor.model.TimelineRange
+import com.directorx.editor.model.TimelineTimebase
+import com.directorx.editor.model.effectiveTimelineEndMs
+import com.directorx.editor.model.effectiveTimelineStartMs
 import kotlin.math.abs
 import kotlin.math.ceil
 
@@ -688,7 +688,7 @@ internal fun preferredAudioTrackIndex(
 ): Int? {
     return tracks
         .withIndex()
-        .filter { (_, track) -> track.type == com.novacut.editor.model.TrackType.AUDIO }
+        .filter { (_, track) -> track.type == com.directorx.editor.model.TrackType.AUDIO }
         .firstOrNull { (_, track) -> track.canFitClipRange(startMs, endMs) }
         ?.index
 }

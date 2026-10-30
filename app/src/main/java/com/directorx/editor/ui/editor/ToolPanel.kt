@@ -1,6 +1,6 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.ClearCutAccents
 import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -37,12 +37,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.stringResource
 import androidx.annotation.StringRes
-import com.novacut.editor.R
-import com.novacut.editor.model.*
-import com.novacut.editor.ui.ClearCutTestTags
-import com.novacut.editor.ui.theme.LocalClearCutColors
-import com.novacut.editor.ui.theme.Radius
-import com.novacut.editor.ui.theme.TouchTarget
+import com.directorx.editor.R
+import com.directorx.editor.model.*
+import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.Radius
+import com.directorx.editor.ui.theme.TouchTarget
 import java.util.Locale
 
 // --- Tab & sub-menu data ---

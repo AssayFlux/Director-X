@@ -1,6 +1,6 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.model.Clip
+import com.directorx.editor.model.Clip
 import kotlin.math.abs
 
 internal const val ACCESSIBILITY_NUDGE_MS = 100L

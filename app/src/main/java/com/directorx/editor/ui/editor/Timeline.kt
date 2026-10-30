@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
 import android.graphics.Bitmap
 import androidx.compose.foundation.*
 import androidx.compose.foundation.combinedClickable
@@ -65,12 +65,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
-import com.novacut.editor.R
-import com.novacut.editor.engine.ThumbnailStripPolicy
-import com.novacut.editor.engine.VideoEngine
-import com.novacut.editor.model.*
-import com.novacut.editor.ui.ClearCutTestTags
-import com.novacut.editor.ui.theme.Radius
+import com.directorx.editor.R
+import com.directorx.editor.engine.ThumbnailStripPolicy
+import com.directorx.editor.engine.VideoEngine
+import com.directorx.editor.model.*
+import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.theme.Radius
 import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 
@@ -402,7 +402,7 @@ fun Timeline(
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val isCompactTimeline = screenWidth < 430.dp
     val density = LocalDensity.current
-    val haptic = com.novacut.editor.ui.theme.rememberUserHaptics()
+    val haptic = com.directorx.editor.ui.theme.rememberUserHaptics()
     val rulerHeight = if (isCompactTimeline) 24.dp else 28.dp
     val pixelsPerMs = zoomLevel * BASE_SCALE
     val coroutineScope = rememberCoroutineScope()
@@ -2267,7 +2267,7 @@ fun Timeline(
                                                     for (i in 0..steps) {
                                                         val t = i.toFloat() / steps
                                                         val timeMs = (t * clip.durationMs).toLong()
-                                                        val vol = com.novacut.editor.engine.KeyframeEngine.getValueAt(
+                                                        val vol = com.directorx.editor.engine.KeyframeEngine.getValueAt(
                                                             volumeKfs, KeyframeProperty.VOLUME, timeMs
                                                         ) ?: clip.volume
                                                         val x = t * size.width

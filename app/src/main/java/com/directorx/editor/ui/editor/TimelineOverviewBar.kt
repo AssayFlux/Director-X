@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -31,10 +31,10 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.novacut.editor.R
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.effectiveTimelineEndMs
-import com.novacut.editor.model.effectiveTimelineStartMs
+import com.directorx.editor.R
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.effectiveTimelineEndMs
+import com.directorx.editor.model.effectiveTimelineStartMs
 
 /**
  * Full-duration mini-strip shown below the tracks area. Paints one rectangle per

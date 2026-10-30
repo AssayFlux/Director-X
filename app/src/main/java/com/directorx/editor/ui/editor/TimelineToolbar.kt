@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -29,9 +29,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.novacut.editor.R
-import com.novacut.editor.model.TimelineRange
-import com.novacut.editor.ui.ClearCutTestTags
+import com.directorx.editor.R
+import com.directorx.editor.model.TimelineRange
+import com.directorx.editor.ui.ClearCutTestTags
 
 internal const val TIMELINE_TOOLBAR_MIN_ZOOM = 0.01f
 internal const val TIMELINE_TOOLBAR_MAX_ZOOM = 10f

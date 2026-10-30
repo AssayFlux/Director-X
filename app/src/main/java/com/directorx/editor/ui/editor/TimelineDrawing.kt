@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -7,9 +7,9 @@ import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.unit.sp
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.Keyframe
-import com.novacut.editor.model.KeyframeProperty
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.Keyframe
+import com.directorx.editor.model.KeyframeProperty
 
 internal fun DrawScope.drawTimeRuler(
     scrollOffsetMs: Long,

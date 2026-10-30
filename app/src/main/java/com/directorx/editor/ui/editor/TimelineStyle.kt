@@ -1,8 +1,8 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.ClearCutAccents
 import androidx.compose.ui.graphics.Color
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.model.TrackType
 
 internal fun trackAccentColor(trackType: TrackType): Color = when (trackType) {
     TrackType.VIDEO -> ClearCutAccents.Blue

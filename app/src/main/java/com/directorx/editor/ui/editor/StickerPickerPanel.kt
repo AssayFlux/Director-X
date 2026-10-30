@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -48,7 +48,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.novacut.editor.R
+import com.directorx.editor.R
 
 private enum class StickerCategory {
     EMOJI,
@@ -78,7 +78,7 @@ private val bundledStickers: List<StickerItem> = buildList {
                 id = "emoji_$index",
                 display = glyph,
                 category = StickerCategory.EMOJI,
-                contentUri = Uri.parse("content://com.novacut.editor.stickers/emoji/$index")
+                contentUri = Uri.parse("content://com.directorx.editor.stickers/emoji/$index")
             )
         )
     }
@@ -95,7 +95,7 @@ private val bundledStickers: List<StickerItem> = buildList {
                 id = "shape_$index",
                 display = glyph,
                 category = StickerCategory.SHAPES,
-                contentUri = Uri.parse("content://com.novacut.editor.stickers/shapes/$index")
+                contentUri = Uri.parse("content://com.directorx.editor.stickers/shapes/$index")
             )
         )
     }
@@ -112,7 +112,7 @@ private val bundledStickers: List<StickerItem> = buildList {
                 id = "arrow_$index",
                 display = glyph,
                 category = StickerCategory.ARROWS,
-                contentUri = Uri.parse("content://com.novacut.editor.stickers/arrows/$index")
+                contentUri = Uri.parse("content://com.directorx.editor.stickers/arrows/$index")
             )
         )
     }
@@ -129,7 +129,7 @@ private val bundledStickers: List<StickerItem> = buildList {
                 id = "social_$index",
                 display = glyph,
                 category = StickerCategory.SOCIAL,
-                contentUri = Uri.parse("content://com.novacut.editor.stickers/social/$index")
+                contentUri = Uri.parse("content://com.directorx.editor.stickers/social/$index")
             )
         )
     }

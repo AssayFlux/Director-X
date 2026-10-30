@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 /**
  * Stable bounds for timeline work that is allowed to happen around the
