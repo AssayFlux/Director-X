@@ -19,44 +19,44 @@ GRADLE_TASK = ":app:clearCutApi37QaAndroidTest"
 
 EXPECTED_TESTS = frozenset(
     {
-        "com.novacut.editor.ClearCutSmokeTest.highContrastPhoneAndDesktopEditorSurfacesRender",
-        "com.novacut.editor.ClearCutSmokeTest.projectEditorExportAndSettingsSurfacesOpen",
-        "com.novacut.editor.ClearCutSmokeTest.pseudoLocalesRenderExpandedAndRtlExportSurfaces",
-        "com.novacut.editor.QaTimelineGestureTest.draggingAClipAlongItsTrackSlidesItAndRecordsOneUndoEntry",
-        "com.novacut.editor.QaTimelineGestureTest.draggingAKeyframeHandleMovesItAndRecordsOneUndoEntry",
-        "com.novacut.editor.QaTimelineGestureTest.draggingATrimEdgeTrimsTheClipAndRecordsOneUndoEntry",
-        "com.novacut.editor.QaTimelineGestureTest.pinchingTheTimelineZoomsInWithoutAnUndoEntry",
-        "com.novacut.editor.QaTimelineGestureTest.swipingTheTimelineScrollsItWithoutAnUndoEntry",
-        "com.novacut.editor.QaTimelineInstrumentationTest.importEditUndoRedoAndRelaunchStayInsideQaStorage",
-        "com.novacut.editor.LargeTextLayoutTest.fontScale200_desktopSurfacesRemainUsable",
-        "com.novacut.editor.LargeTextLayoutTest.fontScale200_largeScreenSurfacesRemainUsable",
-        "com.novacut.editor.LargeTextLayoutTest.fontScale200_phoneSurfacesRemainUsable",
-        "com.novacut.editor.LargeTextLayoutTest.fontScale300_desktopSurfacesRemainUsable",
-        "com.novacut.editor.LargeTextLayoutTest.fontScale300_largeScreenSurfacesRemainUsable",
-        "com.novacut.editor.LargeTextLayoutTest.fontScale300_phoneSurfacesRemainUsable",
-        "com.novacut.editor.engine.AudioOnlyExportContractTest.audioOnlyExportProducesTrackVerifiedM4a",
-        "com.novacut.editor.engine.AudioOnlyExportContractTest.verifierRejectsRequestedVideoCodecMismatch",
-        "com.novacut.editor.engine.AudioOnlyExportContractTest.verifierRejectsVideoOutputWhenAudioOnlyExpected",
-        "com.novacut.editor.engine.AudioRenderGoldenInstrumentationTest.panAndDspRemainDeterministicAcrossMedia3Buffers",
-        "com.novacut.editor.engine.FailureClassDeviceAcceptanceTest.failureClassFixturesStayWithinDeviceContracts",
-        "com.novacut.editor.engine.FcpxmlDeviceParserInstrumentationTest.aNestedEntityBombIsRefusedWithoutExpanding",
-        "com.novacut.editor.engine.FcpxmlDeviceParserInstrumentationTest.anExportedFcpxmlImportsBackThroughTheDeviceParser",
-        "com.novacut.editor.engine.FcpxmlDeviceParserInstrumentationTest.anExternalEntityNeverReadsALocalFile",
-        "com.novacut.editor.engine.InpaintingDeviceAcceptanceTest.stillAndAudioVideoObjectRemovalProduceUsableOutputs",
-        "com.novacut.editor.engine.Media3ExportRobustnessInstrumentationTest.batchSourceRangeExportsOnlyTheQueuedSourceInterval",
-        "com.novacut.editor.engine.Media3ExportRobustnessInstrumentationTest.constantFrameRateExportNormalizesVariableInputCadence",
-        "com.novacut.editor.engine.Media3ExportRobustnessInstrumentationTest.speedExportRemainsValidAndDoesNotAdvertiseBalloonedFrameRate",
-        "com.novacut.editor.engine.Media3TrimOptimizationInstrumentationTest.pureTrimOutputPassesTheExistingVerifier",
-        "com.novacut.editor.engine.OnnxSessionFactoryInstrumentationTest.xnnpackRegistrationProbeIsSafeAndReportsCapability",
-        "com.novacut.editor.engine.PreviewCompositionPlayerTest.gapOnlyCompositionReplacesStaleVisualContent",
-        "com.novacut.editor.engine.PreviewCompositionPlayerTest.trimmedAndExtendedCompositionsDecodeTheirBoundaryFrames",
-        "com.novacut.editor.engine.PreviewCompositionPlayerTest.twoVisualSequencesPrepareAndSeekOnOneAbsoluteTimeline",
-        "com.novacut.editor.engine.StabilizationDeviceAcceptanceTest.analysisCancellationStopsWithoutProducingAResult",
-        "com.novacut.editor.engine.StabilizationDeviceAcceptanceTest.analysisProducesReversibleMotionDataAndSharedKeyframes",
-        "com.novacut.editor.engine.db.ProjectDatabaseMigrationTest.committedSchemaVersionsMigrateToCurrentWithoutProjectLoss",
-        "com.novacut.editor.ui.editor.MaskHandleDragInstrumentationTest.aDragThatMissesEveryHandleLeavesTheMaskAndTheUndoStackAlone",
-        "com.novacut.editor.ui.editor.MaskHandleDragInstrumentationTest.draggingAHandleMovesThatPointAndOpensAndClosesOneGesture",
-        "com.novacut.editor.ui.editor.MediaStoreExportClassificationInstrumentationTest.publishedMp4IsVideoWithDurationAndTimeMetadata",
+        "com.directorx.editor.ClearCutSmokeTest.highContrastPhoneAndDesktopEditorSurfacesRender",
+        "com.directorx.editor.ClearCutSmokeTest.projectEditorExportAndSettingsSurfacesOpen",
+        "com.directorx.editor.ClearCutSmokeTest.pseudoLocalesRenderExpandedAndRtlExportSurfaces",
+        "com.directorx.editor.QaTimelineGestureTest.draggingAClipAlongItsTrackSlidesItAndRecordsOneUndoEntry",
+        "com.directorx.editor.QaTimelineGestureTest.draggingAKeyframeHandleMovesItAndRecordsOneUndoEntry",
+        "com.directorx.editor.QaTimelineGestureTest.draggingATrimEdgeTrimsTheClipAndRecordsOneUndoEntry",
+        "com.directorx.editor.QaTimelineGestureTest.pinchingTheTimelineZoomsInWithoutAnUndoEntry",
+        "com.directorx.editor.QaTimelineGestureTest.swipingTheTimelineScrollsItWithoutAnUndoEntry",
+        "com.directorx.editor.QaTimelineInstrumentationTest.importEditUndoRedoAndRelaunchStayInsideQaStorage",
+        "com.directorx.editor.LargeTextLayoutTest.fontScale200_desktopSurfacesRemainUsable",
+        "com.directorx.editor.LargeTextLayoutTest.fontScale200_largeScreenSurfacesRemainUsable",
+        "com.directorx.editor.LargeTextLayoutTest.fontScale200_phoneSurfacesRemainUsable",
+        "com.directorx.editor.LargeTextLayoutTest.fontScale300_desktopSurfacesRemainUsable",
+        "com.directorx.editor.LargeTextLayoutTest.fontScale300_largeScreenSurfacesRemainUsable",
+        "com.directorx.editor.LargeTextLayoutTest.fontScale300_phoneSurfacesRemainUsable",
+        "com.directorx.editor.engine.AudioOnlyExportContractTest.audioOnlyExportProducesTrackVerifiedM4a",
+        "com.directorx.editor.engine.AudioOnlyExportContractTest.verifierRejectsRequestedVideoCodecMismatch",
+        "com.directorx.editor.engine.AudioOnlyExportContractTest.verifierRejectsVideoOutputWhenAudioOnlyExpected",
+        "com.directorx.editor.engine.AudioRenderGoldenInstrumentationTest.panAndDspRemainDeterministicAcrossMedia3Buffers",
+        "com.directorx.editor.engine.FailureClassDeviceAcceptanceTest.failureClassFixturesStayWithinDeviceContracts",
+        "com.directorx.editor.engine.FcpxmlDeviceParserInstrumentationTest.aNestedEntityBombIsRefusedWithoutExpanding",
+        "com.directorx.editor.engine.FcpxmlDeviceParserInstrumentationTest.anExportedFcpxmlImportsBackThroughTheDeviceParser",
+        "com.directorx.editor.engine.FcpxmlDeviceParserInstrumentationTest.anExternalEntityNeverReadsALocalFile",
+        "com.directorx.editor.engine.InpaintingDeviceAcceptanceTest.stillAndAudioVideoObjectRemovalProduceUsableOutputs",
+        "com.directorx.editor.engine.Media3ExportRobustnessInstrumentationTest.batchSourceRangeExportsOnlyTheQueuedSourceInterval",
+        "com.directorx.editor.engine.Media3ExportRobustnessInstrumentationTest.constantFrameRateExportNormalizesVariableInputCadence",
+        "com.directorx.editor.engine.Media3ExportRobustnessInstrumentationTest.speedExportRemainsValidAndDoesNotAdvertiseBalloonedFrameRate",
+        "com.directorx.editor.engine.Media3TrimOptimizationInstrumentationTest.pureTrimOutputPassesTheExistingVerifier",
+        "com.directorx.editor.engine.OnnxSessionFactoryInstrumentationTest.xnnpackRegistrationProbeIsSafeAndReportsCapability",
+        "com.directorx.editor.engine.PreviewCompositionPlayerTest.gapOnlyCompositionReplacesStaleVisualContent",
+        "com.directorx.editor.engine.PreviewCompositionPlayerTest.trimmedAndExtendedCompositionsDecodeTheirBoundaryFrames",
+        "com.directorx.editor.engine.PreviewCompositionPlayerTest.twoVisualSequencesPrepareAndSeekOnOneAbsoluteTimeline",
+        "com.directorx.editor.engine.StabilizationDeviceAcceptanceTest.analysisCancellationStopsWithoutProducingAResult",
+        "com.directorx.editor.engine.StabilizationDeviceAcceptanceTest.analysisProducesReversibleMotionDataAndSharedKeyframes",
+        "com.directorx.editor.engine.db.ProjectDatabaseMigrationTest.committedSchemaVersionsMigrateToCurrentWithoutProjectLoss",
+        "com.directorx.editor.ui.editor.MaskHandleDragInstrumentationTest.aDragThatMissesEveryHandleLeavesTheMaskAndTheUndoStackAlone",
+        "com.directorx.editor.ui.editor.MaskHandleDragInstrumentationTest.draggingAHandleMovesThatPointAndOpensAndClosesOneGesture",
+        "com.directorx.editor.ui.editor.MediaStoreExportClassificationInstrumentationTest.publishedMp4IsVideoWithDurationAndTimeMetadata",
     }
 )
 
@@ -69,12 +69,12 @@ class KnownAssumption:
 
 
 KNOWN_FAILURES = {
-    "com.novacut.editor.engine.Media3ExportRobustnessInstrumentationTest.batchSourceRangeExportsOnlyTheQueuedSourceInterval": KnownAssumption(
+    "com.directorx.editor.engine.Media3ExportRobustnessInstrumentationTest.batchSourceRangeExportsOnlyTheQueuedSourceInterval": KnownAssumption(
         "emulator-codec",
         "The API 37 goldfish H.264 decoder fails while Media3 reads the generated AVC fixture.",
         ("Codec exception", "c2.goldfish.h264.decoder"),
     ),
-    "com.novacut.editor.engine.Media3ExportRobustnessInstrumentationTest.constantFrameRateExportNormalizesVariableInputCadence": KnownAssumption(
+    "com.directorx.editor.engine.Media3ExportRobustnessInstrumentationTest.constantFrameRateExportNormalizesVariableInputCadence": KnownAssumption(
         "emulator-codec",
         "The API 37 managed image's MediaCodec encoder rejects the CFR pre-render frame.",
         (
@@ -84,22 +84,22 @@ KNOWN_FAILURES = {
             "Error flushing encoder: Try again",
         ),
     ),
-    "com.novacut.editor.engine.Media3ExportRobustnessInstrumentationTest.speedExportRemainsValidAndDoesNotAdvertiseBalloonedFrameRate": KnownAssumption(
+    "com.directorx.editor.engine.Media3ExportRobustnessInstrumentationTest.speedExportRemainsValidAndDoesNotAdvertiseBalloonedFrameRate": KnownAssumption(
         "emulator-codec",
         "The API 37 goldfish H.264 decoder fails while Media3 reads the generated AVC fixture.",
         ("Codec exception", "c2.goldfish.h264.decoder"),
     ),
-    "com.novacut.editor.engine.Media3TrimOptimizationInstrumentationTest.pureTrimOutputPassesTheExistingVerifier": KnownAssumption(
+    "com.directorx.editor.engine.Media3TrimOptimizationInstrumentationTest.pureTrimOutputPassesTheExistingVerifier": KnownAssumption(
         "emulator-codec",
         "The API 37 goldfish H.264 decoder fails before the trim verifier can inspect its output.",
         ("Codec exception", "c2.goldfish.h264.decoder"),
     ),
-    "com.novacut.editor.engine.PreviewCompositionPlayerTest.trimmedAndExtendedCompositionsDecodeTheirBoundaryFrames": KnownAssumption(
+    "com.directorx.editor.engine.PreviewCompositionPlayerTest.trimmedAndExtendedCompositionsDecodeTheirBoundaryFrames": KnownAssumption(
         "emulator-preview",
         "The API 37 goldfish player cannot decode the preview fixture's requested boundary frame.",
         ("trimmed preview failed", "error from player 0"),
     ),
-    "com.novacut.editor.engine.PreviewCompositionPlayerTest.twoVisualSequencesPrepareAndSeekOnOneAbsoluteTimeline": KnownAssumption(
+    "com.directorx.editor.engine.PreviewCompositionPlayerTest.twoVisualSequencesPrepareAndSeekOnOneAbsoluteTimeline": KnownAssumption(
         "emulator-preview",
         "The API 37 goldfish player reports three preview errors while preparing two visual sequences.",
         ("expected:<0> but was:<3>",),
@@ -107,7 +107,7 @@ KNOWN_FAILURES = {
 }
 
 KNOWN_SKIPS = {
-    "com.novacut.editor.engine.InpaintingDeviceAcceptanceTest.stillAndAudioVideoObjectRemovalProduceUsableOutputs": (
+    "com.directorx.editor.engine.InpaintingDeviceAcceptanceTest.stillAndAudioVideoObjectRemovalProduceUsableOutputs": (
         "The optional 174 MiB LaMa model is not installed in the clean managed-device image."
     )
 }
