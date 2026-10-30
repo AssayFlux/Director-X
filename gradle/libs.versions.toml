@@ -1,6 +1,5 @@
 [versions]
 agp = "9.4.1"
-googlePlayBilling = "7.1.1"
 kotlin = "2.4.10"
 ksp = "2.3.11"
 composeBom = "2026.08.00"
@@ -22,8 +21,7 @@ datastore = "1.2.1"
 work = "2.11.2"
 onnxruntime = "1.28.0"
 mediapipe = "1.0.0"
-# Transitive of MediaPipe tasks-core; MediaPipe still pulls 4.26.1, which carries
-# GHSA-735f-pc8j-v9w8 (malformed-input DoS). Constrained upward in app/build.gradle.kts.
+# Transitive of MediaPipe tasks-core; constrained to address the known advisory.
 protobufJavalite = "4.27.5"
 okhttp = "5.5.0"
 lottieCompose = "6.7.1"
@@ -40,7 +38,6 @@ androidxProfileInstaller = "1.4.1"
 androidxUiAutomator = "2.3.0"
 
 [libraries]
-google-play-billing = { group = "com.android.billingclient", name = "billing-ktx", version.ref = "googlePlayBilling" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-exifinterface = { group = "androidx.exifinterface", name = "exifinterface", version.ref = "exifinterface" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
