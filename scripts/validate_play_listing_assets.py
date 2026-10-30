@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate ClearCut's committed Google Play listing package."""
+"""Validate Director X's committed Google Play listing package."""
 from __future__ import annotations
 
 import argparse
@@ -139,7 +139,7 @@ RETIRED_BRAND_NAMES = (b"NovaCut", b"novacut", b"NOVACUT", b"ClearCut", b"CLEARC
 def require_current_branding(path: Path) -> None:
     """Reject retired product branding in anything user-visible.
 
-    The application ID remains `com.novacut.editor` to avoid a package migration in this pass. Listing assets and copy must use the Director X identity.
+    The installed application ID is `com.directorx.editor`. Listing assets and copy must use the Director X identity; legacy identifiers remain only in compatibility data and attribution.
     """
     data = path.read_bytes()
     for name in RETIRED_BRAND_NAMES:
