@@ -285,6 +285,14 @@ java -version
 
 <img src="https://img.shields.io/badge/07-DOWNLOAD_DIRECTOR_X-C79B2E?style=for-the-badge" alt="Download Director X">
 
+<h3>Android 17 audio hardening smoke test</h3>
+
+<p>For API 37 device/emulator QA, enable strict audio-policy handling with the command below, then verify TTS preview, voiceover recording, and video export while checking the <code>AudioHardening</code> log tag. This is a manual verification procedure, not a claim that every device has already passed it.</p>
+
+```bash
+adb shell cmd audio set-hardening throw
+```
+
 <h2>Get the Latest Android APK</h2>
 
 <p>Every successful build uploads a downloadable APK artifact to GitHub Actions.</p>
