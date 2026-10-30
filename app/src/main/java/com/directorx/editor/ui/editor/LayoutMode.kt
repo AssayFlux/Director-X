@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.app.UiModeManager
 import android.content.Context
@@ -9,7 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import com.novacut.editor.engine.DesktopOverride
+import com.directorx.editor.engine.DesktopOverride
 
 /**
  * v3.69 layout-mode resolver.

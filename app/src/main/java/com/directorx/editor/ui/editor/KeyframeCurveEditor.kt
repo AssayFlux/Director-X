@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -39,7 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import com.novacut.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.ClearCutTestTags
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -53,10 +53,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.novacut.editor.R
-import com.novacut.editor.model.Keyframe
-import com.novacut.editor.model.KeyframeInterpolation
-import com.novacut.editor.model.KeyframeProperty
+import com.directorx.editor.R
+import com.directorx.editor.model.Keyframe
+import com.directorx.editor.model.KeyframeInterpolation
+import com.directorx.editor.model.KeyframeProperty
 import java.util.Locale
 
 private val PROPERTY_COLORS = mapOf(
@@ -151,14 +151,14 @@ fun KeyframeCurveEditor(
                     // (punch/attention). Groups are ordered from most-used to most-niche.
                     val applyPreset: (String) -> Unit = { id ->
                         val preset = when (id) {
-                            "kenburns" -> com.novacut.editor.engine.KeyframeEngine.createKenBurnsKeyframes(clipDurationMs)
-                            "fadein" -> com.novacut.editor.engine.KeyframeEngine.createFadeIn()
-                            "fadeout" -> com.novacut.editor.engine.KeyframeEngine.createFadeOut(clipDurationMs)
-                            "pulse" -> com.novacut.editor.engine.KeyframeEngine.createPulse(clipDurationMs)
-                            "shake" -> com.novacut.editor.engine.KeyframeEngine.createShake(clipDurationMs)
-                            "drift" -> com.novacut.editor.engine.KeyframeEngine.createDrift(clipDurationMs)
-                            "spin" -> com.novacut.editor.engine.KeyframeEngine.createSpin360(clipDurationMs)
-                            "zoominout" -> com.novacut.editor.engine.KeyframeEngine.createZoomInOut(clipDurationMs)
+                            "kenburns" -> com.directorx.editor.engine.KeyframeEngine.createKenBurnsKeyframes(clipDurationMs)
+                            "fadein" -> com.directorx.editor.engine.KeyframeEngine.createFadeIn()
+                            "fadeout" -> com.directorx.editor.engine.KeyframeEngine.createFadeOut(clipDurationMs)
+                            "pulse" -> com.directorx.editor.engine.KeyframeEngine.createPulse(clipDurationMs)
+                            "shake" -> com.directorx.editor.engine.KeyframeEngine.createShake(clipDurationMs)
+                            "drift" -> com.directorx.editor.engine.KeyframeEngine.createDrift(clipDurationMs)
+                            "spin" -> com.directorx.editor.engine.KeyframeEngine.createSpin360(clipDurationMs)
+                            "zoominout" -> com.directorx.editor.engine.KeyframeEngine.createZoomInOut(clipDurationMs)
                             else -> emptyList()
                         }
                         onKeyframesChanged(keyframes + preset)
@@ -647,7 +647,7 @@ internal fun CurveCanvas(
         val property = currentActiveProperties.firstOrNull() ?: return false
         val range = getPropertyRange(property)
         val propertyKeyframes = currentKeyframes.filter { it.property == property }
-        val value = com.novacut.editor.engine.KeyframeEngine.getValueAt(
+        val value = com.directorx.editor.engine.KeyframeEngine.getValueAt(
             propertyKeyframes,
             property,
             playheadMs.coerceIn(0L, clipDurationMs),
@@ -781,7 +781,7 @@ internal fun CurveCanvas(
             for (index in 0..steps) {
                 val fraction = index.toFloat() / steps
                 val timeMs = (fraction * clipDurationMs).toLong()
-                val value = com.novacut.editor.engine.KeyframeEngine.getValueAt(propertyKeyframes, property, timeMs)
+                val value = com.directorx.editor.engine.KeyframeEngine.getValueAt(propertyKeyframes, property, timeMs)
                     ?: continue
                 val x = fraction * width
                 val y = (1f - (value - range.first) / rangeSpan) * height

@@ -1,14 +1,14 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.content.Context
 import android.net.Uri
-import com.novacut.editor.R
-import com.novacut.editor.engine.CutListParser
-import com.novacut.editor.model.ImageOverlay
-import com.novacut.editor.model.ImageOverlayType
-import com.novacut.editor.model.MarkerColor
-import com.novacut.editor.model.TextOverlay
-import com.novacut.editor.model.TimelineMarker
+import com.directorx.editor.R
+import com.directorx.editor.engine.CutListParser
+import com.directorx.editor.model.ImageOverlay
+import com.directorx.editor.model.ImageOverlayType
+import com.directorx.editor.model.MarkerColor
+import com.directorx.editor.model.TextOverlay
+import com.directorx.editor.model.TimelineMarker
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class OverlayDelegate(

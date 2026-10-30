@@ -1,6 +1,6 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.ClearCutAccents
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -9,9 +9,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
-import com.novacut.editor.engine.KeyframeEngine
-import com.novacut.editor.model.Keyframe
-import com.novacut.editor.model.KeyframeProperty
+import com.directorx.editor.engine.KeyframeEngine
+import com.directorx.editor.model.Keyframe
+import com.directorx.editor.model.KeyframeProperty
 
 /**
  * Draws the motion path (position X/Y keyframes) on the video preview as a bezier curve.

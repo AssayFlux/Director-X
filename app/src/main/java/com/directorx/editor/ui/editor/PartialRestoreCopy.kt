@@ -1,9 +1,9 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.content.res.Resources
-import com.novacut.editor.R
-import com.novacut.editor.engine.ProjectRestoreReport
-import com.novacut.editor.engine.RestoreElementKind
+import com.directorx.editor.R
+import com.directorx.editor.engine.ProjectRestoreReport
+import com.directorx.editor.engine.RestoreElementKind
 
 /** Render restore losses with locale-aware quantities instead of persisted log labels. */
 internal fun partialRestoreSummary(

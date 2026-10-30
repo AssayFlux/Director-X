@@ -1,6 +1,6 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.engine.MediaRelinkProbe
+import com.directorx.editor.engine.MediaRelinkProbe
 import java.util.Locale
 
 enum class MediaBinFilter {
