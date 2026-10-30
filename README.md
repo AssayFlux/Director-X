@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/icon.svg" alt="Director X — official application icon" width="210" />
+<img src="assets/icon.png" alt="Director X — official application icon" width="450" />
 
 <h1>DIRECTOR X</h1>
 
