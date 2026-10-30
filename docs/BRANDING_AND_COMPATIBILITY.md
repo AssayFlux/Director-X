@@ -37,4 +37,4 @@ Identical file bytes are not sufficient evidence that files are redundant. Andro
 
 The benchmark helper filename `ClearCutBenchmarkFlows.kt` was renamed to `DirectorXBenchmarkFlows.kt`. The Android application ID is `com.directorx.editor`; the source namespace remains `com.directorx.editor`. Benchmark launch targets and shortcut actions use the new application ID. The package identity registry records the separate source namespace and new-install migration policy. The signing key must be retained for future Director X updates.
 
-This migration changes the installed Android application ID, while retaining the internal Kotlin source namespace. Build, instrumentation, signing, and device verification are still required.
+This migration changes source/package and schema snapshot paths only; it does not change the installed Android application ID. Build, instrumentation, signing, and device verification are still required.
