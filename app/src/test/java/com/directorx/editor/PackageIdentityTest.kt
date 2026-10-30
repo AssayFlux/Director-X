@@ -36,7 +36,7 @@ class PackageIdentityTest {
         val manifest = locate("app/src/main/AndroidManifest.xml").readText()
         val shortcuts = locate("app/src/main/res/xml/shortcuts.xml").readText()
         val parser = locate("app/src/main/java/com/directorx/editor/engine/IncomingDocumentIntentParser.kt").readText()
-        val plugins = locate("app/src/main/java/com/novacut/editor/engine/PluginRegistry.kt").readText()
+        val plugins = locate("app/src/main/java/com/directorx/editor/engine/PluginRegistry.kt").readText()
 
         assertTrue(manifest.contains("\${applicationId}.androidx-startup"))
         assertTrue(manifest.contains("\${applicationId}.fileprovider"))
