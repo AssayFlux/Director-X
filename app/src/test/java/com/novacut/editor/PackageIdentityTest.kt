@@ -62,10 +62,10 @@ class PackageIdentityTest {
         }
 
         assertTrue(locate("app/src/main/res/values/strings.xml").readText().contains(
-            "<string name=\"app_name\">ClearCut</string>"
+            "<string name=\"app_name\">Director X</string>"
         ))
         assertTrue(locate("app/src/main/res/values-es/strings.xml").readText().contains(
-            "<string name=\"app_name\">ClearCut</string>"
+            "<string name=\"app_name\">Director X</string>"
         ))
     }
 
