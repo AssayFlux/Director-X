@@ -1,6 +1,6 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.StabilizationProfile
+import com.directorx.editor.model.StabilizationProfile
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.After

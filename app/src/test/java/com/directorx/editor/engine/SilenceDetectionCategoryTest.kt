@@ -1,7 +1,7 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.engine.SilenceDetectionEngine.CutProposal
-import com.novacut.editor.engine.SilenceDetectionEngine.ProposalCategory
+import com.directorx.editor.engine.SilenceDetectionEngine.CutProposal
+import com.directorx.editor.engine.SilenceDetectionEngine.ProposalCategory
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
