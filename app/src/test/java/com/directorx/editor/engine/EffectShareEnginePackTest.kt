@@ -1,6 +1,6 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.ColorGrade
+import com.directorx.editor.model.ColorGrade
 import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
 import org.json.JSONObject

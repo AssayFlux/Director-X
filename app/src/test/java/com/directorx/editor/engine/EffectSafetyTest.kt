@@ -1,9 +1,9 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.EffectCategory
-import com.novacut.editor.model.EffectType
-import com.novacut.editor.model.TransitionEasing
-import com.novacut.editor.ui.editor.genericAddableEffectTypes
+import com.directorx.editor.model.EffectCategory
+import com.directorx.editor.model.EffectType
+import com.directorx.editor.model.TransitionEasing
+import com.directorx.editor.ui.editor.genericAddableEffectTypes
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

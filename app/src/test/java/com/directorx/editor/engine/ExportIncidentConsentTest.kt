@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import org.json.JSONObject
 import org.junit.Assert.assertEquals

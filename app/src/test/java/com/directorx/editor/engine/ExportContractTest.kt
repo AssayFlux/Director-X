@@ -1,13 +1,13 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.FakeUri
 import android.net.Uri
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.ExportConfig
-import com.novacut.editor.model.PlatformPreset
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
-import com.novacut.editor.model.VideoCodec
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.ExportConfig
+import com.directorx.editor.model.PlatformPreset
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
+import com.directorx.editor.model.VideoCodec
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

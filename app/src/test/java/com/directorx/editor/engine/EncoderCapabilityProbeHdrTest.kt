@@ -1,6 +1,6 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.model.VideoCodec
+import com.directorx.editor.model.VideoCodec
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
