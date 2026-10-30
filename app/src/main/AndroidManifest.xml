@@ -53,10 +53,10 @@
             <!-- Explicit launcher/dynamic shortcuts must still match a declared
                  action when Android 16 strict intent matching is enabled. -->
             <intent-filter>
-                <action android:name="com.novacut.editor.action.NEW_PROJECT" />
-                <action android:name="com.novacut.editor.action.OPEN_RECENT" />
-                <action android:name="com.novacut.editor.action.RESUME_RECOVERED" />
-                <action android:name="com.novacut.editor.action.OPEN_LAST_PROJECT" />
+                <action android:name="com.directorx.editor.action.NEW_PROJECT" />
+                <action android:name="com.directorx.editor.action.OPEN_RECENT" />
+                <action android:name="com.directorx.editor.action.RESUME_RECOVERED" />
+                <action android:name="com.directorx.editor.action.OPEN_LAST_PROJECT" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <intent-filter>
