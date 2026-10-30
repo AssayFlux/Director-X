@@ -160,8 +160,8 @@ The application separates presentation, application state, persistence, and medi
 |---|---|
 | Application ID | `com.directorx.editor` |
 | Kotlin namespace | `com.directorx.editor` |
-| Version name | `3.82.0` |
-| Version code | `301` |
+| Android build `versionName` | `3.82.0` (Gradle/package metadata) |
+| Android build `versionCode` | `301` |
 | Minimum SDK | API 26 |
 | Compile SDK | API 37 |
 | Target SDK | API 37 |
