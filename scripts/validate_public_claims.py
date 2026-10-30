@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate public release copy against ClearCut's shipped capability gates."""
+"""Validate Director X public release copy against the shipped capability gates."""
 from __future__ import annotations
 
 import argparse
@@ -13,9 +13,9 @@ from generate_capability_registry import RegistryError, check_or_write, load_reg
 
 
 ROOT = Path(__file__).resolve().parents[1]
-AI_REQUIREMENTS = ROOT / "app" / "src" / "main" / "java" / "com" / "novacut" / "editor" / "engine" / "AiToolRequirements.kt"
-C2PA_ENGINE = ROOT / "app" / "src" / "main" / "java" / "com" / "novacut" / "editor" / "engine" / "C2paExportEngine.kt"
-DIRECT_PUBLISH_ENGINE = ROOT / "app" / "src" / "main" / "java" / "com" / "novacut" / "editor" / "engine" / "DirectPublishEngine.kt"
+AI_REQUIREMENTS = ROOT / "app" / "src" / "main" / "java" / "com" / "directorx" / "editor" / "engine" / "AiToolRequirements.kt"
+C2PA_ENGINE = ROOT / "app" / "src" / "main" / "java" / "com" / "directorx" / "editor" / "engine" / "C2paExportEngine.kt"
+DIRECT_PUBLISH_ENGINE = ROOT / "app" / "src" / "main" / "java" / "com" / "directorx" / "editor" / "engine" / "DirectPublishEngine.kt"
 
 
 class ClaimError(RuntimeError):
