@@ -1,14 +1,14 @@
 # Director X
 
-**Designed by AssayFlux**
+**Designed and maintained by AssayFlux**
 
-Director X is an Android video editor maintained by AssayFlux. This fork retains its inherited editing engine and supporting workflows while presenting a distinct Director X product identity and visual system.
+Director X is an Android video editor maintained by AssayFlux. It builds on an existing editing-engine foundation and presents a distinct Director X product identity and visual system.
 
 ## Product identity
 
 - Product: Director X
-- Maintainer / design credit: AssayFlux
-- Android application identity: inherited package lineage is intentionally retained in this compatibility-preserving pass.
+- Maintainer and design credit: AssayFlux
+- Android application identity: inherited package lineage is retained for compatibility in this development pass.
 - Brand assets and design tokens are maintained for Director X.
 
 ## Design system
@@ -22,10 +22,14 @@ Director X is an Android video editor maintained by AssayFlux. This fork retains
 - Typography: serif display headings with sans-serif controls and metadata
 - Interaction: restrained tactile surfaces and phone-friendly touch targets
 
-## Source and attribution
+## Project history and legal notices
 
-This is an AssayFlux-maintained fork derived from the upstream ClearCut codebase. AssayFlux branding identifies the current product and maintainer; it does not claim ownership of upstream or third-party contributions. Preserve the upstream MIT copyright notice and all third-party licence texts, NOTICE material, source-offer obligations, and required attributions. The protected source notices are catalogued in [ForD](ForD/README.md), while the legally required notices remain available at their required source/distribution locations.
+Director X is an AssayFlux-maintained derivative project. We acknowledge and thank the original ClearCut developer and upstream contributors in [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md).
+
+AssayFlux branding identifies the current product and maintainer; it does not claim ownership of inherited or third-party contributions. The root [LICENSE](LICENSE) applies only to material its named copyright holder is entitled to license. Preserve all applicable upstream and component copyright notices, licence texts, NOTICE material, source-offer obligations, and corresponding-source access. See [UPSTREAM-LICENSE-MIT.txt](UPSTREAM-LICENSE-MIT.txt) and [NOTICE](NOTICE), together with licence resources included in the relevant project and distribution locations.
 
 ## Build and verification
 
-Open this project in a compatible Android Studio installation and allow Gradle to sync. The project uses Kotlin, Jetpack Compose, Android media APIs, and pinned native FFmpegKitNext dependencies. Run unit tests, lint, and Android builds before distributing it. This branding pass is not a claim that every inherited feature has been independently revalidated.
+Open this project in a compatible Android Studio installation and allow Gradle to sync. The project uses Kotlin, Jetpack Compose, Android media APIs, and pinned native media dependencies. Run unit tests, lint, and Android builds before distributing it.
+
+A documentation or branding change does not establish that every inherited feature has been independently revalidated or that a release is legally cleared for distribution. Review the exact components and licence obligations included in each release.
