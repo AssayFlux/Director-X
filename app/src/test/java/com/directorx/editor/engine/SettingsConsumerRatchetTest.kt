@@ -32,8 +32,8 @@ class SettingsConsumerRatchetTest {
     @Test
     fun everySettingHasAConsumerBeyondTheSettingsScreen() {
         val sourceRoot = listOf(
-            File("app/src/main/java/com/novacut/editor"),
-            File("../app/src/main/java/com/novacut/editor"),
+            File("app/src/main/java/com/directorx/editor"),
+            File("../app/src/main/java/com/directorx/editor"),
         ).first { it.isDirectory }
 
         val repository = File(sourceRoot, "engine/SettingsRepository.kt").readText()
