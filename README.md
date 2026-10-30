@@ -11,6 +11,10 @@ Director X is an Android video-editing application maintained by AssayFlux. It b
 - Brand palette: warm cream, beige, charcoal, taupe, amber/brass and sage.
 - Android identity: the current Gradle configuration still declares `com.novacut.editor` as both namespace and application ID. Proposed replacement IDs in older planning documents are not yet the live build identity.
 
+## Branding and compatibility policy
+
+See [BRANDING_AND_COMPATIBILITY.md](docs/BRANDING_AND_COMPATIBILITY.md) for naming conventions, safe path-renaming rules, and legacy identifiers intentionally retained for Android install/data compatibility.
+
 ## Project history and technical attribution
 
 See [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md) for the detailed project history, original developer acknowledgment, current technical inventory, upstream-versus-maintainer boundaries, dependency families, native component versions and upgrade documentation requirements.
