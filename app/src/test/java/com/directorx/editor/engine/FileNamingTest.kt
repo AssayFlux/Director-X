@@ -12,7 +12,7 @@ class FileNamingTest {
 
     @Test
     fun `sanitizeFileName falls back for blank names`() {
-        assertEquals("ClearCut", sanitizeFileName("   "))
+        assertEquals("Director X", sanitizeFileName("   "))
         assertEquals("backup", sanitizeFileName("", fallback = "backup"))
     }
 
