@@ -1,5 +1,6 @@
 [versions]
 agp = "9.4.1"
+googlePlayBilling = "7.1.1"
 kotlin = "2.4.10"
 ksp = "2.3.11"
 composeBom = "2026.08.00"
@@ -39,6 +40,7 @@ androidxProfileInstaller = "1.4.1"
 androidxUiAutomator = "2.3.0"
 
 [libraries]
+google-play-billing = { group = "com.android.billingclient", name = "billing-ktx", version.ref = "googlePlayBilling" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-exifinterface = { group = "androidx.exifinterface", name = "exifinterface", version.ref = "exifinterface" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
