@@ -69,7 +69,7 @@ The current `app/build.gradle.kts` declares:
 - Version name: 3.82.0
 - Main UI/build technology: Kotlin and Jetpack Compose
 
-The installed application ID is `com.directorx.editor`. The Kotlin source namespace remains `com.directorx.editor` as an internal implementation namespace for this staged migration. Existing installations under the previous application ID are separate apps; project transfer requires export/import. Keep the existing signing key for future updates to the Director X package.
+The installed application ID and Kotlin source namespace are both `com.directorx.editor`. The previous NovaCut package identity was `com.novacut.editor`; this is a new-install migration, not an in-place update. Existing installations under the previous application ID are separate apps; project transfer requires export/import. Keep the existing signing key for future updates to the Director X package.
 
 The Kotlin source tree and Room schema snapshot directory have been migrated to `com.directorx.editor`. Historical Room schema versions and their contents are preserved. Legacy serialized data identifiers and project formats remain unchanged.
 
