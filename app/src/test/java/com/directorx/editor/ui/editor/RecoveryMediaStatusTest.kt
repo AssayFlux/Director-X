@@ -1,9 +1,9 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.engine.MediaHealthIssue
-import com.novacut.editor.engine.MediaHealthIssueType
-import com.novacut.editor.engine.MediaHealthReport
-import com.novacut.editor.engine.MediaHealthSeverity
+import com.directorx.editor.engine.MediaHealthIssue
+import com.directorx.editor.engine.MediaHealthIssueType
+import com.directorx.editor.engine.MediaHealthReport
+import com.directorx.editor.engine.MediaHealthSeverity
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

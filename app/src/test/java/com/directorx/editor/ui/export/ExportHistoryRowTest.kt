@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.export
+package com.directorx.editor.ui.export
 
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
@@ -7,15 +7,15 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
 import androidx.compose.ui.test.onNodeWithTag
-import com.novacut.editor.R
-import com.novacut.editor.engine.ExportContractDisposition
-import com.novacut.editor.engine.ExportHistoryEntry
-import com.novacut.editor.engine.ExportHistoryStatus
-import com.novacut.editor.engine.ExportObservation
-import com.novacut.editor.engine.buildExportHistoryEntry
-import com.novacut.editor.model.ExportConfig
-import com.novacut.editor.model.VideoCodec
-import com.novacut.editor.ui.ClearCutTestTags
+import com.directorx.editor.R
+import com.directorx.editor.engine.ExportContractDisposition
+import com.directorx.editor.engine.ExportHistoryEntry
+import com.directorx.editor.engine.ExportHistoryStatus
+import com.directorx.editor.engine.ExportObservation
+import com.directorx.editor.engine.buildExportHistoryEntry
+import com.directorx.editor.model.ExportConfig
+import com.directorx.editor.model.VideoCodec
+import com.directorx.editor.ui.ClearCutTestTags
 import androidx.compose.ui.test.assertTextEquals
 import org.junit.Assert.assertEquals
 import org.junit.Rule

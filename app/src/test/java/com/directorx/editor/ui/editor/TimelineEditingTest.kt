@@ -1,9 +1,9 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.net.FakeUri
 import androidx.media3.common.Player
-import com.novacut.editor.engine.playbackSessionNeedsReset
-import com.novacut.editor.model.*
+import com.directorx.editor.engine.playbackSessionNeedsReset
+import com.directorx.editor.model.*
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals

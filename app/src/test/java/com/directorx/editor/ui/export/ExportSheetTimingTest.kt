@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.export
+package com.directorx.editor.ui.export
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull

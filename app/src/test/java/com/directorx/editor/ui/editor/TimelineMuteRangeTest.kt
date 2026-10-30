@@ -1,12 +1,12 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.net.FakeUri
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.KeyframeProperty
-import com.novacut.editor.model.TimelineRange
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
-import com.novacut.editor.engine.KeyframeEngine
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.KeyframeProperty
+import com.directorx.editor.model.TimelineRange
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
+import com.directorx.editor.engine.KeyframeEngine
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

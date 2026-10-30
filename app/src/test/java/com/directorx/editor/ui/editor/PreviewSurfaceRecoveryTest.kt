@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import androidx.media3.exoplayer.ExoTimeoutException
 import org.junit.Assert.assertFalse

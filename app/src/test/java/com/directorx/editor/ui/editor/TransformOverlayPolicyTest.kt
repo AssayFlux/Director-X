@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import androidx.compose.ui.geometry.Offset
 import org.junit.Assert.assertEquals

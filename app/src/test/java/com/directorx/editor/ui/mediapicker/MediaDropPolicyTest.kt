@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.mediapicker
+package com.directorx.editor.ui.mediapicker
 
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.export
+package com.directorx.editor.ui.export
 
 import java.io.File
 import org.junit.Assert.assertFalse
