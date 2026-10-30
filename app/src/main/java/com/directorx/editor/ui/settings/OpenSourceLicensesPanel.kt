@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.settings
+package com.directorx.editor.ui.settings
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -26,12 +26,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.novacut.editor.R
-import com.novacut.editor.engine.OpenSourceLicenseNotice
-import com.novacut.editor.engine.OpenSourceLicenses
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
-import com.novacut.editor.ui.theme.Radius
+import com.directorx.editor.R
+import com.directorx.editor.engine.OpenSourceLicenseNotice
+import com.directorx.editor.engine.OpenSourceLicenses
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.Radius
 
 @Composable
 fun OpenSourceLicensesPanel(

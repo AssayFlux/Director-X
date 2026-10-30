@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.theme
+package com.directorx.editor.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -13,7 +13,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.novacut.editor.engine.AppearanceMode
+import com.directorx.editor.engine.AppearanceMode
 
 // Director X vintage darkroom palette. Names are kept stable to avoid breaking
 // existing editor modules; values now follow the warm-cream brand system.

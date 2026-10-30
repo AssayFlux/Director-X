@@ -1,20 +1,20 @@
-package com.novacut.editor.ui.settings
+package com.directorx.editor.ui.settings
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.novacut.editor.R
-import com.novacut.editor.engine.AppSettings
-import com.novacut.editor.engine.AppearanceMode
-import com.novacut.editor.engine.ConnectivityObserver
-import com.novacut.editor.engine.ModelDownloadManager
-import com.novacut.editor.engine.ProxyEngine
-import com.novacut.editor.engine.managedMediaDir
-import com.novacut.editor.engine.SettingsRepository
-import com.novacut.editor.engine.UpdateChecker
-import com.novacut.editor.engine.segmentation.SegmentationEngine
-import com.novacut.editor.engine.whisper.WhisperEngine
-import com.novacut.editor.model.*
+import com.directorx.editor.R
+import com.directorx.editor.engine.AppSettings
+import com.directorx.editor.engine.AppearanceMode
+import com.directorx.editor.engine.ConnectivityObserver
+import com.directorx.editor.engine.ModelDownloadManager
+import com.directorx.editor.engine.ProxyEngine
+import com.directorx.editor.engine.managedMediaDir
+import com.directorx.editor.engine.SettingsRepository
+import com.directorx.editor.engine.UpdateChecker
+import com.directorx.editor.engine.segmentation.SegmentationEngine
+import com.directorx.editor.engine.whisper.WhisperEngine
+import com.directorx.editor.model.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -84,7 +84,7 @@ class SettingsViewModel @Inject constructor(
     private val repo: SettingsRepository,
     private val whisperEngine: WhisperEngine,
     private val segmentationEngine: SegmentationEngine,
-    private val mediaPipeGate: com.novacut.editor.engine.MediaPipeUsageGate,
+    private val mediaPipeGate: com.directorx.editor.engine.MediaPipeUsageGate,
     private val diagnosticBundleBuilder: DiagnosticBundleBuilder,
     private val updateChecker: UpdateChecker,
     private val proxyEngine: ProxyEngine,
@@ -268,7 +268,7 @@ class SettingsViewModel @Inject constructor(
             } catch (e: CancellationException) {
                 throw e
             } catch (t: Throwable) {
-                com.novacut.editor.engine.AppLog.w("SettingsViewModel", "proxy cache clear failed", t)
+                com.directorx.editor.engine.AppLog.w("SettingsViewModel", "proxy cache clear failed", t)
                 message = appContext.getString(R.string.settings_proxy_clear_failed_toast)
             } finally {
                 val proxyBytes = runCatching {
@@ -357,7 +357,7 @@ class SettingsViewModel @Inject constructor(
             } catch (error: CancellationException) {
                 throw error
             } catch (e: Exception) {
-                com.novacut.editor.engine.AppLog.e("SettingsViewModel", "DataStore read failed, using defaults", e)
+                com.directorx.editor.engine.AppLog.e("SettingsViewModel", "DataStore read failed, using defaults", e)
             }
             val latest = withContext(Dispatchers.IO) { repo.latestSettingsResetReport() }
             _settingsResetNotice.value = latest?.let {

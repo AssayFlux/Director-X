@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.theme
+package com.directorx.editor.ui.theme
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember

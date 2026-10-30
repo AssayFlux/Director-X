@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.mediapicker
+package com.directorx.editor.ui.mediapicker
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -45,16 +45,16 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.novacut.editor.R
-import com.novacut.editor.engine.MediaSequenceCandidate
-import com.novacut.editor.engine.MediaSequenceOrder
-import com.novacut.editor.engine.moveMediaSequenceItem
-import com.novacut.editor.engine.orderMediaSequence
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
-import com.novacut.editor.ui.theme.Radius
-import com.novacut.editor.ui.theme.Spacing
-import com.novacut.editor.ui.theme.TouchTarget
+import com.directorx.editor.R
+import com.directorx.editor.engine.MediaSequenceCandidate
+import com.directorx.editor.engine.MediaSequenceOrder
+import com.directorx.editor.engine.moveMediaSequenceItem
+import com.directorx.editor.engine.orderMediaSequence
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.Radius
+import com.directorx.editor.ui.theme.Spacing
+import com.directorx.editor.ui.theme.TouchTarget
 import java.text.DateFormat
 import java.util.Date
 

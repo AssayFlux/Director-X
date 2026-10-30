@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.projects
+package com.directorx.editor.ui.projects
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -25,19 +25,19 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.novacut.editor.R
-import com.novacut.editor.engine.UserTemplate
-import com.novacut.editor.model.*
-import com.novacut.editor.ui.ClearCutTestTags
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
-import com.novacut.editor.ui.theme.ClearCutChromeIconButton
-import com.novacut.editor.ui.theme.ClearCutDialogIcon
-import com.novacut.editor.ui.theme.ClearCutMetricPill
-import com.novacut.editor.ui.theme.ClearCutSectionHeader
-import com.novacut.editor.ui.theme.ClearCutSecondaryButton
-import com.novacut.editor.ui.theme.Radius
-import com.novacut.editor.ui.theme.Spacing
+import com.directorx.editor.R
+import com.directorx.editor.engine.UserTemplate
+import com.directorx.editor.model.*
+import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.ClearCutDialogIcon
+import com.directorx.editor.ui.theme.ClearCutMetricPill
+import com.directorx.editor.ui.theme.ClearCutSectionHeader
+import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.Radius
+import com.directorx.editor.ui.theme.Spacing
 
 data class ProjectTemplateUI(
     val id: String,

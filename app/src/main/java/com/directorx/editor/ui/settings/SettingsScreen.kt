@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.settings
+package com.directorx.editor.ui.settings
 
 import android.app.ActivityManager
 import android.Manifest
@@ -52,29 +52,29 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.ContextCompat
-import com.novacut.editor.BuildConfig
-import com.novacut.editor.ClearCutApp
-import com.novacut.editor.R
-import com.novacut.editor.engine.AppearanceMode
-import com.novacut.editor.engine.AppSettings
-import com.novacut.editor.engine.PrivacyDashboard
-import com.novacut.editor.engine.ThumbnailCachePolicy
-import com.novacut.editor.engine.segmentation.SegmentationModelState
-import com.novacut.editor.engine.whisper.WhisperModelState
-import com.novacut.editor.model.*
-import com.novacut.editor.ui.ClearCutTestTags
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.ClearCutChromeIconButton
-import com.novacut.editor.ui.theme.ClearCutDialogIcon
-import com.novacut.editor.ui.theme.ClearCutFilterChip
-import com.novacut.editor.ui.theme.LocalClearCutColors
-import com.novacut.editor.ui.theme.ClearCutMetricPill
-import com.novacut.editor.ui.theme.ClearCutPrimaryButton
-import com.novacut.editor.ui.theme.ClearCutScreenBackground
-import com.novacut.editor.ui.theme.ClearCutSecondaryButton
-import com.novacut.editor.ui.theme.Motion
-import com.novacut.editor.ui.theme.Radius
-import com.novacut.editor.ui.theme.Spacing
+import com.directorx.editor.BuildConfig
+import com.directorx.editor.ClearCutApp
+import com.directorx.editor.R
+import com.directorx.editor.engine.AppearanceMode
+import com.directorx.editor.engine.AppSettings
+import com.directorx.editor.engine.PrivacyDashboard
+import com.directorx.editor.engine.ThumbnailCachePolicy
+import com.directorx.editor.engine.segmentation.SegmentationModelState
+import com.directorx.editor.engine.whisper.WhisperModelState
+import com.directorx.editor.model.*
+import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.ClearCutDialogIcon
+import com.directorx.editor.ui.theme.ClearCutFilterChip
+import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutMetricPill
+import com.directorx.editor.ui.theme.ClearCutPrimaryButton
+import com.directorx.editor.ui.theme.ClearCutScreenBackground
+import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.Motion
+import com.directorx.editor.ui.theme.Radius
+import com.directorx.editor.ui.theme.Spacing
 import java.io.File
 
 private enum class SettingsAiModelRemovalTarget {
@@ -375,7 +375,7 @@ fun SettingsScreen(
                     label = stringResource(R.string.settings_mediapipe_consent),
                     description = stringResource(R.string.settings_mediapipe_consent_description),
                     checked = settings.mediaPipeConsentVersion >=
-                        com.novacut.editor.engine.MediaPipeUsageGate.CONSENT_VERSION,
+                        com.directorx.editor.engine.MediaPipeUsageGate.CONSENT_VERSION,
                     onChanged = viewModel::setMediaPipeConsent
                 )
                 SettingsStorageOverview(
@@ -493,7 +493,7 @@ fun SettingsScreen(
             title = stringResource(R.string.settings_appearance),
             description = stringResource(R.string.settings_appearance_description)
         ) {
-            val appearanceModes = com.novacut.editor.ui.theme.ClearCutThemeDefaults.availableThemes
+            val appearanceModes = com.directorx.editor.ui.theme.ClearCutThemeDefaults.availableThemes
             SettingsDropdown(
                 icon = Icons.Default.Contrast,
                 accent = ClearCutAccents.Sky,
@@ -796,7 +796,7 @@ fun SettingsScreen(
                                         canRemoveWhisperModel = canRemoveWhisperModel,
                                         canRemoveSegmentationModel = canRemoveSegmentationModel,
                                         mediaPipeConsentGranted = settings.mediaPipeConsentVersion >=
-                                            com.novacut.editor.engine.MediaPipeUsageGate.CONSENT_VERSION,
+                                            com.directorx.editor.engine.MediaPipeUsageGate.CONSENT_VERSION,
                                         updateCheckEnabled = settings.updateCheckEnabled,
                                         onExportDiagnostics = {
                                             showPrivacyDashboard = false
@@ -1882,7 +1882,7 @@ private fun SettingsTileText(
     label: String,
     description: String?,
     modifier: Modifier,
-    colors: com.novacut.editor.ui.theme.ClearCutSemanticColors
+    colors: com.directorx.editor.ui.theme.ClearCutSemanticColors
 ) {
     Column(
         modifier = modifier,

@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.theme
+package com.directorx.editor.ui.theme
 
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.Spring

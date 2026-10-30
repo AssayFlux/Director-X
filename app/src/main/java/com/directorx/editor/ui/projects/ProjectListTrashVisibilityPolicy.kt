@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.projects
+package com.directorx.editor.ui.projects
 
 /**
  * When the project list may collapse to a bare empty state.

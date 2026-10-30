@@ -1,12 +1,12 @@
-package com.novacut.editor.ui.settings
+package com.directorx.editor.ui.settings
 
 import android.content.Context
-import com.novacut.editor.engine.DiagnosticExportEngine
-import com.novacut.editor.engine.ProjectAutoSave
-import com.novacut.editor.engine.SettingsRepository
-import com.novacut.editor.engine.db.ProjectDao
-import com.novacut.editor.engine.segmentation.SegmentationEngine
-import com.novacut.editor.engine.whisper.WhisperEngine
+import com.directorx.editor.engine.DiagnosticExportEngine
+import com.directorx.editor.engine.ProjectAutoSave
+import com.directorx.editor.engine.SettingsRepository
+import com.directorx.editor.engine.db.ProjectDao
+import com.directorx.editor.engine.segmentation.SegmentationEngine
+import com.directorx.editor.engine.whisper.WhisperEngine
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first

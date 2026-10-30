@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.projects
+package com.directorx.editor.ui.projects
 
 import android.os.Build
 import android.text.format.DateUtils
@@ -29,17 +29,17 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import com.novacut.editor.R
-import com.novacut.editor.engine.CrashRecordSummary
-import com.novacut.editor.engine.ProcessExitRecorder
-import com.novacut.editor.engine.ProcessExitSnapshot
-import com.novacut.editor.ui.ClearCutTestTags
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.ClearCutChromeIconButton
-import com.novacut.editor.ui.theme.ClearCutSecondaryButton
-import com.novacut.editor.ui.theme.LocalClearCutColors
-import com.novacut.editor.ui.theme.Radius
-import com.novacut.editor.ui.theme.Spacing
+import com.directorx.editor.R
+import com.directorx.editor.engine.CrashRecordSummary
+import com.directorx.editor.engine.ProcessExitRecorder
+import com.directorx.editor.engine.ProcessExitSnapshot
+import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.Radius
+import com.directorx.editor.ui.theme.Spacing
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.settings
+package com.directorx.editor.ui.settings
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -30,13 +30,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.novacut.editor.R
-import com.novacut.editor.engine.PrivacyDashboard
-import com.novacut.editor.engine.PrivacyDashboard.DashboardEntry
-import com.novacut.editor.engine.PrivacyDashboard.Section
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
-import com.novacut.editor.ui.theme.Radius
+import com.directorx.editor.R
+import com.directorx.editor.engine.PrivacyDashboard
+import com.directorx.editor.engine.PrivacyDashboard.DashboardEntry
+import com.directorx.editor.engine.PrivacyDashboard.Section
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.Radius
 
 /**
  * Settings → Privacy panel (R5.5c UI / RESEARCH_FEATURE_PLAN_2026-05-25
