@@ -1,10 +1,10 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import androidx.media3.common.C
 import androidx.media3.common.audio.AudioProcessor
 import androidx.media3.common.audio.BaseAudioProcessor
 import androidx.media3.common.util.UnstableApi
-import com.novacut.editor.model.AudioEffect
+import com.directorx.editor.model.AudioEffect
 import java.nio.ByteBuffer
 
 /**

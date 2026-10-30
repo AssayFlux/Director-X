@@ -1,7 +1,7 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.util.Log as AndroidLog
-import com.novacut.editor.BuildConfig
+import com.directorx.editor.BuildConfig
 
 /**
  * The single application logging boundary.

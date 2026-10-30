@@ -1,10 +1,10 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import androidx.room3.Room
 import androidx.sqlite.driver.AndroidSQLiteDriver
-import com.novacut.editor.engine.db.ProjectDatabase
-import com.novacut.editor.engine.db.ProjectDao
+import com.directorx.editor.engine.db.ProjectDatabase
+import com.directorx.editor.engine.db.ProjectDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

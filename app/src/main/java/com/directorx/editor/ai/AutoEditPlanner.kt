@@ -1,4 +1,4 @@
-package com.novacut.editor.ai
+package com.directorx.editor.ai
 
 import kotlin.math.min
 

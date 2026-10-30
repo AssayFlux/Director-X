@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 /**
  * EU AI Act Article 50 disclosure classification for ClearCut's AI tools.
