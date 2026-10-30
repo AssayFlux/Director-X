@@ -1,11 +1,11 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import androidx.media3.common.Player
-import com.novacut.editor.engine.PreviewRenderPolicy
-import com.novacut.editor.engine.buildTimelineSequenceSteps
-import com.novacut.editor.engine.playbackSessionNeedsReset
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.EffectType
+import com.directorx.editor.engine.PreviewRenderPolicy
+import com.directorx.editor.engine.buildTimelineSequenceSteps
+import com.directorx.editor.engine.playbackSessionNeedsReset
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.EffectType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -41,9 +41,9 @@ class EditorPlaybackBehaviorTest {
             ),
             steps.map {
                 when (it) {
-                    is com.novacut.editor.engine.TimelineSequenceStep.GapStep ->
+                    is com.directorx.editor.engine.TimelineSequenceStep.GapStep ->
                         TimelineSequenceStepDescription.Gap(it.timelineStartMs, it.durationMs)
-                    is com.novacut.editor.engine.TimelineSequenceStep.ClipStep ->
+                    is com.directorx.editor.engine.TimelineSequenceStep.ClipStep ->
                         TimelineSequenceStepDescription.Clip(it.clip.id, it.timelineStartMs, it.durationMs)
                 }
             },

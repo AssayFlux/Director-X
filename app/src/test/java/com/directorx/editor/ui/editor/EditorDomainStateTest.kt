@@ -1,9 +1,9 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.engine.AiToolRequirements
-import com.novacut.editor.engine.CaptionTranslationEngine
-import com.novacut.editor.engine.ExportState
-import com.novacut.editor.engine.ProjectArchive
+import com.directorx.editor.engine.AiToolRequirements
+import com.directorx.editor.engine.CaptionTranslationEngine
+import com.directorx.editor.engine.ExportState
+import com.directorx.editor.engine.ProjectArchive
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame

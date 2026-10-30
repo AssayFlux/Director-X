@@ -1,10 +1,10 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.engine.AutoSaveState
-import com.novacut.editor.engine.ProjectAutoSave
-import com.novacut.editor.engine.ProjectDocumentApplicator
-import com.novacut.editor.engine.ProjectPersistenceCoordinator
-import com.novacut.editor.model.Project
+import com.directorx.editor.engine.AutoSaveState
+import com.directorx.editor.engine.ProjectAutoSave
+import com.directorx.editor.engine.ProjectDocumentApplicator
+import com.directorx.editor.engine.ProjectPersistenceCoordinator
+import com.directorx.editor.model.Project
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

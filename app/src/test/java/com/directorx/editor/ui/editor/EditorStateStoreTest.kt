@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking

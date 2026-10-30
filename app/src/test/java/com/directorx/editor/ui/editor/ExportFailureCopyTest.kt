@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.R
-import com.novacut.editor.engine.VideoEngine
+import com.directorx.editor.R
+import com.directorx.editor.engine.VideoEngine
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test

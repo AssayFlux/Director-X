@@ -1,10 +1,10 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import com.novacut.editor.engine.AiUsageLedger
-import com.novacut.editor.engine.TemplateManager
-import com.novacut.editor.model.ProjectSnapshot
+import com.directorx.editor.engine.AiUsageLedger
+import com.directorx.editor.engine.TemplateManager
+import com.directorx.editor.model.ProjectSnapshot
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
