@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4

@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -7,9 +7,9 @@ import android.media.MediaFormat
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.novacut.editor.model.Mask
-import com.novacut.editor.model.MaskPoint
-import com.novacut.editor.model.MaskType
+import com.directorx.editor.model.Mask
+import com.directorx.editor.model.MaskPoint
+import com.directorx.editor.model.MaskType
 import java.io.File
 import java.nio.ByteBuffer
 import kotlinx.coroutines.runBlocking

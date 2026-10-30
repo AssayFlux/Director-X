@@ -1,12 +1,12 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.TimelineTimebase
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.TimelineTimebase
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

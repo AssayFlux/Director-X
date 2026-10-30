@@ -1,4 +1,4 @@
-package com.novacut.editor
+package com.directorx.editor
 
 import android.os.ParcelFileDescriptor
 import androidx.compose.ui.geometry.Rect
@@ -13,7 +13,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
-import com.novacut.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.ClearCutTestTags
 import kotlin.math.abs
 import kotlin.math.roundToInt
 import org.junit.After

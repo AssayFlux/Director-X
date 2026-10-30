@@ -1,10 +1,10 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.Uri
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.novacut.editor.model.Caption
-import com.novacut.editor.model.SubtitleFormat
+import com.directorx.editor.model.Caption
+import com.directorx.editor.model.SubtitleFormat
 import java.io.File
 import kotlinx.coroutines.runBlocking
 import org.junit.After

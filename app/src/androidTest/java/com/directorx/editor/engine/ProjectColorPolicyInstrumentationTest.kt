@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import android.media.MediaMetadataRetriever
@@ -6,17 +6,17 @@ import android.net.Uri
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.novacut.editor.engine.segmentation.SegmentationEngine
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.ExportConfig
-import com.novacut.editor.model.ProjectColorPolicy
-import com.novacut.editor.model.Resolution
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
-import com.novacut.editor.model.VideoCodec
-import com.novacut.editor.ui.editor.EditorState
-import com.novacut.editor.ui.editor.copyExport
-import com.novacut.editor.ui.editor.exportColorPreflight
+import com.directorx.editor.engine.segmentation.SegmentationEngine
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.ExportConfig
+import com.directorx.editor.model.ProjectColorPolicy
+import com.directorx.editor.model.Resolution
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
+import com.directorx.editor.model.VideoCodec
+import com.directorx.editor.ui.editor.EditorState
+import com.directorx.editor.ui.editor.copyExport
+import com.directorx.editor.ui.editor.exportColorPreflight
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.flowOf

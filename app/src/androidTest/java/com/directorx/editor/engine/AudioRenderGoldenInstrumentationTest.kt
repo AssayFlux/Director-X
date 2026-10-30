@@ -1,10 +1,10 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import androidx.media3.common.C
 import androidx.media3.common.audio.AudioProcessor
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.novacut.editor.model.AudioEffect
-import com.novacut.editor.model.AudioEffectType
+import com.directorx.editor.model.AudioEffect
+import com.directorx.editor.model.AudioEffectType
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Test

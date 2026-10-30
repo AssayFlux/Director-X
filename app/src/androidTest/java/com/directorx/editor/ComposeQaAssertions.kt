@@ -1,4 +1,4 @@
-package com.novacut.editor
+package com.directorx.editor
 
 import android.graphics.Bitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
