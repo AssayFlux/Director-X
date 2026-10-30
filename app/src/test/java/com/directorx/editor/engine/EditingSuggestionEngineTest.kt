@@ -1,13 +1,13 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.FakeUri
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.Effect
-import com.novacut.editor.model.EffectType
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
-import com.novacut.editor.model.Transition
-import com.novacut.editor.model.TransitionType
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.Effect
+import com.directorx.editor.model.EffectType
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
+import com.directorx.editor.model.Transition
+import com.directorx.editor.model.TransitionType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull

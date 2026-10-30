@@ -1,15 +1,15 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.FakeUri
-import com.novacut.editor.model.Caption
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.ExportConfig
-import com.novacut.editor.model.ProjectColorPolicy
-import com.novacut.editor.model.SourceColorMetadata
-import com.novacut.editor.model.SourceHdrFormat
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
-import com.novacut.editor.model.VideoCodec
+import com.directorx.editor.model.Caption
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.ExportConfig
+import com.directorx.editor.model.ProjectColorPolicy
+import com.directorx.editor.model.SourceColorMetadata
+import com.directorx.editor.model.SourceHdrFormat
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
+import com.directorx.editor.model.VideoCodec
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

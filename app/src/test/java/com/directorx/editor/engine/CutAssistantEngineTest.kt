@@ -1,9 +1,9 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.FakeUri
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.Track
-import com.novacut.editor.model.TrackType
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.Track
+import com.directorx.editor.model.TrackType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -231,8 +231,8 @@ class CutAssistantEngineTest {
         val clip = audioClip("c1", 0L, 2000L)
         val tracks = listOf(Track(id = "t1", type = TrackType.AUDIO, index = 0, clips = listOf(clip)))
         val words = listOf(
-            com.novacut.editor.engine.whisper.SherpaAsrEngine.WordTimestamp("you", 500L, 650L),
-            com.novacut.editor.engine.whisper.SherpaAsrEngine.WordTimestamp("know", 650L, 800L),
+            com.directorx.editor.engine.whisper.SherpaAsrEngine.WordTimestamp("you", 500L, 650L),
+            com.directorx.editor.engine.whisper.SherpaAsrEngine.WordTimestamp("know", 650L, 800L),
         )
         val audio = mapOf(
             clip.id to CutAssistantEngine.ClipAudio(

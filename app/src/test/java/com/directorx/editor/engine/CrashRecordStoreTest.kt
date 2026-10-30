@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
@@ -22,7 +22,7 @@ class CrashRecordStoreTest {
         ).apply {
             stackTrace = arrayOf(
                 StackTraceElement(
-                    "com.novacut.editor.engine.VideoEngine",
+                    "com.directorx.editor.engine.VideoEngine",
                     "export",
                     "VideoEngine.kt",
                     123,

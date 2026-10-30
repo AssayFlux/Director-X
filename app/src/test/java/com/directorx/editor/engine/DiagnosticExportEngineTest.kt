@@ -1,4 +1,4 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.content.Context
 import kotlinx.coroutines.runBlocking
@@ -63,7 +63,7 @@ class DiagnosticExportEngineTest {
 
     @Test
     fun redactSensitive_stripsAppPrivatePaths() {
-        val line = "E/N: missing /data/data/com.novacut.editor/files/projects/p123/auto.json"
+        val line = "E/N: missing /data/data/com.directorx.editor/files/projects/p123/auto.json"
         val redacted = DiagnosticExportEngine.redactSensitive(line)
         assertFalse(redacted.contains("/data/data/"))
         assertFalse(redacted.contains("auto.json"))
@@ -72,7 +72,7 @@ class DiagnosticExportEngineTest {
     @Test
     fun redactSensitive_stripsModernPrivateAndWindowsPaths() {
         val line =
-            "E/N: missing /data/user/0/com.novacut.editor/files/projects/private.json " +
+            "E/N: missing /data/user/0/com.directorx.editor/files/projects/private.json " +
                 "after C:\\Users\\Jane Doe\\private-video.mp4"
         val redacted = DiagnosticExportEngine.redactSensitive(line)
 

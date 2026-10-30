@@ -1,7 +1,7 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.R
-import com.novacut.editor.ui.editor.V369Delegate
+import com.directorx.editor.R
+import com.directorx.editor.ui.editor.V369Delegate
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
