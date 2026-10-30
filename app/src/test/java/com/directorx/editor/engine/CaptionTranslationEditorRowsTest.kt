@@ -1,9 +1,9 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.engine.CaptionTranslationEngine.EditorRowState
-import com.novacut.editor.engine.CaptionTranslationEngine.LanguagePairQuality
-import com.novacut.editor.engine.CaptionTranslationEngine.ModelVariant
-import com.novacut.editor.engine.CaptionTranslationEngine.TranslatedSegment
+import com.directorx.editor.engine.CaptionTranslationEngine.EditorRowState
+import com.directorx.editor.engine.CaptionTranslationEngine.LanguagePairQuality
+import com.directorx.editor.engine.CaptionTranslationEngine.ModelVariant
+import com.directorx.editor.engine.CaptionTranslationEngine.TranslatedSegment
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertSame
@@ -123,7 +123,7 @@ class CaptionTranslationEditorRowsTest {
         // Word-timing lists are expensive to recompute; the helper preserves the
         // original list when the regenerate path doesn't pass new timings.
         val existing = listOf(
-            com.novacut.editor.engine.whisper.SherpaAsrEngine.WordTimestamp(
+            com.directorx.editor.engine.whisper.SherpaAsrEngine.WordTimestamp(
                 word = "hi", startTimeMs = 0L, endTimeMs = 500L,
             )
         )

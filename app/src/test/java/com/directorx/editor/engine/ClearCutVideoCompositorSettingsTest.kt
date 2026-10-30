@@ -1,8 +1,8 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import androidx.media3.common.util.Size
 import androidx.media3.common.util.UnstableApi
-import com.novacut.editor.model.BlendMode
+import com.directorx.editor.model.BlendMode
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test

@@ -1,10 +1,10 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import androidx.media3.common.util.UnstableApi
-import com.novacut.editor.model.TextOverlay
+import com.directorx.editor.model.TextOverlay
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith

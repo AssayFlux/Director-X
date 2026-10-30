@@ -1,6 +1,6 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.engine.CaptionFontFallbackPolicy.FontFamily
+import com.directorx.editor.engine.CaptionFontFallbackPolicy.FontFamily
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue

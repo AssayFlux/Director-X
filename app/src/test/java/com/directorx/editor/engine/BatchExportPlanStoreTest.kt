@@ -1,16 +1,16 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
 import android.net.Uri
-import com.novacut.editor.model.AspectRatio
-import com.novacut.editor.model.BatchExportItem
-import com.novacut.editor.model.BatchExportSourceRange
-import com.novacut.editor.model.BatchExportStatus
-import com.novacut.editor.model.ChapterMarker
-import com.novacut.editor.model.ExportConfig
-import com.novacut.editor.model.ExportQuality
-import com.novacut.editor.model.ProjectColorPolicy
-import com.novacut.editor.model.Resolution
-import com.novacut.editor.model.TimelineExportRange
+import com.directorx.editor.model.AspectRatio
+import com.directorx.editor.model.BatchExportItem
+import com.directorx.editor.model.BatchExportSourceRange
+import com.directorx.editor.model.BatchExportStatus
+import com.directorx.editor.model.ChapterMarker
+import com.directorx.editor.model.ExportConfig
+import com.directorx.editor.model.ExportQuality
+import com.directorx.editor.model.ProjectColorPolicy
+import com.directorx.editor.model.Resolution
+import com.directorx.editor.model.TimelineExportRange
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

@@ -1,8 +1,8 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.engine.CaptionTranslationEngine.LanguagePairQuality
-import com.novacut.editor.engine.CaptionTranslationEngine.ModelVariant
-import com.novacut.editor.engine.whisper.SherpaAsrEngine
+import com.directorx.editor.engine.CaptionTranslationEngine.LanguagePairQuality
+import com.directorx.editor.engine.CaptionTranslationEngine.ModelVariant
+import com.directorx.editor.engine.whisper.SherpaAsrEngine
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

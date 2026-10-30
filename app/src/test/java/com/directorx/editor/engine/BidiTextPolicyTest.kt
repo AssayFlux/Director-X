@@ -1,7 +1,7 @@
-package com.novacut.editor.engine
+package com.directorx.editor.engine
 
-import com.novacut.editor.engine.BidiTextPolicy.Direction
-import com.novacut.editor.engine.BidiTextPolicy.PreferredAlignment
+import com.directorx.editor.engine.BidiTextPolicy.Direction
+import com.directorx.editor.engine.BidiTextPolicy.PreferredAlignment
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
