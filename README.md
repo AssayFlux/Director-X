@@ -6,7 +6,7 @@
 
 Director X combines a modern native Android interface with a capable media-processing foundation and on-device intelligent tools.
 
-[![Download Debug APK](https://img.shields.io/badge/Download-Debug%20APK-2ea44f?logo=android&logoColor=white)](https://github.com/AssayFlux/Director-X/actions/runs/41046091269/artifacts/12973505672)
+[![Download Debug APK](https://img.shields.io/badge/Download-Debug%20APK-2ea44f?logo=android&logoColor=white)](https://github.com/AssayFlux/Director-X/actions/runs/41049985412/artifacts/12973892841)
 [![Android](https://img.shields.io/badge/Platform-Android-3DDC84?logo=android&logoColor=white)](https://developer.android.com/)
 [![Min SDK](https://img.shields.io/badge/Min%20SDK-26-blue)](https://developer.android.com/)
 [![Target SDK](https://img.shields.io/badge/Target%20SDK-37-blue)](https://developer.android.com/)
