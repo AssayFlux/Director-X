@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.engine.MediaHealthIssueType
-import com.novacut.editor.engine.MediaHealthReport
+import com.directorx.editor.engine.MediaHealthIssueType
+import com.directorx.editor.engine.MediaHealthReport
 
 enum class RecoveryMediaStatusKind {
     NO_MEDIA,

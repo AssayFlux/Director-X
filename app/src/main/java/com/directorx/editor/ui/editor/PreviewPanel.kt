@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
 import android.graphics.Bitmap
 import android.os.Build
 import android.view.SurfaceView
@@ -70,16 +70,16 @@ import androidx.media3.common.PlaybackException
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerView
 import coil3.compose.SubcomposeAsyncImage
-import com.novacut.editor.R
-import com.novacut.editor.engine.Android15MediaPolicy
-import com.novacut.editor.engine.VideoEngine
-import com.novacut.editor.model.AspectRatio
-import com.novacut.editor.model.Clip
-import com.novacut.editor.model.ImageOverlay
-import com.novacut.editor.model.TextAlignment
-import com.novacut.editor.model.TextOverlay
-import com.novacut.editor.ui.theme.ClearCutChromeIconButton
-import com.novacut.editor.ui.theme.Radius
+import com.directorx.editor.R
+import com.directorx.editor.engine.Android15MediaPolicy
+import com.directorx.editor.engine.VideoEngine
+import com.directorx.editor.model.AspectRatio
+import com.directorx.editor.model.Clip
+import com.directorx.editor.model.ImageOverlay
+import com.directorx.editor.model.TextAlignment
+import com.directorx.editor.model.TextOverlay
+import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.Radius
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

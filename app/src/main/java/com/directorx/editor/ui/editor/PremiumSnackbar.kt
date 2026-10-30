@@ -1,6 +1,6 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.ClearCutAccents
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -43,11 +43,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TextButton
-import com.novacut.editor.ui.theme.Elevation
-import com.novacut.editor.ui.theme.LocalClearCutColors
-import com.novacut.editor.ui.theme.Motion
-import com.novacut.editor.ui.theme.Radius
-import com.novacut.editor.ui.theme.Spacing
+import com.directorx.editor.ui.theme.Elevation
+import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.Motion
+import com.directorx.editor.ui.theme.Radius
+import com.directorx.editor.ui.theme.Spacing
 
 enum class ToastSeverity { Info, Success, Warning, Error }
 
