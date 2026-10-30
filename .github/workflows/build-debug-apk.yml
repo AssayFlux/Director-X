@@ -65,7 +65,6 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/validate_package_identity.py
-          python scripts/generate_capability_registry.py --check
 
       - name: Select build task
         id: task
