@@ -182,15 +182,19 @@ Enable USB debugging, connect the device, and run:
 
 ## Build an APK with GitHub Actions
 
-A manually triggered workflow builds a debug APK. It does not run automatically on pushes or pull requests.
+The GitHub Actions workflow builds a debug APK automatically when changes are pushed to `main`, and can also be started manually.
 
+**[Open the latest build runs and download the APK artifact](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml).**
+
+For the current successful build, open [Build Debug APK run #10](https://github.com/AssayFlux/Director-X/actions/runs/41046091269), scroll to **Artifacts**, and download `director-x-debug-apk`.
+
+To start another build manually:
 1. Open the repository's **Actions** tab.
 2. Select **Build Debug APK**.
-3. Select **Run workflow**.
-4. Choose the build variant and start the run.
-5. After a successful run, download the APK from the workflow's **Artifacts** section.
+3. Select **Run workflow** and choose the build variant.
+4. After the run succeeds, download the APK from its **Artifacts** section.
 
-The workflow uploads APK files as a temporary downloadable artifact. It does not publish a GitHub Release.
+Artifacts are temporary GitHub Actions downloads and expire after 14 days. The workflow does not publish a permanent GitHub Release.
 
 ## Project Structure
 
@@ -203,7 +207,7 @@ Director-X/
 ├── app/
 │   ├── src/
 │   │   ├── main/
-│   │   │   ├── java/com/novacut/editor/
+│   │   │   ├── java/com/directorx/editor/
 │   │   │   │   ├── ai/
 │   │   │   │   ├── engine/
 │   │   │   │   ├── model/
