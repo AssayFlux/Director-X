@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.export
+package com.directorx.editor.ui.export
 
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -40,17 +40,17 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.novacut.editor.R
-import com.novacut.editor.ui.ClearCutTestTags
-import com.novacut.editor.model.BatchExportItem
-import com.novacut.editor.model.BatchExportSourceRange
-import com.novacut.editor.model.BatchExportStatus
-import com.novacut.editor.model.ExportConfig
-import com.novacut.editor.model.PlatformPreset
-import com.novacut.editor.ui.editor.PremiumEditorPanel
-import com.novacut.editor.ui.editor.PremiumPanelCard
-import com.novacut.editor.ui.editor.PremiumPanelIconButton
-import com.novacut.editor.ui.editor.PremiumPanelPill
+import com.directorx.editor.R
+import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.model.BatchExportItem
+import com.directorx.editor.model.BatchExportSourceRange
+import com.directorx.editor.model.BatchExportStatus
+import com.directorx.editor.model.ExportConfig
+import com.directorx.editor.model.PlatformPreset
+import com.directorx.editor.ui.editor.PremiumEditorPanel
+import com.directorx.editor.ui.editor.PremiumPanelCard
+import com.directorx.editor.ui.editor.PremiumPanelIconButton
+import com.directorx.editor.ui.editor.PremiumPanelPill
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

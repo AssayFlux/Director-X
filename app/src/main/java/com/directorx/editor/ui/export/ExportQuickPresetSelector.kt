@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.export
+package com.directorx.editor.ui.export
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -33,14 +33,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.novacut.editor.R
-import com.novacut.editor.model.AspectRatio
-import com.novacut.editor.model.ExportConfig
-import com.novacut.editor.model.PlatformPreset
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
-import com.novacut.editor.ui.theme.Radius
-import com.novacut.editor.ui.theme.TouchTarget
+import com.directorx.editor.R
+import com.directorx.editor.model.AspectRatio
+import com.directorx.editor.model.ExportConfig
+import com.directorx.editor.model.PlatformPreset
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.Radius
+import com.directorx.editor.ui.theme.TouchTarget
 
 private val featuredPresets = listOf(
     PlatformPreset.YOUTUBE_1080,

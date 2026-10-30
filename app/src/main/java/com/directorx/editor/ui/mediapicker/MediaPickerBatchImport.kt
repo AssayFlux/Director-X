@@ -1,12 +1,12 @@
-package com.novacut.editor.ui.mediapicker
+package com.directorx.editor.ui.mediapicker
 
 import android.content.Context
 import android.net.Uri
-import com.novacut.editor.engine.IngestResult
-import com.novacut.editor.engine.deleteManagedMediaUri
-import com.novacut.editor.engine.importUriToManagedMediaWithProgress
-import com.novacut.editor.engine.insufficientSpaceFor
-import com.novacut.editor.engine.querySourceSize
+import com.directorx.editor.engine.IngestResult
+import com.directorx.editor.engine.deleteManagedMediaUri
+import com.directorx.editor.engine.importUriToManagedMediaWithProgress
+import com.directorx.editor.engine.insufficientSpaceFor
+import com.directorx.editor.engine.querySourceSize
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable

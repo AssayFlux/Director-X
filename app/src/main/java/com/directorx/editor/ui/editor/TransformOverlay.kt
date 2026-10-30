@@ -1,6 +1,6 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.ClearCutAccents
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -26,7 +26,7 @@ import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
-import com.novacut.editor.R
+import com.directorx.editor.R
 import kotlin.math.*
 
 private const val HANDLE_RADIUS = 10f

@@ -1,14 +1,14 @@
-package com.novacut.editor.ui.mediapicker
+package com.directorx.editor.ui.mediapicker
 
 import android.app.Activity
-import com.novacut.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.ClearCutAccents
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import com.novacut.editor.engine.AppLog
+import com.directorx.editor.engine.AppLog
 import android.view.DragAndDropPermissions
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -40,26 +40,26 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
-import com.novacut.editor.R
-import com.novacut.editor.engine.IngestResult
-import com.novacut.editor.engine.MediaSequenceOrder
-import com.novacut.editor.engine.finalizePendingCameraCapture
-import com.novacut.editor.engine.importUriToManagedMediaWithProgress
-import com.novacut.editor.engine.insufficientSpaceFor
-import com.novacut.editor.engine.pendingCameraCaptureDir
-import com.novacut.editor.engine.querySourceSize
-import com.novacut.editor.engine.resolveManagedMediaExtension
-import com.novacut.editor.ui.ClearCutTestTags
-import com.novacut.editor.ui.editor.PremiumEditorPanel
-import com.novacut.editor.ui.editor.PremiumPanelCard
-import com.novacut.editor.ui.editor.PremiumPanelPill
-import com.novacut.editor.ui.editor.PremiumSnackbarHost
-import com.novacut.editor.ui.editor.ToastSeverity
-import com.novacut.editor.ui.theme.LocalClearCutColors
-import com.novacut.editor.ui.theme.ClearCutSecondaryButton
-import com.novacut.editor.ui.theme.Radius
-import com.novacut.editor.ui.theme.Spacing
-import com.novacut.editor.ui.theme.TouchTarget
+import com.directorx.editor.R
+import com.directorx.editor.engine.IngestResult
+import com.directorx.editor.engine.MediaSequenceOrder
+import com.directorx.editor.engine.finalizePendingCameraCapture
+import com.directorx.editor.engine.importUriToManagedMediaWithProgress
+import com.directorx.editor.engine.insufficientSpaceFor
+import com.directorx.editor.engine.pendingCameraCaptureDir
+import com.directorx.editor.engine.querySourceSize
+import com.directorx.editor.engine.resolveManagedMediaExtension
+import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.editor.PremiumEditorPanel
+import com.directorx.editor.ui.editor.PremiumPanelCard
+import com.directorx.editor.ui.editor.PremiumPanelPill
+import com.directorx.editor.ui.editor.PremiumSnackbarHost
+import com.directorx.editor.ui.editor.ToastSeverity
+import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.Radius
+import com.directorx.editor.ui.theme.Spacing
+import com.directorx.editor.ui.theme.TouchTarget
 import java.io.File
 import java.util.Locale
 import kotlinx.coroutines.CoroutineStart
@@ -1007,7 +1007,7 @@ private fun takePersistableReadPermission(
         )
         true
     } catch (error: SecurityException) {
-        com.novacut.editor.engine.AppLog.w("MediaPicker", "Failed to persist URI permission", error)
+        com.directorx.editor.engine.AppLog.w("MediaPicker", "Failed to persist URI permission", error)
         false
     }
 }

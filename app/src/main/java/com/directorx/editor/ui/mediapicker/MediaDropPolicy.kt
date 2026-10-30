@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.mediapicker
+package com.directorx.editor.ui.mediapicker
 
 /**
  * MIME types that can identify a media-bearing drag before Android exposes its

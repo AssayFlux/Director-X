@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
 import android.graphics.Bitmap
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
@@ -45,7 +45,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.novacut.editor.R
+import com.directorx.editor.R
 import kotlin.math.min
 
 // RGB trace colors are signal semantics, not UI theme colors, so they stay fixed

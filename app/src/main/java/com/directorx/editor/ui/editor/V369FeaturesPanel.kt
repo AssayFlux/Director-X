@@ -1,8 +1,8 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.engine.ContentIdEngine
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.engine.ContentIdEngine
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -30,14 +30,14 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.Image
-import com.novacut.editor.R
-import com.novacut.editor.engine.ColorBlindPreviewEngine
-import com.novacut.editor.engine.DirectPublishEngine
-import com.novacut.editor.engine.KaraokeCaptionEngine
-import com.novacut.editor.ui.theme.ClearCutFilterChip
-import com.novacut.editor.ui.theme.Radius
-import com.novacut.editor.ui.theme.Spacing
-import com.novacut.editor.ui.theme.TouchTarget
+import com.directorx.editor.R
+import com.directorx.editor.engine.ColorBlindPreviewEngine
+import com.directorx.editor.engine.DirectPublishEngine
+import com.directorx.editor.engine.KaraokeCaptionEngine
+import com.directorx.editor.ui.theme.ClearCutFilterChip
+import com.directorx.editor.ui.theme.Radius
+import com.directorx.editor.ui.theme.Spacing
+import com.directorx.editor.ui.theme.TouchTarget
 
 /**
  * Creator workflow hub: a single scrollable sheet that groups the advanced
@@ -385,7 +385,7 @@ fun V369FeaturesPanel(
         ) {
             val hdr = state.exportConfig.colorPolicy.keepsHdr
             val codecCanCarryHdr = state.exportConfig.codec !=
-                com.novacut.editor.model.VideoCodec.H264
+                com.directorx.editor.model.VideoCodec.H264
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Switch(
                     checked = hdr,
@@ -444,14 +444,14 @@ fun V369FeaturesPanel(
                     .horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                for (opt in com.novacut.editor.engine.DesktopOverride.entries) {
+                for (opt in com.directorx.editor.engine.DesktopOverride.entries) {
                     ClearCutFilterChip(
                         selected = override == opt,
                         onClick = { viewModel.setDesktopOverride(opt) },
                         text = when (opt) {
-                            com.novacut.editor.engine.DesktopOverride.AUTO -> stringResource(R.string.v369_dex_auto)
-                            com.novacut.editor.engine.DesktopOverride.FORCE_ON -> stringResource(R.string.v369_dex_desktop)
-                            com.novacut.editor.engine.DesktopOverride.FORCE_OFF -> stringResource(R.string.v369_dex_phone_chip)
+                            com.directorx.editor.engine.DesktopOverride.AUTO -> stringResource(R.string.v369_dex_auto)
+                            com.directorx.editor.engine.DesktopOverride.FORCE_ON -> stringResource(R.string.v369_dex_desktop)
+                            com.directorx.editor.engine.DesktopOverride.FORCE_OFF -> stringResource(R.string.v369_dex_phone_chip)
                         },
                         accent = ClearCutAccents.Lavender
                     )

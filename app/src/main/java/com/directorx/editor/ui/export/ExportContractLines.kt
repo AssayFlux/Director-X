@@ -1,4 +1,4 @@
-package com.novacut.editor.ui.export
+package com.directorx.editor.ui.export
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -6,18 +6,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import com.novacut.editor.R
-import com.novacut.editor.engine.ExportContractDisposition
-import com.novacut.editor.engine.ExportContractField
-import com.novacut.editor.engine.ExportContractReport
-import com.novacut.editor.engine.ExportHistoryEntry
-import com.novacut.editor.engine.ExportHistoryStatus
-import com.novacut.editor.engine.ExportObservation
-import com.novacut.editor.model.AudioCodec
-import com.novacut.editor.model.VideoCodec
-import com.novacut.editor.ui.ClearCutTestTags
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.R
+import com.directorx.editor.engine.ExportContractDisposition
+import com.directorx.editor.engine.ExportContractField
+import com.directorx.editor.engine.ExportContractReport
+import com.directorx.editor.engine.ExportHistoryEntry
+import com.directorx.editor.engine.ExportHistoryStatus
+import com.directorx.editor.engine.ExportObservation
+import com.directorx.editor.model.AudioCodec
+import com.directorx.editor.model.VideoCodec
+import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
 import java.util.Locale
 
 /**

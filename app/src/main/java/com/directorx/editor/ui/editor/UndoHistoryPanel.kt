@@ -1,7 +1,7 @@
-package com.novacut.editor.ui.editor
+package com.directorx.editor.ui.editor
 
-import com.novacut.editor.ui.theme.ClearCutAccents
-import com.novacut.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.LocalClearCutColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import com.novacut.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.ClearCutTestTags
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -34,8 +34,8 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.novacut.editor.R
-import com.novacut.editor.model.UndoHistoryEntry
+import com.directorx.editor.R
+import com.directorx.editor.model.UndoHistoryEntry
 import kotlinx.coroutines.delay
 
 @Composable
