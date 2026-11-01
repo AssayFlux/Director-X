@@ -37,7 +37,7 @@ java -version
 javac -version
 ```
 
-The output must identify JDK 17. If your device has a different Java version selected, correct `JAVA_HOME` and `PATH` before using Gradle.
+Use the Java toolchain required by the current Gradle project. If a different Java version is selected, correct `JAVA_HOME` and `PATH` before using Gradle.
 
 ## 2. Prepare a Termux-compatible Android SDK
 
@@ -53,7 +53,7 @@ Set the SDK location to the actual path provided by your Android development env
 ```bash
 export ANDROID_HOME="$HOME/Android/Sdk"
 export ANDROID_SDK_ROOT="$ANDROID_HOME"
-export PATH="$PATH:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/build-tools/36.0.0"
+export PATH="$PATH:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin"
 ```
 
 Do not copy this example path unless it exists on your device. Check the installation:
