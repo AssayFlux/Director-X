@@ -35,6 +35,9 @@ jobs:
       - name: Validate application version consistency
         run: python scripts/validate_version_consistency.py
 
+      - name: Validate README links and assets
+        run: python scripts/validate_readme_links.py
+
       - name: Validate generated capability registry
         run: python scripts/generate_capability_registry.py --check
 
