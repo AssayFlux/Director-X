@@ -92,6 +92,25 @@ The interface follows a vintage darkroom direction: warm cream, paper beige, cha
 | Native media | FFmpegKitNext / FFmpeg |
 | Build | Gradle Wrapper, Android Gradle Plugin, Java toolchain (project-managed) |
 
+## Dependency registry
+
+<!-- capability-registry:dependencies:begin -->
+| Dependency | Version | Purpose |
+|-----------|---------|---------|
+| ONNX Runtime | 1.28.0 | Whisper ASR and LaMa inpainting |
+| MediaPipe | 1.0.0 | Selfie segmentation and smart reframe |
+| Lottie Compose | 6.7.1 | Animated title templates |
+| OkHttp | 5.5.0 | Model downloads and future opt-in provider calls |
+| Media3 | 1.11.1 | Transformer, ExoPlayer, effects, and muxing |
+| Coil Compose | 3.5.0 | Image and video thumbnails |
+| Hilt / Dagger | 2.60.1 | Dependency injection |
+| Android DeepFilterNet | 0.0.8 | On-device voiceover noise reduction |
+| FFmpegKitNext / FFmpeg | 8.1.0 (FFmpeg 8.1.2) | LGPL FFmpeg paths not covered by Media3 Transformer |
+| AndroidX Benchmark/ProfileInstaller | 1.5.0-beta01 / 1.4.1 | Baseline profile generation and installation |
+| Sherpa-ONNX | 1.13.2 target | Future native Moonshine v2 ASR path (target) |
+| SAM 2.1 ONNX | Targeted | Future tracked-mask path; MobileSAM fallback (target) |
+<!-- capability-registry:dependencies:end -->
+
 ## Android identity
 
 | Setting | Value |
