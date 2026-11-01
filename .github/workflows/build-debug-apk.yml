@@ -225,20 +225,34 @@ jobs:
         run: |
           set -euo pipefail
           case "$BUILD_VARIANT" in
-            debug) TASK=":app:assembleDebug" ;;
-            qa) TASK=":app:assembleQa" ;;
-            streaming) TASK=":app:assembleStreaming" ;;
+            debug)
+              TASK=":app:assembleDebug"
+              TEST_TASK=":app:testDebugUnitTest"
+              LINT_TASK=":app:lintDebug"
+              ;;
+            qa)
+              TASK=":app:assembleQa"
+              TEST_TASK=":app:testQaUnitTest"
+              LINT_TASK=":app:lintQa"
+              ;;
+            streaming)
+              TASK=":app:assembleStreaming"
+              TEST_TASK=":app:testStreamingUnitTest"
+              LINT_TASK=":app:lintStreaming"
+              ;;
             *) echo "::error::Unsupported build variant: $BUILD_VARIANT"; exit 2 ;;
           esac
           echo "gradle_task=$TASK" >> "$GITHUB_OUTPUT"
+          echo "test_task=$TEST_TASK" >> "$GITHUB_OUTPUT"
+          echo "lint_task=$LINT_TASK" >> "$GITHUB_OUTPUT"
 
-      - name: Run strict verification, QA unit tests, lint and APK build
+      - name: Run strict verification, variant unit tests, variant lint and APK build
         shell: bash
         run: |
           set -o pipefail
           bash ./gradlew --no-daemon --dependency-verification=strict --stacktrace --console=plain \
-            :app:testQaUnitTest \
-            :app:lint \
+            "${{ steps.task.outputs.test_task }}" \
+            "${{ steps.task.outputs.lint_task }}" \
             "${{ steps.task.outputs.gradle_task }}" \
             2>&1 | tee build-diagnostics/gradle-build.log
 
@@ -291,8 +305,8 @@ jobs:
           )
           {
             echo "dependency_verification=strict (passed)"
-            echo "unit_tests=:app:testQaUnitTest (passed)"
-            echo "android_lint=:app:lint (passed)"
+            echo "unit_tests=${{ steps.task.outputs.test_task }} (passed)"
+            echo "android_lint=${{ steps.task.outputs.lint_task }} (passed)"
             echo "apk_build=${{ steps.task.outputs.gradle_task }} (passed)"
             echo "apk_validation=signature, package/version metadata, ABI/native payloads (passed)"
             echo "native_16kb_alignment=passed"
@@ -386,7 +400,7 @@ jobs:
       contents: write
     steps:
       - name: Download validated APK payload
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8.0.2
         with:
           name: director-x-release-payload
           path: artifacts
