@@ -269,15 +269,24 @@ APK outputs are generated under `app/build/outputs/apk/`. Depending on the confi
 
 </div>
 
-The latest successful **debug** build from the `main` branch is published as a GitHub Release only after strict dependency verification, QA unit tests, lint, APK signature verification and package/version metadata validation succeed.
+The latest successful **debug** build from `main` is eligible for a permanent GitHub Release only after strict dependency verification, QA unit tests, aggregate lint, APK metadata/signature checks, native-library alignment checks and the pinned signing-identity check succeed.
 
 Each release includes:
-- APK outputs for the supported ABI packaging configuration.
+- Universal and ABI-specific APK outputs.
 - `SHA256SUMS.txt` for integrity verification.
-- `build-info.txt` with the source commit, build date, application version and variant.
+- `build-info.txt` with the source commit, build date, application version, variant and signing-certificate fingerprint.
 - Release notes identifying the exact source commit.
 
-QA and streaming builds are validation builds and are not automatically published as public releases. Failed or unvalidated builds are never promoted to the latest release.
+**Permanent releases require the existing signing key.** Configure these GitHub Actions secrets with the existing PKCS#12 keystore and credentials matching the certificate fingerprint recorded in `app/release-signing-identity.json`:
+
+- `DIRECTORX_RELEASE_KEYSTORE_BASE64`
+- `DIRECTORX_RELEASE_STORE_PASSWORD`
+- `DIRECTORX_RELEASE_KEY_ALIAS`
+- `DIRECTORX_RELEASE_KEY_PASSWORD`
+
+Do not generate a replacement key. CI refuses to publish an APK signed by a different certificate. Pull-request and manual test builds may use the runner's temporary debug key and are not suitable for in-place updates.
+
+A new public release is created only when Gradle's `versionCode` is greater than the latest published release. Increase the version code deliberately for each new installable update; CI never invents or increments application versions. QA and streaming builds are validation builds and are not automatically published.
 
 ## Repository structure
 
@@ -324,12 +333,12 @@ Director-X/
 | Complete | Media playback, transformation, effects and muxing integration |
 | Complete | Local persistence and background-work infrastructure |
 | Complete | Local AI and audio-processing integrations |
-| Complete | Strictly validated APK build and permanent GitHub Release pipeline |
+| In progress | Strict APK validation and signing/version-gated GitHub Release pipeline |
 | Planned | Validate builds across physical Android devices |
 | Planned | Continue refining editing and export workflows |
 | Planned | Unify local AI engine controls and capability management |
 | Planned | Improve performance and memory behavior on constrained devices |
-| Planned | Prepare signed release distribution when credentials are configured |
+| Planned | Prepare a Google Play AAB pipeline after signing and release verification |
 
 ## Contributing
 
