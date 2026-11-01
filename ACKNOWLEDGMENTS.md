@@ -65,8 +65,6 @@ The current `app/build.gradle.kts` declares:
 - Target SDK: 37
 - Minimum SDK: 26
 - Java source/target compatibility: 17
-- Version code: 301
-- Version name: 3.82.0
 - Main UI/build technology: Kotlin and Jetpack Compose
 
 The installed application ID and Kotlin source namespace are both `com.directorx.editor`. The previous NovaCut package identity was `com.novacut.editor`; this is a new-install migration, not an in-place update. Existing installations under the previous application ID are separate apps; project transfer requires export/import. Keep the existing signing key for future updates to the Director X package.
