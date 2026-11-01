@@ -239,11 +239,15 @@ Use JDK 17. On Windows, run `gradlew.bat` instead of `./gradlew`.
 ./gradlew :app:assembleDebug
 ```
 
-### 5. Run unit tests
+### 5. Run the JVM unit-test suite
+
+The repository's registered JVM test lane is the QA build type:
 
 ```bash
-./gradlew :app:testDebugUnitTest
+./gradlew :app:testQaUnitTest
 ```
+
+The Android CI workflow runs this shared test suite, the aggregate `:app:lint` task, and the selected APK variant. It does not assume that unregistered `testDebugUnitTest` or `testStreamingUnitTest` tasks exist.
 
 ### 6. Install on a connected device
 
