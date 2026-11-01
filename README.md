@@ -13,24 +13,17 @@
 *A warm, tactile editing experience. Built for Android.*
 
 <p>
-  <a href="https://github.com/AssayFlux/Director-X/releases/latest"><strong>DOWNLOAD MANUALLY PUBLISHED APK</strong></a>
-  &nbsp; · &nbsp;
   <a href="https://github.com/AssayFlux/Director-X">SOURCE</a>
   &nbsp; · &nbsp;
   <a href="https://github.com/AssayFlux/Director-X/issues">SUPPORT</a>
 </p>
 
 [![Repository checks](https://img.shields.io/github/actions/workflow/status/AssayFlux/Director-X/repository-hygiene.yml?branch=main&label=REPOSITORY%20CHECKS&logo=githubactions&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X/actions/workflows/repository-hygiene.yml)
-[![Latest release](https://img.shields.io/github/v/release/AssayFlux/Director-X?label=LATEST%20RELEASE&logo=github&style=for-the-badge)](https://github.com/AssayFlux/Director-X/releases/latest)
-[![Version](https://img.shields.io/badge/APP%20VERSION-3.82.0-C29B38?logo=android&logoColor=2C2621&style=for-the-badge)](app/build.gradle.kts)
 
 [![Android](https://img.shields.io/badge/PLATFORM-ANDROID-3DDC84?logo=android&logoColor=white&style=for-the-badge)](https://developer.android.com/)
 [![Min SDK](https://img.shields.io/badge/MIN%20SDK-26-52796F?logo=android&logoColor=white&style=for-the-badge)](https://developer.android.com/about/versions)
 [![Compile / Target](https://img.shields.io/badge/COMPILE%20%2F%20TARGET-37-52796F?logo=android&logoColor=white&style=for-the-badge)](https://developer.android.com/about/versions)
-[![Kotlin](https://img.shields.io/badge/KOTLIN-2.4.10-7F52FF?logo=kotlin&logoColor=white&style=for-the-badge)](https://kotlinlang.org/)
 
-[![Java](https://img.shields.io/badge/JAVA-17-ED8B00?logo=openjdk&logoColor=white&style=for-the-badge)](https://openjdk.org/)
-[![Gradle](https://img.shields.io/badge/GRADLE-9.8.0-02303A?logo=gradle&logoColor=white&style=for-the-badge)](https://gradle.org/)
 [![License](https://img.shields.io/github/license/AssayFlux/Director-X?label=LICENSE&style=for-the-badge)](LICENSE)
 [![Last commit](https://img.shields.io/github/last-commit/AssayFlux/Director-X/main?label=LAST%20UPDATE&logo=git&style=for-the-badge)](https://github.com/AssayFlux/Director-X/commits/main)
 
@@ -38,10 +31,6 @@
 [![Forks](https://img.shields.io/github/forks/AssayFlux/Director-X?label=FORKS&style=for-the-badge)](https://github.com/AssayFlux/Director-X/network/members)
 [![Open issues](https://img.shields.io/github/issues/AssayFlux/Director-X?label=OPEN%20ISSUES&style=for-the-badge)](https://github.com/AssayFlux/Director-X/issues)
 [![Contributors](https://img.shields.io/github/contributors/AssayFlux/Director-X?label=CONTRIBUTORS&style=for-the-badge)](https://github.com/AssayFlux/Director-X/graphs/contributors)
-
-**Version 3.82.0** &nbsp; · &nbsp; **Version code 301** &nbsp; · &nbsp; **Application ID `com.directorx.editor`**
-
-Android app version: `3.82.0` · versionCode `301`
 
 </div>
 
@@ -101,7 +90,26 @@ The interface follows a vintage darkroom direction: warm cream, paper beige, cha
 | Machine learning | ONNX Runtime, MediaPipe |
 | Audio | DeepFilterNet |
 | Native media | FFmpegKitNext / FFmpeg |
-| Build | Gradle 9.8.0, AGP 9.4.1, Java 17 |
+| Build | Gradle Wrapper, Android Gradle Plugin, Java toolchain (project-managed) |
+
+## Dependency registry
+
+<!-- capability-registry:dependencies:begin -->
+| Dependency | Version | Purpose |
+|-----------|---------|---------|
+| ONNX Runtime | 1.28.0 | Whisper ASR and LaMa inpainting |
+| MediaPipe | 1.0.0 | Selfie segmentation and smart reframe |
+| Lottie Compose | 6.7.1 | Animated title templates |
+| OkHttp | 5.5.0 | Model downloads and future opt-in provider calls |
+| Media3 | 1.11.1 | Transformer, ExoPlayer, effects, and muxing |
+| Coil Compose | 3.5.0 | Image and video thumbnails |
+| Hilt / Dagger | 2.60.1 | Dependency injection |
+| Android DeepFilterNet | 0.0.8 | On-device voiceover noise reduction |
+| FFmpegKitNext / FFmpeg | 8.1.0 (FFmpeg 8.1.2) | LGPL FFmpeg paths not covered by Media3 Transformer |
+| AndroidX Benchmark/ProfileInstaller | 1.5.0-beta01 / 1.4.1 | Baseline profile generation and installation |
+| Sherpa-ONNX | 1.13.2 target | Future native Moonshine v2 ASR path (target) |
+| SAM 2.1 ONNX | Targeted | Future tracked-mask path; MobileSAM fallback (target) |
+<!-- capability-registry:dependencies:end -->
 
 ## Android identity
 
@@ -109,14 +117,14 @@ The interface follows a vintage darkroom direction: warm cream, paper beige, cha
 |---|---|
 | Application ID | `com.directorx.editor` |
 | Kotlin namespace | `com.directorx.editor` |
-| Version name | `3.82.0` |
-| Version code | `301` |
 | Minimum SDK | API 26 |
 | Compile SDK | API 37 |
 | Target SDK | API 37 |
 | Java toolchain | 17 |
 
-The version values above reflect the current Gradle configuration at the time this README was updated. The authoritative values are in `app/build.gradle.kts`.
+### Package identity and upgrade policy
+
+The installed application ID and Kotlin namespace are both `com.directorx.editor`. Changing an Android application ID creates a separate installation; it is not an in-place update. The move from the previous package identity is a **new install with an explicit export/import path**: export projects from the previous installation, install Director X, then import those projects. Future updates must retain the established release signing identity.
 
 ## Build and test on Android with Termux
 
@@ -156,19 +164,9 @@ Only lightweight repository-hygiene validation remains enabled in GitHub Actions
 
 The repository-check badge above reports only the repository-hygiene workflow. It must not be interpreted as an Android build or app-test result.
 
-## Downloads
+### Android 17 audio hardening smoke check
 
-<div align="center">
-
-### Manually published releases
-
-[![Release downloads](https://img.shields.io/badge/OPEN-RELEASE%20DOWNLOADS-C29B38?style=for-the-badge&logo=android&logoColor=2C2621)](https://github.com/AssayFlux/Director-X/releases)
-
-[Browse all Director X releases](https://github.com/AssayFlux/Director-X/releases)
-
-</div>
-
-Release downloads are manual. A release page may be empty or may not contain an APK for the current source revision. Do not assume that every commit has a downloadable APK.
+For a manual compatibility check on a device running Android 17, enable strict audio hardening with `adb shell cmd audio set-hardening throw`, then exercise TTS preview, voiceover and export while reviewing `AudioHardening` log output. This is a maintainer-run device check; it is not executed by GitHub Actions.
 
 ## Repository map
 
