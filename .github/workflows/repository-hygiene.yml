@@ -49,3 +49,4 @@ jobs:
           python scripts/validate_package_identity.py --self-test
           python scripts/validate_android_audio_api_policy.py --self-test
           python scripts/check_16kb_alignment.py --self-test
+          python scripts/validate_apk_outputs.py --self-test
