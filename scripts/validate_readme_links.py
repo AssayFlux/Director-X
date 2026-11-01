@@ -18,7 +18,7 @@ def local_targets(readme: str):
     )
     for pattern in patterns:
         for match in re.finditer(pattern, readme, flags=re.IGNORECASE):
-            target = match.group(1).strip()
+            target = match.group(1).strip().split()[0]
             if target.startswith("<") and target.endswith(">"):
                 target = target[1:-1]
             yield target
