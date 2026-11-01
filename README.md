@@ -21,7 +21,7 @@ A native Android video editor for media creation, timeline editing, intelligent 
 </p>
 
 <!-- Live badges: workflow badges report real workflow conclusions; version is checked against Gradle. -->
-[![APK build, tests and lint](https://img.shields.io/github/actions/workflow/status/AssayFlux/Director-X/build-debug-apk.yml?branch=main&label=APK%20BUILD%20%2B%20TESTS%20%2B%20LINT&logo=android&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml)
+[![APK build, tests and lint](https://img.shields.io/github/actions/workflow/status/AssayFlux/Director-X/build-debug-apk.yml?branch=main&label=APK%20BUILD%20%2B%20STRICT%20VERIFY%20%2B%20TESTS%20%2B%20LINT%20%2B%2016KB&logo=android&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml)
 [![Repository validation](https://img.shields.io/github/actions/workflow/status/AssayFlux/Director-X/repository-hygiene.yml?branch=main&label=REPOSITORY%20VALIDATION&logo=githubactions&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X/actions/workflows/repository-hygiene.yml)
 [![Latest release](https://img.shields.io/github/v/release/AssayFlux/Director-X?label=LATEST%20RELEASE&logo=github&style=for-the-badge)](https://github.com/AssayFlux/Director-X/releases/latest)
 
