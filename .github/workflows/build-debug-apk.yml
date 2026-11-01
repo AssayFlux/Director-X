@@ -122,8 +122,8 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p build-diagnostics artifacts
-          VERSION_NAME="$(sed -n 's/^[[:space:]]*versionName = "\\([^"]*\\)".*/\\1/p' app/build.gradle.kts | head -n 1)"
-          VERSION_CODE="$(sed -n 's/^[[:space:]]*versionCode = \\([0-9][0-9]*\\).*/\\1/p' app/build.gradle.kts | head -n 1)"
+          VERSION_NAME="$(sed -n 's/^[[:space:]]*versionName = "\([^"]*\)".*/\1/p' app/build.gradle.kts | head -n 1)"
+          VERSION_CODE="$(sed -n 's/^[[:space:]]*versionCode = \([0-9][0-9]*\).*/\1/p' app/build.gradle.kts | head -n 1)"
           test -n "$VERSION_NAME"
           test -n "$VERSION_CODE"
           {
@@ -159,7 +159,7 @@ jobs:
             exit 1
           fi
           echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
-          printf 'sdk.dir=%s\\n' "$SDK_ROOT" > local.properties
+          printf 'sdk.dir=%s\n' "$SDK_ROOT" > local.properties
 
           sdkmanager --list 2>&1 | tee build-diagnostics/android-sdk-available.log
           if ! grep -Fq 'platforms;android-37' build-diagnostics/android-sdk-available.log; then
@@ -187,7 +187,7 @@ jobs:
           test -d "$SDK_ROOT/build-tools/36.0.0"
           test -x "$SDK_ROOT/build-tools/36.0.0/aapt"
           test -x "$SDK_ROOT/build-tools/36.0.0/apksigner"
-          grep -q '^Pkg.Revision=36\\.0\\.0$' "$SDK_ROOT/build-tools/36.0.0/source.properties"
+          grep -q '^Pkg.Revision=36\.0\.0$' "$SDK_ROOT/build-tools/36.0.0/source.properties"
           {
             echo "android_sdk_root=$SDK_ROOT"
             echo "android_platform=android-37"
@@ -195,7 +195,7 @@ jobs:
             if [[ -d "$SDK_ROOT/build-tools/37.0.0" ]]; then
               test -x "$SDK_ROOT/build-tools/37.0.0/aapt"
               test -x "$SDK_ROOT/build-tools/37.0.0/apksigner"
-              grep -q '^Pkg.Revision=37\\.0\\.0$' "$SDK_ROOT/build-tools/37.0.0/source.properties"
+              grep -q '^Pkg.Revision=37\.0\.0$' "$SDK_ROOT/build-tools/37.0.0/source.properties"
               echo "requested_build_tools_37=37.0.0 (available and installed; not selected by AGP)"
               cat "$SDK_ROOT/build-tools/37.0.0/source.properties"
             else
@@ -236,10 +236,10 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          bash ./gradlew --no-daemon --dependency-verification=strict --stacktrace --console=plain \\
-            :app:testQaUnitTest \\
-            :app:lint \\
-            "${{ steps.task.outputs.gradle_task }}" \\
+          bash ./gradlew --no-daemon --dependency-verification=strict --stacktrace --console=plain \
+            :app:testQaUnitTest \
+            :app:lint \
+            "${{ steps.task.outputs.gradle_task }}" \
             2>&1 | tee build-diagnostics/gradle-build.log
 
       - name: Validate APK metadata, native ABI payloads, signatures and checksums
@@ -268,20 +268,20 @@ jobs:
           for apk in "${APK_PATHS[@]}"; do
             name="$(basename "$apk")"
             cp "$apk" "artifacts/$name"
-            "$APKSIGNER" verify --verbose --print-certs "artifacts/$name" \\
+            "$APKSIGNER" verify --verbose --print-certs "artifacts/$name" \
               >> build-diagnostics/apk-validation.log 2>&1
-            python scripts/check_16kb_alignment.py "artifacts/$name" \\
+            python scripts/check_16kb_alignment.py "artifacts/$name" \
               2>&1 | tee -a build-diagnostics/native-alignment.log
 
             BADGING="$("$AAPT" dump badging "artifacts/$name")"
-            PACKAGE_NAME="$(sed -n "s/^package: name='\\([^']*\\)'.*/\\1/p" <<< "$BADGING")"
-            APK_VERSION_CODE="$(sed -n "s/^package: .*versionCode='\\([^']*\\)'.*/\\1/p" <<< "$BADGING")"
-            APK_VERSION_NAME="$(sed -n "s/^package: .*versionName='\\([^']*\\)'.*/\\1/p" <<< "$BADGING")"
+            PACKAGE_NAME="$(sed -n "s/^package: name='\([^']*\)'.*/\1/p" <<< "$BADGING")"
+            APK_VERSION_CODE="$(sed -n "s/^package: .*versionCode='\([^']*\)'.*/\1/p" <<< "$BADGING")"
+            APK_VERSION_NAME="$(sed -n "s/^package: .*versionName='\([^']*\)'.*/\1/p" <<< "$BADGING")"
             [[ "$PACKAGE_NAME" == "$EXPECTED_PACKAGE" ]]
             [[ "$APK_VERSION_CODE" == "$VERSION_CODE" ]]
             [[ "$APK_VERSION_NAME" == "$EXPECTED_VERSION" ]]
-            printf '%s | package=%s | version=%s (%s) | size=%s bytes\\n' \\
-              "$name" "$PACKAGE_NAME" "$APK_VERSION_NAME" "$APK_VERSION_CODE" "$(stat -c '%s' "artifacts/$name")" \\
+            printf '%s | package=%s | version=%s (%s) | size=%s bytes\n' \
+              "$name" "$PACKAGE_NAME" "$APK_VERSION_NAME" "$APK_VERSION_CODE" "$(stat -c '%s' "artifacts/$name")" \
               | tee -a build-diagnostics/apk-validation.log
           done
 
@@ -298,7 +298,7 @@ jobs:
             echo "native_16kb_alignment=passed"
             echo "apk_file_sizes:"
             for apk in artifacts/*.apk; do
-              printf '%s=%s bytes\\n' "$(basename "$apk")" "$(stat -c '%s' "$apk")"
+              printf '%s=%s bytes\n' "$(basename "$apk")" "$(stat -c '%s' "$apk")"
             done
             echo "apk_sha256:"
             cat artifacts/SHA256SUMS.txt
@@ -399,13 +399,13 @@ jobs:
           TITLE="Director X ${VERSION_NAME} — ${GITHUB_SHA:0:12}"
           # gh release create fails if this tag already exists; do not replace
           # a previously published APK or checksum.
-          gh release create "$TAG" \\
-            artifacts/*.apk \\
-            artifacts/SHA256SUMS.txt \\
-            artifacts/build-info.txt \\
-            --repo "$GITHUB_REPOSITORY" \\
-            --target "$GITHUB_SHA" \\
-            --title "$TITLE" \\
-            --notes-file artifacts/RELEASE_NOTES.md \\
+          gh release create "$TAG" \
+            artifacts/*.apk \
+            artifacts/SHA256SUMS.txt \
+            artifacts/build-info.txt \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "$TITLE" \
+            --notes-file artifacts/RELEASE_NOTES.md \
             --latest
           echo "Published: https://github.com/$GITHUB_REPOSITORY/releases/tag/$TAG" >> "$GITHUB_STEP_SUMMARY"
