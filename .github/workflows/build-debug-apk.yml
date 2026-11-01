@@ -187,7 +187,250 @@ jobs:
           test -d "$SDK_ROOT/build-tools/36.0.0"
           test -x "$SDK_ROOT/build-tools/36.0.0/aapt"
           test -x "$SDK_ROOT/build-tools/36.0.0/apksigner"
-          grep -q '^Pkg.Revision=36\.0\.0$' "$SDK_ROOT/build-tools/36.0.0/source.properties"
+          test -x "$SDK_ROOT/build-tools/36.0.0/zipalign"
+          grep -q '^Pkg.Revision=36\.0\.0 "$SDK_ROOT/build-tools/36.0.0/source.properties"
+          {
+            echo "android_sdk_root=$SDK_ROOT"
+            echo "android_platform=android-37.0"
+            echo "gradle_build_tools=36.0.0 (AGP 9.4.1 default)"
+            if [[ -d "$SDK_ROOT/build-tools/37.0.0" ]]; then
+              test -x "$SDK_ROOT/build-tools/37.0.0/aapt"
+              test -x "$SDK_ROOT/build-tools/37.0.0/apksigner"
+              grep -q '^Pkg.Revision=37\.0\.0$' "$SDK_ROOT/build-tools/37.0.0/source.properties"
+              echo "requested_build_tools_37=37.0.0 (available and installed; not selected by AGP)"
+              cat "$SDK_ROOT/build-tools/37.0.0/source.properties"
+            else
+              echo "requested_build_tools_37=NOT AVAILABLE; 36.0.0 remains the compatible build-tools version"
+            fi
+            cat "$SDK_ROOT/platforms/android-37.0/source.properties"
+            cat "$SDK_ROOT/build-tools/36.0.0/source.properties"
+          } | tee -a build-diagnostics/build-info.txt
+
+      - name: Validate repository identity and policy metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/validate_package_identity.py
+          python scripts/validate_version_consistency.py
+          python scripts/generate_capability_registry.py --check
+          python scripts/validate_public_claims.py
+          python scripts/validate_android_audio_api_policy.py
+          python scripts/validate_package_identity.py --self-test
+          python scripts/validate_android_audio_api_policy.py --self-test
+          python scripts/check_16kb_alignment.py --self-test
+          python scripts/validate_apk_outputs.py --self-test
+
+      - name: Select build task
+        id: task
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "$BUILD_VARIANT" in
+            debug)
+              TASK=":app:assembleDebug"
+              TEST_TASK=":app:testDebugUnitTest"
+              LINT_TASK=":app:lintDebug"
+              ;;
+            qa)
+              TASK=":app:assembleQa"
+              TEST_TASK=":app:testQaUnitTest"
+              LINT_TASK=":app:lintQa"
+              ;;
+            streaming)
+              TASK=":app:assembleStreaming"
+              TEST_TASK=":app:testStreamingUnitTest"
+              LINT_TASK=":app:lintStreaming"
+              ;;
+            *) echo "::error::Unsupported build variant: $BUILD_VARIANT"; exit 2 ;;
+          esac
+          echo "gradle_task=$TASK" >> "$GITHUB_OUTPUT"
+          echo "test_task=$TEST_TASK" >> "$GITHUB_OUTPUT"
+          echo "lint_task=$LINT_TASK" >> "$GITHUB_OUTPUT"
+
+      - name: Run strict verification, variant unit tests, variant lint and APK build
+        shell: bash
+        run: |
+          set -o pipefail
+          bash ./gradlew --no-daemon --dependency-verification=strict --stacktrace --console=plain \
+            "${{ steps.task.outputs.test_task }}" \
+            "${{ steps.task.outputs.lint_task }}" \
+            "${{ steps.task.outputs.gradle_task }}" \
+            2>&1 | tee build-diagnostics/gradle-build.log
+
+      - name: Validate APK metadata, native ABI payloads, signatures and checksums
+        shell: bash
+        run: |
+          set -euo pipefail
+          SDK_ROOT="${ANDROID_SDK_ROOT:-${ANDROID_HOME}}"
+          AAPT="$SDK_ROOT/build-tools/36.0.0/aapt"
+          APKSIGNER="$SDK_ROOT/build-tools/36.0.0/apksigner"
+          ZIPALIGN="$SDK_ROOT/build-tools/36.0.0/zipalign"
+          VERSION_NAME="${{ steps.meta.outputs.version_name }}"
+          VERSION_CODE="${{ steps.meta.outputs.version_code }}"
+          EXPECTED_PACKAGE="com.directorx.editor"
+          EXPECTED_VERSION="$VERSION_NAME"
+          case "$BUILD_VARIANT" in
+            qa) EXPECTED_PACKAGE="$EXPECTED_PACKAGE.qa"; EXPECTED_VERSION="$VERSION_NAME-qa" ;;
+            streaming) EXPECTED_PACKAGE="$EXPECTED_PACKAGE.streaming"; EXPECTED_VERSION="$VERSION_NAME-streaming" ;;
+          esac
+
+          python scripts/validate_apk_outputs.py "$BUILD_VARIANT"
+          mapfile -d '' APK_PATHS < <(find "app/build/outputs/apk/$BUILD_VARIANT" -type f -name '*.apk' -print0 | sort -z)
+          if (( ${#APK_PATHS[@]} == 0 )); then
+            echo "::error::Gradle completed without producing an APK."
+            exit 1
+          fi
+
+          for apk in "${APK_PATHS[@]}"; do
+            name="$(basename "$apk")"
+            cp "$apk" "artifacts/$name"
+            "$APKSIGNER" verify --verbose --print-certs "artifacts/$name" \
+              >> build-diagnostics/apk-validation.log 2>&1
+            "$ZIPALIGN" -c -P 16 -v 4 "artifacts/$name" \
+              >> build-diagnostics/native-alignment.log 2>&1
+            python scripts/check_16kb_alignment.py "artifacts/$name" \
+              2>&1 | tee -a build-diagnostics/native-alignment.log
+
+            BADGING="$("$AAPT" dump badging "artifacts/$name")"
+            PACKAGE_NAME="$(sed -n "s/^package: name='\([^']*\)'.*/\1/p" <<< "$BADGING")"
+            APK_VERSION_CODE="$(sed -n "s/^package: .*versionCode='\([^']*\)'.*/\1/p" <<< "$BADGING")"
+            APK_VERSION_NAME="$(sed -n "s/^package: .*versionName='\([^']*\)'.*/\1/p" <<< "$BADGING")"
+            [[ "$PACKAGE_NAME" == "$EXPECTED_PACKAGE" ]]
+            [[ "$APK_VERSION_CODE" == "$VERSION_CODE" ]]
+            [[ "$APK_VERSION_NAME" == "$EXPECTED_VERSION" ]]
+            printf '%s | package=%s | version=%s (%s) | size=%s bytes\n' \
+              "$name" "$PACKAGE_NAME" "$APK_VERSION_NAME" "$APK_VERSION_CODE" "$(stat -c '%s' "artifacts/$name")" \
+              | tee -a build-diagnostics/apk-validation.log
+          done
+
+          (
+            cd artifacts
+            sha256sum ./*.apk > SHA256SUMS.txt
+          )
+          {
+            echo "dependency_verification=strict (passed)"
+            echo "unit_tests=${{ steps.task.outputs.test_task }} (passed)"
+            echo "android_lint=${{ steps.task.outputs.lint_task }} (passed)"
+            echo "apk_build=${{ steps.task.outputs.gradle_task }} (passed)"
+            echo "apk_validation=signature, package/version metadata, ABI/native payloads (passed)"
+            echo "native_16kb_elf_and_apk_zip_alignment=passed"
+            echo "apk_file_sizes:"
+            for apk in artifacts/*.apk; do
+              printf '%s=%s bytes\n' "$(basename "$apk")" "$(stat -c '%s' "$apk")"
+            done
+            echo "apk_sha256:"
+            cat artifacts/SHA256SUMS.txt
+          } >> build-diagnostics/build-info.txt
+          cp build-diagnostics/build-info.txt artifacts/build-info.txt
+          {
+            echo "## Director X validated Android build"
+            echo
+            echo "- Commit: ${GITHUB_SHA}"
+            echo "- Variant: ${BUILD_VARIANT}"
+            echo "- Version: ${VERSION_NAME} (code ${VERSION_CODE})"
+            echo "- Validation: package identity, APK signature, ABI payloads and native 16 KB alignment verified"
+            echo "- Checksums: see SHA256SUMS.txt"
+          } > artifacts/RELEASE_NOTES.md
+
+      - name: Write build summary
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p build-diagnostics
+          {
+            echo "## Director X build diagnostics"
+            echo
+            echo "- Commit: ${GITHUB_SHA}"
+            echo "- Variant: ${BUILD_VARIANT}"
+            echo "- Gradle task: ${{ steps.task.outputs.gradle_task || 'not selected' }}"
+            if [[ -f build-diagnostics/gradle-build.log ]] && grep -q 'BUILD SUCCESSFUL' build-diagnostics/gradle-build.log; then
+              echo "- Gradle: BUILD SUCCESSFUL"
+              echo "- Strict dependency verification: PASSED"
+              echo "- QA unit tests: PASSED"
+              echo "- Android lint: PASSED"
+            elif [[ -f build-diagnostics/gradle-build.log ]]; then
+              echo "- Gradle: FAILED or interrupted; inspect the attached stack trace"
+              if grep -qi 'dependency verification failed' build-diagnostics/gradle-build.log; then
+                echo "- Strict dependency verification: FAILED"
+              else
+                echo "- Strict dependency verification: NOT SEPARATELY VERIFIED"
+              fi
+              echo "- Unit tests/lint: see task output and uploaded reports"
+              echo "- Failure location:"
+              grep -E 'Execution failed for task|Could not resolve|What went wrong:|FAILURE: Build failed' build-diagnostics/gradle-build.log | tail -n 8 || true
+            else
+              echo "- Gradle: NOT STARTED"
+              echo "- Strict dependency verification: NOT VERIFIED"
+              echo "- Unit tests/lint: NOT RUN"
+            fi
+            if [[ -f build-diagnostics/apk-validation.log ]]; then
+              echo "- APK validation: see attached report"
+            else
+              echo "- APK validation: NOT VERIFIED"
+            fi
+          } | tee build-diagnostics/summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload validated APK payload for release
+        if: success()
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: director-x-release-payload
+          path: artifacts/*
+          if-no-files-found: error
+          retention-days: 3
+
+      - name: Upload diagnostics and test reports
+        if: always()
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: director-x-build-diagnostics-${{ github.run_id }}
+          path: |
+            build-diagnostics/**
+            build/reports/dependency-verification/**
+            build/reports/problems/**
+            app/build/test-results/testQaUnitTest/**
+            app/build/reports/tests/testQaUnitTest/**
+            app/build/reports/lint-results-*.html
+          if-no-files-found: warn
+          retention-days: 14
+
+  publish-release:
+    name: Publish permanent GitHub Release
+    needs: build-apk
+    if: github.event_name == 'push' && needs.build-apk.outputs.build_variant == 'debug'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - name: Download validated APK payload
+        uses: actions/download-artifact@v8.0.2
+        with:
+          name: director-x-release-payload
+          path: artifacts
+
+      - name: Publish immutable commit-specific release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION_NAME: ${{ needs.build-apk.outputs.version_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          TAG="director-x-v${VERSION_NAME}-${GITHUB_SHA}"
+          TITLE="Director X ${VERSION_NAME} — ${GITHUB_SHA:0:12}"
+          # gh release create fails if this tag already exists; do not replace
+          # a previously published APK or checksum.
+          gh release create "$TAG" \
+            artifacts/*.apk \
+            artifacts/SHA256SUMS.txt \
+            artifacts/build-info.txt \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "$TITLE" \
+            --notes-file artifacts/RELEASE_NOTES.md \
+            --latest
+          echo "Published: https://github.com/$GITHUB_REPOSITORY/releases/tag/$TAG" >> "$GITHUB_STEP_SUMMARY"
+ "$SDK_ROOT/build-tools/36.0.0/source.properties"
           {
             echo "android_sdk_root=$SDK_ROOT"
             echo "android_platform=android-37.0"
