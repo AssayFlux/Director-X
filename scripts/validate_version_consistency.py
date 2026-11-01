@@ -38,6 +38,12 @@ def validate(root: Path = ROOT) -> tuple[str, str]:
         raise VersionConsistencyError(
             f"README must contain the authoritative application metadata: {expected_metadata}"
         )
+
+    settings = (root / "app" / "src" / "main" / "java" / "com" / "directorx" / "editor" / "ui" / "settings" / "SettingsScreen.kt").read_text(encoding="utf-8")
+    if '"v${BuildConfig.VERSION_NAME}"' not in settings:
+        raise VersionConsistencyError("Settings must display BuildConfig.VERSION_NAME rather than a hardcoded app version")
+    if re.search(r'"v\\d+\\.\\d+\\.\\d+"', settings):
+        raise VersionConsistencyError("Settings contains a hardcoded semantic app version")
     return name, code
 
 
