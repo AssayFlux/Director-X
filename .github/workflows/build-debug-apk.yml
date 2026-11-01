@@ -97,9 +97,14 @@ jobs:
     timeout-minutes: 150
     env:
       BUILD_VARIANT: ${{ inputs.build_variant || 'debug' }}
+      DIRECTORX_RELEASE_KEYSTORE_BASE64: ${{ secrets.DIRECTORX_RELEASE_KEYSTORE_BASE64 }}
+      CLEARCUT_STORE_PASSWORD: ${{ secrets.DIRECTORX_RELEASE_STORE_PASSWORD }}
+      CLEARCUT_KEY_ALIAS: ${{ secrets.DIRECTORX_RELEASE_KEY_ALIAS }}
+      CLEARCUT_KEY_PASSWORD: ${{ secrets.DIRECTORX_RELEASE_KEY_PASSWORD }}
     outputs:
       build_variant: ${{ steps.meta.outputs.build_variant }}
       version_name: ${{ steps.meta.outputs.version_name }}
+      version_code: ${{ steps.meta.outputs.version_code }}
     steps:
       - name: Check out source
         uses: actions/checkout@v7.0.1
@@ -115,6 +120,21 @@ jobs:
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v6.4.1
+
+      - name: Restore stable release signing key for main-branch publishing
+        if: github.event_name == 'push' && env.BUILD_VARIANT == 'debug' && env.DIRECTORX_RELEASE_KEYSTORE_BASE64 != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "${CLEARCUT_STORE_PASSWORD:-}" || -z "${CLEARCUT_KEY_ALIAS:-}" || -z "${CLEARCUT_KEY_PASSWORD:-}" ]]; then
+            echo "::error::The release keystore secret is present but one or more password/alias secrets are missing."
+            exit 1
+          fi
+          printf '%s' "$DIRECTORX_RELEASE_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/directorx-release.keystore"
+          chmod 600 "$RUNNER_TEMP/directorx-release.keystore"
+          echo "CLEARCUT_STORE_FILE=$RUNNER_TEMP/directorx-release.keystore" >> "$GITHUB_ENV"
+          echo "DIRECTORX_USE_RELEASE_SIGNING_FOR_DEBUG=true" >> "$GITHUB_ENV"
+          echo "Stable release signing key restored to the runner temp directory."
 
       - name: Initialize build diagnostics
         id: meta
@@ -243,11 +263,12 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          bash ./gradlew --no-daemon --dependency-verification=strict --stacktrace --console=plain \
-            :app:testQaUnitTest \
-            :app:lint \
-            "${{ steps.task.outputs.gradle_task }}" \
-            2>&1 | tee build-diagnostics/gradle-build.log
+          GRADLE_ARGS=(--no-daemon --dependency-verification=strict --stacktrace --console=plain)
+          if [[ "${DIRECTORX_USE_RELEASE_SIGNING_FOR_DEBUG:-false}" == "true" ]]; then
+            GRADLE_ARGS+=("-PdirectorxUseReleaseSigningForDebug=true" ":app:verifyReleaseSigningIdentity")
+          fi
+          GRADLE_ARGS+=(:app:testQaUnitTest :app:lint "${{ steps.task.outputs.gradle_task }}")
+          bash ./gradlew "${GRADLE_ARGS[@]}" 2>&1 | tee build-diagnostics/gradle-build.log
 
       - name: Validate APK metadata, native ABI payloads, signatures and checksums
         shell: bash
@@ -273,11 +294,23 @@ jobs:
             exit 1
           fi
 
+          FIRST_CERT_SHA=""
           for apk in "${APK_PATHS[@]}"; do
             name="$(basename "$apk")"
             cp "$apk" "artifacts/$name"
-            "$APKSIGNER" verify --verbose --print-certs "artifacts/$name" \
-              >> build-diagnostics/apk-validation.log 2>&1
+            SIGNER_INFO="$("$APKSIGNER" verify --verbose --print-certs "artifacts/$name" 2>&1)"
+            printf '%s\n' "$SIGNER_INFO" >> build-diagnostics/apk-validation.log
+            CERT_SHA="$(sed -n 's/^Signer #1 certificate SHA-256 digest: //p' <<< "$SIGNER_INFO" | head -n 1 | tr -d '[:space:]:' | tr '[:upper:]' '[:lower:]')"
+            if [[ -z "$CERT_SHA" ]]; then
+              echo "::error::Could not read the APK signing certificate fingerprint for $name."
+              exit 1
+            fi
+            if [[ -z "$FIRST_CERT_SHA" ]]; then
+              FIRST_CERT_SHA="$CERT_SHA"
+            elif [[ "$CERT_SHA" != "$FIRST_CERT_SHA" ]]; then
+              echo "::error::APK splits were signed with different certificates."
+              exit 1
+            fi
             "$ZIPALIGN" -c -P 16 -v 4 "artifacts/$name" \
               >> build-diagnostics/native-alignment.log 2>&1
             python scripts/check_16kb_alignment.py "artifacts/$name" \
@@ -295,11 +328,19 @@ jobs:
               | tee -a build-diagnostics/apk-validation.log
           done
 
+          EXPECTED_CERT_SHA="$(python -c 'import json; print(json.load(open("app/release-signing-identity.json", encoding="utf-8"))["certificateSha256"].lower())')"
+          SIGNING_IDENTITY_MATCHES=false
+          if [[ "$FIRST_CERT_SHA" == "$EXPECTED_CERT_SHA" ]]; then
+            SIGNING_IDENTITY_MATCHES=true
+          fi
           (
             cd artifacts
             sha256sum ./*.apk > SHA256SUMS.txt
           )
           {
+            echo "signing_certificate_sha256=$FIRST_CERT_SHA"
+            echo "pinned_release_certificate_sha256=$EXPECTED_CERT_SHA"
+            echo "signing_identity_matches_pinned_release=$SIGNING_IDENTITY_MATCHES"
             echo "dependency_verification=strict (passed)"
             echo "unit_tests=:app:testQaUnitTest (passed; shared QA JVM test lane)"
             echo "android_lint=:app:lint (aggregate all variants; passed)"
@@ -405,9 +446,39 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION_NAME: ${{ needs.build-apk.outputs.version_name }}
+      VERSION_CODE: ${{ needs.build-apk.outputs.version_code }}
         shell: bash
         run: |
           set -euo pipefail
+          if [[ ! "$VERSION_CODE" =~ ^[0-9]+$ ]]; then
+            echo "::error::The application versionCode is missing or invalid; refusing to publish."
+            exit 1
+          fi
+
+          LATEST_TAG="$(gh release list --repo "$GITHUB_REPOSITORY" --limit 1 --json tagName --jq '.[0].tagName // ""')"
+          if [[ -n "$LATEST_TAG" ]]; then
+            mkdir -p latest-release
+            gh release download "$LATEST_TAG" --repo "$GITHUB_REPOSITORY" --pattern build-info.txt --dir latest-release
+            LATEST_VERSION_CODE="$(sed -n 's/^version_code=//p' latest-release/build-info.txt | head -n 1)"
+            if [[ ! "$LATEST_VERSION_CODE" =~ ^[0-9]+$ ]]; then
+              echo "::error::Latest release has no valid versionCode metadata; refusing to replace or supersede it."
+              exit 1
+            fi
+            if (( VERSION_CODE <= LATEST_VERSION_CODE )); then
+              echo "Skipping release: versionCode $VERSION_CODE is not greater than the latest published versionCode $LATEST_VERSION_CODE."
+              echo "A new permanent APK release requires a Gradle versionCode increment."
+              echo "- Release skipped: current versionCode $VERSION_CODE is not newer than latest $LATEST_VERSION_CODE." >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+          fi
+
+          SIGNING_MATCH="$(sed -n 's/^signing_identity_matches_pinned_release=//p' artifacts/build-info.txt | head -n 1)"
+          if [[ "$SIGNING_MATCH" != "true" ]]; then
+            echo "::error::Refusing to publish an APK signed with a certificate different from app/release-signing-identity.json."
+            echo "::error::Configure DIRECTORX_RELEASE_KEYSTORE_BASE64, DIRECTORX_RELEASE_STORE_PASSWORD, DIRECTORX_RELEASE_KEY_ALIAS and DIRECTORX_RELEASE_KEY_PASSWORD GitHub Actions secrets with the existing matching key."
+            exit 1
+          fi
+
           TAG="director-x-v${VERSION_NAME}-${GITHUB_SHA}"
           TITLE="Director X ${VERSION_NAME} — ${GITHUB_SHA:0:12}"
           # gh release create fails if this tag already exists; do not replace
