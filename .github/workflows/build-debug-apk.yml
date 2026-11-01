@@ -162,11 +162,11 @@ jobs:
           printf 'sdk.dir=%s\n' "$SDK_ROOT" > local.properties
 
           sdkmanager --list 2>&1 | tee build-diagnostics/android-sdk-available.log
-          if ! grep -Eq '^[[:space:]]*platforms;android-37\\.0[[:space:]]*\\|' build-diagnostics/android-sdk-available.log; then
+          if ! grep -Eq '^[[:space:]]*platforms;android-37\.0[[:space:]]*\|' build-diagnostics/android-sdk-available.log; then
             echo "::error::Android SDK Platform 37 is unavailable."
             exit 1
           fi
-          if ! grep -Eq '^[[:space:]]*build-tools;36\\.0\\.0[[:space:]]*\\|' build-diagnostics/android-sdk-available.log; then
+          if ! grep -Eq '^[[:space:]]*build-tools;36\.0\.0[[:space:]]*\|' build-diagnostics/android-sdk-available.log; then
             echo "::error::AGP 9.4.1 default Build Tools 36.0.0 are unavailable."
             exit 1
           fi
@@ -174,7 +174,7 @@ jobs:
           {
             echo "Installing Android SDK Platform 37 and AGP 9.4.1 default Build Tools 36.0.0"
             sdkmanager "platforms;android-37.0" "build-tools;36.0.0"
-            if grep -Eq '^[[:space:]]*build-tools;37\\.0\\.0[[:space:]]*\\|' build-diagnostics/android-sdk-available.log; then
+            if grep -Eq '^[[:space:]]*build-tools;37\.0\.0[[:space:]]*\|' build-diagnostics/android-sdk-available.log; then
               echo "Build Tools 37.0.0 are available; installing the requested package for verification."
               sdkmanager "platforms;android-37.0" "build-tools;37.0.0"
             else
