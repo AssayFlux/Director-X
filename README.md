@@ -20,8 +20,8 @@ A native Android video editor for media creation, timeline editing, intelligent 
   <a href="https://github.com/AssayFlux/Director-X/issues">REPORT AN ISSUE</a>
 </p>
 
-<!-- Live badges: workflow badges report real workflow conclusions; version is checked against Gradle. -->
-[![APK build, tests and lint](https://img.shields.io/github/actions/workflow/status/AssayFlux/Director-X/build-debug-apk.yml?branch=main&label=APK%20BUILD%20%2B%20STRICT%20VERIFY%20%2B%20TESTS%20%2B%20LINT%20%2B%2016KB&logo=android&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml)
+<!-- Live badges: repository and Android test workflows; version is checked against Gradle. -->
+[![Android tests and lint](https://img.shields.io/github/actions/workflow/status/AssayFlux/Director-X/android-tests.yml?branch=main&label=ANDROID%20TESTS%20%2B%20LINT&logo=android&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X/actions/workflows/android-tests.yml)
 [![Repository validation](https://img.shields.io/github/actions/workflow/status/AssayFlux/Director-X/repository-hygiene.yml?branch=main&label=REPOSITORY%20VALIDATION&logo=githubactions&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X/actions/workflows/repository-hygiene.yml)
 [![Latest release](https://img.shields.io/github/v/release/AssayFlux/Director-X?label=LATEST%20RELEASE&logo=github&style=for-the-badge)](https://github.com/AssayFlux/Director-X/releases/latest)
 
@@ -247,7 +247,7 @@ The repository's registered JVM test lane is the QA build type:
 ./gradlew :app:testQaUnitTest
 ```
 
-The Android CI workflow runs this shared test suite, the aggregate `:app:lint` task, and the selected APK variant. It does not assume that unregistered `testDebugUnitTest` or `testStreamingUnitTest` tasks exist.
+The Android test workflow runs this shared test suite and the aggregate `:app:lint` task. It does not assemble, package, sign, or publish an APK, and it does not assume that unregistered `testDebugUnitTest` or `testStreamingUnitTest` tasks exist.
 
 ### 6. Install on a connected device
 
@@ -269,24 +269,9 @@ APK outputs are generated under `app/build/outputs/apk/`. Depending on the confi
 
 </div>
 
-The latest successful **debug** build from `main` is eligible for a permanent GitHub Release only after strict dependency verification, QA unit tests, aggregate lint, APK metadata/signature checks, native-library alignment checks and the pinned signing-identity check succeed.
+GitHub Actions no longer builds, signs, validates, or publishes APK files. The release page remains available for APKs that a maintainer publishes manually. Build and install an APK locally using the source-build instructions above, then verify its package identity and signing certificate before distributing it.
 
-Each release includes:
-- Universal and ABI-specific APK outputs.
-- `SHA256SUMS.txt` for integrity verification.
-- `build-info.txt` with the source commit, build date, application version, variant and signing-certificate fingerprint.
-- Release notes identifying the exact source commit.
-
-**Permanent releases require the existing signing key.** Configure these GitHub Actions secrets with the existing PKCS#12 keystore and credentials matching the certificate fingerprint recorded in `app/release-signing-identity.json`:
-
-- `DIRECTORX_RELEASE_KEYSTORE_BASE64`
-- `DIRECTORX_RELEASE_STORE_PASSWORD`
-- `DIRECTORX_RELEASE_KEY_ALIAS`
-- `DIRECTORX_RELEASE_KEY_PASSWORD`
-
-Do not generate a replacement key. CI refuses to publish an APK signed by a different certificate. Pull-request and manual test builds may use the runner's temporary debug key and are not suitable for in-place updates.
-
-A new public release is created only when Gradle's `versionCode` is greater than the latest published release. Increase the version code deliberately for each new installable update; CI never invents or increments application versions. QA and streaming builds are validation builds and are not automatically published.
+**Update compatibility depends on the original signing key.** Do not generate a replacement key for an in-place update. Keep the existing signing identity recorded in `app/release-signing-identity.json` secure and use it when preparing a manually published update.
 
 ## Repository structure
 
@@ -333,7 +318,7 @@ Director-X/
 | Complete | Media playback, transformation, effects and muxing integration |
 | Complete | Local persistence and background-work infrastructure |
 | Complete | Local AI and audio-processing integrations |
-| In progress | Strict APK validation and signing/version-gated GitHub Release pipeline |
+| Complete | Automated repository validation, Android QA unit tests and lint (without APK building) |
 | Planned | Validate builds across physical Android devices |
 | Planned | Continue refining editing and export workflows |
 | Planned | Unify local AI engine controls and capability management |
