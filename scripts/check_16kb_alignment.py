@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-check_16kb_alignment.py — Verify every native library in a built ClearCut
+check_16kb_alignment.py — Verify every native library in a built Director X
 APK or AAB declares 16 KB (0x4000) or larger LOAD-segment alignment.
 
 Why: Google Play blocks uploads of apps targeting Android 15+ (API 35+)
