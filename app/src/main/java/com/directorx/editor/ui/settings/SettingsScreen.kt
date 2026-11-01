@@ -741,7 +741,7 @@ fun SettingsScreen(
             title = stringResource(R.string.settings_about),
             description = stringResource(R.string.settings_about_description)
         ) {
-            SettingsInfo(Icons.Default.Info, stringResource(R.string.settings_version), "v0.1.0", ClearCutAccents.Sapphire)
+            SettingsInfo(Icons.Default.Info, stringResource(R.string.settings_version), "v${BuildConfig.VERSION_NAME}", ClearCutAccents.Sapphire)
             SettingsInfo(Icons.Default.AutoAwesome, stringResource(R.string.brand_credit), "AssayFlux", ClearCutAccents.Mauve)
         }
 
