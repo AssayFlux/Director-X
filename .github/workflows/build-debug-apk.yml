@@ -632,39 +632,3 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
-  publish-release:
-    name: Publish permanent GitHub Release
-    needs: build-apk
-    if: github.event_name == 'push' && needs.build-apk.outputs.build_variant == 'debug'
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    permissions:
-      contents: write
-    steps:
-      - name: Download validated APK payload
-        uses: actions/download-artifact@v8.0.2
-        with:
-          name: director-x-release-payload
-          path: artifacts
-
-      - name: Publish immutable commit-specific release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          VERSION_NAME: ${{ needs.build-apk.outputs.version_name }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          TAG="director-x-v${VERSION_NAME}-${GITHUB_SHA}"
-          TITLE="Director X ${VERSION_NAME} — ${GITHUB_SHA:0:12}"
-          # gh release create fails if this tag already exists; do not replace
-          # a previously published APK or checksum.
-          gh release create "$TAG" \
-            artifacts/*.apk \
-            artifacts/SHA256SUMS.txt \
-            artifacts/build-info.txt \
-            --repo "$GITHUB_REPOSITORY" \
-            --target "$GITHUB_SHA" \
-            --title "$TITLE" \
-            --notes-file artifacts/RELEASE_NOTES.md \
-            --latest
-          echo "Published: https://github.com/$GITHUB_REPOSITORY/releases/tag/$TAG" >> "$GITHUB_STEP_SUMMARY"
