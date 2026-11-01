@@ -179,8 +179,16 @@ jobs:
           echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
           printf 'sdk.dir=%s\n' "$SDK_ROOT" > local.properties
 
-          # Accept SDK licences non-interactively before querying/installing packages.
+          # Accept SDK licences non-interactively. Ignore a possible SIGPIPE from yes,
+          # but still fail if sdkmanager itself rejects the licence operation.
+          set +o pipefail
           yes | sdkmanager --licenses >/dev/null
+          LICENSE_STATUS=$?
+          set -o pipefail
+          if (( LICENSE_STATUS != 0 )); then
+            echo "::error::Android SDK licence acceptance failed (sdkmanager exit $LICENSE_STATUS)."
+            exit "$LICENSE_STATUS"
+          fi
 
           sdkmanager --list 2>&1 | tee build-diagnostics/android-sdk-available.log
           PLATFORM_PACKAGE=""
