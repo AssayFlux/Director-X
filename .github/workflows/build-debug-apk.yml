@@ -228,32 +228,24 @@ jobs:
           case "$BUILD_VARIANT" in
             debug)
               TASK=":app:assembleDebug"
-              TEST_TASK=":app:testDebugUnitTest"
-              LINT_TASK=":app:lintDebug"
               ;;
             qa)
               TASK=":app:assembleQa"
-              TEST_TASK=":app:testQaUnitTest"
-              LINT_TASK=":app:lintQa"
               ;;
             streaming)
               TASK=":app:assembleStreaming"
-              TEST_TASK=":app:testStreamingUnitTest"
-              LINT_TASK=":app:lintStreaming"
               ;;
             *) echo "::error::Unsupported build variant: $BUILD_VARIANT"; exit 2 ;;
           esac
           echo "gradle_task=$TASK" >> "$GITHUB_OUTPUT"
-          echo "test_task=$TEST_TASK" >> "$GITHUB_OUTPUT"
-          echo "lint_task=$LINT_TASK" >> "$GITHUB_OUTPUT"
 
-      - name: Run strict verification, variant unit tests, variant lint and APK build
+      - name: Run strict verification, QA unit tests, aggregate lint and selected APK build
         shell: bash
         run: |
           set -o pipefail
           bash ./gradlew --no-daemon --dependency-verification=strict --stacktrace --console=plain \
-            "${{ steps.task.outputs.test_task }}" \
-            "${{ steps.task.outputs.lint_task }}" \
+            :app:testQaUnitTest \
+            :app:lint \
             "${{ steps.task.outputs.gradle_task }}" \
             2>&1 | tee build-diagnostics/gradle-build.log
 
@@ -309,8 +301,8 @@ jobs:
           )
           {
             echo "dependency_verification=strict (passed)"
-            echo "unit_tests=${{ steps.task.outputs.test_task }} (passed)"
-            echo "android_lint=${{ steps.task.outputs.lint_task }} (passed)"
+            echo "unit_tests=:app:testQaUnitTest (passed; shared QA JVM test lane)"
+            echo "android_lint=:app:lint (aggregate all variants; passed)"
             echo "apk_build=${{ steps.task.outputs.gradle_task }} (passed)"
             echo "apk_validation=signature, package/version metadata, ABI/native payloads (passed)"
             echo "native_16kb_elf_and_apk_zip_alignment=passed"
@@ -346,8 +338,8 @@ jobs:
             if [[ -f build-diagnostics/gradle-build.log ]] && grep -q 'BUILD SUCCESSFUL' build-diagnostics/gradle-build.log; then
               echo "- Gradle: BUILD SUCCESSFUL"
               echo "- Strict dependency verification: PASSED"
-              echo "- Unit tests: ${{ steps.task.outputs.test_task }} (passed)"
-              echo "- Android lint: ${{ steps.task.outputs.lint_task }} (passed)"
+              echo "- Unit tests: :app:testQaUnitTest (shared QA JVM test lane; passed)"
+              echo "- Android lint: :app:lint (aggregate all variants; passed)"
             elif [[ -f build-diagnostics/gradle-build.log ]]; then
               echo "- Gradle: FAILED or interrupted; inspect the attached stack trace"
               if grep -qi 'dependency verification failed' build-diagnostics/gradle-build.log; then
