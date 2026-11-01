@@ -164,6 +164,7 @@ jobs:
           python scripts/validate_android_audio_api_policy.py
           python scripts/validate_package_identity.py --self-test
           python scripts/validate_android_audio_api_policy.py --self-test
+          python scripts/check_16kb_alignment.py --self-test
 
       - name: Select build task
         id: task
@@ -213,6 +214,8 @@ jobs:
             cp "$apk" "artifacts/$name"
             "$APKSIGNER" verify --verbose --print-certs "artifacts/$name" \
               >> build-diagnostics/apk-validation.log 2>&1
+            python scripts/check_16kb_alignment.py "artifacts/$name" \
+              2>&1 | tee -a build-diagnostics/native-alignment.log
             BADGING="$("$AAPT" dump badging "artifacts/$name")"
             PACKAGE_NAME="$(sed -n "s/^package: name='\\([^']*\\)'.*/\\1/p" <<< "$BADGING")"
             APK_VERSION_CODE="$(sed -n "s/^package: .*versionCode='\\([^']*\\)'.*/\\1/p" <<< "$BADGING")"
@@ -234,6 +237,7 @@ jobs:
             echo "android_lint=:app:lint (passed)"
             echo "apk_build=${{ steps.task.outputs.gradle_task }} (passed)"
             echo "apk_validation=signature and package/version metadata (passed)"
+            echo "native_16kb_alignment=passed"
             echo "apk_file_sizes:"
             for apk in artifacts/*.apk; do
               printf '%s=%s bytes\\n' "$(basename "$apk")" "$(stat -c '%s' "$apk")"
