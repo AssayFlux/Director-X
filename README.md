@@ -41,6 +41,8 @@
 
 **Version 3.82.0** &nbsp; · &nbsp; **Version code 301** &nbsp; · &nbsp; **Application ID `com.directorx.editor`**
 
+Android app version: `3.82.0` · versionCode `301`
+
 </div>
 
 ---
@@ -67,23 +69,23 @@ The interface follows a vintage darkroom direction: warm cream, paper beige, cha
 ## Capability status
 
 <!-- capability-registry:ai-tools:begin -->
-| Tool | Implementation status |
-|---|---|
-| Auto captions | Integrated ONNX Whisper tiny.en path; English model |
-| Background removal | Integrated MediaPipe Selfie Segmentation |
-| Object removal | LaMa inpainting; explicit model download |
-| Stabilization | Integrated offline motion analysis |
-| Smart reframe | Integrated MediaPipe BlazeFace tracking path |
-| Scene detection | Integrated frame-difference analysis |
-| Auto color | Integrated histogram-based adjustments |
-| HDR feature gate | Android codec capability detection |
-| Motion tracking | Integrated template matching and keyframe path |
-| Audio denoise | DeepFilterNet integration with fallback |
-| AI green screen | Planned model integration |
-| Video upscaling | Planned model integration |
-| Frame interpolation | Planned RIFE / NCNN integration |
-| Style transfer | Planned model integration |
-| Tap-to-segment | Planned SAM 2.1 / MobileSAM integration |
+| Tool | Engine | On-Device? |
+|------|--------|------------|
+| **Auto Captions** | ONNX Runtime Whisper tiny.en (English; multilingual Sherpa/Whisper path gated) | Yes |
+| **Background Removal** | MediaPipe Selfie Segmentation (~1-7MB, ~30fps) | Yes |
+| **AI Green Screen** | Planned: RobustVideoMatting requires model integration | Planned |
+| **Object Removal** | LaMa-Dilated inpainting with rectangle, ellipse, and freehand mask rendering for stills and motion clips | Yes (explicit ~174 MB model download) |
+| **Video Upscaling** | Planned: Real-ESRGAN requires model integration | Planned |
+| **Frame Interpolation** | Planned: RIFE v4.6 requires the NCNN dependency | Planned |
+| **Style Transfer** | Planned: AnimeGANv2 and Fast NST require model integration | Planned |
+| **Stabilization** | Built-in offline motion analysis with bounded translation search and shared preview/export transforms | Yes |
+| **Smart Reframe** | MediaPipe BlazeFace detection, EMA-smoothed crop trajectory, 3 strategies (stationary/pan/track) | Yes |
+| **Tap-to-Segment** | Planned: SAM 2.1 Hiera Tiny with a MobileSAM fallback | Planned |
+| **Scene Detection** | Content-aware frame difference analysis with auto-split | Yes |
+| **Auto Color** | Histogram-based brightness/contrast/saturation/temperature | Yes |
+| **HDR Encoder Feature Gate** | MediaCodecInfo.CodecCapabilities FEATURE_HdrEditing / FEATURE_HlgEditing | Yes |
+| **Motion Tracking** | Template matching with position keyframe generation | Yes |
+| **Audio Denoise** | DeepFilterNet 3 with spectral-gate fallback | Yes |
 <!-- capability-registry:ai-tools:end -->
 
 ## Technology
