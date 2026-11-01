@@ -341,7 +341,7 @@ Before opening a pull request:
 
 ## License
 
-See the repository's [LICENSE](LICENSE) file for the terms that apply to this project. Third-party components remain subject to their respective licences and notices.
+See the repository's [LICENSE](LICENSE) for the project licence and [ACKNOWLEDGMENTS](ACKNOWLEDGMENTS.md) for third-party components, attribution and licence notices. Third-party components remain subject to their respective licences and notices.
 
 ---
 
