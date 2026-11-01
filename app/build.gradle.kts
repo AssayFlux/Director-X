@@ -82,6 +82,12 @@ android {
     buildTypes {
         debug {
             isPseudoLocalesEnabled = true
+            // Main-branch CI can use the existing pinned release key for the
+            // publicly published debug APK. PR builds keep the normal local
+            // debug key because repository secrets are not available to forks.
+            if (providers.gradleProperty("directorxUseReleaseSigningForDebug").orNull == "true") {
+                signingConfig = signingConfigs.getByName("release")
+            }
         }
         release {
             isMinifyEnabled = true
