@@ -23,10 +23,7 @@
 [![Android](https://img.shields.io/badge/PLATFORM-ANDROID-3DDC84?logo=android&logoColor=white&style=for-the-badge)](https://developer.android.com/)
 [![Min SDK](https://img.shields.io/badge/MIN%20SDK-26-52796F?logo=android&logoColor=white&style=for-the-badge)](https://developer.android.com/about/versions)
 [![Compile / Target](https://img.shields.io/badge/COMPILE%20%2F%20TARGET-37-52796F?logo=android&logoColor=white&style=for-the-badge)](https://developer.android.com/about/versions)
-[![Kotlin](https://img.shields.io/badge/KOTLIN-2.4.10-7F52FF?logo=kotlin&logoColor=white&style=for-the-badge)](https://kotlinlang.org/)
 
-[![Java](https://img.shields.io/badge/JAVA-17-ED8B00?logo=openjdk&logoColor=white&style=for-the-badge)](https://openjdk.org/)
-[![Gradle](https://img.shields.io/badge/GRADLE-9.8.0-02303A?logo=gradle&logoColor=white&style=for-the-badge)](https://gradle.org/)
 [![License](https://img.shields.io/github/license/AssayFlux/Director-X?label=LICENSE&style=for-the-badge)](LICENSE)
 [![Last commit](https://img.shields.io/github/last-commit/AssayFlux/Director-X/main?label=LAST%20UPDATE&logo=git&style=for-the-badge)](https://github.com/AssayFlux/Director-X/commits/main)
 
@@ -34,7 +31,6 @@
 [![Forks](https://img.shields.io/github/forks/AssayFlux/Director-X?label=FORKS&style=for-the-badge)](https://github.com/AssayFlux/Director-X/network/members)
 [![Open issues](https://img.shields.io/github/issues/AssayFlux/Director-X?label=OPEN%20ISSUES&style=for-the-badge)](https://github.com/AssayFlux/Director-X/issues)
 [![Contributors](https://img.shields.io/github/contributors/AssayFlux/Director-X?label=CONTRIBUTORS&style=for-the-badge)](https://github.com/AssayFlux/Director-X/graphs/contributors)
-
 
 </div>
 
@@ -94,7 +90,7 @@ The interface follows a vintage darkroom direction: warm cream, paper beige, cha
 | Machine learning | ONNX Runtime, MediaPipe |
 | Audio | DeepFilterNet |
 | Native media | FFmpegKitNext / FFmpeg |
-| Build | Gradle 9.8.0, AGP 9.4.1, Java 17 |
+| Build | Gradle Wrapper, Android Gradle Plugin, Java toolchain (project-managed) |
 
 ## Android identity
 
@@ -102,13 +98,10 @@ The interface follows a vintage darkroom direction: warm cream, paper beige, cha
 |---|---|
 | Application ID | `com.directorx.editor` |
 | Kotlin namespace | `com.directorx.editor` |
-| Version name | `3.82.0` |
-| Version code | `301` |
 | Minimum SDK | API 26 |
 | Compile SDK | API 37 |
 | Target SDK | API 37 |
 | Java toolchain | 17 |
-
 
 ### Package identity and upgrade policy
 
@@ -151,8 +144,6 @@ Only lightweight repository-hygiene validation remains enabled in GitHub Actions
 - Android builds, installation and device testing are performed manually by the maintainer in Termux.
 
 The repository-check badge above reports only the repository-hygiene workflow. It must not be interpreted as an Android build or app-test result.
-
-
 
 ## Repository map
 
