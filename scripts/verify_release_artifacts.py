@@ -151,13 +151,11 @@ def verify_local_trust_controls(apks: list[Path]) -> None:
     run_python_script("validate_play_listing_assets.py", "--quiet")
     run_python_script("validate_package_identity.py")
     run_python_script("validate_distribution_readiness.py")
-    # These two shipped as workflow steps before the local migration; they are
-    # release gates (unearned capability claims / audio API policy), not lint.
+    # Keep public capability and Android audio-policy gates in the local release check.
     run_python_script("validate_public_claims.py")
     run_python_script("validate_android_audio_api_policy.py")
-    # Local sidecars prove nothing about what was actually uploaded. v3.76.0
-    # shipped a lone APK with no checksum and no certificate fingerprint while
-    # every local gate was green.
+    # Local sidecars prove nothing about what was actually uploaded. Verify the
+    # published release itself so its checksums and signing identity are present.
     run_python_script("verify_published_release_sidecars.py")
     for apk in apks:
         run_python_script("check_16kb_alignment.py", str(apk))
