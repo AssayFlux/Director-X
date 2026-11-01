@@ -11,9 +11,10 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def local_targets(readme: str):
-    readme = re.sub(r"```.*?```", "", readme, flags=re.DOTALL)
+    fence = chr(96) * 3
+    readme = re.sub(re.escape(fence) + r".*?" + re.escape(fence), "", readme, flags=re.DOTALL)
     patterns = (
-        r"!?[[^]]*](([^)]+))",
+        r"\]\(([^)]+)\)",
         r"""(?:href|src)\s*=\s*["']([^"']+)["']""",
     )
     for pattern in patterns:
