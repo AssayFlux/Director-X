@@ -1,8 +1,7 @@
 # Director X changelog
 
-## v3.82.0
+## Project identity and repository maintenance — 1 November 2026
 
-- Android version name: `3.82.0`; version code: `301`.
 - Corrected package identity metadata, generated capability paths, launcher shortcut targets and QA references for `com.directorx.editor`.
 - Recorded `com.novacut.editor` as migration history; moving projects from that separate package requires export/import.
 - Updated product identity, source paths and capability documentation.
