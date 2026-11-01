@@ -93,6 +93,10 @@ Its visual direction uses a warm, cinematic palette: ivory, charcoal, vintage go
 | **Audio Denoise** | DeepFilterNet 3 with spectral-gate fallback | Yes |
 <!-- capability-registry:ai-tools:end -->
 
+## Screenshots and feature presentation
+
+The repository intentionally excludes old promotional and unverified editor screenshots. No screenshots are presented as evidence of functionality until they are captured from a successfully built Director X application. Genuine device captures can be added here after the QA build is installed and the editing, preview and export flows are verified.
+
 ## Technology
 
 | Layer | Technology |
