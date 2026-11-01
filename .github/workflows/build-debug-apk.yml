@@ -430,7 +430,6 @@ jobs:
             --notes-file artifacts/RELEASE_NOTES.md \
             --latest
           echo "Published: https://github.com/$GITHUB_REPOSITORY/releases/tag/$TAG" >> "$GITHUB_STEP_SUMMARY"
- "$SDK_ROOT/build-tools/36.0.0/source.properties"
           {
             echo "android_sdk_root=$SDK_ROOT"
             echo "android_platform=android-37.0"
