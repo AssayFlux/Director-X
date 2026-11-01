@@ -368,6 +368,8 @@ jobs:
           name: director-x-build-diagnostics-${{ github.run_id }}
           path: |
             build-diagnostics/**
+            build/reports/dependency-verification/**
+            build/reports/problems/**
             app/build/test-results/testQaUnitTest/**
             app/build/reports/tests/testQaUnitTest/**
             app/build/reports/lint-results-*.html
