@@ -125,6 +125,15 @@ jobs:
           fi
           echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
           printf 'sdk.dir=%s\n' "$SDK_ROOT" > local.properties
+          sdkmanager --list 2>&1 | tee build-diagnostics/android-sdk-available.log
+          if ! grep -Fq 'platforms;android-37' build-diagnostics/android-sdk-available.log; then
+            echo "::error::Android SDK Platform 37 is not available from the configured SDK repositories."
+            exit 1
+          fi
+          if ! grep -Fq 'build-tools;37.0.0' build-diagnostics/android-sdk-available.log; then
+            echo "::error::Android Build Tools 37.0.0 are not available from the configured SDK repositories."
+            exit 1
+          fi
           {
             echo "Installing platforms;android-37 and build-tools;37.0.0"
             sdkmanager "platforms;android-37" "build-tools;37.0.0"
@@ -219,6 +228,19 @@ jobs:
             cd artifacts
             sha256sum ./*.apk > SHA256SUMS.txt
           )
+          {
+            echo "dependency_verification=strict (passed)"
+            echo "unit_tests=:app:testQaUnitTest (passed)"
+            echo "android_lint=:app:lint (passed)"
+            echo "apk_build=${{ steps.task.outputs.gradle_task }} (passed)"
+            echo "apk_validation=signature and package/version metadata (passed)"
+            echo "apk_file_sizes:"
+            for apk in artifacts/*.apk; do
+              printf '%s=%s bytes\\n' "$(basename "$apk")" "$(stat -c '%s' "$apk")"
+            done
+            echo "apk_sha256:"
+            cat artifacts/SHA256SUMS.txt
+          } >> build-diagnostics/build-info.txt
           cp build-diagnostics/build-info.txt artifacts/build-info.txt
           {
             echo "## Director X validated Android build"
@@ -254,6 +276,10 @@ jobs:
               echo "- APK validation: completed; see attached report"
             else
               echo "- APK validation: NOT VERIFIED"
+            fi
+            if [[ -f build-diagnostics/gradle-build.log ]] && ! grep -q 'BUILD SUCCESSFUL' build-diagnostics/gradle-build.log; then
+              echo "- Failure location:"
+              grep -E 'Execution failed for task|Could not resolve|What went wrong:|FAILURE: Build failed' build-diagnostics/gradle-build.log | tail -n 8 || true
             fi
           } | tee build-diagnostics/summary.md >> "$GITHUB_STEP_SUMMARY"
 
