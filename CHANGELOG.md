@@ -3,19 +3,26 @@
 ## v3.82.0
 
 - Android version name: `3.82.0`; version code: `301`.
-- Corrected the package identity registry, generated capability source path, launcher shortcut targets, and QA/test references to match the actual `com.directorx.editor` namespace and application ID.
-- Documented the previous `com.novacut.editor` package as migration history; project transfer from that separate installation requires export/import.
-- Updated public documentation and the model registry to use Director X product identity and current source paths.
-- Removed the CI metadata-push operation that could fail after APK compilation and prevent artifact collection/upload.
+- Corrected package identity metadata, generated capability paths, launcher shortcut targets and QA references for `com.directorx.editor`.
+- Recorded `com.novacut.editor` as migration history; moving projects from that separate package requires export/import.
+- Updated product identity, source paths and capability documentation.
+- Removed CI metadata-push behavior that could interfere with artifact handling.
+
+## Repository workflow change — 1 November 2026
+
+- Removed the GitHub Actions Android tests and lint workflow at the maintainer's request.
+- Removed the GitHub Actions APK build/release workflow in the preceding repository change.
+- Retained only lightweight repository-hygiene validation in GitHub Actions.
+- Android APK compilation, installation, unit tests, instrumentation tests and lint are now maintainer-run tasks in Termux or another locally configured Android development environment.
+- Reworked the README and added a Termux build guide so automation badges and documentation no longer imply that GitHub Actions builds or tests the Android application.
 
 ## Rebrand and design-system pass
 
 - Set the Android display name to Director X and added the “Designed by AssayFlux” credit to Settings → About.
-- Replaced the dark palette with the warm-cream vintage darkroom palette: cream canvas, beige surfaces, charcoal text, taupe borders, amber highlights, and sage actions.
-- Introduced serif display headings while retaining sans-serif controls and metadata.
-- Replaced launcher and store icon artwork with an original film-camera/aperture motif.
-- Removed old promotional, development, and visual-capture screenshots. Visual verification tests can generate fresh captures from a running build.
-- Preserved editing code, project formats, tests, native dependency locks, and licence notices.
-- Disabled upstream release checking until a Director X repository is configured.
+- Applied the warm-cream vintage darkroom palette: cream canvas, beige surfaces, charcoal text, taupe borders, amber highlights and sage actions.
+- Introduced serif display headings with sans-serif controls and metadata.
+- Replaced launcher and store identity artwork with the Director X camera/aperture motif.
+- Removed old promotional, development and unverified screenshots.
+- Preserved inherited editing code, project formats, upstream attribution, native dependency locks and licence notices.
 
-This is an initial rebrand/design-system pass. Android builds and runtime workflows still require verification before release.
+Builds and runtime workflows must be verified on a real device before a release is described as tested or production-ready.
