@@ -40,6 +40,7 @@ on:
       - "scripts/validate_public_claims.py"
       - "scripts/validate_android_audio_api_policy.py"
       - "scripts/validate_version_consistency.py"
+      - "scripts/check_16kb_alignment.py"
   workflow_dispatch:
     inputs:
       build_variant:
@@ -198,6 +199,40 @@ jobs:
           APKSIGNER="$SDK_ROOT/build-tools/37.0.0/apksigner"
           VERSION_NAME="${{ steps.meta.outputs.version_name }}"
           VERSION_CODE="${{ steps.meta.outputs.version_code }}"
+          python - "$BUILD_VARIANT" <<'PY'
+          import json
+          import pathlib
+          import sys
+
+          variant = sys.argv[1]
+          metadata_path = pathlib.Path("app/build/outputs/apk") / variant / "output-metadata.json"
+          if not metadata_path.is_file():
+              raise SystemExit(f"Missing APK output metadata: {metadata_path}")
+          metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+          elements = metadata.get("elements")
+          if not isinstance(elements, list) or not elements:
+              raise SystemExit("APK output metadata has no elements")
+          expected_abis = {"armeabi-v7a", "arm64-v8a", "x86", "x86_64"}
+          found_abis = set()
+          universal = 0
+          for element in elements:
+              filters = element.get("filters", [])
+              abis = {
+                  item.get("value")
+                  for item in filters
+                  if isinstance(item, dict) and item.get("filterType") == "ABI"
+              }
+              if abis:
+                  found_abis.update(abis)
+              else:
+                  universal += 1
+          if universal != 1:
+              raise SystemExit(f"Expected one universal APK, found {universal}")
+          missing = expected_abis - found_abis
+          if missing:
+              raise SystemExit(f"Missing ABI APK splits: {', '.join(sorted(missing))}")
+          print(f"APK split metadata verified: universal + {', '.join(sorted(found_abis))}")
+          PY
           EXPECTED_PACKAGE="com.directorx.editor"
           EXPECTED_VERSION="$VERSION_NAME"
           case "$BUILD_VARIANT" in
