@@ -67,9 +67,11 @@ These models are *named in the roadmap* but not yet fetched at runtime. They get
 | C.5 / R6.7 | MADLAD-400 3B (Q4, mobile) | https://huggingface.co/google/madlad400-3b-mt | ~1.5 GB (Q4) | 419 languages; replaces NLLB-200 target. |
 | C.5 / R6.7 | Mozilla Bergamot models | https://browser.mt/ | varies (~100 MB per pair) | Per-language-pair download; Firefox offline translation models. |
 
-## 4. Cloud-only providers (consent-gated, never on-device bundled)
+## 4. Planned cloud-only providers (not currently integrated)
 
-Codified by [`GenerativeVideoPolicy.kt`](../app/src/main/java/com/directorx/editor/engine/GenerativeVideoPolicy.kt). Each provider must disclose destination, upload size, retention policy, and collect explicit consent before any cloud call.
+The following table is a requirements and roadmap inventory, **not a list of working cloud integrations**. `GenerativeVideoPolicy.kt` codifies the disclosure/consent policy, but the production `HybridAiRouter` currently has no registered cloud provider adapter or provider API client. Do not advertise these entries as available features until a real adapter, settings consent flow, privacy review, error/offline handling, and integration tests are implemented.
+
+Each future provider must disclose destination, upload size, retention policy, and collect explicit consent before any cloud call.
 
 | Provider | Use case | Tier | Notes |
 |---|---|---|---|
