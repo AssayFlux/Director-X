@@ -9,14 +9,11 @@ This guide documents the maintainer's manual Android build workflow. GitHub Acti
 | Setting | Value |
 |---|---|
 | Application ID | `com.directorx.editor` |
-| Version | `3.82.0` (version code `301`) |
 | Minimum Android API | 26 |
 | Compile / target API | 37 |
 | Java toolchain | 17 |
-| Gradle wrapper | 9.8.0 |
-| Android Gradle Plugin | 9.4.1 |
 
-The authoritative application values are in `app/build.gradle.kts`; plugin and library versions are in `gradle/libs.versions.toml`.
+The Android application identity and required build-tool versions are defined by the Gradle project files. Read those files before selecting SDK packages; this guide deliberately avoids copying version numbers that can become stale.
 
 ## 1. Prepare Termux
 
@@ -46,8 +43,8 @@ The output must identify JDK 17. If your device has a different Java version sel
 
 You need a working Android SDK installation that is executable from Termux and includes:
 
-- Android SDK Platform 37.
-- Android SDK Build Tools 36.0.0 (or the exact compatible version required by the current Gradle configuration).
+- The Android SDK platform required by `compileSdk` in `app/build.gradle.kts`.
+- The Android SDK Build Tools version required by the Android Gradle Plugin configuration.
 - Platform Tools.
 - A working `aapt2`, `aidl`, `zipalign` and other build-tools executables required by AGP.
 
@@ -62,10 +59,9 @@ export PATH="$PATH:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/late
 Do not copy this example path unless it exists on your device. Check the installation:
 
 ```bash
-test -d "$ANDROID_HOME/platforms/android-37"
-test -d "$ANDROID_HOME/build-tools/36.0.0"
+find "$ANDROID_HOME/platforms" -maxdepth 1 -mindepth 1 -type d -print
+find "$ANDROID_HOME/build-tools" -maxdepth 1 -mindepth 1 -type d -print
 command -v adb || true
-ls "$ANDROID_HOME/build-tools/36.0.0"
 ```
 
 If your SDK manager is compatible with Termux, install the required packages and accept their licences using that manager. If its executables fail with an ELF, linker, or Bionic/glibc error, stop: that SDK distribution is not a usable Termux build toolchain. Use a Termux-compatible SDK provider rather than repeatedly retrying Gradle.
