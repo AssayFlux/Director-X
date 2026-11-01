@@ -1,6 +1,8 @@
 <div align="center">
 
-<img src="assets/icon.png" alt="Director X application icon" width="500" />
+<p>
+  <img src="assets/icon.svg" alt="Director X application icon" width="176" />
+</p>
 
 # DIRECTOR X
 
@@ -8,18 +10,22 @@
 
 **Designed by AssayFlux**
 
-A native Android video-editing studio combining media creation, intelligent tools, and local-first processing.
+A native Android video editor for media creation, timeline editing, intelligent tools and local-first processing.
 
-[**View source**](https://github.com/AssayFlux/Director-X) · [**Report an issue**](https://github.com/AssayFlux/Director-X/issues) · [**Builds & APK**](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml)
+<p>
+  <a href="https://github.com/AssayFlux/Director-X/releases/latest"><strong>⬇ DOWNLOAD LATEST APK</strong></a>
+  &nbsp; · &nbsp;
+  <a href="https://github.com/AssayFlux/Director-X">SOURCE CODE</a>
+  &nbsp; · &nbsp;
+  <a href="https://github.com/AssayFlux/Director-X/issues">REPORT AN ISSUE</a>
+</p>
 
-<br/>
+<!-- Live badges: workflow badges report real workflow conclusions; version is checked against Gradle. -->
+[![APK build, tests and lint](https://img.shields.io/github/actions/workflow/status/AssayFlux/Director-X/build-debug-apk.yml?branch=main&label=APK%20BUILD%20%2B%20STRICT%20VERIFY%20%2B%20TESTS%20%2B%20LINT%20%2B%2016KB&logo=android&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml)
+[![Repository validation](https://img.shields.io/github/actions/workflow/status/AssayFlux/Director-X/repository-hygiene.yml?branch=main&label=REPOSITORY%20VALIDATION&logo=githubactions&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X/actions/workflows/repository-hygiene.yml)
+[![Latest release](https://img.shields.io/github/v/release/AssayFlux/Director-X?label=LATEST%20RELEASE&logo=github&style=for-the-badge)](https://github.com/AssayFlux/Director-X/releases/latest)
 
-<!-- LIVE STATUS BADGES: keep workflow badges tied to real workflows only. -->
-[![APK build](https://img.shields.io/github/actions/workflow/status/AssayFlux/Director-X/build-debug-apk.yml?branch=main&label=APK%20BUILD&logo=android&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml)
-[![Repository hygiene](https://img.shields.io/github/actions/workflow/status/AssayFlux/Director-X/repository-hygiene.yml?branch=main&label=REPOSITORY%20HYGIENE&logo=githubactions&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X/actions/workflows/repository-hygiene.yml)
-[![Latest commit](https://img.shields.io/github/last-commit/AssayFlux/Director-X/main?label=LATEST%20COMMIT&logo=git&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X/commits/main)
-
-[![Version](https://img.shields.io/badge/PROJECT%20VERSION-v0.1.0-B18B5E?logo=semver&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X)
+[![Application version](https://img.shields.io/badge/APP%20VERSION-3.82.0-C29B38?logo=android&logoColor=2C2621&style=for-the-badge)](https://github.com/AssayFlux/Director-X/blob/main/app/build.gradle.kts)
 [![Android](https://img.shields.io/badge/PLATFORM-ANDROID-3DDC84?logo=android&logoColor=white&style=for-the-badge)](https://developer.android.com/)
 [![Minimum SDK](https://img.shields.io/badge/MIN%20SDK-26-52796F?logo=android&logoColor=white&style=for-the-badge)](https://developer.android.com/about/versions)
 [![Target SDK](https://img.shields.io/badge/TARGET%20SDK-37-52796F?logo=android&logoColor=white&style=for-the-badge)](https://developer.android.com/about/versions)
@@ -29,13 +35,14 @@ A native Android video-editing studio combining media creation, intelligent tool
 [![Gradle](https://img.shields.io/badge/GRADLE-9.8.0-02303A?logo=gradle&logoColor=white&style=for-the-badge)](https://gradle.org/)
 [![License](https://img.shields.io/github/license/AssayFlux/Director-X?label=LICENSE&style=for-the-badge)](https://github.com/AssayFlux/Director-X/blob/main/LICENSE)
 
+[![Latest commit](https://img.shields.io/github/last-commit/AssayFlux/Director-X/main?label=LATEST%20COMMIT&logo=git&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X/commits/main)
 [![Stars](https://img.shields.io/github/stars/AssayFlux/Director-X?label=STARS&style=for-the-badge)](https://github.com/AssayFlux/Director-X/stargazers)
 [![Forks](https://img.shields.io/github/forks/AssayFlux/Director-X?label=FORKS&style=for-the-badge)](https://github.com/AssayFlux/Director-X/network/members)
 [![Open issues](https://img.shields.io/github/issues/AssayFlux/Director-X?label=OPEN%20ISSUES&style=for-the-badge)](https://github.com/AssayFlux/Director-X/issues)
-[![Repo size](https://img.shields.io/github/repo-size/AssayFlux/Director-X?label=REPOSITORY%20SIZE&style=for-the-badge)](https://github.com/AssayFlux/Director-X)
+
+Android app version: `3.82.0` · versionCode `301`
 
 </div>
-
 ---
 
 ## About Director X
@@ -85,6 +92,10 @@ Its visual direction uses a warm, cinematic palette: ivory, charcoal, vintage go
 | **Motion Tracking** | Template matching with position keyframe generation | Yes |
 | **Audio Denoise** | DeepFilterNet 3 with spectral-gate fallback | Yes |
 <!-- capability-registry:ai-tools:end -->
+
+## Screenshots and feature presentation
+
+The repository intentionally excludes old promotional and unverified editor screenshots. No screenshots are presented as evidence of functionality until they are captured from a successfully built Director X application. Genuine device captures can be added here after the QA build is installed and the editing, preview and export flows are verified.
 
 ## Technology
 
@@ -246,21 +257,23 @@ APK outputs are generated under `app/build/outputs/apk/`. Depending on the confi
 
 <div align="center">
 
-### Director X · Android builds
+### Director X · Permanent public release
 
-**Download the APK produced by the latest successful workflow run.**
+[![Download latest APK](https://img.shields.io/badge/DOWNLOAD-LATEST%20APK-C29B38?style=for-the-badge&logo=android&logoColor=2C2621)](https://github.com/AssayFlux/Director-X/releases/latest)
 
-[![Open APK build history](https://img.shields.io/badge/OPEN_APK_BUILDS-View_downloadable_artifacts-C79B2E?style=for-the-badge&logo=android&logoColor=2D2824)](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml)
+**Stable download page:** [github.com/AssayFlux/Director-X/releases/latest](https://github.com/AssayFlux/Director-X/releases/latest)
 
 </div>
 
-1. Open the [Build Debug APK workflow](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml).
-2. Select the latest run marked **Success**.
-3. Scroll to **Artifacts**.
-4. Download the `director-x-debug-apk` artifact.
-5. Extract the ZIP and install the APK on your Android device.
+The latest successful **debug** build from the `main` branch is published as a GitHub Release only after strict dependency verification, QA unit tests, lint, APK signature verification and package/version metadata validation succeed.
 
-**Important:** Workflow artifacts are temporary and currently have a 14-day retention period. This is an Actions artifact download, not a permanent GitHub Release. A failed or in-progress run will not provide a successful APK artifact.
+Each release includes:
+- APK outputs for the supported ABI packaging configuration.
+- `SHA256SUMS.txt` for integrity verification.
+- `build-info.txt` with the source commit, build date, application version and variant.
+- Release notes identifying the exact source commit.
+
+QA and streaming builds are validation builds and are not automatically published as public releases. Failed or unvalidated builds are never promoted to the latest release.
 
 ## Repository structure
 
@@ -307,7 +320,7 @@ Director-X/
 | Complete | Media playback, transformation, effects and muxing integration |
 | Complete | Local persistence and background-work infrastructure |
 | Complete | Local AI and audio-processing integrations |
-| Complete | Manual debug APK workflow |
+| Complete | Strictly validated APK build and permanent GitHub Release pipeline |
 | Planned | Validate builds across physical Android devices |
 | Planned | Continue refining editing and export workflows |
 | Planned | Unify local AI engine controls and capability management |
@@ -328,7 +341,7 @@ Before opening a pull request:
 
 ## License
 
-See the repository's [LICENSE](LICENSE) file for the terms that apply to this project. Third-party components remain subject to their respective licences and notices.
+See the repository's [LICENSE](LICENSE) for the project licence and [ACKNOWLEDGMENTS](ACKNOWLEDGMENTS.md) for third-party components, attribution and licence notices. Third-party components remain subject to their respective licences and notices.
 
 ---
 
@@ -340,7 +353,7 @@ See the repository's [LICENSE](LICENSE) file for the terms that apply to this pr
 
 **Designed by AssayFlux**
 
-[Repository](https://github.com/AssayFlux/Director-X) · [Issues](https://github.com/AssayFlux/Director-X/issues) · [Builds & APK](https://github.com/AssayFlux/Director-X/actions/workflows/build-debug-apk.yml)
+[Repository](https://github.com/AssayFlux/Director-X) · [Issues](https://github.com/AssayFlux/Director-X/issues) · [Latest APK](https://github.com/AssayFlux/Director-X/releases/latest)
 
 *Crafted for creators. Engineered for Android.*
 

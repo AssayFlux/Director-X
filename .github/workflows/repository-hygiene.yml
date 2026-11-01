@@ -11,15 +11,45 @@ permissions:
   contents: read
 
 jobs:
-  exact-duplicate-audit:
-    name: Exact duplicate audit
+  repository-validation:
+    name: Repository, identity and policy validation
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
       - name: Detect unapproved exact duplicates
         run: python scripts/check_repository_duplicates.py
+
+      - name: Validate Android package identity
+        run: python scripts/validate_package_identity.py
+
+      - name: Validate application version consistency
+        run: python scripts/validate_version_consistency.py
+
+      - name: Validate README links and assets
+        run: python scripts/validate_readme_links.py
+
+      - name: Validate generated capability registry
+        run: python scripts/generate_capability_registry.py --check
+
+      - name: Validate public feature claims
+        run: python scripts/validate_public_claims.py
+
+      - name: Validate Android audio API policy
+        run: python scripts/validate_android_audio_api_policy.py
+
+      - name: Run validator self-tests
+        run: |
+          python scripts/validate_package_identity.py --self-test
+          python scripts/validate_android_audio_api_policy.py --self-test
+          python scripts/check_16kb_alignment.py --self-test
+          python scripts/validate_apk_outputs.py --self-test
