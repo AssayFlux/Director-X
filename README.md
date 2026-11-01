@@ -164,6 +164,10 @@ Only lightweight repository-hygiene validation remains enabled in GitHub Actions
 
 The repository-check badge above reports only the repository-hygiene workflow. It must not be interpreted as an Android build or app-test result.
 
+### Android 17 audio hardening smoke check
+
+For a manual compatibility check on a device running Android 17, enable strict audio hardening with `adb shell cmd audio set-hardening throw`, then exercise TTS preview, voiceover and export while reviewing `AudioHardening` log output. This is a maintainer-run device check; it is not executed by GitHub Actions.
+
 ## Repository map
 
 ```text
