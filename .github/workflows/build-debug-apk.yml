@@ -40,6 +40,43 @@ on:
       - "scripts/validate_android_audio_api_policy.py"
       - "scripts/validate_version_consistency.py"
       - "scripts/check_16kb_alignment.py"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "app/**"
+      - "baselineprofile/**"
+      - "third_party/**"
+      - "gradle/**"
+      - "buildSrc/**"
+      - "build-logic/**"
+      - "**/*.kt"
+      - "**/*.java"
+      - "**/*.xml"
+      - "**/*.so"
+      - "**/*.aar"
+      - "**/*.jar"
+      - "**/*.c"
+      - "**/*.cc"
+      - "**/*.cpp"
+      - "**/*.h"
+      - "**/*.gradle"
+      - "**/*.gradle.kts"
+      - "**/*.properties"
+      - "build.gradle.kts"
+      - "settings.gradle.kts"
+      - "gradle.properties"
+      - "gradlew"
+      - "gradlew.bat"
+      - ".github/workflows/build-debug-apk.yml"
+      - "scripts/capability_registry.json"
+      - "scripts/generate_capability_registry.py"
+      - "scripts/package_identity.json"
+      - "scripts/validate_package_identity.py"
+      - "scripts/validate_public_claims.py"
+      - "scripts/validate_android_audio_api_policy.py"
+      - "scripts/validate_version_consistency.py"
+      - "scripts/check_16kb_alignment.py"
   workflow_dispatch:
     inputs:
       build_variant:
