@@ -71,6 +71,8 @@ These models are *named in the roadmap* but not yet fetched at runtime. They get
 
 The following table is a requirements and roadmap inventory, **not a list of working cloud integrations**. `GenerativeVideoPolicy.kt` codifies the disclosure/consent policy, but the production `HybridAiRouter` currently has no registered cloud provider adapter or provider API client. Do not advertise these entries as available features until a real adapter, settings consent flow, privacy review, error/offline handling, and integration tests are implemented.
 
+The on-device model/engine rows elsewhere in this document (for example Whisper transcription, MediaPipe segmentation, ONNX inference, and DeepFilterNet audio denoising) describe separate local engine integrations. They are not evidence that a pluggable `OnDeviceAiProvider` implementation is registered in `HybridAiRouter`.
+
 Each future provider must disclose destination, upload size, retention policy, and collect explicit consent before any cloud call.
 
 | Provider | Use case | Tier | Notes |
