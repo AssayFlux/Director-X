@@ -318,6 +318,7 @@ jobs:
         if: always()
         shell: bash
         run: |
+          mkdir -p build-diagnostics
           {
             echo "## Director X build diagnostics"
             echo
