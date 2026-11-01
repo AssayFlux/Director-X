@@ -162,35 +162,35 @@ jobs:
           printf 'sdk.dir=%s\n' "$SDK_ROOT" > local.properties
 
           sdkmanager --list 2>&1 | tee build-diagnostics/android-sdk-available.log
-          if ! grep -Fq 'platforms;android-37' build-diagnostics/android-sdk-available.log; then
+          if ! grep -Eq '^[[:space:]]*platforms;android-37\\.0[[:space:]]*\\|' build-diagnostics/android-sdk-available.log; then
             echo "::error::Android SDK Platform 37 is unavailable."
             exit 1
           fi
-          if ! grep -Fq 'build-tools;36.0.0' build-diagnostics/android-sdk-available.log; then
+          if ! grep -Eq '^[[:space:]]*build-tools;36\\.0\\.0[[:space:]]*\\|' build-diagnostics/android-sdk-available.log; then
             echo "::error::AGP 9.4.1 default Build Tools 36.0.0 are unavailable."
             exit 1
           fi
 
           {
             echo "Installing Android SDK Platform 37 and AGP 9.4.1 default Build Tools 36.0.0"
-            sdkmanager "platforms;android-37" "build-tools;36.0.0"
-            if grep -Fq 'build-tools;37.0.0' build-diagnostics/android-sdk-available.log; then
+            sdkmanager "platforms;android-37.0" "build-tools;36.0.0"
+            if grep -Eq '^[[:space:]]*build-tools;37\\.0\\.0[[:space:]]*\\|' build-diagnostics/android-sdk-available.log; then
               echo "Build Tools 37.0.0 are available; installing the requested package for verification."
-              sdkmanager "platforms;android-37" "build-tools;37.0.0"
+              sdkmanager "platforms;android-37.0" "build-tools;37.0.0"
             else
               echo "::warning::Build Tools 37.0.0 are not available; using the documented AGP 9.4.1 default 36.0.0."
             fi
             sdkmanager --list_installed
           } 2>&1 | tee build-diagnostics/android-sdk-install.log
 
-          test -d "$SDK_ROOT/platforms/android-37"
+          test -d "$SDK_ROOT/platforms/android-37.0"
           test -d "$SDK_ROOT/build-tools/36.0.0"
           test -x "$SDK_ROOT/build-tools/36.0.0/aapt"
           test -x "$SDK_ROOT/build-tools/36.0.0/apksigner"
           grep -q '^Pkg.Revision=36\.0\.0$' "$SDK_ROOT/build-tools/36.0.0/source.properties"
           {
             echo "android_sdk_root=$SDK_ROOT"
-            echo "android_platform=android-37"
+            echo "android_platform=android-37.0"
             echo "gradle_build_tools=36.0.0 (AGP 9.4.1 default)"
             if [[ -d "$SDK_ROOT/build-tools/37.0.0" ]]; then
               test -x "$SDK_ROOT/build-tools/37.0.0/aapt"
@@ -201,7 +201,7 @@ jobs:
             else
               echo "requested_build_tools_37=NOT AVAILABLE; 36.0.0 remains the compatible build-tools version"
             fi
-            cat "$SDK_ROOT/platforms/android-37/source.properties"
+            cat "$SDK_ROOT/platforms/android-37.0/source.properties"
             cat "$SDK_ROOT/build-tools/36.0.0/source.properties"
           } | tee -a build-diagnostics/build-info.txt
 
