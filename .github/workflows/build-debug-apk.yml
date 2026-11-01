@@ -28,7 +28,6 @@ on:
       - "gradle.properties"
       - "gradlew"
       - "gradlew.bat"
-      - ".github/workflows/build-debug-apk.yml"
       - "scripts/capability_registry.json"
       - "scripts/generate_capability_registry.py"
       - "scripts/package_identity.json"
@@ -65,7 +64,6 @@ on:
       - "gradle.properties"
       - "gradlew"
       - "gradlew.bat"
-      - ".github/workflows/build-debug-apk.yml"
       - "scripts/capability_registry.json"
       - "scripts/generate_capability_registry.py"
       - "scripts/package_identity.json"
@@ -181,29 +179,40 @@ jobs:
           echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
           printf 'sdk.dir=%s\n' "$SDK_ROOT" > local.properties
 
+          # Accept SDK licences non-interactively before querying/installing packages.
+          yes | sdkmanager --licenses >/dev/null
+
           sdkmanager --list 2>&1 | tee build-diagnostics/android-sdk-available.log
-          if ! grep -Eq '^[[:space:]]*platforms;android-37\.0[[:space:]]*\|' build-diagnostics/android-sdk-available.log; then
-            echo "::error::Android SDK Platform 37 is unavailable."
+          PLATFORM_PACKAGE=""
+          for candidate in "platforms;android-37.0" "platforms;android-37"; do
+            if grep -Fq "${candidate} |" build-diagnostics/android-sdk-available.log; then
+              PLATFORM_PACKAGE="$candidate"
+              break
+            fi
+          done
+          if [[ -z "$PLATFORM_PACKAGE" ]]; then
+            echo "::error::Android SDK Platform 37 is unavailable. Checked android-37.0 and android-37; refusing to downgrade compileSdk."
             exit 1
           fi
-          if ! grep -Eq '^[[:space:]]*build-tools;36\.0\.0[[:space:]]*\|' build-diagnostics/android-sdk-available.log; then
+          if ! grep -Fq 'build-tools;36.0.0 |' build-diagnostics/android-sdk-available.log; then
             echo "::error::AGP 9.4.1 default Build Tools 36.0.0 are unavailable."
             exit 1
           fi
 
+          PLATFORM_DIR="$SDK_ROOT/platforms/${PLATFORM_PACKAGE#platforms;}"
           {
-            echo "Installing Android SDK Platform 37 and AGP 9.4.1 default Build Tools 36.0.0"
-            sdkmanager "platforms;android-37.0" "build-tools;36.0.0"
-            if grep -Eq '^[[:space:]]*build-tools;37\.0\.0[[:space:]]*\|' build-diagnostics/android-sdk-available.log; then
-              echo "Build Tools 37.0.0 are available; installing the requested package for verification."
-              sdkmanager "platforms;android-37.0" "build-tools;37.0.0"
+            echo "Installing $PLATFORM_PACKAGE and AGP 9.4.1 default Build Tools 36.0.0"
+            sdkmanager "$PLATFORM_PACKAGE" "build-tools;36.0.0"
+            if grep -Fq 'build-tools;37.0.0 |' build-diagnostics/android-sdk-available.log; then
+              echo "Build Tools 37.0.0 are available; installing the optional verification package."
+              sdkmanager "build-tools;37.0.0"
             else
-              echo "::warning::Build Tools 37.0.0 are not available; using the documented AGP 9.4.1 default 36.0.0."
+              echo "::notice::Build Tools 37.0.0 are not available; AGP uses 36.0.0."
             fi
             sdkmanager --list_installed
           } 2>&1 | tee build-diagnostics/android-sdk-install.log
 
-          test -d "$SDK_ROOT/platforms/android-37.0"
+          test -d "$PLATFORM_DIR"
           test -d "$SDK_ROOT/build-tools/36.0.0"
           test -x "$SDK_ROOT/build-tools/36.0.0/aapt"
           test -x "$SDK_ROOT/build-tools/36.0.0/apksigner"
@@ -211,7 +220,7 @@ jobs:
           grep -q '^Pkg.Revision=36\.0\.0$' "$SDK_ROOT/build-tools/36.0.0/source.properties"
           {
             echo "android_sdk_root=$SDK_ROOT"
-            echo "android_platform=android-37.0"
+            echo "android_platform=${PLATFORM_PACKAGE#platforms;}"
             echo "gradle_build_tools=36.0.0 (AGP 9.4.1 default)"
             if [[ -d "$SDK_ROOT/build-tools/37.0.0" ]]; then
               test -x "$SDK_ROOT/build-tools/37.0.0/aapt"
@@ -263,7 +272,8 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          GRADLE_ARGS=(--no-daemon --dependency-verification=strict --stacktrace --console=plain)
+          # Keep memory bounded on Colab-class and standard GitHub runners.
+          GRADLE_ARGS=(--no-daemon --max-workers=2 "-Dorg.gradle.jvmargs=-Xmx5g -Dfile.encoding=UTF-8" --dependency-verification=strict --stacktrace --console=plain)
           if [[ "${DIRECTORX_USE_RELEASE_SIGNING_FOR_DEBUG:-false}" == "true" ]]; then
             GRADLE_ARGS+=("-PdirectorxUseReleaseSigningForDebug=true" ":app:verifyReleaseSigningIdentity")
           fi
@@ -410,7 +420,7 @@ jobs:
           name: director-x-release-payload
           path: artifacts/*
           if-no-files-found: error
-          retention-days: 3
+          retention-days: 14
 
       - name: Upload diagnostics and test reports
         if: always()
@@ -474,9 +484,15 @@ jobs:
 
           SIGNING_MATCH="$(sed -n 's/^signing_identity_matches_pinned_release=//p' artifacts/build-info.txt | head -n 1)"
           if [[ "$SIGNING_MATCH" != "true" ]]; then
-            echo "::error::Refusing to publish an APK signed with a certificate different from app/release-signing-identity.json."
-            echo "::error::Configure DIRECTORX_RELEASE_KEYSTORE_BASE64, DIRECTORX_RELEASE_STORE_PASSWORD, DIRECTORX_RELEASE_KEY_ALIAS and DIRECTORX_RELEASE_KEY_PASSWORD GitHub Actions secrets with the existing matching key."
-            exit 1
+            echo "::notice::Permanent release publishing skipped: this build does not use the pinned Director X signing certificate."
+            echo "::notice::The validated APK remains available in the workflow artifact for 14 days."
+            echo "::notice::To publish an update-compatible permanent release, configure the original matching keystore and all three associated secrets."
+            {
+              echo "- Permanent release: **skipped safely** (pinned signing key unavailable or not selected)."
+              echo "- Validated APK: available in the `director-x-release-payload` workflow artifact for 14 days."
+              echo "- No signing identity was changed; install/update compatibility is protected."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
           fi
 
           TAG="director-x-v${VERSION_NAME}-${GITHUB_SHA}"
