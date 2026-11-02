@@ -764,7 +764,6 @@ fun SettingsScreen(
             }
         }
 
-        }
 
         pendingAiModelRemoval?.let { target ->
             SettingsAiModelRemovalConfirmDialog(
@@ -784,7 +783,6 @@ fun SettingsScreen(
             )
         }
 
-        }
         if (showPrivacyDashboard) {
             androidx.compose.ui.window.Dialog(
                 onDismissRequest = { showPrivacyDashboard = false }
