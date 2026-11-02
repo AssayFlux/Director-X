@@ -298,3 +298,14 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 - **Correction in PR #45:** Preserve mappings for active proxies, failed deletions, and any backing file still present. If the cache directory cannot be enumerated, return an explicit incomplete cleanup result and leave mappings intact.
 - **Regression coverage:** Added pure policy tests for active, failed, still-present, and genuinely stale mappings.
 - **Status:** IN PROGRESS — awaiting Android unit-test CI and API/device validation.
+
+
+### DX-PROXY-006 — Proxy generation can block the main dispatcher while waiting for codec capacity
+
+- **Severity:** High
+- **Status:** IN PROGRESS
+- **Affected files:** `ProxyEngine.kt`, `CodecInstanceBudget.kt`
+- **Finding:** `generateProxy()` switches to `Dispatchers.Main` for Media3 Transformer lifecycle work, then calls the blocking `acquirePipelineBlocking()` semaphore API before creating the Transformer. If another codec-backed operation owns the final permit, this blocks the UI thread while proxy generation waits.
+- **Impact:** A busy codec budget can freeze the editor UI during background proxy generation, defeating the resource queue's intended behavior.
+- **Correction in PR #46:** Replace the blocking pipeline acquisition API with a suspending lease acquisition. The lease pool already moves permit waiting to `Dispatchers.IO`; Transformer construction/start remains on Main.
+- **Verification required:** Android unit tests, API 37 proxy instrumentation, and a stress test where another codec lease is held while proxy generation waits; confirm the main dispatcher remains responsive and the lease is released on success, failure, and cancellation.
