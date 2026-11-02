@@ -33,4 +33,5 @@
 <text x="90" y="1130" class="t">Dashboard target</text><text x="90" y="1165" class="s">• 20dp page inset • 56dp app bar target • 48dp minimum touch target</text><text x="90" y="1195" class="s">• 16dp section rhythm • primary action 56–64dp target height</text><text x="90" y="1225" class="s">• project row target 88–104dp; thumbnail ratio adapts to available width</text>
 <text x="90" y="1285" class="t">Settings target</text><text x="90" y="1320" class="s">• 20dp page inset • 56dp app bar target • 64–72dp setting-row target</text><text x="90" y="1350" class="s">• category navigation cards 72–88dp • 12–16dp between grouped controls</text>
 <text x="90" y="1410" class="t">Rules</text><text x="90" y="1445" class="s">Use dp for layout; sp for text; respect system bars, font scale, width classes and accessibility.</text><text x="90" y="1475" class="s">Blueprint is conceptual; source-measured values are separately documented from proposed targets.</text>
+<text x="90" y="1505" class="s">Palette swatches are layout illustration only: preserve all 10 selectable Director X themes and saved selection.</text>
 </svg>
