@@ -48,7 +48,7 @@ The interface follows a vintage darkroom direction: warm cream, paper beige, cha
 |---|---|
 | Media import and playback | Auto captions (Whisper / ONNX path) |
 | Timeline, trimming and previews | Background removal (MediaPipe) |
-| Video transformation and export | Object removal (LaMa; model download required) |
+| Transformation and export | Object removal (LaMa; model download required) |
 | Effects, composition and muxing | Smart reframe and motion tracking |
 | Audio and voiceover workflows | Audio denoising (DeepFilterNet) |
 | Project files and sharing | Scene detection, stabilization and auto color |
