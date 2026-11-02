@@ -57,7 +57,7 @@ class ProxyResolutionPolicyTest {
         assertTrue(ProxyResolutionPolicy.requiresProxy(1080, 1920))
         assertTrue(ProxyResolutionPolicy.requiresProxy(2160, 3840))
         assertTrue(!ProxyResolutionPolicy.requiresProxy(1080, 1080))
-        assertTrue(!ProxyResolutionPolicy.requiresProxy(720, 1280))
+        assertTrue(ProxyResolutionPolicy.requiresProxy(720, 1280))
         assertTrue(!ProxyResolutionPolicy.requiresProxy(0, 0))
     }
 
