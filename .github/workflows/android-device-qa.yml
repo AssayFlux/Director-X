@@ -143,10 +143,33 @@ jobs:
       - name: Set up Gradle cache
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Create temporary benchmark-only signing key
+        shell: bash
+        run: |
+          KEYSTORE="$RUNNER_TEMP/directorx-ci-benchmark.p12"
+          PASSWORD="benchmark-only-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          keytool -genkeypair -v \
+            -storetype PKCS12 \
+            -keystore "$KEYSTORE" \
+            -storepass "$PASSWORD" \
+            -keypass "$PASSWORD" \
+            -alias benchmark \
+            -dname "CN=Director X CI Benchmark, OU=QA, O=AssayFlux, C=IN" \
+            -keyalg RSA -keysize 2048 -validity 2
+          {
+            echo "CLEARCUT_STORE_FILE=$KEYSTORE"
+            echo "CLEARCUT_STORE_PASSWORD=$PASSWORD"
+            echo "CLEARCUT_KEY_ALIAS=benchmark"
+            echo "CLEARCUT_KEY_PASSWORD=$PASSWORD"
+          } >> "$GITHUB_ENV"
+
       - name: Run API 37 macrobenchmark
         run: |
           chmod +x ./gradlew
+          # The benchmark APK is disposable and never published. Exclude only the
+          # production-certificate identity gate for this ephemeral CI signing key.
           ./gradlew --no-daemon --stacktrace --console=plain \
+            -x :app:verifyReleaseSigningIdentity \
             :baselineprofile:pixel6Api37BenchmarkReleaseAndroidTest
 
       - name: Upload macrobenchmark and baseline profile outputs
