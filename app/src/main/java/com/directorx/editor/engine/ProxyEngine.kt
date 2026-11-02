@@ -89,6 +89,14 @@ internal fun proxyCacheKey(
     return digest.joinToString("") { "%02x".format(it) }.take(32)
 }
 
+/** Keeps mappings for active proxies, failed deletions, or files still on disk. */
+internal fun shouldRetainProxyMapping(
+    key: String,
+    activeKeys: Set<String>,
+    failedKeys: Set<String>,
+    backingFileExists: Boolean,
+): Boolean = key in activeKeys || key in failedKeys || backingFileExists
+
 /**
  * Generates low-resolution proxy files for smooth timeline editing.
  * Proxies are stored in app cache and swapped with originals during export.
@@ -328,10 +336,16 @@ class ProxyEngine @Inject constructor(
 
     fun clearProxies(): ProxyClearResult {
         val activeKeys = activeProxyKeys.toSet()
+        val files = proxyDir.listFiles() ?: return ProxyClearResult(
+            deleted = 0,
+            failed = 1,
+            keptInUse = activeKeys.size,
+        )
         var deleted = 0
         var failed = 0
         var keptInUse = 0
-        proxyDir.listFiles()?.forEach { file ->
+        val failedKeys = mutableSetOf<String>()
+        files.forEach { file ->
             val managedFile = canonicalManagedProxyFile(file)?.takeIf { it.isFile } ?: return@forEach
             val key = managedFile.name.removePrefix("proxy_").removeSuffix(".mp4")
             if (key in activeKeys) {
@@ -339,16 +353,24 @@ class ProxyEngine @Inject constructor(
                 return@forEach
             }
             // A proxy an open project is not using can still refuse to delete: another
-            // process may hold the handle. Reporting "cleared" for a file that is still
-            // on disk is the failure this counter exists to prevent.
+            // process may hold the handle. Preserve its mapping so preview/cache lookup
+            // does not forget a file that is still present.
             if (managedFile.delete()) {
                 deleted++
                 proxyMap.remove(key)
             } else {
                 failed++
+                failedKeys += key
             }
         }
-        proxyMap.keys.removeIf { it !in activeKeys }
+        proxyMap.keys.removeIf { key ->
+            !shouldRetainProxyMapping(
+                key = key,
+                activeKeys = activeKeys,
+                failedKeys = failedKeys,
+                backingFileExists = proxyFileForKey(key).isFile,
+            )
+        }
         return ProxyClearResult(deleted = deleted, failed = failed, keptInUse = keptInUse)
     }
 
