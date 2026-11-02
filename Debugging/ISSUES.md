@@ -145,10 +145,11 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 ### DX-MEDIA-001 — Professional-camera codec and profile compatibility is not yet established
 
 - **Severity:** Critical for the requested professional-camera workflow
-- **Status:** OPEN — INVESTIGATE
-- **Affected areas:** Media import, Media3 preview/Transformer, FFmpegKitNext fallback, proxy generation, export preflight, media metadata persistence.
-- **Finding:** The app has Media3 decoder fallback and an LGPL-profile FFmpegKitNext engine, but those components do not establish support for every professional-camera codec/profile. In particular, a container being importable does not prove its video bit depth, chroma subsampling, profile, frame rate, audio streams, timecode, HDR metadata or camera-specific RAW payload can be decoded and rendered.
-- **Required work:** Build an explicit source capability inspection path; identify MIME/container, codec/profile/level, coded dimensions, frame rate, bit depth/chroma where the platform exposes them, audio streams, rotation and HDR metadata. Distinguish import, preview, proxy and final-export capability. Preserve originals and offer a proxy/transcode path only where the decoder can actually read the source.
+- **Status:** IN PROGRESS — source inspection extended; device and camera-corpus verification pending
+- **Affected areas:** Media import, Media3 preview/Transformer, FFmpegKitNext fallback, proxy generation, export preflight, media metadata persistence, Media Manager diagnostics.
+- **Finding:** A container being importable does not prove its video profile, bit depth, chroma subsampling, frame rate, audio streams, timecode, HDR metadata or camera-specific RAW payload can be decoded and rendered.
+- **Implemented on 2026-11-02:** Media track diagnostics now record profile, level, reported bit depth/chroma, bitrate, audio channel count/sample rate and a device-local decoder lookup against the actual extractor format using Android's regular codec catalogue. The Media Manager diagnostics surface displays the selected decoder (or a clear no-match/unknown result), profile/level, reported bit depth/chroma and audio stream properties. This is a capability hint for the current device, not a guarantee of successful playback or export.
+- **Still required:** Distinguish import, preview, proxy and final-export capability end to end. Preserve originals and offer a proxy/transcode path only when a decoder can actually read the source. Verify whether Media3 and FFmpeg fallback can decode each sample and whether export conforms.
 - **Test corpus required:** Representative camera samples for H.264, HEVC Main/Main10, 4:2:2 variants, ProRes variants, high-bitrate Long-GOP, variable frame rate, multichannel/PCM audio and HDR. Test RAW formats separately; do not claim BRAW, R3D or ARRIRAW support without a verified decoder and licensing review.
 - **Verification required:** Record source file, codec/profile, device/API, preview result, proxy result, export result and output conformance for each sample. Hardware-dependent support must be reported as device-specific.
 
