@@ -164,3 +164,13 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 - **Required correction:** Add validated custom canvas dimensions with even encoder-compatible output dimensions; persist them in Room and the versioned project document; add a forward migration and preserve all legacy enum presets; propagate custom dimensions through crop, preview, template and export paths. Do not merely add a `CUSTOM` enum constant.
 - **Verification required:** Unit tests for bounds, invalid values, portrait/landscape/square dimensions and even-dimension normalization; Room migration tests from schema 10; project-document legacy round trips; preview and export dimension checks.
 
+
+
+## Dashboard redesign — 2026-11-02
+
+- **Status:** IN PROGRESS — first layout refinement committed; visual and regression verification pending.
+- **Scope:** `app/src/main/java/com/directorx/editor/ui/projects/ProjectListScreen.kt` only.
+- **Change:** Dashboard hero horizontal inset increased from 16dp to 20dp, vertical padding tightened to 12dp, child spacing set to 14dp, and the welcome heading reduced from `displayLarge` to `displayMedium` for a more balanced first-screen hierarchy.
+- **Preserved:** Existing Material filled icons, theme-driven colors, callbacks, search/sort visibility conditions, project list states, import/create actions, trash/restore, crash-report actions, and all other Dashboard behavior were not intentionally changed.
+- **Commit:** `d1149f3e1ac9fe4143526e522fe1243f4397a774`.
+- **Not verified yet:** Gradle build, Compose/UI tests, screenshots at narrow and wide viewports, large font scale, orientation, and physical-device behavior. This is a source-level layout refinement, not completion of the Dashboard redesign.
