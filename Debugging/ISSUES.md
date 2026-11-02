@@ -120,3 +120,14 @@ Do not close issues based only on a successful build, a green badge, or code tha
 ## Audit scope and limitations
 
 This is an initial source-level review of the proxy engine, proxy workflow, background worker, and the existing proxy policy tests on the recorded `main` baseline. It is not a complete application audit, and it does not claim that the listed issues are the only defects in Director X. Re-audit the affected files and tests before implementing fixes if the branch has advanced.
+
+## CI follow-up — 2026-11-02
+
+### DX-CI-001 — APK validator was called with an unsupported argument
+
+- **Severity:** High
+- **Status:** FIXED IN SOURCE — CI verification pending
+- **Affected file:** `.github/workflows/android-verification.yml`
+- **Finding:** The workflow passed `app/build/outputs/apk` to `scripts/validate_apk_outputs.py`, but the validator accepts a build variant (`debug`, `qa`, or `streaming`) and resolves the repository output path itself. The workflow therefore could not correctly invoke the validator.
+- **Correction:** The workflow now runs `python3 scripts/validate_apk_outputs.py debug`. It also runs the validator's `--self-test` before Gradle tests to catch fixture/metadata validation regressions.
+- **Verification:** Repository hygiene passed on the workflow-fix commit. The Android verification run for that commit is still in progress; this issue must not be marked verified until unit tests, APK assembly, APK validation, and artifact upload complete successfully.
