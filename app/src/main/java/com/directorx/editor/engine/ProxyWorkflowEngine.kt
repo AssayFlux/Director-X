@@ -215,18 +215,9 @@ class ProxyWorkflowEngine @Inject constructor(
     suspend fun deleteAllProxies(): ProxyDeleteResult = withContext(Dispatchers.IO) {
         var deleted = 0
         var failed = 0
-        var missing = 0
         _entries.value.forEach { (clipId, entry) ->
             val uri = entry.proxyUri ?: return@forEach
-            val fileBytes = proxyEngine.proxyFileLength(uri)
-            if (fileBytes <= 0L) {
-                missing++
-                _entries.update { current ->
-                    current[clipId]?.let { live ->
-                        current + (clipId to live.copy(proxyUri = null, proxyGenerated = false))
-                    } ?: current
-                }
-            } else if (proxyEngine.deleteProxyUri(uri)) {
+            if (proxyEngine.deleteProxyUri(uri)) {
                 deleted++
                 _entries.update { current ->
                     current[clipId]?.let { live ->
@@ -234,10 +225,11 @@ class ProxyWorkflowEngine @Inject constructor(
                     } ?: current
                 }
             } else {
+                // Keep the URI/state so a later retry or diagnostics can still find it.
                 failed++
             }
         }
-        ProxyDeleteResult(deleted = deleted, failed = failed, missing = missing)
+        ProxyDeleteResult(deleted = deleted, failed = failed, missing = 0)
     }
 
     /**
