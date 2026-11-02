@@ -56,7 +56,7 @@ sealed class ProjectDocumentReadResult {
  * are reported rather than silently treated as part of the contract.
  */
 object ProjectDocumentApplicator {
-    const val FORMAT_VERSION = 1
+    const val FORMAT_VERSION = 2
 
     private const val DOCUMENT_VERSION_KEY = "documentVersion"
     private const val PROJECT_KEY = "project"
@@ -115,6 +115,8 @@ object ProjectDocumentApplicator {
                 put("frameRateNumerator", project.frameRateNumerator)
                 put("frameRateDenominator", project.frameRateDenominator)
                 put("resolution", project.resolution.name)
+                put("customWidth", project.customWidth)
+                put("customHeight", project.customHeight)
                 put("createdAt", project.createdAt)
                 put("updatedAt", project.updatedAt)
                 put("durationMs", project.durationMs)
@@ -219,6 +221,8 @@ object ProjectDocumentApplicator {
     ): Project {
         val aspectRatio = parseEnum(json.optString("aspectRatio"), AspectRatio.RATIO_16_9, "aspectRatio", warnings)
         val resolution = parseEnum(json.optString("resolution"), Resolution.FHD_1080P, "resolution", warnings)
+        val customWidth = json.optInt("customWidth", 0)
+        val customHeight = json.optInt("customHeight", 0)
         val frameRate = json.optInt("frameRate", 30).coerceIn(1, 240_000)
         val numerator = json.optInt("frameRateNumerator", frameRate).coerceIn(1, 240_000)
         val denominator = json.optInt("frameRateDenominator", 1).coerceIn(1, 10_000)
@@ -230,6 +234,8 @@ object ProjectDocumentApplicator {
             frameRateNumerator = numerator,
             frameRateDenominator = denominator,
             resolution = resolution,
+            customWidth = customWidth,
+            customHeight = customHeight,
             createdAt = json.optLong("createdAt", System.currentTimeMillis()),
             updatedAt = json.optLong("updatedAt", System.currentTimeMillis()),
             durationMs = json.optLong("durationMs", 0L).coerceAtLeast(0L),
