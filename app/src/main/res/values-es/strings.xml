@@ -1997,6 +1997,10 @@
     <string name="media_diagnostics_fps">%1$.2f fps</string>
     <string name="media_diagnostics_fps_unknown">fps desconocidos</string>
     <string name="media_diagnostics_video_details">%1$s · %2$s · %3$s</string>
+    <string name="media_diagnostics_decoder_supported">Códec del dispositivo encontrado</string>
+    <string name="media_diagnostics_decoder_unavailable">No hay un códec compatible en el dispositivo</string>
+    <string name="media_diagnostics_decoder_unknown">No se pudo comprobar el códec</string>
+    <string name="media_diagnostics_decoder_details">%1$s · %2$s · perfil %3$s · nivel %4$s · %5$s bits</string>
     <string name="media_diagnostics_sync_frames">%1$d fotogramas de sincronización</string>
     <string name="media_diagnostics_sync_frames_approx">%1$d+ fotogramas de sincronización</string>
     <string name="media_diagnostics_timestamp_risk">Riesgo de marcas de tiempo: %1$s</string>
