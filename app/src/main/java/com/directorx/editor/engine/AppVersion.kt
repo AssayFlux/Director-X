@@ -3,7 +3,7 @@ package com.directorx.editor.engine
 /**
  * Pure semantic-version parsing and comparison for the passive update check.
  *
- * Director X releases use semantic version tags in the form `vX.Y.Z` (current repository version: `v3.82.0`). The GitHub releases
+ * Director X releases use semantic version tags in the form `vX.Y.Z` (current repository version: `v0.1.0`). The GitHub releases
  * API reports a `tag_name` in the same shape. This object keeps the comparison
  * logic free of Android and network types so the opt-in gate and the
  * "is a newer release available" decision are fully unit-testable on the JVM.
