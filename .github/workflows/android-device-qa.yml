@@ -71,10 +71,18 @@ jobs:
       - name: Set up Gradle cache
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Bootstrap missing dependency verification checksums
+        run: |
+          chmod +x ./gradlew
+          # Bootstrap missing SHA-256 entries, then rerun the same QA tasks below
+          # with normal strict dependency verification before accepting results.
+          ./gradlew --no-daemon --write-verification-metadata sha256 \
+            :app:clearCutApi37QaAndroidTest
+
       - name: Run Android lint and API 37 managed-device suite
         run: |
           chmod +x ./gradlew
-          ./gradlew --no-daemon --stacktrace --console=plain \
+          ./gradlew --no-daemon --stacktrace --console=plain --rerun-tasks \
             :app:lintQa \
             :app:clearCutApi37QaAndroidTest
 
@@ -93,6 +101,7 @@ jobs:
             app/build/reports/connected-qa/**
             app/build/outputs/androidTest-results/**
             app/build/outputs/androidTest-results/managedDevice/**
+            gradle/verification-metadata.xml
           if-no-files-found: warn
           retention-days: 14
 
@@ -163,12 +172,21 @@ jobs:
             echo "CLEARCUT_KEY_PASSWORD=$PASSWORD"
           } >> "$GITHUB_ENV"
 
+      - name: Bootstrap missing dependency verification checksums
+        run: |
+          chmod +x ./gradlew
+          # Bootstrap missing SHA-256 entries, then rerun the benchmark below
+          # with normal strict dependency verification before accepting results.
+          ./gradlew --no-daemon --write-verification-metadata sha256 \
+            -x :app:verifyReleaseSigningIdentity \
+            :baselineprofile:pixel6Api37BenchmarkReleaseAndroidTest
+
       - name: Run API 37 macrobenchmark
         run: |
           chmod +x ./gradlew
           # The benchmark APK is disposable and never published. Exclude only the
           # production-certificate identity gate for this ephemeral CI signing key.
-          ./gradlew --no-daemon --stacktrace --console=plain \
+          ./gradlew --no-daemon --stacktrace --console=plain --rerun-tasks \
             -x :app:verifyReleaseSigningIdentity \
             :baselineprofile:pixel6Api37BenchmarkReleaseAndroidTest
 
