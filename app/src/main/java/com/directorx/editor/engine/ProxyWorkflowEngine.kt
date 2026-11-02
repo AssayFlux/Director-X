@@ -121,7 +121,7 @@ class ProxyWorkflowEngine @Inject constructor(
             try {
                 val resolution = settingsRepository.settings.first().proxyResolution
                 val needsProxy = _entries.value.filter {
-                    !it.value.proxyGenerated && it.value.originalHeight > 1080
+                    !it.value.proxyGenerated && ProxyResolutionPolicy.requiresProxy(it.value.originalWidth, it.value.originalHeight)
                 }
                 if (needsProxy.isEmpty()) {
                     onProgress(1f)
