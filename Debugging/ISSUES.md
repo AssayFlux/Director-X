@@ -184,3 +184,13 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 - **Preserved by this edit:** Existing section bodies, setting controls, callbacks, ViewModel state, DataStore values, appearance options and current navigation entry point were not intentionally changed.
 - **Commit:** `339a6c375acbbabd13b8a712be2976099742b49f`.
 - **Still required:** Implement the four category views (Export & Delivery; Editing & Timeline; AI & Project Storage; App & Preferences), map all 13 existing sections exactly once, verify back-stack/state restoration and every setting control, and run Android build/UI tests plus device/font-scale checks. Do not mark Step 6 complete until these pass.
+
+
+## Settings category navigation — 2026-11-02
+
+- **Implemented:** Added four Settings category views in `SettingsScreen.kt`: Export & Delivery, Editing & Timeline, AI & Project Storage, and App & Preferences.
+- **Mapping:** All 13 existing `SettingsSection` blocks remain in place and are grouped once: 2 export, 1 editing/timeline, 2 AI/storage, and 8 app/preferences sections.
+- **Navigation:** The Settings header back action returns from a selected category to the category overview; from the overview it invokes the existing parent back callback.
+- **Preservation:** Existing setting controls, ViewModel callbacks, dialogs, and underlying settings state were not replaced.
+- **Commit:** `81e82444` — Add Settings category navigation.
+- **Validation status:** Android verification and repository hygiene workflows have been triggered for this commit. Do not close Step 6 until Android verification passes and UI/back-navigation behaviour is checked on-device, including font scaling.
