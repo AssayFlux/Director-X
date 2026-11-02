@@ -44,6 +44,17 @@ data class ProxyClearResult(
 }
 
 /**
+ * Stable cache identity for a proxy render. A source can have several valid
+ * proxy resolutions at once, so resolution is part of the key as well as URI.
+ */
+internal fun proxyCacheKey(sourceUri: Uri, resolution: ProxyResolution): String {
+    val identity = "${sourceUri.normalizeScheme()}|resolution=${resolution.name}"
+    val digest = java.security.MessageDigest.getInstance("SHA-256")
+        .digest(identity.toByteArray(Charsets.UTF_8))
+    return digest.joinToString("") { "%02x".format(it) }.take(32)
+}
+
+/**
  * Generates low-resolution proxy files for smooth timeline editing.
  * Proxies are stored in app cache and swapped with originals during export.
  */
