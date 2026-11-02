@@ -6,6 +6,21 @@
 **Last repository review:** 2026-11-02  
 **Register status:** Initial source audit recorded; fixes are not claimed until implemented and verified.
 
+## Product direction reminder — UI upgrade scope is strictly limited
+
+> **Do not forget or expand this direction:** The user has authorized UI modernization for exactly five supplied screens: **(1) the Dashboard screen and (2–5) the four Settings screens**. These are the only UI surfaces in scope for this upgrade.
+
+- Preserve the existing Director X cream/vintage visual identity and established palette unless the user approves a deliberate adjustment.
+- Recommend/select a suitable UI design catalogue for these five screens only; do not apply a generic redesign that conflicts with the existing identity.
+- Do **not** redesign or modify the video editor, timeline, preview/player, media import, project creation flow, templates, export flow, playback, proxy workflow, AI features, billing, navigation outside the five named screens, or any other application screen/functionality.
+- Do not refactor unrelated code, rename features, change behavior, remove controls, or alter settings semantics as part of this UI task.
+- Keep existing functionality, settings values, persistence, callbacks, and navigation behavior intact. UI-only changes must be isolated and reviewed.
+- Before implementation, inspect the current Dashboard and Settings source/layout files and map each supplied screenshot to its corresponding screen. Record the exact in-scope files before editing.
+- After implementation, review the diff and confirm that only the Dashboard and four Settings UI surfaces (plus strictly necessary UI resources/tests) changed. If an unrelated file appears in the diff, stop and explain why before proceeding.
+- This is a scope reminder, not authorization to begin implementation before the catalogue/design direction is agreed.
+
+This scope restriction takes precedence over broader redesign ideas or previous project suggestions.
+
 This register tracks reproducible source-level findings, their impact, the proposed correction, and the evidence required to close each item. A source inspection is not a substitute for Android device testing.
 
 ## Status definitions
