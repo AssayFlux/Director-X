@@ -35,7 +35,8 @@ import javax.inject.Singleton
 @Singleton
 class ProxyWorkflowEngine @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val proxyEngine: ProxyEngine
+    private val proxyEngine: ProxyEngine,
+    private val settingsRepository: SettingsRepository,
 ) {
     enum class MediaTier { THUMBNAIL, PROXY, ORIGINAL }
 
