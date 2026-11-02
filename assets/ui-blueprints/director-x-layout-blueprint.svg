@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1600" viewBox="0 0 1200 1600">
+<defs><style>
+.bg{fill:#F5F0E6}.panel{fill:#EAE3D2;stroke:#8C8275;stroke-width:2}.ink{fill:#2C2621}.muted{fill:#71685e}.gold{fill:#C29B38}.line{stroke:#8C8275;stroke-width:2;fill:none}.dash{stroke:#C29B38;stroke-width:2;stroke-dasharray:8 7;fill:none}.h{font:700 32px Georgia,serif;fill:#2C2621}.t{font:20px Arial,sans-serif;fill:#2C2621}.s{font:16px Arial,sans-serif;fill:#71685e}.dim{font:700 17px Arial,sans-serif;fill:#9A741D}
+</style></defs>
+<rect class="bg" width="1200" height="1600"/>
+<text x="60" y="65" class="h">DIRECTOR X — LAYOUT BLUEPRINT</text><text x="60" y="100" class="s">Conceptual target wireframes • dp dimensions are design targets unless explicitly marked as measured baseline</text>
+<!-- dashboard -->
+<rect x="55" y="140" width="520" height="850" rx="24" class="panel"/><text x="85" y="190" class="h">01  Dashboard / Projects</text>
+<rect x="95" y="225" width="440" height="700" rx="18" fill="#F5F0E6" stroke="#8C8275" stroke-width="2"/>
+<rect x="115" y="245" width="400" height="56" rx="10" fill="#EAE3D2"/><text x="135" y="280" class="t">[existing filled movie icon]  Director X</text><text x="475" y="280" class="t">⚙</text>
+<path d="M115 318H515" class="line"/>
+<text x="125" y="365" class="h">Your projects</text><text x="125" y="395" class="s">Keep the first action obvious; avoid a tall hero</text>
+<rect x="120" y="420" width="390" height="72" rx="12" fill="#C29B38"/><text x="155" y="464" font-size="22" font-weight="700" fill="#2C2621">+  New Project</text>
+<rect x="120" y="515" width="188" height="76" rx="12" fill="#EAE3D2" stroke="#8C8275"/><rect x="322" y="515" width="188" height="76" rx="12" fill="#EAE3D2" stroke="#8C8275"/><text x="150" y="560" class="t">Import</text><text x="355" y="560" class="t">Templates</text>
+<text x="125" y="640" class="h">Recent projects</text>
+<rect x="120" y="660" width="390" height="74" rx="10" fill="#EAE3D2"/><rect x="132" y="671" width="88" height="52" rx="6" fill="#C29B38"/><text x="235" y="694" class="t">Project title</text><text x="235" y="718" class="s">Metadata • existing actions</text>
+<rect x="120" y="746" width="390" height="74" rx="10" fill="#EAE3D2"/><rect x="132" y="757" width="88" height="52" rx="6" fill="#C29B38"/><text x="235" y="780" class="t">Project title</text><text x="235" y="804" class="s">Metadata • existing actions</text>
+<rect x="120" y="840" width="390" height="58" rx="8" fill="#EAE3D2"/><text x="145" y="875" class="s">Existing search / filter / sort stay available</text>
+<path d="M95 215H535" class="dash"/><text x="385" y="210" class="dim">Target outer margin 20dp</text>
+<!-- settings -->
+<rect x="625" y="140" width="520" height="850" rx="24" class="panel"/><text x="655" y="190" class="h">02–05  Settings hub + 4 groups</text>
+<rect x="665" y="225" width="440" height="700" rx="18" fill="#F5F0E6" stroke="#8C8275" stroke-width="2"/>
+<rect x="685" y="245" width="400" height="56" rx="10" fill="#EAE3D2"/><text x="705" y="280" class="t">←  Settings</text>
+<text x="695" y="345" class="h">Settings overview</text><text x="695" y="375" class="s">Keep current editor mode + autosave summary</text>
+<rect x="690" y="400" width="390" height="58" rx="8" fill="#EAE3D2"/><text x="710" y="435" class="t">Export &amp; Delivery                         ›</text>
+<rect x="690" y="470" width="390" height="58" rx="8" fill="#EAE3D2"/><text x="710" y="505" class="t">Editing &amp; Timeline                        ›</text>
+<rect x="690" y="540" width="390" height="58" rx="8" fill="#EAE3D2"/><text x="710" y="575" class="t">AI &amp; Project Storage                      ›</text>
+<rect x="690" y="610" width="390" height="58" rx="8" fill="#EAE3D2"/><text x="710" y="645" class="t">App &amp; Preferences                         ›</text>
+<rect x="690" y="700" width="390" height="120" rx="10" fill="#EAE3D2"/><text x="710" y="740" class="t">Category page example</text><text x="710" y="775" class="s">Section cards → setting rows → current controls</text><text x="710" y="800" class="s">No setting removed; no behavior rewritten</text>
+<!-- dimensions -->
+<rect x="55" y="1030" width="1090" height="500" rx="20" class="panel"/>
+<text x="85" y="1080" class="h">Layout rules and measurement ledger</text>
+<text x="90" y="1130" class="t">Dashboard target</text><text x="90" y="1165" class="s">• 20dp page inset • 56dp app bar target • 48dp minimum touch target</text><text x="90" y="1195" class="s">• 16dp section rhythm • primary action 56–64dp target height</text><text x="90" y="1225" class="s">• project row target 88–104dp; thumbnail ratio adapts to available width</text>
+<text x="90" y="1285" class="t">Settings target</text><text x="90" y="1320" class="s">• 20dp page inset • 56dp app bar target • 64–72dp setting-row target</text><text x="90" y="1350" class="s">• category navigation cards 72–88dp • 12–16dp between grouped controls</text>
+<text x="90" y="1410" class="t">Rules</text><text x="90" y="1445" class="s">Use dp for layout; sp for text; respect system bars, font scale, width classes and accessibility.</text><text x="90" y="1475" class="s">Blueprint is conceptual; source-measured values are separately documented from proposed targets.</text>
+</svg>
