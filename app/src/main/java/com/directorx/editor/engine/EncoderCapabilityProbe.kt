@@ -128,7 +128,11 @@ object EncoderCapabilityProbe {
         val heightAlignment: Int = 1,
         /** Android MediaCodec profile/level integer pairs advertised by the encoder. */
         val profileLevels: List<Pair<Int, Int>> = emptyList(),
-    )
+    ) {
+        val hardwareAccelerated: Boolean get() = encoderPath == EncoderPath.HARDWARE
+        val softwareOnly: Boolean get() = encoderPath == EncoderPath.SOFTWARE
+        val performanceVerified: Boolean get() = encoderPath == EncoderPath.HARDWARE
+    }
 
     /**
      * Check whether any of the device's advertised encoders for
@@ -203,7 +207,7 @@ object EncoderCapabilityProbe {
                 width % base.widthAlignment != 0 || height % base.heightAlignment != 0 ->
                     "Requested dimensions must align to ${base.widthAlignment}×${base.heightAlignment} for ${codec.label}."
                 !videoCaps.isSizeSupported(width, height) ->
-                    "${codec.label} encoder ${info.name} does not support ${width}×${height}; advertised maximum is ${base.maxWidth}×${base.maxHeight}."
+                    "${codec.label} encoder ${info.name} does not support ${width}×${height}; advertised width/height bounds are ${base.maxWidth}×${base.maxHeight}."
                 !videoCaps.areSizeAndRateSupported(width, height, framerate.toDouble()) ->
                     "${codec.label} at ${width}×${height} does not support ${framerate} fps on encoder ${info.name}."
                 bitrate !in videoCaps.bitrateRange.lower..videoCaps.bitrateRange.upper ->
