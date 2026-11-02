@@ -76,6 +76,11 @@ import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 import java.io.File
 
+
+private enum class SettingsCategory {
+    EXPORT, EDITING, AI_STORAGE, APP
+}
+
 private enum class SettingsAiModelRemovalTarget {
     WHISPER,
     SEGMENTATION
@@ -128,6 +133,7 @@ fun SettingsScreen(
     var showPrivacyDashboard by remember { mutableStateOf(false) }
     var showOpenSourceLicenses by remember { mutableStateOf(false) }
     var notificationStatusRefreshKey by remember { mutableIntStateOf(0) }
+    var selectedCategory by remember { mutableStateOf<SettingsCategory?>(null) }
 
     val projectStorage by viewModel.projectStorage.collectAsStateWithLifecycle()
     LaunchedEffect(Unit) {
@@ -156,7 +162,7 @@ fun SettingsScreen(
             SettingsHero(
                 settings = settings,
                 editorModeLabel = selectedEditorMode.label,
-                onBack = onBack
+                onBack = { if (selectedCategory != null) selectedCategory = null else onBack() }
             )
 
             Column(
@@ -195,8 +201,11 @@ fun SettingsScreen(
             )
         }
 
-        Spacer(Modifier.height(10.dp))
+        if (selectedCategory == null) {
+            SettingsCategoryOverview(onSelect = { selectedCategory = it })
+        }
 
+        if (selectedCategory == SettingsCategory.EXPORT) {
         // Export Defaults
         SettingsSection(
             title = stringResource(R.string.settings_export_defaults),
@@ -264,6 +273,8 @@ fun SettingsScreen(
             )
         }
 
+        }
+        if (selectedCategory == SettingsCategory.EDITING) {
         // Timeline
         SettingsSection(
             title = stringResource(R.string.settings_timeline),
@@ -355,6 +366,8 @@ fun SettingsScreen(
             }
         }
 
+        }
+        if (selectedCategory == SettingsCategory.AI_STORAGE) {
         // AI Models
         SettingsSection(
             title = stringResource(R.string.settings_ai_models),
@@ -487,6 +500,8 @@ fun SettingsScreen(
             SettingsFeedbackBanner(message = message, onDismiss = viewModel::dismissProjectStorageFeedback)
         }
 
+        }
+        if (selectedCategory == SettingsCategory.APP) {
         // Appearance
         SettingsSection(
             title = stringResource(R.string.settings_appearance),
@@ -767,6 +782,7 @@ fun SettingsScreen(
             )
         }
 
+        }
         if (showPrivacyDashboard) {
             androidx.compose.ui.window.Dialog(
                 onDismissRequest = { showPrivacyDashboard = false }
@@ -865,6 +881,28 @@ fun SettingsScreen(
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun SettingsCategoryOverview(onSelect: (SettingsCategory) -> Unit) {
+    Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        listOf(
+            SettingsCategory.EXPORT to "Export & Delivery",
+            SettingsCategory.EDITING to "Editing & Timeline",
+            SettingsCategory.AI_STORAGE to "AI & Project Storage",
+            SettingsCategory.APP to "App & Preferences"
+        ).forEach { (category, title) ->
+            Surface(
+                modifier = Modifier.fillMaxWidth().clickable { onSelect(category) },
+                shape = RoundedCornerShape(Radius.xl),
+                color = LocalClearCutColors.current.panel,
+                border = BorderStroke(1.dp, LocalClearCutColors.current.cardStroke)
+            ) {
+                Text(title, modifier = Modifier.padding(20.dp), color = LocalClearCutColors.current.text, style = MaterialTheme.typography.titleMedium)
             }
         }
     }
