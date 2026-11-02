@@ -254,7 +254,7 @@ class ProxyEngine @Inject constructor(
                 // shared video-family permit for the complete proxy lifecycle so
                 // proxy generation queues behind preview/retriever work instead
                 // of turning a codec-ceiling collision into a failed render.
-                pipelineLease = CodecInstanceBudget.acquirePipelineBlocking()
+                pipelineLease = CodecInstanceBudget.acquirePipeline()
                 suspendCancellableCoroutine { cont ->
                     val mediaItem = MediaItem.fromUri(sourceUri)
 
