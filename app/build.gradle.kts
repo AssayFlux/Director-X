@@ -91,7 +91,7 @@ android {
                 "proguard-rules.pro"
             )
             // Never fall back to the debug key. Android refuses an in-place update
-            // when the signing certificate changes, and ClearCut's projects live in
+            // when the signing certificate changes, and Director X projects live in
             // app-private storage -- signing a release with a different key strands
             // every installed user with no migration path. The release build fails
             // loudly instead, and `verifyReleaseSigningIdentity` proves the resolved
@@ -638,7 +638,7 @@ val verifyResolvedAdvisoryFloors by tasks.registering {
   "metadata": {
     "component": {
       "type": "application",
-      "name": "clearcut",
+      "name": "directorx",
       "version": "${android.defaultConfig.versionName}"
     }
   },
@@ -712,7 +712,7 @@ val verifyReleaseSigningIdentity = tasks.register("verifyReleaseSigningIdentity"
                     "  expected: $expected (every published release since v3.74.108)\n" +
                     "  resolved: $actual (alias '$alias' in ${storeFile.name})\n" +
                     "Signing with this key would strand every installed user, because Android " +
-                    "refuses an in-place update across a certificate change and ClearCut's " +
+                    "refuses an in-place update across a certificate change and Director X's " +
                     "projects live in app-private storage. Point keystore.properties at the " +
                     "correct keystore, or -- if the break is deliberate -- update " +
                     "release-signing-identity.json and document the clean-install migration."
