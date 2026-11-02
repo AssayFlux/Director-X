@@ -52,7 +52,12 @@ jobs:
           echo "ANDROID_HOME=$SDK_ROOT" >> "$GITHUB_ENV"
           echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
           "$SDKMANAGER" --licenses < <(yes)
-          "$SDKMANAGER" --channel=3 --install "platform-tools" "platforms;android-37" "emulator"
+          "$SDKMANAGER" --channel=3 --install "platform-tools" "platforms;android-37.0" "emulator"
+          # API 37.0 is installed under android-37.0, while AGP compileSdk=37
+          # expects the android-37 directory name on this SDK packaging layout.
+          if [ -d "$SDK_ROOT/platforms/android-37.0" ] && [ ! -e "$SDK_ROOT/platforms/android-37" ]; then
+            ln -s android-37.0 "$SDK_ROOT/platforms/android-37"
+          fi
 
       - name: Enable KVM
         run: |
@@ -119,7 +124,12 @@ jobs:
           echo "ANDROID_HOME=$SDK_ROOT" >> "$GITHUB_ENV"
           echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
           "$SDKMANAGER" --licenses < <(yes)
-          "$SDKMANAGER" --channel=3 --install "platform-tools" "platforms;android-37" "emulator"
+          "$SDKMANAGER" --channel=3 --install "platform-tools" "platforms;android-37.0" "emulator"
+          # API 37.0 is installed under android-37.0, while AGP compileSdk=37
+          # expects the android-37 directory name on this SDK packaging layout.
+          if [ -d "$SDK_ROOT/platforms/android-37.0" ] && [ ! -e "$SDK_ROOT/platforms/android-37" ]; then
+            ln -s android-37.0 "$SDK_ROOT/platforms/android-37"
+          fi
 
       - name: Enable KVM
         run: |
