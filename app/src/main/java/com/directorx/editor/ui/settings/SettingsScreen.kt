@@ -1459,17 +1459,45 @@ private fun SettingsSection(
     description: String? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    Column(modifier = Modifier.padding(horizontal = Spacing.lg, vertical = Spacing.md)) {
-        Text(
-            text = title.uppercase(),
-            color = LocalClearCutColors.current.subtext,
-            style = MaterialTheme.typography.labelLarge,
-            modifier = Modifier.padding(bottom = Spacing.xs)
-        )
+    val colors = LocalClearCutColors.current
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 10.dp)
+    ) {
         Column(
-            modifier = Modifier.animateContentSize(),
-            content = content
-        )
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = colors.panel.copy(alpha = 0.72f),
+                    shape = RoundedCornerShape(Radius.xl)
+                )
+                .border(
+                    width = 1.dp,
+                    color = colors.cardStroke.copy(alpha = 0.88f),
+                    shape = RoundedCornerShape(Radius.xl)
+                )
+                .padding(horizontal = Spacing.md, vertical = Spacing.md)
+        ) {
+            Text(
+                text = title,
+                color = colors.text,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold
+            )
+            description?.let {
+                Text(
+                    text = it,
+                    color = colors.subtext,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(top = 3.dp, bottom = Spacing.xs)
+                )
+            }
+            Column(
+                modifier = Modifier.animateContentSize(),
+                content = content
+            )
+        }
     }
 }
 
