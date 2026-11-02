@@ -80,7 +80,7 @@
                 <data android:mimeType="image/*" />
                 <data android:mimeType="audio/*" />
             </intent-filter>
-            <!-- Non-media document receiver for ClearCut-owned plugin,
+            <!-- Non-media document receiver for Director X plugin,
                  template, LUT, archive, timeline-interchange, and caption files.
                  Kept to explicit MIME families plus content:// VIEW grants;
                  MainActivity still validates extension, size, and parser
