@@ -2,8 +2,8 @@
 
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
 **Branch audited:** `main`  
-**Audit baseline:** `63bd0fbf0fdda89630781338548e3ec0613728b4`  
-**Last repository review:** 2026-11-02  
+**Audit baseline:** `7760187420b25776c2af624aef1df6a6a34b1559` (source audit baseline; follow-up fixes are listed below)  
+**Last repository review:** 2026-11-02 (follow-up implementation in progress)  
 **Register status:** Initial source audit recorded; fixes are not claimed until implemented and verified.
 
 ## Product direction reminder — UI upgrade scope is strictly limited
@@ -37,7 +37,7 @@ This register tracks reproducible source-level findings, their impact, the propo
 ### DX-PROXY-001 — Proxy cache key ignores selected resolution
 
 - **Severity:** High
-- **Status:** OPEN — CONFIRMED
+- **Status:** IN PROGRESS
 - **Affected file:** `app/src/main/java/com/directorx/editor/engine/ProxyEngine.kt`
 - **Finding:** `keyFor(sourceUri)` derives the cache key only from the source URI. The output filename and cache lookup therefore do not distinguish HALF, QUARTER, and EIGHTH resolutions. `generateProxy()` returns an existing non-empty cached file before evaluating the requested resolution.
 - **Impact:** After a proxy is generated at one resolution, requesting another resolution for the same URI can return the earlier proxy. The setting may appear to change without producing a proxy at the newly selected quality.
@@ -47,7 +47,7 @@ This register tracks reproducible source-level findings, their impact, the propo
 ### DX-PROXY-002 — Background workflow hardcodes QUARTER resolution
 
 - **Severity:** High
-- **Status:** OPEN — CONFIRMED
+- **Status:** IN PROGRESS
 - **Affected file:** `app/src/main/java/com/directorx/editor/engine/ProxyWorkflowEngine.kt`
 - **Finding:** `generateAllProxies()` calls `proxyEngine.generateProxy(entry.originalUri, ProxyResolution.QUARTER)` directly. The workflow does not receive or read the user's selected proxy resolution.
 - **Impact:** Background-generated proxies can remain quarter-resolution even when the user selects HALF or EIGHTH. This makes the setting inconsistent across proxy-generation entry points.
@@ -57,7 +57,7 @@ This register tracks reproducible source-level findings, their impact, the propo
 ### DX-PROXY-003 — Background worker can report success when individual proxy generation fails
 
 - **Severity:** Medium
-- **Status:** OPEN — CONFIRMED
+- **Status:** IN PROGRESS
 - **Affected files:** `app/src/main/java/com/directorx/editor/engine/ProxyWorkflowEngine.kt`, `app/src/main/java/com/directorx/editor/engine/ProxyGenerationWorker.kt`
 - **Finding:** The workflow catches per-clip exceptions and continues. A null result from `generateProxy()` leaves that entry without a generated proxy, but the worker receives no failure summary and returns `Result.success()` after the loop.
 - **Impact:** WorkManager/UI may report the batch as completed even though one or more clips did not receive proxies.
@@ -67,7 +67,7 @@ This register tracks reproducible source-level findings, their impact, the propo
 ### DX-PROXY-004 — Proxy cleanup result is not propagated by workflow deletion
 
 - **Severity:** Medium
-- **Status:** OPEN — CONFIRMED
+- **Status:** IN PROGRESS
 - **Affected file:** `app/src/main/java/com/directorx/editor/engine/ProxyWorkflowEngine.kt`
 - **Finding:** `deleteAllProxies()` ignores the Boolean returned by `proxyEngine.deleteProxyUri()` and clears each entry's proxy state regardless of whether the underlying file was deleted.
 - **Impact:** A failed deletion can be presented as cleared while an orphaned proxy file remains on disk and is no longer represented in workflow state.
@@ -83,6 +83,18 @@ This register tracks reproducible source-level findings, their impact, the propo
 - **Impact / uncertainty:** If callers store coded rather than displayed dimensions, rotated portrait clips may be treated differently by preview selection than by proxy planning. The current source review does not establish what every caller supplies.
 - **Required investigation:** Trace all `registerMedia()` callers and document whether width/height are coded or display-oriented. Prefer one shared orientation-aware eligibility policy if the values can diverge.
 - **Verification required:** Test landscape, portrait, rotated portrait, and sources around the 1080-pixel threshold through import, background generation, preview selection, and export.
+
+## Follow-up implementation log — 2026-11-02
+
+The following corrections have been committed to `main`. They remain **IN PROGRESS** until the Android unit/instrumentation test suite and relevant device checks pass; repository-hygiene CI alone is not sufficient to close them.
+
+- **DX-PROXY-001:** Cache identity now hashes source URI plus selected `ProxyResolution`; preview cache checks and URI lookup pass the requested resolution. Added `ProxyCacheKeyTest.kt` for stable keys, resolution separation, and source separation. Commits: `3691b0b`, `170cb6f`, `f4024dd`, `4b30a01`, `885878b`, `13c1c98`, `58ed5d4`.
+- **DX-PROXY-002:** `ProxyWorkflowEngine` now reads the persisted `SettingsRepository.settings.proxyResolution` and plans/generates with that value rather than hardcoding QUARTER. Commit: `cb4ea44`.
+- **DX-PROXY-003:** Workflow now returns attempted/generated/skipped/failed counts; the worker includes counts in output data, retries partial failures under a bounded policy, and fails after the retry limit. Cancellation is rethrown rather than incorrectly treated as a retryable exception. Added result contract tests. Commits: `8aeaba3`, `747d6aa`, `9f396bd`, `7760187`.
+- **DX-PROXY-004:** Workflow cleanup now clears entry state only after deletion succeeds; failed deletions retain their URI/state and are counted as failures. Commit: `d2fe6a4`.
+- **Additional cache safety:** Existing cache files from the old URI-only key format may remain as orphaned files until the user clears the proxy cache; the existing cache-wide cleanup scans managed proxy files. Do not delete user media or unrelated cache files.
+
+**Verification status:** The repository-hygiene workflow passed for commit `885878b`. Later commits have triggered new repository-hygiene runs; the latest result must be checked separately. No Android Gradle test/build or physical-device test is claimed by this log.
 
 ## Existing proxy test coverage observed
 
