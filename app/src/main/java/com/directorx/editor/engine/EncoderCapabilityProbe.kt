@@ -185,7 +185,11 @@ object EncoderCapabilityProbe {
                 AppLog.w(TAG, "Could not inspect ${info.name} for $mimeType", t)
                 continue
             }
-            val videoCaps = caps.videoCapabilities ?: continue
+            val videoCaps = caps.videoCapabilities
+            if (videoCaps == null) {
+                firstReason = firstReason ?: "Encoder ${info.name} advertises $mimeType but exposes no video capability profile."
+                continue
+            }
             val path = when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && info.isHardwareAccelerated -> EncoderPath.HARDWARE
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && info.isSoftwareOnly -> EncoderPath.SOFTWARE
@@ -234,11 +238,13 @@ object EncoderCapabilityProbe {
                 encoderNames = listOf(info.name),
             )
         }
-        return (bestRejected ?: Capability(
-            supported = false,
-            reason = firstReason ?: "${codec.label} has no encoder with a verifiable video capability profile.",
-            encoderPath = EncoderPath.NONE,
-        )).copy(reason = firstReason ?: bestRejected?.reason)
+        return bestRejected?.copy(reason = firstReason ?: bestRejected.reason)
+            ?: Capability(
+                supported = false,
+                reason = firstReason ?: "${codec.label} has no encoder with a verifiable video capability profile.",
+                known = false,
+                encoderPath = EncoderPath.UNKNOWN,
+            )
     }
 
     /**
