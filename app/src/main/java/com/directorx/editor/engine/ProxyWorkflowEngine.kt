@@ -226,21 +226,36 @@ class ProxyWorkflowEngine @Inject constructor(
     suspend fun deleteAllProxies(): ProxyDeleteResult = withContext(Dispatchers.IO) {
         var deleted = 0
         var failed = 0
+        var missing = 0
         _entries.value.forEach { (clipId, entry) ->
             val uri = entry.proxyUri ?: return@forEach
-            if (proxyEngine.deleteProxyUri(uri)) {
-                deleted++
-                _entries.update { current ->
-                    current[clipId]?.let { live ->
-                        current + (clipId to live.copy(proxyUri = null, proxyGenerated = false))
-                    } ?: current
+            when (proxyEngine.deleteProxyUri(uri)) {
+                ProxyFileDeleteOutcome.DELETED -> {
+                    deleted++
+                    clearProxyReference(clipId)
                 }
-            } else {
-                // Keep the URI/state so a later retry or diagnostics can still find it.
-                failed++
+                ProxyFileDeleteOutcome.MISSING -> {
+                    // The file was already removed (for example by cache pressure).
+                    // Clear the stale URI rather than reporting a failed deletion.
+                    missing++
+                    clearProxyReference(clipId)
+                }
+                ProxyFileDeleteOutcome.FAILED,
+                ProxyFileDeleteOutcome.INVALID -> {
+                    // Preserve the reference so the user can retry or inspect it.
+                    failed++
+                }
             }
         }
-        ProxyDeleteResult(deleted = deleted, failed = failed, missing = 0)
+        ProxyDeleteResult(deleted = deleted, failed = failed, missing = missing)
+    }
+
+    private fun clearProxyReference(clipId: String) {
+        _entries.update { current ->
+            current[clipId]?.let { live ->
+                current + (clipId to live.copy(proxyUri = null, proxyGenerated = false, proxyGenerating = false))
+            } ?: current
+        }
     }
 
     /**
