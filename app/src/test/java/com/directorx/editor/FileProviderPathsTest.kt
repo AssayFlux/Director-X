@@ -183,8 +183,8 @@ class FileProviderPathsTest {
 
     private fun shareableExportRoots(): Set<ProviderRoot> {
         return setOf(
-            ProviderRoot("files-path", "internal_exports", "Director X/"),
-            ProviderRoot("external-files-path", "exports", "Movies/Director X/"),
+            ProviderRoot("files-path", "internal_exports", "ClearCut/"),
+            ProviderRoot("external-files-path", "exports", "Movies/ClearCut/"),
             ProviderRoot("external-files-path", "timeline_exports", "exports/")
         )
     }

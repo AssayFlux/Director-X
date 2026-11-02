@@ -164,6 +164,7 @@ class JvmVisualVerificationTest {
         waitUntilAtLeastOneExists(ClearCutTestTags.PROJECTS_SCREEN)
         compose.onNodeWithTag(ClearCutTestTags.PROJECTS_SETTINGS).performClick()
         waitUntilAtLeastOneExists(ClearCutTestTags.SETTINGS_SCREEN)
+        compose.onNodeWithText("App & Preferences").performClick()
         compose.onNodeWithTag(ClearCutTestTags.SETTINGS_REPLAY_TUTORIAL)
             .performScrollTo()
             .performClick()
