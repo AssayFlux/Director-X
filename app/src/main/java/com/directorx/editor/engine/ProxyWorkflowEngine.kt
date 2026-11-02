@@ -12,6 +12,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -37,6 +38,23 @@ class ProxyWorkflowEngine @Inject constructor(
     private val proxyEngine: ProxyEngine
 ) {
     enum class MediaTier { THUMBNAIL, PROXY, ORIGINAL }
+
+    data class ProxyBatchResult(
+        val attempted: Int,
+        val generated: Int,
+        val skipped: Int,
+        val failed: Int,
+    ) {
+        val isComplete: Boolean get() = failed == 0
+    }
+
+    data class ProxyDeleteResult(
+        val deleted: Int,
+        val failed: Int,
+        val missing: Int,
+    ) {
+        val isComplete: Boolean get() = failed == 0
+    }
 
     data class MediaEntry(
         val originalUri: Uri,
@@ -96,16 +114,22 @@ class ProxyWorkflowEngine @Inject constructor(
      */
     suspend fun generateAllProxies(
         onProgress: (Float) -> Unit = {}
-    ) = withContext(Dispatchers.IO) {
+    ): ProxyBatchResult = withContext(Dispatchers.IO) {
         generationMutex.withLock {
             _isGenerating.value = true
             try {
-                val needsProxy = _entries.value.filter { !it.value.proxyGenerated && it.value.originalHeight > 1080 }
+                val resolution = settingsRepository.settings.first().proxyResolution
+                val needsProxy = _entries.value.filter {
+                    !it.value.proxyGenerated && it.value.originalHeight > 1080
+                }
                 if (needsProxy.isEmpty()) {
                     onProgress(1f)
-                    return@withLock
+                    return@withLock ProxyBatchResult(0, 0, 0, 0)
                 }
                 var completed = 0
+                var generated = 0
+                var skipped = 0
+                var failed = 0
 
                 for ((clipId, entry) in needsProxy) {
                     // Check cancellation before each potentially multi-minute proxy job so
@@ -114,6 +138,7 @@ class ProxyWorkflowEngine @Inject constructor(
                     val expectedVersion = entry.mediaVersion
                     val currentEntry = _entries.value[clipId]
                     if (!shouldApplyProxyResult(expectedVersion, currentEntry?.mediaVersion)) {
+                        skipped++
                         completed++
                         onProgress(completed.toFloat() / needsProxy.size)
                         continue
@@ -128,11 +153,15 @@ class ProxyWorkflowEngine @Inject constructor(
                             }
                         }
 
-                        // Use QUARTER resolution (540p from 4K) for proxy editing
-                        val proxyUri = proxyEngine.generateProxy(
-                            entry.originalUri,
-                            ProxyResolution.QUARTER
-                        ) { /* per-clip progress */ }
+                        val plan = proxyEngine.planProxy(entry.originalUri, resolution)
+                        val proxyUri = when (plan) {
+                            is ProxyResolutionPolicy.Plan.UseSource -> null
+                            is ProxyResolutionPolicy.Plan.Generate -> proxyEngine.generateProxy(
+                                entry.originalUri,
+                                resolution,
+                                plan,
+                            ) { /* per-clip progress */ }
+                        }
 
                         _entries.update { current ->
                             val liveEntry = current[clipId]
@@ -146,6 +175,11 @@ class ProxyWorkflowEngine @Inject constructor(
                                 ))
                             }
                         }
+                        when {
+                            plan is ProxyResolutionPolicy.Plan.UseSource -> skipped++
+                            proxyUri != null -> generated++
+                            else -> failed++
+                        }
                     } catch (e: CancellationException) {
                         throw e
                     } catch (e: Exception) {
@@ -157,10 +191,18 @@ class ProxyWorkflowEngine @Inject constructor(
                                 current + (clipId to liveEntry.copy(proxyGenerating = false))
                             }
                         }
+                        failed++
+                        AppLog.w("ProxyWorkflowEngine", "Proxy generation failed for clip $clipId", e)
                     }
                     completed++
                     onProgress(completed.toFloat() / needsProxy.size)
                 }
+                ProxyBatchResult(
+                    attempted = needsProxy.size,
+                    generated = generated,
+                    skipped = skipped,
+                    failed = failed,
+                )
             } finally {
                 _isGenerating.value = false
             }
@@ -168,14 +210,34 @@ class ProxyWorkflowEngine @Inject constructor(
     }
 
     /**
-     * Delete all proxy files to reclaim storage.
+     * Delete proxies while retaining entries whose files could not be removed.
      */
-    suspend fun deleteAllProxies() = withContext(Dispatchers.IO) {
-        val current = _entries.value
-        for ((_, entry) in current) {
-            entry.proxyUri?.let { proxyEngine.deleteProxyUri(it) }
+    suspend fun deleteAllProxies(): ProxyDeleteResult = withContext(Dispatchers.IO) {
+        var deleted = 0
+        var failed = 0
+        var missing = 0
+        _entries.value.forEach { (clipId, entry) ->
+            val uri = entry.proxyUri ?: return@forEach
+            val fileBytes = proxyEngine.proxyFileLength(uri)
+            if (fileBytes <= 0L) {
+                missing++
+                _entries.update { current ->
+                    current[clipId]?.let { live ->
+                        current + (clipId to live.copy(proxyUri = null, proxyGenerated = false))
+                    } ?: current
+                }
+            } else if (proxyEngine.deleteProxyUri(uri)) {
+                deleted++
+                _entries.update { current ->
+                    current[clipId]?.let { live ->
+                        current + (clipId to live.copy(proxyUri = null, proxyGenerated = false))
+                    } ?: current
+                }
+            } else {
+                failed++
+            }
         }
-        _entries.update { it.mapValues { (_, e) -> e.copy(proxyUri = null, proxyGenerated = false) } }
+        ProxyDeleteResult(deleted = deleted, failed = failed, missing = missing)
     }
 
     /**
