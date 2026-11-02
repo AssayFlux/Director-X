@@ -14,7 +14,7 @@ import com.directorx.editor.model.AspectRatio
 import com.directorx.editor.model.Resolution
 import kotlinx.coroutines.flow.Flow
 
-@Database(entities = [Project::class, ProjectMediaAssetEntity::class], version = 10, exportSchema = true)
+@Database(entities = [Project::class, ProjectMediaAssetEntity::class], version = 11, exportSchema = true)
 @ColumnTypeConverters(Converters::class)
 abstract class ProjectDatabase : RoomDatabase() {
     abstract fun projectDao(): ProjectDao
@@ -119,6 +119,15 @@ abstract class ProjectDatabase : RoomDatabase() {
             override suspend fun migrate(connection: SQLiteConnection) {
                 connection.execSQL("ALTER TABLE project_media_assets ADD COLUMN notes TEXT NOT NULL DEFAULT ''")
                 connection.execSQL("ALTER TABLE project_media_assets ADD COLUMN tagsJson TEXT NOT NULL DEFAULT '[]'")
+            }
+        }
+
+        val MIGRATION_10_11 = object : Migration(10, 11) {
+            override suspend fun migrate(connection: SQLiteConnection) {
+                // Zero denotes "not set"; existing projects retain their preset ratio
+                // and continue resolving dimensions through Resolution.forAspect().
+                connection.execSQL("ALTER TABLE projects ADD COLUMN customWidth INTEGER NOT NULL DEFAULT 0")
+                connection.execSQL("ALTER TABLE projects ADD COLUMN customHeight INTEGER NOT NULL DEFAULT 0")
             }
         }
 
