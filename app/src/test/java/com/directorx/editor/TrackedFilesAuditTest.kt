@@ -195,6 +195,7 @@ class TrackedFilesAuditTest {
         private val APPROVED_AUTOMATION_FILES = setOf(
             ".github/workflows/ci.yml",
             ".github/workflows/android-verification.yml",
+            ".github/workflows/android-device-qa.yml",
             ".github/workflows/repository-hygiene.yml",
         )
 
