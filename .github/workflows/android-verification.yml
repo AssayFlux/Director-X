@@ -58,7 +58,7 @@ jobs:
           ./gradlew --version
 
       - name: Run Android unit tests
-        run: ./gradlew --no-daemon --stacktrace :app:testDebugUnitTest
+        run: ./gradlew --no-daemon --stacktrace :app:testQaUnitTest
 
       - name: Assemble debug APK
         run: ./gradlew --no-daemon --stacktrace :app:assembleDebug
