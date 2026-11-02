@@ -673,8 +673,10 @@ private fun ProjectHomeHero(
     showSortControls: Boolean,
     actionsEnabled: Boolean
 ) {
-    val maximumHeight = (LocalConfiguration.current.screenHeightDp * 0.62f)
-        .coerceAtLeast(320f)
+    // Keep the project list visible sooner on phone-sized screens. The hero
+    // remains internally scrollable so search/sort never become unreachable.
+    val maximumHeight = (LocalConfiguration.current.screenHeightDp * 0.50f)
+        .coerceAtLeast(280f)
         .dp
     Column(
         modifier = Modifier
@@ -682,8 +684,8 @@ private fun ProjectHomeHero(
             .heightIn(max = maximumHeight)
             .verticalScroll(rememberScrollState())
             .background(LocalClearCutColors.current.background)
-            .padding(horizontal = 20.dp, vertical = Spacing.md),
-        verticalArrangement = Arrangement.spacedBy(14.dp)
+            .padding(horizontal = 20.dp, vertical = Spacing.lg),
+        verticalArrangement = Arrangement.spacedBy(Spacing.md)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -717,7 +719,7 @@ private fun ProjectHomeHero(
             Text(
                 text = stringResource(R.string.projects_ready_title),
                 color = LocalClearCutColors.current.text,
-                style = MaterialTheme.typography.displayMedium,
+                style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold
             )
             Text(

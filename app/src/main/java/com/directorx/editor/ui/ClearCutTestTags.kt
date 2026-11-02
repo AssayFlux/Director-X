@@ -56,6 +56,10 @@ object ClearCutTestTags {
     const val BATCH_EXPORT_CLOSE = "batchExport.close"
 
     const val SETTINGS_SCREEN = "settings.screen"
+    const val SETTINGS_CATEGORY_EXPORT = "settings.category.export"
+    const val SETTINGS_CATEGORY_EDITING = "settings.category.editing"
+    const val SETTINGS_CATEGORY_AI_STORAGE = "settings.category.aiStorage"
+    const val SETTINGS_CATEGORY_APP = "settings.category.app"
     const val SETTINGS_BACK = "settings.back"
     const val SETTINGS_REPLAY_TUTORIAL = "settings.replayTutorial"
     const val SETTINGS_PRIVACY_OPEN = "settings.privacy.open"
