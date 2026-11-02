@@ -52,13 +52,19 @@ jobs:
           echo "ANDROID_HOME=$SDK_ROOT" >> "$GITHUB_ENV"
           echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
           set +o pipefail
+          set +o pipefail
           yes | "$SDKMANAGER" --licenses
           sdkmanager_status=${PIPESTATUS[1]}
           set -o pipefail
           if [ "$sdkmanager_status" -ne 0 ]; then
             exit "$sdkmanager_status"
           fi
-          "$SDKMANAGER" --install "platform-tools" "platforms;android-37" "build-tools;37.0.0" "emulator"
+          sdkmanager_status=${PIPESTATUS[1]}
+          set -o pipefail
+          if [ "$sdkmanager_status" -ne 0 ]; then
+            exit "$sdkmanager_status"
+          fi
+          "$SDKMANAGER" --install "platform-tools" "platforms;android-37" "emulator"
 
       - name: Enable KVM
         run: |
@@ -125,7 +131,7 @@ jobs:
           echo "ANDROID_HOME=$SDK_ROOT" >> "$GITHUB_ENV"
           echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
           yes | "$SDKMANAGER" --licenses
-          "$SDKMANAGER" --install "platform-tools" "platforms;android-37" "build-tools;37.0.0" "emulator"
+          "$SDKMANAGER" --install "platform-tools" "platforms;android-37" "emulator"
 
       - name: Enable KVM
         run: |
