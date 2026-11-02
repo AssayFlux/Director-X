@@ -131,3 +131,10 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 - **Finding:** The workflow passed `app/build/outputs/apk` to `scripts/validate_apk_outputs.py`, but the validator accepts a build variant (`debug`, `qa`, or `streaming`) and resolves the repository output path itself. The workflow therefore could not correctly invoke the validator.
 - **Correction:** The workflow now runs `python3 scripts/validate_apk_outputs.py debug`. It also runs the validator's `--self-test` before Gradle tests to catch fixture/metadata validation regressions.
 - **Verification:** Repository hygiene passed on the workflow-fix commit. The Android verification run for that commit is still in progress; this issue must not be marked verified until unit tests, APK assembly, APK validation, and artifact upload complete successfully.
+
+### DX-PROXY-005 implementation update — 2026-11-02
+
+- **Source correction committed:** Proxy eligibility now uses the larger coded dimension instead of only `originalHeight`. This covers rotated 1920×1080 phone footage and portrait sources whose coded dimensions are landscape-oriented.
+- **Regression coverage added:** `ProxyResolutionPolicyTest.proxyEligibilityUsesTheLongDimensionForPortraitAndLandscapeMedia` checks landscape, portrait, 4K, square, and threshold cases.
+- **Commits:** `0cf735d`, `1c63a26`, `f0cee32`, `7ac6ce8`, `2733fd8`.
+- **Status:** IN PROGRESS — source and unit test added; CI and device/instrumentation verification pending. This does not yet prove that all import callers supply valid coded dimensions or that rotation metadata is handled identically in every preview path.
