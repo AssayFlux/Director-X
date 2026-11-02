@@ -24,15 +24,15 @@ import kotlin.coroutines.resume
  *
  * ## Dependency path
  *
- * ClearCut vendors a source-pinned LGPL-profile FFmpegKitNext 8.1.0 AAR
+ * Director X vendors a source-pinned LGPL-profile FFmpegKitNext 8.1.0 AAR
  * carrying FFmpeg 8.1.2. Local gates verify its checksum, source/build lock,
  * disabled-format advisory coverage, deterministic SBOMs, and 16 KB page
  * alignment.
  *
  * ## License note
  *
- * ClearCut itself is MIT-licensed; bundling an AAR whose packaged license
- * resources carry LGPL text does not relicense ClearCut's Kotlin source, but it
+ * Director X itself is MIT-licensed; bundling an AAR whose packaged license
+ * resources carry LGPL text does not relicense Director X's Kotlin source, but it
  * does require shipping the FFmpeg license addendum and source offer with
  * release artifacts. The shipped profile has no x264/GPL encoder and keeps
  * Media3 Transformer as the primary H.264/HEVC path.
@@ -60,7 +60,7 @@ import kotlin.coroutines.resume
  *
  * ### API compatibility matrix
  *
- * | ClearCut call site                       | FFmpegKit (current)              | ffmpeg-kt (zt64)                  |
+ * | Director X call site                       | FFmpegKit (current)              | ffmpeg-kt (zt64)                  |
  * |-----------------------------------------|----------------------------------|-----------------------------------|
  * | `execute(command)`                       | `FFmpegKit.executeAsync(cmd,…)`  | No equivalent — raw libav* only   |
  * | `executeArguments(args)`                 | `FFmpegKit.executeWithArgumentsAsync(…)` | No equivalent              |
@@ -83,7 +83,7 @@ import kotlin.coroutines.resume
  *
  * Not documented. No published native .so artifacts to verify. The project
  * does not mention Android 16 / API 35+ 16KB page alignment anywhere.
- * ClearCut's FFmpegKitNext 8.1.0 build targets NDK r27d and is verified by the
+ * Director X's FFmpegKitNext 8.1.0 build targets NDK r27d and is verified by the
  * local `scripts/check_16kb_alignment.py` gate.
  *
  * ### APK size comparison
@@ -94,11 +94,11 @@ import kotlin.coroutines.resume
  *
  * ### License analysis
  *
- * ffmpeg-kt is GPL v3.0. ClearCut's current FFmpegKitNext profile is LGPL-only,
+ * ffmpeg-kt is GPL v3.0. Director X's current FFmpegKitNext profile is LGPL-only,
  * so adopting it would not improve the distribution posture. The alternative
  * JamaisMagic fork
  * (`io.github.jamaismagic.ffmpeg:ffmpeg-kit-lts-16kb:6.1.7`) offers an
- * LGPL-3.0 variant, which would be a license improvement if ClearCut ever
+ * LGPL-3.0 variant, which would be a license improvement if Director X ever
  * needs a no-GPL distribution channel.
  *
  * ### Adopt / defer criteria
@@ -111,7 +111,7 @@ import kotlin.coroutines.resume
  * compliance documentation, and would require a full FFmpegEngine rewrite
  * with no functional benefit over the current fork.
  *
- * The upstream binary-supply risk is mitigated by ClearCut's vendored,
+ * The upstream binary-supply risk is mitigated by Director X's vendored,
  * reproducibly built AAR and local provenance/advisory gates.
  *
  * Re-evaluate if ffmpeg-kt ships a 1.0 with command-string execution,
@@ -548,7 +548,7 @@ class FFmpegEngine @Inject constructor(
      * H.264 encoders an FFmpeg build may expose, best first.
      *
      * The final export is encoded by Media3 Transformer through Android
-     * MediaCodec and never touches FFmpeg, so ClearCut's headline H.264 support
+     * MediaCodec and never touches FFmpeg, so Director X's headline H.264 support
      * does not depend on any of these. These cover the FFmpeg-side passes —
      * reverse pre-render, subtitle burn-in, inpainted frame assembly — which
      * previously either hard-coded `libx264` or, worse, passed no `-c:v` at all
@@ -556,7 +556,7 @@ class FFmpegEngine @Inject constructor(
      *
      * [MEDIACODEC] wraps the device's hardware encoder and is licence-neutral.
      * [X264] is retained only as a compatibility probe for a future artifact;
-     * the locked ClearCut profile does not build it. [MPEG4] is FFmpeg's own
+     * the locked Director X profile does not build it. [MPEG4] is FFmpeg's own
      * LGPL encoder and is the always-present floor — MPEG-4 Part 2 in MP4 is
      * decodable by Android MediaCodec, so an intermediate written with it still
      * feeds back into the Media3 composition.
