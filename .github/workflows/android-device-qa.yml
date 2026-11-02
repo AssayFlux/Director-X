@@ -147,7 +147,7 @@ jobs:
         run: |
           chmod +x ./gradlew
           ./gradlew --no-daemon --stacktrace --console=plain \
-            :baselineprofile:pixel6Api37AndroidTest
+            :baselineprofile:pixel6Api37BenchmarkReleaseAndroidTest
 
       - name: Upload macrobenchmark and baseline profile outputs
         if: always()
