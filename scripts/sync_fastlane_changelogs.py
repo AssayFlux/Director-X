@@ -120,7 +120,7 @@ def changelog_text(body: str) -> str:
         lines.append(title)
     lines.extend(release_bullets(body))
     if not lines:
-        lines.append("ClearCut release maintenance and stability updates.")
+        lines.append("Director X release maintenance and stability updates.")
     return truncate_entry(lines)
 
 
