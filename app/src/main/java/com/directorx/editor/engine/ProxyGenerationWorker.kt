@@ -7,14 +7,15 @@ import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import kotlinx.coroutines.CancellationException
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
 /**
  * WorkManager worker for background proxy generation.
  *
- * Generates quarter-height H.264 proxies (540p from 4K) for all registered media
- * that exceeds 1080p. Reports progress via setProgress() so the UI
+ * Generates proxies at the user's saved proxy resolution for registered high-resolution media.
+ * Reports progress via setProgress() so the UI
  * can display a progress indicator.
  *
  * Enqueued by EditorViewModel when proxy editing is enabled and
@@ -58,6 +59,8 @@ class ProxyGenerationWorker @AssistedInject constructor(
                 runAttemptCount < MAX_RETRIES -> Result.retry()
                 else -> Result.failure(output)
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
             AppLog.e(TAG, "Proxy generation failed", e)
             if (runAttemptCount < MAX_RETRIES) {
