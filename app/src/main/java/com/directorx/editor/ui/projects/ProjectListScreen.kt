@@ -682,8 +682,8 @@ private fun ProjectHomeHero(
             .heightIn(max = maximumHeight)
             .verticalScroll(rememberScrollState())
             .background(LocalClearCutColors.current.background)
-            .padding(horizontal = Spacing.lg, vertical = Spacing.lg),
-        verticalArrangement = Arrangement.spacedBy(Spacing.lg)
+            .padding(horizontal = 20.dp, vertical = Spacing.md),
+        verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -717,7 +717,7 @@ private fun ProjectHomeHero(
             Text(
                 text = stringResource(R.string.projects_ready_title),
                 color = LocalClearCutColors.current.text,
-                style = MaterialTheme.typography.displayLarge,
+                style = MaterialTheme.typography.displayMedium,
                 fontWeight = FontWeight.Bold
             )
             Text(
