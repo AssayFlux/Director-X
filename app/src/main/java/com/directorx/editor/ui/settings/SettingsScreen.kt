@@ -764,6 +764,8 @@ fun SettingsScreen(
             }
         }
 
+        }
+
         pendingAiModelRemoval?.let { target ->
             SettingsAiModelRemovalConfirmDialog(
                 target = target,
