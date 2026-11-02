@@ -128,7 +128,7 @@ The installed application ID and Kotlin namespace are both `com.directorx.editor
 
 ## Build and test on Android with Termux
 
-Director X is built and tested manually by the maintainer on an Android device using Termux. GitHub Actions does **not** build APKs, run Android unit tests, or run Android lint.
+Director X supports both local Android builds in Termux and automated GitHub Actions verification. The Android verification workflow runs the QA unit-test task, assembles a debug APK, validates the generated APK, and uploads it as a short-lived workflow artifact. This CI run is not a substitute for physical-device acceptance testing.
 
 See the complete, device-oriented guide: **[Build Director X in Termux](docs/TERMUX_BUILD.md)**.
 
@@ -150,19 +150,16 @@ Useful local checks, when deliberately requested:
 ./gradlew :app:lint
 ```
 
-These commands are optional maintainer-run checks; they are not run by GitHub Actions.
+`:app:testQaUnitTest` is also run by the Android verification workflow. The lint command above remains a separate maintainer-run check.
 
 ## GitHub automation policy
 
-Only lightweight repository-hygiene validation remains enabled in GitHub Actions. It checks repository metadata and documentation policy; it does not configure an Android SDK or invoke Gradle.
+Two distinct GitHub Actions workflows are used:
 
-- No APK build workflow.
-- No Android unit-test workflow.
-- No Android lint workflow.
-- No automated APK signing, release upload or publishing.
-- Android builds, installation and device testing are performed manually by the maintainer in Termux.
+- **Android verification** runs on relevant application/build changes and pull requests. It executes `:app:testQaUnitTest`, `:app:assembleDebug`, validates the debug APK, and uploads the APK as an artifact retained for 14 days.
+- **Repository hygiene** checks repository metadata, branding, documentation links/assets and policy consistency. It does not prove that Android code compiles.
 
-The repository-check badge above reports only the repository-hygiene workflow. It must not be interpreted as an Android build or app-test result.
+The Android verification workflow does not perform Android lint, production signing, Play Store publishing, or physical-device testing. A green repository-hygiene badge must never be interpreted as a successful Android build. A debug artifact is not a stable release APK.
 
 ### Android 17 audio hardening smoke check
 
