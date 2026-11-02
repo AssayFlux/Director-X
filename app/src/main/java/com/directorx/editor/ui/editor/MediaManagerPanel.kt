@@ -1360,6 +1360,23 @@ private fun MediaDiagnosticCard(
                             style = MaterialTheme.typography.bodySmall,
                             color = semanticColors.subtext,
                         )
+                        val decoderStatus = when (track.decoderSupported) {
+                            true -> stringResource(R.string.media_diagnostics_decoder_supported)
+                            false -> stringResource(R.string.media_diagnostics_decoder_unavailable)
+                            null -> stringResource(R.string.media_diagnostics_decoder_unknown)
+                        }
+                        Text(
+                            text = stringResource(
+                                R.string.media_diagnostics_decoder_details,
+                                decoderStatus,
+                                track.decoderName ?: stringResource(R.string.media_diagnostics_unknown),
+                                track.profile?.toString() ?: stringResource(R.string.media_diagnostics_unknown),
+                                track.level?.toString() ?: stringResource(R.string.media_diagnostics_unknown),
+                                track.bitDepth?.toString() ?: stringResource(R.string.media_diagnostics_unknown),
+                            ),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = if (track.decoderSupported == false) ClearCutAccents.Peach else semanticColors.subtext,
+                        )
                     }
                 }
 
