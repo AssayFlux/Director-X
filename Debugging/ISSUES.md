@@ -282,3 +282,11 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 - **Verification:** Test preview and rendered output with portrait, landscape, square and nonstandard canvases; confirm crop/fit and overlay alignment.
 
 **Audit evidence:** Current `main` source files inspected on 2026-11-02: `Project.kt`, `ExportConfig.kt`, `ProjectDocument.kt`, `ProjectDatabase.kt`, `ProjectListScreen.kt`, `ProjectListViewModel.kt`, `ProjectTemplateSheet.kt`, `ExportSheet.kt`, `ProjectCanvasDimensionsTest.kt`, `ProjectDocumentApplicatorTest.kt`, `ProjectArchiveRoundTripTest.kt`, and `ProjectDatabaseMigrationTest.kt`. This is a source-level finding, not a passing build or device result.
+
+
+### DX-PROXY-004 implementation update — 2026-11-02
+
+- **Source correction in PR #43:** Proxy deletion now returns an explicit `DELETED`, `MISSING`, `FAILED`, or `INVALID` outcome. An already-missing managed cache file clears its stale workflow reference and increments `missing`, rather than being reported as a deletion failure.
+- **Failure safety:** The engine retains its in-memory cache mapping when deletion fails. Workflow cleanup retains the URI for failed/invalid files and only clears a reference if it still matches the URI being deleted, preventing a stale cleanup pass from erasing a newer proxy assignment.
+- **Regression tests added:** successful deletion, already-missing files, outside-cache path rejection, unmanaged filenames, and directories.
+- **Status:** IN PROGRESS — awaiting Android unit-test CI. Instrumentation and actual cache-pressure/device behavior remain unverified.
