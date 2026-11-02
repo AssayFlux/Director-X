@@ -521,7 +521,7 @@ fun MediaPickerSheet(
 
     fun startCameraCapture() {
         val cameraDir = pendingCameraCaptureDir(context).apply { mkdirs() }
-        val videoFile = File(cameraDir, "clearcut_${System.currentTimeMillis()}.mp4")
+        val videoFile = File(cameraDir, "directorx_${System.currentTimeMillis()}.mp4")
         val uri = runCatching {
             FileProvider.getUriForFile(
                 context,
