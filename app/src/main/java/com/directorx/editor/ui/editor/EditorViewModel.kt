@@ -2924,7 +2924,7 @@ class EditorViewModel @Inject constructor(
                                 if (request != null &&
                                     shouldApplyMediaJobResult(request.identity, clip.timelineMediaJobIdentity())
                                 ) {
-                                    clip.copy(proxyUri = proxyEngine.getProxyUri(request.sourceUri))
+                                    clip.copy(proxyUri = proxyEngine.getProxyUri(request.sourceUri, request.resolution))
                                 } else {
                                     clip
                                 }
