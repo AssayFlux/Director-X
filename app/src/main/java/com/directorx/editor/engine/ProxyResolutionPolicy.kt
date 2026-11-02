@@ -2,6 +2,7 @@ package com.directorx.editor.engine
 
 import com.directorx.editor.model.ProxyResolution
 import kotlin.math.abs
+import kotlin.math.max
 import kotlin.math.roundToInt
 
 /**
@@ -28,6 +29,12 @@ object ProxyResolutionPolicy {
         data class Generate(val targetHeight: Int) : Plan()
         data class UseSource(val reason: String) : Plan()
     }
+
+    /** Whether either coded dimension exceeds the preview proxy threshold. This is deliberately
+     * orientation-independent: a 1920x1080 frame rotated 90 degrees is portrait on screen but
+     * still carries 1920 pixels of displayed height. */
+    fun requiresProxy(codedWidth: Int, codedHeight: Int): Boolean =
+        maxOf(codedWidth, codedHeight) > REFERENCE_HEIGHT
 
     /** The displayed height of a frame stored [codedWidth] by [codedHeight] with [rotationDegrees]. */
     fun displayHeight(codedWidth: Int, codedHeight: Int, rotationDegrees: Int): Int {
