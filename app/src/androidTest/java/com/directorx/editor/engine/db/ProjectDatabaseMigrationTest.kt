@@ -192,6 +192,15 @@ class ProjectDatabaseMigrationTest {
             }
         }
 
+        if (schemaVersion >= 11) {
+            db.prepare("SELECT customWidth, customHeight FROM projects WHERE id = ?").use { statement ->
+                statement.bindText(1, projectId(sourceVersion))
+                assertTrue(statement.step())
+                assertEquals(0, statement.getInt(0))
+                assertEquals(0, statement.getInt(1))
+            }
+        }
+
         if (schemaVersion >= 10) {
             val columns = db.prepare("PRAGMA table_info(project_media_assets)").use { statement ->
                 buildSet {
@@ -236,7 +245,7 @@ class ProjectDatabaseMigrationTest {
 
     companion object {
         private const val FIRST_SCHEMA_VERSION = 1
-        private const val CURRENT_SCHEMA_VERSION = 10
+        private const val CURRENT_SCHEMA_VERSION = 11
         private const val DELETED_AT = 12_345L
         private const val TEST_DB = "clearcut-migration-test"
     }
