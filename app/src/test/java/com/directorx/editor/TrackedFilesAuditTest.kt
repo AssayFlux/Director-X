@@ -39,7 +39,7 @@ class TrackedFilesAuditTest {
 
         assertTrue(
             "Tracked files include cross-project pollution. The following paths " +
-                "must not be committed to ClearCut — they belong to a sibling project " +
+                "must not be committed to Director X — they belong to a sibling project " +
                 "(HostShield) and are blocked by .gitignore for that reason. Either " +
                 "delete the file from the working tree or run `git rm --cached <path>`. " +
                 "Offenders: $offenders",
@@ -85,6 +85,15 @@ class TrackedFilesAuditTest {
             "docs/privacy-policy.md",
             "docs/play-data-safety.md",
             "docs/translations.md",
+            "ACKNOWLEDGMENTS.md",
+            "CONTRIBUTING.md",
+            "Debugging/ISSUES.md",
+            "Upgradations/BASELINE_MEASUREMENTS.md",
+            "Upgradations/README.md",
+            "Upgradations/UI_LAYOUT_UPGRADE_PLAN.md",
+            "Upgradations/UPGRADE_ROADMAP.md",
+            "docs/BRANDING_AND_COMPATIBILITY.md",
+            "docs/TERMUX_BUILD.md",
         )
         val trackedPrivateMarkdown = tracked.filter { path ->
             path.endsWith(".md") && path !in releaseContractMarkdown
@@ -185,6 +194,8 @@ class TrackedFilesAuditTest {
 
         private val APPROVED_AUTOMATION_FILES = setOf(
             ".github/workflows/ci.yml",
+            ".github/workflows/android-verification.yml",
+            ".github/workflows/repository-hygiene.yml",
         )
 
         private val REQUIRED_TRACKED = listOf(

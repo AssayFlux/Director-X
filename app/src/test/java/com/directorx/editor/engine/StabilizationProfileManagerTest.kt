@@ -88,7 +88,7 @@ class StabilizationProfileManagerTest {
     fun incompatibleAppVersionIsRejected() {
         val validation = manager.validateJson(
             manager.encode(StabilizationProfile()).toString(),
-            supportedAppVersion = "3.78.0",
+            supportedAppVersion = "0.0.9",
         )
 
         assertEquals(StabilizationProfileFailure.INCOMPATIBLE_APP_VERSION, validation.failure)

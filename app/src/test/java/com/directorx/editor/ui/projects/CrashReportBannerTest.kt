@@ -68,8 +68,8 @@ class CrashReportBannerTest {
 
         waitUntilBannerGone()
         val clip = context.getSystemService(ClipboardManager::class.java).primaryClip!!.getItemAt(0).text.toString()
-        assertTrue(clip, clip.contains("ClearCut closed unexpectedly (java.lang.IllegalStateException)"))
-        assertTrue(clip, clip.contains("- ClearCut: ${ClearCutApp.VERSION}"))
+        assertTrue(clip, clip.contains("Director X closed unexpectedly (java.lang.IllegalStateException)"))
+        assertTrue(clip, clip.contains("- Director X: ${ClearCutApp.VERSION}"))
         assertTrue(clip, clip.contains("- Version it happened in: v3.81.0"))
         assertTrue(clip, clip.contains("- Android: "))
         assertTrue(clip, clip.contains("- ABI: "))
@@ -88,7 +88,7 @@ class CrashReportBannerTest {
         val request = activity.nextStartedActivityForResult.intent
         assertEquals(Intent.ACTION_CREATE_DOCUMENT, request.action)
         assertEquals("application/zip", request.type)
-        assertTrue(request.getStringExtra(Intent.EXTRA_TITLE)!!.startsWith("ClearCut-report-"))
+        assertTrue(request.getStringExtra(Intent.EXTRA_TITLE)!!.startsWith("Director X-report-"))
         activity.receiveResult(request, Activity.RESULT_OK, Intent().setData(Uri.fromFile(target)))
 
         waitUntilBannerGone()

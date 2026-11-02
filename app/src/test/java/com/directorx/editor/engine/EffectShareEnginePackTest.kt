@@ -1,5 +1,6 @@
 package com.directorx.editor.engine
 
+import com.directorx.editor.BuildConfig
 import com.directorx.editor.model.ColorGrade
 import kotlinx.coroutines.runBlocking
 import org.json.JSONArray
@@ -162,7 +163,7 @@ class EffectShareEnginePackTest {
         put("schemaVersion", DeclarativePackContract.CURRENT_SCHEMA_VERSION)
         put("packType", DeclarativePackKind.EFFECT.wireName)
         put("provenance", JSONObject().put("source", "test export"))
-        put("minAppVersion", "3.80.0")
+        put("minAppVersion", BuildConfig.VERSION_NAME)
         put("requiredCapabilities", JSONArray().put(DeclarativePackContract.EFFECT_PACK_CAPABILITY))
         put("effects", JSONArray().put(JSONObject().put("type", "BRIGHTNESS")))
         put("contentHash", DeclarativePackContract.contentHash(this))

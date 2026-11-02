@@ -12,12 +12,12 @@ class MediaStorePendingRowSweeperTest {
         val nowSeconds = 2_000_000L
         val staleSeconds = nowSeconds - (MediaStorePendingRowPolicy.ORPHAN_AGE_MS / 1_000L)
 
-        assertTrue(MediaStorePendingRowPolicy.shouldDelete("Movies/ClearCut/", staleSeconds, nowSeconds))
-        assertTrue(MediaStorePendingRowPolicy.shouldDelete("Download/ClearCut", staleSeconds - 1L, nowSeconds))
-        assertFalse(MediaStorePendingRowPolicy.shouldDelete("Movies/ClearCut/", staleSeconds + 1L, nowSeconds))
+        assertTrue(MediaStorePendingRowPolicy.shouldDelete("Movies/Director X/", staleSeconds, nowSeconds))
+        assertTrue(MediaStorePendingRowPolicy.shouldDelete("Download/Director X", staleSeconds - 1L, nowSeconds))
+        assertFalse(MediaStorePendingRowPolicy.shouldDelete("Movies/Director X/", staleSeconds + 1L, nowSeconds))
         assertFalse(MediaStorePendingRowPolicy.shouldDelete("Movies/OtherApp/", staleSeconds, nowSeconds))
         assertFalse(MediaStorePendingRowPolicy.shouldDelete(null, staleSeconds, nowSeconds))
-        assertFalse(MediaStorePendingRowPolicy.shouldDelete("Movies/ClearCut/", 0L, nowSeconds))
+        assertFalse(MediaStorePendingRowPolicy.shouldDelete("Movies/Director X/", 0L, nowSeconds))
     }
 
     @Test

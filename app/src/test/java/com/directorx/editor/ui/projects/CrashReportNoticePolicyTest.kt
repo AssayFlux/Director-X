@@ -181,8 +181,8 @@ class CrashReportNoticePolicyTest {
 
         val body = CrashReportNoticePolicy.issueBody(notice, device)
 
-        assertTrue(body, body.contains("ClearCut closed unexpectedly (java.lang.IllegalStateException) at 2026-10-06 00:02 UTC."))
-        assertTrue(body, body.contains("- ClearCut: v3.82.0\n- Version it happened in: v3.81.0\n"))
+        assertTrue(body, body.contains("Director X closed unexpectedly (java.lang.IllegalStateException) at 2026-10-06 00:02 UTC."))
+        assertTrue(body, body.contains("- Director X: v3.82.0\n- Version it happened in: v3.81.0\n"))
         assertTrue(body, body.contains("- Device: samsung SM-S901U\n"))
         assertTrue(body, body.contains("- Android: 16 (API 36)\n"))
         assertTrue(body, body.contains("- ABI: arm64-v8a\n"))

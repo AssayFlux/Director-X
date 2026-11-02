@@ -219,7 +219,7 @@ object ClearCutThemeDefaults {
         AppearanceMode.LAVENDER_FILM -> DirectorXPalette(Color(0xFFF2EFF7),Color(0xFFE5DFEF),Color(0xFFD8CFE6),Color(0xFFCABFDB),Color(0xFF30283B),Color(0xFF665A76),Color(0xFF75618F),Color(0xFF9B7185),Color(0xFF647D91))
         AppearanceMode.COPPER_STUDIO -> DirectorXPalette(Color(0xFFF5EEE8),Color(0xFFE9DCD0),Color(0xFFDDC9B8),Color(0xFFD0B6A0),Color(0xFF332720),Color(0xFF70594B),Color(0xFF9A5838),Color(0xFFB17A48),Color(0xFF65766B))
         AppearanceMode.ARCTIC_MINIMAL -> DirectorXPalette(Color(0xFFF1F5F8),Color(0xFFE2EAF0),Color(0xFFD2DEE7),Color(0xFFC1D1DE),Color(0xFF202D38),Color(0xFF536675),Color(0xFF426F91),Color(0xFF5E8F9B),Color(0xFF8A789D))
-        else -> DirectorXPalette(Color(0xFFF5F0E6),Color(0xFFEAE3D2),Color(0xFFE2D8C5),Color(0xFFD9CDB7),Color(0xFF2C2621),Color(0xFF655B50),Color(0xFFC29B38),Color(0xFF5A6B57),Color(0xFF96775C))
+        else -> DirectorXPalette(Color(0xFFF5F0E6),Color(0xFFEAE3D2),Color(0xFFE2D8C5),Color(0xFFD9CDB7),Color(0xFF2C2621),Color(0xFF655B50),Color(0xFFC29B38),Color(0xFF5A6B57),Color(0xFF805C40))
     }
 
     /** Legacy DARK identifiers resolve to the new primary brand theme. */

@@ -82,6 +82,7 @@ class JvmVisualVerificationTest {
         waitUntilAtLeastOneExists(ClearCutTestTags.SETTINGS_SCREEN)
         capture("settings-cream.png")
 
+        waitUntilAtLeastOneExists(ClearCutTestTags.SETTINGS_PRIVACY_OPEN)
         compose.onNodeWithTag(ClearCutTestTags.SETTINGS_PRIVACY_OPEN)
             .performScrollTo()
             .performClick()

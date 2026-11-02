@@ -79,7 +79,7 @@ class SettingsRepositoryTest {
         assertEquals("H264", settings.defaultCodec)
         assertEquals("HIGH", settings.defaultExportQuality)
         assertEquals(DesktopOverride.AUTO, settings.desktopModeOverride)
-        assertEquals(AppearanceMode.DARK, settings.appearanceMode)
+        assertEquals(AppearanceMode.PRIMARY_BRAND, settings.appearanceMode)
         assertEquals(false, settings.proxyEnabled)
         assertEquals(false, settings.autoSaveEnabled)
         assertEquals("kept-local-key", settings.acoustIdApiKey)

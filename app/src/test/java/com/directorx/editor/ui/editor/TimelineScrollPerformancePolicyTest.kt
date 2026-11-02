@@ -37,7 +37,7 @@ class TimelineScrollPerformancePolicyTest {
     @Test
     fun frameTimingBenchmarkStillExercisesTimelineScrubbing() {
         val source = locate(
-            "baselineprofile/src/main/java/com/novacut/baselineprofile/StartupAndEditorMacrobenchmark.kt"
+            "baselineprofile/src/main/java/com/directorx/baselineprofile/StartupAndEditorMacrobenchmark.kt"
         ).readText()
 
         assertTrue(source.contains("FrameTimingMetric()"))

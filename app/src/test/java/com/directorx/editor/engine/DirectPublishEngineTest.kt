@@ -63,7 +63,7 @@ class DirectPublishEngineTest {
             )
         )
 
-        assertEquals("ClearCut export", normalized.title)
+        assertEquals("Director X export", normalized.title)
         assertTrue(normalized.description.length <= 4_000)
         assertTrue(normalized.chapters.length <= 4_000)
         assertTrue(normalized.aiDisclosureSummary.length <= 1_000)

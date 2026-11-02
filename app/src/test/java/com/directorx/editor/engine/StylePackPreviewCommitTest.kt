@@ -1,5 +1,6 @@
 package com.directorx.editor.engine
 
+import com.directorx.editor.BuildConfig
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -100,7 +101,7 @@ class StylePackPreviewCommitTest {
             .put("schemaVersion", DeclarativePackContract.CURRENT_SCHEMA_VERSION)
             .put("packType", DeclarativePackKind.STYLE.wireName)
             .put("provenance", org.json.JSONObject().put("source", "test"))
-            .put("minAppVersion", "3.80.0")
+            .put("minAppVersion", BuildConfig.VERSION_NAME)
             .put(
                 "requiredCapabilities",
                 org.json.JSONArray().put(DeclarativePackContract.STYLE_PACK_CAPABILITY),

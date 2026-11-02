@@ -75,7 +75,7 @@ class C2paExportEngineTest {
             ledger = emptyList(),
             exporterCreationTimeMs = 0L
         )
-        assertEquals("ClearCut/3.74.9", m.claimGenerator)
+        assertEquals("Director X/3.74.9", m.claimGenerator)
         assertEquals("3.74.9", m.claimGeneratorInfoVersion)
         assertNull(m.title)
         assertEquals(C2paExportEngine.SigningMode.ANDROID_KEYSTORE, m.signingMode)
@@ -256,7 +256,7 @@ class C2paExportEngineTest {
 
         val generatorInfo = json.getJSONObject("claim_generator_info")
         assertFalse(json.has("claim_generator"))
-        assertEquals("ClearCut", generatorInfo.getString("name"))
+        assertEquals("Director X", generatorInfo.getString("name"))
         assertEquals("3.74.9", generatorInfo.getString("version"))
         assertEquals("Android", generatorInfo.getString("operating_system"))
         assertEquals("2.4.0", generatorInfo.getString("specVersion"))
