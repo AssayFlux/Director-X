@@ -48,7 +48,7 @@ The interface follows a vintage darkroom direction: warm cream, paper beige, cha
 |---|---|
 | Media import and playback | Auto captions (Whisper / ONNX path) |
 | Timeline, trimming and previews | Background removal (MediaPipe) |
-| Video transformation and export | Object removal (LaMa; model download required) |
+| Transformation and export | Object removal (LaMa; model download required) |
 | Effects, composition and muxing | Smart reframe and motion tracking |
 | Audio and voiceover workflows | Audio denoising (DeepFilterNet) |
 | Project files and sharing | Scene detection, stabilization and auto color |
@@ -81,16 +81,19 @@ The interface follows a vintage darkroom direction: warm cream, paper beige, cha
 
 | Area | Stack |
 |---|---|
-| Language and UI | Kotlin, Jetpack Compose, Material 3 |
-| Media | AndroidX Media3, ExoPlayer, Transformer, Effects, Muxer |
-| Persistence | Room, DataStore |
+| Language | Kotlin 2.4.10, Jetpack Compose, Material 3 |
+| Video | AndroidX Media3 1.11.1, ExoPlayer, Transformer, Effects, Muxer |
+| Database | Room 3.0.1, DataStore 1.2.1 |
 | Background work | WorkManager, Android foreground services |
 | Dependency injection | Hilt / Dagger |
 | Image loading | Coil |
-| Machine learning | ONNX Runtime, MediaPipe |
-| Audio | DeepFilterNet |
+| Speech-to-Text | ONNX Runtime 1.28.0 |
+| Segmentation | MediaPipe 1.0.0 |
+| Noise Reduction | DeepFilterNet 0.0.8 |
+| Animated Titles | Lottie Compose 6.7.1 |
 | Native media | FFmpegKitNext / FFmpeg |
-| Build | Gradle Wrapper, Android Gradle Plugin, Java toolchain (project-managed) |
+| Startup performance | AndroidX Benchmark 1.5.0-beta01, ProfileInstaller 1.4.1 |
+| Build | Gradle Wrapper, Android Gradle Plugin, Java toolchain 17 |
 
 ## Dependency registry
 
@@ -125,6 +128,12 @@ The interface follows a vintage darkroom direction: warm cream, paper beige, cha
 ### Package identity and upgrade policy
 
 The installed application ID and Kotlin namespace are both `com.directorx.editor`. Changing an Android application ID creates a separate installation; it is not an in-place update. The move from the previous package identity is a **new install with an explicit export/import path**: export projects from the previous installation, install Director X, then import those projects. Future updates must retain the established release signing identity.
+
+## Archive Transfer
+
+Archive Transfer is a local file workflow: users export an archive to Downloads/Director X and import it from a file. It does not provide cloud synchronization or remote backup.
+
+Timeline interchange currently exposes a guarded import preview; full timeline import remains gated.
 
 ## Build and test on Android with Termux
 
@@ -186,6 +195,39 @@ Director-X/
 ├── LICENSE
 ├── NOTICE
 └── README.md
+```
+
+## Architecture
+
+The application source is organized around the editor engine layer. The following entries are real Kotlin source files; generated sources and build output are excluded.
+
+```text
+Director X/
+├── engine/
+│   ├── AiDisclosurePolicy.kt
+│   ├── AiThumbnailEngine.kt
+│   ├── AiToolRequirements.kt
+│   ├── AiUsageLedger.kt
+│   ├── Android15MediaPolicy.kt
+│   ├── AndroidProjectDependencyProbe.kt
+│   ├── AppLog.kt
+│   ├── AppModule.kt
+│   ├── AppVersion.kt
+│   ├── AtomicFiles.kt
+│   ├── AudioDecodeBudget.kt
+│   ├── AudioDescriptionEngine.kt
+│   ├── AudioEffectsAudioProcessor.kt
+│   ├── AudioEffectsEngine.kt
+│   ├── AudioEngine.kt
+│   ├── AudioFocusPolicy.kt
+│   ├── AudioMasteringEngine.kt
+│   ├── AutoChapterEngine.kt
+│   ├── BatchExportPlanStore.kt
+│   ├── BeatDetectionEngine.kt
+│   ├── BidiTextPolicy.kt
+│   ├── BoundedIo.kt
+│   ├── C2paExportEngine.kt
+│   └── CapabilityRegistry.kt
 ```
 
 ## Design language

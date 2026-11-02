@@ -60,7 +60,7 @@ class UntrustedDocumentCorpusTest {
             assertTrue("took ${elapsedMs}ms", elapsedMs < 2_000L)
             assertEquals(emptyList<Any>(), imported.tracks)
             assertEquals(
-                listOf("Failed to parse FCPXML: the file declares an internal DTD, which ClearCut doesn't load"),
+                listOf("Failed to parse FCPXML: the file declares an internal DTD, which Director X doesn't load"),
                 imported.warnings,
             )
         }
@@ -76,7 +76,7 @@ class UntrustedDocumentCorpusTest {
 
         assertEquals(emptyList<Any>(), imported.tracks)
         assertEquals(
-            listOf("Failed to parse FCPXML: the file declares an external DTD, which ClearCut doesn't load"),
+            listOf("Failed to parse FCPXML: the file declares an external DTD, which Director X doesn't load"),
             imported.warnings,
         )
     }
