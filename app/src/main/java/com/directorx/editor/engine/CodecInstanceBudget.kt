@@ -264,8 +264,12 @@ object CodecInstanceBudget {
     internal fun acquirePlayerBlocking(mimeType: String? = null): CodecLease<Unit> =
         playerPool.acquireBlocking(mimeType ?: VIDEO_FAMILY)
 
-    internal fun acquirePipelineBlocking(mimeType: String? = null): CodecLease<Unit> =
-        pipelinePool.acquireBlocking(mimeType ?: VIDEO_FAMILY)
+    /**
+     * Acquires the shared video pipeline permit without blocking the caller's
+     * dispatcher. Proxy generation can call this while its coroutine is on Main.
+     */
+    internal suspend fun acquirePipeline(mimeType: String? = null): CodecLease<Unit> =
+        pipelinePool.acquire(mimeType ?: VIDEO_FAMILY)
 
     internal fun snapshots(): List<CodecLeaseSnapshot> =
         (decoderPool.snapshots() + retrieverPool.snapshots() +
