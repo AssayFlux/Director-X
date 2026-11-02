@@ -2100,6 +2100,8 @@
     <string name="media_diagnostics_decoder_unavailable">No matching device decoder</string>
     <string name="media_diagnostics_decoder_unknown">Decoder check unavailable</string>
     <string name="media_diagnostics_decoder_details">%1$s · %2$s · profile %3$s · level %4$s · %5$s-bit</string>
+    <string name="media_diagnostics_video_advanced">Chroma: %1$s · bitrate: %2$s bit/s</string>
+    <string name="media_diagnostics_audio_details">Channels: %1$s · sample rate: %2$s Hz · bitrate: %3$s bit/s</string>
     <string name="media_diagnostics_sync_frames">%1$d sync frames</string>
     <string name="media_diagnostics_sync_frames_approx">%1$d+ sync frames</string>
     <string name="media_diagnostics_timestamp_risk">Timestamp risk: %1$s</string>
