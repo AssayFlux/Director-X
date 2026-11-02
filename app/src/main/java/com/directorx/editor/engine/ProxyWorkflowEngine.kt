@@ -103,7 +103,7 @@ class ProxyWorkflowEngine @Inject constructor(
         val entry = _entries.value[clipId] ?: return Uri.EMPTY
         if (forExport) return entry.originalUri
         // Use proxy during preview if original is high-res and proxy exists
-        if (entry.proxyGenerated && entry.proxyUri != null && entry.originalHeight > 1080) {
+        if (entry.proxyGenerated && entry.proxyUri != null && ProxyResolutionPolicy.requiresProxy(entry.originalWidth, entry.originalHeight)) {
             return entry.proxyUri
         }
         return entry.originalUri
