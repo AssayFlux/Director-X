@@ -147,7 +147,7 @@ class ProxyEngine @Inject constructor(
         }
     }
 
-    fun deleteProxyUri(uri: Uri): ProxyFileDeleteOutcome {
+    internal fun deleteProxyUri(uri: Uri): ProxyFileDeleteOutcome {
         if (uri.scheme != "file") return ProxyFileDeleteOutcome.INVALID
         val file = uri.path?.let(::File) ?: return ProxyFileDeleteOutcome.INVALID
         val managedFile = canonicalManagedProxyFile(file) ?: return ProxyFileDeleteOutcome.INVALID
