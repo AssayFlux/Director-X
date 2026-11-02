@@ -47,8 +47,12 @@ data class ProxyClearResult(
  * Stable cache identity for a proxy render. A source can have several valid
  * proxy resolutions at once, so resolution is part of the key as well as URI.
  */
-internal fun proxyCacheKey(sourceIdentity: String, resolution: ProxyResolution): String {
-    val identity = "$sourceIdentity|resolution=${resolution.name}"
+internal fun proxyCacheKey(
+    sourceIdentity: String,
+    resolution: ProxyResolution,
+    mediaVersion: String = sourceIdentity,
+): String {
+    val identity = "$sourceIdentity|version=$mediaVersion|resolution=${resolution.name}"
     val digest = java.security.MessageDigest.getInstance("SHA-256")
         .digest(identity.toByteArray(Charsets.UTF_8))
     return digest.joinToString("") { "%02x".format(it) }.take(32)
@@ -86,8 +90,11 @@ class ProxyEngine @Inject constructor(
         }
     }
 
-    private fun keyFor(sourceUri: Uri, resolution: ProxyResolution): String =
-        proxyCacheKey(sourceUri.toString(), resolution)
+    private fun keyFor(
+        sourceUri: Uri,
+        resolution: ProxyResolution,
+        mediaVersion: String = sourceUri.toString(),
+    ): String = proxyCacheKey(sourceUri.toString(), resolution, mediaVersion)
 
     private fun proxyFileForKey(key: String): File = File(proxyDir, "proxy_$key.mp4")
 
@@ -118,14 +125,16 @@ class ProxyEngine @Inject constructor(
 
     fun getProxyUri(
         sourceUri: Uri,
-        resolution: ProxyResolution = ProxyResolution.QUARTER
-    ): Uri? = proxyMap[keyFor(sourceUri, resolution)]
+        resolution: ProxyResolution = ProxyResolution.QUARTER,
+        mediaVersion: String = sourceUri.toString(),
+    ): Uri? = proxyMap[keyFor(sourceUri, resolution, mediaVersion)]
 
     fun hasProxy(
         sourceUri: Uri,
-        resolution: ProxyResolution = ProxyResolution.QUARTER
+        resolution: ProxyResolution = ProxyResolution.QUARTER,
+        mediaVersion: String = sourceUri.toString(),
     ): Boolean {
-        val key = keyFor(sourceUri, resolution)
+        val key = keyFor(sourceUri, resolution, mediaVersion)
         val file = proxyFileForKey(key)
         return file.isFile.also { if (it) proxyMap[key] = Uri.fromFile(file) }
     }
@@ -167,9 +176,10 @@ class ProxyEngine @Inject constructor(
         sourceUri: Uri,
         resolution: ProxyResolution,
         plan: ProxyResolutionPolicy.Plan? = null,
-        onProgress: (Float) -> Unit = {}
+        onProgress: (Float) -> Unit = {},
+        mediaVersion: String = sourceUri.toString(),
     ): Uri? = withContext(Dispatchers.Main) {
-        val key = keyFor(sourceUri, resolution)
+        val key = keyFor(sourceUri, resolution, mediaVersion)
         val outFile = proxyFileForKey(key)
 
         // Hold the per-key mutex across the existence check + transformer
