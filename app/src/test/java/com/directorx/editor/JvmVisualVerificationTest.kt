@@ -53,7 +53,7 @@ class JvmVisualVerificationTest {
         )
     }
 
-    @Test
+    @Test(timeout = 300_000L)
     fun primary_workflow_and_supporting_surfaces_render_in_both_cream_modes() {
         capture("project-dashboard-empty-cream.png")
 
