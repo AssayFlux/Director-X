@@ -6,6 +6,7 @@ import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -52,7 +53,7 @@ class JvmVisualVerificationTest {
         )
     }
 
-    @Test
+    @Test(timeout = 300_000L)
     fun primary_workflow_and_supporting_surfaces_render_in_both_cream_modes() {
         capture("project-dashboard-empty-cream.png")
 
