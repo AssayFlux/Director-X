@@ -1336,6 +1336,18 @@ private fun MediaDiagnosticCard(
                         style = MaterialTheme.typography.bodySmall,
                         color = semanticColors.subtext,
                     )
+                    if (track.isAudio) {
+                        Text(
+                            text = stringResource(
+                                R.string.media_diagnostics_audio_details,
+                                track.channelCount?.toString() ?: stringResource(R.string.media_diagnostics_unknown),
+                                track.sampleRate?.toString() ?: stringResource(R.string.media_diagnostics_unknown),
+                                track.bitRate?.toString() ?: stringResource(R.string.media_diagnostics_unknown),
+                            ),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = semanticColors.subtext,
+                        )
+                    }
                     if (track.isVideo) {
                         val dimensions = if (track.width != null && track.height != null) {
                             "${track.width}×${track.height}"
@@ -1376,6 +1388,15 @@ private fun MediaDiagnosticCard(
                             ),
                             style = MaterialTheme.typography.bodySmall,
                             color = if (track.decoderSupported == false) ClearCutAccents.Peach else semanticColors.subtext,
+                        )
+                        Text(
+                            text = stringResource(
+                                R.string.media_diagnostics_video_advanced,
+                                track.chromaSubsampling ?: stringResource(R.string.media_diagnostics_unknown),
+                                track.bitRate?.toString() ?: stringResource(R.string.media_diagnostics_unknown),
+                            ),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = semanticColors.subtext,
                         )
                     }
                 }
