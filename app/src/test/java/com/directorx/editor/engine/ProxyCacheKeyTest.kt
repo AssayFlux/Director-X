@@ -23,6 +23,22 @@ class ProxyCacheKeyTest {
     }
 
     @Test
+    fun replacingContentAtTheSameUriInvalidatesTheCacheIdentity() {
+        assertNotEquals(
+            proxyCacheKey(source, ProxyResolution.QUARTER, "version-a"),
+            proxyCacheKey(source, ProxyResolution.QUARTER, "version-b")
+        )
+    }
+
+    @Test
+    fun defaultVersionPreservesStableUriBasedCallers() {
+        assertEquals(
+            proxyCacheKey(source, ProxyResolution.HALF),
+            proxyCacheKey(source, ProxyResolution.HALF, source)
+        )
+    }
+
+    @Test
     fun differentSourcesNeverShareCacheIdentity() {
         assertNotEquals(
             proxyCacheKey(source, ProxyResolution.QUARTER),
