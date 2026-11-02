@@ -161,7 +161,9 @@ class ProxyWorkflowEngine @Inject constructor(
                                 entry.originalUri,
                                 resolution,
                                 plan,
-                            ) { /* per-clip progress */ }
+                                onProgress = { /* per-clip progress */ },
+                                mediaVersion = entry.mediaVersion,
+                            )
                         }
 
                         _entries.update { current ->
