@@ -2900,7 +2900,7 @@ class EditorViewModel @Inject constructor(
                     ) {
                         continue
                     }
-                    if (!proxyEngine.hasProxy(request.sourceUri)) {
+                    if (!proxyEngine.hasProxy(request.sourceUri, request.resolution)) {
                         val plan = proxyEngine.planProxy(request.sourceUri, request.resolution)
                         if (plan is ProxyResolutionPolicy.Plan.UseSource) {
                             editedDirectly++
