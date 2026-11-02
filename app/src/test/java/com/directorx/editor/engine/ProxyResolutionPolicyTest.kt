@@ -52,6 +52,16 @@ class ProxyResolutionPolicyTest {
     }
 
     @Test
+    fun proxyEligibilityUsesTheLongDimensionForPortraitAndLandscapeMedia() {
+        assertTrue(ProxyResolutionPolicy.requiresProxy(1920, 1080))
+        assertTrue(ProxyResolutionPolicy.requiresProxy(1080, 1920))
+        assertTrue(ProxyResolutionPolicy.requiresProxy(2160, 3840))
+        assertTrue(!ProxyResolutionPolicy.requiresProxy(1080, 1080))
+        assertTrue(!ProxyResolutionPolicy.requiresProxy(720, 1280))
+        assertTrue(!ProxyResolutionPolicy.requiresProxy(0, 0))
+    }
+
+    @Test
     fun aRotatedPortraitSourceScalesFromTheHeightItIsShownAt() {
         // A phone's portrait clip is usually stored 1920x1080 with a 90 degree rotation.
         val shown = ProxyResolutionPolicy.displayHeight(codedWidth = 1920, codedHeight = 1080, rotationDegrees = 90)
