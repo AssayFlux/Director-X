@@ -181,6 +181,14 @@ class ProxyWorkflowEngine @Inject constructor(
                             else -> failed++
                         }
                     } catch (e: CancellationException) {
+                        _entries.update { current ->
+                            val liveEntry = current[clipId]
+                            if (liveEntry == null || !shouldApplyProxyResult(expectedVersion, liveEntry.mediaVersion)) {
+                                current
+                            } else {
+                                current + (clipId to liveEntry.copy(proxyGenerating = false))
+                            }
+                        }
                         throw e
                     } catch (e: Exception) {
                         _entries.update { current ->
