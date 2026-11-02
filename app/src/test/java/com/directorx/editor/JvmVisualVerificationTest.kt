@@ -186,9 +186,12 @@ class JvmVisualVerificationTest {
     }
 
     private fun updateAppearance(mode: AppearanceMode) {
+        // ActivityScenario access is main-thread-only under Robolectric. Capture
+        // the repository before moving the suspending DataStore work to IO.
+        val repository = compose.activity.settingsRepository
         runBlocking(Dispatchers.IO) {
-            compose.activity.settingsRepository.updateAppearanceMode(mode)
-            compose.activity.settingsRepository.settings.first { it.appearanceMode == mode }
+            repository.updateAppearanceMode(mode)
+            repository.settings.first { it.appearanceMode == mode }
         }
         compose.waitForIdle()
     }
