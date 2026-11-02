@@ -232,7 +232,7 @@ class ProxyWorkflowEngine @Inject constructor(
             when (proxyEngine.deleteProxyUri(uri)) {
                 ProxyFileDeleteOutcome.DELETED -> {
                     deleted++
-                    clearProxyReference(clipId)
+                    clearProxyReference(clipId, uri)
                 }
                 ProxyFileDeleteOutcome.MISSING -> {
                     // The file was already removed (for example by cache pressure).
@@ -250,11 +250,17 @@ class ProxyWorkflowEngine @Inject constructor(
         ProxyDeleteResult(deleted = deleted, failed = failed, missing = missing)
     }
 
-    private fun clearProxyReference(clipId: String) {
+    private fun clearProxyReference(clipId: String, expectedUri: Uri) {
         _entries.update { current ->
-            current[clipId]?.let { live ->
-                current + (clipId to live.copy(proxyUri = null, proxyGenerated = false, proxyGenerating = false))
-            } ?: current
+            current[clipId]
+                ?.takeIf { it.proxyUri == expectedUri }
+                ?.let { live ->
+                    current + (clipId to live.copy(
+                        proxyUri = null,
+                        proxyGenerated = false,
+                        proxyGenerating = false,
+                    ))
+                } ?: current
         }
     }
 
