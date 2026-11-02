@@ -1,6 +1,7 @@
 package com.directorx.editor.engine
 
 import android.content.Context
+import android.media.MediaCodecList
 import android.media.MediaExtractor
 import android.media.MediaFormat
 import android.media.MediaMetadataRetriever
@@ -45,6 +46,12 @@ data class MediaTrackDiagnostic(
     val width: Int? = null,
     val height: Int? = null,
     val frameRate: Float? = null,
+    val profile: Int? = null,
+    val level: Int? = null,
+    val bitDepth: Int? = null,
+    val decoderName: String? = null,
+    val decoderSupported: Boolean? = null,
+    val decoderProbeError: String? = null,
     val colorStandard: String? = null,
     val colorTransfer: String? = null,
     val colorRange: String? = null,
@@ -288,6 +295,7 @@ class MediaDiagnosticsProbe @Inject constructor(
             codecString = codecString,
         ).map { it.displayName }.toSet()
         val stats = scanTrack(extractor, trackIndex, isVideo)
+        val decoder = if (isVideo && mimeType != null) inspectDecoder(format) else DecoderInspection()
         val durationUs = format.safeLong(MediaFormat.KEY_DURATION)
         return MediaTrackDiagnostic(
             trackIndex = trackIndex,
@@ -299,6 +307,12 @@ class MediaDiagnosticsProbe @Inject constructor(
             width = format.safeInt(MediaFormat.KEY_WIDTH),
             height = format.safeInt(MediaFormat.KEY_HEIGHT),
             frameRate = format.safeInt(MediaFormat.KEY_FRAME_RATE)?.toFloat(),
+            profile = format.safeInt(MediaFormat.KEY_PROFILE),
+            level = format.safeInt(MediaFormat.KEY_LEVEL),
+            bitDepth = format.safeInt("bit-depth"),
+            decoderName = decoder.name,
+            decoderSupported = decoder.supported,
+            decoderProbeError = decoder.error,
             colorStandard = format.safeInt(MediaFormat.KEY_COLOR_STANDARD)?.toColorStandardName(),
             colorTransfer = format.safeInt(MediaFormat.KEY_COLOR_TRANSFER)?.toColorTransferName(),
             colorRange = format.safeInt(MediaFormat.KEY_COLOR_RANGE)?.toColorRangeName(),
@@ -311,6 +325,27 @@ class MediaDiagnosticsProbe @Inject constructor(
         )
     }
 
+    private data class DecoderInspection(
+        val name: String? = null,
+        val supported: Boolean? = null,
+        val error: String? = null,
+    )
+
+    /**
+     * Checks this device's regular decoder catalogue against the actual
+     * extractor format. This is a device-local capability hint, not proof that
+     * every frame will decode: vendor decoders can still fail at runtime.
+     */
+    private fun inspectDecoder(format: MediaFormat): DecoderInspection = try {
+        val decoderName = MediaCodecList(MediaCodecList.REGULAR_CODECS)
+            .findDecoderForFormat(format)
+        DecoderInspection(name = decoderName, supported = decoderName != null)
+    } catch (t: Throwable) {
+        DecoderInspection(
+            supported = null,
+            error = t.message?.take(120) ?: t::class.java.simpleName,
+        )
+    }
     private fun scanTrack(
         extractor: MediaExtractor,
         trackIndex: Int,
