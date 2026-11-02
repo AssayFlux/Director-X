@@ -290,3 +290,11 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 - **Failure safety:** The engine retains its in-memory cache mapping when deletion fails. Workflow cleanup retains the URI for failed/invalid files and only clears a reference if it still matches the URI being deleted, preventing a stale cleanup pass from erasing a newer proxy assignment.
 - **Regression tests added:** successful deletion, already-missing files, outside-cache path rejection, unmanaged filenames, and directories.
 - **Status:** IN PROGRESS — awaiting Android unit-test CI. Instrumentation and actual cache-pressure/device behavior remain unverified.
+
+
+### DX-PROXY-004 follow-up — engine-wide cache clear mapping retention
+
+- **Additional finding:** `clearProxies()` removed every non-active in-memory proxy mapping after scanning the cache, including mappings whose backing file deletion had failed. If cache enumeration itself failed, it could also discard mappings without evidence that the files were gone.
+- **Correction in PR #45:** Preserve mappings for active proxies, failed deletions, and any backing file still present. If the cache directory cannot be enumerated, return an explicit incomplete cleanup result and leave mappings intact.
+- **Regression coverage:** Added pure policy tests for active, failed, still-present, and genuinely stale mappings.
+- **Status:** IN PROGRESS — awaiting Android unit-test CI and API/device validation.
