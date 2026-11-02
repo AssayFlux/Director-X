@@ -6,6 +6,7 @@ import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
@@ -174,6 +175,32 @@ class JvmVisualVerificationTest {
         capture("tutorial-high-contrast-cream.png")
         updateAppearance(AppearanceMode.DARK)
         capture("tutorial-cream.png")
+    }
+
+    @Test(timeout = 120_000L)
+    fun settings_overview_exposes_four_categories_and_navigation_round_trips() {
+        compose.onNodeWithTag(ClearCutTestTags.PROJECTS_SETTINGS).performClick()
+        waitUntilAtLeastOneExists(ClearCutTestTags.SETTINGS_SCREEN)
+
+        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_CATEGORY_EXPORT).assertIsDisplayed().performClick()
+        compose.onNodeWithText("Export Defaults").assertIsDisplayed()
+        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_BACK).performClick()
+        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_CATEGORY_EXPORT).assertIsDisplayed()
+
+        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_CATEGORY_EDITING).assertIsDisplayed().performClick()
+        compose.onNodeWithText("Timeline").assertIsDisplayed()
+        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_BACK).performClick()
+
+        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_CATEGORY_AI_STORAGE).assertIsDisplayed().performClick()
+        compose.onNodeWithText("AI Models").assertIsDisplayed()
+        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_BACK).performClick()
+
+        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_CATEGORY_APP).assertIsDisplayed().performClick()
+        compose.onNodeWithText("Appearance").assertIsDisplayed()
+        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_BACK).performClick()
+
+        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_BACK).performClick()
+        waitUntilAtLeastOneExists(ClearCutTestTags.PROJECTS_SCREEN)
     }
 
     private fun capture(name: String) {
