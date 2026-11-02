@@ -1,5 +1,13 @@
 # Director X changelog
 
+## v0.1.0
+
+- Set the Android application version to v0.1.0.
+- Advanced Android versionCode from 301 to 302 so installs of earlier builds can upgrade in place.
+- Kept the Android application ID and Kotlin namespace at com.directorx.editor.
+- Updated remaining user-facing build and media-capture naming to Director X.
+
+
 ## Project identity and repository maintenance — 1 November 2026
 
 - Corrected package identity metadata, generated capability paths, launcher shortcut targets and QA references for `com.directorx.editor`.
