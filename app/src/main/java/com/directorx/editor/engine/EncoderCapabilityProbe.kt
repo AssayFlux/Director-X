@@ -102,16 +102,32 @@ object EncoderCapabilityProbe {
         val hasHardwareVp9: Boolean
     )
 
+    enum class EncoderPath {
+        HARDWARE,
+        SOFTWARE,
+        UNKNOWN,
+        NONE,
+    }
+
     /**
-     * Per-codec capability snapshot. `supported = false` means no
-     * encoder on this device accepts the (width, height, framerate,
-     * bitrate) tuple. Reasons are human-readable for toast display.
+     * Device capability snapshot for one requested output tuple.
+     * A positive result is advisory: the platform may still reject a
+     * configuration at runtime, so the finished file must be inspected.
      */
     data class Capability(
         val supported: Boolean,
         val reason: String? = null,
         /** False means the probe could not establish a positive capability claim. */
         val known: Boolean = true,
+        val encoderPath: EncoderPath = EncoderPath.UNKNOWN,
+        val encoderNames: List<String> = emptyList(),
+        val maxWidth: Int = 0,
+        val maxHeight: Int = 0,
+        val maxBitrate: Int = 0,
+        val widthAlignment: Int = 1,
+        val heightAlignment: Int = 1,
+        /** Android MediaCodec profile/level integer pairs advertised by the encoder. */
+        val profileLevels: List<Pair<Int, Int>> = emptyList(),
     )
 
     /**
@@ -129,60 +145,96 @@ object EncoderCapabilityProbe {
         bitrate: Int
     ): Capability {
         if (width <= 0 || height <= 0 || framerate <= 0 || bitrate <= 0) {
-            return Capability(false, "Invalid export dimensions")
+            return Capability(false, "Invalid export dimensions, frame rate, or bitrate.", encoderPath = EncoderPath.NONE)
         }
         val mimeType = codec.mimeType
         val codecInfos = try {
             MediaCodecList(MediaCodecList.REGULAR_CODECS).codecInfos
                 .filter { it.isEncoder }
-                .filter { it.supportedTypes.any { t -> t.equals(mimeType, ignoreCase = true) } }
+                .filter { it.supportedTypes.any { type -> type.equals(mimeType, ignoreCase = true) } }
+                .sortedBy { info ->
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && info.isHardwareAccelerated) 0 else 1
+                }
         } catch (e: Exception) {
             AppLog.w(TAG, "MediaCodecList lookup failed for ${codec.label}", e)
             return Capability(
                 supported = false,
-                reason = "Encoder capability could not be queried; output will be verified after export.",
+                reason = "Encoder capability could not be queried; export support is unverified.",
                 known = false,
+                encoderPath = EncoderPath.UNKNOWN,
             )
         }
         if (codecInfos.isEmpty()) {
             return Capability(
-                false,
-                "No ${codec.label} encoder present — falling back to H.264 is safer."
+                supported = false,
+                reason = "No ${codec.label} encoder is advertised on this device.",
+                encoderPath = EncoderPath.NONE,
             )
         }
 
-        // Accumulate the reason from the *best* encoder that declines
-        // so the warning explains which limit was hit. Many devices
-        // expose a software encoder that accepts anything — if any
-        // encoder says yes we report supported=true.
         var firstReason: String? = null
+        var bestRejected: Capability? = null
         for (info in codecInfos) {
             val caps = try {
                 info.getCapabilitiesForType(mimeType)
-            } catch (_: IllegalArgumentException) {
+            } catch (t: Throwable) {
+                AppLog.w(TAG, "Could not inspect ${info.name} for $mimeType", t)
                 continue
-            } ?: continue
+            }
             val videoCaps = caps.videoCapabilities ?: continue
+            val path = when {
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && info.isHardwareAccelerated -> EncoderPath.HARDWARE
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && info.isSoftwareOnly -> EncoderPath.SOFTWARE
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> EncoderPath.UNKNOWN
+                else -> EncoderPath.UNKNOWN
+            }
+            val base = Capability(
+                supported = false,
+                encoderPath = path,
+                encoderNames = listOf(info.name),
+                maxWidth = videoCaps.supportedWidths.upper,
+                maxHeight = videoCaps.supportedHeights.upper,
+                maxBitrate = videoCaps.bitrateRange.upper,
+                widthAlignment = videoCaps.widthAlignment.coerceAtLeast(1),
+                heightAlignment = videoCaps.heightAlignment.coerceAtLeast(1),
+                profileLevels = caps.profileLevels.orEmpty().map { it.profile to it.level },
+            )
+            val failure = when {
+                width % base.widthAlignment != 0 || height % base.heightAlignment != 0 ->
+                    "Requested dimensions must align to ${base.widthAlignment}×${base.heightAlignment} for ${codec.label}."
+                !videoCaps.isSizeSupported(width, height) ->
+                    "${codec.label} encoder ${info.name} does not support ${width}×${height}; advertised maximum is ${base.maxWidth}×${base.maxHeight}."
+                !videoCaps.areSizeAndRateSupported(width, height, framerate.toDouble()) ->
+                    "${codec.label} at ${width}×${height} does not support ${framerate} fps on encoder ${info.name}."
+                bitrate !in videoCaps.bitrateRange.lower..videoCaps.bitrateRange.upper ->
+                    "${codec.label} bitrate must be within ${videoCaps.bitrateRange.lower / 1_000_000}–${videoCaps.bitrateRange.upper / 1_000_000} Mbps for encoder ${info.name}."
+                else -> null
+            }
+            if (failure != null) {
+                if (firstReason == null) firstReason = failure
+                bestRejected = base.copy(reason = failure)
+                continue
+            }
 
-            if (!videoCaps.isSizeSupported(width, height)) {
-                firstReason = firstReason ?: "${codec.label} on this device tops out at " +
-                    "${videoCaps.supportedWidths.upper}×${videoCaps.supportedHeights.upper}"
-                continue
+            val pathNotice = when (path) {
+                EncoderPath.SOFTWARE ->
+                    "This output is supported only by a software encoder; export may be substantially slower and use more battery."
+                EncoderPath.UNKNOWN ->
+                    "The encoder reports support, but Android did not identify it as hardware-accelerated or software-only. Treat performance as unverified."
+                else -> null
             }
-            if (!videoCaps.areSizeAndRateSupported(width, height, framerate.toDouble())) {
-                firstReason = firstReason ?: "${codec.label} at ${width}×${height} " +
-                    "is capped to ${videoCaps.getSupportedFrameRatesFor(width, height).upper.toInt()} fps on this device"
-                continue
-            }
-            val bitrateRange = videoCaps.bitrateRange
-            if (bitrate !in bitrateRange.lower..bitrateRange.upper) {
-                firstReason = firstReason ?: "${codec.label} bitrate is capped at " +
-                    "${bitrateRange.upper / 1_000_000} Mbps on this device"
-                continue
-            }
-            return Capability(true)
+            return base.copy(
+                supported = true,
+                reason = pathNotice,
+                encoderPath = path,
+                encoderNames = listOf(info.name),
+            )
         }
-        return Capability(false, firstReason ?: "${codec.label} can't encode this configuration")
+        return (bestRejected ?: Capability(
+            supported = false,
+            reason = firstReason ?: "${codec.label} has no encoder with a verifiable video capability profile.",
+            encoderPath = EncoderPath.NONE,
+        )).copy(reason = firstReason ?: bestRejected?.reason)
     }
 
     /**
