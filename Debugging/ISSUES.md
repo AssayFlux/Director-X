@@ -174,3 +174,13 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 - **Preserved:** Existing Material filled icons, theme-driven colors, callbacks, search/sort visibility conditions, project list states, import/create actions, trash/restore, crash-report actions, and all other Dashboard behavior were not intentionally changed.
 - **Commit:** `d1149f3e1ac9fe4143526e522fe1243f4397a774`.
 - **Not verified yet:** Gradle build, Compose/UI tests, screenshots at narrow and wide viewports, large font scale, orientation, and physical-device behavior. This is a source-level layout refinement, not completion of the Dashboard redesign.
+
+
+## Settings redesign — 2026-11-02
+
+- **Status:** IN PROGRESS — initial section presentation refinement committed; four-category navigation and regression verification remain open.
+- **Scope:** `app/src/main/java/com/directorx/editor/ui/settings/SettingsScreen.kt` only.
+- **Change:** Settings sections now use the existing theme semantic panel/border colors, established 12dp radius token, 20dp horizontal page inset, and clearer title hierarchy. The previously accepted `description` parameter is now rendered beneath each section heading instead of being discarded.
+- **Preserved by this edit:** Existing section bodies, setting controls, callbacks, ViewModel state, DataStore values, appearance options and current navigation entry point were not intentionally changed.
+- **Commit:** `339a6c375acbbabd13b8a712be2976099742b49f`.
+- **Still required:** Implement the four category views (Export & Delivery; Editing & Timeline; AI & Project Storage; App & Preferences), map all 13 existing sections exactly once, verify back-stack/state restoration and every setting control, and run Android build/UI tests plus device/font-scale checks. Do not mark Step 6 complete until these pass.
