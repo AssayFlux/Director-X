@@ -874,7 +874,7 @@ class EditorViewModel @Inject constructor(
                         height = h,
                         mediaVersion = mediaVersion,
                     )
-                    if (h > 1080) enqueueProxyGeneration()
+                    if (ProxyResolutionPolicy.requiresProxy(w, h)) enqueueProxyGeneration()
                 }
             }
             // Auto-fit on first clip: when we go from empty→populated, frame the full
