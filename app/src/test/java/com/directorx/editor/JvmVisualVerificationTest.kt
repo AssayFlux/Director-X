@@ -186,12 +186,19 @@ class JvmVisualVerificationTest {
     }
 
     private fun updateAppearance(mode: AppearanceMode) {
-        // ActivityScenario access is main-thread-only under Robolectric. Capture
-        // the repository before moving the suspending DataStore work to IO.
+        // The repository intentionally normalizes legacy persisted enum names:
+        // DARK -> PRIMARY_BRAND and HIGH_CONTRAST_DARK -> HIGH_CONTRAST.
+        // Wait for the public settings value, not the legacy value written to disk.
+        // Capture the injected repository before moving DataStore work to IO.
         val repository = compose.activity.settingsRepository
+        val expectedMode = when (mode) {
+            AppearanceMode.DARK -> AppearanceMode.PRIMARY_BRAND
+            AppearanceMode.HIGH_CONTRAST_DARK -> AppearanceMode.HIGH_CONTRAST
+            else -> mode
+        }
         runBlocking(Dispatchers.IO) {
             repository.updateAppearanceMode(mode)
-            repository.settings.first { it.appearanceMode == mode }
+            repository.settings.first { it.appearanceMode == expectedMode }
         }
         compose.waitForIdle()
     }
