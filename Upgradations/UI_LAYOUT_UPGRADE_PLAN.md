@@ -15,15 +15,15 @@ The visual blueprint is stored at [`assets/ui-blueprints/director-x-layout-bluep
 ## 2. Non-negotiable scope and compatibility rules
 
 1. Only the Dashboard / Project List and the four proposed Settings category views may be redesigned.
-2. Keep the existing cream/vintage colour system, typography identity, and current Material filled icon family and icon choices. Do not replace icons with outline or another icon pack.
-3. Keep the existing Jetpack Compose + Material 3 architecture.
-4. Preserve all callbacks, ViewModel state, persistence, navigation destinations, project operations, dialogs, import flows, crash-report actions, settings values, permissions, and accessibility semantics.
-5. Do not redesign or change the editor, preview/player, timeline, media import flow, project creation/template sheet, export sheet, playback, proxy system, AI processing screens, billing, or unrelated screens.
-6. No invented actions. A visual shortcut may appear only if it invokes an already existing action with the same semantics.
-7. No setting may be deleted, silently reset, renamed in storage, or changed in meaning.
-8. Treat all measurements as dp for layout and sp for text. Respect system insets, font scaling, screen width, display cutouts, and accessibility touch targets.
-9. Do not change application version, package ID, build system, dependencies, or CI as part of the UI-only implementation.
-10. Do not start implementation until this plan is approved.
+2. **Preserve the complete existing theme selector and every palette.** The source currently exposes ten selectable themes: Primary Brand, Midnight Cinema, Forest Atelier, Burgundy Editorial, Ocean Studio, Graphite Luxe, Sandstone, Lavender Film, Copper Studio, and Arctic Minimal. Keep all ten options, their exact palette mappings, current selected value, DataStore persistence, and preview/application behavior. Retain legacy persisted identifiers for compatibility. Do not hardcode the blueprint's cream sample colours into app UI or replace/reduce the theme selector. The blueprint colours are illustrative layout ink only.\n3. Keep the existing typography identity and current Material filled icon family and icon choices. Do not replace icons with outline or another icon pack.
+4. Keep the existing Jetpack Compose + Material 3 architecture.
+5. Preserve all callbacks, ViewModel state, persistence, navigation destinations, project operations, dialogs, import flows, crash-report actions, settings values, permissions, and accessibility semantics.
+6. Do not redesign or change the editor, preview/player, timeline, media import flow, project creation/template sheet, export sheet, playback, proxy system, AI processing screens, billing, or unrelated screens.
+7. No invented actions. A visual shortcut may appear only if it invokes an already existing action with the same semantics.
+8. No setting may be deleted, silently reset, renamed in storage, or changed in meaning.
+9. Treat all measurements as dp for layout and sp for text. Respect system insets, font scaling, screen width, display cutouts, and accessibility touch targets.
+10. Do not change application version, package ID, build system, dependencies, or CI as part of the UI-only implementation.
+11. Appearance is a relocation only: all current theme options, appearance controls, labels, and persistence must remain fully available in the new category page.
 
 ## 3. Current UI — source-verified baseline
 
