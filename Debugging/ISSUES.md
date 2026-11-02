@@ -10,9 +10,11 @@
 
 > **Do not forget or expand this direction:** The user has authorized UI modernization for exactly five supplied screens: **(1) the Dashboard screen and (2–5) the four Settings screens**. These are the only UI surfaces in scope for this upgrade.
 
+- The user prefers a **modern UI**. Use the existing Jetpack Compose / Material 3 architecture and modernize layout, hierarchy, cards, spacing, typography application, and control presentation only where appropriate.
+- **Preserve the existing icon style exactly.** Do not replace, redraw, restyle, or migrate the current Material filled icon family (`Icons.Default` / `Icons.Filled`) to outlined, line-art, duotone, thin-stroke, or another icon catalogue. Keep existing icon choices and their recognizable visual treatment unless the user explicitly approves a change.
 - Preserve the existing Director X cream/vintage visual identity and established palette unless the user approves a deliberate adjustment.
 - Recommend/select a suitable UI design catalogue for these five screens only; do not apply a generic redesign that conflicts with the existing identity.
-- Do **not** redesign or modify the video editor, timeline, preview/player, media import, project creation flow, templates, export flow, playback, proxy workflow, AI features, billing, navigation outside the five named screens, or any other application screen/functionality.
+- Do **not** redesign or modify the video editor, timeline, preview/player, media import, project creation flow, templates, export flow, playback, proxy workflow, AI features, billing, navigation outside the five named screens, or any other application screen/function.
 - Do not refactor unrelated code, rename features, change behavior, remove controls, or alter settings semantics as part of this UI task.
 - Keep existing functionality, settings values, persistence, callbacks, and navigation behavior intact. UI-only changes must be isolated and reviewed.
 - Before implementation, inspect the current Dashboard and Settings source/layout files and map each supplied screenshot to its corresponding screen. Record the exact in-scope files before editing.
