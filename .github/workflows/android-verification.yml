@@ -61,6 +61,17 @@ jobs:
       - name: Run Android unit tests
         run: ./gradlew --no-daemon --stacktrace :app:testQaUnitTest
 
+      - name: Upload Android unit-test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: director-x-unit-test-reports-${{ github.sha }}
+          path: |
+            app/build/test-results/testQaUnitTest/**/*.xml
+            app/build/reports/tests/testQaUnitTest/**
+          if-no-files-found: warn
+          retention-days: 14
+
       - name: Assemble debug APK
         run: ./gradlew --no-daemon --stacktrace :app:assembleDebug
 
