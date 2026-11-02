@@ -3,7 +3,7 @@
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
 **Branch audited:** `main`  
 **Audit baseline:** `7760187420b25776c2af624aef1df6a6a34b1559` (source audit baseline; follow-up fixes are listed below)  
-**Last repository review:** 2026-11-02 (follow-up implementation in progress)  
+**Last repository review:** 2026-11-02 (Step 7 validation in progress)  
 **Register status:** Initial source audit recorded; fixes are not claimed until implemented and verified.
 
 ## Product direction reminder — UI upgrade scope is strictly limited
@@ -178,12 +178,12 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 
 ## Settings redesign — 2026-11-02
 
-- **Status:** IN PROGRESS — initial section presentation refinement committed; four-category navigation and regression verification remain open.
+- **Status:** IMPLEMENTED — four-category navigation committed; Android verification and device/UI regression checks remain pending.
 - **Scope:** `app/src/main/java/com/directorx/editor/ui/settings/SettingsScreen.kt` only.
 - **Change:** Settings sections now use the existing theme semantic panel/border colors, established 12dp radius token, 20dp horizontal page inset, and clearer title hierarchy. The previously accepted `description` parameter is now rendered beneath each section heading instead of being discarded.
 - **Preserved by this edit:** Existing section bodies, setting controls, callbacks, ViewModel state, DataStore values, appearance options and current navigation entry point were not intentionally changed.
 - **Commit:** `339a6c375acbbabd13b8a712be2976099742b49f`.
-- **Still required:** Implement the four category views (Export & Delivery; Editing & Timeline; AI & Project Storage; App & Preferences), map all 13 existing sections exactly once, verify back-stack/state restoration and every setting control, and run Android build/UI tests plus device/font-scale checks. Do not mark Step 6 complete until these pass.
+- **Still required:** Verify Android unit tests/build, category back-stack/state restoration, every setting control, and device/font-scale behavior. Do not mark Step 6 fully verified until these pass.
 
 
 ## Settings category navigation — 2026-11-02
@@ -194,3 +194,15 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 - **Preservation:** Existing setting controls, ViewModel callbacks, dialogs, and underlying settings state were not replaced.
 - **Commit:** `81e82444` — Add Settings category navigation.
 - **Validation status:** Android verification and repository hygiene workflows have been triggered for this commit. Do not close Step 6 until Android verification passes and UI/back-navigation behaviour is checked on-device, including font scaling.
+
+
+## Step 7 — final validation and closure audit — 2026-11-02
+
+- **Status:** IN PROGRESS — CI failure diagnosed; corrective commit pushed; clean Android verification pending.
+- **Repository hygiene:** Passed for commit `6dac3b48` (run 41423237862). This validates package identity, version consistency, README links/assets, capability registry, policy checks and validator self-tests; it does not prove the Android app compiles.
+- **Android verification failure:** Run 41423237875 failed during `:app:compileQaKotlin` at `SettingsScreen.kt:889` with `Syntax error: Expecting a top level declaration`. Unit tests did not start; APK assembly and APK validation were skipped.
+- **Correction:** Removed two extra closing braces introduced around the Settings category/dialog scope. Commit: `f5a184df`.
+- **Revalidation:** Android verification run 41424241742 and repository-hygiene run 41424241710 were queued at the time this register was updated. No passing build or APK is claimed until the Android run completes.
+- **Other unresolved project work:** `DX-PROJECT-001` custom canvas dimensions remains OPEN — CONFIRMED. `DX-MEDIA-001` professional-camera codec compatibility remains IN PROGRESS pending a representative camera corpus and device-level preview/proxy/export checks. Proxy items DX-PROXY-001 through DX-PROXY-005 still require their listed automated/instrumentation/device verification; source commits alone do not close them.
+- **Dashboard / Settings UI verification:** Physical-device checks, narrow/wide layouts, font scaling, orientation, category back navigation, settings persistence and control-by-control regression checks have not been performed by this audit. Do not describe them as passed.
+- **Release decision:** No stable APK download link or release artifact should be published until the current Android verification succeeds and the APK validator passes.
