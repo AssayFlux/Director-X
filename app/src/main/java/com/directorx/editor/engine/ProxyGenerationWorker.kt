@@ -35,19 +35,29 @@ class ProxyGenerationWorker @AssistedInject constructor(
         return try {
             AppLog.d(TAG, "Starting proxy generation for all registered media")
 
-            proxyWorkflowEngine.generateAllProxies { progress ->
+            val batch = proxyWorkflowEngine.generateAllProxies { progress ->
                 setProgressAsync(workDataOf(KEY_PROGRESS to progress))
             }
 
             val storageBytes = proxyWorkflowEngine.getProxyStorageBytes()
-            AppLog.d(TAG, "Proxy generation complete. Storage used: ${storageBytes / 1024}KB")
-
-            Result.success(
-                workDataOf(
-                    KEY_PROGRESS to 1f,
-                    KEY_STORAGE_BYTES to storageBytes
-                )
+            AppLog.d(
+                TAG,
+                "Proxy batch finished: attempted=${batch.attempted}, generated=${batch.generated}, " +
+                    "skipped=${batch.skipped}, failed=${batch.failed}; storage=${storageBytes / 1024}KB"
             )
+            val output = workDataOf(
+                KEY_PROGRESS to 1f,
+                KEY_STORAGE_BYTES to storageBytes,
+                KEY_ATTEMPTED to batch.attempted,
+                KEY_GENERATED to batch.generated,
+                KEY_SKIPPED to batch.skipped,
+                KEY_FAILED to batch.failed,
+            )
+            when {
+                batch.failed == 0 -> Result.success(output)
+                runAttemptCount < MAX_RETRIES -> Result.retry()
+                else -> Result.failure(output)
+            }
         } catch (e: Exception) {
             AppLog.e(TAG, "Proxy generation failed", e)
             if (runAttemptCount < MAX_RETRIES) {
@@ -63,6 +73,10 @@ class ProxyGenerationWorker @AssistedInject constructor(
         const val WORK_NAME = "proxy_generation"
         const val KEY_PROGRESS = "progress"
         const val KEY_STORAGE_BYTES = "storage_bytes"
+        const val KEY_ATTEMPTED = "attempted"
+        const val KEY_GENERATED = "generated"
+        const val KEY_SKIPPED = "skipped"
+        const val KEY_FAILED = "failed"
         const val KEY_ERROR = "error"
         private const val MAX_RETRIES = 2
     }
