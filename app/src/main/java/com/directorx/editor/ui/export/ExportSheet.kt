@@ -1562,8 +1562,12 @@ fun ExportSheet(
                             bitrate = effectiveConfig.videoBitrate
                         )
                     }
-                    if (!probe.known || !probe.supported) {
-                        probe.reason?.let { add(it) }
+                    // A software-only path is technically possible but must
+                    // be disclosed before rendering because its speed, heat and
+                    // battery profile can be very different from hardware encode.
+                    probe.reason?.let { add(it) }
+                    if (!probe.known && probe.reason == null) {
+                        add("Encoder capability is unverified on this device; the output will be checked after rendering.")
                     }
                 }
                 preflightWarnings.forEach { warning ->
