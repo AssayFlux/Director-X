@@ -2,7 +2,6 @@ package com.directorx.editor.engine
 
 import com.directorx.editor.model.ProxyResolution
 import kotlin.math.abs
-import kotlin.math.max
 import kotlin.math.roundToInt
 
 /**
