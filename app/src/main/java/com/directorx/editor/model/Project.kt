@@ -23,8 +23,26 @@ data class Project(
     val proxyEnabled: Boolean = false,
     val version: Int = 1,
     val notes: String = "",
-    val deletedAtEpochMs: Long? = null
+    val deletedAtEpochMs: Long? = null,
+    /** Explicit canvas dimensions are used only when aspectRatio is CUSTOM. Zero means unset. */
+    val customWidth: Int = 0,
+    val customHeight: Int = 0
 ) {
+    init {
+        if (aspectRatio == AspectRatio.CUSTOM) {
+            require(CanvasDimensions.isValid(customWidth, customHeight)) {
+                "Custom canvas dimensions must be even values between 2 and 8192 with an aspect ratio between 1:4 and 4:1"
+            }
+        }
+    }
+
+    val canvasDimensions: CanvasDimensions
+        get() = if (aspectRatio == AspectRatio.CUSTOM) {
+            CanvasDimensions(customWidth, customHeight)
+        } else {
+            resolution.forAspect(aspectRatio).let { CanvasDimensions(it.first, it.second) }
+        }
+
     val timelineTimebase: TimelineTimebase
         get() {
             val numerator = frameRateNumerator.coerceIn(1, 240_000)
@@ -52,9 +70,34 @@ enum class AspectRatio(val widthRatio: Int, val heightRatio: Int, val label: Str
     RATIO_4_3(4, 3, "4:3"),
     RATIO_3_4(3, 4, "3:4"),
     RATIO_4_5(4, 5, "4:5"),
-    RATIO_21_9(21, 9, "21:9");
+    RATIO_21_9(21, 9, "21:9"),\n    CUSTOM(1, 1, "Custom");
 
     fun toFloat(): Float = widthRatio.toFloat() / heightRatio.toFloat()
+}
+
+/**
+ * Validated output canvas dimensions. Bounds keep encoder allocations practical
+ * and reject malformed/accidentally enormous project metadata.
+ */
+data class CanvasDimensions(val width: Int, val height: Int) {
+    companion object {
+        const val MIN_DIMENSION = 2
+        const val MAX_DIMENSION = 8192
+
+        fun isValid(width: Int, height: Int): Boolean {
+            if (width !in MIN_DIMENSION..MAX_DIMENSION || height !in MIN_DIMENSION..MAX_DIMENSION) return false
+            if (width % 2 != 0 || height % 2 != 0) return false
+            val ratio = width.toDouble() / height.toDouble()
+            return ratio in 0.25..4.0
+        }
+
+        fun requireValid(width: Int, height: Int): CanvasDimensions {
+            require(isValid(width, height)) {
+                "Canvas dimensions must be even values between 2 and 8192 with an aspect ratio between 1:4 and 4:1"
+            }
+            return CanvasDimensions(width, height)
+        }
+    }
 }
 
 enum class Resolution(val width: Int, val height: Int, val label: String) {
