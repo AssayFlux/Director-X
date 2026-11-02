@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Enforce Gradle as ClearCut's only runtime release-version source.
+"""Enforce Gradle as Director X's only runtime release-version source.
 
 Also refuses a CHANGELOG.md version section that has no git tag, other than the
 version Gradle is about to release, so the public record never lists a release
