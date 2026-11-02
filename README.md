@@ -137,7 +137,7 @@ Timeline interchange currently exposes a guarded import preview; full timeline i
 
 ## Build and test on Android with Termux
 
-Director X supports both local Android builds in Termux and automated GitHub Actions verification. The Android verification workflow runs the QA unit-test task, assembles a debug APK, validates the generated APK, and uploads it as a short-lived workflow artifact. This CI run is not a substitute for physical-device acceptance testing.
+Director X supports local Android builds in Termux and automated GitHub Actions verification. GitHub Actions runs QA unit tests, lint, API 37 instrumentation, repository-policy checks and performance/recovery QA. It does not assemble, validate, upload or publish a production/debug APK. Build the APK manually using the local build instructions below. CI results are not a substitute for physical-device acceptance testing.
 
 See the complete, device-oriented guide: **[Build Director X in Termux](docs/TERMUX_BUILD.md)**.
 
@@ -165,10 +165,10 @@ Useful local checks, when deliberately requested:
 
 Two distinct GitHub Actions workflows are used:
 
-- **Android verification** runs on relevant application/build changes and pull requests. It executes `:app:testQaUnitTest`, `:app:assembleDebug`, validates the debug APK, and uploads the APK as an artifact retained for 14 days.
+- **Android verification** runs on relevant application/build changes and pull requests. It executes `:app:testQaUnitTest` and uploads test reports only. APK assembly, APK validation and APK uploads are intentionally left to the maintainer's manual build process.
 - **Repository hygiene** checks repository metadata, branding, documentation links/assets and policy consistency. It does not prove that Android code compiles.
 
-The Android verification workflow does not perform Android lint, production signing, Play Store publishing, or physical-device testing. A green repository-hygiene badge must never be interpreted as a successful Android build. A debug artifact is not a stable release APK.
+The unit-test workflow does not perform APK assembly, production signing, Play Store publishing, or physical-device testing. API 37 instrumentation and macrobenchmark workflows may build temporary test targets solely to execute automated tests; those artifacts are not production APK deliverables. A green repository-hygiene badge must never be interpreted as proof of Android device compatibility.
 
 ### Android 17 audio hardening smoke check
 
