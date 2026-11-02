@@ -44,6 +44,37 @@ data class ProxyClearResult(
 }
 
 /**
+ * Explicit outcome for deleting a managed proxy. A missing cache file is not a
+ * deletion failure: the workflow can safely clear its stale URI reference.
+ */
+internal enum class ProxyFileDeleteOutcome { DELETED, MISSING, FAILED, INVALID }
+
+/**
+ * Deletes only files directly inside the proxy cache with the managed filename
+ * shape. Canonical-path checks reject traversal and symlinks escaping the cache.
+ */
+internal fun deleteManagedProxyFile(proxyRoot: File, candidate: File): ProxyFileDeleteOutcome {
+    val canonicalRoot = runCatching { proxyRoot.canonicalFile }.getOrNull()
+        ?: return ProxyFileDeleteOutcome.INVALID
+    val canonicalFile = runCatching { candidate.canonicalFile }.getOrNull()
+        ?: return ProxyFileDeleteOutcome.INVALID
+    if (
+        canonicalFile.parentFile != canonicalRoot ||
+        !canonicalFile.name.startsWith("proxy_") ||
+        !canonicalFile.name.endsWith(".mp4")
+    ) {
+        return ProxyFileDeleteOutcome.INVALID
+    }
+    if (!canonicalFile.exists()) return ProxyFileDeleteOutcome.MISSING
+    if (!canonicalFile.isFile) return ProxyFileDeleteOutcome.INVALID
+    return if (canonicalFile.delete()) {
+        ProxyFileDeleteOutcome.DELETED
+    } else {
+        ProxyFileDeleteOutcome.FAILED
+    }
+}
+
+/**
  * Stable cache identity for a proxy render. A source can have several valid
  * proxy resolutions at once, so resolution is part of the key as well as URI.
  */
@@ -108,12 +139,15 @@ class ProxyEngine @Inject constructor(
         }
     }
 
-    fun deleteProxyUri(uri: Uri): Boolean {
-        if (uri.scheme != "file") return false
-        val file = uri.path?.let(::File) ?: return false
-        val managedFile = canonicalManagedProxyFile(file) ?: return false
-        proxyMap.entries.removeIf { it.value == uri }
-        return managedFile.isFile && managedFile.delete()
+    fun deleteProxyUri(uri: Uri): ProxyFileDeleteOutcome {
+        if (uri.scheme != "file") return ProxyFileDeleteOutcome.INVALID
+        val file = uri.path?.let(::File) ?: return ProxyFileDeleteOutcome.INVALID
+        val managedFile = canonicalManagedProxyFile(file) ?: return ProxyFileDeleteOutcome.INVALID
+        val outcome = deleteManagedProxyFile(proxyDir, managedFile)
+        if (outcome == ProxyFileDeleteOutcome.DELETED || outcome == ProxyFileDeleteOutcome.MISSING) {
+            proxyMap.entries.removeIf { it.value == uri }
+        }
+        return outcome
     }
 
     fun proxyFileLength(uri: Uri): Long {
