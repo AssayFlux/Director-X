@@ -81,6 +81,7 @@ class JvmVisualVerificationTest {
         compose.onNodeWithTag(ClearCutTestTags.PROJECTS_SETTINGS).performClick()
         waitUntilAtLeastOneExists(ClearCutTestTags.SETTINGS_SCREEN)
         capture("settings-cream.png")
+        compose.onNodeWithText("App & Preferences").performClick()
 
         waitUntilAtLeastOneExists(ClearCutTestTags.SETTINGS_PRIVACY_OPEN)
         compose.onNodeWithTag(ClearCutTestTags.SETTINGS_PRIVACY_OPEN)
@@ -99,6 +100,7 @@ class JvmVisualVerificationTest {
         compose.onNodeWithTag(ClearCutTestTags.SETTINGS_LICENSES_CLOSE).performClick()
         waitUntilNoExists(ClearCutTestTags.SETTINGS_LICENSES_DIALOG)
 
+        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_BACK).performClick()
         compose.onNodeWithTag(ClearCutTestTags.SETTINGS_BACK).performClick()
         waitUntilAtLeastOneExists(ClearCutTestTags.PROJECTS_SCREEN)
 
@@ -129,6 +131,7 @@ class JvmVisualVerificationTest {
         compose.onNodeWithTag(ClearCutTestTags.PROJECTS_SETTINGS).performClick()
         waitUntilAtLeastOneExists(ClearCutTestTags.SETTINGS_SCREEN)
         capture("settings-high-contrast-cream.png")
+        compose.onNodeWithText("App & Preferences").performClick()
 
         compose.onNodeWithTag(ClearCutTestTags.SETTINGS_PRIVACY_OPEN)
             .performScrollTo()
@@ -138,6 +141,7 @@ class JvmVisualVerificationTest {
         compose.onNodeWithTag(ClearCutTestTags.SETTINGS_PRIVACY_CLOSE).performClick()
         waitUntilNoExists(ClearCutTestTags.SETTINGS_PRIVACY_DASHBOARD)
 
+        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_BACK).performClick()
         compose.onNodeWithTag(ClearCutTestTags.SETTINGS_BACK).performClick()
         waitUntilAtLeastOneExists(ClearCutTestTags.PROJECTS_SCREEN)
 
