@@ -23,6 +23,7 @@ import com.directorx.editor.model.TextOverlay
 import com.directorx.editor.model.Track
 import com.directorx.editor.model.TrackType
 import com.directorx.editor.ui.ClearCutTestTags
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
@@ -185,7 +186,7 @@ class JvmVisualVerificationTest {
     }
 
     private fun updateAppearance(mode: AppearanceMode) {
-        runBlocking {
+        runBlocking(Dispatchers.IO) {
             compose.activity.settingsRepository.updateAppearanceMode(mode)
             compose.activity.settingsRepository.settings.first { it.appearanceMode == mode }
         }
