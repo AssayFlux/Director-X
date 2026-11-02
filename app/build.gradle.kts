@@ -34,8 +34,8 @@ android {
         applicationId = "com.directorx.editor"
         minSdk = 26
         targetSdk = 37
-        versionCode = 301
-        versionName = "3.82.0"
+        versionCode = 302
+        versionName = "0.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testBuildType = "qa"
 
