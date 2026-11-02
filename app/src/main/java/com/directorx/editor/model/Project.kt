@@ -70,7 +70,8 @@ enum class AspectRatio(val widthRatio: Int, val heightRatio: Int, val label: Str
     RATIO_4_3(4, 3, "4:3"),
     RATIO_3_4(3, 4, "3:4"),
     RATIO_4_5(4, 5, "4:5"),
-    RATIO_21_9(21, 9, "21:9"),\n    CUSTOM(1, 1, "Custom");
+    RATIO_21_9(21, 9, "21:9"),
+    CUSTOM(1, 1, "Custom");
 
     fun toFloat(): Float = widthRatio.toFloat() / heightRatio.toFloat()
 }
