@@ -238,7 +238,7 @@ class ProxyWorkflowEngine @Inject constructor(
                     // The file was already removed (for example by cache pressure).
                     // Clear the stale URI rather than reporting a failed deletion.
                     missing++
-                    clearProxyReference(clipId)
+                    clearProxyReference(clipId, uri)
                 }
                 ProxyFileDeleteOutcome.FAILED,
                 ProxyFileDeleteOutcome.INVALID -> {
