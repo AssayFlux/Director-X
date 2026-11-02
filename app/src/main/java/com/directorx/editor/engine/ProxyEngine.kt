@@ -75,11 +75,8 @@ class ProxyEngine @Inject constructor(
         }
     }
 
-    private fun keyFor(sourceUri: Uri): String {
-        val bytes = sourceUri.toString().toByteArray()
-        val digest = java.security.MessageDigest.getInstance("SHA-256").digest(bytes)
-        return digest.joinToString("") { "%02x".format(it) }.take(32)
-    }
+    private fun keyFor(sourceUri: Uri, resolution: ProxyResolution): String =
+        proxyCacheKey(sourceUri, resolution)
 
     private fun proxyFileForKey(key: String): File = File(proxyDir, "proxy_$key.mp4")
 
@@ -108,12 +105,16 @@ class ProxyEngine @Inject constructor(
         return managedFile.takeIf { it.isFile }?.length() ?: 0L
     }
 
-    fun getProxyUri(sourceUri: Uri): Uri? {
-        return proxyMap[keyFor(sourceUri)]
-    }
+    fun getProxyUri(
+        sourceUri: Uri,
+        resolution: ProxyResolution = ProxyResolution.QUARTER
+    ): Uri? = proxyMap[keyFor(sourceUri, resolution)]
 
-    fun hasProxy(sourceUri: Uri): Boolean {
-        val key = keyFor(sourceUri)
+    fun hasProxy(
+        sourceUri: Uri,
+        resolution: ProxyResolution = ProxyResolution.QUARTER
+    ): Boolean {
+        val key = keyFor(sourceUri, resolution)
         val file = proxyFileForKey(key)
         return file.isFile.also { if (it) proxyMap[key] = Uri.fromFile(file) }
     }
@@ -157,7 +158,7 @@ class ProxyEngine @Inject constructor(
         plan: ProxyResolutionPolicy.Plan? = null,
         onProgress: (Float) -> Unit = {}
     ): Uri? = withContext(Dispatchers.Main) {
-        val key = keyFor(sourceUri)
+        val key = keyFor(sourceUri, resolution)
         val outFile = proxyFileForKey(key)
 
         // Hold the per-key mutex across the existence check + transformer
