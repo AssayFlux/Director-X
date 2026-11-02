@@ -1,0 +1,158 @@
+name: Android device and performance QA
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "app/**"
+      - "baselineprofile/**"
+      - "gradle/**"
+      - "*.gradle"
+      - "*.gradle.kts"
+      - "gradle.properties"
+      - "gradlew"
+      - "gradlew.bat"
+      - "scripts/run_api37_qa.py"
+      - ".github/workflows/android-device-qa.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-device-qa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-api37-instrumentation:
+    name: Lint and API 37 instrumentation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - name: Check out Director X
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Install Android SDK components
+        shell: bash
+        run: |
+          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          SDKMANAGER="$(find "$SDK_ROOT/cmdline-tools" -type f -name sdkmanager | sort | tail -n 1)"
+          if [ -z "$SDKMANAGER" ]; then
+            echo "::error::Android SDK command-line tools were not found under $SDK_ROOT"
+            exit 1
+          fi
+          echo "ANDROID_HOME=$SDK_ROOT" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
+          set +o pipefail
+          yes | "$SDKMANAGER" --licenses
+          sdkmanager_status=${PIPESTATUS[1]}
+          set -o pipefail
+          if [ "$sdkmanager_status" -ne 0 ]; then
+            exit "$sdkmanager_status"
+          fi
+          "$SDKMANAGER" --install "platform-tools" "platforms;android-37" "build-tools;37.0.0" "emulator"
+
+      - name: Enable KVM
+        run: |
+          if [ -e /dev/kvm ]; then
+            sudo chmod 666 /dev/kvm
+            ls -l /dev/kvm
+          else
+            echo "::warning::KVM is unavailable; managed-device tests may not start."
+          fi
+
+      - name: Set up Gradle cache
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Run Android lint and API 37 managed-device suite
+        run: |
+          chmod +x ./gradlew
+          ./gradlew --no-daemon --stacktrace --console=plain \
+            :app:lintQa \
+            :app:clearCutApi37QaAndroidTest
+
+      - name: Classify API 37 QA results
+        if: always()
+        run: python3 scripts/run_api37_qa.py --skip-run
+
+      - name: Upload lint and instrumentation reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: director-x-api37-qa-reports-${{ github.sha }}
+          path: |
+            app/build/reports/lint-results-qa.html
+            app/build/reports/lint-results-qa.sarif
+            app/build/reports/connected-qa/**
+            app/build/outputs/androidTest-results/**
+            app/build/outputs/androidTest-results/managedDevice/**
+          if-no-files-found: warn
+          retention-days: 14
+
+  macrobenchmark:
+    name: API 37 startup and editor macrobenchmark
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - name: Check out Director X
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Install Android SDK components
+        shell: bash
+        run: |
+          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          SDKMANAGER="$(find "$SDK_ROOT/cmdline-tools" -type f -name sdkmanager | sort | tail -n 1)"
+          if [ -z "$SDKMANAGER" ]; then
+            echo "::error::Android SDK command-line tools were not found under $SDK_ROOT"
+            exit 1
+          fi
+          echo "ANDROID_HOME=$SDK_ROOT" >> "$GITHUB_ENV"
+          echo "ANDROID_SDK_ROOT=$SDK_ROOT" >> "$GITHUB_ENV"
+          yes | "$SDKMANAGER" --licenses
+          "$SDKMANAGER" --install "platform-tools" "platforms;android-37" "build-tools;37.0.0" "emulator"
+
+      - name: Enable KVM
+        run: |
+          if [ -e /dev/kvm ]; then
+            sudo chmod 666 /dev/kvm
+            ls -l /dev/kvm
+          else
+            echo "::warning::KVM is unavailable; macrobenchmark may not start."
+          fi
+
+      - name: Set up Gradle cache
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Run API 37 macrobenchmark
+        run: |
+          chmod +x ./gradlew
+          ./gradlew --no-daemon --stacktrace --console=plain \
+            :baselineprofile:pixel6Api37AndroidTest
+
+      - name: Upload macrobenchmark and baseline profile outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: director-x-macrobenchmark-${{ github.sha }}
+          path: |
+            baselineprofile/build/reports/**
+            baselineprofile/build/outputs/**
+            app/build/generated/baselineProfiles/**
+          if-no-files-found: warn
+          retention-days: 14

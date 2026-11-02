@@ -380,6 +380,7 @@ def main() -> int:
     args = parser.parse_args()
 
     root = args.root.resolve()
+    gradle_exit_code = 0
     if not args.skip_run and args.results is None:
         prior_directory = (
             root
@@ -393,14 +394,34 @@ def main() -> int:
         )
         for prior in prior_directory.glob("TEST-*.xml"):
             prior.unlink()
-        run_gradle(root)
+        gradle_exit_code = run_gradle(root)
 
     try:
         result_path = args.results.resolve() if args.results else find_result(root)
         report = evaluate(parse_results(result_path))
     except (FileNotFoundError, ElementTree.ParseError, OSError, RuntimeError) as error:
         print(f"error: {error}", file=sys.stderr)
+        if gradle_exit_code:
+            print(
+                f"Gradle managed-device task failed with exit code {gradle_exit_code}.",
+                file=sys.stderr,
+            )
         return 1
+
+    if gradle_exit_code:
+        regressions = report["regressions"]
+        summary = report["summary"]
+        assert isinstance(regressions, list)
+        assert isinstance(summary, dict)
+        regressions.append(
+            {
+                "id": "managed-device-gradle-task",
+                "status": "gradle-failed",
+                "detail": f"Gradle task exited with code {gradle_exit_code}.",
+            }
+        )
+        summary["regressions"] = len(regressions)
+        report["outcome"] = "regression"
 
     report_directory = (
         args.report_dir or root / "app" / "build" / "reports" / "connected-qa"
