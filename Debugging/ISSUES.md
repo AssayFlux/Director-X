@@ -155,16 +155,14 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 
 ## Custom aspect ratio
 
-### DX-PROJECT-001 — Custom canvas dimensions are not represented in the project model
+### DX-PROJECT-001 — Custom canvas dimensions are only partially propagated
 
 - **Severity:** High
-- **Status:** OPEN — CONFIRMED
-- **Affected areas:** `model/Project.kt`, `engine/ProjectDocument.kt`, Room schema/migrations, export configuration, preview/crop/template UI and render planning.
-- **Finding:** Project and export configurations currently persist an `AspectRatio` enum only. The existing `Resolution.forAspect()` derives dimensions from a preset ratio, so arbitrary user-entered width/height values cannot survive project save/reopen or be guaranteed through export.
-- **Required correction:** Add validated custom canvas dimensions with even encoder-compatible output dimensions; persist them in Room and the versioned project document; add a forward migration and preserve all legacy enum presets; propagate custom dimensions through crop, preview, template and export paths. Do not merely add a `CUSTOM` enum constant.
-- **Verification required:** Unit tests for bounds, invalid values, portrait/landscape/square dimensions and even-dimension normalization; Room migration tests from schema 10; project-document legacy round trips; preview and export dimension checks.
-
-
+- **Status:** IN PROGRESS — model and project-document persistence already exist; end-to-end UI, database, preview and export behavior still require verification.
+- **Confirmed implementation:** `Project.kt` contains `customWidth`, `customHeight`, `AspectRatio.CUSTOM`, validation through `CanvasDimensions`, and a computed `canvasDimensions` property. `ProjectDocument.kt` writes and reads the custom dimensions.
+- **Correction to previous finding:** It is inaccurate to say custom dimensions are absent from the project model or project-document serializer. Those foundations are already present and must be preserved.
+- **Remaining investigation and work:** Confirm the project-creation/edit UI; Room entity/schema/migration coverage; autosave and reopen; archive/import; templates; preview/crop sizing; and actual export renderer dimensions. `ExportConfig.kt` still has independent preset `resolution` and `aspectRatio` fields, so verify how the project canvas dimensions reach the renderer and how platform presets intentionally override them.
+- **Verification required:** Legacy project round trips; custom portrait, landscape and square dimensions; invalid/odd/boundary values; database migration tests; preview dimension assertions; and exported-file dimension inspection. Do not duplicate existing model/document fields or mark this resolved from source presence alone.
 
 ## Dashboard redesign — 2026-11-02
 
@@ -206,3 +204,29 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 - **Other unresolved project work:** `DX-PROJECT-001` custom canvas dimensions remains OPEN — CONFIRMED. `DX-MEDIA-001` professional-camera codec compatibility remains IN PROGRESS pending a representative camera corpus and device-level preview/proxy/export checks. Proxy items DX-PROXY-001 through DX-PROXY-005 still require their listed automated/instrumentation/device verification; source commits alone do not close them.
 - **Dashboard / Settings UI verification:** Physical-device checks, narrow/wide layouts, font scaling, orientation, category back navigation, settings persistence and control-by-control regression checks have not been performed by this audit. Do not describe them as passed.
 - **Release decision:** No stable APK download link or release artifact should be published until the current Android verification succeeds and the APK validator passes.
+
+
+## Step 1 — foundation stabilization update — 2026-11-02
+
+### DX-SETTINGS-001 — SettingsScreen category scope prevented Kotlin compilation
+
+- **Severity:** Critical — blocks Android verification, unit-test compilation and debug APK assembly.
+- **Root cause confirmed:** The `if (selectedCategory == SettingsCategory.APP)` block was not closed after the About section. The missing closure caused the following dialog content and helper declarations to remain nested in the wrong scope. A compensating trailing brace at end-of-file had masked the structure and did not restore top-level helper declarations.
+- **Correction committed:** Added the missing close immediately after the App/Preferences category content, then removed the obsolete trailing file-level brace. Helper composables and private declarations now return to file scope.
+- **Commits:** `20a77abb5c071558cca6cc680f45b813d8a6cbc5` (close category scope); `abc4bde34462df2521deedd2b6a5f1fde4f30cc6` (remove obsolete trailing brace).
+- **Verification:** Android verification was triggered by the source change. Await the current workflow result before marking the compile blocker fixed. The previous failing run `41424630145` showed unresolved helper references and private-local declaration errors; its unit tests and APK assembly did not complete.
+
+### DX-DOCS-001 — README described obsolete GitHub Actions behavior
+
+- **Severity:** Medium
+- **Status:** SOURCE UPDATED — repository-hygiene verification pending.
+- **Correction:** README now distinguishes Android verification from repository hygiene. It documents QA unit tests, debug APK assembly, APK validation and 14-day artifact upload, and clarifies that lint, production signing, publishing and physical-device testing are not performed by that workflow.
+- **Commit:** `7a525a8c29bf70b946f80f2b585929cdd1298084`.
+
+### Step 1 acceptance gate
+
+- [ ] Current Android verification completes successfully: unit tests, debug APK assembly, APK validation and artifact upload.
+- [ ] Repository-hygiene workflow passes after README and issue-register corrections.
+- [ ] Review any new Kotlin/compiler/test failures from the corrected build; do not assume the brace fix is the only possible blocker.
+- [ ] Confirm APK artifact metadata and package/version identity from the generated output.
+- [ ] Keep device acceptance, instrumentation and release-signing checks explicitly separate from CI success.
