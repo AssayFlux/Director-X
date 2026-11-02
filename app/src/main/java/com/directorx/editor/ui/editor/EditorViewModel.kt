@@ -2900,7 +2900,8 @@ class EditorViewModel @Inject constructor(
                     ) {
                         continue
                     }
-                    if (!proxyEngine.hasProxy(request.sourceUri, request.resolution)) {
+                    val mediaVersion = request.identity.version
+                    if (!proxyEngine.hasProxy(request.sourceUri, request.resolution, mediaVersion)) {
                         val plan = proxyEngine.planProxy(request.sourceUri, request.resolution)
                         if (plan is ProxyResolutionPolicy.Plan.UseSource) {
                             editedDirectly++
@@ -2909,6 +2910,7 @@ class EditorViewModel @Inject constructor(
                                 request.sourceUri,
                                 request.resolution,
                                 plan,
+                                mediaVersion = mediaVersion,
                             )
                             if (proxyUri != null) generated++
                         }
@@ -2924,7 +2926,11 @@ class EditorViewModel @Inject constructor(
                                 if (request != null &&
                                     shouldApplyMediaJobResult(request.identity, clip.timelineMediaJobIdentity())
                                 ) {
-                                    clip.copy(proxyUri = proxyEngine.getProxyUri(request.sourceUri, request.resolution))
+                                    clip.copy(proxyUri = proxyEngine.getProxyUri(
+                                        request.sourceUri,
+                                        request.resolution,
+                                        request.identity.version,
+                                    ))
                                 } else {
                                     clip
                                 }
