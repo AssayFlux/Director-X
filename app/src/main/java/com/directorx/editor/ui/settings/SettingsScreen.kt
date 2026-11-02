@@ -890,20 +890,102 @@ fun SettingsScreen(
 
 @Composable
 private fun SettingsCategoryOverview(onSelect: (SettingsCategory) -> Unit) {
-    Column(Modifier.fillMaxWidth().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    val colors = LocalClearCutColors.current
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = Spacing.md),
+        verticalArrangement = Arrangement.spacedBy(Spacing.md)
+    ) {
         listOf(
-            SettingsCategory.EXPORT to "Export & Delivery",
-            SettingsCategory.EDITING to "Editing & Timeline",
-            SettingsCategory.AI_STORAGE to "AI & Project Storage",
-            SettingsCategory.APP to "App & Preferences"
-        ).forEach { (category, title) ->
+            Triple(
+                SettingsCategory.EXPORT,
+                "Export & Delivery",
+                stringResource(R.string.settings_export_defaults_description)
+            ),
+            Triple(
+                SettingsCategory.EDITING,
+                "Editing & Timeline",
+                stringResource(R.string.settings_timeline_description)
+            ),
+            Triple(
+                SettingsCategory.AI_STORAGE,
+                "AI & Project Storage",
+                stringResource(R.string.settings_ai_models_description)
+            ),
+            Triple(
+                SettingsCategory.APP,
+                "App & Preferences",
+                stringResource(R.string.settings_subtitle)
+            )
+        ).forEach { (category, title, description) ->
+            val (icon, accent) = when (category) {
+                SettingsCategory.EXPORT -> Icons.Default.Movie to ClearCutAccents.Rosewater
+                SettingsCategory.EDITING -> Icons.Default.Timeline to ClearCutAccents.Sapphire
+                SettingsCategory.AI_STORAGE -> Icons.Default.Psychology to ClearCutAccents.Green
+                SettingsCategory.APP -> Icons.Default.Tune to ClearCutAccents.Mauve
+            }
             Surface(
-                modifier = Modifier.fillMaxWidth().clickable { onSelect(category) },
-                shape = RoundedCornerShape(Radius.xl),
-                color = LocalClearCutColors.current.panel,
-                border = BorderStroke(1.dp, LocalClearCutColors.current.cardStroke)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 76.dp)
+                    .testTag(
+                        when (category) {
+                            SettingsCategory.EXPORT -> ClearCutTestTags.SETTINGS_CATEGORY_EXPORT
+                            SettingsCategory.EDITING -> ClearCutTestTags.SETTINGS_CATEGORY_EDITING
+                            SettingsCategory.AI_STORAGE -> ClearCutTestTags.SETTINGS_CATEGORY_AI_STORAGE
+                            SettingsCategory.APP -> ClearCutTestTags.SETTINGS_CATEGORY_APP
+                        }
+                    )
+                    .clickable(role = Role.Button) { onSelect(category) },
+                shape = RoundedCornerShape(Radius.lg),
+                color = colors.panel,
+                border = BorderStroke(1.dp, colors.cardStroke),
+                tonalElevation = 0.dp,
+                shadowElevation = 1.dp
             ) {
-                Text(title, modifier = Modifier.padding(20.dp), color = LocalClearCutColors.current.text, style = MaterialTheme.typography.titleMedium)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.md)
+                ) {
+                    Surface(
+                        shape = RoundedCornerShape(Radius.md),
+                        color = accent.copy(alpha = 0.14f)
+                    ) {
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = null,
+                            tint = accent,
+                            modifier = Modifier
+                                .size(44.dp)
+                                .padding(10.dp)
+                        )
+                    }
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Text(
+                            text = title,
+                            color = colors.text,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(
+                            text = description,
+                            color = colors.subtext,
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+                    Icon(
+                        imageVector = Icons.Default.ChevronRight,
+                        contentDescription = null,
+                        tint = colors.subtext
+                    )
+                }
             }
         }
     }
