@@ -134,10 +134,10 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 
 ### DX-PROXY-005 implementation update — 2026-11-02
 
-- **Source correction committed:** Proxy eligibility now uses the larger coded dimension instead of only `originalHeight`. This covers rotated 1920×1080 phone footage and portrait sources whose coded dimensions are landscape-oriented.
+- **Source corrections committed:** Preview selection, background batch filtering, and the EditorViewModel enqueue trigger now use `ProxyResolutionPolicy.requiresProxy(width, height)` rather than checking height alone. This prevents rotated 1920×1080 coded media from being missed by the background generation trigger or batch planner.
 - **Regression coverage added:** `ProxyResolutionPolicyTest.proxyEligibilityUsesTheLongDimensionForPortraitAndLandscapeMedia` checks landscape, portrait, 4K, square, and threshold cases.
-- **Commits:** `0cf735d`, `1c63a26`, `f0cee32`, `7ac6ce8`, `2733fd8`.
-- **Status:** IN PROGRESS — source and unit test added; CI and device/instrumentation verification pending. This does not yet prove that all import callers supply valid coded dimensions or that rotation metadata is handled identically in every preview path.
+- **Commits:** `0cf735d`, `1c63a26`, `f0cee32`, `7ac6ce8`, `2733fd8`, `92420a4`, `f829928`.
+- **Status:** IN PROGRESS — source and unit test added; Android CI and device/instrumentation verification pending. The current implementation treats the supplied width/height as coded dimensions; verify this contract against the video metadata provider and test rotated clips end to end.
 
 
 ## Professional camera media compatibility
