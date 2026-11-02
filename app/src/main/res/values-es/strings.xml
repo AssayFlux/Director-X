@@ -2001,6 +2001,8 @@
     <string name="media_diagnostics_decoder_unavailable">No hay un códec compatible en el dispositivo</string>
     <string name="media_diagnostics_decoder_unknown">No se pudo comprobar el códec</string>
     <string name="media_diagnostics_decoder_details">%1$s · %2$s · perfil %3$s · nivel %4$s · %5$s bits</string>
+    <string name="media_diagnostics_video_advanced">Croma: %1$s · tasa de bits: %2$s bit/s</string>
+    <string name="media_diagnostics_audio_details">Canales: %1$s · frecuencia de muestreo: %2$s Hz · tasa de bits: %3$s bit/s</string>
     <string name="media_diagnostics_sync_frames">%1$d fotogramas de sincronización</string>
     <string name="media_diagnostics_sync_frames_approx">%1$d+ fotogramas de sincronización</string>
     <string name="media_diagnostics_timestamp_risk">Riesgo de marcas de tiempo: %1$s</string>
