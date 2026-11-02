@@ -79,9 +79,9 @@ This register tracks reproducible source-level findings, their impact, the propo
 - **Severity:** Medium
 - **Status:** OPEN — INVESTIGATE
 - **Affected file:** `app/src/main/java/com/directorx/editor/engine/ProxyWorkflowEngine.kt`
-- **Finding:** Preview selection checks `entry.originalHeight > 1080`, while proxy planning in `ProxyEngine` derives displayed height from media metadata and rotation. The workflow's stored `originalHeight` is supplied by its caller.
-- **Impact / uncertainty:** If callers store coded rather than displayed dimensions, rotated portrait clips may be treated differently by preview selection than by proxy planning. The current source review does not establish what every caller supplies.
-- **Required investigation:** Trace all `registerMedia()` callers and document whether width/height are coded or display-oriented. Prefer one shared orientation-aware eligibility policy if the values can diverge.
+- **Finding:** The first implementation pass updated preview selection to use the long coded dimension, but a follow-up source review found the background batch filter still used `originalHeight > 1080`. That left portrait/rotated sources inconsistently eligible.
+- **Correction committed:** Both preview selection and background batch filtering now call `ProxyResolutionPolicy.requiresProxy(originalWidth, originalHeight)`, which uses the larger coded dimension.
+- **Remaining uncertainty:** The current source review still needs to trace every `registerMedia()` caller and establish whether width/height are consistently coded dimensions. The proxy planner separately uses displayed height derived from rotation metadata.
 - **Verification required:** Test landscape, portrait, rotated portrait, and sources around the 1080-pixel threshold through import, background generation, preview selection, and export.
 
 ## Follow-up implementation log — 2026-11-02
@@ -138,3 +138,28 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 - **Regression coverage added:** `ProxyResolutionPolicyTest.proxyEligibilityUsesTheLongDimensionForPortraitAndLandscapeMedia` checks landscape, portrait, 4K, square, and threshold cases.
 - **Commits:** `0cf735d`, `1c63a26`, `f0cee32`, `7ac6ce8`, `2733fd8`.
 - **Status:** IN PROGRESS — source and unit test added; CI and device/instrumentation verification pending. This does not yet prove that all import callers supply valid coded dimensions or that rotation metadata is handled identically in every preview path.
+
+
+## Professional camera media compatibility
+
+### DX-MEDIA-001 — Professional-camera codec and profile compatibility is not yet established
+
+- **Severity:** Critical for the requested professional-camera workflow
+- **Status:** OPEN — INVESTIGATE
+- **Affected areas:** Media import, Media3 preview/Transformer, FFmpegKitNext fallback, proxy generation, export preflight, media metadata persistence.
+- **Finding:** The app has Media3 decoder fallback and an LGPL-profile FFmpegKitNext engine, but those components do not establish support for every professional-camera codec/profile. In particular, a container being importable does not prove its video bit depth, chroma subsampling, profile, frame rate, audio streams, timecode, HDR metadata or camera-specific RAW payload can be decoded and rendered.
+- **Required work:** Build an explicit source capability inspection path; identify MIME/container, codec/profile/level, coded dimensions, frame rate, bit depth/chroma where the platform exposes them, audio streams, rotation and HDR metadata. Distinguish import, preview, proxy and final-export capability. Preserve originals and offer a proxy/transcode path only where the decoder can actually read the source.
+- **Test corpus required:** Representative camera samples for H.264, HEVC Main/Main10, 4:2:2 variants, ProRes variants, high-bitrate Long-GOP, variable frame rate, multichannel/PCM audio and HDR. Test RAW formats separately; do not claim BRAW, R3D or ARRIRAW support without a verified decoder and licensing review.
+- **Verification required:** Record source file, codec/profile, device/API, preview result, proxy result, export result and output conformance for each sample. Hardware-dependent support must be reported as device-specific.
+
+## Custom aspect ratio
+
+### DX-PROJECT-001 — Custom canvas dimensions are not represented in the project model
+
+- **Severity:** High
+- **Status:** OPEN — CONFIRMED
+- **Affected areas:** `model/Project.kt`, `engine/ProjectDocument.kt`, Room schema/migrations, export configuration, preview/crop/template UI and render planning.
+- **Finding:** Project and export configurations currently persist an `AspectRatio` enum only. The existing `Resolution.forAspect()` derives dimensions from a preset ratio, so arbitrary user-entered width/height values cannot survive project save/reopen or be guaranteed through export.
+- **Required correction:** Add validated custom canvas dimensions with even encoder-compatible output dimensions; persist them in Room and the versioned project document; add a forward migration and preserve all legacy enum presets; propagate custom dimensions through crop, preview, template and export paths. Do not merely add a `CUSTOM` enum constant.
+- **Verification required:** Unit tests for bounds, invalid values, portrait/landscape/square dimensions and even-dimension normalization; Room migration tests from schema 10; project-document legacy round trips; preview and export dimension checks.
+
