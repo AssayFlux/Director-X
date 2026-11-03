@@ -1,11 +1,13 @@
 # Director X Privacy Policy
 
-**Last updated: 2026-07-29**
+**Last updated: 2026-11-03**
 
 Director X is a local-first Android video editor. Your projects, media, and edits
-stay on your device. Director X has no account system, no advertising, and no
-analytics SDK. Nothing in this policy is aspirational: every statement below
-describes what the shipped app does.
+stay on your device. Director X has no account system or advertising SDK and no
+general-purpose app analytics SDK. The optional MediaPipe Tasks performance
+metrics path is disclosed separately below and transmits metrics only after
+explicit consent. Nothing in this policy is aspirational: every statement below
+describes the current build.
 
 ## What Director X stores, and where
 
@@ -17,7 +19,7 @@ otherwise.
 | --- | --- | --- |
 | Project content (clips, overlays, timelines, captions) | The projects you create | Kept until you delete the project or clear app storage |
 | Media metadata (durations, codecs, dimensions) | Timeline layout and export planning | Discarded when the source clip leaves every project |
-| Downloaded ML models (Whisper, segmentation) | On-device speech-to-text and background removal | Kept until you remove the model in Settings → AI Models |
+| Downloaded ML models (Whisper, MediaPipe segmentation/BlazeFace, and LaMa inpainting) | On-device speech-to-text and background removal | Kept until you remove the model in Settings → AI Models |
 | App preferences | Theme, export defaults, editor layout | Kept until you clear app storage |
 | Saved templates and effect packs | Reusable looks you created or imported | Kept until you delete the template |
 | Settings reset reports | Recovering from corrupted preferences | Capped at the 16 most recent resets |
@@ -34,25 +36,31 @@ URIs in them are redacted.
 
 Only these, and each one requires you to act first:
 
-- **Cloud generative video calls**: off unless you invoke a cloud generative
-  tool, and a consent sheet discloses the provider before each call.
+- **Cloud generative video**: the current build includes a generic routing
+  contract and a disclosure policy, but no production cloud provider adapter is
+  registered. Cloud generative-video processing is therefore not currently
+  available, and this route does not currently upload project media. Any future
+  provider integration must disclose the destination, payload size and retention
+  policy and obtain explicit consent before sending media.
 - **MediaPipe on-device task metrics**: off by default. If you grant consent in
   Settings → Privacy, Google's MediaPipe Tasks SDK uploads anonymous performance
   metrics (app id/version, task and mode, invocation and drop counts, latency,
   initialization errors). Your frames and pixels never leave the device.
   Revoking consent closes any running task and blocks it from starting again.
-- **App update check**: off by default. When enabled in Settings → Updates,
-  Director X makes a single TLS request to the public GitHub releases API to
-  compare the latest tag with your installed version. No data is stored and no
-  APK is downloaded or installed.
-- **Model downloads**: fetching a Whisper or segmentation model contacts the
+- **App update check**: unavailable in the current build configuration.
+  `UPDATE_CHECK_AVAILABLE` is `false` in `app/build.gradle.kts`, so the optional
+  GitHub Releases lookup is compile-time disabled in this build. No update-check
+  request is made by the current configuration.
+- **Model downloads**: fetching a Whisper, MediaPipe, or LaMa model contacts the
   model host recorded in `docs/models.md`. You start the download; nothing about
   your projects is sent with it.
 
-Director X integrates no advertising SDK, no attribution SDK, and no usage
-analytics. The "opt-in usage telemetry" row in the in-app privacy dashboard is a
-placeholder for a future provider: no telemetry provider is integrated today,
-and the row exists so it cannot be added silently.
+Director X integrates no advertising SDK, no attribution SDK, and no general-
+purpose app analytics provider. MediaPipe's separate, consent-gated performance
+metrics path is described above. The "opt-in usage telemetry" row in the in-app
+privacy dashboard is a placeholder for a future general-purpose provider: no
+such provider is integrated today, and the row exists so it cannot be added
+silently.
 
 ## Backup and device transfer
 
@@ -79,7 +87,7 @@ system settings.
 | `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_MEDIA_PROCESSING`, `FOREGROUND_SERVICE_DATA_SYNC` | Keeping an export running when you leave the app |
 | `POST_NOTIFICATIONS` | Export progress and completion notifications |
 | `VIBRATE` | Haptic feedback on timeline edits |
-| `INTERNET`, `ACCESS_NETWORK_STATE` | Model downloads, the optional update check, and consent-gated cloud tools |
+| `INTERNET`, `ACCESS_NETWORK_STATE` | User-initiated model downloads; the optional update check is compile-time disabled in the current build, and no cloud provider adapter is registered |
 
 Media is read through the Android photo picker and Storage Access Framework, so
 Director X requests no broad storage permission and can only see files you pick.
@@ -110,8 +118,8 @@ anyone, including children.
 
 ## Changes to this policy
 
-Changes should be published in the official Director X repository once its public URL is established. The "Last updated" date above changes whenever the substance changes.
+Changes should be published in the public [Director X repository](https://github.com/AssayFlux/Director-X). Update the "Last updated" date above whenever the substance changes.
 
 ## Contact
 
-Questions about this policy, or about anything Director X does with your data, should be directed to the maintainer or distributor of the specific build you installed. A public project contact will be added before public release.
+Questions about this policy, or about anything Director X does with your data, can be raised through the [Director X GitHub issue tracker](https://github.com/AssayFlux/Director-X/issues). Do not include private media, personal data, credentials, or diagnostic archives in a public issue.

@@ -1,6 +1,6 @@
 # Director X — UI Layout Upgrade Plan
 
-**Status:** Planning only — no application UI code changed by this plan  
+**Status:** Layout implementation is present on `main` as of 2026-11-03; device, screenshot, accessibility and full regression acceptance remain pending. This document does not authorize further code changes.  
 **Repository:** https://github.com/AssayFlux/Director-X  
 **Branch reviewed:** `main`  
 **Design scope:** Dashboard + Settings only  
@@ -15,7 +15,8 @@ The visual blueprint is stored at [`assets/ui-blueprints/director-x-layout-bluep
 ## 2. Non-negotiable scope and compatibility rules
 
 1. Only the Dashboard / Project List and the four proposed Settings category views may be redesigned.
-2. **Preserve the complete existing theme selector and every palette.** The source currently exposes ten selectable themes: Primary Brand, Midnight Cinema, Forest Atelier, Burgundy Editorial, Ocean Studio, Graphite Luxe, Sandstone, Lavender Film, Copper Studio, and Arctic Minimal. Keep all ten options, their exact palette mappings, current selected value, DataStore persistence, and preview/application behavior. Retain legacy persisted identifiers for compatibility. Do not hardcode the blueprint's cream sample colours into app UI or replace/reduce the theme selector. The blueprint colours are illustrative layout ink only.\n3. Keep the existing typography identity and current Material filled icon family and icon choices. Do not replace icons with outline or another icon pack.
+2. **Preserve the complete existing theme selector and every palette.** The source currently exposes ten selectable themes: Primary Brand, Midnight Cinema, Forest Atelier, Burgundy Editorial, Ocean Studio, Graphite Luxe, Sandstone, Lavender Film, Copper Studio, and Arctic Minimal. Keep all ten options, their exact palette mappings, current selected value, DataStore persistence, and preview/application behavior. Retain legacy persisted identifiers for compatibility. Do not hardcode the blueprint's cream sample colours into app UI or replace/reduce the theme selector. The blueprint colours are illustrative layout ink only.
+3. Keep the existing typography identity and current Material filled icon family and icon choices. Do not replace icons with outline or another icon pack.
 4. Keep the existing Jetpack Compose + Material 3 architecture.
 5. Preserve all callbacks, ViewModel state, persistence, navigation destinations, project operations, dialogs, import flows, crash-report actions, settings values, permissions, and accessibility semantics.
 6. Do not redesign or change the editor, preview/player, timeline, media import flow, project creation/template sheet, export sheet, playback, proxy system, AI processing screens, billing, or unrelated screens.
@@ -32,9 +33,9 @@ The visual blueprint is stored at [`assets/ui-blueprints/director-x-layout-bluep
 Source: `app/src/main/java/com/directorx/editor/ui/projects/ProjectListScreen.kt`
 
 - The screen is a full-size `ClearCutScreenBackground` containing a vertical `Column`.
-- `ProjectHomeHero` appears first. It is a vertically scrollable `Column`, fills available width, and is capped at 62% of screen height with a minimum cap of 320dp.
-- Hero horizontal and vertical padding are both `Spacing.lg` = **16dp**.
-- Hero children use `Arrangement.spacedBy(Spacing.lg)` = **16dp**.
+- `ProjectHomeHero` appears first. It is a vertically scrollable `Column`, fills available width, and is capped at 50% of screen height with a minimum cap of 280dp.
+- Hero horizontal padding is **20dp**; vertical padding is `Spacing.lg` = **16dp**.
+- Hero children use `Arrangement.spacedBy(Spacing.md)` = **12dp**.
 - The brand/movie icon is **24dp**.
 - The settings control uses the shared chrome icon button; shared minimum touch target is **48dp**, default icon size **18dp**.
 - The hero contains: brand/title row, divider, large welcome heading/body, primary create-project and secondary import actions, conditional search, conditional sort chips, and a trailing divider.
@@ -46,7 +47,7 @@ Source: `app/src/main/java/com/directorx/editor/ui/projects/ProjectListScreen.kt
 
 Source: `app/src/main/java/com/directorx/editor/ui/settings/SettingsScreen.kt`
 
-- Current Settings is one Settings screen with a vertically arranged collection of sections, not four separate category composables.
+- Settings remains one navigation entry and now presents a category overview plus four in-screen category views. The category selection is held in the screen state; the header back action returns to the overview before invoking the parent back callback.
 - The current section groups observed in source are: Export Defaults; Export Notifications; Timeline; AI Models; Project Storage; Appearance; Editor; Tutorial; Diagnostics; Privacy; Open-source Licenses; Updates; About.
 - `SettingsHero` uses **16dp horizontal × 12dp vertical** outer padding.
 - Back control minimum touch target is **48dp**; shared icon size default is **18dp**.
@@ -56,7 +57,7 @@ Source: `app/src/main/java/com/directorx/editor/ui/settings/SettingsScreen.kt`
 - Divider top spacing is **16dp** (`Spacing.lg`).
 - Overview row has a **1dp × 56dp** vertical divider.
 - Each overview stat uses **12dp horizontal × 16dp vertical** padding, **24dp** icon, and **12dp** internal horizontal gap.
-- Each SettingsSection uses **16dp horizontal × 12dp vertical** padding; section title bottom spacing is **4dp**.
+- Each `SettingsSection` outer wrapper uses **20dp horizontal × 10dp vertical** padding. Its panel uses **12dp** horizontal and vertical padding and a **12dp** radius token. Optional descriptions use 3dp top and 4dp bottom spacing.
 - Settings rows/cards are composed by helper components and individual setting content. Their heights vary with content; do not assume one universal fixed height.
 
 ### Shared layout tokens
@@ -77,7 +78,7 @@ The existing radius system is intentionally capped at 12dp. Do not introduce cap
 
 ## 4. Proposed new information architecture
 
-The four Settings views are proposed as category destinations inside the existing Settings navigation entry. The current 13 groups are reorganized, not removed:
+The four Settings views are implemented as in-screen categories inside the existing Settings navigation entry. The current 13 groups are reorganized, not removed:
 
 | Proposed Settings view | Existing groups assigned to it |
 |---|---|
@@ -168,37 +169,31 @@ Do not force every row to the same height. Descriptions, badges, permission stat
 ## 7. Implementation sequence (gated)
 
 ### Phase 0 — Baseline capture
-- Record current branch HEAD and clean working state.
-- Capture current Dashboard and Settings screenshots on at least one narrow phone and one larger emulator/device.
-- Inventory all click handlers, test tags, state branches, dialogs, and navigation routes in the two source files.
-- Record all 13 settings groups and every setting row/control in a mapping sheet.
-- No code changes in this phase.
+- Source baseline and all 13 settings groups were recorded.
+- Current source measurements are maintained in `BASELINE_MEASUREMENTS.md`.
+- Runtime screenshot capture and full control inventory remain incomplete; do not mark this phase fully verified.
 
 ### Phase 1 — Navigation model
-- Confirm the four-group mapping above against all existing settings controls.
-- Implement category routing using the app's existing navigation approach only.
-- Verify entry/back/back-stack behavior, state restoration, and process recreation.
-- No setting semantics or persistence changes.
+- **Implemented in source:** four categories are selected within the existing Settings screen; back returns to the overview and then the existing parent callback.
+- **Verification pending:** back-stack behavior, state restoration and process recreation on device.
 
 ### Phase 2 — Dashboard layout
-- Refactor only the Dashboard composable/layout helpers and strictly required resources/tests.
-- Retain every existing callback and state branch.
-- Use the target dimensions as adaptive constraints.
-- Verify project creation, template import, document import, search, sort, filters, project selection, trash restore, empty/error/loading states, crash report export/share, and operation feedback.
+- **Implemented in source:** hero sizing, spacing and hierarchy have been refined while retaining the existing project/import/recovery branches.
+- **Verification pending:** project creation, template/document import, search, sort, filters, trash restore, empty/error/loading states, crash-report actions and operation feedback on device.
 
 ### Phase 3 — Settings overview and four category layouts
-- Split presentation into overview + four category views while retaining the same underlying settings state/ViewModel and callbacks.
-- Move each of the 13 existing sections into exactly one category.
-- Verify every existing control still reads/writes the same preference and persists across app restart.
-- Verify notification permissions, AI model states/downloads, storage management, diagnostics export/share, privacy actions, licenses, updates, and About links.
+- **Implemented in source:** all 13 sections are grouped once across the four categories, using the existing settings state/ViewModel and callbacks.
+- **Verification pending:** every control's preference persistence, notification permissions, model states/downloads, storage management, diagnostics export/share, privacy actions, licenses, update availability and About links.
 
 ### Phase 4 — Visual and accessibility verification
+- **Pending:** matched-viewport screenshots, font-scale, orientation, system insets, TalkBack semantics, keyboard/focus order and touch-target measurements.
 - Compare screenshots against blueprint at matching viewport sizes.
 - Test font scale, screen widths, orientation, system insets, talkback semantics, keyboard/focus order, and touch target sizes.
 - Add/update Compose UI tests for navigation and critical state branches.
 - Verify no existing filled Material icons were replaced or restyled.
 
 ### Phase 5 — Regression and release gate
+- **Pending:** full relevant UI tests, lint/build evidence and physical-device regression. The current Android unit-test CI pass is not proof of these UI/device acceptance criteria.
 - Run relevant unit tests, Compose/UI tests, lint, and debug build.
 - Run device tests on Android 15 and a lower supported API level.
 - Verify project open/edit/export paths remain unchanged (smoke tests only; no editor UI redesign).
@@ -218,12 +213,12 @@ Do not force every row to the same height. Descriptions, badges, permission stat
 - Tests/build pass and device evidence is recorded.
 - No unrelated editor or feature behavior is changed.
 
-## 9. Known limitations / items requiring measurement before implementation
+## 9. Known limitations / items requiring measurement before final verification
 
 - The repository source gives dp constraints, but actual rendered pixel measurements depend on density, viewport, font scale, system insets, and device configuration. Record screenshots and density before pixel-level comparison.
 - The dashboard project-row thumbnail and row measurements are implemented in list-item helpers outside `ProjectHomeHero`; they must be measured from those exact helpers and runtime screenshots before finalizing their new values.
 - Some Settings row heights depend on content and state; measure representative rows (simple preference, toggle, dropdown, status badge, multiline description, diagnostics action) rather than assigning one universal current height.
-- The current app's exact navigation graph must be traced before the four category destinations are implemented.
+- The four categories are implemented as in-screen selection within the existing Settings entry, not four independent NavGraph destinations. Verify back behavior, state restoration and process recreation.
 - The blueprint is a layout direction, not a claim that every sample label/action is already in the app.
 
 ## 10. Change control

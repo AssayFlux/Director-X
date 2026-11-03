@@ -2,7 +2,7 @@
 
 Authoritative list of every ML model and native AAR that Director X may fetch or bundle. Pairs with the [ModelDownloadManager](../app/src/main/java/com/directorx/editor/engine/ModelDownloadManager.kt) and is the single reference for F-Droid `NonFreeNet` audits, license review, reproducible build verification, and 16 KB page-size compliance tracking.
 
-**Last refresh:** 2026-08-23. Runtime activation requirements are recorded in the AI tool activation gate matrix below.
+**Documentation review:** 2026-11-03. Runtime activation requirements are recorded in the AI tool activation gate matrix below. The pinned source URLs and checksums are preserved; a documentation-date update is not a claim that every remote model artifact was downloaded and rehashed on this date.
 
 ---
 
@@ -69,7 +69,7 @@ These models are *named in the roadmap* but not yet fetched at runtime. They get
 
 ## 4. Planned cloud-only providers (not currently integrated)
 
-The following table is a requirements and roadmap inventory, **not a list of working cloud integrations**. `GenerativeVideoPolicy.kt` codifies the disclosure/consent policy, but the production `HybridAiRouter` currently has no registered cloud provider adapter or provider API client. Do not advertise these entries as available features until a real adapter, settings consent flow, privacy review, error/offline handling, and integration tests are implemented.
+The following table is a requirements and roadmap inventory, **not a list of working cloud integrations**. `GenerativeVideoPolicy.kt` and `HybridAiRouter` define policy/routing contracts, but no production cloud provider adapter is currently registered. The router therefore has no cloud implementation to execute. Do not advertise these entries as available features until a real adapter, settings consent flow, privacy review, error/offline handling, and integration tests are implemented.
 
 The on-device model/engine rows elsewhere in this document (for example Whisper transcription, MediaPipe segmentation, ONNX inference, and DeepFilterNet audio denoising) describe separate local engine integrations. They are not evidence that a pluggable `OnDeviceAiProvider` implementation is registered in `HybridAiRouter`.
 

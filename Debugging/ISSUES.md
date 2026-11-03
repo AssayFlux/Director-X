@@ -2,18 +2,18 @@
 
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
 **Branch audited:** `main`  
-**Audit baseline:** `7760187420b25776c2af624aef1df6a6a34b1559` (source audit baseline; follow-up fixes are listed below)  
-**Last repository review:** 2026-11-02 (Step 7 validation in progress)  
-**Register status:** Initial source audit recorded; fixes are not claimed until implemented and verified.
+**Historical audit baseline:** `7760187420b25776c2af624aef1df6a6a34b1559` (follow-up source fixes are recorded below)  
+**Current documentation review:** 2026-11-03 against `main` at `1a3b7b8fe6a744780bbe202c07087e0eac5add2f`  
+**Register status:** Historical findings retained; current implementation and CI state are summarized below. Source fixes, automated tests, managed-device QA and physical-device acceptance are tracked separately.
 
 ## Product direction reminder — UI upgrade scope is strictly limited
 
-> **Do not forget or expand this direction:** The user has authorized UI modernization for exactly five supplied screens: **(1) the Dashboard screen and (2–5) the four Settings screens**. These are the only UI surfaces in scope for this upgrade.
+> **Do not forget or expand this direction:** The approved UI modernization scope is exactly the Dashboard and four Settings category views. These are the only UI surfaces in that earlier UI upgrade; the current task is documentation-only.
 
-- The user prefers a **modern UI**. Use the existing Jetpack Compose / Material 3 architecture and modernize layout, hierarchy, cards, spacing, typography application, and control presentation only where appropriate.
+- The intended direction is a clearer, modernized hierarchy while preserving the Director X vintage/cream visual identity. Use the existing Jetpack Compose / Material 3 architecture; do not treat this note as authorization for new UI code changes.
 - **Preserve the existing icon style exactly.** Do not replace, redraw, restyle, or migrate the current Material filled icon family (`Icons.Default` / `Icons.Filled`) to outlined, line-art, duotone, thin-stroke, or another icon catalogue. Keep existing icon choices and their recognizable visual treatment unless the user explicitly approves a change.
 - Preserve the existing Director X cream/vintage visual identity and established palette unless the user approves a deliberate adjustment.
-- Recommend/select a suitable UI design catalogue for these five screens only; do not apply a generic redesign that conflicts with the existing identity.
+- Keep any future visual refinement aligned with the approved design system; do not apply a generic redesign that conflicts with the existing identity.
 - Do **not** redesign or modify the video editor, timeline, preview/player, media import, project creation flow, templates, export flow, playback, proxy workflow, AI features, billing, navigation outside the five named screens, or any other application screen/function.
 - Do not refactor unrelated code, rename features, change behavior, remove controls, or alter settings semantics as part of this UI task.
 - Keep existing functionality, settings values, persistence, callbacks, and navigation behavior intact. UI-only changes must be isolated and reviewed.
@@ -25,6 +25,17 @@ This scope restriction takes precedence over broader redesign ideas or previous 
 
 This register tracks reproducible source-level findings, their impact, the proposed correction, and the evidence required to close each item. A source inspection is not a substitute for Android device testing.
 
+## Current repository snapshot — 2026-11-03
+
+- **Main source baseline:** `1a3b7b8fe6a744780bbe202c07087e0eac5add2f`.
+- **Merged proxy reliability work:** PR [#47](https://github.com/AssayFlux/Director-X/pull/47) (restart-safe temporary artifacts), [#48](https://github.com/AssayFlux/Director-X/pull/48) (legacy cache-key namespace invalidation), and [#49](https://github.com/AssayFlux/Director-X/pull/49) (Transformer cancellation fence) are all merged.
+- **Android unit tests:** main-branch run [41556330546](https://github.com/AssayFlux/Director-X/actions/runs/41556330546) completed successfully for this main commit.
+- **Repository hygiene:** main-branch run [41556330569](https://github.com/AssayFlux/Director-X/actions/runs/41556330569) completed successfully.
+- **API 37 device/performance QA:** PR run [41553185619](https://github.com/AssayFlux/Director-X/actions/runs/41553185619) was cancelled; it is not a passing device-test result.
+- **Physical-device testing:** not performed by this repository audit. The user's Moto G54 5G / Android 15 remains the intended manual acceptance device.
+
+The original `OPEN` / `IN PROGRESS` labels below describe the state when each finding was first recorded. For proxy implementation status, use the merged-source and current CI evidence above plus the remaining acceptance gates in the 2026-11-03 proxy section. Do not equate merged source or passing JVM tests with completed end-to-end device validation.
+
 ## Status definitions
 
 - **OPEN — CONFIRMED:** The source code demonstrates the issue; correction and verification are pending.
@@ -34,10 +45,12 @@ This register tracks reproducible source-level findings, their impact, the propo
 
 ## Proxy video workflow
 
+The issue titles and defect descriptions below preserve the original findings. Where the current status says **SOURCE FIX MERGED**, the described defect is historical and the correction is in current `main`; the remaining verification bullets are still acceptance requirements, not proof that the original defect remains in the source.
+
 ### DX-PROXY-001 — Proxy cache key ignores selected resolution
 
 - **Severity:** High
-- **Status:** IN PROGRESS
+- **Status:** SOURCE FIX MERGED — Android unit-test suite passed on current main; end-to-end/device acceptance pending.
 - **Affected file:** `app/src/main/java/com/directorx/editor/engine/ProxyEngine.kt`
 - **Finding:** `keyFor(sourceUri)` derives the cache key only from the source URI. The output filename and cache lookup therefore do not distinguish HALF, QUARTER, and EIGHTH resolutions. `generateProxy()` returns an existing non-empty cached file before evaluating the requested resolution.
 - **Impact:** After a proxy is generated at one resolution, requesting another resolution for the same URI can return the earlier proxy. The setting may appear to change without producing a proxy at the newly selected quality.
@@ -47,7 +60,7 @@ This register tracks reproducible source-level findings, their impact, the propo
 ### DX-PROXY-002 — Background workflow hardcodes QUARTER resolution
 
 - **Severity:** High
-- **Status:** IN PROGRESS
+- **Status:** SOURCE FIX MERGED — Android unit-test suite passed on current main; actual WorkManager tier-selection test remains required.
 - **Affected file:** `app/src/main/java/com/directorx/editor/engine/ProxyWorkflowEngine.kt`
 - **Finding:** `generateAllProxies()` calls `proxyEngine.generateProxy(entry.originalUri, ProxyResolution.QUARTER)` directly. The workflow does not receive or read the user's selected proxy resolution.
 - **Impact:** Background-generated proxies can remain quarter-resolution even when the user selects HALF or EIGHTH. This makes the setting inconsistent across proxy-generation entry points.
@@ -57,7 +70,7 @@ This register tracks reproducible source-level findings, their impact, the propo
 ### DX-PROXY-003 — Background worker can report success when individual proxy generation fails
 
 - **Severity:** Medium
-- **Status:** IN PROGRESS
+- **Status:** SOURCE FIX MERGED — Android unit-test suite passed on current main; worker-level partial-failure/retry acceptance remains required.
 - **Affected files:** `app/src/main/java/com/directorx/editor/engine/ProxyWorkflowEngine.kt`, `app/src/main/java/com/directorx/editor/engine/ProxyGenerationWorker.kt`
 - **Finding:** The workflow catches per-clip exceptions and continues. A null result from `generateProxy()` leaves that entry without a generated proxy, but the worker receives no failure summary and returns `Result.success()` after the loop.
 - **Impact:** WorkManager/UI may report the batch as completed even though one or more clips did not receive proxies.
@@ -67,7 +80,7 @@ This register tracks reproducible source-level findings, their impact, the propo
 ### DX-PROXY-004 — Proxy cleanup result is not propagated by workflow deletion
 
 - **Severity:** Medium
-- **Status:** IN PROGRESS
+- **Status:** SOURCE FIX MERGED — Android unit-test suite passed on current main; storage-pressure and real deletion-failure acceptance remain required.
 - **Affected file:** `app/src/main/java/com/directorx/editor/engine/ProxyWorkflowEngine.kt`
 - **Finding:** `deleteAllProxies()` ignores the Boolean returned by `proxyEngine.deleteProxyUri()` and clears each entry's proxy state regardless of whether the underlying file was deleted.
 - **Impact:** A failed deletion can be presented as cleared while an orphaned proxy file remains on disk and is no longer represented in workflow state.
@@ -77,7 +90,7 @@ This register tracks reproducible source-level findings, their impact, the propo
 ### DX-PROXY-005 — Preview high-resolution eligibility and portrait orientation need end-to-end validation
 
 - **Severity:** Medium
-- **Status:** OPEN — INVESTIGATE
+- **Status:** SOURCE FIX MERGED — Android unit-test suite passed on current main; metadata/import/rotation end-to-end device verification remains required.
 - **Affected file:** `app/src/main/java/com/directorx/editor/engine/ProxyWorkflowEngine.kt`
 - **Finding:** The first implementation pass updated preview selection to use the long coded dimension, but a follow-up source review found the background batch filter still used `originalHeight > 1080`. That left portrait/rotated sources inconsistently eligible.
 - **Correction committed:** Both preview selection and background batch filtering now call `ProxyResolutionPolicy.requiresProxy(originalWidth, originalHeight)`, which uses the larger coded dimension.
@@ -86,7 +99,7 @@ This register tracks reproducible source-level findings, their impact, the propo
 
 ## Follow-up implementation log — 2026-11-02
 
-The following corrections have been committed to `main`. They remain **IN PROGRESS** until the Android unit/instrumentation test suite and relevant device checks pass; repository-hygiene CI alone is not sufficient to close them.
+The following corrections were committed during the 2026-11-02 implementation sequence. The source fixes are now merged to current `main`; the latest Android unit-test suite passed, but end-to-end/instrumentation/device acceptance remains incomplete. Repository-hygiene CI alone is not sufficient to close them.
 
 - **DX-PROXY-001:** Cache identity now hashes source URI plus selected `ProxyResolution`; preview cache checks and URI lookup pass the requested resolution. Added `ProxyCacheKeyTest.kt` for stable keys, resolution separation, and source separation. Commits: `3691b0b`, `170cb6f`, `f4024dd`, `4b30a01`, `885878b`, `13c1c98`, `58ed5d4`.
 - **DX-PROXY-002:** `ProxyWorkflowEngine` now reads the persisted `SettingsRepository.settings.proxyResolution` and plans/generates with that value rather than hardcoding QUARTER. Commit: `cb4ea44`.
@@ -94,16 +107,16 @@ The following corrections have been committed to `main`. They remain **IN PROGRE
 - **DX-PROXY-004:** Workflow cleanup now clears entry state only after deletion succeeds; failed deletions retain their URI/state and are counted as failures. Commit: `d2fe6a4`.
 - **Additional cache safety:** Existing cache files from the old URI-only key format may remain as orphaned files until the user clears the proxy cache; the existing cache-wide cleanup scans managed proxy files. Do not delete user media or unrelated cache files.
 
-**Verification status:** The repository-hygiene workflow passed for commit `885878b`. Later commits have triggered new repository-hygiene runs; the latest result must be checked separately. No Android Gradle test/build or physical-device test is claimed by this log.
+**Historical verification status at the time of this entry:** repository hygiene passed for commit `885878b`; later results were not yet known. Current evidence is recorded in the 2026-11-03 repository snapshot above.
 
 ## Existing proxy test coverage observed
 
-The audited branch already contains:
+The initial audit branch contained: 
 
 - `app/src/test/java/com/directorx/editor/engine/ProxyResolutionPolicyTest.kt`
 - `app/src/androidTest/java/com/directorx/editor/engine/ProxyResolutionInstrumentationTest.kt`
 
-These cover resolution scaling, rotation-aware dimensions, source fallback, cached repeat requests, and direct editing when a proxy is unnecessary. They do not, in the inspected tests, establish resolution-specific cache separation or the full background WorkManager result contract.
+The current test tree also contains resolution-specific cache-key and proxy artifact commit-policy tests. The main-branch Android unit-test suite passed on 2026-11-03. However, the suite does not replace the outstanding high-resolution Media3 generation, full WorkManager tier-selection, cancellation-during-transcode, concurrency, process-restart, cache-pressure, and original-source export acceptance listed below.
 
 ## Closure requirements
 
@@ -126,18 +139,18 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 ### DX-CI-001 — APK validator was called with an unsupported argument
 
 - **Severity:** High
-- **Status:** FIXED IN SOURCE — CI verification pending
+- **Status:** Historical workflow defect — current workflow configuration has been restructured; see the 2026-11-03 workflow snapshot above.
 - **Affected file:** `.github/workflows/android-verification.yml`
 - **Finding:** The workflow passed `app/build/outputs/apk` to `scripts/validate_apk_outputs.py`, but the validator accepts a build variant (`debug`, `qa`, or `streaming`) and resolves the repository output path itself. The workflow therefore could not correctly invoke the validator.
-- **Correction:** The workflow now runs `python3 scripts/validate_apk_outputs.py debug`. It also runs the validator's `--self-test` before Gradle tests to catch fixture/metadata validation regressions.
-- **Verification:** Repository hygiene passed on the workflow-fix commit. The Android verification run for that commit is still in progress; this issue must not be marked verified until unit tests, APK assembly, APK validation, and artifact upload complete successfully.
+- **Correction:** The workflow at that time was corrected to call the validator with its supported variant argument. The current Android verification workflow now runs QA unit tests and uploads test reports; APK assembly and APK validation are not part of that workflow.
+- **Verification:** Repository hygiene passed on the workflow-fix commit. At the time, the Android run was pending. The current unit-test workflow result is recorded in the 2026-11-03 snapshot; the current workflow no longer assembles a distributable APK.
 
 ### DX-PROXY-005 implementation update — 2026-11-02
 
 - **Source corrections committed:** Preview selection, background batch filtering, and the EditorViewModel enqueue trigger now use `ProxyResolutionPolicy.requiresProxy(width, height)` rather than checking height alone. This prevents rotated 1920×1080 coded media from being missed by the background generation trigger or batch planner.
 - **Regression coverage added:** `ProxyResolutionPolicyTest.proxyEligibilityUsesTheLongDimensionForPortraitAndLandscapeMedia` checks landscape, portrait, 4K, square, and threshold cases.
 - **Commits:** `0cf735d`, `1c63a26`, `f0cee32`, `7ac6ce8`, `2733fd8`, `92420a4`, `f829928`.
-- **Status:** IN PROGRESS — source and unit test added; Android CI and device/instrumentation verification pending. The current implementation treats the supplied width/height as coded dimensions; verify this contract against the video metadata provider and test rotated clips end to end.
+- **Status:** Source fix merged; current main Android unit-test suite passed. The coded-dimension contract still requires metadata/import/rotation end-to-end device verification.
 
 
 
@@ -147,16 +160,16 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 ### DX-PROXY-007 — Interrupted Transformer output can be mistaken for a completed proxy
 
 - **Severity:** High
-- **Status:** FIX IMPLEMENTED — automated and device verification pending
+- **Status:** SOURCE FIX MERGED — Android unit-test suite passed on current main; real Transformer cancellation and restart/device verification remain pending
 - **Affected file:** `app/src/main/java/com/directorx/editor/engine/ProxyEngine.kt`
 - **Finding:** Before this correction, Media3 Transformer wrote directly to the final cache filename and cache lookup accepted any non-empty file. A process kill or power loss before the cancellation callback could leave a truncated, non-empty MP4 that a later process accepted as a valid cache hit.
 - **Correction:** Proxy renders now write to a distinct `proxy_tmp_<key>.mp4` artifact. The engine promotes it to `proxy_<key>.mp4` only after Media3 reports completion and the temporary file is non-empty. Cancellation, Transformer error, and coroutine failure remove the temporary artifact. Startup generation removes an orphaned temporary artifact before retrying. Cache cleanup recognizes temporary artifacts and does not mistake them for active final-cache mappings. The cache-key namespace also includes `artifact=v2`, invalidating final-path artifacts produced by the pre-fix implementation so an old interrupted file cannot be reused after upgrade.
-- **Regression test added:** `ProxyArtifactCommitPolicyTest.kt` verifies that a non-empty temporary artifact, a zero-byte final artifact, and unrelated files are not accepted as completed proxies. This test has not yet been run on CI at the time of this update.
-- **Commit:** `13ad483` (implementation), `0502d5e` (unit test).
+- **Regression test added:** `ProxyArtifactCommitPolicyTest.kt` verifies that a non-empty temporary artifact, a zero-byte final artifact, and unrelated files are not accepted as completed proxies. The current main-branch Android unit-test workflow passed after this test was merged (run 41556330546).
+- **Commits:** `13ad483` (implementation), `0502d5e` (unit test); follow-up cache-key and cancellation changes are in merged PRs #48 and #49.
 
 ### Remaining proxy acceptance work — not yet verified
 
-The source-level fixes for resolution-specific cache identity, saved background resolution, batch result reporting, deletion retention, and non-blocking codec-permit acquisition are present. The following are still required before this workflow can be called complete:
+The source-level fixes for resolution-specific cache identity, saved background resolution, batch result reporting, deletion retention, non-blocking codec-permit acquisition, atomic temporary-file commit, cache-key namespace invalidation and cancellation fencing are merged. The following are still required before this workflow can be called complete:
 
 1. Generate HALF, QUARTER and EIGHTH from one actual high-resolution source whose dimensions exceed all three policy thresholds; inspect each output file's container, codec, dimensions, duration, decodability and non-zero size. The existing `trim-boundary.mp4` fixture is only 320×240 and cannot prove this.
 2. Exercise each persisted user-selected tier through the real WorkManager/background workflow, not only a direct `ProxyEngine.generateProxy()` call.
@@ -168,9 +181,9 @@ The source-level fixes for resolution-specific cache identity, saved background 
 8. Re-run API 37 instrumentation and the macrobenchmark lane. A green unit-test or repository-hygiene workflow alone does not close these checks.
 9. Perform physical acceptance on the Moto G54 5G / Android 15. Emulator results are not a substitute for this device check.
 
-### Current evidence
+### Historical evidence from the 2026-11-02 review
 
-- Main baseline: `cef21be9805d0eb28225829370588d4a2cfea821`.
+- Main baseline at that time: `cef21be9805d0eb28225829370588d4a2cfea821`.
 - Android unit-test workflow run `41549620339`: passed on the baseline before the temporary-file correction.
 - Repository-hygiene workflow run `41549620327`: passed on the baseline before the temporary-file correction.
 - API 37 / macrobenchmark run `41549501956`: macrobenchmark bootstrap was cancelled and benchmark execution was skipped; API 37 instrumentation was still in progress when last inspected.
@@ -194,25 +207,25 @@ The source-level fixes for resolution-specific cache identity, saved background 
 ### DX-PROJECT-001 — Custom canvas dimensions are only partially propagated
 
 - **Severity:** High
-- **Status:** IN PROGRESS — model and project-document persistence already exist; end-to-end UI, database, preview and export behavior still require verification.
+- **Status:** IN PROGRESS — model and project-document persistence exist; end-to-end UI, database, preview and export behavior still require verification.
 - **Confirmed implementation:** `Project.kt` contains `customWidth`, `customHeight`, `AspectRatio.CUSTOM`, validation through `CanvasDimensions`, and a computed `canvasDimensions` property. `ProjectDocument.kt` writes and reads the custom dimensions.
 - **Correction to previous finding:** It is inaccurate to say custom dimensions are absent from the project model or project-document serializer. Those foundations are already present and must be preserved.
 - **Remaining investigation and work:** Confirm the project-creation/edit UI; Room entity/schema/migration coverage; autosave and reopen; archive/import; templates; preview/crop sizing; and actual export renderer dimensions. `ExportConfig.kt` still has independent preset `resolution` and `aspectRatio` fields, so verify how the project canvas dimensions reach the renderer and how platform presets intentionally override them.
 - **Verification required:** Legacy project round trips; custom portrait, landscape and square dimensions; invalid/odd/boundary values; database migration tests; preview dimension assertions; and exported-file dimension inspection. Do not duplicate existing model/document fields or mark this resolved from source presence alone.
 
-## Dashboard redesign — 2026-11-02
+## Dashboard redesign — historical implementation log (2026-11-02)
 
-- **Status:** IN PROGRESS — first layout refinement committed; visual and regression verification pending.
+- **Status:** Layout refinements are present in source; matched-device screenshots, accessibility and full UI regression verification remain pending.
 - **Scope:** `app/src/main/java/com/directorx/editor/ui/projects/ProjectListScreen.kt` only.
-- **Change:** Dashboard hero horizontal inset increased from 16dp to 20dp, vertical padding tightened to 12dp, child spacing set to 14dp, and the welcome heading reduced from `displayLarge` to `displayMedium` for a more balanced first-screen hierarchy.
+- **Change at that commit:** Dashboard hero layout was refined. Current source has a 50%-of-screen-height cap (minimum 280dp), 20dp horizontal × 16dp vertical padding, and 12dp child spacing; see `Upgradations/BASELINE_MEASUREMENTS.md`.
 - **Preserved:** Existing Material filled icons, theme-driven colors, callbacks, search/sort visibility conditions, project list states, import/create actions, trash/restore, crash-report actions, and all other Dashboard behavior were not intentionally changed.
 - **Commit:** `d1149f3e1ac9fe4143526e522fe1243f4397a774`.
 - **Not verified yet:** Gradle build, Compose/UI tests, screenshots at narrow and wide viewports, large font scale, orientation, and physical-device behavior. This is a source-level layout refinement, not completion of the Dashboard redesign.
 
 
-## Settings redesign — 2026-11-02
+## Settings redesign — historical implementation log (2026-11-02)
 
-- **Status:** IMPLEMENTED — four-category navigation committed; Android verification and device/UI regression checks remain pending.
+- **Status:** Four-category navigation is present in source; Android unit-test CI has since passed, but device/UI regression checks remain pending.
 - **Scope:** `app/src/main/java/com/directorx/editor/ui/settings/SettingsScreen.kt` only.
 - **Change:** Settings sections now use the existing theme semantic panel/border colors, established 12dp radius token, 20dp horizontal page inset, and clearer title hierarchy. The previously accepted `description` parameter is now rendered beneath each section heading instead of being discarded.
 - **Preserved by this edit:** Existing section bodies, setting controls, callbacks, ViewModel state, DataStore values, appearance options and current navigation entry point were not intentionally changed.
@@ -220,19 +233,21 @@ The source-level fixes for resolution-specific cache identity, saved background 
 - **Still required:** Verify Android unit tests/build, category back-stack/state restoration, every setting control, and device/font-scale behavior. Do not mark Step 6 fully verified until these pass.
 
 
-## Settings category navigation — 2026-11-02
+## Settings category navigation — historical implementation log (2026-11-02)
 
 - **Implemented:** Added four Settings category views in `SettingsScreen.kt`: Export & Delivery, Editing & Timeline, AI & Project Storage, and App & Preferences.
-- **Mapping:** All 13 existing `SettingsSection` blocks remain in place and are grouped once: 2 export, 1 editing/timeline, 2 AI/storage, and 8 app/preferences sections.
+- **Mapping:** All 13 existing `SettingsSection` blocks remain in place and are grouped once: 2 export, 3 editing/timeline, 2 AI/storage, and 6 app/preferences sections.
 - **Navigation:** The Settings header back action returns from a selected category to the category overview; from the overview it invokes the existing parent back callback.
 - **Preservation:** Existing setting controls, ViewModel callbacks, dialogs, and underlying settings state were not replaced.
 - **Commit:** `81e82444` — Add Settings category navigation.
 - **Validation status:** Android verification and repository hygiene workflows have been triggered for this commit. Do not close Step 6 until Android verification passes and UI/back-navigation behaviour is checked on-device, including font scaling.
 
 
-## Step 7 — final validation and closure audit — 2026-11-02
+## Step 7 — final validation and closure audit — historical snapshot (2026-11-02)
 
-- **Status:** IN PROGRESS — CI failure diagnosed; corrective commit pushed; clean Android verification pending.
+> This section records the state before the 2026-11-03 merged proxy fixes and current CI runs. Its pending-run statements and release gate are historical; use the current repository snapshot at the top of this file.
+
+- **Status at the time:** CI failure diagnosed and corrected. Subsequent main-branch Android unit-test verification passed on 2026-11-03; see current snapshot.
 - **Repository hygiene:** Passed for commit `6dac3b48` (run 41423237862). This validates package identity, version consistency, README links/assets, capability registry, policy checks and validator self-tests; it does not prove the Android app compiles.
 - **Android verification failure:** Run 41423237875 failed during `:app:compileQaKotlin` at `SettingsScreen.kt:889` with `Syntax error: Expecting a top level declaration`. Unit tests did not start; APK assembly and APK validation were skipped.
 - **Correction:** Removed two extra closing braces introduced around the Settings category/dialog scope. Commit: `f5a184df`.
@@ -256,12 +271,14 @@ The source-level fixes for resolution-specific cache identity, saved background 
 
 - **Severity:** Medium
 - **Status:** SOURCE UPDATED — repository-hygiene verification pending.
-- **Correction:** README now distinguishes Android verification from repository hygiene. It documents QA unit tests, debug APK assembly, APK validation and 14-day artifact upload, and clarifies that lint, production signing, publishing and physical-device testing are not performed by that workflow.
+- **Correction:** This historical documentation correction was superseded by the current three-workflow description in README. Current CI does not publish a user-installable APK; device QA is a separate pull-request workflow.
 - **Commit:** `7a525a8c29bf70b946f80f2b585929cdd1298084`.
 
-### Step 1 acceptance gate
+### Step 1 acceptance gate — historical checklist (superseded by the current snapshot above)
 
-- [ ] Current Android verification completes successfully: unit tests, debug APK assembly, APK validation and artifact upload.
+- [x] Current main-branch Android unit-test workflow completed successfully (run 41556330546).
+- [ ] API 37 managed-device instrumentation and macrobenchmark complete successfully; latest PR run was cancelled.
+- [ ] Manual physical-device acceptance is recorded.
 - [ ] Repository-hygiene workflow passes after README and issue-register corrections.
 - [ ] Review any new Kotlin/compiler/test failures from the corrected build; do not assume the brace fix is the only possible blocker.
 - [ ] Confirm APK artifact metadata and package/version identity from the generated output.
@@ -325,7 +342,7 @@ The source-level fixes for resolution-specific cache identity, saved background 
 - **Source correction in PR #43:** Proxy deletion now returns an explicit `DELETED`, `MISSING`, `FAILED`, or `INVALID` outcome. An already-missing managed cache file clears its stale workflow reference and increments `missing`, rather than being reported as a deletion failure.
 - **Failure safety:** The engine retains its in-memory cache mapping when deletion fails. Workflow cleanup retains the URI for failed/invalid files and only clears a reference if it still matches the URI being deleted, preventing a stale cleanup pass from erasing a newer proxy assignment.
 - **Regression tests added:** successful deletion, already-missing files, outside-cache path rejection, unmanaged filenames, and directories.
-- **Status:** IN PROGRESS — awaiting Android unit-test CI. Instrumentation and actual cache-pressure/device behavior remain unverified.
+- **Status:** Source correction merged; current main Android unit-test suite passed. Instrumentation and actual cache-pressure/device behavior remain unverified.
 
 
 ### DX-PROXY-004 follow-up — engine-wide cache clear mapping retention
@@ -333,13 +350,13 @@ The source-level fixes for resolution-specific cache identity, saved background 
 - **Additional finding:** `clearProxies()` removed every non-active in-memory proxy mapping after scanning the cache, including mappings whose backing file deletion had failed. If cache enumeration itself failed, it could also discard mappings without evidence that the files were gone.
 - **Correction in PR #45:** Preserve mappings for active proxies, failed deletions, and any backing file still present. If the cache directory cannot be enumerated, return an explicit incomplete cleanup result and leave mappings intact.
 - **Regression coverage:** Added pure policy tests for active, failed, still-present, and genuinely stale mappings.
-- **Status:** IN PROGRESS — awaiting Android unit-test CI and API/device validation.
+- **Status:** Source correction merged; current main Android unit-test suite passed. Instrumentation and actual cache-pressure/device behavior remain unverified.
 
 
 ### DX-PROXY-006 — Proxy generation can block the main dispatcher while waiting for codec capacity
 
 - **Severity:** High
-- **Status:** IN PROGRESS
+- **Status:** SOURCE FIX MERGED — Android unit-test suite passed on current main; contention/stress and UI responsiveness device verification remain required.
 - **Affected files:** `ProxyEngine.kt`, `CodecInstanceBudget.kt`
 - **Finding:** `generateProxy()` switches to `Dispatchers.Main` for Media3 Transformer lifecycle work, then calls the blocking `acquirePipelineBlocking()` semaphore API before creating the Transformer. If another codec-backed operation owns the final permit, this blocks the UI thread while proxy generation waits.
 - **Impact:** A busy codec budget can freeze the editor UI during background proxy generation, defeating the resource queue's intended behavior.

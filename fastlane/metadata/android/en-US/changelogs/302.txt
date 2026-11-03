@@ -1,0 +1,1 @@
+Director X 0.1.0 (version code 302). Includes proxy cache restart-safety, legacy cache invalidation and Transformer cancellation fencing. Automated Android unit tests passed; device-level proxy acceptance remains in progress.

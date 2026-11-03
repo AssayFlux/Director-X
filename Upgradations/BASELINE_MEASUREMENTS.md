@@ -1,7 +1,7 @@
 # Director X — Current UI Measurement Ledger
 
 **Purpose:** Separate source-observed current values from proposed redesign targets.  
-**Reviewed source:** `main` on 2026-11-02.  
+**Reviewed source:** `main` at `1a3b7b8fe6a744780bbe202c07087e0eac5add2f` on 2026-11-03.  
 **Important:** These are Compose dp/sp declarations, not physical screen-pixel measurements. Device density, font scale, viewport, and system insets affect rendered pixels.
 
 ## A. Dashboard — verified current source values
@@ -11,15 +11,15 @@ Source: `app/src/main/java/com/directorx/editor/ui/projects/ProjectListScreen.kt
 | Element | Current source value / behavior | Evidence |
 |---|---|---|
 | Root layout | Full-size background + vertical Column | `ProjectListScreen` |
-| Hero maximum height | 62% of `screenHeightDp`, coerced to at least 320dp | `ProjectHomeHero` |
+| Hero maximum height | 50% of `screenHeightDp`, coerced to at least 280dp | `ProjectHomeHero` |
 | Hero scroll | Its own verticalScroll container | `ProjectHomeHero` |
-| Hero outer padding | 16dp horizontal, 16dp vertical | `Spacing.lg` |
-| Hero child spacing | 16dp | `Arrangement.spacedBy(Spacing.lg)` |
+| Hero outer padding | 20dp horizontal, 16dp vertical | literal horizontal padding + `Spacing.lg` vertical |
+| Hero child spacing | 12dp | `Arrangement.spacedBy(Spacing.md)` |
 | Brand/movie icon | 24dp | `Modifier.size(24.dp)` |
 | Brand-to-title gap | 8dp | `Spacing.sm` |
 | Settings control min hit target | 48dp | Shared `ClearCutChromeIconButton` |
 | Settings control default icon | 18dp | Shared `ClearCutChromeIconButton` |
-| Headline style | Material `displayLarge` | Typography token |
+| Headline style | Material `headlineLarge` | Typography token |
 | Supporting copy style | Material `bodyLarge` | Typography token |
 | Search icon | 20dp | Conditional search field |
 | Search clear control | 40dp surface, inside 48dp minimum hit target | Search trailing action |
@@ -36,7 +36,7 @@ Source: `app/src/main/java/com/directorx/editor/ui/settings/SettingsScreen.kt`
 
 | Element | Current source value / behavior |
 |---|---|
-| Settings structure | One Settings screen with vertically arranged content; not currently four independent category screens |
+| Settings structure | One Settings entry with a category overview and four in-screen category views (Export & Delivery; Editing & Timeline; AI & Project Storage; App & Preferences) |
 | SettingsHero outer padding | 16dp horizontal × 12dp vertical |
 | Back control | Shared minimum touch target 48dp; default icon 18dp |
 | Back-to-title gap | 8dp |
@@ -49,10 +49,10 @@ Source: `app/src/main/java/com/directorx/editor/ui/settings/SettingsScreen.kt`
 | Overview stat vertical padding | 16dp |
 | Overview stat icon | 24dp |
 | Overview stat internal gap | 12dp |
-| SettingsSection outer padding | 16dp horizontal × 12dp vertical |
-| Section title bottom gap | 4dp |
+| SettingsSection outer padding | 20dp horizontal × 10dp vertical |
+| Section description | Optional description rendered beneath the title with 3dp top and 4dp bottom spacing; the content is inside a panel with 12dp padding |
 
-Current section groups in source:
+Current 13 section groups in source:
 1. Export Defaults
 2. Export Notifications
 3. Timeline
@@ -67,7 +67,11 @@ Current section groups in source:
 12. Updates
 13. About
 
+The current category overview groups these as 2 export sections, 3 editing/timeline sections, 2 AI/storage sections, and 6 app/preferences sections.
+
 **Not yet source-measured in this pass:** every individual SettingsTile/SettingsRow height, icon-container dimensions, control-specific padding, and expanded/permission/download states. These vary by component and state; do not describe one generic value as the current row height.
+
+The category overview uses 20dp horizontal padding, 12dp vertical padding, 12dp inter-card spacing, and category cards with a 76dp minimum height.
 
 ## C. Shared design tokens — verified current values
 

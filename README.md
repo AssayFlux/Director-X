@@ -123,6 +123,8 @@ The interface follows a vintage darkroom direction: warm cream, paper beige, cha
 | Minimum SDK | API 26 |
 | Compile SDK | API 37 |
 | Target SDK | API 37 |
+| Gradle wrapper | `9.8.0` |
+| Android Gradle Plugin | `9.4.1` |
 | Java toolchain | 17 |
 
 ### Package identity and upgrade policy
@@ -156,19 +158,20 @@ Useful local checks, when deliberately requested:
 
 ```bash
 ./gradlew :app:testQaUnitTest
-./gradlew :app:lint
+./gradlew :app:lintQa
 ```
 
-`:app:testQaUnitTest` is also run by the Android verification workflow. The lint command above remains a separate maintainer-run check.
+`:app:testQaUnitTest` is also run by the Android verification workflow. `:app:lintQa` is run by the Android device/performance QA workflow on relevant pull requests.
 
 ## GitHub automation policy
 
-Two distinct GitHub Actions workflows are used:
+Three GitHub Actions workflows are used:
 
-- **Android verification** runs on relevant application/build changes and pull requests. It executes `:app:testQaUnitTest` and uploads test reports only. APK assembly, APK validation and APK uploads are intentionally left to the maintainer's manual build process.
-- **Repository hygiene** checks repository metadata, branding, documentation links/assets and policy consistency. It does not prove that Android code compiles.
+- **Android verification** runs on relevant application/build changes and pull requests. It executes `:app:testQaUnitTest` and uploads test reports. It does not assemble or publish a distributable debug/release APK.
+- **Android device and performance QA** runs for relevant pull requests. It runs `:app:lintQa`, the API 37 managed-device instrumentation suite, and the API 37 startup/editor macrobenchmark. It may assemble temporary QA/benchmark APKs strictly to run those checks; these are not downloadable product builds.
+- **Repository hygiene** runs on pushes and pull requests. It validates package identity, version consistency, README links/assets, generated capability metadata, public feature claims, Android audio policy and validator self-tests. It does not prove that Android code compiles or works on a physical phone.
 
-The unit-test workflow does not perform APK assembly, production signing, Play Store publishing, or physical-device testing. API 37 instrumentation and macrobenchmark workflows may build temporary test targets solely to execute automated tests; those artifacts are not production APK deliverables. A green repository-hygiene badge must never be interpreted as proof of Android device compatibility.
+No workflow publishes a user-installable APK, signs a production release, or publishes to Google Play. A green repository-hygiene badge is not proof of Android compatibility; a passing unit-test run is not proof of physical-device behavior.
 
 ### Android 17 audio hardening smoke check
 
@@ -178,7 +181,7 @@ For a manual compatibility check on a device running Android 17, enable strict a
 
 ```text
 Director-X/
-├── .github/workflows/       # Repository hygiene only
+├── .github/workflows/       # Android verification, device QA, repository hygiene
 ├── app/
 │   ├── src/main/            # Android application source and resources
 │   ├── src/test/            # JVM tests (run manually)

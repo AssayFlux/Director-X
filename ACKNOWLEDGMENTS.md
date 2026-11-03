@@ -163,7 +163,7 @@ This is a dependency-family summary, not a complete bill of materials. Transitiv
 
 ## 7. Tests, QA and maintenance tooling
 
-The repository contains unit and Android instrumentation test source sets, media fixtures, Room schema snapshots, and scripts for build/release verification. These are application QA resources, not active GitHub Actions jobs; Android test execution is performed manually by the maintainer. The visible test coverage areas include media playback/export, audio processing, trimming, timeline behavior, database migration, UI layout, accessibility/QA assertions, media decoder fallback, project color policy and other editor workflows.
+The repository contains unit and Android instrumentation test source sets, media fixtures, Room schema snapshots, and scripts for build/release verification. Current GitHub Actions runs `:app:testQaUnitTest` on relevant application/build pushes and pull requests. A separate pull-request device/performance workflow runs `:app:lintQa`, API 37 managed-device instrumentation and startup/editor macrobenchmark using temporary test targets. Repository hygiene runs its own metadata, identity, capability and policy validators. These workflows do not publish a user-installable APK or production release. The visible test coverage areas include media playback/export, audio processing, trimming, timeline behavior, database migration, UI layout, accessibility/QA assertions, media decoder fallback, project color policy and other editor workflows. A test's presence in the repository is not proof that it has passed; consult the linked workflow run for its actual result and retain physical-device acceptance as a separate gate.
 
 The `scripts/` directory includes tooling for areas such as:
 
@@ -178,7 +178,7 @@ The `scripts/` directory includes tooling for areas such as:
 - Release artifact, sidecar, checksum and signing-fingerprint verification.
 - repository-hygiene and release-provenance utilities.
 
-The existence of these tests and scripts does not mean they have all passed. GitHub Actions is intentionally limited to repository-hygiene validation; it does not build the Android app, run Android unit tests, or run lint. The maintainer builds and verifies the app manually in Termux or another configured Android environment. Record exact commands, build variants, device/API levels, test outcomes and release artifact hashes for each release. Do not claim a successful build or device test without its result.
+The existence of these tests and scripts does not mean they have all passed. GitHub Actions runs Android unit tests on relevant application/build changes, and its separate pull-request device/performance lane runs `:app:lintQa`, API 37 managed-device instrumentation and startup/editor macrobenchmark. Repository hygiene runs independently. These workflows do not publish a user-installable APK or production release. The maintainer builds installable APKs and performs physical-device acceptance manually in Termux or another configured Android environment. Record exact commands, build variants, device/API levels, test outcomes and release artifact hashes for each release. Do not claim a successful build or device test without its result.
 
 ## 8. Brand and design system
 
