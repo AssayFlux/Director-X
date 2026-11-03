@@ -1,13 +1,16 @@
 package com.directorx.editor
 
 import android.content.Intent
+import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.OpenableColumns
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.compose.BackHandler
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.safeDrawingPadding
@@ -20,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -50,6 +54,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -94,6 +99,29 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val currentBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = currentBackStackEntry?.destination?.route
+                var showBrandSplash by remember { mutableStateOf(true) }
+                var exitRequested by remember { mutableStateOf(false) }
+
+                LaunchedEffect(Unit) {
+                    delay(ASSAYFLUX_SPLASH_DURATION_MS)
+                    showBrandSplash = false
+                }
+
+                // At the root screen, Back performs a deliberate app exit:
+                // show the same brand screen before finishing the Activity.
+                // Nested editor/settings navigation keeps its normal Back behavior.
+                BackHandler(
+                    enabled = showBrandSplash || (currentRoute == "projects" && !exitRequested)
+                ) {
+                    if (!showBrandSplash && !exitRequested) {
+                        exitRequested = true
+                        showBrandSplash = true
+                        lifecycleScope.launch {
+                            delay(ASSAYFLUX_SPLASH_DURATION_MS)
+                            finish()
+                        }
+                    }
+                }
                 val rootModifier = Modifier
                     .fillMaxSize()
                     .safeDrawingPadding()
@@ -153,6 +181,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 CompositionLocalProvider(LocalTabletopPosture provides isTabletopPosture) {
+                    Box(modifier = Modifier.fillMaxSize()) {
                     NavHost(
                         navController = navController,
                         startDestination = "projects",
@@ -220,6 +249,13 @@ class MainActivity : ComponentActivity() {
                                 onBack = { navController.popBackStack() }
                             )
                         }
+                    }
+                    if (showBrandSplash) {
+                        AndroidView(
+                            factory = { AssayFluxSplashView(it) },
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
                     }
                 }
             }
