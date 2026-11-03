@@ -164,8 +164,8 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 - **Affected file:** `app/src/main/java/com/directorx/editor/engine/ProxyEngine.kt`
 - **Finding:** Before this correction, Media3 Transformer wrote directly to the final cache filename and cache lookup accepted any non-empty file. A process kill or power loss before the cancellation callback could leave a truncated, non-empty MP4 that a later process accepted as a valid cache hit.
 - **Correction:** Proxy renders now write to a distinct `proxy_tmp_<key>.mp4` artifact. The engine promotes it to `proxy_<key>.mp4` only after Media3 reports completion and the temporary file is non-empty. Cancellation, Transformer error, and coroutine failure remove the temporary artifact. Startup generation removes an orphaned temporary artifact before retrying. Cache cleanup recognizes temporary artifacts and does not mistake them for active final-cache mappings. The cache-key namespace also includes `artifact=v2`, invalidating final-path artifacts produced by the pre-fix implementation so an old interrupted file cannot be reused after upgrade.
-- **Regression test added:** `ProxyArtifactCommitPolicyTest.kt` verifies that a non-empty temporary artifact, a zero-byte final artifact, and unrelated files are not accepted as completed proxies. This test has not yet been run on CI at the time of this update.
-- **Commit:** `13ad483` (implementation), `0502d5e` (unit test).
+- **Regression test added:** `ProxyArtifactCommitPolicyTest.kt` verifies that a non-empty temporary artifact, a zero-byte final artifact, and unrelated files are not accepted as completed proxies. The current main-branch Android unit-test workflow passed after this test was merged (run 41556330546).
+- **Commits:** `13ad483` (implementation), `0502d5e` (unit test); follow-up cache-key and cancellation changes are in merged PRs #48 and #49.
 
 ### Remaining proxy acceptance work — not yet verified
 
