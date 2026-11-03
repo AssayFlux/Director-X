@@ -20,16 +20,16 @@ Read [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md), [NOTICE](NOTICE), and [the brandi
 
 ## Android verification policy
 
-GitHub Actions is intentionally limited to repository-hygiene checks. It does not build the Android application, run JVM or instrumentation tests, or run Android lint.
+GitHub Actions has three distinct lanes: Android unit tests (`:app:testQaUnitTest`) on relevant pushes and pull requests; pull-request device/performance QA (`:app:lintQa`, API 37 managed-device instrumentation and macrobenchmark); and repository-hygiene validation. CI does not publish a user-installable APK or replace physical-device acceptance testing.
 
-The maintainer performs Android builds and device testing manually in Termux. Contributors should state exactly which commands they ran and whether they completed successfully. Do not describe a change as tested if only source inspection was performed.
+The maintainer builds installable APKs manually in Termux or another configured Android environment and performs physical-device testing. Contributors should state exactly which commands they ran and whether they completed successfully. Do not describe a change as tested if only source inspection was performed.
 
 For a maintainer build, follow [Build Director X in Termux](docs/TERMUX_BUILD.md). Useful optional local commands include:
 
 ```bash
 ./gradlew :app:assembleDebug
 ./gradlew :app:testQaUnitTest
-./gradlew :app:lint
+./gradlew :app:lintQa
 ```
 
 These commands are examples for a correctly configured Android toolchain; contributors are not expected to claim they ran them when the environment is unavailable.
