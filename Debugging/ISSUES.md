@@ -181,9 +181,9 @@ The source-level fixes for resolution-specific cache identity, saved background 
 8. Re-run API 37 instrumentation and the macrobenchmark lane. A green unit-test or repository-hygiene workflow alone does not close these checks.
 9. Perform physical acceptance on the Moto G54 5G / Android 15. Emulator results are not a substitute for this device check.
 
-### Current evidence
+### Historical evidence from the 2026-11-02 review
 
-- Main baseline: `cef21be9805d0eb28225829370588d4a2cfea821`.
+- Main baseline at that time: `cef21be9805d0eb28225829370588d4a2cfea821`.
 - Android unit-test workflow run `41549620339`: passed on the baseline before the temporary-file correction.
 - Repository-hygiene workflow run `41549620327`: passed on the baseline before the temporary-file correction.
 - API 37 / macrobenchmark run `41549501956`: macrobenchmark bootstrap was cancelled and benchmark execution was skipped; API 37 instrumentation was still in progress when last inspected.
@@ -274,7 +274,7 @@ The source-level fixes for resolution-specific cache identity, saved background 
 - **Correction:** This historical documentation correction was superseded by the current three-workflow description in README. Current CI does not publish a user-installable APK; device QA is a separate pull-request workflow.
 - **Commit:** `7a525a8c29bf70b946f80f2b585929cdd1298084`.
 
-### Step 1 acceptance gate
+### Step 1 acceptance gate — historical checklist (superseded by the current snapshot above)
 
 - [x] Current main-branch Android unit-test workflow completed successfully (run 41556330546).
 - [ ] API 37 managed-device instrumentation and macrobenchmark complete successfully; latest PR run was cancelled.
