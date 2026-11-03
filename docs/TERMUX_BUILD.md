@@ -1,6 +1,6 @@
 # Build Director X in Termux
 
-This guide documents the maintainer's manual Android build workflow. GitHub Actions does not build APKs, run Android tests, or run Android lint.
+This guide documents the maintainer's manual, installable Android APK build workflow. GitHub Actions runs Android unit tests on relevant pushes/pull requests and runs lint, API 37 managed-device instrumentation, and macrobenchmark QA on relevant pull requests. Those CI jobs may create temporary test APKs, but they do not publish a user-installable debug/release APK. The maintainer builds installable APKs manually.
 
 > **Important:** Android SDK/Gradle builds on Android depend on the host toolchain. A normal desktop Linux SDK installation is not automatically executable on Android's Bionic environment. Use a Termux-compatible Android SDK/build-tools installation (for example, one supplied by a compatible Android IDE/build environment) and confirm that its tools actually execute before attempting a full build. Do not assume that installing the `android-tools` package alone provides the Android SDK.
 
@@ -43,7 +43,7 @@ Use the Java toolchain required by the current Gradle project. If a different Ja
 
 You need a working Android SDK installation that is executable from Termux and includes:
 
-- The Android SDK platform required by `compileSdk` in `app/build.gradle.kts`.
+- Android SDK platform API 37, matching `compileSdk = 37` in `app/build.gradle.kts`.
 - The Android SDK Build Tools version required by the Android Gradle Plugin configuration.
 - Platform Tools.
 - A working `aapt2`, `aidl`, `zipalign` and other build-tools executables required by AGP.
@@ -145,11 +145,11 @@ If multiple APKs are generated, copy/install the correct APK for your device rat
 
 ## 8. Optional local QA commands
 
-These commands are available for deliberate maintainer-run checks. They are not run automatically by GitHub Actions:
+These commands are available for deliberate maintainer-run checks. The unit-test task and `lintQa`/API 37 device suite are also used by their respective GitHub Actions workflows; local runs are useful for reproducing failures:
 
 ```bash
 ./gradlew :app:testQaUnitTest
-./gradlew :app:lint
+./gradlew :app:lintQa
 ```
 
 Instrumentation tests require a compatible connected device or emulator and must be invoked with the appropriate Gradle task for the configured test variant. Check registered tasks before running a guessed task:
@@ -182,4 +182,8 @@ A debug APK is for local testing. Do not distribute it as a production release. 
 
 ## Scope of GitHub Actions
 
-Only repository-hygiene checks remain in GitHub Actions. Android SDK setup, Gradle builds, APK creation, Android unit tests, instrumentation tests and lint are intentionally manual maintainer tasks.
+- `android-verification.yml`: runs `:app:testQaUnitTest` on relevant application/build pushes and pull requests; uploads test reports.
+- `android-device-qa.yml`: runs `:app:lintQa`, API 37 managed-device instrumentation and API 37 startup/editor macrobenchmark on relevant pull requests. Temporary test/benchmark APKs are not release downloads.
+- `repository-hygiene.yml`: validates repository identity, documentation links, capability metadata, public claims, audio policy and validator self-tests.
+
+None of these workflows publishes a user-installable APK or a production release. Installable debug APK creation remains a manual maintainer task.
