@@ -19,7 +19,7 @@ Source: `app/src/main/java/com/directorx/editor/ui/projects/ProjectListScreen.kt
 | Brand-to-title gap | 8dp | `Spacing.sm` |
 | Settings control min hit target | 48dp | Shared `ClearCutChromeIconButton` |
 | Settings control default icon | 18dp | Shared `ClearCutChromeIconButton` |
-| Headline style | Material `displayLarge` | Typography token |
+| Headline style | Material `headlineLarge` | Typography token |
 | Supporting copy style | Material `bodyLarge` | Typography token |
 | Search icon | 20dp | Conditional search field |
 | Search clear control | 40dp surface, inside 48dp minimum hit target | Search trailing action |
