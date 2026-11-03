@@ -118,4 +118,4 @@ Changes should be published in the public [Director X repository](https://github
 
 ## Contact
 
-Questions about this policy, or about anything Director X does with your data, should be directed to the maintainer or distributor of the specific build you installed. A public project contact will be added before public release.
+Questions about this policy, or about anything Director X does with your data, can be raised through the [Director X GitHub issue tracker](https://github.com/AssayFlux/Director-X/issues). Do not include private media, personal data, credentials, or diagnostic archives in a public issue.
