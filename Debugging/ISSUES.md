@@ -45,6 +45,8 @@ The original `OPEN` / `IN PROGRESS` labels below describe the state when each fi
 
 ## Proxy video workflow
 
+The issue titles and defect descriptions below preserve the original findings. Where the current status says **SOURCE FIX MERGED**, the described defect is historical and the correction is in current `main`; the remaining verification bullets are still acceptance requirements, not proof that the original defect remains in the source.
+
 ### DX-PROXY-001 — Proxy cache key ignores selected resolution
 
 - **Severity:** High
@@ -109,7 +111,7 @@ The following corrections were committed during the 2026-11-02 implementation se
 
 ## Existing proxy test coverage observed
 
-The audited branch already contains:
+The initial audit branch contained: 
 
 - `app/src/test/java/com/directorx/editor/engine/ProxyResolutionPolicyTest.kt`
 - `app/src/androidTest/java/com/directorx/editor/engine/ProxyResolutionInstrumentationTest.kt`
@@ -167,7 +169,7 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 
 ### Remaining proxy acceptance work — not yet verified
 
-The source-level fixes for resolution-specific cache identity, saved background resolution, batch result reporting, deletion retention, and non-blocking codec-permit acquisition are present. The following are still required before this workflow can be called complete:
+The source-level fixes for resolution-specific cache identity, saved background resolution, batch result reporting, deletion retention, non-blocking codec-permit acquisition, atomic temporary-file commit, cache-key namespace invalidation and cancellation fencing are merged. The following are still required before this workflow can be called complete:
 
 1. Generate HALF, QUARTER and EIGHTH from one actual high-resolution source whose dimensions exceed all three policy thresholds; inspect each output file's container, codec, dimensions, duration, decodability and non-zero size. The existing `trim-boundary.mp4` fixture is only 320×240 and cannot prove this.
 2. Exercise each persisted user-selected tier through the real WorkManager/background workflow, not only a direct `ProxyEngine.generateProxy()` call.
@@ -242,6 +244,8 @@ The source-level fixes for resolution-specific cache identity, saved background 
 
 
 ## Step 7 — final validation and closure audit — historical snapshot (2026-11-02)
+
+> This section records the state before the 2026-11-03 merged proxy fixes and current CI runs. Its pending-run statements and release gate are historical; use the current repository snapshot at the top of this file.
 
 - **Status at the time:** CI failure diagnosed and corrected. Subsequent main-branch Android unit-test verification passed on 2026-11-03; see current snapshot.
 - **Repository hygiene:** Passed for commit `6dac3b48` (run 41423237862). This validates package identity, version consistency, README links/assets, capability registry, policy checks and validator self-tests; it does not prove the Android app compiles.
