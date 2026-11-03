@@ -1,6 +1,6 @@
 # Director X Privacy Policy
 
-**Last updated: 2026-07-29**
+**Last updated: 2026-11-03**
 
 Director X is a local-first Android video editor. Your projects, media, and edits
 stay on your device. Director X has no account system, no advertising, and no
@@ -34,17 +34,21 @@ URIs in them are redacted.
 
 Only these, and each one requires you to act first:
 
-- **Cloud generative video calls**: off unless you invoke a cloud generative
-  tool, and a consent sheet discloses the provider before each call.
+- **Cloud generative video**: the current build includes a generic routing
+  contract and a disclosure policy, but no production cloud provider adapter is
+  registered. Cloud generative-video processing is therefore not currently
+  available, and this route does not currently upload project media. Any future
+  provider integration must disclose the destination, payload size and retention
+  policy and obtain explicit consent before sending media.
 - **MediaPipe on-device task metrics**: off by default. If you grant consent in
   Settings → Privacy, Google's MediaPipe Tasks SDK uploads anonymous performance
   metrics (app id/version, task and mode, invocation and drop counts, latency,
   initialization errors). Your frames and pixels never leave the device.
   Revoking consent closes any running task and blocks it from starting again.
-- **App update check**: off by default. When enabled in Settings → Updates,
-  Director X makes a single TLS request to the public GitHub releases API to
-  compare the latest tag with your installed version. No data is stored and no
-  APK is downloaded or installed.
+- **App update check**: unavailable in the current build configuration.
+  `UPDATE_CHECK_AVAILABLE` is `false` in `app/build.gradle.kts`, so the optional
+  GitHub Releases lookup is compile-time disabled in this build. No update-check
+  request is made by the current configuration.
 - **Model downloads**: fetching a Whisper or segmentation model contacts the
   model host recorded in `docs/models.md`. You start the download; nothing about
   your projects is sent with it.
@@ -79,7 +83,7 @@ system settings.
 | `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_MEDIA_PROCESSING`, `FOREGROUND_SERVICE_DATA_SYNC` | Keeping an export running when you leave the app |
 | `POST_NOTIFICATIONS` | Export progress and completion notifications |
 | `VIBRATE` | Haptic feedback on timeline edits |
-| `INTERNET`, `ACCESS_NETWORK_STATE` | Model downloads, the optional update check, and consent-gated cloud tools |
+| `INTERNET`, `ACCESS_NETWORK_STATE` | User-initiated model downloads; the optional update check is compile-time disabled in the current build, and no cloud provider adapter is registered |
 
 Media is read through the Android photo picker and Storage Access Framework, so
 Director X requests no broad storage permission and can only see files you pick.
