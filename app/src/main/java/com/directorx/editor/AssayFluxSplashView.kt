@@ -27,7 +27,7 @@ internal class AssayFluxSplashView(context: Context) : View(context) {
 
     init {
         setBackgroundColor(Color.WHITE)
-        contentDescription = context.getString(R.string.assayflux_splash_content_description)
+        contentDescription = "AssayFlux logo"
     }
 
     override fun onDraw(canvas: Canvas) {
