@@ -49,6 +49,12 @@ data class ProxyClearResult(
  */
 internal enum class ProxyFileDeleteOutcome { DELETED, MISSING, FAILED, INVALID }
 
+/** A non-empty temporary Transformer output is never a completed cache artifact. */
+internal fun isCompletedProxyArtifact(file: File): Boolean =
+    file.isFile && file.length() > 0L &&
+        file.name.startsWith("proxy_") && !file.name.startsWith("proxy_tmp_") &&
+        file.name.endsWith(".mp4")
+
 /**
  * Deletes only files directly inside the proxy cache with the managed filename
  * shape. Canonical-path checks reject traversal and symlinks escaping the cache.
@@ -137,6 +143,9 @@ class ProxyEngine @Inject constructor(
 
     private fun proxyFileForKey(key: String): File = File(proxyDir, "proxy_$key.mp4")
 
+    /** Work-in-progress output is deliberately distinct from the committed cache filename. */
+    private fun proxyPartialFileForKey(key: String): File = File(proxyDir, "proxy_tmp_$key.mp4")
+
     private fun canonicalManagedProxyFile(file: File): File? {
         val proxyRoot = runCatching { proxyDir.canonicalFile }.getOrNull() ?: return null
         val canonicalFile = runCatching { file.canonicalFile }.getOrNull() ?: return null
@@ -178,7 +187,7 @@ class ProxyEngine @Inject constructor(
     ): Boolean {
         val key = keyFor(sourceUri, resolution, mediaVersion)
         val file = proxyFileForKey(key)
-        return file.isFile.also { if (it) proxyMap[key] = Uri.fromFile(file) }
+        return isCompletedProxyArtifact(file).also { if (it) proxyMap[key] = Uri.fromFile(file) }
     }
 
     /**
@@ -223,6 +232,7 @@ class ProxyEngine @Inject constructor(
     ): Uri? = withContext(Dispatchers.Main) {
         val key = keyFor(sourceUri, resolution, mediaVersion)
         val outFile = proxyFileForKey(key)
+        val partialFile = proxyPartialFileForKey(key)
 
         // Hold the per-key mutex across the existence check + transformer
         // start so concurrent callers for the same source serialise: the
@@ -234,9 +244,16 @@ class ProxyEngine @Inject constructor(
             // (e.g. the transformer crashed before writing any data).  Treat
             // zero-length files as absent so we re-render rather than returning
             // a broken URI — mirrors the check inside the onCompleted callback.
-            if (outFile.isFile && outFile.length() > 0L) {
+            if (isCompletedProxyArtifact(outFile)) {
                 proxyMap[key] = Uri.fromFile(outFile)
                 return@withContext Uri.fromFile(outFile)
+            }
+            // A process can be killed before invokeOnCancellation runs. Discard its
+            // orphaned temporary output before starting a fresh Transformer; never
+            // interpret a non-empty partial MP4 as a completed proxy after restart.
+            if (partialFile.exists() && !partialFile.delete()) {
+                AppLog.w("ProxyEngine", "Could not remove interrupted proxy output for key $key")
+                return@withContext null
             }
 
             val targetHeight = when (val resolved = plan ?: planProxy(sourceUri, resolution)) {
@@ -274,22 +291,25 @@ class ProxyEngine @Inject constructor(
                         .addListener(object : Transformer.Listener {
                             override fun onCompleted(composition: Composition, exportResult: androidx.media3.transformer.ExportResult) {
                                 if (!cont.isActive) {
-                                    outFile.delete()
+                                    partialFile.delete()
                                     proxyMap.remove(key)
                                     return
                                 }
-                                if (outFile.isFile && outFile.length() > 0L) {
+                                // Commit the artifact only after Media3 reports success.
+                                // Same-directory rename is atomic on Android filesystems.
+                                if (isCompletedProxyArtifact(partialFile) && partialFile.renameTo(outFile)) {
                                     val proxyUri = Uri.fromFile(outFile)
                                     proxyMap[key] = proxyUri
                                     cont.resume(proxyUri)
                                 } else {
-                                    outFile.delete()
+                                    partialFile.delete()
+                                    proxyMap.remove(key)
                                     cont.resume(null)
                                 }
                             }
                             override fun onError(composition: Composition, exportResult: androidx.media3.transformer.ExportResult, exportException: androidx.media3.transformer.ExportException) {
                                 AppLog.e("ProxyEngine", "Proxy generation failed", exportException)
-                                outFile.delete()
+                                partialFile.delete()
                                 proxyMap.remove(key)
                                 if (cont.isActive) cont.resume(null)
                             }
@@ -301,7 +321,7 @@ class ProxyEngine @Inject constructor(
                         .build()
                     transformer.start(
                         Composition.Builder(sequence).build(),
-                        outFile.absolutePath
+                        partialFile.absolutePath
                     )
 
                     cont.invokeOnCancellation {
@@ -314,17 +334,20 @@ class ProxyEngine @Inject constructor(
                         // process. Post it to the main looper.
                         Handler(Looper.getMainLooper()).post {
                             runCatching { transformer.cancel() }
-                            outFile.delete()
+                            partialFile.delete()
                             proxyMap.remove(key)
                         }
                     }
                 }
             } catch (e: kotlinx.coroutines.CancellationException) {
                 // Preserve structured cancellation — don't mask it as a null result.
+                // Once Transformer.start() has run, invokeOnCancellation owns cleanup
+                // after Transformer.cancel() has fenced its writes on the main thread.
                 proxyMap.remove(key)
                 throw e
             } catch (e: Exception) {
                 AppLog.e("ProxyEngine", "Proxy generation error", e)
+                partialFile.delete()
                 proxyMap.remove(key)
                 null
             } finally {
@@ -347,7 +370,12 @@ class ProxyEngine @Inject constructor(
         val failedKeys = mutableSetOf<String>()
         files.forEach { file ->
             val managedFile = canonicalManagedProxyFile(file)?.takeIf { it.isFile } ?: return@forEach
-            val key = managedFile.name.removePrefix("proxy_").removeSuffix(".mp4")
+            val isPartial = managedFile.name.startsWith("proxy_tmp_")
+            val key = if (isPartial) {
+                managedFile.name.removePrefix("proxy_tmp_").removeSuffix(".mp4")
+            } else {
+                managedFile.name.removePrefix("proxy_").removeSuffix(".mp4")
+            }
             if (key in activeKeys) {
                 keptInUse++
                 return@forEach
@@ -357,7 +385,7 @@ class ProxyEngine @Inject constructor(
             // does not forget a file that is still present.
             if (managedFile.delete()) {
                 deleted++
-                proxyMap.remove(key)
+                if (!isPartial) proxyMap.remove(key)
             } else {
                 failed++
                 failedKeys += key
