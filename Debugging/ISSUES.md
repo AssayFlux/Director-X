@@ -236,7 +236,7 @@ The source-level fixes for resolution-specific cache identity, saved background 
 ## Settings category navigation — historical implementation log (2026-11-02)
 
 - **Implemented:** Added four Settings category views in `SettingsScreen.kt`: Export & Delivery, Editing & Timeline, AI & Project Storage, and App & Preferences.
-- **Mapping:** All 13 existing `SettingsSection` blocks remain in place and are grouped once: 2 export, 1 editing/timeline, 2 AI/storage, and 8 app/preferences sections.
+- **Mapping:** All 13 existing `SettingsSection` blocks remain in place and are grouped once: 2 export, 3 editing/timeline, 2 AI/storage, and 6 app/preferences sections.
 - **Navigation:** The Settings header back action returns from a selected category to the category overview; from the overview it invokes the existing parent back callback.
 - **Preservation:** Existing setting controls, ViewModel callbacks, dialogs, and underlying settings state were not replaced.
 - **Commit:** `81e82444` — Add Settings category navigation.
