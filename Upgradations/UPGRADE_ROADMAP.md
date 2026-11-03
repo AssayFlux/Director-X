@@ -24,14 +24,11 @@
 - Avoid unnecessary proxy creation for sources that do not benefit from it.
 - Preserve proxy settings and behavior across app restart.
 
-### Known source issues to fix before expansion
-- **DX-PROXY-001:** Cache key omits selected resolution; different proxy qualities can collide.
-- **DX-PROXY-002:** Background workflow hardcodes QUARTER (1/4), ignoring the selected resolution.
-- **DX-PROXY-003:** Worker can report batch success after individual generation failures.
-- **DX-PROXY-004:** Cleanup ignores deletion failures and clears state anyway.
-- **DX-PROXY-005:** Trace orientation-aware dimensions and 1080px eligibility through all callers.
+### Source implementation status — 2026-11-03
 
-See `../Debugging/ISSUES.md` for detailed findings and closure tests. Keep that register synchronized.
+The proxy source corrections for resolution-specific cache identity, persisted background resolution, structured batch outcomes, deletion-failure retention, orientation-aware eligibility, non-blocking codec lease acquisition, atomic temporary-file commits, cache-key namespace invalidation, and Transformer cancellation fencing are merged into `main` (PRs #47–#49 completed the latest cache/cancellation work). The current main-branch Android unit-test workflow passed (run [41556330546](https://github.com/AssayFlux/Director-X/actions/runs/41556330546)).
+
+**Acceptance is not complete:** the API 37 device/performance QA run for PR #49 was cancelled (run [41553185619](https://github.com/AssayFlux/Director-X/actions/runs/41553185619)); high-resolution three-tier generation, real WorkManager tier selection, active-transform cancellation, playback/export/proxy stress, process-restart recovery, storage-pressure cleanup, and original-source export still require explicit instrumentation/device evidence. Track each gate in `../Debugging/ISSUES.md`.
 
 ## Priority 2 — 8K export and high-resolution pipeline
 
@@ -108,7 +105,7 @@ See `../Debugging/ISSUES.md` for detailed findings and closure tests. Keep that 
 
 ## Suggested delivery order
 
-1. Fix and test proxy correctness issues DX-PROXY-001 through DX-PROXY-005.
+1. Complete the remaining proxy instrumentation and physical-device acceptance gates for the source fixes already merged (DX-PROXY-001 through DX-PROXY-007).
 2. Complete the UI-only Dashboard + Settings layout upgrade as its own isolated change.
 3. Add custom aspect ratio as a separate model/migration/UI/export feature.
 4. Complete export capability negotiation and 8K feasibility/device matrix.
