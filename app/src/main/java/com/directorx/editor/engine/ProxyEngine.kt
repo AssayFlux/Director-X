@@ -346,12 +346,17 @@ class ProxyEngine @Inject constructor(
                                 }
                             }
                             if (posted) {
-                                try {
-                                    finished.await()
-                                } catch (interrupted: InterruptedException) {
-                                    Thread.currentThread().interrupt()
-                                    AppLog.w("ProxyEngine", "Interrupted while fencing Transformer cancellation")
+                                var wasInterrupted = false
+                                while (true) {
+                                    try {
+                                        finished.await()
+                                        break
+                                    } catch (_: InterruptedException) {
+                                        // Keep the codec lease until cancel has actually run.
+                                        wasInterrupted = true
+                                    }
                                 }
+                                if (wasInterrupted) Thread.currentThread().interrupt()
                             } else {
                                 AppLog.e("ProxyEngine", "Main looper rejected Transformer cancellation")
                             }
