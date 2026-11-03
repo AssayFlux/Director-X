@@ -213,7 +213,7 @@ Do not force every row to the same height. Descriptions, badges, permission stat
 - Tests/build pass and device evidence is recorded.
 - No unrelated editor or feature behavior is changed.
 
-## 9. Known limitations / items requiring measurement before implementation
+## 9. Known limitations / items requiring measurement before final verification
 
 - The repository source gives dp constraints, but actual rendered pixel measurements depend on density, viewport, font scale, system insets, and device configuration. Record screenshots and density before pixel-level comparison.
 - The dashboard project-row thumbnail and row measurements are implemented in list-item helpers outside `ProjectHomeHero`; they must be measured from those exact helpers and runtime screenshots before finalizing their new values.
