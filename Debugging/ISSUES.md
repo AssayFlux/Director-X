@@ -140,6 +140,42 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 - **Status:** IN PROGRESS — source and unit test added; Android CI and device/instrumentation verification pending. The current implementation treats the supplied width/height as coded dimensions; verify this contract against the video metadata provider and test rotated clips end to end.
 
 
+
+
+## Proxy reliability follow-up — 2026-11-03
+
+### DX-PROXY-007 — Interrupted Transformer output can be mistaken for a completed proxy
+
+- **Severity:** High
+- **Status:** FIX IMPLEMENTED — automated and device verification pending
+- **Affected file:** `app/src/main/java/com/directorx/editor/engine/ProxyEngine.kt`
+- **Finding:** Before this correction, Media3 Transformer wrote directly to the final cache filename and cache lookup accepted any non-empty file. A process kill or power loss before the cancellation callback could leave a truncated, non-empty MP4 that a later process accepted as a valid cache hit.
+- **Correction:** Proxy renders now write to a distinct `proxy_tmp_<key>.mp4` artifact. The engine promotes it to `proxy_<key>.mp4` only after Media3 reports completion and the temporary file is non-empty. Cancellation, Transformer error, and coroutine failure remove the temporary artifact. Startup generation removes an orphaned temporary artifact before retrying. Cache cleanup recognizes temporary artifacts and does not mistake them for active final-cache mappings.
+- **Regression test added:** `ProxyArtifactCommitPolicyTest.kt` verifies that a non-empty temporary artifact, a zero-byte final artifact, and unrelated files are not accepted as completed proxies. This test has not yet been run on CI at the time of this update.
+- **Commit:** `13ad483` (implementation), `0502d5e` (unit test).
+
+### Remaining proxy acceptance work — not yet verified
+
+The source-level fixes for resolution-specific cache identity, saved background resolution, batch result reporting, deletion retention, and non-blocking codec-permit acquisition are present. The following are still required before this workflow can be called complete:
+
+1. Generate HALF, QUARTER and EIGHTH from one actual high-resolution source whose dimensions exceed all three policy thresholds; inspect each output file's container, codec, dimensions, duration, decodability and non-zero size. The existing `trim-boundary.mp4` fixture is only 320×240 and cannot prove this.
+2. Exercise each persisted user-selected tier through the real WorkManager/background workflow, not only a direct `ProxyEngine.generateProxy()` call.
+3. Cancel after the actual Media3 Transformer has started writing output; prove the temporary file is removed, the final cache entry is absent, the codec lease is released, and the worker reports cancellation.
+4. Run playback, export and proxy generation concurrently on an emulator/device; capture codec lease snapshots, completion/failure outcomes, UI responsiveness and resource release.
+5. Kill/restart during a proxy transcode, reopen the project, and prove an orphaned partial file is discarded and generation can complete again.
+6. Exercise cache cleanup with active files, orphaned temporary files, low free storage, failed deletion and failed directory enumeration. Confirm mappings survive failed deletion and unrelated/original media is never removed.
+7. Attach a generated proxy to a clip, run a real final export, inspect the exported file, and prove the export pipeline read the original source rather than the proxy.
+8. Re-run API 37 instrumentation and the macrobenchmark lane. A green unit-test or repository-hygiene workflow alone does not close these checks.
+9. Perform physical acceptance on the Moto G54 5G / Android 15. Emulator results are not a substitute for this device check.
+
+### Current evidence
+
+- Main baseline: `cef21be9805d0eb28225829370588d4a2cfea821`.
+- Android unit-test workflow run `41549620339`: passed on the baseline before the temporary-file correction.
+- Repository-hygiene workflow run `41549620327`: passed on the baseline before the temporary-file correction.
+- API 37 / macrobenchmark run `41549501956`: macrobenchmark bootstrap was cancelled and benchmark execution was skipped; API 37 instrumentation was still in progress when last inspected.
+- No physical-device proxy stress test is claimed.
+
 ## Professional camera media compatibility
 
 ### DX-MEDIA-001 — Professional-camera codec and profile compatibility is not yet established
