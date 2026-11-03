@@ -89,7 +89,9 @@ internal fun proxyCacheKey(
     resolution: ProxyResolution,
     mediaVersion: String = sourceIdentity,
 ): String {
-    val identity = "$sourceIdentity|version=$mediaVersion|resolution=${resolution.name}"
+    // Bump this whenever cache artifact semantics change. Version 2 separates
+    // atomic-commit artifacts from legacy files written directly to the final path.
+    val identity = "artifact=v2|$sourceIdentity|version=$mediaVersion|resolution=${resolution.name}"
     val digest = java.security.MessageDigest.getInstance("SHA-256")
         .digest(identity.toByteArray(Charsets.UTF_8))
     return digest.joinToString("") { "%02x".format(it) }.take(32)
