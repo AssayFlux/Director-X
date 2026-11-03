@@ -341,7 +341,8 @@ class ProxyEngine @Inject constructor(
                 }
             } catch (e: kotlinx.coroutines.CancellationException) {
                 // Preserve structured cancellation — don't mask it as a null result.
-                partialFile.delete()
+                // Once Transformer.start() has run, invokeOnCancellation owns cleanup
+                // after Transformer.cancel() has fenced its writes on the main thread.
                 proxyMap.remove(key)
                 throw e
             } catch (e: Exception) {
