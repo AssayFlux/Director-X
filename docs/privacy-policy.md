@@ -3,9 +3,11 @@
 **Last updated: 2026-11-03**
 
 Director X is a local-first Android video editor. Your projects, media, and edits
-stay on your device. Director X has no account system, no advertising, and no
-analytics SDK. Nothing in this policy is aspirational: every statement below
-describes what the shipped app does.
+stay on your device. Director X has no account system or advertising SDK and no
+general-purpose app analytics SDK. The optional MediaPipe Tasks performance
+metrics path is disclosed separately below and transmits metrics only after
+explicit consent. Nothing in this policy is aspirational: every statement below
+describes the current build.
 
 ## What Director X stores, and where
 
@@ -53,10 +55,12 @@ Only these, and each one requires you to act first:
   model host recorded in `docs/models.md`. You start the download; nothing about
   your projects is sent with it.
 
-Director X integrates no advertising SDK, no attribution SDK, and no usage
-analytics. The "opt-in usage telemetry" row in the in-app privacy dashboard is a
-placeholder for a future provider: no telemetry provider is integrated today,
-and the row exists so it cannot be added silently.
+Director X integrates no advertising SDK, no attribution SDK, and no general-
+purpose app analytics provider. MediaPipe's separate, consent-gated performance
+metrics path is described above. The "opt-in usage telemetry" row in the in-app
+privacy dashboard is a placeholder for a future general-purpose provider: no
+such provider is integrated today, and the row exists so it cannot be added
+silently.
 
 ## Backup and device transfer
 
