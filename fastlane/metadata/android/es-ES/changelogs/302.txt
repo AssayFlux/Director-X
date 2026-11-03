@@ -1,0 +1,1 @@
+Director X 0.1.0 (código de versión 302). Incluye escritura segura de la caché de proxies, invalidación de caché heredada y sincronización de la cancelación de Transformer. Las pruebas unitarias automatizadas de Android finalizaron correctamente; la validación de proxies en dispositivos sigue pendiente.
