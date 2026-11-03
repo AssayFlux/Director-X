@@ -163,7 +163,7 @@ This is a dependency-family summary, not a complete bill of materials. Transitiv
 
 ## 7. Tests, QA and maintenance tooling
 
-The repository contains unit and Android instrumentation test source sets, media fixtures, Room schema snapshots, and scripts for build/release verification. These are application QA resources, not active GitHub Actions jobs; Android test execution is performed manually by the maintainer. The visible test coverage areas include media playback/export, audio processing, trimming, timeline behavior, database migration, UI layout, accessibility/QA assertions, media decoder fallback, project color policy and other editor workflows.
+The repository contains unit and Android instrumentation test source sets, media fixtures, Room schema snapshots, and scripts for build/release verification. Current GitHub Actions runs `:app:testQaUnitTest` on relevant application/build pushes and pull requests. A separate pull-request device/performance workflow runs `:app:lintQa`, API 37 managed-device instrumentation and startup/editor macrobenchmark using temporary test targets. Repository hygiene runs its own metadata, identity, capability and policy validators. These workflows do not publish a user-installable APK or production release. The visible test coverage areas include media playback/export, audio processing, trimming, timeline behavior, database migration, UI layout, accessibility/QA assertions, media decoder fallback, project color policy and other editor workflows. A test's presence in the repository is not proof that it has passed; consult the linked workflow run for its actual result and retain physical-device acceptance as a separate gate.
 
 The `scripts/` directory includes tooling for areas such as:
 
