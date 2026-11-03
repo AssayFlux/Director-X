@@ -123,7 +123,6 @@ The interface follows a vintage darkroom direction: warm cream, paper beige, cha
 | Minimum SDK | API 26 |
 | Compile SDK | API 37 |
 | Target SDK | API 37 |
-| App version | `0.1.0` (version code `302`) |
 | Gradle wrapper | `9.8.0` |
 | Android Gradle Plugin | `9.4.1` |
 | Java toolchain | 17 |
@@ -162,7 +161,7 @@ Useful local checks, when deliberately requested:
 ./gradlew :app:lintQa
 ```
 
-`:app:testQaUnitTest` is also run by the Android verification workflow. The lint command above remains a separate maintainer-run check.
+`:app:testQaUnitTest` is also run by the Android verification workflow. `:app:lintQa` is run by the Android device/performance QA workflow on relevant pull requests.
 
 ## GitHub automation policy
 
