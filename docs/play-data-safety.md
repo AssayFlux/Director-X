@@ -1,9 +1,11 @@
 # Google Play Data safety worksheet: Director X
 
-This is the source of truth for Director X's Play Console **Data safety** form. It
-is derived from the in-app privacy dashboard (`PrivacyDashboard.kt`) and the
-shipped manifests, and the release gate fails if a declared permission or a
-dashboard category is missing from this file.
+This is the engineering worksheet for preparing Director X's Play Console
+**Data safety** form. It is derived from the in-app privacy dashboard
+(`PrivacyDashboard.kt`) and the shipped manifests. It is **not yet an approved
+Play Console submission**: optional MediaPipe Tasks performance metrics are
+transmitted to Google when the user grants consent, so their classification under
+the current Play Data safety definitions must be reviewed before submission.
 
 See [privacy-policy.md](privacy-policy.md) for the user-facing policy.
 
@@ -11,12 +13,12 @@ See [privacy-policy.md](privacy-policy.md) for the user-facing policy.
 
 | Question | Answer |
 | --- | --- |
-| Does your app collect or share any of the required user data types? | **No** |
-| Is all of the user data collected by your app encrypted in transit? | Not applicable: no user data is collected |
-| Do you provide a way for users to request that their data is deleted? | **Yes**: all data is on-device and removable from the app or from Android's app storage settings |
+| Does your app collect or share any required user data types? | **Review required before submission**: consented MediaPipe Tasks performance metrics are sent to Google; classify them under current Play definitions. |
+| Is all collected user data encrypted in transit? | **Review required** after the data-type classification above. |
+| Do you provide a way for users to request deletion? | **Yes for on-device data**: users can delete it in-app or clear Android app storage. Review any third-party retention implications before submission. |
 | Does your app contain ads? | **No** |
-| Data types collected | **None** |
-| Data types shared | **None** |
+| Data types collected | **Pending Play policy classification** for opt-in MediaPipe performance metrics; project/media content remains on-device unless user exports/shares it. |
+| Data types shared | **Pending Play policy classification** for opt-in MediaPipe metrics transmitted to Google. |
 
 Director X is local-first: projects, media, and derived data stay in app-private
 storage. There is no account, no server, no advertising SDK, and no analytics
@@ -28,9 +30,9 @@ documented here anyway.
 
 | Path | Default | What is sent | Consent |
 | --- | --- | --- | --- |
-| Cloud generative video calls | Off | The media you submit to that tool | A consent sheet naming the provider, shown before each call |
+| Cloud generative video | Not available in the current build | No media is uploaded through this route because no production cloud provider adapter is registered | A future integration must implement provider, destination, payload-size and retention disclosure plus explicit consent |
 | MediaPipe on-device task metrics (Google) | Off | Anonymous performance metrics: app id/version, task and mode, invocation and drop counts, latency, initialization errors. No frames or pixels | Versioned consent in Settings → Privacy; revoking closes running tasks |
-| App update check | Off | An HTTPS GET to the public GitHub releases API. Nothing about the user or their projects | Settings → Updates toggle |
+| App update check | Compile-time disabled (`UPDATE_CHECK_AVAILABLE=false`) | No request in the current build | Not applicable until the feature is enabled in a future build |
 | ML model download | User-initiated | An HTTPS GET for the model file recorded in `models.md` | The user starts the download |
 
 No telemetry provider (Sentry, Glean, or otherwise) is integrated. The
