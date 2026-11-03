@@ -20,11 +20,13 @@ See [privacy-policy.md](privacy-policy.md) for the user-facing policy.
 | Data types collected | **Pending Play policy classification** for opt-in MediaPipe performance metrics; project/media content remains on-device unless user exports/shares it. |
 | Data types shared | **Pending Play policy classification** for opt-in MediaPipe metrics transmitted to Google. |
 
-Director X is local-first: projects, media, and derived data stay in app-private
-storage. There is no account, no server, no advertising SDK, and no analytics
-SDK. The optional network paths below are user-initiated and carry no personal
-data, so they do not constitute collection under Play's definition: they are
-documented here anyway.
+Director X is local-first: project media and edits stay in app-private storage.
+There is no account system, app-operated backend, advertising SDK or general
+analytics SDK. However, the optional MediaPipe Tasks metrics path transmits
+anonymous performance measurements to Google after explicit consent. Do not
+assume this is outside Play Data safety solely because the metrics are described
+as anonymous; classify the data under the current Play definitions before
+submitting the form.
 
 ## Optional, user-initiated network activity
 
@@ -41,9 +43,11 @@ visible change rather than a silent one.
 
 ## On-device data categories
 
-These mirror the in-app privacy dashboard one-for-one. None are collected in the
-Play Data safety sense: they never leave the device except in a diagnostic ZIP
-or project archive the user exports and shares themselves.
+These mirror the in-app privacy dashboard one-for-one. The categories below are
+stored locally unless a row explicitly identifies a consented external service.
+User-created diagnostic ZIPs and project archives leave the device only when the
+user exports and shares them. The MediaPipe metrics row is an exception: the
+SDK sends the disclosed performance measurements to Google after consent.
 
 - **Project content** (clips, overlays, timelines, captions): kept until the
   project is deleted or app storage is cleared. Cloud backup carries the project
@@ -58,12 +62,12 @@ or project archive the user exports and shares themselves.
   most recent incidents, included only in user-triggered diagnostic ZIPs.
 - **Crash records**: capped at the 8 most recent records.
 - **Process-death history**: capped at the 16 most recent unique records.
-- **Cloud generative video calls**: consent-gated; see the table above.
+- **Cloud generative video**: not available in the current build; no production cloud provider adapter is registered.
 - **MediaPipe on-device task metrics**: consent-gated; see the table above.
 - **AI usage ledger**: stored inside the project autosave; clearable from the
   export disclosure review.
 - **Opt-in usage telemetry**: not integrated; off.
-- **App update check**: off by default; stores nothing.
+- **App update check**: compile-time disabled in the current build (`UPDATE_CHECK_AVAILABLE=false`).
 
 ## Declared permissions
 
@@ -77,7 +81,7 @@ Normal (published) builds: `app/src/main/AndroidManifest.xml`:
 | `android.permission.FOREGROUND_SERVICE_DATA_SYNC` | Export service type fallback on API 34 (`maxSdkVersion="34"`) | None |
 | `android.permission.POST_NOTIFICATIONS` | Export progress and completion notifications | None |
 | `android.permission.VIBRATE` | Timeline haptics | None |
-| `android.permission.INTERNET` | Model downloads, optional update check, consent-gated cloud tools | See the optional-network table |
+| `android.permission.INTERNET` | User-initiated model downloads; update check is compile-time disabled and no cloud provider is registered in the current build | See the optional-network table |
 | `android.permission.ACCESS_NETWORK_STATE` | Wi-Fi-only model download preference | None |
 
 Director X requests no broad storage permission. Media is read through the Android
