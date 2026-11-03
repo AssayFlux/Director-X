@@ -2,9 +2,9 @@
 
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
 **Branch audited:** `main`  
-**Audit baseline:** `7760187420b25776c2af624aef1df6a6a34b1559` (source audit baseline; follow-up fixes are listed below)  
-**Last repository review:** 2026-11-02 (Step 7 validation in progress)  
-**Register status:** Initial source audit recorded; fixes are not claimed until implemented and verified.
+**Historical audit baseline:** `7760187420b25776c2af624aef1df6a6a34b1559` (follow-up source fixes are recorded below)  
+**Current documentation review:** 2026-11-03 against `main` at `1a3b7b8fe6a744780bbe202c07087e0eac5add2f`  
+**Register status:** Historical findings retained; current implementation and CI state are summarized below. Source fixes, automated tests, managed-device QA and physical-device acceptance are tracked separately.
 
 ## Product direction reminder — UI upgrade scope is strictly limited
 
@@ -25,6 +25,17 @@ This scope restriction takes precedence over broader redesign ideas or previous 
 
 This register tracks reproducible source-level findings, their impact, the proposed correction, and the evidence required to close each item. A source inspection is not a substitute for Android device testing.
 
+## Current repository snapshot — 2026-11-03
+
+- **Main source baseline:** `1a3b7b8fe6a744780bbe202c07087e0eac5add2f`.
+- **Merged proxy reliability work:** PR [#47](https://github.com/AssayFlux/Director-X/pull/47) (restart-safe temporary artifacts), [#48](https://github.com/AssayFlux/Director-X/pull/48) (legacy cache-key namespace invalidation), and [#49](https://github.com/AssayFlux/Director-X/pull/49) (Transformer cancellation fence) are all merged.
+- **Android unit tests:** main-branch run [41556330546](https://github.com/AssayFlux/Director-X/actions/runs/41556330546) completed successfully for this main commit.
+- **Repository hygiene:** main-branch run [41556330569](https://github.com/AssayFlux/Director-X/actions/runs/41556330569) completed successfully.
+- **API 37 device/performance QA:** PR run [41553185619](https://github.com/AssayFlux/Director-X/actions/runs/41553185619) was cancelled; it is not a passing device-test result.
+- **Physical-device testing:** not performed by this repository audit. The user's Moto G54 5G / Android 15 remains the intended manual acceptance device.
+
+The original `OPEN` / `IN PROGRESS` labels below describe the state when each finding was first recorded. For proxy implementation status, use the merged-source and current CI evidence above plus the remaining acceptance gates in the 2026-11-03 proxy section. Do not equate merged source or passing JVM tests with completed end-to-end device validation.
+
 ## Status definitions
 
 - **OPEN — CONFIRMED:** The source code demonstrates the issue; correction and verification are pending.
@@ -37,7 +48,7 @@ This register tracks reproducible source-level findings, their impact, the propo
 ### DX-PROXY-001 — Proxy cache key ignores selected resolution
 
 - **Severity:** High
-- **Status:** IN PROGRESS
+- **Status:** SOURCE FIX MERGED — Android unit-test suite passed on current main; end-to-end/device acceptance pending.
 - **Affected file:** `app/src/main/java/com/directorx/editor/engine/ProxyEngine.kt`
 - **Finding:** `keyFor(sourceUri)` derives the cache key only from the source URI. The output filename and cache lookup therefore do not distinguish HALF, QUARTER, and EIGHTH resolutions. `generateProxy()` returns an existing non-empty cached file before evaluating the requested resolution.
 - **Impact:** After a proxy is generated at one resolution, requesting another resolution for the same URI can return the earlier proxy. The setting may appear to change without producing a proxy at the newly selected quality.
@@ -47,7 +58,7 @@ This register tracks reproducible source-level findings, their impact, the propo
 ### DX-PROXY-002 — Background workflow hardcodes QUARTER resolution
 
 - **Severity:** High
-- **Status:** IN PROGRESS
+- **Status:** SOURCE FIX MERGED — Android unit-test suite passed on current main; actual WorkManager tier-selection test remains required.
 - **Affected file:** `app/src/main/java/com/directorx/editor/engine/ProxyWorkflowEngine.kt`
 - **Finding:** `generateAllProxies()` calls `proxyEngine.generateProxy(entry.originalUri, ProxyResolution.QUARTER)` directly. The workflow does not receive or read the user's selected proxy resolution.
 - **Impact:** Background-generated proxies can remain quarter-resolution even when the user selects HALF or EIGHTH. This makes the setting inconsistent across proxy-generation entry points.
@@ -57,7 +68,7 @@ This register tracks reproducible source-level findings, their impact, the propo
 ### DX-PROXY-003 — Background worker can report success when individual proxy generation fails
 
 - **Severity:** Medium
-- **Status:** IN PROGRESS
+- **Status:** SOURCE FIX MERGED — Android unit-test suite passed on current main; worker-level partial-failure/retry acceptance remains required.
 - **Affected files:** `app/src/main/java/com/directorx/editor/engine/ProxyWorkflowEngine.kt`, `app/src/main/java/com/directorx/editor/engine/ProxyGenerationWorker.kt`
 - **Finding:** The workflow catches per-clip exceptions and continues. A null result from `generateProxy()` leaves that entry without a generated proxy, but the worker receives no failure summary and returns `Result.success()` after the loop.
 - **Impact:** WorkManager/UI may report the batch as completed even though one or more clips did not receive proxies.
@@ -67,7 +78,7 @@ This register tracks reproducible source-level findings, their impact, the propo
 ### DX-PROXY-004 — Proxy cleanup result is not propagated by workflow deletion
 
 - **Severity:** Medium
-- **Status:** IN PROGRESS
+- **Status:** SOURCE FIX MERGED — Android unit-test suite passed on current main; storage-pressure and real deletion-failure acceptance remain required.
 - **Affected file:** `app/src/main/java/com/directorx/editor/engine/ProxyWorkflowEngine.kt`
 - **Finding:** `deleteAllProxies()` ignores the Boolean returned by `proxyEngine.deleteProxyUri()` and clears each entry's proxy state regardless of whether the underlying file was deleted.
 - **Impact:** A failed deletion can be presented as cleared while an orphaned proxy file remains on disk and is no longer represented in workflow state.
@@ -77,7 +88,7 @@ This register tracks reproducible source-level findings, their impact, the propo
 ### DX-PROXY-005 — Preview high-resolution eligibility and portrait orientation need end-to-end validation
 
 - **Severity:** Medium
-- **Status:** OPEN — INVESTIGATE
+- **Status:** SOURCE FIX MERGED — Android unit-test suite passed on current main; metadata/import/rotation end-to-end device verification remains required.
 - **Affected file:** `app/src/main/java/com/directorx/editor/engine/ProxyWorkflowEngine.kt`
 - **Finding:** The first implementation pass updated preview selection to use the long coded dimension, but a follow-up source review found the background batch filter still used `originalHeight > 1080`. That left portrait/rotated sources inconsistently eligible.
 - **Correction committed:** Both preview selection and background batch filtering now call `ProxyResolutionPolicy.requiresProxy(originalWidth, originalHeight)`, which uses the larger coded dimension.
@@ -147,7 +158,7 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 ### DX-PROXY-007 — Interrupted Transformer output can be mistaken for a completed proxy
 
 - **Severity:** High
-- **Status:** FIX IMPLEMENTED — automated and device verification pending
+- **Status:** SOURCE FIX MERGED — Android unit-test suite passed on current main; real Transformer cancellation and restart/device verification remain pending
 - **Affected file:** `app/src/main/java/com/directorx/editor/engine/ProxyEngine.kt`
 - **Finding:** Before this correction, Media3 Transformer wrote directly to the final cache filename and cache lookup accepted any non-empty file. A process kill or power loss before the cancellation callback could leave a truncated, non-empty MP4 that a later process accepted as a valid cache hit.
 - **Correction:** Proxy renders now write to a distinct `proxy_tmp_<key>.mp4` artifact. The engine promotes it to `proxy_<key>.mp4` only after Media3 reports completion and the temporary file is non-empty. Cancellation, Transformer error, and coroutine failure remove the temporary artifact. Startup generation removes an orphaned temporary artifact before retrying. Cache cleanup recognizes temporary artifacts and does not mistake them for active final-cache mappings. The cache-key namespace also includes `artifact=v2`, invalidating final-path artifacts produced by the pre-fix implementation so an old interrupted file cannot be reused after upgrade.
@@ -333,13 +344,13 @@ The source-level fixes for resolution-specific cache identity, saved background 
 - **Additional finding:** `clearProxies()` removed every non-active in-memory proxy mapping after scanning the cache, including mappings whose backing file deletion had failed. If cache enumeration itself failed, it could also discard mappings without evidence that the files were gone.
 - **Correction in PR #45:** Preserve mappings for active proxies, failed deletions, and any backing file still present. If the cache directory cannot be enumerated, return an explicit incomplete cleanup result and leave mappings intact.
 - **Regression coverage:** Added pure policy tests for active, failed, still-present, and genuinely stale mappings.
-- **Status:** IN PROGRESS — awaiting Android unit-test CI and API/device validation.
+- **Status:** Source correction merged; current main Android unit-test suite passed. Instrumentation and actual cache-pressure/device behavior remain unverified.
 
 
 ### DX-PROXY-006 — Proxy generation can block the main dispatcher while waiting for codec capacity
 
 - **Severity:** High
-- **Status:** IN PROGRESS
+- **Status:** SOURCE FIX MERGED — Android unit-test suite passed on current main; contention/stress and UI responsiveness device verification remain required.
 - **Affected files:** `ProxyEngine.kt`, `CodecInstanceBudget.kt`
 - **Finding:** `generateProxy()` switches to `Dispatchers.Main` for Media3 Transformer lifecycle work, then calls the blocking `acquirePipelineBlocking()` semaphore API before creating the Transformer. If another codec-backed operation owns the final permit, this blocks the UI thread while proxy generation waits.
 - **Impact:** A busy codec budget can freeze the editor UI during background proxy generation, defeating the resource queue's intended behavior.
