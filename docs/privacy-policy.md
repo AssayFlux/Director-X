@@ -17,7 +17,7 @@ otherwise.
 | --- | --- | --- |
 | Project content (clips, overlays, timelines, captions) | The projects you create | Kept until you delete the project or clear app storage |
 | Media metadata (durations, codecs, dimensions) | Timeline layout and export planning | Discarded when the source clip leaves every project |
-| Downloaded ML models (Whisper, segmentation) | On-device speech-to-text and background removal | Kept until you remove the model in Settings → AI Models |
+| Downloaded ML models (Whisper, MediaPipe segmentation/BlazeFace, and LaMa inpainting) | On-device speech-to-text and background removal | Kept until you remove the model in Settings → AI Models |
 | App preferences | Theme, export defaults, editor layout | Kept until you clear app storage |
 | Saved templates and effect packs | Reusable looks you created or imported | Kept until you delete the template |
 | Settings reset reports | Recovering from corrupted preferences | Capped at the 16 most recent resets |
@@ -49,7 +49,7 @@ Only these, and each one requires you to act first:
   `UPDATE_CHECK_AVAILABLE` is `false` in `app/build.gradle.kts`, so the optional
   GitHub Releases lookup is compile-time disabled in this build. No update-check
   request is made by the current configuration.
-- **Model downloads**: fetching a Whisper or segmentation model contacts the
+- **Model downloads**: fetching a Whisper, MediaPipe, or LaMa model contacts the
   model host recorded in `docs/models.md`. You start the download; nothing about
   your projects is sent with it.
 
@@ -114,7 +114,7 @@ anyone, including children.
 
 ## Changes to this policy
 
-Changes should be published in the official Director X repository once its public URL is established. The "Last updated" date above changes whenever the substance changes.
+Changes should be published in the public [Director X repository](https://github.com/AssayFlux/Director-X). Update the "Last updated" date above whenever the substance changes.
 
 ## Contact
 
