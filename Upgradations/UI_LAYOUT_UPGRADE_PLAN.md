@@ -218,7 +218,7 @@ Do not force every row to the same height. Descriptions, badges, permission stat
 - The repository source gives dp constraints, but actual rendered pixel measurements depend on density, viewport, font scale, system insets, and device configuration. Record screenshots and density before pixel-level comparison.
 - The dashboard project-row thumbnail and row measurements are implemented in list-item helpers outside `ProjectHomeHero`; they must be measured from those exact helpers and runtime screenshots before finalizing their new values.
 - Some Settings row heights depend on content and state; measure representative rows (simple preference, toggle, dropdown, status badge, multiline description, diagnostics action) rather than assigning one universal current height.
-- The current app's exact navigation graph must be traced before the four category destinations are implemented.
+- The four categories are implemented as in-screen selection within the existing Settings entry, not four independent NavGraph destinations. Verify back behavior, state restoration and process recreation.
 - The blueprint is a layout direction, not a claim that every sample label/action is already in the app.
 
 ## 10. Change control
