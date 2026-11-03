@@ -327,18 +327,41 @@ class ProxyEngine @Inject constructor(
                     )
 
                     cont.invokeOnCancellation {
-                        // invokeOnCancellation runs on whichever thread triggers
-                        // cancellation (e.g. WorkManager's executor when a
-                        // CoroutineWorker is stopped mid-transcode). Media3
-                        // Transformer.cancel() must run on its application thread
-                        // (main) or it throws IllegalStateException — and an
-                        // exception inside a cancellation handler crashes the
-                        // process. Post it to the main looper.
-                        Handler(Looper.getMainLooper()).post {
+                        // The codec lease is released by the coroutine's finally block.
+                        // Do not let cancellation return (and release that lease) until
+                        // Transformer.cancel() has run on its application thread. Posting
+                        // asynchronously here creates a race with the next codec user.
+                        val mainLooper = Looper.getMainLooper()
+                        if (Looper.myLooper() == mainLooper) {
                             runCatching { transformer.cancel() }
                             partialFile.delete()
-                            proxyMap.remove(key)
+                        } else {
+                            val finished = java.util.concurrent.CountDownLatch(1)
+                            val posted = Handler(mainLooper).post {
+                                try {
+                                    runCatching { transformer.cancel() }
+                                    partialFile.delete()
+                                } finally {
+                                    finished.countDown()
+                                }
+                            }
+                            if (posted) {
+                                var wasInterrupted = false
+                                while (true) {
+                                    try {
+                                        finished.await()
+                                        break
+                                    } catch (_: InterruptedException) {
+                                        // Keep the codec lease until cancel has actually run.
+                                        wasInterrupted = true
+                                    }
+                                }
+                                if (wasInterrupted) Thread.currentThread().interrupt()
+                            } else {
+                                AppLog.e("ProxyEngine", "Main looper rejected Transformer cancellation")
+                            }
                         }
+                        proxyMap.remove(key)
                     }
                 }
             } catch (e: kotlinx.coroutines.CancellationException) {
