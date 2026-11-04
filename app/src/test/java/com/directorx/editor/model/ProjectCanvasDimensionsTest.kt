@@ -40,6 +40,28 @@ class ProjectCanvasDimensionsTest {
     }
 
     @Test
+    fun customProjectExposesItsExactAspectRatio() {
+        val project = Project(
+            aspectRatio = AspectRatio.CUSTOM,
+            customWidth = 2048,
+            customHeight = 858,
+        )
+
+        assertEquals(2048f / 858f, project.canvasAspectRatio, 0.0001f)
+    }
+
+    @Test
+    fun scalingCustomCanvasFitsMaximumDimensionAndKeepsEvenDimensions() {
+        val scaled = CanvasDimensions.requireValid(4096, 2160).scaledToFit(720)
+
+        assertEquals(720, scaled.width)
+        assertEquals(378, scaled.height)
+        assertTrue(scaled.width % 2 == 0)
+        assertTrue(scaled.height % 2 == 0)
+        assertEquals(4096f / 2160f, scaled.width.toFloat() / scaled.height, 0.01f)
+    }
+
+    @Test
     fun presetProjectStillUsesPresetResolution() {
         val project = Project(
             aspectRatio = AspectRatio.RATIO_9_16,
