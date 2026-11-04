@@ -592,10 +592,10 @@ class ExportDelegate(
             runCatching { outputFile.delete() }
             return false
         }
-        val requestedDimensions = config.resolution.forAspect(config.aspectRatio)
+        val requestedDimensions = config.outputDimensions()
         val safeDimensions = Media3ExportRobustnessPolicy.encoderSafeDimensions(
-            requestedDimensions.first,
-            requestedDimensions.second,
+            requestedDimensions.width,
+            requestedDimensions.height,
         )
         val verification = ExportOutputVerifier.verify(
             outputFile = outputFile,
@@ -2943,9 +2943,15 @@ class ExportDelegate(
 
     fun renderQuickPreview() {
         val savedConfig = stateFlow.value.exportConfig
+        val customPreviewCanvas = if (savedConfig.customCanvasWidth != null && savedConfig.customCanvasHeight != null) {
+            savedConfig.outputDimensions().scaledToFit(480)
+        } else null
         val previewConfig = savedConfig.copy(
             resolution = com.directorx.editor.model.Resolution.SD_480P,
-            quality = com.directorx.editor.model.ExportQuality.LOW
+            quality = com.directorx.editor.model.ExportQuality.LOW,
+            platformPreset = null,
+            customCanvasWidth = customPreviewCanvas?.width,
+            customCanvasHeight = customPreviewCanvas?.height,
         )
         updateExport {
             it.copy(
