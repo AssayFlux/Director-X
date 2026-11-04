@@ -334,12 +334,18 @@ class ProjectListViewModel @Inject constructor(
                 requireNotNull(customHeight) { "Custom canvas height is required" },
             )
         }
+        require(aspectRatio != AspectRatio.CUSTOM || customCanvas != null) {
+            "A custom project requires explicit width and height"
+        }
 
         viewModelScope.launch {
             val settings = settingsRepo.settings.first()
+            val selectedAspectRatio = aspectRatio ?: settings.defaultAspectRatio
+            val projectAspectRatio = if (customCanvas != null) AspectRatio.CUSTOM
+                else selectedAspectRatio.takeUnless { it == AspectRatio.CUSTOM } ?: AspectRatio.RATIO_16_9
             val project = Project(
                 name = normalizedName,
-                aspectRatio = if (customCanvas != null) AspectRatio.CUSTOM else aspectRatio ?: settings.defaultAspectRatio,
+                aspectRatio = projectAspectRatio,
                 frameRate = frameRate ?: settings.defaultFrameRate,
                 resolution = resolution ?: settings.defaultResolution,
                 templateId = templateId,
@@ -705,8 +711,8 @@ class ProjectListViewModel @Inject constructor(
                     frameRateDenominator = template.frameRateDenominator,
                     resolution = template.resolution,
                     templateId = template.id,
-                    customWidth = template.customWidth,
-                    customHeight = template.customHeight,
+                    customWidth = template.customWidth.takeIf { it > 0 },
+                    customHeight = template.customHeight.takeIf { it > 0 },
                 )
                 val created = withContext(Dispatchers.IO) {
                     createProjectWithInitialState(
