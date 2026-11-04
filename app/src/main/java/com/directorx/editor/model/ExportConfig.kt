@@ -15,6 +15,9 @@ data class ExportConfig(
     val audioCodec: AudioCodec = AudioCodec.AAC,
     val audioBitrate: Int = 256_000,
     val aspectRatio: AspectRatio = AspectRatio.RATIO_16_9,
+    /** Exact project canvas dimensions; null preserves the legacy preset-resolution behavior. */
+    val customCanvasWidth: Int? = null,
+    val customCanvasHeight: Int? = null,
     val platformPreset: PlatformPreset? = null,
     val exportAudioOnly: Boolean = false,
     val exportStemsOnly: Boolean = false,
@@ -60,6 +63,32 @@ data class ExportConfig(
     init {
         require(videoBitrate > 0) { "Bitrate must be positive" }
         require(audioBitrate > 0) { "Audio bitrate must be positive" }
+        require((customCanvasWidth == null) == (customCanvasHeight == null)) {
+            "Custom canvas width and height must either both be set or both be absent"
+        }
+        if (customCanvasWidth != null && customCanvasHeight != null) {
+            require(CanvasDimensions.isValid(customCanvasWidth, customCanvasHeight)) {
+                "Custom export canvas dimensions must be even values between 2 and 8192 with an aspect ratio between 1:4 and 4:1"
+            }
+        }
+    }
+
+    /**
+     * Resolve the exact dimensions used by UI estimates, preview/export renderers and
+     * output verification. An explicitly selected platform preset wins; otherwise
+     * a custom project canvas is authoritative; legacy projects keep preset sizing.
+     */
+    fun outputDimensions(projectAspectRatio: AspectRatio = aspectRatio): CanvasDimensions {
+        val preset = platformPreset
+        if (preset != null) {
+            val (width, height) = preset.resolution.forAspect(preset.aspectRatio)
+            return CanvasDimensions(width, height)
+        }
+        if (customCanvasWidth != null && customCanvasHeight != null) {
+            return CanvasDimensions.requireValid(customCanvasWidth, customCanvasHeight)
+        }
+        val (width, height) = resolution.forAspect(outputAspectRatio(projectAspectRatio))
+        return CanvasDimensions(width, height)
     }
 
     /** Apply every delivery setting from a platform preset in one data-driven operation. */
