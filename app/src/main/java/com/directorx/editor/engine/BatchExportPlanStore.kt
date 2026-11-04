@@ -283,6 +283,8 @@ private fun exportConfigToJson(config: ExportConfig): JSONObject = JSONObject().
     put("audioCodec", config.audioCodec.name)
     put("audioBitrate", config.audioBitrate)
     put("aspectRatio", config.aspectRatio.name)
+    config.customCanvasWidth?.let { put("customCanvasWidth", it) }
+    config.customCanvasHeight?.let { put("customCanvasHeight", it) }
     config.platformPreset?.let { put("platformPreset", it.name) }
     put("exportAudioOnly", config.exportAudioOnly)
     put("exportStemsOnly", config.exportStemsOnly)
@@ -375,6 +377,8 @@ private fun exportConfigFromJson(json: JSONObject?): ExportConfig? {
             audioCodec = enumOrDefault(json.optString("audioCodec"), AudioCodec.AAC),
             audioBitrate = json.optInt("audioBitrate", 256_000).coerceAtLeast(1),
             aspectRatio = enumOrDefault(json.optString("aspectRatio"), AspectRatio.RATIO_16_9),
+            customCanvasWidth = json.optInt("customCanvasWidth").takeIf { json.has("customCanvasWidth") && it > 0 },
+            customCanvasHeight = json.optInt("customCanvasHeight").takeIf { json.has("customCanvasHeight") && it > 0 },
             platformPreset = enumOrNull<PlatformPreset>(json.optString("platformPreset")),
             exportAudioOnly = json.optBoolean("exportAudioOnly", false),
             exportStemsOnly = json.optBoolean("exportStemsOnly", false),
