@@ -1687,8 +1687,8 @@ class VideoEngine @Inject constructor(
     }
 
     private fun encoderSafeOutputDimensions(config: ExportConfig): Pair<Int, Int> {
-        val (width, height) = config.resolution.forAspect(config.aspectRatio)
-        val safe = Media3ExportRobustnessPolicy.encoderSafeDimensions(width, height)
+        val dimensions = config.outputDimensions()
+        val safe = Media3ExportRobustnessPolicy.encoderSafeDimensions(dimensions.width, dimensions.height)
         return safe.width to safe.height
     }
 
@@ -2447,7 +2447,15 @@ class VideoEngine @Inject constructor(
         trackedObjects: List<TrackedObject>,
     ): Composition {
         val compositionDurationMs = plan.durationMs.coerceAtLeast(1L)
-        val previewConfig = config.copy(resolution = Resolution.HD_720P)
+        val customPreviewCanvas = if (config.customCanvasWidth != null && config.customCanvasHeight != null) {
+            config.outputDimensions().scaledToFit(720)
+        } else null
+        val previewConfig = config.copy(
+            resolution = Resolution.HD_720P,
+            platformPreset = null,
+            customCanvasWidth = customPreviewCanvas?.width,
+            customCanvasHeight = customPreviewCanvas?.height,
+        )
         val (targetW, targetH) = encoderSafeOutputDimensions(previewConfig)
         val resolvedTracks = tracks.map { track ->
             track.copy(
