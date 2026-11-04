@@ -272,7 +272,11 @@ fun ExportSheet(
     val semanticColors = LocalClearCutColors.current
     val availableCodecs = remember { ExportConfig.getAvailableCodecs() }
     val outputAspectRatio = config.outputAspectRatio(aspectRatio)
-    val (width, height) = config.resolution.forAspect(outputAspectRatio)
+    val hasCustomCanvas = config.customCanvasWidth != null && config.customCanvasHeight != null &&
+        config.platformPreset == null
+    val outputDimensions = config.outputDimensions(aspectRatio)
+    val width = outputDimensions.width
+    val height = outputDimensions.height
     val resolvedRange = remember(config.timelineRange, timelineTimebase, totalDurationMs) {
         config.timelineRange?.resolve(timelineTimebase, totalDurationMs)
     }
@@ -743,17 +747,27 @@ fun ExportSheet(
             accent = ClearCutAccents.Sky
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(0.dp)) {
-                ExportSummarySettingRow(
-                icon = Icons.Default.ViewModule,
-                label = stringResource(R.string.export_resolution),
-                value = config.resolution.label,
-                accent = ClearCutAccents.Sky,
-                onClick = {
-                    val options = Resolution.entries
-                    val next = options[(options.indexOf(config.resolution) + 1) % options.size]
-                    onConfigChanged(config.copy(resolution = next, platformPreset = null))
+                if (hasCustomCanvas) {
+                    ExportSummarySettingRow(
+                        icon = Icons.Default.ViewModule,
+                        label = "Project canvas",
+                        value = width.toString() + " × " + height + " px",
+                        accent = ClearCutAccents.Sky,
+                        onClick = {}
+                    )
+                } else {
+                    ExportSummarySettingRow(
+                        icon = Icons.Default.ViewModule,
+                        label = stringResource(R.string.export_resolution),
+                        value = config.resolution.label,
+                        accent = ClearCutAccents.Sky,
+                        onClick = {
+                            val options = Resolution.entries
+                            val next = options[(options.indexOf(config.resolution) + 1) % options.size]
+                            onConfigChanged(config.copy(resolution = next, platformPreset = null))
+                        }
+                    )
                 }
-            )
                 ExportSummarySettingRow(
                 icon = Icons.Default.Speed,
                 label = stringResource(R.string.export_frame_rate),
@@ -1268,7 +1282,7 @@ fun ExportSheet(
                 }
             }
 
-            if (videoModeEnabled) {
+            if (videoModeEnabled && !hasCustomCanvas) {
                 ExportChoiceGroup(
                     title = stringResource(R.string.export_resolution),
                     accent = ClearCutAccents.Rosewater
