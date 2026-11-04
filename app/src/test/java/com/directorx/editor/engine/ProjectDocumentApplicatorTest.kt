@@ -164,4 +164,33 @@ class ProjectDocumentApplicatorTest {
         assertEquals(result.textOverlays, document.state.textOverlays)
         assertEquals(450L, document.state.playheadMs)
     }
+    @Test
+    fun customCanvasDimensionsSurviveDocumentRoundTripAndRekey() {
+        val document = ProjectDocumentApplicator.capture(
+            project = Project(
+                id = "custom-project",
+                name = "Custom cinema",
+                aspectRatio = AspectRatio.CUSTOM,
+                customWidth = 2048,
+                customHeight = 858,
+            ),
+            state = AutoSaveState(projectId = "custom-project", playheadMs = 450L),
+        )
+
+        val read = ProjectDocumentApplicator.read(ProjectDocumentApplicator.encode(document))
+        assertTrue(read is ProjectDocumentReadResult.Loaded)
+        val restored = (read as ProjectDocumentReadResult.Loaded).document
+        assertEquals(2048, restored.project.customWidth)
+        assertEquals(858, restored.project.customHeight)
+        assertEquals(2048f / 858f, restored.project.canvasAspectRatio, 0.0001f)
+
+        val copied = ProjectDocumentApplicator.rekey(
+            restored,
+            restored.project.copy(id = "custom-copy", name = "Custom copy"),
+        )
+        assertEquals("custom-copy", copied.project.id)
+        assertEquals(2048, copied.project.customWidth)
+        assertEquals(858, copied.project.customHeight)
+    }
+
 }
