@@ -24,6 +24,8 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.unit.dp
 import com.directorx.editor.R
 import com.directorx.editor.engine.UserTemplate
@@ -120,6 +122,7 @@ val projectTemplates = listOf(
 @Composable
 fun ProjectTemplateSheet(
     onTemplateSelected: (ProjectTemplateUI, String) -> Unit,
+    onCustomCanvasSelected: (Int, Int) -> Unit = { _, _ -> },
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     onUserTemplateSelected: (UserTemplate) -> Unit = {},
@@ -129,6 +132,12 @@ fun ProjectTemplateSheet(
     userTemplates: List<UserTemplate> = emptyList(),
 ) {
     var pendingDeleteTemplate by remember { mutableStateOf<UserTemplate?>(null) }
+    var customWidthText by remember { mutableStateOf("1920") }
+    var customHeightText by remember { mutableStateOf("1080") }
+    val customWidth = customWidthText.toIntOrNull()
+    val customHeight = customHeightText.toIntOrNull()
+    val customCanvasValid = customWidth != null && customHeight != null &&
+        CanvasDimensions.isValid(customWidth, customHeight)
 
     Column(
         modifier = modifier
@@ -210,6 +219,61 @@ fun ProjectTemplateSheet(
         }
 
         Spacer(Modifier.height(14.dp))
+
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            color = LocalClearCutColors.current.panelHighest,
+            shape = RoundedCornerShape(Radius.xl),
+            border = androidx.compose.foundation.BorderStroke(1.dp, LocalClearCutColors.current.cardStrokeStrong)
+        ) {
+            Column(
+                modifier = Modifier.padding(Spacing.md),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text(
+                    "Custom canvas",
+                    color = LocalClearCutColors.current.text,
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    "Create a blank project with exact output dimensions.",
+                    color = LocalClearCutColors.current.subtext,
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    OutlinedTextField(
+                        value = customWidthText,
+                        onValueChange = { customWidthText = it.filter(Char::isDigit).take(5) },
+                        modifier = Modifier.weight(1f),
+                        label = { Text("Width (px)") },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
+                    OutlinedTextField(
+                        value = customHeightText,
+                        onValueChange = { customHeightText = it.filter(Char::isDigit).take(5) },
+                        modifier = Modifier.weight(1f),
+                        label = { Text("Height (px)") },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
+                }
+                Text(
+                    "Use even dimensions from 2–8192 px. Aspect ratio must be between 1:4 and 4:1.",
+                    color = if (customCanvasValid) LocalClearCutColors.current.subtext else ClearCutAccents.Red,
+                    style = MaterialTheme.typography.bodySmall
+                )
+                Button(
+                    onClick = { onCustomCanvasSelected(requireNotNull(customWidth), requireNotNull(customHeight)) },
+                    enabled = customCanvasValid,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Create custom project")
+                }
+            }
+        }
+
+        Spacer(Modifier.height(12.dp))
 
         Surface(
             onClick = onImportTemplate,
