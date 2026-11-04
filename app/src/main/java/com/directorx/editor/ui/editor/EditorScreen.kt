@@ -919,6 +919,7 @@ fun EditorScreen(
                     isPlaybackRequested = state.isPlaybackRequested,
                     isLooping = state.isLooping,
                     aspectRatio = state.project.aspectRatio,
+                    canvasAspectRatio = state.project.canvasAspectRatio,
                     frameRate = state.project.frameRate,
                     onTogglePlayback = viewModel::togglePlayback,
                     onToggleLoop = viewModel::toggleLoop,
