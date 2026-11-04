@@ -517,6 +517,14 @@ fun ProjectListScreen(
         if (showTemplateSheet) {
             val untitledProjectName = stringResource(R.string.project_untitled)
             ProjectTemplateSheet(
+                onCustomCanvasSelected = { width, height ->
+                    showTemplateSheet = false
+                    viewModel.createProject(
+                        name = untitledProjectName,
+                        customWidth = width,
+                        customHeight = height,
+                    ) { id -> onProjectSelected(id) }
+                },
                 onTemplateSelected = { template, templateName ->
                     showTemplateSheet = false
                     viewModel.createProject(
