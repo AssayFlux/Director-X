@@ -25,6 +25,8 @@ data class UserTemplate(
     val frameRateNumerator: Int = frameRate,
     val frameRateDenominator: Int = 1,
     val resolution: Resolution = Resolution.FHD_1080P,
+    val customWidth: Int = 0,
+    val customHeight: Int = 0,
     val trackTypes: List<TrackType>,
     val textOverlayCount: Int = 0,
     val effectSummary: String = "",
@@ -127,6 +129,8 @@ class TemplateManager @Inject constructor(
             frameRateNumerator = project.frameRateNumerator,
             frameRateDenominator = project.frameRateDenominator,
             resolution = project.resolution,
+            customWidth = project.customWidth,
+            customHeight = project.customHeight,
             trackTypes = tracks.map { it.type }.ifEmpty { defaultTemplateTrackTypes },
             textOverlayCount = textOverlays.size,
             effectSummary = effectSummary,
@@ -406,12 +410,19 @@ class TemplateManager @Inject constructor(
             .joinToString(", ")
             .ifBlank { "No effects" }
 
+        val parsedAspectRatio = parseAspectRatio(json.optString("aspectRatio", "RATIO_16_9"))
+        val customWidth = json.optInt("customWidth", 0)
+        val customHeight = json.optInt("customHeight", 0)
+        if (parsedAspectRatio == AspectRatio.CUSTOM && !CanvasDimensions.isValid(customWidth, customHeight)) {
+            return TemplateParseResult.Failure(TemplateImportFailure.INVALID_STATE)
+        }
+
         return TemplateParseResult.Success(
             template = UserTemplate(
                 id = json.optString("id", fallbackId).ifBlank { fallbackId },
                 name = normalizeTemplateName(json.optString("name", "Untitled Template")),
                 description = normalizeTemplateDescription(json.optString("description", "")),
-                aspectRatio = parseAspectRatio(json.optString("aspectRatio", "RATIO_16_9")),
+                aspectRatio = parsedAspectRatio,
                 frameRate = json.optInt("frameRate", 30).coerceIn(1, 240),
                 frameRateNumerator = json.optInt(
                     "frameRateNumerator",
@@ -419,6 +430,8 @@ class TemplateManager @Inject constructor(
                 ).coerceIn(1, 240_000),
                 frameRateDenominator = json.optInt("frameRateDenominator", 1).coerceIn(1, 10_000),
                 resolution = parseResolution(json.optString("resolution", "FHD_1080P")),
+                customWidth = customWidth,
+                customHeight = customHeight,
                 trackTypes = normalizedTrackTypes,
                 textOverlayCount = state.textOverlays.size,
                 effectSummary = effectSummary,
@@ -441,6 +454,8 @@ class TemplateManager @Inject constructor(
             put("frameRateNumerator", template.frameRateNumerator)
             put("frameRateDenominator", template.frameRateDenominator)
             put("resolution", template.resolution.name)
+            put("customWidth", template.customWidth)
+            put("customHeight", template.customHeight)
             put("trackTypes", JSONArray(template.trackTypes.map { it.name }))
             put("textOverlayCount", template.textOverlayCount)
             put("effectSummary", template.effectSummary)
