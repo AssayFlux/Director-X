@@ -530,6 +530,10 @@ class ExportDelegate(
     ): Boolean {
         val engine = streamCopyEngine ?: return false
         if (!config.allowStreamCopy) return false
+        // Stream-copy cannot resize or reframe packets to the project's exact
+        // custom canvas dimensions. Force the renderer so the output contract
+        // remains exact rather than silently inheriting source dimensions.
+        if (config.customCanvasWidth != null && config.customCanvasHeight != null) return false
         // A copied packet stream preserves the source cadence. CFR requests
         // must take the rendered/pre-normalized path so the selected target is
         // actually present in the output samples.
