@@ -47,6 +47,7 @@ import com.directorx.editor.engine.sweepUnreferencedManagedMedia
 import com.directorx.editor.engine.db.ProjectDao
 import com.directorx.editor.engine.db.toProjectMediaAssetEntities
 import com.directorx.editor.model.AspectRatio
+import com.directorx.editor.model.CanvasDimensions
 import com.directorx.editor.model.Clip
 import com.directorx.editor.model.Project
 import com.directorx.editor.model.Resolution
@@ -320,18 +321,30 @@ class ProjectListViewModel @Inject constructor(
         resolution: Resolution? = null,
         templateId: String? = null,
         trackTypes: List<TrackType> = listOf(TrackType.VIDEO, TrackType.AUDIO),
+        customWidth: Int? = null,
+        customHeight: Int? = null,
         onCreated: (String) -> Unit = {}
     ) {
         val normalizedName = normalizeProjectName(name)
+        val customCanvas = if (customWidth == null && customHeight == null) {
+            null
+        } else {
+            CanvasDimensions.requireValid(
+                requireNotNull(customWidth) { "Custom canvas width is required" },
+                requireNotNull(customHeight) { "Custom canvas height is required" },
+            )
+        }
 
         viewModelScope.launch {
             val settings = settingsRepo.settings.first()
             val project = Project(
                 name = normalizedName,
-                aspectRatio = aspectRatio ?: settings.defaultAspectRatio,
+                aspectRatio = if (customCanvas != null) AspectRatio.CUSTOM else aspectRatio ?: settings.defaultAspectRatio,
                 frameRate = frameRate ?: settings.defaultFrameRate,
                 resolution = resolution ?: settings.defaultResolution,
-                templateId = templateId
+                templateId = templateId,
+                customWidth = customCanvas?.width ?: 0,
+                customHeight = customCanvas?.height ?: 0,
             )
             val initialTracks = buildTracks(trackTypes, settings.defaultTrackHeight)
             val operation = beginOperation(
@@ -691,7 +704,9 @@ class ProjectListViewModel @Inject constructor(
                     frameRateNumerator = template.frameRateNumerator,
                     frameRateDenominator = template.frameRateDenominator,
                     resolution = template.resolution,
-                    templateId = template.id
+                    templateId = template.id,
+                    customWidth = template.customWidth,
+                    customHeight = template.customHeight,
                 )
                 val created = withContext(Dispatchers.IO) {
                     createProjectWithInitialState(
