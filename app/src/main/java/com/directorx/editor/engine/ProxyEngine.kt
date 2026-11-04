@@ -49,7 +49,16 @@ data class ProxyClearResult(
  */
 internal enum class ProxyFileDeleteOutcome { DELETED, MISSING, FAILED, INVALID }
 
-/** A non-empty temporary Transformer output is never a completed cache artifact. */
+/**
+ * A non-empty temporary Transformer output is eligible for atomic promotion.
+ * It is intentionally not a completed cache artifact until it has been renamed
+ * to the final `proxy_<key>.mp4` filename.
+ */
+internal fun isValidProxyTransformerOutput(file: File): Boolean =
+    file.isFile && file.length() > 0L &&
+        file.name.startsWith("proxy_tmp_") && file.name.endsWith(".mp4")
+
+/** Only atomically promoted, non-empty proxy files may be reused from the cache. */
 internal fun isCompletedProxyArtifact(file: File): Boolean =
     file.isFile && file.length() > 0L &&
         file.name.startsWith("proxy_") && !file.name.startsWith("proxy_tmp_") &&
@@ -299,7 +308,7 @@ class ProxyEngine @Inject constructor(
                                 }
                                 // Commit the artifact only after Media3 reports success.
                                 // Same-directory rename is atomic on Android filesystems.
-                                if (isCompletedProxyArtifact(partialFile) && partialFile.renameTo(outFile)) {
+                                if (isValidProxyTransformerOutput(partialFile) && partialFile.renameTo(outFile)) {
                                     val proxyUri = Uri.fromFile(outFile)
                                     proxyMap[key] = proxyUri
                                     cont.resume(proxyUri)
