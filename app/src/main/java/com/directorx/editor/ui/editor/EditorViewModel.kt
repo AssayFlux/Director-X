@@ -1058,7 +1058,17 @@ class EditorViewModel @Inject constructor(
                 return@launch
             }
             openResult.project?.let { project ->
-                _state.update { it.copy(project = project) }
+                _state.update { state ->
+                    state.copy(project = project).copyExport { export ->
+                        export.copy(
+                            config = export.config.copy(
+                                aspectRatio = project.aspectRatio,
+                                customCanvasWidth = project.customWidth.takeIf { project.aspectRatio == AspectRatio.CUSTOM },
+                                customCanvasHeight = project.customHeight.takeIf { project.aspectRatio == AspectRatio.CUSTOM },
+                            )
+                        )
+                    }
+                }
             }
 
             // Restore auto-save AFTER Room load to avoid race condition.
@@ -6477,7 +6487,22 @@ class EditorViewModel @Inject constructor(
     }
 
     fun updateProjectAspect(aspect: AspectRatio) {
-        _state.update { it.copy(project = it.project.copy(aspectRatio = aspect)) }
+        _state.update { state ->
+            val project = state.project.copy(
+                aspectRatio = aspect,
+                customWidth = if (aspect == AspectRatio.CUSTOM) state.project.customWidth else 0,
+                customHeight = if (aspect == AspectRatio.CUSTOM) state.project.customHeight else 0,
+            )
+            state.copy(project = project).copyExport { export ->
+                export.copy(
+                    config = export.config.copy(
+                        aspectRatio = aspect,
+                        customCanvasWidth = project.customWidth.takeIf { aspect == AspectRatio.CUSTOM },
+                        customCanvasHeight = project.customHeight.takeIf { aspect == AspectRatio.CUSTOM },
+                    )
+                )
+            }
+        }
         saveProject()
         showToast(text(R.string.vm_aspect_ratio_toast, aspect.label))
     }
