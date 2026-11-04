@@ -3,6 +3,7 @@ package com.directorx.editor.model
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Assert.assertThrows
 import org.junit.Test
 
 class ExportConfigPresetTest {
@@ -34,6 +35,39 @@ class ExportConfigPresetTest {
             customConfig.outputAspectRatio(AspectRatio.RATIO_9_16),
         )
         assertFalse(customConfig.requiresStreamSafeOutput("mp4"))
+    }
+
+    @Test
+    fun customProjectCanvasIsTheExactDefaultExportSize() {
+        val config = ExportConfig(
+            aspectRatio = AspectRatio.CUSTOM,
+            customCanvasWidth = 2048,
+            customCanvasHeight = 858,
+        )
+
+        assertEquals(CanvasDimensions(2048, 858), config.outputDimensions(AspectRatio.CUSTOM))
+    }
+
+    @Test
+    fun explicitlySelectedPlatformPresetOverridesCustomProjectCanvas() {
+        val config = ExportConfig(
+            aspectRatio = AspectRatio.CUSTOM,
+            customCanvasWidth = 2048,
+            customCanvasHeight = 858,
+        ).withPlatformPreset(PlatformPreset.TIKTOK)
+
+        val expected = PlatformPreset.TIKTOK.resolution.forAspect(PlatformPreset.TIKTOK.aspectRatio)
+        assertEquals(CanvasDimensions(expected.first, expected.second), config.outputDimensions(AspectRatio.CUSTOM))
+    }
+
+    @Test
+    fun customExportDimensionsMustBePairedAndValid() {
+        assertThrows(IllegalArgumentException::class.java) {
+            ExportConfig(aspectRatio = AspectRatio.CUSTOM, customCanvasWidth = 2048)
+        }
+        assertThrows(IllegalArgumentException::class.java) {
+            ExportConfig(aspectRatio = AspectRatio.CUSTOM, customCanvasWidth = 2049, customCanvasHeight = 858)
+        }
     }
 
     @Test
