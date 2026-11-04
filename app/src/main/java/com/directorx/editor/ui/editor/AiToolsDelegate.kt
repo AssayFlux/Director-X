@@ -551,7 +551,7 @@ class AiToolsDelegate(
 
     private suspend fun runSmartCrop(clip: Clip) {
         val suggestion = withContext(Dispatchers.Default) { aiFeatures.suggestCrop(
-            clip.sourceUri, stateFlow.value.project.aspectRatio.toFloat()
+            clip.sourceUri, stateFlow.value.project.canvasAspectRatio
         ) }
         val confidence = safeConfidence(suggestion.confidence)
         if (confidence < 0.1f) {
