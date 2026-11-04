@@ -43,6 +43,10 @@ data class Project(
             resolution.forAspect(aspectRatio).let { CanvasDimensions(it.first, it.second) }
         }
 
+    /** Exact project canvas ratio; unlike AspectRatio.CUSTOM's placeholder, this is not 1:1 by default. */
+    val canvasAspectRatio: Float
+        get() = canvasDimensions.width.toFloat() / canvasDimensions.height.toFloat()
+
     val timelineTimebase: TimelineTimebase
         get() {
             val numerator = frameRateNumerator.coerceIn(1, 240_000)
@@ -81,6 +85,17 @@ enum class AspectRatio(val widthRatio: Int, val heightRatio: Int, val label: Str
  * and reject malformed/accidentally enormous project metadata.
  */
 data class CanvasDimensions(val width: Int, val height: Int) {
+    /**
+     * Fit this canvas inside a square bound without changing its aspect ratio.
+     * The result stays even-sized for the Android video encoder path.
+     */
+    fun scaledToFit(maxDimension: Int): CanvasDimensions {
+        require(maxDimension >= 2) { "Maximum canvas dimension must be at least 2" }
+        val scale = minOf(1.0, maxDimension.toDouble() / maxOf(width, height))
+        fun even(value: Double): Int = (value.toInt() - (value.toInt() % 2)).coerceAtLeast(2)
+        return requireValid(even(width * scale), even(height * scale))
+    }
+
     companion object {
         const val MIN_DIMENSION = 2
         const val MAX_DIMENSION = 8192
