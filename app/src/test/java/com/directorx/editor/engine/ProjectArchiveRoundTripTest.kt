@@ -219,6 +219,37 @@ class ProjectArchiveRoundTripTest {
         assertEquals(19, restoredWatermark.scalePercent)
     }
 
+    @Test
+    fun customCanvasDimensionsSurviveArchiveExportAndImport() = runBlocking {
+        val context = RuntimeEnvironment.getApplication().applicationContext as Context
+        val project = Project(
+            id = "custom-archive-project",
+            name = "Custom archive",
+            aspectRatio = com.directorx.editor.model.AspectRatio.CUSTOM,
+            customWidth = 2048,
+            customHeight = 858,
+        )
+        val document = ProjectDocumentApplicator.capture(
+            project = project,
+            state = AutoSaveState(projectId = project.id, playheadMs = 320L),
+        )
+        val archive = File(temp.root, "custom-canvas.clearcut")
+        assertTrue(ProjectArchive.exportArchive(context, document, archive))
+        registerStorageCapacity(context, temp.root)
+
+        val result = ProjectArchive.importArchiveWithReport(
+            context = context,
+            archiveUri = Uri.fromFile(archive),
+            targetDir = File(temp.root, "custom-canvas-import"),
+        )
+
+        assertNull(result.errorMessage)
+        val restored = requireNotNull(result.document).project
+        assertEquals(com.directorx.editor.model.AspectRatio.CUSTOM, restored.aspectRatio)
+        assertEquals(2048, restored.customWidth)
+        assertEquals(858, restored.customHeight)
+    }
+
     private fun registerStorageCapacity(context: Context, destinationParent: File) {
         val blockCount = 2_000_000
         val freeBlocks = 1_800_000
