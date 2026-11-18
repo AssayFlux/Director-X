@@ -77,6 +77,15 @@ enum class AspectRatio(val widthRatio: Int, val heightRatio: Int, val label: Str
 }
 
 /**
+ * Resolve a persisted global aspect-ratio preference for a newly created project.
+ * CUSTOM is intentionally project-scoped because it requires explicit dimensions.
+ * Legacy settings may still contain CUSTOM, so use the safe 16:9 preset.
+ */
+fun resolveDefaultProjectAspectRatio(configured: AspectRatio): AspectRatio =
+    configured.takeUnless { it == AspectRatio.CUSTOM } ?: AspectRatio.RATIO_16_9
+
+
+/**
  * Validated output canvas dimensions. Bounds keep encoder allocations practical
  * and reject malformed/accidentally enormous project metadata.
  */
