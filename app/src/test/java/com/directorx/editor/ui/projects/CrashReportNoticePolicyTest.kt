@@ -177,18 +177,18 @@ class CrashReportNoticePolicyTest {
             detail = "java.lang.IllegalStateException",
             appVersion = "0.1.0",
         )
-        val device = CrashReportDevice("0.1.0", "samsung", "SM-S901U", "16", 36, "arm64-v8a")
+        val device = CrashReportDevice("0.1.1", "samsung", "SM-S901U", "16", 36, "arm64-v8a") // Simulates an install upgraded after the crash.
 
         val body = CrashReportNoticePolicy.issueBody(notice, device)
 
         assertTrue(body, body.contains("Director X closed unexpectedly (java.lang.IllegalStateException) at 2026-10-06 00:02 UTC."))
-        assertTrue(body, body.contains("- Director X: 0.1.0\n- Version it happened in: 0.1.0\n"))
+        assertTrue(body, body.contains("- Director X: 0.1.1\n- Version it happened in: 0.1.0\n"))
         assertTrue(body, body.contains("- Device: samsung SM-S901U\n"))
         assertTrue(body, body.contains("- Android: 16 (API 36)\n"))
         assertTrue(body, body.contains("- ABI: arm64-v8a\n"))
         assertFalse(
             "same version twice",
-            CrashReportNoticePolicy.issueBody(notice.copy(appVersion = "0.1.0"), device).contains("happened in")
+            CrashReportNoticePolicy.issueBody(notice.copy(appVersion = "0.1.1"), device).contains("happened in")
         )
     }
 
