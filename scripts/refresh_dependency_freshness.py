@@ -235,9 +235,10 @@ def default_hold(key: str, pinned: str, latest: str) -> tuple[str, str]:
         )
     elif key == "kotlin":
         reason = (
-            f"Kotlin Gradle plugin {latest} is stable, but the current AGP pin 9.4.1 is above "
-            "the fully supported AGP range documented for KGP 2.4.21 (through AGP 9.3.1). "
-            "Coordinate the Kotlin/AGP toolchain rather than changing this pin alone."
+            f"Kotlin Gradle plugin {latest} is stable, but its formal compatibility matrix "
+            "supports AGP only through 9.3.1 while the current AGP pin is 9.4.1. The existing "
+            "AGP 9.4.1 / KGP 2.4.10 pair passed its recorded strict probe; the 2.4.21 candidate "
+            "still needs a coordinated toolchain probe."
         )
         unblock = (
             f"Select a mutually supported Kotlin/AGP pair, then run `{command}` and the full "
