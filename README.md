@@ -270,7 +270,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for repository workflow, manual Android v
 
 <div align="center">
 
-<img src="assets/icon.svg" alt="Director X" width="64" />
+<img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" alt="Director X" width="64" />
 
 ### DIRECTOR X
 
