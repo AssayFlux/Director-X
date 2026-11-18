@@ -6,9 +6,10 @@
 **Branch used for source review:** `Alpha`  
 **Original source/code reference baseline:** `1a3b7b8fe6a744780bbe202c07087e0eac5add2f`
 **Current Alpha base reference checked for this refresh:** `b4dd5d71138dad6d926df6a612ed66127fff02cb`  
-**Scope:** Documentation, release text and repository-facing descriptions only.
+**Original review scope:** Documentation, release text and repository-facing descriptions only.  
+**Current implementation scope:** Draft PR #59 also contains the custom canvas, 5.3K proxy and AssayFlux SVG UI integration.
 
-This document records the factual reference state used to align the repository documentation. The 2026-11-03 inventory and source measurements remain historical evidence; the 2026-11-18 refresh updates repository status and points to the current acceptance matrix. It does not claim that every historical measurement was re-measured. The exact documentation baseline is the Git commit that contains this file after the documentation-only change set is merged to `Alpha`. The source reference SHA above identifies the code/configuration state against which these documents were checked.
+This document records the factual reference state used to align the repository documentation. The 2026-11-03 inventory and source measurements remain historical evidence; the 2026-11-18 refresh updates repository status and points to the current acceptance matrix. It does not claim that every historical measurement was re-measured. The source reference SHA above identifies the Alpha code/configuration state against which the original documentation inventory was checked. The refreshed documentation and related implementation changes are currently in draft PR #59 and are not yet merged.
 
 ## 1. Verified Android identity and build configuration
 
