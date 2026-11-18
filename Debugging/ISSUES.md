@@ -447,3 +447,12 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - Export resolution presets currently top out at 4K. 8K export is not implemented or accepted.
 - Professional-camera compatibility is not established by generic Media3/FFmpeg support. Validate a representative corpus and codec/profile/bit-depth/chroma combinations before making broad compatibility claims.
 - Proxy, custom canvas and splash status must be reported independently: a source change, a CI result, and physical-device acceptance are different evidence levels.
+
+
+### DX-DOC-README-002 — README hero image pointed to a missing asset
+
+- **Severity:** Low
+- **Status:** CORRECTED ON MAINTENANCE BRANCH — repository-hygiene rerun pending.
+- **Finding:** The README referenced `assets/icon.svg`, which does not exist in the current repository tree. The first PR #51 repository-hygiene run failed at README link validation for this reason.
+- **Correction prepared:** The README now references the existing `app/src/main/res/mipmap-xxxhdpi/ic_launcher.png` artwork.
+- **Verification required:** Confirm the next repository-hygiene run passes README link/asset validation.
