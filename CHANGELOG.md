@@ -51,3 +51,4 @@ The current Android identity is `0.1.0` / version code `302`. Builds and runtime
 - Added the authoritative current engineering status and acceptance matrix at `docs/PROJECT_STATUS.md`.
 - Refreshed the issue register with current-main baseline, custom-canvas, splash, proxy, Room schema, native security, CI/documentation and branch-cleanup findings.
 - These changes are prepared on a maintenance branch. They are not yet merged and have not yet passed an Android build, automated test run or physical-device acceptance.
+- Corrected a broken README hero-image path discovered by the PR repository-hygiene validator; the rerun is pending.
