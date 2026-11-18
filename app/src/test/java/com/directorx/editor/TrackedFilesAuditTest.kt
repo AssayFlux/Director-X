@@ -84,6 +84,7 @@ class TrackedFilesAuditTest {
             "docs/models.md",
             "docs/DOCUMENTATION_BASELINE.md",
             "docs/PROJECT_STATUS.md",
+            // These are tracked, public engineering status documents.
             "docs/privacy-policy.md",
             "docs/play-data-safety.md",
             "docs/translations.md",
