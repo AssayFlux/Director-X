@@ -38,6 +38,14 @@ class ProxyResolutionPolicyTest {
     }
 
     @Test
+    fun fivePointThreeKCameraSourcePlansAllThreeProxyTiers() {
+        assertTrue(ProxyResolutionPolicy.requiresProxy(5312, 2988))
+        assertEquals(Plan.Generate(1494), ProxyResolutionPolicy.plan(2988, ProxyResolution.HALF))
+        assertEquals(Plan.Generate(748), ProxyResolutionPolicy.plan(2988, ProxyResolution.QUARTER))
+        assertEquals(Plan.Generate(374), ProxyResolutionPolicy.plan(2988, ProxyResolution.EIGHTH))
+    }
+
+    @Test
     fun a480pSourceAtHalfIsEditedDirectlyWithTheReasonStated() {
         val plan = ProxyResolutionPolicy.plan(480, ProxyResolution.HALF)
 
