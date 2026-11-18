@@ -2,8 +2,8 @@
 
 **Review date:** 18 November 2026  
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
-**Audited baseline:** `main` at `69fe420a1de7d7de584afcdcbdb76475735fa1ab`  
-**Maintenance work:** `maintenance/consistency-and-docs-2026-11-18` (not merged at the time of this document)
+**Audited baseline:** `main` at `73f704792e4572cd456723dd262f88098a5543f5`  
+**Maintenance work:** merged to `main` in PR [#53](https://github.com/AssayFlux/Director-X/pull/53)
 
 This is the authoritative status summary. It deliberately separates implementation presence, automated verification, and real-device acceptance. A feature is not complete merely because its model, UI setting, dependency or branch exists.
 
@@ -16,7 +16,7 @@ This is the authoritative status summary. It deliberately separates implementati
 | Proxy acceptance | **Not complete** | High-resolution tier, cancellation, restart, storage pressure, concurrent workload, original-media export and Moto G54 checks |
 | Custom canvas model/database | Partial foundation | Project dimensions and Room migration 10→11 exist |
 | Custom canvas creation-to-export | **Not complete** | UI and dimensions must flow through preview and actual encoder output |
-| CUSTOM global default crash | Confirmed defect on audited main | Defensive correction prepared on maintenance branch; compile/regression tests pending |
+| CUSTOM global default crash | Confirmed defect on audited main | Correction merged in PR #53; Android unit-test run pending |
 | AssayFlux splash | **Not on main** | Implementation candidate is on unmerged branch; review and device checks required |
 | Room schema snapshot | Incomplete | Database version 11, tracked schema JSON only through 10; generate/inspect/commit 11 |
 | Native FFmpeg security review | **Expired release gate** | `reviewUntil=2026-10-31`; conduct new review before release |
@@ -77,7 +77,7 @@ The existing 320×240 trim fixture is not sufficient evidence for high-resolutio
 
 The Settings screen exposed `CUSTOM` as a global default. Project creation applied that default without dimensions, while the Project model requires valid custom dimensions. This could throw during ordinary project creation.
 
-The maintenance branch prepares a defensive correction: custom dimensions are project-scoped, global defaults exclude CUSTOM, legacy CUSTOM values display/fall back to 16:9, and project creation refuses to instantiate a dimensionless CUSTOM project.
+PR #53 merged a defensive correction: custom dimensions are project-scoped, global defaults exclude CUSTOM, legacy CUSTOM values display/fall back to 16:9, and project creation refuses to instantiate a dimensionless CUSTOM project.
 
 This correction still requires compilation and regression tests before it can be called fixed.
 
@@ -116,9 +116,9 @@ Do not mechanically extend the expiry date. The expired review is a release bloc
 | Repository hygiene | Identity, docs, metadata, feature claims and policy checks | Android compilation or runtime behavior |
 
 Recorded evidence at the time of audit:
-- Android unit verification: [run 41556330546](https://github.com/AssayFlux/Director-X/actions/runs/41556330546) — passed.
-- Repository hygiene on audited main: [run 41574172284](https://github.com/AssayFlux/Director-X/actions/runs/41574172284) — passed. The first PR #51 run then exposed a pre-existing README image reference to missing `assets/icon.svg`; README now points to the existing launcher PNG. The rerun is pending.
-- API 37 device/performance QA: [run 41553185619](https://github.com/AssayFlux/Director-X/actions/runs/41553185619) — cancelled.
+- Android unit verification on the maintenance PR: [run 44344294946](https://github.com/AssayFlux/Director-X/actions/runs/44344294946) — in progress at this update. The previous completed main run [41556330546](https://github.com/AssayFlux/Director-X/actions/runs/41556330546) passed.
+- Repository hygiene for the maintenance PR: [run 44344295278](https://github.com/AssayFlux/Director-X/actions/runs/44344295278) — passed, including README link/asset validation.
+- API 37 device/performance QA on the maintenance PR: [run 44344294891](https://github.com/AssayFlux/Director-X/actions/runs/44344294891) — in progress at this update. The earlier main run [41553185619](https://github.com/AssayFlux/Director-X/actions/runs/41553185619) was cancelled.
 
 No workflow publishes an installable product APK or production release. CI may assemble temporary QA/benchmark APKs. The installable APK is built manually by the maintainer using the documented Termux workflow. The README and Termux guide should be updated whenever workflow triggers or tasks change.
 
