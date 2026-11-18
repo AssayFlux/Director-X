@@ -499,3 +499,12 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - **Finding:** The exact-duplicate validator found `Assets/UI Design Texture.png` and `UI Design Texture.png` to be byte-identical. Both are user-supplied design-reference assets; no application or documentation reference currently selects one as the canonical path.
 - **Correction:** Preserved both files and added the pair to the explicit intentional-duplicate allowlist with a comment. The README repository map now documents the mirror.
 - **Verification evidence:** All repository-hygiene validators passed on the current main commit in run [44350935702](https://github.com/AssayFlux/Director-X/actions/runs/44350935702).
+
+
+### DX-TEST-CRASH-001 — Crash-report version fixture no longer exercised the version-change branch
+
+- **Severity:** Low
+- **Status:** FIXED IN MAIN — Android unit-test rerun pending.
+- **Finding:** Replacing historical version strings with the current app version made the event version and current-device version identical, so the test incorrectly expected a “Version it happened in” line that production code correctly omits for same-version reports.
+- **Correction:** Keep the event version at the current release fixture `0.1.0`; model an upgraded install with `0.1.1` only as a simulated test value, and assert that the prior event version is shown only when it differs.
+- **Verification:** Rerun [44351352630](https://github.com/AssayFlux/Director-X/actions/runs/44351352630).
