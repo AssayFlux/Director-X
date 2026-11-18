@@ -57,6 +57,7 @@ jobs:
           chmod +x ./gradlew
           ./gradlew --version
 
+      # Temporary: generate a reviewed snapshot with the corrected metadata refresh logic.
       - name: Refresh dependency freshness snapshot for one-off validation
         run: |
           python scripts/refresh_dependency_freshness.py --reviewed-on 2026-11-18
