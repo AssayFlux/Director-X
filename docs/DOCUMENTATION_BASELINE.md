@@ -111,7 +111,7 @@ Key corrections for this refresh:
 - The README repository map previously described JVM and instrumentation tests as manual-only. The maintenance patch corrects that wording to reflect the Android verification and device-QA workflows.
 - Proxy PRs #47–#49 remain merged implementation improvements, not completed physical-device acceptance.
 - The API 37 device/performance QA run remains cancelled; do not represent it as passing.
-- Main still lacks end-to-end custom canvas propagation and the AssayFlux splash implementation.
+- Alpha still lacks the splash implementation. Draft PR #59 adds custom canvas creation, preview and export propagation, but Room schema 11 and actual export/device acceptance remain open.
 - Room database version 11 has no committed schema 11 JSON in the tracked schema directory.
 - The native FFmpeg security review expiry is 2026-10-31 and must be renewed through an actual dependency/advisory review before release.
 - A confirmed CUSTOM-default project-creation defect has a defensive correction merged in PR #53 and project-construction regression coverage merged in PR #55; Android unit-test verification is still running at this update.
