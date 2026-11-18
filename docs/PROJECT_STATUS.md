@@ -2,7 +2,7 @@
 
 **Review date:** 18 November 2026  
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
-**Audited baseline:** `main` at `73f704792e4572cd456723dd262f88098a5543f5`  
+**Audited baseline:** `main` at `1431a9ad28777f7172d1b94032b3a7c882090463`  
 **Maintenance work:** merged to `main` in PR [#53](https://github.com/AssayFlux/Director-X/pull/53)
 
 This is the authoritative status summary. It deliberately separates implementation presence, automated verification, and real-device acceptance. A feature is not complete merely because its model, UI setting, dependency or branch exists.
@@ -79,7 +79,7 @@ The Settings screen exposed `CUSTOM` as a global default. Project creation appli
 
 PR #53 merged a defensive correction: custom dimensions are project-scoped, global defaults exclude CUSTOM, legacy CUSTOM values display/fall back to 16:9, and project creation refuses to instantiate a dimensionless CUSTOM project.
 
-This correction still requires compilation and regression tests before it can be called fixed.
+The source correction and project-construction regression tests are merged. The Android unit-test workflow is still running; do not call the fix fully verified until it passes.
 
 ### Remaining integration
 
@@ -116,9 +116,9 @@ Do not mechanically extend the expiry date. The expired review is a release bloc
 | Repository hygiene | Identity, docs, metadata, feature claims and policy checks | Android compilation or runtime behavior |
 
 Recorded evidence at the time of audit:
-- Android unit verification on PR #53: [run 44344294946](https://github.com/AssayFlux/Director-X/actions/runs/44344294946) — failed on an unresolved helper import in `ProjectListViewModel.kt`. The missing import was added in main commit `5572f9a`; a fresh CI run is pending. The previous completed main run [41556330546](https://github.com/AssayFlux/Director-X/actions/runs/41556330546) passed.
+- Android unit verification: the first run [44344294946](https://github.com/AssayFlux/Director-X/actions/runs/44344294946) failed on an unresolved helper import in `ProjectListViewModel.kt`. The missing import was added in main commit `5572f9a`; follow-up run [44345410795](https://github.com/AssayFlux/Director-X/actions/runs/44345410795) is in progress. The previous completed main run [41556330546](https://github.com/AssayFlux/Director-X/actions/runs/41556330546) passed.
 - Repository hygiene for the maintenance PR: [run 44344295278](https://github.com/AssayFlux/Director-X/actions/runs/44344295278) — passed, including README link/asset validation.
-- API 37 device/performance QA on the maintenance PR: [run 44344294891](https://github.com/AssayFlux/Director-X/actions/runs/44344294891) — in progress at this update. The earlier main run [41553185619](https://github.com/AssayFlux/Director-X/actions/runs/41553185619) was cancelled.
+- API 37 device/performance QA: follow-up run [44345410638](https://github.com/AssayFlux/Director-X/actions/runs/44345410638) is in progress. The earlier main run [41553185619](https://github.com/AssayFlux/Director-X/actions/runs/41553185619) was cancelled.
 
 No workflow publishes an installable product APK or production release. CI may assemble temporary QA/benchmark APKs. The installable APK is built manually by the maintainer using the documented Termux workflow. The README and Termux guide should be updated whenever workflow triggers or tasks change.
 
