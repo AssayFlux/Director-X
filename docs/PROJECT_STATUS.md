@@ -218,3 +218,16 @@ Until all applicable gates pass, documentation and release notes must say **5.3K
 - Do not introduce third-party product branding, logos or promotional copy into Director X surfaces.
 - Preserve legally required open-source notices, licence texts, source offers and accurate upstream acknowledgements. Those are compliance materials, not competing product branding.
 - Do not describe an upstream dependency as an AssayFlux original component. Keep dependency provenance and licence records factual.
+
+
+### Maintenance implementation update — PR #59
+
+A draft maintenance PR now carries these source changes:
+
+- Custom canvas dimensions can be entered during new-project creation and are persisted on the existing Project model.
+- Exact custom dimensions are carried through ExportConfig, Media3 encoder sizing, export output verification/history and export storage estimates. Explicit platform presets clear project-custom dimensions and remain authoritative.
+- The editor preview and smart-crop aspect ratio now use the resolved project canvas geometry; GIF gap frames use the same exact ratio.
+- Proxy temporary artifacts now have a distinct validation predicate. The prior implementation checked a `proxy_tmp_*.mp4` path with the committed-cache predicate, which rejects temporary filenames; successful temporary output can now be atomically promoted.
+- Proxy generation now attempts an FFmpeg software-capable decode/encode fallback after Media3 hardware-decoder attempts fail. The fallback supports SAF content URIs through the existing FFmpeg input adapter and retains the existing proxy tier's target height.
+
+These are implementation changes under review, not verified acceptance. The draft PR must pass unit tests, lint and instrumentation. Real 5.3K footage, physical-device playback, cancellation, process death, storage pressure and final original-source export still require evidence. Room schema 11, splash, in-app SVG integration and native security review remain open.
