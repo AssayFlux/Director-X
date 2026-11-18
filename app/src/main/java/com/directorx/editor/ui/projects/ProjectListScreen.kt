@@ -72,6 +72,8 @@ import com.directorx.editor.ui.theme.ClearCutDialogIcon
 import com.directorx.editor.ui.theme.ClearCutFilterChip
 import com.directorx.editor.ui.theme.ClearCutMetricPill
 import com.directorx.editor.ui.theme.ClearCutPrimaryButton
+import com.directorx.editor.ui.theme.AssayFluxLogo
+import com.directorx.editor.ui.theme.AssayFluxTexture
 import com.directorx.editor.ui.theme.ClearCutScreenBackground
 import com.directorx.editor.ui.theme.ClearCutSectionHeader
 import com.directorx.editor.ui.theme.ClearCutSecondaryButton
@@ -161,6 +163,10 @@ fun ProjectListScreen(
             .fillMaxSize()
             .testTag(ClearCutTestTags.PROJECTS_SCREEN)
     ) {
+        AssayFluxTexture(
+            modifier = Modifier.matchParentSize(),
+            alpha = 0.045f,
+        )
         val importTemplate = { templateImportLauncher.launch(arrayOf("*/*")) }
         val showCollectionControls = projectTotalCount > 1 ||
             searchQuery.isNotBlank() ||
@@ -783,11 +789,9 @@ private fun ProjectHomeHero(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Default.Movie,
-                contentDescription = null,
-                tint = ClearCutAccents.Mauve,
-                modifier = Modifier.size(24.dp)
+            AssayFluxLogo(
+                modifier = Modifier.size(width = 52.dp, height = 32.dp),
+                contentDescription = stringResource(R.string.app_name),
             )
             Spacer(Modifier.width(Spacing.sm))
             Text(
