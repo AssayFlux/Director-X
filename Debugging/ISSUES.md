@@ -394,13 +394,13 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - **Required correction:** Review and integrate the custom-canvas candidate in small, auditable changes. Draft [PR #56](https://github.com/AssayFlux/Director-X/pull/56) contains the candidate, but GitHub currently reports it as dirty/non-mergeable; its branch also imports `resolveDefaultProjectAspectRatio` without defining that helper and lacks the tracked Room schema 11 snapshot. Propagate validated dimensions through project creation, document/archive round-trip, editor preview, export configuration, engine/delegate and final encoder output. Preserve preset behavior for existing projects.
 - **Verification required:** Unit tests for bounds/even dimensions and archive round-trip; UI/project creation tests; export tests that inspect actual output dimensions; regression tests for preset projects and rotated media.
 
-### DX-SPLASH-002 — AssayFlux splash is not integrated on main
+### DX-SPLASH-002 — AssayFlux SVG splash integration
 
 - **Severity:** Medium
-- **Status:** OPEN — CONFIRMED.
-- **Finding:** Main does not contain the AssayFlux splash view and GIF resource identified during the audit. Those assets/implementation are on an unmerged candidate branch and draft [PR #56](https://github.com/AssayFlux/Director-X/pull/56) only; the PR is not mergeable yet.
-- **Required correction:** Review GIF licensing/ownership, dimensions, file size and resource handling; integrate the splash view and resource without blocking startup or breaking lifecycle/navigation. Preserve the requested white background, centered artwork and 1.3-second presentation only if the implementation's timing and exit behavior are verified.
-- **Verification required:** Build, cold-start and background/foreground tests, navigation tests, low-memory behavior and a physical-device check. Do not describe splash integration as complete on main before merge.
+- **Status:** IMPLEMENTED IN DRAFT PR #59 — NOT ACCEPTED.
+- **Finding:** Draft PR #59 packages the supplied `Assets/Director-X Logo.svg` and displays it in a white, centered 1.3-second Compose splash overlay. It does not use the previously proposed GIF.
+- **Required correction:** Validate the WebView SVG renderer, asset packaging, cold-start cost, lifecycle/background behavior and accessibility. Preserve the requested 1.3-second presentation and verify it on a physical device.
+- **Verification required:** Android build, cold-start and background/foreground tests, navigation tests, low-memory behavior and physical-device visual/performance checks. Do not mark the splash accepted before these pass.
 
 ### DX-PROXY-ACCEPTANCE-001 — Proxy source fixes are not full acceptance
 
