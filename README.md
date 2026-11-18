@@ -37,7 +37,7 @@
 
 Director X is a native Android video editor built with Kotlin and Jetpack Compose. It combines media playback, editing and export infrastructure, local project storage, and selected on-device media-intelligence tools.
 
-The interface uses the supplied `Assets/Director-X Logo.svg` in the 1.3-second splash and Dashboard/Settings headers, and `Assets/UI Design Texture.svg` as a subtle Dashboard/Settings background. Gradle packages only these two assets; the app renders them locally with Android WebView, JavaScript disabled and network loads blocked. The editing workspace retains its existing palette and layout. The visual direction is a vintage darkroom: warm cream, paper beige, charcoal, muted taupe, brass gold and sage.
+The interface uses the supplied `Assets/Director-X Logo.svg` in the 1.3-second entry/exit splash and Dashboard/Settings headers, and `Assets/UI Design Texture.svg` as a subtle Dashboard/Settings background. Gradle packages only these two assets; the app renders them locally with Android WebView, JavaScript disabled and network loads blocked. The editing workspace retains its existing palette and layout. The visual direction is a vintage darkroom: warm cream, paper beige, charcoal, muted taupe, brass gold and sage.
 
 ## Editing toolkit
 
