@@ -6,6 +6,15 @@ import org.junit.Test
 
 class FFmpegEditingProxyArgumentsTest {
     @Test
+    fun softwareProxyFallbackIsLimitedToH264AndHevcCameraMedia() {
+        assertTrue(isSupportedEditingProxyMimeType("video/avc"))
+        assertTrue(isSupportedEditingProxyMimeType("video/hevc"))
+        assertFalse(isSupportedEditingProxyMimeType("video/x-vnd.on2.vp9"))
+        assertFalse(isSupportedEditingProxyMimeType("video/quicktime"))
+        assertFalse(isSupportedEditingProxyMimeType(null))
+    }
+
+    @Test
     fun proxyArgumentsScaleToBoundedEvenHeightAndPreserveOptionalAudio() {
         val args = buildEditingProxyArguments(
             inputPath = "/private/source.mov",
