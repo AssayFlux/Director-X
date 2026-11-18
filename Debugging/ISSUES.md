@@ -1,40 +1,34 @@
 # Director X — Debugging & Issue Register
 
+**Product owner:** AssayFlux  
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
-**Branch audited:** `main`  
-**Historical audit baseline:** `7760187420b25776c2af624aef1df6a6a34b1559` (follow-up source fixes are recorded below)  
-**Current documentation review:** 2026-11-18 against `main` at `58ba5ccc712035fd53da687b3590e5fd2c92bf00` (PRs #53 and #55 merged)  
-**Register status:** Historical findings retained; current implementation and CI state are summarized below. Source fixes, automated tests, managed-device QA and physical-device acceptance are tracked separately.
+**Default branch:** `Alpha` at `b4dd5d71138dad6d926df6a612ed66127fff02cb`  
+**Active implementation:** `assayflux/5.3k-media-and-branding` — [draft PR #59](https://github.com/AssayFlux/Director-X/pull/59), head `f5570fea5287acb297691decf8c08249ba904788`  
+**Review date:** 18 November 2026
 
-## Product direction reminder — UI upgrade scope is strictly limited
+This register distinguishes historical findings, current source corrections, automated test results, managed-device QA and physical-device acceptance. PR #59 is still a draft and is not merged.
 
-> **Do not forget or expand this direction:** The approved UI modernization scope is exactly the Dashboard and four Settings category views. These are the only UI surfaces in that earlier UI upgrade; the current task is documentation-only.
+## Product direction and authorized scope
 
-- The intended direction is a clearer, modernized hierarchy while preserving the Director X vintage/cream visual identity. Use the existing Jetpack Compose / Material 3 architecture; do not treat this note as authorization for new UI code changes.
-- **Preserve the existing icon style exactly.** Do not replace, redraw, restyle, or migrate the current Material filled icon family (`Icons.Default` / `Icons.Filled`) to outlined, line-art, duotone, thin-stroke, or another icon catalogue. Keep existing icon choices and their recognizable visual treatment unless the user explicitly approves a change.
-- Preserve the existing Director X cream/vintage visual identity and established palette unless the user approves a deliberate adjustment.
-- Keep any future visual refinement aligned with the approved design system; do not apply a generic redesign that conflicts with the existing identity.
-- Do **not** redesign or modify the video editor, timeline, preview/player, media import, project creation flow, templates, export flow, playback, proxy workflow, AI features, billing, navigation outside the five named screens, or any other application screen/function.
-- Do not refactor unrelated code, rename features, change behavior, remove controls, or alter settings semantics as part of this UI task.
-- Keep existing functionality, settings values, persistence, callbacks, and navigation behavior intact. UI-only changes must be isolated and reviewed.
-- Before implementation, inspect the current Dashboard and Settings source/layout files and map each supplied screenshot to its corresponding screen. Record the exact in-scope files before editing.
-- After implementation, review the diff and confirm that only the Dashboard and four Settings UI surfaces (plus strictly necessary UI resources/tests) changed. If an unrelated file appears in the diff, stop and explain why before proceeding.
-- This is a scope reminder, not authorization to begin implementation before the catalogue/design direction is agreed.
+- All current product-facing branding must identify **Director X — Designed by AssayFlux**. Use the supplied `Assets/Director-X Logo.svg` and `Assets/UI Design Texture.svg`; do not introduce another product identity or third-party brand treatment.
+- Use the logo in the 1.3-second entry/exit splash and Dashboard/Settings headers. Use the texture subtly on Dashboard and Settings only.
+- Preserve the existing color system and icon style. The editing workspace, timeline, preview/player, import, export and editor controls are outside this UI change.
+- Keep Dashboard and Settings navigation/functionality intact. This is a focused layout/artwork integration, not a general redesign.
+- Preserve all legally required upstream license and attribution notices. Legal provenance is not product branding and must not be removed to make the app appear wholly dependency-free.
+- 5.3K source-media support is a required product goal. Prefer automatic selected-tier proxies for 5.3K-class sources and preserve original media for final export.
 
-This scope restriction takes precedence over broader redesign ideas or previous project suggestions.
+## Current repository snapshot — 2026-11-18
 
-This register tracks reproducible source-level findings, their impact, the proposed correction, and the evidence required to close each item. A source inspection is not a substitute for Android device testing.
+- **Default branch:** `Alpha`; its current baseline is `b4dd5d71138dad6d926df6a612ed66127fff02cb`.
+- **Active draft:** PR #59 contains custom canvas end-to-end wiring, 5.3K-class proxy handling, AVC/HEVC software fallback, AssayFlux SVG artwork integration, splash, cancellation improvements and refreshed documentation.
+- **Branch discipline:** only Alpha plus the single active PR branch should be maintained. Do not create additional branches for the same work. Delete the PR branch only after the work is merged or abandoned.
+- **CI:** latest-head Android verification, repository hygiene and API 37 QA must all complete successfully. Earlier cancelled/in-progress run IDs are not evidence of a pass.
+- **Room:** database version 11 and migration 10→11 exist, but the schema 11 snapshot still needs to be generated, inspected and committed.
+- **Native media security:** FFmpeg review expiry is 2026-10-31. The release gate remains blocked pending component inventory, advisory reachability review and reproducible native build evidence.
+- **Device acceptance:** not performed by this repository review. Moto G54 5G / Android 15 remains the manual target for 5.3K footage, proxy playback, export, memory/storage and splash visual checks.
+- **Export scope:** 8K output is not implemented; custom canvas dimensions up to 8192 do not prove that an encoder can produce 8K output.
 
-## Current repository snapshot — 2026-11-03
-
-- **Main source baseline:** `1a3b7b8fe6a744780bbe202c07087e0eac5add2f`.
-- **Merged proxy reliability work:** PR [#47](https://github.com/AssayFlux/Director-X/pull/47) (restart-safe temporary artifacts), [#48](https://github.com/AssayFlux/Director-X/pull/48) (legacy cache-key namespace invalidation), and [#49](https://github.com/AssayFlux/Director-X/pull/49) (Transformer cancellation fence) are all merged.
-- **Android unit tests:** main-branch run [41556330546](https://github.com/AssayFlux/Director-X/actions/runs/41556330546) completed successfully for this main commit.
-- **Repository hygiene:** main-branch run [41556330569](https://github.com/AssayFlux/Director-X/actions/runs/41556330569) completed successfully.
-- **API 37 device/performance QA:** PR run [41553185619](https://github.com/AssayFlux/Director-X/actions/runs/41553185619) was cancelled; it is not a passing device-test result.
-- **Physical-device testing:** not performed by this repository audit. The user's Moto G54 5G / Android 15 remains the intended manual acceptance device.
-
-The original `OPEN` / `IN PROGRESS` labels below describe the state when each finding was first recorded. For proxy implementation status, use the merged-source and current CI evidence above plus the remaining acceptance gates in the 2026-11-03 proxy section. Do not equate merged source or passing JVM tests with completed end-to-end device validation.
+The 2026-11-03 snapshot below is retained as historical audit evidence only. Use the 2026-11-18 snapshot above for current branch and CI state.
 
 ## Status definitions
 
