@@ -186,6 +186,11 @@ The maintained status, known gaps, acceptance gates and release blockers are tra
 ```text
 Director-X/
 ├── .github/workflows/       # Android verification, device QA, repository hygiene
+├── Assets/                  # Director X logo variants and design references
+│   ├── Director-X Logo.png
+│   ├── Director-X Logo.svg
+│   └── UI Design Texture.png
+├── UI Design Texture.png    # Mirrored design reference texture
 ├── app/
 │   ├── src/main/            # Android application source and resources
 │   ├── src/test/            # JVM tests (Android verification workflow + local runs)
