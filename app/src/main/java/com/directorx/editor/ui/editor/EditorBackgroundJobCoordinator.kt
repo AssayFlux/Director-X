@@ -46,6 +46,7 @@ class EditorBackgroundJobCoordinator internal constructor(
         fun enqueue(request: WorkRequest)
         fun enqueueUniqueWork(name: String, policy: ExistingWorkPolicy, request: OneTimeWorkRequest)
         fun cancelWorkById(id: UUID)
+        fun cancelUniqueWork(name: String)
         fun observe(id: UUID, observer: Observer<WorkInfo?>): WorkObservation
 
         companion object {
@@ -64,6 +65,10 @@ class EditorBackgroundJobCoordinator internal constructor(
 
                 override fun cancelWorkById(id: UUID) {
                     workManager.cancelWorkById(id)
+                }
+
+                override fun cancelUniqueWork(name: String) {
+                    workManager.cancelUniqueWork(name)
                 }
 
                 override fun observe(id: UUID, observer: Observer<WorkInfo?>): WorkObservation {
@@ -106,6 +111,10 @@ class EditorBackgroundJobCoordinator internal constructor(
                 .addTag(ProxyGenerationWorker.TAG)
                 .build(),
         )
+    }
+
+    fun cancelProxyGeneration() {
+        scheduler.cancelUniqueWork(ProxyGenerationWorker.WORK_NAME)
     }
 
     fun enqueueMediaIngest(
