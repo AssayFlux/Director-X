@@ -14,15 +14,15 @@ This is the authoritative status summary. It deliberately separates implementati
 | App identity | Aligned | Director X, AssayFlux, `com.directorx.editor`, versionName `0.1.0`, versionCode `302` |
 | Proxy reliability foundations | Merged | PRs #47–#49; end-to-end/device acceptance remains open |
 | Proxy acceptance | **Not complete** | High-resolution tier, cancellation, restart, storage pressure, concurrent workload, original-media export and Moto G54 checks |
-| Custom canvas model/database | Partial foundation | Project dimensions and Room migration 10→11 exist |
-| Custom canvas creation-to-export | **Not complete** | UI and dimensions must flow through preview and actual encoder output |
+| Custom canvas model/database | Partial foundation | Project dimensions and Room migration 10→11 exist; Room schema 11 JSON still needs generation |
+| Custom canvas creation-to-export | **Implemented in draft PR #59; not accepted** | Project creation, preview geometry and export dimensions are wired; Room schema 11, exact output-file checks and device validation remain |
 | CUSTOM global default crash | Correction and regression coverage merged | Import fixed in `5572f9a`; latest Android verification run `44349406491` is in progress |
-| AssayFlux splash | **Not on main** | Implementation candidate is on unmerged branch; review and device checks required |
+| AssayFlux splash | **Not present on Alpha** | No splash implementation or raw GIF was found in the current Alpha tree |
 | Room schema snapshot | Incomplete | Database version 11, tracked schema JSON only through 10; generate/inspect/commit 11 |
 | Native FFmpeg security review | **Expired release gate** | `reviewUntil=2026-10-31`; conduct new review before release |
-| CI unit tests | Last recorded run passed | Run 41556330546; not proof of device acceptance |
+| CI unit tests | Current PR #59 run in progress | Check run 134991201705; no result claimed yet |
 | Repository hygiene | Last recorded run passed | Run 41574172284 |
-| API 37 device/performance QA | Not passed | Run 41553185619 was cancelled |
+| API 37 device/performance QA | Current PR #59 run in progress | Check runs 134991181167 and 134991181852; not physical-device acceptance |
 | Physical-device acceptance | Not established by this audit | Target device: Moto G54 5G / Android 15 |
 | 8K export | Not implemented | Current preset enum ends at 4K |
 | Professional camera compatibility | Not established | Requires a documented codec/profile test corpus |
