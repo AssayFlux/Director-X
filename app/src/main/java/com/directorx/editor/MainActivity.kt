@@ -62,7 +62,6 @@ import com.directorx.editor.ui.editor.LocalTabletopPosture
 import com.directorx.editor.ui.projects.ProjectListScreen
 import com.directorx.editor.ui.settings.SettingsScreen
 import com.directorx.editor.ui.theme.AssayFluxLogo
-import com.directorx.editor.ui.theme.AssayFluxTexture
 import com.directorx.editor.ui.theme.ClearCutTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
