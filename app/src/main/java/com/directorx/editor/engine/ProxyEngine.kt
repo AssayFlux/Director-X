@@ -55,6 +55,11 @@ internal fun isCompletedProxyArtifact(file: File): Boolean =
         file.name.startsWith("proxy_") && !file.name.startsWith("proxy_tmp_") &&
         file.name.endsWith(".mp4")
 
+/** A temporary artifact is eligible for atomic promotion only after a successful encode. */
+internal fun isUsableProxyTemporaryArtifact(file: File): Boolean =
+    file.isFile && file.length() > 0L &&
+        file.name.startsWith("proxy_tmp_") && file.name.endsWith(".mp4")
+
 /**
  * Deletes only files directly inside the proxy cache with the managed filename
  * shape. Canonical-path checks reject traversal and symlinks escaping the cache.
@@ -112,6 +117,7 @@ internal fun shouldRetainProxyMapping(
 @Singleton
 class ProxyEngine @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val ffmpegEngine: FFmpegEngine,
     memoryTrimRegistry: MemoryTrimRegistry,
 ) {
     private val proxyDir = File(context.cacheDir, "proxies").also { it.mkdirs() }
@@ -274,7 +280,7 @@ class ProxyEngine @Inject constructor(
                 // proxy generation queues behind preview/retriever work instead
                 // of turning a codec-ceiling collision into a failed render.
                 pipelineLease = CodecInstanceBudget.acquirePipeline()
-                suspendCancellableCoroutine { cont ->
+                val transformerResult = suspendCancellableCoroutine<Uri?> { cont ->
                     val mediaItem = MediaItem.fromUri(sourceUri)
 
                     // Presentation sizes the displayed (rotated) frame, so the proxy keeps the
@@ -299,7 +305,7 @@ class ProxyEngine @Inject constructor(
                                 }
                                 // Commit the artifact only after Media3 reports success.
                                 // Same-directory rename is atomic on Android filesystems.
-                                if (isCompletedProxyArtifact(partialFile) && partialFile.renameTo(outFile)) {
+                                if (isUsableProxyTemporaryArtifact(partialFile) && partialFile.renameTo(outFile)) {
                                     val proxyUri = Uri.fromFile(outFile)
                                     proxyMap[key] = proxyUri
                                     cont.resume(proxyUri)
@@ -364,10 +370,35 @@ class ProxyEngine @Inject constructor(
                         proxyMap.remove(key)
                     }
                 }
+                if (transformerResult != null) {
+                    transformerResult
+                } else {
+                    // Media3's alternate hardware-decoder attempts can still fail when
+                    // the source raster/profile exceeds every device decoder. Fall back
+                    // to FFmpeg's software-capable source decode and a bounded proxy.
+                    partialFile.delete()
+                    AppLog.i("ProxyEngine", "Media3 proxy decode failed; trying FFmpeg software-decoded proxy")
+                    val encoded = ffmpegEngine.createEditingProxy(
+                        inputUri = sourceUri,
+                        outputFile = partialFile,
+                        targetHeight = targetHeight,
+                        onProgress = onProgress,
+                    )
+                    if (encoded && isUsableProxyTemporaryArtifact(partialFile) && partialFile.renameTo(outFile)) {
+                        val proxyUri = Uri.fromFile(outFile)
+                        proxyMap[key] = proxyUri
+                        proxyUri
+                    } else {
+                        partialFile.delete()
+                        proxyMap.remove(key)
+                        null
+                    }
+                }
             } catch (e: kotlinx.coroutines.CancellationException) {
                 // Preserve structured cancellation — don't mask it as a null result.
                 // Once Transformer.start() has run, invokeOnCancellation owns cleanup
                 // after Transformer.cancel() has fenced its writes on the main thread.
+                partialFile.delete()
                 proxyMap.remove(key)
                 throw e
             } catch (e: Exception) {
