@@ -552,3 +552,13 @@ The older `main`-branch references and workflow run IDs in this register are his
 - DX-CANVAS-002: custom canvas creation, project dimension persistence, preview geometry, smart-crop ratio, export dimensions, storage estimates and output-history dimensions have been wired in the draft. Room schema 11 generation, migration validation, encoder output inspection and physical-device validation remain open.
 - Proxy artifact promotion: a source-level defect was found during this work. The code tested a temporary `proxy_tmp_*.mp4` using a predicate that deliberately rejects temporary filenames, preventing the successful artifact from being promoted. A dedicated temporary-artifact predicate and regression tests are included in the draft.
 - CI: draft PR #59 has repository hygiene and API 37 QA queued/in progress at the time of this note. No passing result is claimed here.
+
+
+### DX-NATIVE-001 — FFmpeg 8.1.2 native component security review is expired
+
+- **Severity:** Critical — release gate
+- **Status:** OPEN — BLOCKED
+- **Finding:** The native lock review expired on 2026-10-31. Upstream advisories published after the prior review affect FFmpeg 8.1.2 components including Vulkan HEVC decode, LCL/ZLIB decode, PNG/APNG encode and the quirc filter. The existing patch disables some components, but the exact AAR component inventory is not available in the current build record.
+- **Required correction:** Inspect the AAR's exact configure transcript and decoder/encoder/filter inventories; explicitly disable or backport fixes for affected components; rebuild the AAR; update artifact/patch hashes and lock metadata; run native smoke tests and the complete Android suite.
+- **Evidence:** `docs/NATIVE_MEDIA_SECURITY_REVIEW_2026-11-18.md`
+- **Policy:** Do not extend `reviewUntil` without this evidence.
