@@ -180,7 +180,7 @@ This section supersedes earlier branch/status statements in this historical matr
 |---|---|---|
 | Repository branch | `Alpha` is the default and only branch | Current |
 | CI branch triggers | Updated on the maintenance branch to target `Alpha` | Change made; workflow run still required |
-| Logo/background assets | `Assets/Director-X Logo.svg` and `Assets/UI Design Texture.svg` exist; the texture also exists at repository root with the same blob SHA | Present; app integration not yet verified |
+| Logo/background assets | `Assets/Director-X Logo.svg` and `Assets/UI Design Texture.svg` exist; the redundant root SVG copy has been removed in draft PR #59 | Present; app integration not yet verified |
 | 5.3K source video | Current preset enum ends at 4K; the project model's 8192 dimension limit is not a playback/export guarantee | Not accepted |
 | Custom canvas | Model and Room migration exist; export still calculates dimensions from preset resolution/aspect ratio | Incomplete |
 | Proxy acceptance | Cache/cancellation foundations exist; real high-resolution source, worker, recovery, storage and physical-device gates remain | Incomplete |
