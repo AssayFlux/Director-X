@@ -875,7 +875,7 @@ class EditorViewModel @Inject constructor(
                         mediaVersion = mediaVersion,
                     )
                     if (
-                        ProxyResolutionPolicy.requiresProxy(w, h) &&
+                        ProxyResolutionPolicy.requiresAutomaticProxy(w, h) &&
                         _state.value.proxySettings.enabled &&
                         _state.value.proxySettings.autoGenerate
                     ) {
