@@ -26,7 +26,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "gradle" / "libs.versions.toml"
 SNAPSHOT = ROOT / "scripts" / "dependency_freshness_snapshot.json"
-USER_AGENT = "ClearCut-dependency-freshness/1"
+USER_AGENT = "DirectorX-dependency-freshness/1"
 STABLE_VERSION = re.compile(r"^\d+(?:\.\d+)*$")
 REVIEW_HORIZON_DAYS = 30
 
@@ -35,7 +35,7 @@ SOURCE_SPECS: dict[str, dict[str, str]] = {
     "agp": {
         "coordinate": "com.android.tools.build:gradle",
         "metadataSource": "https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle/maven-metadata.xml",
-        "source": "https://developer.android.com/build/releases/agp-9-3-0-release-notes",
+        "source": "https://developer.android.com/build/releases/about-agp",
     },
     "kotlin": {
         "coordinate": "org.jetbrains.kotlin:kotlin-gradle-plugin",
@@ -224,12 +224,24 @@ def default_hold(key: str, pinned: str, latest: str) -> tuple[str, str]:
     command = probe_command(key, latest)
     if key == "agp":
         reason = (
-            f"The catalog remains on AGP {pinned}; authoritative metadata reports {latest}, "
-            "but the current wrapper/toolchain lane is not ready for the candidate's Gradle requirement."
+            f"The catalog remains on AGP {pinned}; authoritative metadata reports {latest}. "
+            "The Gradle 9.8 wrapper can satisfy the AGP 9.5 Gradle 9.6 minimum, but the pinned "
+            "Kotlin Gradle plugin 2.4.10 is only fully compatible through AGP 9.1.0. "
+            "Upgrade the Kotlin/AGP toolchain as a coordinated pair and probe it before adoption."
         )
         unblock = (
-            f"Update the wrapper and toolchain for {latest}, then run `{command}`; keep the "
-            "catalog change only if the full local probe passes."
+            f"Select a Kotlin Gradle plugin release whose supported AGP range includes {latest}, "
+            f"then run `{command}` with lint and assemble checks before changing the pin."
+        )
+    elif key == "kotlin":
+        reason = (
+            f"Kotlin Gradle plugin {latest} is stable, but the current AGP pin 9.4.1 is above "
+            "the fully supported AGP range documented for KGP 2.4.21 (through AGP 9.3.1). "
+            "Coordinate the Kotlin/AGP toolchain rather than changing this pin alone."
+        )
+        unblock = (
+            f"Select a mutually supported Kotlin/AGP pair, then run `{command}` and the full "
+            "unit-test, lint and assemble probe before adoption."
         )
     elif key == "lifecycle":
         reason = (
@@ -245,13 +257,13 @@ def default_hold(key: str, pinned: str, latest: str) -> tuple[str, str]:
         unblock = f"Complete the Room 3 coordinate/API migration, then run `{command}` before updating the catalog."
     elif key == "onnxruntime":
         reason = (
-            f"ONNX Runtime {latest} is newer than the pinned {pinned}; every ONNX Runtime release changes the "
-            "native payload in all four ABIs, so it needs the per-ABI size review and the on-device Whisper and "
-            "inpaint fixtures before adoption."
+            f"ONNX Runtime {latest} is newer than the pinned {pinned}; every release changes the native payload "
+            "in all four ABIs. The previously reviewed 1.30.0 candidate exceeded the 2 MB per-ABI growth budget, "
+            "so the new candidate requires fresh size, alignment, Whisper and inpainting evidence."
         )
         unblock = (
-            f"Complete the per-ABI size and model-output review, then run `{command}` and retain the candidate "
-            "only when the APK budget and on-device fixtures stay green."
+            f"Complete the per-ABI size and model-output review for {latest}, then run `{command}`; retain the "
+            "candidate only when the APK budget and on-device fixtures stay green."
         )
     elif key == "protobufJavalite":
         reason = (
@@ -327,21 +339,31 @@ def refresh(reviewed_on: str) -> dict[str, Any]:
                 "version": pinned if state == "current" else None,
                 "command": candidate_command,
             }
-        if old.get("pinnedVersion") == pinned and old.get("state") == state:
-            reason = old.get("reason", "")
-            unblock = old.get("unblockCondition", "")
-        else:
-            reason, unblock = default_hold(key, pinned, latest)
         if state == "current":
             reason = "The catalog pin matches the latest stable version returned by authoritative metadata."
             unblock = f"Run `python scripts/refresh_dependency_freshness.py` before changing this pin."
         elif state == "pre-release":
-            reason = old.get("reason") or (
-                f"The catalog intentionally uses pre-release {pinned}; stable metadata stops at {latest}."
+            reason = f"The catalog intentionally uses pre-release {pinned}; stable metadata currently stops at {latest}."
+            unblock = (
+                f"Wait for a stable benchmark release, then run `{candidate_command}` before changing this pin."
             )
-            unblock = old.get("unblockCondition") or (
-                f"Wait for the stable 1.5.x benchmark line, then run `{candidate_command}` before changing this pin."
-            )
+        else:
+            # Rebuild hold text from the latest metadata on every refresh. Preserving
+            # old prose when latestStable changes leaves obsolete candidate versions
+            # in reason/unblockCondition even though candidateDecision is current.
+            reason, unblock = default_hold(key, pinned, latest)
+        previous_review = None
+        if old and (
+            old.get("reason") != reason
+            or old.get("unblockCondition") != unblock
+            or old.get("latestStable") != latest
+        ):
+            previous_review = {
+                "reviewedOn": old.get("reviewedOn"),
+                "latestStable": old.get("latestStable"),
+                "reason": old.get("reason"),
+                "unblockCondition": old.get("unblockCondition"),
+            }
         entry: dict[str, Any] = {
             "coordinate": spec["coordinate"],
             "pinnedVersion": pinned,
@@ -357,6 +379,8 @@ def refresh(reviewed_on: str) -> dict[str, Any]:
         }
         if "latestCoordinate" in spec:
             entry["latestCoordinate"] = spec["latestCoordinate"]
+        if previous_review is not None:
+            entry["previousReview"] = previous_review
         if key in LINT_SENSITIVE:
             entry["lintReviewRequired"] = True
         dependencies[key] = entry
