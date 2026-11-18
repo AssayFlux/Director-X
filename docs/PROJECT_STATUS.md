@@ -164,3 +164,57 @@ Use these labels consistently:
 - **Release ready:** all functional, compatibility, signing, native security and release checks passed.
 
 Never substitute one label for another.
+
+## Current repository refresh — 18 November 2026 (Alpha)
+
+**Product owner:** AssayFlux  
+**Product:** Director X  
+**Current default branch:** `Alpha`  
+**Audited base before this maintenance branch:** `b4dd5d71138dad6d926df6a612ed66127fff02cb`
+
+This section supersedes earlier branch/status statements in this historical matrix where they conflict. Earlier run IDs and PR references below remain historical evidence only; they are not evidence about the current Alpha head.
+
+### Current verified state
+
+| Area | Current finding | Completion status |
+|---|---|---|
+| Repository branch | `Alpha` is the default and only branch | Current |
+| CI branch triggers | Updated on the maintenance branch to target `Alpha` | Change made; workflow run still required |
+| Logo/background assets | `Assets/Director-X Logo.svg` and `Assets/UI Design Texture.svg` exist; the texture also exists at repository root with the same blob SHA | Present; app integration not yet verified |
+| 5.3K source video | Current preset enum ends at 4K; the project model's 8192 dimension limit is not a playback/export guarantee | Not accepted |
+| Custom canvas | Model and Room migration exist; export still calculates dimensions from preset resolution/aspect ratio | Incomplete |
+| Proxy acceptance | Cache/cancellation foundations exist; real high-resolution source, worker, recovery, storage and physical-device gates remain | Incomplete |
+| Splash | No current Alpha splash implementation was found in the audited tree | Incomplete |
+| Room schema | Database version 11 / migration 10→11 exist; tracked schema 11 snapshot was not found | Incomplete |
+| Native FFmpeg review | Security review date 2026-10-31 is expired | Release blocker until reviewed |
+| Physical device | No evidence of 5.3K acceptance on the target Android device | Not tested |
+
+### 5.3K video support contract
+
+Director X must accept high-resolution source media for import, metadata inspection, timeline editing, seeking and playback. A “5.3K” label is not a single universal raster: the implementation must use the dimensions and codec metadata read from each file (for example, 5312×2988 sources) rather than hard-code one assumed size.
+
+Playback is device-dependent. The app must query the actual decoder's format support, frame-rate/size limits and profile/bit-depth capability. If native real-time decoding is unavailable or unstable, the editor must offer a proxy workflow that can decode the original through a supported fallback, create a bounded editing proxy, preserve source timebase/orientation/audio, and keep the original source attached for final export. It must never silently replace the original media with a proxy in the export path.
+
+The current Media3 proxy path uses Transformer to decode the original. Its fallback currently tries alternate Android decoders; that is not proof of a software decode path for sources that exceed every device decoder's limits. A dedicated FFmpeg software-decode proxy fallback, cancellation fencing, progress, disk budgeting and recovery tests are required before claiming 5.3K editing on devices without a suitable hardware decoder.
+
+### 5.3K acceptance gates
+
+1. Import representative camera files across H.264, HEVC Main/Main10, AVC/HEVC high profiles, 8-bit/10-bit, SDR/HDR, variable/constant frame rate, rotation metadata and long-GOP footage.
+2. Inspect the real raster, frame rate, codec profile/level, chroma, bit depth, color metadata, audio tracks and rotation without loading full-resolution frames into memory.
+3. Query Android decoder capabilities against the actual source format; distinguish “container readable”, “decoder advertised”, and “sustained playback passed”.
+4. Verify native playback where supported and an explicit proxy fallback where unsupported. Test scrubbing, seeking, audio sync, orientation, HDR/SDR behavior and lifecycle interruption.
+5. Generate HALF/QUARTER/EIGHTH proxies from 5.3K sources; verify dimensions, duration, audio policy, timestamps, rotation and cache identity.
+6. Cancel during active decode/encode, kill the process, restart and recover without promoting partial files.
+7. Stress playback + export + proxy generation under memory and storage pressure; verify bounded memory and safe cache cleanup.
+8. Export a project and inspect the output file. The selected project/export dimensions must be honored, and source media must remain the original.
+9. Run the full acceptance corpus on the maintainer's physical Android device. A managed emulator or JVM test alone is insufficient.
+
+Until all applicable gates pass, documentation and release notes must say **5.3K source support under validation**, not “fully supported”.
+
+### AssayFlux asset and documentation rules
+
+- Use the supplied Director X logo and UI background SVGs as the authoritative product artwork; do not substitute generated or unrelated brand artwork.
+- Keep the app-facing product name **Director X** and product-owner credit **Designed by AssayFlux** consistent across README, in-app surfaces, release notes and current documentation.
+- Do not introduce third-party product branding, logos or promotional copy into Director X surfaces.
+- Preserve legally required open-source notices, licence texts, source offers and accurate upstream acknowledgements. Those are compliance materials, not competing product branding.
+- Do not describe an upstream dependency as an AssayFlux original component. Keep dependency provenance and licence records factual.
