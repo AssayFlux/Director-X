@@ -5,7 +5,7 @@
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
 **Branch used for source review:** `main`  
 **Original source/code reference baseline:** `1a3b7b8fe6a744780bbe202c07087e0eac5add2f`
-**Current main reference checked for this refresh:** `1431a9ad28777f7172d1b94032b3a7c882090463`  
+**Current main reference checked for this refresh:** `efa84e0c55b902ab59b8d2b83df60f2812192b43`  
 **Scope:** Documentation, release text and repository-facing descriptions only.
 
 This document records the factual reference state used to align the repository documentation. The 2026-11-03 inventory and source measurements remain historical evidence; the 2026-11-18 refresh updates repository status and points to the current acceptance matrix. It does not claim that every historical measurement was re-measured. The exact documentation baseline is the Git commit that contains this file after the documentation-only change set is merged to `main`. The source reference SHA above identifies the code/configuration state against which these documents were checked.
@@ -84,7 +84,7 @@ Historical localized changelog entries and legal/source-offer materials are reta
 
 ## 7. Documentation-only change boundary
 
-The original 2026-11-03 documentation-only pass did not change Kotlin/Java source, Android resources, manifests, Gradle files, dependency versions, Room schemas, scripts, CI workflow definitions, native binaries, signing configuration or app behavior. That was a scope boundary for that historical pass, not a prohibition on later separately reviewed engineering fixes. The 2026-11-18 CUSTOM-default correction was merged through PR #53; it does not authorize unrelated application changes.
+The original 2026-11-03 documentation-only pass did not change Kotlin/Java source, Android resources, manifests, Gradle files, dependency versions, Room schemas, scripts, CI workflow definitions, native binaries, signing configuration or app behavior. That was a scope boundary for that historical pass, not a prohibition on later separately reviewed engineering fixes. The 2026-11-18 CUSTOM-default correction was merged through PR #53 and the project-construction regression test through PR #55; it does not authorize unrelated application changes.
 
 ## 8. Baseline update procedure
 
@@ -117,3 +117,12 @@ Key corrections for this refresh:
 - A confirmed CUSTOM-default project-creation defect has a defensive correction merged in PR #53 and project-construction regression coverage merged in PR #55; Android unit-test verification is still running at this update.
 
 The merged maintenance patch keeps the targeted code correction and documentation reconciliation reviewable as PR #53; this document does not authorize broad application redesign or removal of upstream legal notices.
+
+
+## 10. Dependency freshness refresh — 18 November 2026
+
+The source-backed freshness snapshot was refreshed with the repository's existing Maven metadata updater. It now records 21 dependencies reviewed on 2026-11-18 under the unchanged 30-day policy. No version catalog pins were upgraded.
+
+The refresh also corrected a stale-reason defect: when the latest stable candidate changes, the updater now regenerates the active hold explanation and unblock command, retaining the prior review under `previousReview`. The active dependency guidance therefore refers to current candidates rather than obsolete versions.
+
+The tracked-document policy now explicitly permits `docs/DOCUMENTATION_BASELINE.md` and `docs/PROJECT_STATUS.md` as public engineering documentation.
