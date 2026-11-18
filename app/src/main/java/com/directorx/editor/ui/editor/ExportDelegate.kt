@@ -66,6 +66,7 @@ import com.directorx.editor.model.BatchExportSourceRange
 import com.directorx.editor.model.BatchExportStatus
 import com.directorx.editor.model.ChapterMarker
 import com.directorx.editor.model.ExportConfig
+import com.directorx.editor.model.withProjectCanvas
 import com.directorx.editor.model.requiresStreamSafeOutput
 import com.directorx.editor.model.TrackType
 import kotlinx.coroutines.CoroutineScope
@@ -1072,19 +1073,8 @@ class ExportDelegate(
 
         val totalDurationMs = resolvedRange?.durationMs ?: projectDurationMs
         val outputAspectRatio = currentState.exportConfig.outputAspectRatio(currentState.project.aspectRatio)
-        val projectCanvas = currentState.project.canvasDimensions
         val config = currentState.exportConfig
-            .copy(
-                aspectRatio = outputAspectRatio,
-                customOutputWidth = projectCanvas.width.takeIf {
-                    currentState.project.aspectRatio == com.directorx.editor.model.AspectRatio.CUSTOM &&
-                        currentState.exportConfig.platformPreset == null
-                },
-                customOutputHeight = projectCanvas.height.takeIf {
-                    currentState.project.aspectRatio == com.directorx.editor.model.AspectRatio.CUSTOM &&
-                        currentState.exportConfig.platformPreset == null
-                },
-            )
+            .withProjectCanvas(currentState.project, outputAspectRatio)
             .resolveTargetSize(totalDurationMs)
         val baseChapters = if (config.includeChapterMarkers && config.chapters.isEmpty()) {
             currentState.timelineMarkers
