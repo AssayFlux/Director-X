@@ -16,7 +16,7 @@ This is the authoritative status summary. It deliberately separates implementati
 | Proxy acceptance | **Not complete** | High-resolution tier, cancellation, restart, storage pressure, concurrent workload, original-media export and Moto G54 checks |
 | Custom canvas model/database | Partial foundation | Project dimensions and Room migration 10→11 exist |
 | Custom canvas creation-to-export | **Not complete** | UI and dimensions must flow through preview and actual encoder output |
-| CUSTOM global default crash | Confirmed defect on audited main | Correction merged in PR #53; Android unit-test run pending |
+| CUSTOM global default crash | Correction merged | First Android unit-test run caught a missing helper import; fixed in main commit `5572f9a`; fresh CI verification pending |
 | AssayFlux splash | **Not on main** | Implementation candidate is on unmerged branch; review and device checks required |
 | Room schema snapshot | Incomplete | Database version 11, tracked schema JSON only through 10; generate/inspect/commit 11 |
 | Native FFmpeg security review | **Expired release gate** | `reviewUntil=2026-10-31`; conduct new review before release |
@@ -116,7 +116,7 @@ Do not mechanically extend the expiry date. The expired review is a release bloc
 | Repository hygiene | Identity, docs, metadata, feature claims and policy checks | Android compilation or runtime behavior |
 
 Recorded evidence at the time of audit:
-- Android unit verification on the maintenance PR: [run 44344294946](https://github.com/AssayFlux/Director-X/actions/runs/44344294946) — in progress at this update. The previous completed main run [41556330546](https://github.com/AssayFlux/Director-X/actions/runs/41556330546) passed.
+- Android unit verification on PR #53: [run 44344294946](https://github.com/AssayFlux/Director-X/actions/runs/44344294946) — failed on an unresolved helper import in `ProjectListViewModel.kt`. The missing import was added in main commit `5572f9a`; a fresh CI run is pending. The previous completed main run [41556330546](https://github.com/AssayFlux/Director-X/actions/runs/41556330546) passed.
 - Repository hygiene for the maintenance PR: [run 44344295278](https://github.com/AssayFlux/Director-X/actions/runs/44344295278) — passed, including README link/asset validation.
 - API 37 device/performance QA on the maintenance PR: [run 44344294891](https://github.com/AssayFlux/Director-X/actions/runs/44344294891) — in progress at this update. The earlier main run [41553185619](https://github.com/AssayFlux/Director-X/actions/runs/41553185619) was cancelled.
 
