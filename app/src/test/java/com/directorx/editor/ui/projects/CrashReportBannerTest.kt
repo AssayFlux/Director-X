@@ -51,7 +51,7 @@ class CrashReportBannerTest {
             CrashRecordStore(context).recordUncaughtException(
                 Thread.currentThread(),
                 IllegalStateException("decoder released"),
-                "v3.81.0",
+                "0.1.0",
                 crashedAt,
             )
         }
@@ -70,7 +70,7 @@ class CrashReportBannerTest {
         val clip = context.getSystemService(ClipboardManager::class.java).primaryClip!!.getItemAt(0).text.toString()
         assertTrue(clip, clip.contains("Director X closed unexpectedly (java.lang.IllegalStateException)"))
         assertTrue(clip, clip.contains("- Director X: ${ClearCutApp.VERSION}"))
-        assertTrue(clip, clip.contains("- Version it happened in: v3.81.0"))
+        assertTrue(clip, clip.contains("- Version it happened in: 0.1.0"))
         assertTrue(clip, clip.contains("- Android: "))
         assertTrue(clip, clip.contains("- ABI: "))
         assertTrue(clip, !clip.contains("decoder released"))
