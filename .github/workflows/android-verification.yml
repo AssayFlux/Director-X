@@ -64,6 +64,13 @@ jobs:
           cat scripts/dependency_freshness_snapshot.json
           echo "DEPENDENCY_FRESHNESS_SNAPSHOT_END"
 
+      - name: Upload refreshed dependency snapshot for one-off validation
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-freshness-snapshot-${{ github.sha }}
+          path: scripts/dependency_freshness_snapshot.json
+          if-no-files-found: error
+
       - name: Run Android unit tests
         run: ./gradlew --no-daemon --stacktrace --console=plain :app:testQaUnitTest
 
