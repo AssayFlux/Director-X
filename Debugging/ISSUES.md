@@ -453,6 +453,6 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 
 - **Severity:** Low
 - **Status:** CORRECTED ON MAINTENANCE BRANCH — repository-hygiene rerun pending.
-- **Finding:** The README referenced `assets/icon.svg`, which does not exist in the current repository tree. The first PR #51 repository-hygiene run failed at README link validation for this reason.
-- **Correction prepared:** The README now references the existing `app/src/main/res/mipmap-xxxhdpi/ic_launcher.png` artwork.
+- **Finding:** Two README image references pointed to `assets/icon.svg`, which does not exist in the current repository tree. The first two PR validation attempts failed at README link validation for this reason.
+- **Correction prepared:** Both README image references now use the existing `app/src/main/res/mipmap-xxxhdpi/ic_launcher.png` artwork.
 - **Verification required:** Confirm the next repository-hygiene run passes README link/asset validation.
