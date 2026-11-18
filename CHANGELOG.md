@@ -3,7 +3,7 @@
 ## v0.1.0 (Android version code 302)
 
 - Set the Android application version to v0.1.0.
-- Advanced Android versionCode from 301 to 302 so installs of earlier builds can upgrade in place.
+- Set the Android versionCode to the current monotonic release value so supported installs can upgrade in place.
 - Kept the Android application ID and Kotlin namespace at com.directorx.editor.
 - Updated remaining user-facing build and media-capture naming to Director X.
 
