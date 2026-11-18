@@ -258,6 +258,64 @@ class FFmpegEngine @Inject constructor(
         ) == 0
     }
 
+    /**
+     * Build a low-resolution editing proxy with FFmpeg's software-capable decode path.
+     * This is the fallback for camera sources that the device's MediaCodec decoders
+     * cannot open at their native raster/profile (including some 5.3K HEVC files).
+     * The source URI is read through the SAF adapter when it is a content:// URI.
+     */
+    suspend fun createEditingProxy(
+        inputUri: Uri,
+        outputFile: File,
+        targetHeight: Int,
+        onProgress: (Float) -> Unit = {},
+    ): Boolean = withContext(Dispatchers.IO) {
+        val violation = NativeProcessingPolicy.validateVideoUri(context, inputUri, "createEditingProxy")
+        if (violation != null) return@withContext NativeProcessingPolicy.logAndReject(violation)
+        val height = (targetHeight.coerceIn(144, 2160) / 2) * 2
+        if (height < 144) return@withContext false
+        outputFile.parentFile?.mkdirs()
+        val hasAudio = hasUsableTrack(inputUri, "audio/")
+        encodeUntilUsable(
+            label = "editing proxy",
+            outputFile = outputFile,
+            expectAudio = hasAudio,
+            onProgress = onProgress,
+        ) { encoder ->
+            buildEditingProxyArguments(
+                inputPath = ffmpegInput(inputUri),
+                outputPath = outputFile.absolutePath,
+                targetHeight = height,
+                videoEncoder = encoder.ffmpegName,
+                includeAudio = hasAudio,
+            )
+        }
+    }
+
+    /**
+     * Pure FFmpeg argument planner kept separate so proxy scaling/audio mapping
+     * can be regression-tested without requiring a native FFmpeg runtime.
+     */
+    internal fun buildEditingProxyArguments(
+        inputPath: String,
+        outputPath: String,
+        targetHeight: Int,
+        videoEncoder: String,
+        includeAudio: Boolean,
+    ): List<String> {
+        val height = (targetHeight.coerceIn(144, 2160) / 2) * 2
+        require(height >= 144)
+        require(inputPath.isNotBlank() && outputPath.isNotBlank() && videoEncoder.isNotBlank())
+        return buildList {
+            addAll(listOf("-y", "-i", inputPath, "-map", "0:v:0"))
+            if (includeAudio) addAll(listOf("-map", "0:a:0?"))
+            addAll(listOf("-vf", "scale=-2:$height:flags=lanczos"))
+            addAll(listOf("-c:v", videoEncoder, "-pix_fmt", "yuv420p"))
+            if (includeAudio) addAll(listOf("-c:a", "aac", "-b:a", "128k"))
+            addAll(listOf("-movflags", "+faststart", outputPath))
+        }
+    }
+
     suspend fun reverseClipToFile(
         inputUri: Uri,
         outputFile: File,
