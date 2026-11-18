@@ -57,6 +57,13 @@ jobs:
           chmod +x ./gradlew
           ./gradlew --version
 
+      - name: Refresh dependency freshness snapshot for one-off validation
+        run: |
+          python scripts/refresh_dependency_freshness.py --reviewed-on 2026-11-18
+          echo "DEPENDENCY_FRESHNESS_SNAPSHOT_BEGIN"
+          cat scripts/dependency_freshness_snapshot.json
+          echo "DEPENDENCY_FRESHNESS_SNAPSHOT_END"
+
       - name: Run Android unit tests
         run: ./gradlew --no-daemon --stacktrace --console=plain :app:testQaUnitTest
 
