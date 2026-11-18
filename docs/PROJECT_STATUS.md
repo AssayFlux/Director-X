@@ -117,7 +117,7 @@ Do not mechanically extend the expiry date. The expired review is a release bloc
 
 Recorded evidence at the time of audit:
 - Android unit verification: [run 41556330546](https://github.com/AssayFlux/Director-X/actions/runs/41556330546) — passed.
-- Repository hygiene: [run 41574172284](https://github.com/AssayFlux/Director-X/actions/runs/41574172284) — passed.
+- Repository hygiene on audited main: [run 41574172284](https://github.com/AssayFlux/Director-X/actions/runs/41574172284) — passed. The first PR #51 run then exposed a pre-existing README image reference to missing `assets/icon.svg`; README now points to the existing launcher PNG. The rerun is pending.
 - API 37 device/performance QA: [run 41553185619](https://github.com/AssayFlux/Director-X/actions/runs/41553185619) — cancelled.
 
 No workflow publishes an installable product APK or production release. CI may assemble temporary QA/benchmark APKs. The installable APK is built manually by the maintainer using the documented Termux workflow. The README and Termux guide should be updated whenever workflow triggers or tasks change.
