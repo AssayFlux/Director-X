@@ -433,12 +433,12 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - **Workflow truth:** Android verification runs `:app:testQaUnitTest`; device/performance QA runs lint, API 37 managed-device instrumentation and macrobenchmark on relevant pull requests; repository hygiene checks repository policy and documentation. QA workflows may create temporary test/benchmark APKs. No workflow publishes a user-installable product APK or production release.
 - **Evidence limitation:** The prior main-branch unit-test run passed, while the maintenance PR's Android unit-test run and API 37 device/performance QA are still in progress as of this register update. Repository hygiene passed. Do not call device QA passed until its run completes.
 
-### DX-BRANCH-001 — Stale maintenance branches
+### DX-BRANCH-001 — Maintenance branch count and cleanup
 
 - **Severity:** Low
-- **Status:** OPEN — CLEANUP AFTER REVIEW.
-- **Finding:** Several branches remain after their associated fixes were merged, alongside the larger unmerged splash/custom-canvas candidate.
-- **Required correction:** Compare each branch to main, preserve any unique commits, close/reconcile superseded work and delete only branches confirmed redundant. Never delete the candidate branch before its unique changes have been reviewed or safely ported.
+- **Status:** CONTROLLED — ONE ACTIVE PR BRANCH.
+- **Finding:** The current work uses only the Alpha default branch and one active implementation branch for PR #59.
+- **Required correction:** Do not create more branches for the same work. Delete the PR branch only after merge or abandonment; do not delete Alpha.
 
 ### Product capability boundaries
 
@@ -506,36 +506,37 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 
 **Product owner:** AssayFlux  
 **Product:** Director X  
-**Branch:** `Alpha` (default and only branch at the time of review)  
+**Default branch:** `Alpha`  
+**Active implementation branch:** `assayflux/5.3k-media-and-branding` — draft PR #59  
 **Base audited:** `b4dd5d71138dad6d926df6a612ed66127fff02cb`
 
-The older `main`-branch references and workflow run IDs in this register are historical. Current verification must be performed against Alpha and the maintenance branch before any issue is marked resolved.
+The older `main`-branch references and workflow run IDs in this register are historical. Current verification must be performed against Alpha and PR #59's branch before any issue is marked resolved.
 
 ### DX-MEDIA-053K-001 — 5.3K source decoding and editing is not accepted
 
 - **Severity:** Critical for the requested feature
-- **Status:** OPEN — implementation and device acceptance required
-- **Finding:** The project resolution enum currently ends at 4K. Media diagnostics can inspect actual track dimensions and query a decoder for a source format, but the current proxy path delegates source decoding to Media3 Transformer and only tries alternate Android decoders. This does not establish a software decode fallback when every device decoder rejects a 5.3K profile/raster.
-- **Impact:** Some 5.3K camera files may import and display metadata but fail during preview, scrubbing or proxy generation on devices without a decoder capable of the source's exact dimensions/profile/bit depth.
-- **Required correction:** Add an explicit source capability decision based on actual codec, profile, level, raster, frame rate, bit depth, chroma and color metadata. For unsupported native decode, implement a bounded FFmpeg software-decode proxy path with SAF URI support, cancellation, progress, storage budgeting, atomic output promotion and restart recovery. Preserve original media references and guarantee final export uses originals.
-- **Verification required:** Representative 5.3K camera corpus; native and software fallback tests; HALF/QUARTER/EIGHTH proxy dimensions; audio/timestamp/rotation/HDR checks; active cancellation; process death; low-storage behavior; concurrent playback/export/proxy stress; final output inspection; physical-device acceptance. Do not claim support before these gates pass.
+- **Status:** IMPLEMENTED IN DRAFT PR #59 — REAL-DEVICE ACCEPTANCE PENDING
+- **Finding:** PR #59 adds automatic selected-tier proxy generation for 5.3K-class and larger imports in new projects, plus an FFmpeg software-decoding fallback after Media3 attempts fail. The fallback accepts Android-reported AVC/H.264 and HEVC source tracks only.
+- **Impact:** The source path now has a software fallback for common camera codecs, but this does not prove sustained decode, audio sync, HDR behavior or memory stability for every 5.3K camera format/device.
+- **Required correction:** Validate actual codec/profile/level/raster/frame-rate/bit-depth/chroma/color metadata. Confirm the bundled FFmpeg binary's enabled decoder set and keep the native security gate open until reviewed. Preserve original media references and guarantee final export uses originals.
+- **Verification required:** Representative 5.3K camera corpus; native and software fallback tests; HALF/QUARTER/EIGHTH proxy dimensions; audio/timestamp/rotation/HDR checks; active cancellation; process death; low-storage behavior; concurrent playback/export/proxy stress; final output inspection; Moto G54 5G / Android 15 acceptance. Do not claim support before these gates pass.
 
-### DX-BRAND-ASSET-001 — supplied SVG artwork is not yet verified as in-app UI artwork
+### DX-BRAND-ASSET-001 — supplied AssayFlux SVG artwork integration
 
 - **Severity:** High
-- **Status:** ASSETS PRESENT — APP INTEGRATION UNVERIFIED
+- **Status:** INTEGRATED IN DRAFT PR #59 — DEVICE VERIFICATION PENDING
 - **Assets:** `Assets/Director-X Logo.svg` and `Assets/UI Design Texture.svg`
-- **Finding:** Both supplied assets exist in the repository. The redundant root SVG copy was removed in draft PR #59; the canonical asset remains under `Assets/`.
-- **Required correction:** Use the supplied logo and texture as the authoritative artwork for the app's own surfaces. Inspect the SVG source, dimensions, viewBox, filters, embedded resources and licensing before converting or loading them. Remove the duplicate only after confirming all references use the canonical `Assets/` path.
-- **Verification required:** App launcher/splash and approved UI-surface rendering on Android, density/scaling checks, accessibility contrast and repository duplicate validation.
+- **Finding:** Gradle packages only the two supplied SVGs as generated Android assets. The logo is used in the 1.3-second entry/exit splash and Dashboard/Settings headers; the texture is used subtly on Dashboard/Settings only. The editor workspace remains unchanged.
+- **Safety:** The local WebView renderer disables JavaScript and network loads. Both SVGs were inspected for script elements and external references; none were found.
+- **Verification required:** App build, cold-start cost, local asset rendering, density/scaling, accessibility, WebView lifecycle/memory behavior and physical-device visual acceptance.
 
 ### DX-CANVAS-002 — custom canvas dimensions are not propagated to encoder output
 
 - **Severity:** High
-- **Status:** OPEN — CONFIRMED
-- **Finding:** `Project.canvasDimensions` is defined, but export code still resolves dimensions from `config.resolution.forAspect(config.aspectRatio)`. The current project model's maximum dimension of 8192 is a validation ceiling, not an encoder support statement.
-- **Required correction:** Carry explicit canvas dimensions through project creation/edit, persistence, preview composition, export configuration, render planner, encoder-safe dimension calculation, export history and output verification. Platform presets may override the project canvas only when the user explicitly selects that preset.
-- **Verification required:** Portrait, landscape, square and non-standard canvas round trips; actual output width/height inspection; encoder capability fallback; memory/thermal behavior on physical devices.
+- **Status:** IMPLEMENTED IN DRAFT PR #59 — OUTPUT/DEVICE ACCEPTANCE PENDING
+- **Finding:** PR #59 carries validated project canvas dimensions through project creation, preview geometry, export configuration, encoder sizing, output verification/history and storage estimates. Explicit platform presets clear project-custom dimensions and remain authoritative.
+- **Required correction:** Validate exact exported dimensions for portrait, landscape, square and non-standard canvases; verify Room schema 11 and migration; inspect actual output files and encoder behavior on supported devices.
+- **Verification required:** JVM/unit tests, Room migration matrix, Android instrumentation, exported-file metadata inspection and physical-device memory/thermal checks.
 
 
 ### Implementation update — draft PR #59
