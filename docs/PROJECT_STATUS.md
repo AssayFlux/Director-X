@@ -231,3 +231,8 @@ A draft maintenance PR now carries these source changes:
 - Proxy generation now attempts an FFmpeg software-capable decode/encode fallback after Media3 hardware-decoder attempts fail. The fallback supports SAF content URIs through the existing FFmpeg input adapter and retains the existing proxy tier's target height.
 
 These are implementation changes under review, not verified acceptance. The draft PR must pass unit tests, lint and instrumentation. Real 5.3K footage, physical-device playback, cancellation, process death, storage pressure and final original-source export still require evidence. Room schema 11, splash, in-app SVG integration and native security review remain open.
+
+
+### Native security review update — 18 November 2026
+
+The expired FFmpeg review was investigated against current upstream advisories. FFmpeg 8.1.2 has additional published issues affecting the Vulkan HEVC decoder, LCL/ZLIB decoder, PNG/APNG encoders and `vf_quirc` filter. The existing native patch disables PNG/APNG encoders and the standalone ZLIB decoder, but the exact shipped AAR decoder/filter/encoder inventory has not been verified. A detailed evidence and closure plan is recorded in [the AssayFlux native media security review](NATIVE_MEDIA_SECURITY_REVIEW_2026-11-18.md). Keep the native release gate blocked; do not merely extend its expiry date.
