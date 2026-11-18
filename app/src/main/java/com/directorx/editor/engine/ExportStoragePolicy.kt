@@ -106,7 +106,7 @@ object ExportStoragePolicy {
         val visualClipCount = tracks
             .filter { it.type == TrackType.VIDEO || it.type == TrackType.OVERLAY }
             .sumOf { it.clips.size }
-        val (resolvedWidth, resolvedHeight) = config.resolution.forAspect(config.aspectRatio)
+        val (resolvedWidth, resolvedHeight) = config.outputDimensions()
         val width = if (mode == Mode.GIF) config.gifMaxWidth.coerceAtLeast(1) else resolvedWidth
         val height = if (mode == Mode.GIF) {
             (width.toLong() * resolvedHeight / resolvedWidth.coerceAtLeast(1))
