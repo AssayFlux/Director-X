@@ -533,7 +533,7 @@ The older `main`-branch references and workflow run IDs in this register are his
 - **Severity:** High
 - **Status:** ASSETS PRESENT — APP INTEGRATION UNVERIFIED
 - **Assets:** `Assets/Director-X Logo.svg` and `Assets/UI Design Texture.svg`
-- **Finding:** Both supplied assets exist in the repository. The UI texture also exists at the repository root with the same blob SHA, so the root copy is an exact duplicate.
+- **Finding:** Both supplied assets exist in the repository. The redundant root SVG copy was removed in draft PR #59; the canonical asset remains under `Assets/`.
 - **Required correction:** Use the supplied logo and texture as the authoritative artwork for the app's own surfaces. Inspect the SVG source, dimensions, viewBox, filters, embedded resources and licensing before converting or loading them. Remove the duplicate only after confirming all references use the canonical `Assets/` path.
 - **Verification required:** App launcher/splash and approved UI-surface rendering on Android, density/scaling checks, accessibility contrast and repository duplicate validation.
 
