@@ -29,6 +29,34 @@ class ExportConfigCanvasTest {
     }
 
     @Test
+    fun customProjectCanvasIsCopiedIntoExportConfiguration() {
+        val project = Project(
+            aspectRatio = AspectRatio.CUSTOM,
+            customWidth = 5312,
+            customHeight = 2988,
+        )
+
+        val config = ExportConfig().withProjectCanvas(project, AspectRatio.CUSTOM)
+
+        assertEquals(5312 to 2988, config.outputDimensions())
+    }
+
+    @Test
+    fun explicitPlatformPresetOverridesProjectCustomCanvas() {
+        val project = Project(
+            aspectRatio = AspectRatio.CUSTOM,
+            customWidth = 5312,
+            customHeight = 2988,
+        )
+        val presetConfig = ExportConfig().withPlatformPreset(PlatformPreset.YOUTUBE_4K)
+        val resolved = presetConfig.withProjectCanvas(project, AspectRatio.RATIO_16_9)
+
+        assertNull(resolved.customOutputWidth)
+        assertNull(resolved.customOutputHeight)
+        assertEquals(Resolution.UHD_4K.forAspect(AspectRatio.RATIO_16_9), resolved.outputDimensions())
+    }
+
+    @Test
     fun selectingPlatformPresetClearsProjectCustomDimensions() {
         val config = ExportConfig(
             customOutputWidth = 5312,
