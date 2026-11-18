@@ -456,3 +456,12 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - **Finding:** Two README image references pointed to `assets/icon.svg`, which does not exist in the current repository tree. The first two PR validation attempts failed at README link validation for this reason.
 - **Correction merged:** Both README image references now use the existing `app/src/main/res/mipmap-xxxhdpi/ic_launcher.png` artwork.
 - **Verification evidence:** README link/asset validation passed in repository-hygiene run [44344295278](https://github.com/AssayFlux/Director-X/actions/runs/44344295278).
+
+
+### DX-DOC-README-003 — README repository map listed a removed assets directory
+
+- **Severity:** Low
+- **Status:** CORRECTED ON MAIN.
+- **Finding:** The repository map still listed a root `assets/` directory after its last tracked icon asset had been removed. The README hero now uses the actual launcher resource under `app/src/main/res/`.
+- **Correction merged:** Removed the obsolete root `assets/` entry from the README repository map.
+- **Verification required:** The next repository-hygiene run should confirm README path and asset validation remains green.
