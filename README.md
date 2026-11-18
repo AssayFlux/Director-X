@@ -1,7 +1,7 @@
 <div align="center">
 
 <p>
-  <img src="assets/icon.svg" alt="Director X application icon" width="168" />
+  <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" alt="Director X application icon" width="168" />
 </p>
 
 # DIRECTOR X
