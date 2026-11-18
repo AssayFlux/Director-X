@@ -44,6 +44,12 @@ Sources:
 - [GitHub Advisory CVE-2026-66041](https://github.com/advisories/GHSA-frhp-m687-9g3q)
 - [ALT Linux advisory: FFmpeg through 8.1.2 PNG/APNG encoder issue](https://errata.altlinux.org/ALT-PU-2026-20098)
 
+## Additional unreviewed NVD records
+
+The existing issue register also records further FFmpeg advisories absent from `security.requiredAdvisories`: CVE-2026-64834 (RTP/ASF demuxer), CVE-2026-65704 (TY demuxer/Shorten decoder), CVE-2026-64833 (S/PDIF muxer), CVE-2026-66036 (HQDN3D filter), CVE-2026-70628 (DVB subtitle parser), CVE-2026-70631 (TIFF decoder), CVE-2026-52295, CVE-2026-52296, CVE-2026-52297, CVE-2026-107697 and CVE-2026-96611. Their exact affected functions and reachability in the bundled build have not been independently mapped here. Some may be excluded by the custom build profile; do not label all of them exploitable. Treat all as unreviewed until the AAR's actual component inventory and source reachability are proven.
+
+See the [NVD FFmpeg CPE advisory search](https://nvd.nist.gov/vuln/search?cpeFilterMode=cpe&cpeName=cpe%3A2.3%3Aa%3Affmpeg%3Affmpeg%3A3.1%3Adev%3A%2A%3A%2A%3A%2A%3A%2A%3A%2A%3A%2A%3A%2A&resultType=records) and [additional NVD FFmpeg CVE search](https://nvd.nist.gov/vuln/search?cpeFilterMode=cpe&cpeName=cpe%3A2.3%3Aa%3Affmpeg%3Affmpeg%3A0.5.4.5%3A%2A%3A%2A%3A%2A%3A%2A%3A%2A%3A%2A%3A%2A&resultType=records). The repository's issue register records the full current list and must be reconciled with the lockfile before release.
+
 ## Required closure work
 
 1. Obtain the exact FFmpeg configure transcript and generated `config.h` for the AAR's source commit and build flags.
