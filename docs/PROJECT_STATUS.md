@@ -244,4 +244,4 @@ The expired FFmpeg review was investigated against current upstream advisories. 
 - The supplied `Assets/UI Design Texture.svg` is layered subtly behind Dashboard and Settings only; the editing workspace palette/layout is unchanged.
 - The generated assets are loaded from local Android assets using the platform WebView renderer with JavaScript and network loads disabled.
 - The SVG artwork is large and path-dense. Visual quality, startup cost and memory use still need physical-device acceptance.
-- New projects enable automatic proxy editing by default for high-resolution clips. The selected proxy tier is used; the FFmpeg fallback is restricted to AVC/HEVC source tracks. Existing projects with an explicitly saved disabled setting remain user-controlled.
+- New projects enable automatic proxy editing by default for 5.3K-class and larger clips; smaller media remains user-controlled. The selected proxy tier is used; the FFmpeg fallback is restricted to AVC/HEVC source tracks. Existing projects with an explicitly saved disabled setting remain user-controlled.
