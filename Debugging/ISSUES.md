@@ -39,7 +39,7 @@ The 2026-11-03 snapshot below is retained as historical audit evidence only. Use
 
 ## Proxy video workflow
 
-The issue titles and defect descriptions below preserve the original findings. Where the current status says **SOURCE FIX MERGED**, the described defect is historical and the correction is in current `main`; the remaining verification bullets are still acceptance requirements, not proof that the original defect remains in the source.
+The issue titles and defect descriptions below preserve the original findings. Where the current status says **SOURCE FIX MERGED**, the described defect is historical and the correction is in current `Alpha`; the remaining verification bullets are still acceptance requirements, not proof that the original defect remains in the source.
 
 ### DX-PROXY-001 — Proxy cache key ignores selected resolution
 
@@ -93,7 +93,7 @@ The issue titles and defect descriptions below preserve the original findings. W
 
 ## Follow-up implementation log — 2026-11-02
 
-The following corrections were committed during the 2026-11-02 implementation sequence. The source fixes are now merged to current `main`; the latest Android unit-test suite passed, but end-to-end/instrumentation/device acceptance remains incomplete. Repository-hygiene CI alone is not sufficient to close them.
+The following corrections were committed during the 2026-11-02 implementation sequence. The source fixes are now merged into the Alpha baseline before the default-branch transition; the latest Android unit-test suite passed, but end-to-end/instrumentation/device acceptance remains incomplete. Repository-hygiene CI alone is not sufficient to close them.
 
 - **DX-PROXY-001:** Cache identity now hashes source URI plus selected `ProxyResolution`; preview cache checks and URI lookup pass the requested resolution. Added `ProxyCacheKeyTest.kt` for stable keys, resolution separation, and source separation. Commits: `3691b0b`, `170cb6f`, `f4024dd`, `4b30a01`, `885878b`, `13c1c98`, `58ed5d4`.
 - **DX-PROXY-002:** `ProxyWorkflowEngine` now reads the persisted `SettingsRepository.settings.proxyResolution` and plans/generates with that value rather than hardcoding QUARTER. Commit: `cb4ea44`.
@@ -126,7 +126,7 @@ Do not close issues based only on a successful build, a green badge, or code tha
 
 ## Audit scope and limitations
 
-This is an initial source-level review of the proxy engine, proxy workflow, background worker, and the existing proxy policy tests on the recorded `main` baseline. It is not a complete application audit, and it does not claim that the listed issues are the only defects in Director X. Re-audit the affected files and tests before implementing fixes if the branch has advanced.
+This is an initial source-level review of the proxy engine, proxy workflow, background worker, and the existing proxy policy tests on the recorded historical main baseline. It is not a complete application audit, and it does not claim that the listed issues are the only defects in Director X. Re-audit the affected files and tests before implementing fixes if the branch has advanced.
 
 ## CI follow-up — 2026-11-02
 
@@ -144,7 +144,7 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 - **Source corrections committed:** Preview selection, background batch filtering, and the EditorViewModel enqueue trigger now use `ProxyResolutionPolicy.requiresProxy(width, height)` rather than checking height alone. This prevents rotated 1920×1080 coded media from being missed by the background generation trigger or batch planner.
 - **Regression coverage added:** `ProxyResolutionPolicyTest.proxyEligibilityUsesTheLongDimensionForPortraitAndLandscapeMedia` checks landscape, portrait, 4K, square, and threshold cases.
 - **Commits:** `0cf735d`, `1c63a26`, `f0cee32`, `7ac6ce8`, `2733fd8`, `92420a4`, `f829928`.
-- **Status:** Source fix merged; current main Android unit-test suite passed. The coded-dimension contract still requires metadata/import/rotation end-to-end device verification.
+- **Status:** Source fix merged; current Alpha-baseline Android unit-test suite passed. The coded-dimension contract still requires metadata/import/rotation end-to-end device verification.
 
 
 
@@ -379,7 +379,7 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - **Regression coverage merged:** PR #55 adds tests for the resolver and construction of a valid 16:9 Project from a legacy CUSTOM default.
 - **CI finding/correction:** The first PR #53 Android verification run failed because `ProjectListViewModel.kt` lacked the import for `resolveDefaultProjectAspectRatio`. The import was added in main commit `5572f9a`; the follow-up Android verification run [44345410795](https://github.com/AssayFlux/Director-X/actions/runs/44345410795) is still running and has not yet reported a result.
 
-### DX-CANVAS-005 — Custom canvas is not end-to-end on main
+### DX-CANVAS-005 — Custom canvas is not end-to-end on the historical main baseline
 
 - **Severity:** High
 - **Status:** OPEN — CONFIRMED.
