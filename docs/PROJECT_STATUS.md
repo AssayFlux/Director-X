@@ -17,7 +17,7 @@ This is the authoritative status summary. It deliberately separates implementati
 | Custom canvas model/database | Partial foundation | Project dimensions and Room migration 10→11 exist; Room schema 11 JSON still needs generation |
 | Custom canvas creation-to-export | **Implemented in draft PR #59; not accepted** | Project creation, preview geometry and export dimensions are wired; Room schema 11, exact output-file checks and device validation remain |
 | CUSTOM global default crash | Correction and regression coverage merged | Import fixed in `5572f9a`; latest Android verification run `44349406491` is in progress |
-| AssayFlux splash | **Implemented in draft PR #59; not accepted** | 1.3-second SVG-logo splash overlay; device rendering and timing still require validation |
+| AssayFlux splash | **Implemented in draft PR #59; not accepted** | 1.3-second SVG-logo entry/exit splash overlay; device rendering and timing still require validation |
 | Room schema snapshot | Incomplete | Database version 11, tracked schema JSON only through 10; generate/inspect/commit 11 |
 | Native FFmpeg security review | **Expired release gate** | `reviewUntil=2026-10-31`; conduct new review before release |
 | CI unit tests | Current PR #59 run in progress | Check run 134991201705; no result claimed yet |
