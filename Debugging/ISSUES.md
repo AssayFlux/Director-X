@@ -3,7 +3,7 @@
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
 **Branch audited:** `main`  
 **Historical audit baseline:** `7760187420b25776c2af624aef1df6a6a34b1559` (follow-up source fixes are recorded below)  
-**Current documentation review:** 2026-11-18 against `main` at `73f704792e4572cd456723dd262f88098a5543f5` (PR #53 merged)  
+**Current documentation review:** 2026-11-18 against `main` at `1431a9ad28777f7172d1b94032b3a7c882090463` (PRs #53 and #55 merged)  
 **Register status:** Historical findings retained; current implementation and CI state are summarized below. Source fixes, automated tests, managed-device QA and physical-device acceptance are tracked separately.
 
 ## Product direction reminder — UI upgrade scope is strictly limited
@@ -370,7 +370,7 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 
 ### Repository baseline and change-control
 
-- Audited default branch: `main`, HEAD `73f704792e4572cd456723dd262f88098a5543f5`.
+- Audited default branch: `main`, HEAD `1431a9ad28777f7172d1b94032b3a7c882090463`.
 - The maintenance work for this review was merged into `main` through [PR #53](https://github.com/AssayFlux/Director-X/pull/53).
 - The branch `fix/proxy-splash-custom-canvas-2026-11-04` contains a larger, unmerged implementation candidate. Do not merge it wholesale: review each source change and run the required checks. It is not evidence that the feature is present on `main`.
 - No claim in this register should be upgraded to RESOLVED — VERIFIED without the evidence required by that issue.
@@ -382,8 +382,8 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - **Affected files:** `ProjectListViewModel.kt`, `SettingsScreen.kt`.
 - **Finding:** Settings exposed `CUSTOM` as a global default aspect ratio, but a project created from that default received no custom width or height. The `Project` model validates custom dimensions and can reject this project during creation.
 - **Correction merged:** Treat custom dimensions as project-scoped. Exclude `CUSTOM` from global default choices, display a safe 16:9 fallback for legacy persisted `CUSTOM` settings, and defensively fall back to 16:9 in project creation if an older setting still contains `CUSTOM`.
-- **Verification required:** Compile the Android app; run the new regression test for a legacy CUSTOM setting; verify project creation from both normal defaults and templates; verify custom canvas dimensions remain project-specific.
-- **CI finding/correction:** The first PR #53 Android verification run failed because `ProjectListViewModel.kt` lacked the import for `resolveDefaultProjectAspectRatio`. The import was added in main commit `5572f9a`; the full Android verification rerun is still required.
+- **Regression coverage merged:** PR #55 adds tests for the resolver and construction of a valid 16:9 Project from a legacy CUSTOM default.
+- **CI finding/correction:** The first PR #53 Android verification run failed because `ProjectListViewModel.kt` lacked the import for `resolveDefaultProjectAspectRatio`. The import was added in main commit `5572f9a`; the follow-up Android verification run [44345410795](https://github.com/AssayFlux/Director-X/actions/runs/44345410795) is still running and has not yet reported a result.
 
 ### DX-CANVAS-005 — Custom canvas is not end-to-end on main
 
@@ -391,14 +391,14 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - **Status:** OPEN — CONFIRMED.
 - **Finding:** Main has model/database/document foundations for custom dimensions, including Room version 11 and migration 10→11. It does not yet provide the complete creation-to-renderer path: custom-canvas UI and custom dimensions are not consistently carried through export configuration and final encoder sizing.
 - **Impact:** Persisted dimensions alone do not guarantee that a user can create, preview and export a custom-size project at the selected dimensions.
-- **Required correction:** Review and integrate the custom-canvas candidate in small, auditable changes. Propagate validated dimensions through project creation, document/archive round-trip, editor preview, export configuration, engine/delegate and final encoder output. Preserve preset behavior for existing projects.
+- **Required correction:** Review and integrate the custom-canvas candidate in small, auditable changes. Draft [PR #56](https://github.com/AssayFlux/Director-X/pull/56) contains the candidate, but GitHub currently reports it as dirty/non-mergeable; its branch also imports `resolveDefaultProjectAspectRatio` without defining that helper and lacks the tracked Room schema 11 snapshot. Propagate validated dimensions through project creation, document/archive round-trip, editor preview, export configuration, engine/delegate and final encoder output. Preserve preset behavior for existing projects.
 - **Verification required:** Unit tests for bounds/even dimensions and archive round-trip; UI/project creation tests; export tests that inspect actual output dimensions; regression tests for preset projects and rotated media.
 
 ### DX-SPLASH-002 — AssayFlux splash is not integrated on main
 
 - **Severity:** Medium
 - **Status:** OPEN — CONFIRMED.
-- **Finding:** Main does not contain the AssayFlux splash view and GIF resource identified during the audit. Those assets/implementation are on an unmerged candidate branch only.
+- **Finding:** Main does not contain the AssayFlux splash view and GIF resource identified during the audit. Those assets/implementation are on an unmerged candidate branch and draft [PR #56](https://github.com/AssayFlux/Director-X/pull/56) only; the PR is not mergeable yet.
 - **Required correction:** Review GIF licensing/ownership, dimensions, file size and resource handling; integrate the splash view and resource without blocking startup or breaking lifecycle/navigation. Preserve the requested white background, centered artwork and 1.3-second presentation only if the implementation's timing and exit behavior are verified.
 - **Verification required:** Build, cold-start and background/foreground tests, navigation tests, low-memory behavior and a physical-device check. Do not describe splash integration as complete on main before merge.
 
