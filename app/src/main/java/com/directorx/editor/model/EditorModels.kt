@@ -33,7 +33,7 @@ data class ProjectSnapshot(
 )
 
 data class ProxySettings(
-    val enabled: Boolean = false,
+    val enabled: Boolean = true,
     val resolution: ProxyResolution = ProxyResolution.QUARTER,
     val autoGenerate: Boolean = true
 )
