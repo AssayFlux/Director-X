@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.OpenableColumns
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
@@ -172,9 +173,18 @@ class MainActivity : ComponentActivity() {
                 }
 
                 var showAssayFluxSplash by remember { mutableStateOf(true) }
+                var exitingWithBrandSplash by remember { mutableStateOf(false) }
                 LaunchedEffect(Unit) {
                     delay(1_100L)
-                    showAssayFluxSplash = false
+                    if (!exitingWithBrandSplash) showAssayFluxSplash = false
+                }
+                BackHandler(enabled = currentRoute == "projects" && !exitingWithBrandSplash) {
+                    exitingWithBrandSplash = true
+                    showAssayFluxSplash = true
+                    lifecycleScope.launch {
+                        delay(1_300L)
+                        finish()
+                    }
                 }
 
                 CompositionLocalProvider(LocalTabletopPosture provides isTabletopPosture) {
