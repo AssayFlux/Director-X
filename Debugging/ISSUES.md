@@ -3,7 +3,7 @@
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
 **Branch audited:** `main`  
 **Historical audit baseline:** `7760187420b25776c2af624aef1df6a6a34b1559` (follow-up source fixes are recorded below)  
-**Current documentation review:** 2026-11-18 against `main` at `69fe420a1de7d7de584afcdcbdb76475735fa1ab` (maintenance fixes are being prepared separately)  
+**Current documentation review:** 2026-11-18 against `main` at `73f704792e4572cd456723dd262f88098a5543f5` (PR #53 merged)  
 **Register status:** Historical findings retained; current implementation and CI state are summarized below. Source fixes, automated tests, managed-device QA and physical-device acceptance are tracked separately.
 
 ## Product direction reminder — UI upgrade scope is strictly limited
@@ -370,18 +370,18 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 
 ### Repository baseline and change-control
 
-- Audited default branch: `main`, HEAD `69fe420a1de7d7de584afcdcbdb76475735fa1ab`.
-- The maintenance work for this review is isolated on `maintenance/consistency-and-docs-2026-11-18`; it is not yet merged into `main`.
+- Audited default branch: `main`, HEAD `73f704792e4572cd456723dd262f88098a5543f5`.
+- The maintenance work for this review was merged into `main` through [PR #53](https://github.com/AssayFlux/Director-X/pull/53).
 - The branch `fix/proxy-splash-custom-canvas-2026-11-04` contains a larger, unmerged implementation candidate. Do not merge it wholesale: review each source change and run the required checks. It is not evidence that the feature is present on `main`.
 - No claim in this register should be upgraded to RESOLVED — VERIFIED without the evidence required by that issue.
 
 ### DX-CANVAS-004 — CUSTOM is invalid as a global default aspect ratio
 
 - **Severity:** High
-- **Status:** FIX PREPARED ON MAINTENANCE BRANCH — verification pending.
+- **Status:** FIX MERGED — automated verification pending.
 - **Affected files:** `ProjectListViewModel.kt`, `SettingsScreen.kt`.
 - **Finding:** Settings exposed `CUSTOM` as a global default aspect ratio, but a project created from that default received no custom width or height. The `Project` model validates custom dimensions and can reject this project during creation.
-- **Correction prepared:** Treat custom dimensions as project-scoped. Exclude `CUSTOM` from global default choices, display a safe 16:9 fallback for legacy persisted `CUSTOM` settings, and defensively fall back to 16:9 in project creation if an older setting still contains `CUSTOM`.
+- **Correction merged:** Treat custom dimensions as project-scoped. Exclude `CUSTOM` from global default choices, display a safe 16:9 fallback for legacy persisted `CUSTOM` settings, and defensively fall back to 16:9 in project creation if an older setting still contains `CUSTOM`.
 - **Verification required:** Compile the Android app; add/run a regression test for a legacy CUSTOM setting; verify project creation from both normal defaults and templates; verify custom canvas dimensions remain project-specific. Until those checks pass, this is a prepared fix, not a verified resolution.
 
 ### DX-CANVAS-005 — Custom canvas is not end-to-end on main
@@ -429,9 +429,9 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 ### DX-CI-DOC-001 — Repository map and automation descriptions drifted
 
 - **Severity:** Low
-- **Status:** CORRECTION PREPARED ON MAINTENANCE BRANCH.
+- **Status:** CORRECTION MERGED — repository hygiene passed.
 - **Finding:** README described `src/test` and `src/androidTest` as manually run despite the workflows automating unit tests and managed-device instrumentation.
-- **Correction prepared:** README repository map now identifies the relevant workflows while retaining local execution as an option.
+- **Correction merged:** README repository map now identifies the relevant workflows while retaining local execution as an option.
 - **Workflow truth:** Android verification runs `:app:testQaUnitTest`; device/performance QA runs lint, API 37 managed-device instrumentation and macrobenchmark on relevant pull requests; repository hygiene checks repository policy and documentation. QA workflows may create temporary test/benchmark APKs. No workflow publishes a user-installable product APK or production release.
 - **Evidence limitation:** The latest recorded unit-test and repository-hygiene runs passed; the API 37 QA run was cancelled. Do not call device QA passed.
 
@@ -452,7 +452,7 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 ### DX-DOC-README-002 — README hero image pointed to a missing asset
 
 - **Severity:** Low
-- **Status:** CORRECTED ON MAINTENANCE BRANCH — repository-hygiene rerun pending.
+- **Status:** CORRECTED ON MAIN — repository hygiene passed in run [44344295278](https://github.com/AssayFlux/Director-X/actions/runs/44344295278).
 - **Finding:** Two README image references pointed to `assets/icon.svg`, which does not exist in the current repository tree. The first two PR validation attempts failed at README link validation for this reason.
 - **Correction prepared:** Both README image references now use the existing `app/src/main/res/mipmap-xxxhdpi/ic_launcher.png` artwork.
-- **Verification required:** Confirm the next repository-hygiene run passes README link/asset validation.
+- **Verification evidence:** README link/asset validation passed in repository-hygiene run [44344295278](https://github.com/AssayFlux/Director-X/actions/runs/44344295278).
