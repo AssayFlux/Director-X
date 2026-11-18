@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Assets/Director-X Logo.svg" alt="AssayFlux Pocket Host" width="100%">
+  <img src="Assets/Director-X Logo.svg" alt="Director X — Designed by AssayFlux" width="100%">
 </p>
 # DIRECTOR X
 
@@ -15,14 +15,14 @@
   <a href="https://github.com/AssayFlux/Director-X/issues">SUPPORT</a>
 </p>
 
-[![Repository checks](https://img.shields.io/github/actions/workflow/status/AssayFlux/Director-X/repository-hygiene.yml?branch=main&label=REPOSITORY%20CHECKS&logo=githubactions&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X/actions/workflows/repository-hygiene.yml)
+[![Repository checks](https://img.shields.io/github/actions/workflow/status/AssayFlux/Director-X/repository-hygiene.yml?branch=Alpha&label=REPOSITORY%20CHECKS&logo=githubactions&logoColor=white&style=for-the-badge)](https://github.com/AssayFlux/Director-X/actions/workflows/repository-hygiene.yml)
 
 [![Android](https://img.shields.io/badge/PLATFORM-ANDROID-3DDC84?logo=android&logoColor=white&style=for-the-badge)](https://developer.android.com/)
 [![Min SDK](https://img.shields.io/badge/MIN%20SDK-26-52796F?logo=android&logoColor=white&style=for-the-badge)](https://developer.android.com/about/versions)
 [![Compile / Target](https://img.shields.io/badge/COMPILE%20%2F%20TARGET-37-52796F?logo=android&logoColor=white&style=for-the-badge)](https://developer.android.com/about/versions)
 
 [![License](https://img.shields.io/github/license/AssayFlux/Director-X?label=LICENSE&style=for-the-badge)](LICENSE)
-[![Last commit](https://img.shields.io/github/last-commit/AssayFlux/Director-X/main?label=LAST%20UPDATE&logo=git&style=for-the-badge)](https://github.com/AssayFlux/Director-X/commits/main)
+[![Last commit](https://img.shields.io/github/last-commit/AssayFlux/Director-X/Alpha?label=LAST%20UPDATE&logo=git&style=for-the-badge)](https://github.com/AssayFlux/Director-X/commits/Alpha)
 
 [![Stars](https://img.shields.io/github/stars/AssayFlux/Director-X?label=STARS&style=for-the-badge)](https://github.com/AssayFlux/Director-X/stargazers)
 [![Forks](https://img.shields.io/github/forks/AssayFlux/Director-X?label=FORKS&style=for-the-badge)](https://github.com/AssayFlux/Director-X/network/members)
@@ -37,7 +37,7 @@
 
 Director X is a native Android video editor built with Kotlin and Jetpack Compose. It combines media playback, editing and export infrastructure, local project storage, and selected on-device media-intelligence tools.
 
-The interface follows a vintage darkroom direction: warm cream, paper beige, charcoal, muted taupe, brass gold and sage.
+The interface uses the supplied `Assets/Director-X Logo.svg` in the 1.3-second entry/exit splash and Dashboard/Settings headers, and `Assets/UI Design Texture.svg` as a subtle Dashboard/Settings background. Gradle packages only these two assets; the app renders them locally with Android WebView, JavaScript disabled and network loads blocked. The editing workspace retains its existing palette and layout. The visual direction is a vintage darkroom: warm cream, paper beige, charcoal, muted taupe, brass gold and sage.
 
 ## Editing toolkit
 
@@ -50,7 +50,7 @@ The interface follows a vintage darkroom direction: warm cream, paper beige, cha
 | Audio and voiceover workflows | Audio denoising (DeepFilterNet) |
 | Project files and sharing | Scene detection, stabilization and auto color |
 
-**Capability note:** A dependency or roadmap entry is not proof that every feature is available on every device. Some features require model downloads; others remain planned. See the capability registry in the source and verify features on a real device before relying on them.
+**Capability note:** A dependency or roadmap entry is not proof that every feature is available on every device. Some features require model downloads; others remain planned. 5.3K source-media playback/editing is under validation: new projects enable automatic proxies for 5.3K-class and larger source clips, and a software-decoded fallback is implemented for H.264/HEVC sources when Media3 hardware decoding fails. Real camera-footage and Android-device acceptance are still required. Do not treat the 8192-pixel custom-canvas model limit as proof of 5.3K media support. See [Project status and acceptance matrix](docs/PROJECT_STATUS.md).
 
 ## Capability status
 
@@ -265,7 +265,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for repository workflow, manual Android v
 
 - [Report a bug](https://github.com/AssayFlux/Director-X/issues/new/choose)
 - [Browse issues](https://github.com/AssayFlux/Director-X/issues)
-- [View source history](https://github.com/AssayFlux/Director-X/commits/main)
+- [View source history](https://github.com/AssayFlux/Director-X/commits/Alpha)
 
 ---
 

@@ -17,9 +17,13 @@ def local_targets(readme: str):
         r"\]\(([^)]+)\)",
         r"""(?:href|src)\s*=\s*["']([^"']+)["']""",
     )
-    for pattern in patterns:
+    for index, pattern in enumerate(patterns):
         for match in re.finditer(pattern, readme, flags=re.IGNORECASE):
-            target = match.group(1).strip().split()[0]
+            raw_target = match.group(1).strip()
+            # Markdown link destinations may be followed by an optional title;
+            # HTML href/src values are already bounded by their quote delimiters
+            # and may legitimately contain spaces in repository asset filenames.
+            target = raw_target if index == 1 else raw_target.split()[0]
             if target.startswith("<") and target.endswith(">"):
                 target = target[1:-1]
             yield target

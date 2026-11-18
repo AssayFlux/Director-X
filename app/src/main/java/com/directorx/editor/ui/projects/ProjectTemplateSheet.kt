@@ -113,6 +113,15 @@ val projectTemplates = listOf(
         aspectRatio = AspectRatio.RATIO_1_1,
         tracks = listOf(TrackType.VIDEO, TrackType.AUDIO, TrackType.TEXT),
         suggestedDurationResId = R.string.template_square_duration
+    ),
+    ProjectTemplateUI(
+        id = "custom_canvas", nameResId = R.string.template_custom_canvas_name,
+        descriptionResId = R.string.template_custom_canvas_desc,
+        category = TemplateCategory.BLANK, icon = Icons.Default.CropSquare,
+        accentColor = ClearCutAccents.Neutral,
+        aspectRatio = AspectRatio.CUSTOM,
+        tracks = listOf(TrackType.VIDEO, TrackType.AUDIO),
+        suggestedDurationResId = R.string.template_blank_duration
     )
 )
 

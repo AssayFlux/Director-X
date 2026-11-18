@@ -66,6 +66,7 @@ import com.directorx.editor.model.BatchExportSourceRange
 import com.directorx.editor.model.BatchExportStatus
 import com.directorx.editor.model.ChapterMarker
 import com.directorx.editor.model.ExportConfig
+import com.directorx.editor.model.withProjectCanvas
 import com.directorx.editor.model.requiresStreamSafeOutput
 import com.directorx.editor.model.TrackType
 import kotlinx.coroutines.CoroutineScope
@@ -592,7 +593,7 @@ class ExportDelegate(
             runCatching { outputFile.delete() }
             return false
         }
-        val requestedDimensions = config.resolution.forAspect(config.aspectRatio)
+        val requestedDimensions = config.outputDimensions()
         val safeDimensions = Media3ExportRobustnessPolicy.encoderSafeDimensions(
             requestedDimensions.first,
             requestedDimensions.second,
@@ -1073,7 +1074,7 @@ class ExportDelegate(
         val totalDurationMs = resolvedRange?.durationMs ?: projectDurationMs
         val outputAspectRatio = currentState.exportConfig.outputAspectRatio(currentState.project.aspectRatio)
         val config = currentState.exportConfig
-            .copy(aspectRatio = outputAspectRatio)
+            .withProjectCanvas(currentState.project, outputAspectRatio)
             .resolveTargetSize(totalDurationMs)
         val baseChapters = if (config.includeChapterMarkers && config.chapters.isEmpty()) {
             currentState.timelineMarkers
@@ -1383,7 +1384,7 @@ class ExportDelegate(
                     }
                     val (logicalWidth, logicalHeight) = gifLogicalScreenSize(
                         targetWidth = maxWidth,
-                        aspectRatio = configWithChapters.aspectRatio.toFloat(),
+                        aspectRatio = configWithChapters.outputDimensions().let { it.first.toFloat() / it.second },
                         sourceSizes = sourceSizes,
                     )
 
@@ -1408,7 +1409,7 @@ class ExportDelegate(
                                         if (clip == null) {
                                             frameBitmap = createGapGifFrame(
                                                 maxWidth,
-                                                configWithChapters.aspectRatio,
+                                                configWithChapters.outputDimensions().let { it.first.toFloat() / it.second },
                                             )
                                         } else {
                                             // Respect speedCurve — `timelineOffsetToSourceMs`
@@ -2962,10 +2963,10 @@ class ExportDelegate(
 
     private fun createGapGifFrame(
         maxWidth: Int,
-        aspectRatio: com.directorx.editor.model.AspectRatio
+        aspectRatio: Float
     ): android.graphics.Bitmap {
         val width = maxWidth.coerceAtLeast(1)
-        val height = (width / aspectRatio.toFloat()).roundToInt().coerceAtLeast(1)
+        val height = (width / aspectRatio.coerceAtLeast(0.1f)).roundToInt().coerceAtLeast(1)
         return android.graphics.Bitmap
             .createBitmap(width, height, android.graphics.Bitmap.Config.ARGB_8888)
             .apply { eraseColor(android.graphics.Color.BLACK) }

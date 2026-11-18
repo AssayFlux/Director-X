@@ -874,7 +874,16 @@ class EditorViewModel @Inject constructor(
                         height = h,
                         mediaVersion = mediaVersion,
                     )
-                    if (ProxyResolutionPolicy.requiresProxy(w, h)) enqueueProxyGeneration()
+                    if (
+                        ProxyResolutionPolicy.requiresAutomaticProxy(w, h) &&
+                        _state.value.proxySettings.enabled &&
+                        _state.value.proxySettings.autoGenerate
+                    ) {
+                        // Attach a proxy immediately for the editor while WorkManager
+                        // keeps the cache-generation request resilient to process loss.
+                        generateProxiesForAllClips()
+                        enqueueProxyGeneration()
+                    }
                 }
             }
             // Auto-fit on first clip: when we go from empty→populated, frame the full
@@ -2854,6 +2863,7 @@ class EditorViewModel @Inject constructor(
         if (enabled) {
             generateProxiesForAllClips()
         } else {
+            backgroundJobCoordinator.cancelProxyGeneration()
             proxyGenerationJob?.cancel()
             proxyGenerationJob = null
             proxyEngine.clearProxies()

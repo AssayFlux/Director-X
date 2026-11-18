@@ -5,6 +5,7 @@ import java.security.KeyStore
 import java.security.MessageDigest
 import java.util.Locale
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.testing.Test
 
 plugins {
@@ -22,6 +23,13 @@ fun resolveSigningSecret(vararg keys: String): String? {
 }
 
 val runtimeNoticeGeneratedDir = layout.buildDirectory.dir("generated/source/runtimeNotices")
+val assayFluxBrandAssetsDir = layout.buildDirectory.dir("generated/assets/assayfluxBrand")
+val copyAssayFluxBrandAssets by tasks.registering(Copy::class) {
+    from(rootProject.file("Assets")) {
+        include("Director-X Logo.svg", "UI Design Texture.svg")
+    }
+    into(assayFluxBrandAssetsDir)
+}
 val bundleTaskRequested = gradle.startParameter.taskNames.any { taskName ->
     taskName.substringAfterLast(':').startsWith("bundle", ignoreCase = true)
 }
@@ -164,6 +172,7 @@ android {
 
     sourceSets {
         getByName("main").java.directories.add(runtimeNoticeGeneratedDir.get().asFile.absolutePath)
+        getByName("main").assets.srcDir(assayFluxBrandAssetsDir.get().asFile)
         getByName("androidTest").assets.directories += "$projectDir/schemas"
     }
 
@@ -173,6 +182,10 @@ android {
         htmlReport = true
         sarifReport = true
     }
+}
+
+tasks.named("preBuild").configure {
+    dependsOn(copyAssayFluxBrandAssets)
 }
 
 composeCompiler {

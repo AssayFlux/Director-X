@@ -2,7 +2,7 @@ name: Android device and performance QA
 
 on:
   pull_request:
-    branches: [main]
+    branches: [Alpha]
     paths:
       - "app/**"
       - "baselineprofile/**"

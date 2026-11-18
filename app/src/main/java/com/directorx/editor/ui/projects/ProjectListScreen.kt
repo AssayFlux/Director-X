@@ -42,6 +42,7 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -55,6 +56,8 @@ import com.directorx.editor.engine.IncomingDocumentImportPreview
 import com.directorx.editor.engine.IncomingDocumentImportStatus
 import com.directorx.editor.engine.IncomingDocumentItem
 import com.directorx.editor.engine.IncomingMediaItem
+import com.directorx.editor.model.AspectRatio
+import com.directorx.editor.model.CanvasDimensions
 import com.directorx.editor.model.ExportConfig
 import com.directorx.editor.model.Project
 import com.directorx.editor.model.ProjectFilterMode
@@ -69,6 +72,8 @@ import com.directorx.editor.ui.theme.ClearCutDialogIcon
 import com.directorx.editor.ui.theme.ClearCutFilterChip
 import com.directorx.editor.ui.theme.ClearCutMetricPill
 import com.directorx.editor.ui.theme.ClearCutPrimaryButton
+import com.directorx.editor.ui.theme.AssayFluxLogo
+import com.directorx.editor.ui.theme.AssayFluxTexture
 import com.directorx.editor.ui.theme.ClearCutScreenBackground
 import com.directorx.editor.ui.theme.ClearCutSectionHeader
 import com.directorx.editor.ui.theme.ClearCutSecondaryButton
@@ -109,6 +114,10 @@ fun ProjectListScreen(
     val currentLocale = LocalConfiguration.current.locales[0]
     val hasAnyProjects = projectTotalCount > 0
     var showTemplateSheet by remember { mutableStateOf(false) }
+    var showCustomCanvasDialog by remember { mutableStateOf(false) }
+    var customCanvasWidthText by remember { mutableStateOf("1920") }
+    var customCanvasHeightText by remember { mutableStateOf("1080") }
+    var customCanvasProjectName by remember { mutableStateOf("") }
     val templateImportLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
     ) { uri ->
@@ -154,6 +163,10 @@ fun ProjectListScreen(
             .fillMaxSize()
             .testTag(ClearCutTestTags.PROJECTS_SCREEN)
     ) {
+        AssayFluxTexture(
+            modifier = Modifier.fillMaxSize(),
+            alpha = 0.045f,
+        )
         val importTemplate = { templateImportLauncher.launch(arrayOf("*/*")) }
         val showCollectionControls = projectTotalCount > 1 ||
             searchQuery.isNotBlank() ||
@@ -519,12 +532,17 @@ fun ProjectListScreen(
             ProjectTemplateSheet(
                 onTemplateSelected = { template, templateName ->
                     showTemplateSheet = false
-                    viewModel.createProject(
-                        name = if (template.id == "blank") untitledProjectName else templateName,
-                        aspectRatio = template.aspectRatio,
-                        templateId = template.id,
-                        trackTypes = template.tracks
-                    ) { id -> onProjectSelected(id) }
+                    if (template.aspectRatio == AspectRatio.CUSTOM) {
+                        customCanvasProjectName = templateName
+                        showCustomCanvasDialog = true
+                    } else {
+                        viewModel.createProject(
+                            name = if (template.id == "blank") untitledProjectName else templateName,
+                            aspectRatio = template.aspectRatio,
+                            templateId = template.id,
+                            trackTypes = template.tracks
+                        ) { id -> onProjectSelected(id) }
+                    }
                 },
                 onUserTemplateSelected = { userTemplate ->
                     showTemplateSheet = false
@@ -538,6 +556,86 @@ fun ProjectListScreen(
                 userTemplates = userTemplates,
                 onDismiss = { showTemplateSheet = false },
                 modifier = Modifier.align(Alignment.BottomCenter)
+            )
+        }
+
+        if (showCustomCanvasDialog) {
+            val fallbackName = stringResource(R.string.template_custom_canvas_name)
+            val width = customCanvasWidthText.toIntOrNull()
+            val height = customCanvasHeightText.toIntOrNull()
+            val dimensionsValid = width != null && height != null &&
+                CanvasDimensions.isValid(width, height)
+            AlertDialog(
+                onDismissRequest = { showCustomCanvasDialog = false },
+                title = {
+                    Text(
+                        text = stringResource(R.string.project_custom_canvas_title),
+                        color = LocalClearCutColors.current.text,
+                    )
+                },
+                text = {
+                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        OutlinedTextField(
+                            value = customCanvasWidthText,
+                            onValueChange = { customCanvasWidthText = it.filter(Char::isDigit).take(5) },
+                            label = { Text(stringResource(R.string.project_custom_canvas_width)) },
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number,
+                                imeAction = ImeAction.Next,
+                            ),
+                        )
+                        OutlinedTextField(
+                            value = customCanvasHeightText,
+                            onValueChange = { customCanvasHeightText = it.filter(Char::isDigit).take(5) },
+                            label = { Text(stringResource(R.string.project_custom_canvas_height)) },
+                            singleLine = true,
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number,
+                                imeAction = ImeAction.Done,
+                            ),
+                        )
+                        if (!dimensionsValid) {
+                            Text(
+                                text = stringResource(R.string.project_custom_canvas_invalid),
+                                color = MaterialTheme.colorScheme.error,
+                                style = MaterialTheme.typography.bodySmall,
+                            )
+                        }
+                    }
+                },
+                confirmButton = {
+                    TextButton(
+                        enabled = dimensionsValid,
+                        onClick = {
+                            val validWidth = width ?: return@TextButton
+                            val validHeight = height ?: return@TextButton
+                            viewModel.createProject(
+                                name = customCanvasProjectName.ifBlank { fallbackName },
+                                aspectRatio = AspectRatio.CUSTOM,
+                                templateId = "custom_canvas",
+                                customWidth = validWidth,
+                                customHeight = validHeight,
+                                trackTypes = listOf(
+                                    com.directorx.editor.model.TrackType.VIDEO,
+                                    com.directorx.editor.model.TrackType.AUDIO,
+                                ),
+                            ) { id -> onProjectSelected(id) }
+                            showCustomCanvasDialog = false
+                        },
+                    ) {
+                        Text(stringResource(R.string.project_custom_canvas_create))
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showCustomCanvasDialog = false }) {
+                        Text(stringResource(R.string.cancel))
+                    }
+                },
+                containerColor = LocalClearCutColors.current.panelHighest,
+                titleContentColor = LocalClearCutColors.current.text,
+                textContentColor = LocalClearCutColors.current.subtext,
+                shape = RoundedCornerShape(Radius.xxl),
             )
         }
 
@@ -691,11 +789,9 @@ private fun ProjectHomeHero(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Default.Movie,
-                contentDescription = null,
-                tint = ClearCutAccents.Mauve,
-                modifier = Modifier.size(24.dp)
+            AssayFluxLogo(
+                modifier = Modifier.size(width = 52.dp, height = 32.dp),
+                contentDescription = stringResource(R.string.app_name),
             )
             Spacer(Modifier.width(Spacing.sm))
             Text(

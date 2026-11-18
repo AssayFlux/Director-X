@@ -84,6 +84,7 @@ class TrackedFilesAuditTest {
             "docs/models.md",
             "docs/DOCUMENTATION_BASELINE.md",
             "docs/PROJECT_STATUS.md",
+            "docs/NATIVE_MEDIA_SECURITY_REVIEW_2026-11-18.md",
             // These are tracked, public engineering status documents; other planning notes remain local.
             // Dependency evidence is separately time-bounded by DependencyFreshnessTest.
             "docs/privacy-policy.md",

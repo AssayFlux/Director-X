@@ -28,6 +28,22 @@ class ProxyArtifactCommitPolicyTest {
     }
 
     @Test
+    fun nonEmptyTemporaryProxyOutputCanBePromotedAfterSuccessfulEncode() {
+        val file = File(temporaryFolder.root, "proxy_tmp_0123456789abcdef.mp4")
+        file.writeBytes(byteArrayOf(1, 2, 3))
+
+        assertTrue(isUsableProxyTemporaryArtifact(file))
+    }
+
+    @Test
+    fun emptyTemporaryProxyOutputCannotBePromoted() {
+        val file = File(temporaryFolder.root, "proxy_tmp_0123456789abcdef.mp4")
+        file.createNewFile()
+
+        assertFalse(isUsableProxyTemporaryArtifact(file))
+    }
+
+    @Test
     fun emptyCommittedProxyIsNotAccepted() {
         val file = File(temporaryFolder.root, "proxy_0123456789abcdef.mp4")
         file.createNewFile()

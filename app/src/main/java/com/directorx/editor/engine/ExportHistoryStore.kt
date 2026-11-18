@@ -371,7 +371,7 @@ internal fun requestedExportContract(
     val duration = expectedDurationMs.takeIf { it > 0L }
     return when (kind) {
         ExportOutputKind.VIDEO -> {
-            val (width, height) = config.resolution.forAspect(config.aspectRatio)
+            val (width, height) = config.outputDimensions()
             val safe = Media3ExportRobustnessPolicy.encoderSafeDimensions(width, height)
             base.copy(
                 requestedVideoMimeType = (if (config.transparentBackground) VideoCodec.VP9 else config.codec).mimeType,

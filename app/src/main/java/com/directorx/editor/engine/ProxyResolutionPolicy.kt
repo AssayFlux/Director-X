@@ -35,6 +35,10 @@ object ProxyResolutionPolicy {
     fun requiresProxy(codedWidth: Int, codedHeight: Int): Boolean =
         maxOf(codedWidth, codedHeight) > REFERENCE_HEIGHT
 
+    /** Auto-proxy only 5.3K-class and larger sources; smaller media stays user-controlled. */
+    fun requiresAutomaticProxy(codedWidth: Int, codedHeight: Int): Boolean =
+        requiresProxy(codedWidth, codedHeight) && maxOf(codedWidth, codedHeight) >= 4096
+
     /** The displayed height of a frame stored [codedWidth] by [codedHeight] with [rotationDegrees]. */
     fun displayHeight(codedWidth: Int, codedHeight: Int, rotationDegrees: Int): Int {
         if (codedWidth <= 0 || codedHeight <= 0) return 0

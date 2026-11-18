@@ -1,5 +1,8 @@
 # Build Director X in Termux
 
+**Maintainer:** AssayFlux  
+**Default branch:** `Alpha`
+
 This guide documents the maintainer's manual, installable Android APK build workflow. GitHub Actions runs Android unit tests on relevant pushes/pull requests and runs lint, API 37 managed-device instrumentation, and macrobenchmark QA on relevant pull requests. Those CI jobs may create temporary test APKs, but they do not publish a user-installable debug/release APK. The maintainer builds installable APKs manually.
 
 > **Important:** Android SDK/Gradle builds on Android depend on the host toolchain. A normal desktop Linux SDK installation is not automatically executable on Android's Bionic environment. Use a Termux-compatible Android SDK/build-tools installation (for example, one supplied by a compatible Android IDE/build environment) and confirm that its tools actually execute before attempting a full build. Do not assume that installing the `android-tools` package alone provides the Android SDK.
@@ -69,7 +72,7 @@ If your SDK manager is compatible with Termux, install the required packages and
 ## 3. Clone the repository
 
 ```bash
-git clone https://github.com/AssayFlux/Director-X.git
+git clone --branch Alpha https://github.com/AssayFlux/Director-X.git
 cd Director-X
 chmod +x gradlew
 ```
@@ -79,8 +82,8 @@ For an existing checkout:
 ```bash
 cd ~/Director-X
 git fetch origin
-git switch main
-git pull --ff-only origin main
+git switch Alpha
+git pull --ff-only origin Alpha
 ```
 
 ## 4. Configure the local SDK path

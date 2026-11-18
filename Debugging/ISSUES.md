@@ -1,40 +1,34 @@
 # Director X — Debugging & Issue Register
 
+**Product owner:** AssayFlux  
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
-**Branch audited:** `main`  
-**Historical audit baseline:** `7760187420b25776c2af624aef1df6a6a34b1559` (follow-up source fixes are recorded below)  
-**Current documentation review:** 2026-11-18 against `main` at `58ba5ccc712035fd53da687b3590e5fd2c92bf00` (PRs #53 and #55 merged)  
-**Register status:** Historical findings retained; current implementation and CI state are summarized below. Source fixes, automated tests, managed-device QA and physical-device acceptance are tracked separately.
+**Default branch:** `Alpha` at `b4dd5d71138dad6d926df6a612ed66127fff02cb`  
+**Active implementation:** `assayflux/5.3k-media-and-branding` — [draft PR #59](https://github.com/AssayFlux/Director-X/pull/59), head `f5570fea5287acb297691decf8c08249ba904788`  
+**Review date:** 18 November 2026
 
-## Product direction reminder — UI upgrade scope is strictly limited
+This register distinguishes historical findings, current source corrections, automated test results, managed-device QA and physical-device acceptance. PR #59 is still a draft and is not merged.
 
-> **Do not forget or expand this direction:** The approved UI modernization scope is exactly the Dashboard and four Settings category views. These are the only UI surfaces in that earlier UI upgrade; the current task is documentation-only.
+## Product direction and authorized scope
 
-- The intended direction is a clearer, modernized hierarchy while preserving the Director X vintage/cream visual identity. Use the existing Jetpack Compose / Material 3 architecture; do not treat this note as authorization for new UI code changes.
-- **Preserve the existing icon style exactly.** Do not replace, redraw, restyle, or migrate the current Material filled icon family (`Icons.Default` / `Icons.Filled`) to outlined, line-art, duotone, thin-stroke, or another icon catalogue. Keep existing icon choices and their recognizable visual treatment unless the user explicitly approves a change.
-- Preserve the existing Director X cream/vintage visual identity and established palette unless the user approves a deliberate adjustment.
-- Keep any future visual refinement aligned with the approved design system; do not apply a generic redesign that conflicts with the existing identity.
-- Do **not** redesign or modify the video editor, timeline, preview/player, media import, project creation flow, templates, export flow, playback, proxy workflow, AI features, billing, navigation outside the five named screens, or any other application screen/function.
-- Do not refactor unrelated code, rename features, change behavior, remove controls, or alter settings semantics as part of this UI task.
-- Keep existing functionality, settings values, persistence, callbacks, and navigation behavior intact. UI-only changes must be isolated and reviewed.
-- Before implementation, inspect the current Dashboard and Settings source/layout files and map each supplied screenshot to its corresponding screen. Record the exact in-scope files before editing.
-- After implementation, review the diff and confirm that only the Dashboard and four Settings UI surfaces (plus strictly necessary UI resources/tests) changed. If an unrelated file appears in the diff, stop and explain why before proceeding.
-- This is a scope reminder, not authorization to begin implementation before the catalogue/design direction is agreed.
+- All current product-facing branding must identify **Director X — Designed by AssayFlux**. Use the supplied `Assets/Director-X Logo.svg` and `Assets/UI Design Texture.svg`; do not introduce another product identity or third-party brand treatment.
+- Use the logo in the 1.3-second entry/exit splash and Dashboard/Settings headers. Use the texture subtly on Dashboard and Settings only.
+- Preserve the existing color system and icon style. The editing workspace, timeline, preview/player, import, export and editor controls are outside this UI change.
+- Keep Dashboard and Settings navigation/functionality intact. This is a focused layout/artwork integration, not a general redesign.
+- Preserve all legally required upstream license and attribution notices. Legal provenance is not product branding and must not be removed to make the app appear wholly dependency-free.
+- 5.3K source-media support is a required product goal. Prefer automatic selected-tier proxies for 5.3K-class sources and preserve original media for final export.
 
-This scope restriction takes precedence over broader redesign ideas or previous project suggestions.
+## Current repository snapshot — 2026-11-18
 
-This register tracks reproducible source-level findings, their impact, the proposed correction, and the evidence required to close each item. A source inspection is not a substitute for Android device testing.
+- **Default branch:** `Alpha`; its current baseline is `b4dd5d71138dad6d926df6a612ed66127fff02cb`.
+- **Active draft:** PR #59 contains custom canvas end-to-end wiring, 5.3K-class proxy handling, AVC/HEVC software fallback, AssayFlux SVG artwork integration, splash, cancellation improvements and refreshed documentation.
+- **Branch discipline:** only Alpha plus the single active PR branch should be maintained. Do not create additional branches for the same work. Delete the PR branch only after the work is merged or abandoned.
+- **CI:** latest-head Android verification, repository hygiene and API 37 QA must all complete successfully. Earlier cancelled/in-progress run IDs are not evidence of a pass.
+- **Room:** database version 11 and migration 10→11 exist, but the schema 11 snapshot still needs to be generated, inspected and committed.
+- **Native media security:** FFmpeg review expiry is 2026-10-31. The release gate remains blocked pending component inventory, advisory reachability review and reproducible native build evidence.
+- **Device acceptance:** not performed by this repository review. Moto G54 5G / Android 15 remains the manual target for 5.3K footage, proxy playback, export, memory/storage and splash visual checks.
+- **Export scope:** 8K output is not implemented; custom canvas dimensions up to 8192 do not prove that an encoder can produce 8K output.
 
-## Current repository snapshot — 2026-11-03
-
-- **Main source baseline:** `1a3b7b8fe6a744780bbe202c07087e0eac5add2f`.
-- **Merged proxy reliability work:** PR [#47](https://github.com/AssayFlux/Director-X/pull/47) (restart-safe temporary artifacts), [#48](https://github.com/AssayFlux/Director-X/pull/48) (legacy cache-key namespace invalidation), and [#49](https://github.com/AssayFlux/Director-X/pull/49) (Transformer cancellation fence) are all merged.
-- **Android unit tests:** main-branch run [41556330546](https://github.com/AssayFlux/Director-X/actions/runs/41556330546) completed successfully for this main commit.
-- **Repository hygiene:** main-branch run [41556330569](https://github.com/AssayFlux/Director-X/actions/runs/41556330569) completed successfully.
-- **API 37 device/performance QA:** PR run [41553185619](https://github.com/AssayFlux/Director-X/actions/runs/41553185619) was cancelled; it is not a passing device-test result.
-- **Physical-device testing:** not performed by this repository audit. The user's Moto G54 5G / Android 15 remains the intended manual acceptance device.
-
-The original `OPEN` / `IN PROGRESS` labels below describe the state when each finding was first recorded. For proxy implementation status, use the merged-source and current CI evidence above plus the remaining acceptance gates in the 2026-11-03 proxy section. Do not equate merged source or passing JVM tests with completed end-to-end device validation.
+The 2026-11-03 snapshot below is retained as historical audit evidence only. Use the 2026-11-18 snapshot above for current branch and CI state.
 
 ## Status definitions
 
@@ -45,7 +39,7 @@ The original `OPEN` / `IN PROGRESS` labels below describe the state when each fi
 
 ## Proxy video workflow
 
-The issue titles and defect descriptions below preserve the original findings. Where the current status says **SOURCE FIX MERGED**, the described defect is historical and the correction is in current `main`; the remaining verification bullets are still acceptance requirements, not proof that the original defect remains in the source.
+The issue titles and defect descriptions below preserve the original findings. Where the current status says **SOURCE FIX MERGED**, the described defect is historical and the correction is in current `Alpha`; the remaining verification bullets are still acceptance requirements, not proof that the original defect remains in the source.
 
 ### DX-PROXY-001 — Proxy cache key ignores selected resolution
 
@@ -99,7 +93,7 @@ The issue titles and defect descriptions below preserve the original findings. W
 
 ## Follow-up implementation log — 2026-11-02
 
-The following corrections were committed during the 2026-11-02 implementation sequence. The source fixes are now merged to current `main`; the latest Android unit-test suite passed, but end-to-end/instrumentation/device acceptance remains incomplete. Repository-hygiene CI alone is not sufficient to close them.
+The following corrections were committed during the 2026-11-02 implementation sequence. The source fixes are now merged into the Alpha baseline before the default-branch transition; the latest Android unit-test suite passed, but end-to-end/instrumentation/device acceptance remains incomplete. Repository-hygiene CI alone is not sufficient to close them.
 
 - **DX-PROXY-001:** Cache identity now hashes source URI plus selected `ProxyResolution`; preview cache checks and URI lookup pass the requested resolution. Added `ProxyCacheKeyTest.kt` for stable keys, resolution separation, and source separation. Commits: `3691b0b`, `170cb6f`, `f4024dd`, `4b30a01`, `885878b`, `13c1c98`, `58ed5d4`.
 - **DX-PROXY-002:** `ProxyWorkflowEngine` now reads the persisted `SettingsRepository.settings.proxyResolution` and plans/generates with that value rather than hardcoding QUARTER. Commit: `cb4ea44`.
@@ -132,7 +126,7 @@ Do not close issues based only on a successful build, a green badge, or code tha
 
 ## Audit scope and limitations
 
-This is an initial source-level review of the proxy engine, proxy workflow, background worker, and the existing proxy policy tests on the recorded `main` baseline. It is not a complete application audit, and it does not claim that the listed issues are the only defects in Director X. Re-audit the affected files and tests before implementing fixes if the branch has advanced.
+This is an initial source-level review of the proxy engine, proxy workflow, background worker, and the existing proxy policy tests on the recorded historical main baseline. It is not a complete application audit, and it does not claim that the listed issues are the only defects in Director X. Re-audit the affected files and tests before implementing fixes if the branch has advanced.
 
 ## CI follow-up — 2026-11-02
 
@@ -150,7 +144,7 @@ This is an initial source-level review of the proxy engine, proxy workflow, back
 - **Source corrections committed:** Preview selection, background batch filtering, and the EditorViewModel enqueue trigger now use `ProxyResolutionPolicy.requiresProxy(width, height)` rather than checking height alone. This prevents rotated 1920×1080 coded media from being missed by the background generation trigger or batch planner.
 - **Regression coverage added:** `ProxyResolutionPolicyTest.proxyEligibilityUsesTheLongDimensionForPortraitAndLandscapeMedia` checks landscape, portrait, 4K, square, and threshold cases.
 - **Commits:** `0cf735d`, `1c63a26`, `f0cee32`, `7ac6ce8`, `2733fd8`, `92420a4`, `f829928`.
-- **Status:** Source fix merged; current main Android unit-test suite passed. The coded-dimension contract still requires metadata/import/rotation end-to-end device verification.
+- **Status:** Source fix merged; current Alpha-baseline Android unit-test suite passed. The coded-dimension contract still requires metadata/import/rotation end-to-end device verification.
 
 
 
@@ -207,11 +201,9 @@ The source-level fixes for resolution-specific cache identity, saved background 
 ### DX-PROJECT-001 — Custom canvas dimensions are only partially propagated
 
 - **Severity:** High
-- **Status:** IN PROGRESS — model and project-document persistence exist; end-to-end UI, database, preview and export behavior still require verification.
-- **Confirmed implementation:** `Project.kt` contains `customWidth`, `customHeight`, `AspectRatio.CUSTOM`, validation through `CanvasDimensions`, and a computed `canvasDimensions` property. `ProjectDocument.kt` writes and reads the custom dimensions.
-- **Correction to previous finding:** It is inaccurate to say custom dimensions are absent from the project model or project-document serializer. Those foundations are already present and must be preserved.
-- **Remaining investigation and work:** Confirm the project-creation/edit UI; Room entity/schema/migration coverage; autosave and reopen; archive/import; templates; preview/crop sizing; and actual export renderer dimensions. `ExportConfig.kt` still has independent preset `resolution` and `aspectRatio` fields, so verify how the project canvas dimensions reach the renderer and how platform presets intentionally override them.
-- **Verification required:** Legacy project round trips; custom portrait, landscape and square dimensions; invalid/odd/boundary values; database migration tests; preview dimension assertions; and exported-file dimension inspection. Do not duplicate existing model/document fields or mark this resolved from source presence alone.
+- **Status:** IMPLEMENTED IN DRAFT PR #59 — acceptance pending.
+- **Confirmed implementation:** `Project.kt` and `ProjectDocument.kt` retain custom width/height and validation. PR #59 adds custom dimensions to project creation, preview geometry, `ExportConfig`, encoder sizing and output-dimension verification. Explicit platform presets remain authoritative and clear project-custom export dimensions.
+- **Remaining acceptance:** Generate/commit Room schema 11; test autosave/reopen, archive/import and templates; inspect actual output-file dimensions for custom portrait, landscape, square and 5.3K-sized canvases; validate physical-device behavior. Do not equate configuration propagation with proof that every device encoder supports every requested output size.
 
 ## Dashboard redesign — historical implementation log (2026-11-02)
 
@@ -299,22 +291,22 @@ The source-level fixes for resolution-specific cache identity, saved background 
 ### DX-CANVAS-001 — Custom dimensions cannot be selected during project creation
 
 - **Severity:** High
-- **Status:** OPEN — CONFIRMED
+- **Status:** IMPLEMENTED IN DRAFT PR #59 — NOT ACCEPTED
 - **Affected files:** `ui/projects/ProjectListViewModel.kt`, `ui/projects/ProjectListScreen.kt`, `ui/projects/ProjectTemplateSheet.kt`
-- **Finding:** The current `createProject` API accepts aspect ratio, frame rate, and preset resolution only. It does not accept custom width/height; template creation copies the template's preset ratio/resolution only.
-- **Impact:** The model supports custom canvases, but the normal project-creation workflow cannot create one.
-- **Required correction:** Add validated custom width/height entry to the existing project setup path, propagate values through the ViewModel and project constructor, and define sensible defaults when switching between preset and custom modes. Keep the user's existing project creation/navigation behavior intact.
-- **Verification:** UI tests for valid/invalid dimensions, mode switching, project creation and reopening; test tags/accessibility and small-screen layout.
+- **Finding:** Draft PR #59 adds a Custom Canvas project template, width/height entry, validation and ViewModel-to-Project propagation.
+- **Impact:** The source path is now present in the draft, but UI behavior has not yet passed Android tests or physical-device checks.
+- **Required correction:** Verify valid/invalid input, keyboard behavior, accessibility, small-screen layout, project creation/reopen and project-document round trips. Generate and commit Room schema 11 from the configured Room/KSP build.
+- **Verification:** Android unit tests, UI/instrumentation coverage, Room migration test, archive/autosave round trip and device review.
 
 ### DX-CANVAS-002 — Custom canvas dimensions are not resolved by export configuration
 
 - **Severity:** Critical
-- **Status:** OPEN — CONFIRMED
-- **Affected files:** `model/ExportConfig.kt`, `ui/export/ExportSheet.kt`, export renderer call sites (to be traced before edits)
-- **Finding:** `ExportSheet` calculates output dimensions using `config.resolution.forAspect(outputAspectRatio)`. `ExportConfig` has no explicit custom width/height and its output aspect-ratio helper returns a ratio, not the project's validated canvas dimensions.
-- **Impact:** A custom project canvas can be silently exported using a preset resolution rather than its requested pixel dimensions.
-- **Required correction:** Define one authoritative output-dimensions resolver that distinguishes (a) project-canvas export from (b) explicit platform/delivery presets. Carry the resolved width and height through preview, export planning, renderer configuration, bitrate/codec capability checks, and metadata. Do not let a preset override custom dimensions unless the user explicitly selects that delivery preset.
-- **Verification:** Assert exact width/height at the final renderer boundary for landscape, portrait, square and nonstandard valid dimensions; verify platform presets still produce their documented sizes and legacy projects remain unchanged.
+- **Status:** IMPLEMENTED IN DRAFT PR #59 — NOT ACCEPTED
+- **Affected files:** `model/ExportConfig.kt`, `ui/editor/PreviewPanel.kt`, `ui/editor/ExportDelegate.kt`, `engine/VideoEngine.kt`, `engine/ExportStoragePolicy.kt`, `engine/ExportHistoryStore.kt`
+- **Finding:** Draft PR #59 adds explicit custom output width/height to ExportConfig and uses them in preview geometry, smart-crop ratio, encoder-safe renderer sizing, output verification/history and storage estimates. Selecting a platform preset clears the project custom dimensions.
+- **Impact:** The source path now carries the custom canvas dimensions to the encoder boundary, but actual output files have not yet been inspected.
+- **Required correction:** Verify exact exported width/height for portrait, landscape, square and nonstandard dimensions; confirm encoder-safe rounding, bitrate estimates, platform preset overrides and legacy project behavior. Keep Room schema 11 and migration validation as separate acceptance gates.
+- **Verification:** Unit tests, Android instrumentation, exported-file metadata inspection and physical-device thermal/memory checks.
 
 ### DX-CANVAS-003 — Custom dimensions lack end-to-end persistence and migration regression coverage
 
@@ -385,7 +377,7 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - **Regression coverage merged:** PR #55 adds tests for the resolver and construction of a valid 16:9 Project from a legacy CUSTOM default.
 - **CI finding/correction:** The first PR #53 Android verification run failed because `ProjectListViewModel.kt` lacked the import for `resolveDefaultProjectAspectRatio`. The import was added in main commit `5572f9a`; the follow-up Android verification run [44345410795](https://github.com/AssayFlux/Director-X/actions/runs/44345410795) is still running and has not yet reported a result.
 
-### DX-CANVAS-005 — Custom canvas is not end-to-end on main
+### DX-CANVAS-005 — Custom canvas is not end-to-end on the historical main baseline
 
 - **Severity:** High
 - **Status:** OPEN — CONFIRMED.
@@ -394,19 +386,20 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - **Required correction:** Review and integrate the custom-canvas candidate in small, auditable changes. Draft [PR #56](https://github.com/AssayFlux/Director-X/pull/56) contains the candidate, but GitHub currently reports it as dirty/non-mergeable; its branch also imports `resolveDefaultProjectAspectRatio` without defining that helper and lacks the tracked Room schema 11 snapshot. Propagate validated dimensions through project creation, document/archive round-trip, editor preview, export configuration, engine/delegate and final encoder output. Preserve preset behavior for existing projects.
 - **Verification required:** Unit tests for bounds/even dimensions and archive round-trip; UI/project creation tests; export tests that inspect actual output dimensions; regression tests for preset projects and rotated media.
 
-### DX-SPLASH-002 — AssayFlux splash is not integrated on main
+### DX-SPLASH-002 — AssayFlux SVG splash integration
 
 - **Severity:** Medium
-- **Status:** OPEN — CONFIRMED.
-- **Finding:** Main does not contain the AssayFlux splash view and GIF resource identified during the audit. Those assets/implementation are on an unmerged candidate branch and draft [PR #56](https://github.com/AssayFlux/Director-X/pull/56) only; the PR is not mergeable yet.
-- **Required correction:** Review GIF licensing/ownership, dimensions, file size and resource handling; integrate the splash view and resource without blocking startup or breaking lifecycle/navigation. Preserve the requested white background, centered artwork and 1.3-second presentation only if the implementation's timing and exit behavior are verified.
-- **Verification required:** Build, cold-start and background/foreground tests, navigation tests, low-memory behavior and a physical-device check. Do not describe splash integration as complete on main before merge.
+- **Status:** IMPLEMENTED IN DRAFT PR #59 — NOT ACCEPTED.
+- **Finding:** Draft PR #59 packages the supplied `Assets/Director-X Logo.svg` and displays it in a white, centered 1.3-second Compose entry/exit splash overlay. It does not use the previously proposed GIF.
+- **Required correction:** Validate the WebView SVG renderer, asset packaging, cold-start cost, lifecycle/background behavior and accessibility. Preserve the requested 1.3-second presentation and verify it on a physical device.
+- **Verification required:** Android build, cold-start and background/foreground tests, navigation tests, low-memory behavior and physical-device visual/performance checks. Do not mark the splash accepted before these pass.
 
 ### DX-PROXY-ACCEPTANCE-001 — Proxy source fixes are not full acceptance
 
 - **Severity:** Critical
 - **Status:** OPEN — DEVICE / END-TO-END ACCEPTANCE PENDING.
 - **Merged foundations:** PRs #47, #48 and #49 address restart-safe temporary artifacts, cache-key namespace invalidation and Transformer cancellation fencing.
+- **PR #59 implementation:** Adds automatic selected-tier proxy generation for 5.3K-class and larger sources in new projects, an AVC/HEVC FFmpeg software-decoding fallback after Media3 failure, temporary-artifact validation and WorkManager cancellation when proxy editing is disabled.
 - **Still required:** Generate and inspect HALF, QUARTER and EIGHTH proxies from real high-resolution camera footage; prove selected-tier propagation through the actual WorkManager path; cancel during active transcoding; stress playback + export + proxy concurrently; kill/restart the process during work; exercise storage pressure and cache cleanup; verify exports always read original media rather than proxy media; complete acceptance on the target Moto G54 5G / Android 15.
 - **Fixture limitation:** The existing 320×240 trim fixture cannot prove high-resolution tier behavior.
 - **Closure rule:** A merged implementation or passing JVM suite is not a substitute for the listed end-to-end and physical-device evidence.
@@ -441,12 +434,12 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - **Workflow truth:** Android verification runs `:app:testQaUnitTest`; device/performance QA runs lint, API 37 managed-device instrumentation and macrobenchmark on relevant pull requests; repository hygiene checks repository policy and documentation. QA workflows may create temporary test/benchmark APKs. No workflow publishes a user-installable product APK or production release.
 - **Evidence limitation:** The prior main-branch unit-test run passed, while the maintenance PR's Android unit-test run and API 37 device/performance QA are still in progress as of this register update. Repository hygiene passed. Do not call device QA passed until its run completes.
 
-### DX-BRANCH-001 — Stale maintenance branches
+### DX-BRANCH-001 — Maintenance branch count and cleanup
 
 - **Severity:** Low
-- **Status:** OPEN — CLEANUP AFTER REVIEW.
-- **Finding:** Several branches remain after their associated fixes were merged, alongside the larger unmerged splash/custom-canvas candidate.
-- **Required correction:** Compare each branch to main, preserve any unique commits, close/reconcile superseded work and delete only branches confirmed redundant. Never delete the candidate branch before its unique changes have been reviewed or safely ported.
+- **Status:** CONTROLLED — ONE ACTIVE PR BRANCH.
+- **Finding:** The current work uses only the Alpha default branch and one active implementation branch for PR #59.
+- **Required correction:** Do not create more branches for the same work. Delete the PR branch only after merge or abandonment; do not delete Alpha.
 
 ### Product capability boundaries
 
@@ -508,3 +501,66 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - **Finding:** Replacing historical version strings with the current app version made the event version and current-device version identical, so the test incorrectly expected a “Version it happened in” line that production code correctly omits for same-version reports.
 - **Correction:** Keep the event version at the current release fixture `0.1.0`; model an upgraded install with `0.1.1` only as a simulated test value, and assert that the prior event version is shown only when it differs.
 - **Verification:** Rerun [44351352630](https://github.com/AssayFlux/Director-X/actions/runs/44351352630).
+
+
+## Current Alpha refresh — 18 November 2026
+
+**Product owner:** AssayFlux  
+**Product:** Director X  
+**Default branch:** `Alpha`  
+**Active implementation branch:** `assayflux/5.3k-media-and-branding` — draft PR #59  
+**Base audited:** `b4dd5d71138dad6d926df6a612ed66127fff02cb`
+
+The older `main`-branch references and workflow run IDs in this register are historical. Current verification must be performed against Alpha and PR #59's branch before any issue is marked resolved.
+
+### DX-MEDIA-053K-001 — 5.3K source decoding and editing is not accepted
+
+- **Severity:** Critical for the requested feature
+- **Status:** IMPLEMENTED IN DRAFT PR #59 — REAL-DEVICE ACCEPTANCE PENDING
+- **Finding:** PR #59 adds automatic selected-tier proxy generation for 5.3K-class and larger imports in new projects, plus an FFmpeg software-decoding fallback after Media3 attempts fail. The fallback accepts Android-reported AVC/H.264 and HEVC source tracks only.
+- **Impact:** The source path now has a software fallback for common camera codecs, but this does not prove sustained decode, audio sync, HDR behavior or memory stability for every 5.3K camera format/device.
+- **Required correction:** Validate actual codec/profile/level/raster/frame-rate/bit-depth/chroma/color metadata. Confirm the bundled FFmpeg binary's enabled decoder set and keep the native security gate open until reviewed. Preserve original media references and guarantee final export uses originals.
+- **Verification required:** Representative 5.3K camera corpus; native and software fallback tests; HALF/QUARTER/EIGHTH proxy dimensions; audio/timestamp/rotation/HDR checks; active cancellation; process death; low-storage behavior; concurrent playback/export/proxy stress; final output inspection; Moto G54 5G / Android 15 acceptance. Do not claim support before these gates pass.
+
+### DX-BRAND-ASSET-001 — supplied AssayFlux SVG artwork integration
+
+- **Severity:** High
+- **Status:** INTEGRATED IN DRAFT PR #59 — DEVICE VERIFICATION PENDING
+- **Assets:** `Assets/Director-X Logo.svg` and `Assets/UI Design Texture.svg`
+- **Finding:** Gradle packages only the two supplied SVGs as generated Android assets. The logo is used in the 1.3-second entry/exit splash and Dashboard/Settings headers; the texture is used subtly on Dashboard/Settings only. The editor workspace remains unchanged.
+- **Safety:** The local WebView renderer disables JavaScript and network loads. Both SVGs were inspected for script elements and external references; none were found.
+- **Verification required:** App build, cold-start cost, local asset rendering, density/scaling, accessibility, WebView lifecycle/memory behavior and physical-device visual acceptance.
+
+### DX-CANVAS-002 — custom canvas dimensions are not propagated to encoder output
+
+- **Severity:** High
+- **Status:** IMPLEMENTED IN DRAFT PR #59 — OUTPUT/DEVICE ACCEPTANCE PENDING
+- **Finding:** PR #59 carries validated project canvas dimensions through project creation, preview geometry, export configuration, encoder sizing, output verification/history and storage estimates. Explicit platform presets clear project-custom dimensions and remain authoritative.
+- **Required correction:** Validate exact exported dimensions for portrait, landscape, square and non-standard canvases; verify Room schema 11 and migration; inspect actual output files and encoder behavior on supported devices.
+- **Verification required:** JVM/unit tests, Room migration matrix, Android instrumentation, exported-file metadata inspection and physical-device memory/thermal checks.
+
+
+### Implementation update — draft PR #59
+
+- DX-MEDIA-053K-001: FFmpeg software-decoded proxy fallback has been added after Media3's available hardware-decoder attempts fail. This closes the missing fallback implementation path in source, but the 5.3K source corpus and physical-device acceptance remain open.
+- DX-CANVAS-002: custom canvas creation, project dimension persistence, preview geometry, smart-crop ratio, export dimensions, storage estimates and output-history dimensions have been wired in the draft. Room schema 11 generation, migration validation, encoder output inspection and physical-device validation remain open.
+- Proxy artifact promotion: a source-level defect was found during this work. The code tested a temporary `proxy_tmp_*.mp4` using a predicate that deliberately rejects temporary filenames, preventing the successful artifact from being promoted. A dedicated temporary-artifact predicate and regression tests are included in the draft.
+- CI: draft PR #59 has repository hygiene and API 37 QA queued/in progress at the time of this note. No passing result is claimed here.
+
+
+### DX-NATIVE-001 — FFmpeg 8.1.2 native component security review is expired
+
+- **Severity:** Critical — release gate
+- **Status:** OPEN — BLOCKED
+- **Finding:** The native lock review expired on 2026-10-31. Upstream advisories published after the prior review affect FFmpeg 8.1.2 components including Vulkan HEVC decode, LCL/ZLIB decode, PNG/APNG encode and the quirc filter. The existing patch disables some components, but the exact AAR component inventory is not available in the current build record.
+- **Required correction:** Inspect the AAR's exact configure transcript and decoder/encoder/filter inventories; explicitly disable or backport fixes for affected components; rebuild the AAR; update artifact/patch hashes and lock metadata; run native smoke tests and the complete Android suite.
+- **Evidence:** `docs/NATIVE_MEDIA_SECURITY_REVIEW_2026-11-18.md`
+- **Policy:** Do not extend `reviewUntil` without this evidence.
+
+
+### AssayFlux artwork and 5.3K implementation update — PR #59
+
+- The supplied logo SVG now drives a 1.3-second white splash and the Dashboard/Settings brand marks.
+- The supplied UI background SVG is used subtly on Dashboard and Settings only; the editor workspace and its existing color system are not redesigned.
+- New projects default to proxy editing enabled. 5.3K-class and larger imports auto-start selected-tier proxy generation; the software fallback accepts AVC/HEVC tracks only.
+- These changes are implemented in the draft PR, not yet accepted. Validate SVG rendering/performance and 5.3K camera footage on the target Android device before closing the issues.
