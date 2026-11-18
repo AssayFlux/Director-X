@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Assets/Director-X Logo.svg" alt="AssayFlux Pocket Host" width="100%">
+  <img src="Assets/Director-X Logo.svg" alt="Director X — Designed by AssayFlux" width="100%">
 </p>
 # DIRECTOR X
 
@@ -37,7 +37,7 @@
 
 Director X is a native Android video editor built with Kotlin and Jetpack Compose. It combines media playback, editing and export infrastructure, local project storage, and selected on-device media-intelligence tools.
 
-The interface follows a vintage darkroom direction: warm cream, paper beige, charcoal, muted taupe, brass gold and sage.
+The interface uses the supplied Director X logo and UI background artwork in the AssayFlux design system. The visual direction is a vintage darkroom: warm cream, paper beige, charcoal, muted taupe, brass gold and sage.
 
 ## Editing toolkit
 
@@ -50,7 +50,7 @@ The interface follows a vintage darkroom direction: warm cream, paper beige, cha
 | Audio and voiceover workflows | Audio denoising (DeepFilterNet) |
 | Project files and sharing | Scene detection, stabilization and auto color |
 
-**Capability note:** A dependency or roadmap entry is not proof that every feature is available on every device. Some features require model downloads; others remain planned. See the capability registry in the source and verify features on a real device before relying on them.
+**Capability note:** A dependency or roadmap entry is not proof that every feature is available on every device. Some features require model downloads; others remain planned. 5.3K source-media playback/editing is under validation: native decoder capability varies by device, and the current proxy path does not yet prove a software-decoder fallback for unsupported 5.3K formats. Do not treat the 8192-pixel custom-canvas model limit as proof of 5.3K media support. See [Project status and acceptance matrix](docs/PROJECT_STATUS.md).
 
 ## Capability status
 
