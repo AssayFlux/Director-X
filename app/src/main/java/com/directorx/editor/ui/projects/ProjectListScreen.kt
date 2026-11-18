@@ -113,8 +113,8 @@ fun ProjectListScreen(
     val hasAnyProjects = projectTotalCount > 0
     var showTemplateSheet by remember { mutableStateOf(false) }
     var showCustomCanvasDialog by remember { mutableStateOf(false) }
-    var customCanvasWidthText by remember { mutableStateOf("5312") }
-    var customCanvasHeightText by remember { mutableStateOf("2988") }
+    var customCanvasWidthText by remember { mutableStateOf("1920") }
+    var customCanvasHeightText by remember { mutableStateOf("1080") }
     var customCanvasProjectName by remember { mutableStateOf("") }
     val templateImportLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
