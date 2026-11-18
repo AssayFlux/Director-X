@@ -3,7 +3,7 @@
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
 **Branch audited:** `main`  
 **Historical audit baseline:** `7760187420b25776c2af624aef1df6a6a34b1559` (follow-up source fixes are recorded below)  
-**Current documentation review:** 2026-11-18 against `main` at `1431a9ad28777f7172d1b94032b3a7c882090463` (PRs #53 and #55 merged)  
+**Current documentation review:** 2026-11-18 against `main` at `efa84e0c55b902ab59b8d2b83df60f2812192b43` (PRs #53 and #55 merged)  
 **Register status:** Historical findings retained; current implementation and CI state are summarized below. Source fixes, automated tests, managed-device QA and physical-device acceptance are tracked separately.
 
 ## Product direction reminder — UI upgrade scope is strictly limited
@@ -370,7 +370,7 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 
 ### Repository baseline and change-control
 
-- Audited default branch: `main`, HEAD `1431a9ad28777f7172d1b94032b3a7c882090463`.
+- Audited default branch: `main`, HEAD `efa84e0c55b902ab59b8d2b83df60f2812192b43`.
 - The maintenance work for this review was merged into `main` through [PR #53](https://github.com/AssayFlux/Director-X/pull/53).
 - The branch `fix/proxy-splash-custom-canvas-2026-11-04` contains a larger, unmerged implementation candidate. Do not merge it wholesale: review each source change and run the required checks. It is not evidence that the feature is present on `main`.
 - No claim in this register should be upgraded to RESOLVED — VERIFIED without the evidence required by that issue.
@@ -475,3 +475,13 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - **Finding:** `scripts/check_repository_duplicates.py` still listed `assets/icon.png` as an intentional duplicate after the root assets directory and icon had been removed.
 - **Correction merged:** Removed the obsolete allowlist group; the Fastlane store icon remains governed by its actual path.
 - **Verification evidence:** Repository hygiene passed in run [44345956760](https://github.com/AssayFlux/Director-X/actions/runs/44345956760), after removal of the obsolete allowlist entry.
+
+
+### DX-DEP-001 — Dependency freshness snapshot exceeded its 30-day review horizon
+
+- **Severity:** Medium
+- **Status:** RESOLVED — authoritative metadata refreshed 2026-11-18; pinned versions unchanged.
+- **Finding:** The snapshot and fact reviews were last dated 2026-10-05, 44 days before the audit, while the offline policy requires a review within 30 days. The Android unit suite correctly failed `DependencyFreshnessTest`.
+- **Correction merged:** Ran `scripts/refresh_dependency_freshness.py` against configured Maven metadata. The snapshot now covers 21 dependencies and records current latest-stable candidates. No version catalog pins were changed.
+- **Refresh-script correction:** Held-candidate reasons and unblock conditions are regenerated when metadata changes; previous reasoning is retained under `previousReview` rather than leaving stale candidate versions in active guidance.
+- **Decision:** Newer versions remain held until their compatibility probes pass. In particular, the AGP/Kotlin pair, Room 3 migration, ONNX per-ABI size, and MediaPipe/protobuf generated-code compatibility are not approved for automatic upgrades.
