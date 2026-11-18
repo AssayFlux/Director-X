@@ -2,7 +2,7 @@
 
 **Review date:** 18 November 2026  
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
-**Audited baseline:** `main` at `66f14c551e1d7429753e12bfa0b196f6a16445d9`  
+**Audited baseline:** `main` at `69fe420a1de7d7de584afcdcbdb76475735fa1ab`  
 **Maintenance work:** `maintenance/consistency-and-docs-2026-11-18` (not merged at the time of this document)
 
 This is the authoritative status summary. It deliberately separates implementation presence, automated verification, and real-device acceptance. A feature is not complete merely because its model, UI setting, dependency or branch exists.
