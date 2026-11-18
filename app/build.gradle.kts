@@ -172,7 +172,7 @@ android {
 
     sourceSets {
         getByName("main").java.directories.add(runtimeNoticeGeneratedDir.get().asFile.absolutePath)
-        getByName("main").assets.srcDir(assayFluxBrandAssetsDir)
+        getByName("main").assets.srcDir(assayFluxBrandAssetsDir.get().asFile)
         getByName("androidTest").assets.directories += "$projectDir/schemas"
     }
 
