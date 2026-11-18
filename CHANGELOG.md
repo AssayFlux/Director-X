@@ -58,3 +58,4 @@ The current Android identity is `0.1.0` / version code `302`. Builds and runtime
 - Added the two public engineering status documents to the tracked-document audit allowlist.
 - Removed the superseded pre-0.1.0 Fastlane changelog for version code 301 and aligned crash-report test fixtures with the current 0.1.0 app version.
 - Documented the mirrored user-supplied design texture and explicitly allowlisted the byte-identical pair rather than deleting either copy.
+- Repository hygiene passed after the intentional mirrored design texture was documented and allowlisted (run [44350163729](https://github.com/AssayFlux/Director-X/actions/runs/44350163729)).
