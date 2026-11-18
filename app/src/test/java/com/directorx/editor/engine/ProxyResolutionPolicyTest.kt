@@ -46,6 +46,14 @@ class ProxyResolutionPolicyTest {
     }
 
     @Test
+    fun automaticProxyGenerationIsReservedForFivePointThreeKClassSources() {
+        assertTrue(ProxyResolutionPolicy.requiresAutomaticProxy(5312, 2988))
+        assertTrue(ProxyResolutionPolicy.requiresAutomaticProxy(4096, 2160))
+        assertFalse(ProxyResolutionPolicy.requiresAutomaticProxy(3840, 2160))
+        assertFalse(ProxyResolutionPolicy.requiresAutomaticProxy(1920, 1080))
+    }
+
+    @Test
     fun a480pSourceAtHalfIsEditedDirectlyWithTheReasonStated() {
         val plan = ProxyResolutionPolicy.plan(480, ProxyResolution.HALF)
 
