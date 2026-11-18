@@ -17,7 +17,7 @@ This is the authoritative status summary. It deliberately separates implementati
 | Custom canvas model/database | Partial foundation | Project dimensions and Room migration 10→11 exist; Room schema 11 JSON still needs generation |
 | Custom canvas creation-to-export | **Implemented in draft PR #59; not accepted** | Project creation, preview geometry and export dimensions are wired; Room schema 11, exact output-file checks and device validation remain |
 | CUSTOM global default crash | Correction and regression coverage merged | Import fixed in `5572f9a`; latest Android verification run `44349406491` is in progress |
-| AssayFlux splash | **Not present on Alpha** | No splash implementation or raw GIF was found in the current Alpha tree |
+| AssayFlux splash | **Implemented in draft PR #59; not accepted** | 1.3-second SVG-logo splash overlay; device rendering and timing still require validation |
 | Room schema snapshot | Incomplete | Database version 11, tracked schema JSON only through 10; generate/inspect/commit 11 |
 | Native FFmpeg security review | **Expired release gate** | `reviewUntil=2026-10-31`; conduct new review before release |
 | CI unit tests | Current PR #59 run in progress | Check run 134991201705; no result claimed yet |
@@ -236,3 +236,12 @@ These are implementation changes under review, not verified acceptance. The draf
 ### Native security review update — 18 November 2026
 
 The expired FFmpeg review was investigated against current upstream advisories. FFmpeg 8.1.2 has additional published issues affecting the Vulkan HEVC decoder, LCL/ZLIB decoder, PNG/APNG encoders and `vf_quirc` filter. The existing native patch disables PNG/APNG encoders and the standalone ZLIB decoder, but the exact shipped AAR decoder/filter/encoder inventory has not been verified. A detailed evidence and closure plan is recorded in [the AssayFlux native media security review](NATIVE_MEDIA_SECURITY_REVIEW_2026-11-18.md). Keep the native release gate blocked; do not merely extend its expiry date.
+
+
+### AssayFlux brand artwork implementation — PR #59
+
+- The supplied `Assets/Director-X Logo.svg` is packaged into Android assets and used by the 1.3-second splash plus Dashboard/Settings headers.
+- The supplied `Assets/UI Design Texture.svg` is layered subtly behind Dashboard and Settings only; the editing workspace palette/layout is unchanged.
+- The generated assets are loaded from local Android assets using the platform WebView renderer with JavaScript and network loads disabled.
+- The SVG artwork is large and path-dense. Visual quality, startup cost and memory use still need physical-device acceptance.
+- New projects enable automatic proxy editing by default for high-resolution clips. The selected proxy tier is used; the FFmpeg fallback is restricted to AVC/HEVC source tracks. Existing projects with an explicitly saved disabled setting remain user-controlled.
