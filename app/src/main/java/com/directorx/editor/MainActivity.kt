@@ -8,16 +8,32 @@ import android.provider.OpenableColumns
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.navigation.compose.NavHost
@@ -28,6 +44,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.directorx.editor.engine.AppSettings
@@ -44,9 +61,12 @@ import com.directorx.editor.ui.editor.EditorScreen
 import com.directorx.editor.ui.editor.LocalTabletopPosture
 import com.directorx.editor.ui.projects.ProjectListScreen
 import com.directorx.editor.ui.settings.SettingsScreen
+import com.directorx.editor.ui.theme.AssayFluxLogo
+import com.directorx.editor.ui.theme.AssayFluxTexture
 import com.directorx.editor.ui.theme.ClearCutTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -152,12 +172,19 @@ class MainActivity : ComponentActivity() {
                     pendingEditorOpen = null
                 }
 
+                var showAssayFluxSplash by remember { mutableStateOf(true) }
+                LaunchedEffect(Unit) {
+                    delay(1_100L)
+                    showAssayFluxSplash = false
+                }
+
                 CompositionLocalProvider(LocalTabletopPosture provides isTabletopPosture) {
-                    NavHost(
-                        navController = navController,
-                        startDestination = "projects",
-                        modifier = rootModifier
-                    ) {
+                    Box(modifier = rootModifier) {
+                        NavHost(
+                            navController = navController,
+                            startDestination = "projects",
+                            modifier = Modifier.fillMaxSize()
+                        ) {
                         composable("projects") {
                             ProjectListScreen(
                                 onProjectSelected = { projectId ->
@@ -219,6 +246,46 @@ class MainActivity : ComponentActivity() {
                             EditorScreen(
                                 onBack = { navController.popBackStack() }
                             )
+                        }
+                        }
+                        AnimatedVisibility(
+                            visible = showAssayFluxSplash,
+                            enter = fadeIn(tween(100)),
+                            exit = fadeOut(tween(200)),
+                            modifier = Modifier.fillMaxSize(),
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(Color.White),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                AssayFluxTexture(
+                                    modifier = Modifier.fillMaxSize(),
+                                    alpha = 0.035f,
+                                )
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                                ) {
+                                    AssayFluxLogo(
+                                        modifier = Modifier
+                                            .width(224.dp)
+                                            .height(138.dp)
+                                            .aspectRatio(2080f / 1281f),
+                                    )
+                                    Text(
+                                        text = stringResource(R.string.app_name),
+                                        color = Color(0xFF2C2621),
+                                        style = MaterialTheme.typography.headlineLarge,
+                                    )
+                                    Text(
+                                        text = stringResource(R.string.assayflux_developer_credit),
+                                        color = Color(0xFF8C8275),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                    )
+                                }
+                            }
                         }
                     }
                 }
