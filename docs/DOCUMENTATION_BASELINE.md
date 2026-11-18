@@ -84,7 +84,7 @@ Historical localized changelog entries and legal/source-offer materials are reta
 
 ## 7. Documentation-only change boundary
 
-This documentation baseline must not change Kotlin/Java source, Android resources, manifests, Gradle files, dependency versions, Room schemas, scripts, CI workflow definitions, native binaries, signing configuration or app behavior. If a factual discrepancy requires one of those changes, record it as a separate engineering issue and obtain separate approval.
+The original 2026-11-03 documentation-only pass did not change Kotlin/Java source, Android resources, manifests, Gradle files, dependency versions, Room schemas, scripts, CI workflow definitions, native binaries, signing configuration or app behavior. That was a scope boundary for that historical pass, not a prohibition on later separately reviewed engineering fixes. The 2026-11-18 CUSTOM-default correction is tracked independently in PR #51; it does not authorize unrelated application changes.
 
 ## 8. Baseline update procedure
 
