@@ -29,10 +29,6 @@ INTENTIONAL_DUPLICATES = {
         for density in ("hdpi", "mdpi", "xhdpi", "xxhdpi", "xxxhdpi")
     ),
     frozenset({
-        "assets/icon.png",
-        "fastlane/metadata/android/en-US/images/icon.png",
-    }),
-    frozenset({
         "fastlane/metadata/android/en-US/privacy_policy_url.txt",
         "fastlane/metadata/android/es-ES/privacy_policy_url.txt",
     }),
