@@ -1,7 +1,8 @@
 # Director X — Current UI Measurement Ledger
 
 **Purpose:** Separate source-observed current values from proposed redesign targets.  
-**Reviewed source:** `main` at `1a3b7b8fe6a744780bbe202c07087e0eac5add2f` on 2026-11-03.  
+**Original source review:** `main` at `1a3b7b8fe6a744780bbe202c07087e0eac5add2f` on 2026-11-03.
+**Refresh note (2026-11-18):** This ledger has not been re-measured against a physical device. Treat its Compose dp/sp values as the 2026-11-03 source snapshot until the UI source is deliberately re-audited. The current project status and accepted scope are in [PROJECT_STATUS.md](../docs/PROJECT_STATUS.md).  
 **Important:** These are Compose dp/sp declarations, not physical screen-pixel measurements. Device density, font scale, viewport, and system insets affect rendered pixels.
 
 ## A. Dashboard — verified current source values
