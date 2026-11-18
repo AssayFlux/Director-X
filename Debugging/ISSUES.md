@@ -490,7 +490,7 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 ### DX-HYGIENE-002 — Mirrored user-supplied design texture
 
 - **Severity:** Low
-- **Status:** ALLOWLIST CORRECTED — repository-hygiene rerun pending.
+- **Status:** RESOLVED — repository hygiene passed in run [44350163729](https://github.com/AssayFlux/Director-X/actions/runs/44350163729).
 - **Finding:** The exact-duplicate validator found `Assets/UI Design Texture.png` and `UI Design Texture.png` to be byte-identical. Both are user-supplied design-reference assets; no application or documentation reference currently selects one as the canonical path.
 - **Correction:** Preserved both files and added the pair to the explicit intentional-duplicate allowlist with a comment. The README repository map now documents the mirror.
-- **Verification required:** Confirm repository hygiene passes on the next main run.
+- **Verification evidence:** All repository-hygiene validators passed in run [44350163729](https://github.com/AssayFlux/Director-X/actions/runs/44350163729).
