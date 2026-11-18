@@ -191,7 +191,6 @@ Director-X/
 │   ├── src/test/            # JVM tests (Android verification workflow + local runs)
 │   ├── src/androidTest/     # Instrumentation tests (device-QA workflow + local runs)
 │   └── build.gradle.kts     # Android identity and build configuration
-├── assets/                  # Director X brand assets
 ├── baselineprofile/
 ├── docs/                    # Build, privacy and compatibility documents
 ├── gradle/                  # Wrapper and version catalog
