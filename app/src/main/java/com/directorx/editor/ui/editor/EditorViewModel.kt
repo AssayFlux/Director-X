@@ -2863,6 +2863,7 @@ class EditorViewModel @Inject constructor(
         if (enabled) {
             generateProxiesForAllClips()
         } else {
+            backgroundJobCoordinator.cancelProxyGeneration()
             proxyGenerationJob?.cancel()
             proxyGenerationJob = null
             proxyEngine.clearProxies()
