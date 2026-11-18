@@ -7,6 +7,7 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkInfo
 import androidx.work.WorkRequest
 import com.directorx.editor.engine.MediaIngestWorker
+import com.directorx.editor.engine.ProxyGenerationWorker
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -78,6 +79,16 @@ class EditorBackgroundJobCoordinatorTest {
     }
 
     @Test
+    fun disablingProxyEditingCancelsTheUniqueProxyWork() {
+        val scheduler = FakeScheduler()
+        val coordinator = EditorBackgroundJobCoordinator(scheduler)
+
+        coordinator.cancelProxyGeneration()
+
+        assertEquals(listOf(ProxyGenerationWorker.WORK_NAME), scheduler.cancelledUnique)
+    }
+
+    @Test
     fun recurringJobsUseKeepPolicy() {
         val scheduler = FakeScheduler()
         val coordinator = EditorBackgroundJobCoordinator(scheduler)
@@ -99,6 +110,7 @@ class EditorBackgroundJobCoordinatorTest {
         val enqueued = mutableListOf<WorkRequest>()
         val unique = mutableListOf<Unique>()
         val cancelled = mutableListOf<UUID>()
+        val cancelledUnique = mutableListOf<String>()
         val observers = mutableMapOf<UUID, Observer<WorkInfo?>>()
         var removed = 0
 
@@ -116,6 +128,10 @@ class EditorBackgroundJobCoordinatorTest {
 
         override fun cancelWorkById(id: UUID) {
             cancelled += id
+        }
+
+        override fun cancelUniqueWork(name: String) {
+            cancelledUnique += name
         }
 
         override fun observe(id: UUID, observer: Observer<WorkInfo?>): EditorBackgroundJobCoordinator.WorkObservation {
