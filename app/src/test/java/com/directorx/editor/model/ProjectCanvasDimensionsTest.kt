@@ -52,6 +52,16 @@ class ProjectCanvasDimensionsTest {
     }
 
     @Test
+    fun legacyCustomDefaultCreatesValidPresetProject() {
+        val project = Project(
+            aspectRatio = resolveDefaultProjectAspectRatio(AspectRatio.CUSTOM)
+        )
+
+        assertEquals(AspectRatio.RATIO_16_9, project.aspectRatio)
+        assertEquals(CanvasDimensions(1920, 1080), project.canvasDimensions)
+    }
+
+    @Test
     fun presetProjectStillUsesPresetResolution() {
         val project = Project(
             aspectRatio = AspectRatio.RATIO_9_16,

@@ -382,7 +382,8 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - **Affected files:** `ProjectListViewModel.kt`, `SettingsScreen.kt`.
 - **Finding:** Settings exposed `CUSTOM` as a global default aspect ratio, but a project created from that default received no custom width or height. The `Project` model validates custom dimensions and can reject this project during creation.
 - **Correction merged:** Treat custom dimensions as project-scoped. Exclude `CUSTOM` from global default choices, display a safe 16:9 fallback for legacy persisted `CUSTOM` settings, and defensively fall back to 16:9 in project creation if an older setting still contains `CUSTOM`.
-- **Verification required:** Compile the Android app; add/run a regression test for a legacy CUSTOM setting; verify project creation from both normal defaults and templates; verify custom canvas dimensions remain project-specific. Until those checks pass, this is a prepared fix, not a verified resolution.
+- **Verification required:** Compile the Android app; run the new regression test for a legacy CUSTOM setting; verify project creation from both normal defaults and templates; verify custom canvas dimensions remain project-specific.
+- **CI finding/correction:** The first PR #53 Android verification run failed because `ProjectListViewModel.kt` lacked the import for `resolveDefaultProjectAspectRatio`. The import was added in main commit `5572f9a`; the full Android verification rerun is still required.
 
 ### DX-CANVAS-005 — Custom canvas is not end-to-end on main
 
