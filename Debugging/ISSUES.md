@@ -299,22 +299,22 @@ The source-level fixes for resolution-specific cache identity, saved background 
 ### DX-CANVAS-001 — Custom dimensions cannot be selected during project creation
 
 - **Severity:** High
-- **Status:** OPEN — CONFIRMED
+- **Status:** IMPLEMENTED IN DRAFT PR #59 — NOT ACCEPTED
 - **Affected files:** `ui/projects/ProjectListViewModel.kt`, `ui/projects/ProjectListScreen.kt`, `ui/projects/ProjectTemplateSheet.kt`
-- **Finding:** The current `createProject` API accepts aspect ratio, frame rate, and preset resolution only. It does not accept custom width/height; template creation copies the template's preset ratio/resolution only.
-- **Impact:** The model supports custom canvases, but the normal project-creation workflow cannot create one.
-- **Required correction:** Add validated custom width/height entry to the existing project setup path, propagate values through the ViewModel and project constructor, and define sensible defaults when switching between preset and custom modes. Keep the user's existing project creation/navigation behavior intact.
-- **Verification:** UI tests for valid/invalid dimensions, mode switching, project creation and reopening; test tags/accessibility and small-screen layout.
+- **Finding:** Draft PR #59 adds a Custom Canvas project template, width/height entry, validation and ViewModel-to-Project propagation.
+- **Impact:** The source path is now present in the draft, but UI behavior has not yet passed Android tests or physical-device checks.
+- **Required correction:** Verify valid/invalid input, keyboard behavior, accessibility, small-screen layout, project creation/reopen and project-document round trips. Generate and commit Room schema 11 from the configured Room/KSP build.
+- **Verification:** Android unit tests, UI/instrumentation coverage, Room migration test, archive/autosave round trip and device review.
 
 ### DX-CANVAS-002 — Custom canvas dimensions are not resolved by export configuration
 
 - **Severity:** Critical
-- **Status:** OPEN — CONFIRMED
-- **Affected files:** `model/ExportConfig.kt`, `ui/export/ExportSheet.kt`, export renderer call sites (to be traced before edits)
-- **Finding:** `ExportSheet` calculates output dimensions using `config.resolution.forAspect(outputAspectRatio)`. `ExportConfig` has no explicit custom width/height and its output aspect-ratio helper returns a ratio, not the project's validated canvas dimensions.
-- **Impact:** A custom project canvas can be silently exported using a preset resolution rather than its requested pixel dimensions.
-- **Required correction:** Define one authoritative output-dimensions resolver that distinguishes (a) project-canvas export from (b) explicit platform/delivery presets. Carry the resolved width and height through preview, export planning, renderer configuration, bitrate/codec capability checks, and metadata. Do not let a preset override custom dimensions unless the user explicitly selects that delivery preset.
-- **Verification:** Assert exact width/height at the final renderer boundary for landscape, portrait, square and nonstandard valid dimensions; verify platform presets still produce their documented sizes and legacy projects remain unchanged.
+- **Status:** IMPLEMENTED IN DRAFT PR #59 — NOT ACCEPTED
+- **Affected files:** `model/ExportConfig.kt`, `ui/editor/PreviewPanel.kt`, `ui/editor/ExportDelegate.kt`, `engine/VideoEngine.kt`, `engine/ExportStoragePolicy.kt`, `engine/ExportHistoryStore.kt`
+- **Finding:** Draft PR #59 adds explicit custom output width/height to ExportConfig and uses them in preview geometry, smart-crop ratio, encoder-safe renderer sizing, output verification/history and storage estimates. Selecting a platform preset clears the project custom dimensions.
+- **Impact:** The source path now carries the custom canvas dimensions to the encoder boundary, but actual output files have not yet been inspected.
+- **Required correction:** Verify exact exported width/height for portrait, landscape, square and nonstandard dimensions; confirm encoder-safe rounding, bitrate estimates, platform preset overrides and legacy project behavior. Keep Room schema 11 and migration validation as separate acceptance gates.
+- **Verification:** Unit tests, Android instrumentation, exported-file metadata inspection and physical-device thermal/memory checks.
 
 ### DX-CANVAS-003 — Custom dimensions lack end-to-end persistence and migration regression coverage
 
