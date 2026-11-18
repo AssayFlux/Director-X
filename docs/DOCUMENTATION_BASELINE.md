@@ -5,7 +5,7 @@
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
 **Branch used for source review:** `main`  
 **Original source/code reference baseline:** `1a3b7b8fe6a744780bbe202c07087e0eac5add2f`
-**Current main reference checked for this refresh:** `69fe420a1de7d7de584afcdcbdb76475735fa1ab`  
+**Current main reference checked for this refresh:** `73f704792e4572cd456723dd262f88098a5543f5`  
 **Scope:** Documentation, release text and repository-facing descriptions only.
 
 This document records the factual reference state used to align the repository documentation. The 2026-11-03 inventory and source measurements remain historical evidence; the 2026-11-18 refresh updates repository status and points to the current acceptance matrix. It does not claim that every historical measurement was re-measured. The exact documentation baseline is the Git commit that contains this file after the documentation-only change set is merged to `main`. The source reference SHA above identifies the code/configuration state against which these documents were checked.
@@ -84,7 +84,7 @@ Historical localized changelog entries and legal/source-offer materials are reta
 
 ## 7. Documentation-only change boundary
 
-The original 2026-11-03 documentation-only pass did not change Kotlin/Java source, Android resources, manifests, Gradle files, dependency versions, Room schemas, scripts, CI workflow definitions, native binaries, signing configuration or app behavior. That was a scope boundary for that historical pass, not a prohibition on later separately reviewed engineering fixes. The 2026-11-18 CUSTOM-default correction is tracked independently in PR #51; it does not authorize unrelated application changes.
+The original 2026-11-03 documentation-only pass did not change Kotlin/Java source, Android resources, manifests, Gradle files, dependency versions, Room schemas, scripts, CI workflow definitions, native binaries, signing configuration or app behavior. That was a scope boundary for that historical pass, not a prohibition on later separately reviewed engineering fixes. The 2026-11-18 CUSTOM-default correction was merged through PR #53; it does not authorize unrelated application changes.
 
 ## 8. Baseline update procedure
 
@@ -107,13 +107,13 @@ The authoritative current engineering state is maintained in [Project Status and
 
 Key corrections for this refresh:
 
-- The current `main` baseline observed is `69fe420a1de7d7de584afcdcbdb76475735fa1ab`; the prior source baseline remains historical.
+- The current `main` baseline observed is `73f704792e4572cd456723dd262f88098a5543f5`; the prior source baseline remains historical.
 - The README repository map previously described JVM and instrumentation tests as manual-only. The maintenance patch corrects that wording to reflect the Android verification and device-QA workflows.
 - Proxy PRs #47–#49 remain merged implementation improvements, not completed physical-device acceptance.
 - The API 37 device/performance QA run remains cancelled; do not represent it as passing.
 - Main still lacks end-to-end custom canvas propagation and the AssayFlux splash implementation.
 - Room database version 11 has no committed schema 11 JSON in the tracked schema directory.
 - The native FFmpeg security review expiry is 2026-10-31 and must be renewed through an actual dependency/advisory review before release.
-- A confirmed CUSTOM-default project-creation defect has a defensive correction prepared on a separate maintenance branch; compile and regression verification remain pending.
+- A confirmed CUSTOM-default project-creation defect has a defensive correction merged in PR #53, with Android unit-test verification still running at this update.
 
-The maintenance patch intentionally keeps code changes and documentation changes reviewable in one branch, but this document does not authorize broad application redesign or removal of upstream legal notices.
+The merged maintenance patch keeps the targeted code correction and documentation reconciliation reviewable as PR #53; this document does not authorize broad application redesign or removal of upstream legal notices.
