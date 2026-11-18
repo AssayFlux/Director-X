@@ -20,6 +20,14 @@ import javax.inject.Singleton
 import kotlin.coroutines.resume
 
 /**
+ * Keep the software-decoded editing-proxy fallback scoped to common camera
+ * codecs. This avoids invoking FFmpeg decoders for unrelated/unreviewed media
+ * formats while the bundled native build's full decoder configuration is audited.
+ */
+internal fun isSupportedEditingProxyMimeType(mimeType: String?): Boolean =
+    mimeType == "video/avc" || mimeType == "video/hevc"
+
+/**
  * Pure FFmpeg argument planner kept separate so proxy scaling/audio mapping
  * can be regression-tested without requiring a native FFmpeg runtime.
  */
@@ -296,6 +304,11 @@ class FFmpegEngine @Inject constructor(
     ): Boolean = withContext(Dispatchers.IO) {
         val violation = NativeProcessingPolicy.validateVideoUri(context, inputUri, "createEditingProxy")
         if (violation != null) return@withContext NativeProcessingPolicy.logAndReject(violation)
+        val sourceMimeType = readVideoMimeType(inputUri)
+        if (!isSupportedEditingProxyMimeType(sourceMimeType)) {
+            AppLog.w(TAG, "Skipping FFmpeg proxy fallback for unsupported source codec: ${sourceMimeType ?: "unknown"}")
+            return@withContext false
+        }
         val height = (targetHeight.coerceIn(144, 2160) / 2) * 2
         if (height < 144) return@withContext false
         outputFile.parentFile?.mkdirs()
@@ -908,6 +921,26 @@ class FFmpegEngine @Inject constructor(
         return System.getProperty("java.vm.name")
             .orEmpty()
             .contains("dalvik", ignoreCase = true)
+    }
+
+    private fun readVideoMimeType(uri: Uri): String? {
+        val extractor = MediaExtractor()
+        return try {
+            extractor.setDataSource(context, uri, null)
+            (0 until extractor.trackCount)
+                .asSequence()
+                .mapNotNull { index ->
+                    extractor.getTrackFormat(index)
+                        .getString(MediaFormat.KEY_MIME)
+                        ?.takeIf { it.startsWith("video/") }
+                }
+                .firstOrNull()
+        } catch (e: Exception) {
+            AppLog.w(TAG, "Could not inspect proxy source codec: ${e.javaClass.simpleName}")
+            null
+        } finally {
+            runCatching { extractor.release() }
+        }
     }
 
     private fun ffmpegInput(uri: Uri): String = when (uri.scheme?.lowercase()) {
