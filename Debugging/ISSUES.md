@@ -3,7 +3,7 @@
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
 **Branch audited:** `main`  
 **Historical audit baseline:** `7760187420b25776c2af624aef1df6a6a34b1559` (follow-up source fixes are recorded below)  
-**Current documentation review:** 2026-11-18 against `main` at `efa84e0c55b902ab59b8d2b83df60f2812192b43` (PRs #53 and #55 merged)  
+**Current documentation review:** 2026-11-18 against `main` at `dc1acdb2dcb8c851a75092f145fed9c84f776d11` (PRs #53 and #55 merged)  
 **Register status:** Historical findings retained; current implementation and CI state are summarized below. Source fixes, automated tests, managed-device QA and physical-device acceptance are tracked separately.
 
 ## Product direction reminder — UI upgrade scope is strictly limited
@@ -498,4 +498,4 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - **Status:** RESOLVED — repository hygiene passed in run [44350163729](https://github.com/AssayFlux/Director-X/actions/runs/44350163729).
 - **Finding:** The exact-duplicate validator found `Assets/UI Design Texture.png` and `UI Design Texture.png` to be byte-identical. Both are user-supplied design-reference assets; no application or documentation reference currently selects one as the canonical path.
 - **Correction:** Preserved both files and added the pair to the explicit intentional-duplicate allowlist with a comment. The README repository map now documents the mirror.
-- **Verification evidence:** All repository-hygiene validators passed in run [44350163729](https://github.com/AssayFlux/Director-X/actions/runs/44350163729).
+- **Verification evidence:** All repository-hygiene validators passed on the current main commit in run [44350935702](https://github.com/AssayFlux/Director-X/actions/runs/44350935702).
