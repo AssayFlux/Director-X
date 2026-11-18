@@ -177,6 +177,10 @@ No workflow publishes a user-installable APK, signs a production release, or pub
 
 For a manual compatibility check on a device running Android 17, enable strict audio hardening with `adb shell cmd audio set-hardening throw`, then exercise TTS preview, voiceover and export while reviewing `AudioHardening` log output. This is a maintainer-run device check; it is not executed by GitHub Actions.
 
+## Current engineering status
+
+The maintained status, known gaps, acceptance gates and release blockers are tracked in **[Project status and acceptance matrix](docs/PROJECT_STATUS.md)**. That document distinguishes merged source changes from automated test evidence and physical-device acceptance. In particular, custom canvas export propagation, the AssayFlux splash integration, full proxy acceptance and the FFmpeg native security review must not be described as complete until their listed gates pass.
+
 ## Repository map
 
 ```text
@@ -184,8 +188,8 @@ Director-X/
 ├── .github/workflows/       # Android verification, device QA, repository hygiene
 ├── app/
 │   ├── src/main/            # Android application source and resources
-│   ├── src/test/            # JVM tests (run manually)
-│   ├── src/androidTest/     # Instrumentation tests (run manually)
+│   ├── src/test/            # JVM tests (Android verification workflow + local runs)
+│   ├── src/androidTest/     # Instrumentation tests (device-QA workflow + local runs)
 │   └── build.gradle.kts     # Android identity and build configuration
 ├── assets/                  # Director X brand assets
 ├── baselineprofile/
