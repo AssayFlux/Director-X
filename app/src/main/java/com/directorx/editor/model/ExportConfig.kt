@@ -15,6 +15,9 @@ data class ExportConfig(
     val audioCodec: AudioCodec = AudioCodec.AAC,
     val audioBitrate: Int = 256_000,
     val aspectRatio: AspectRatio = AspectRatio.RATIO_16_9,
+    /** Explicit project canvas dimensions; null keeps preset-based output sizing. */
+    val customOutputWidth: Int? = null,
+    val customOutputHeight: Int? = null,
     val platformPreset: PlatformPreset? = null,
     val exportAudioOnly: Boolean = false,
     val exportStemsOnly: Boolean = false,
@@ -60,12 +63,22 @@ data class ExportConfig(
     init {
         require(videoBitrate > 0) { "Bitrate must be positive" }
         require(audioBitrate > 0) { "Audio bitrate must be positive" }
+        require((customOutputWidth == null) == (customOutputHeight == null)) {
+            "Custom output width and height must be supplied together"
+        }
+        if (customOutputWidth != null && customOutputHeight != null) {
+            require(CanvasDimensions.isValid(customOutputWidth, customOutputHeight)) {
+                "Custom output dimensions must be even values between 2 and 8192"
+            }
+        }
     }
 
     /** Apply every delivery setting from a platform preset in one data-driven operation. */
     fun withPlatformPreset(preset: PlatformPreset): ExportConfig = copy(
         resolution = preset.resolution,
         aspectRatio = preset.aspectRatio,
+        customOutputWidth = null,
+        customOutputHeight = null,
         frameRate = preset.frameRate,
         codec = preset.codec,
         platformPreset = preset,
@@ -74,6 +87,14 @@ data class ExportConfig(
     /** Use the selected delivery ratio, or the project canvas for a custom export. */
     fun outputAspectRatio(projectAspectRatio: AspectRatio): AspectRatio =
         platformPreset?.aspectRatio ?: projectAspectRatio
+
+    /** Exact custom canvas dimensions when supplied; otherwise resolve the selected preset. */
+    fun outputDimensions(): Pair<Int, Int> =
+        if (customOutputWidth != null && customOutputHeight != null) {
+            customOutputWidth to customOutputHeight
+        } else {
+            resolution.forAspect(aspectRatio)
+        }
 
     /**
      * Resolve target-size constraint into a concrete bitrate override for the given
