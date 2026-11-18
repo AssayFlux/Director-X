@@ -50,7 +50,7 @@ The interface uses the supplied Director X logo and UI background artwork in the
 | Audio and voiceover workflows | Audio denoising (DeepFilterNet) |
 | Project files and sharing | Scene detection, stabilization and auto color |
 
-**Capability note:** A dependency or roadmap entry is not proof that every feature is available on every device. Some features require model downloads; others remain planned. 5.3K source-media playback/editing is under validation: native decoder capability varies by device, and the current proxy path does not yet prove a software-decoder fallback for unsupported 5.3K formats. Do not treat the 8192-pixel custom-canvas model limit as proof of 5.3K media support. See [Project status and acceptance matrix](docs/PROJECT_STATUS.md).
+**Capability note:** A dependency or roadmap entry is not proof that every feature is available on every device. Some features require model downloads; others remain planned. 5.3K source-media playback/editing is under validation: native decoder capability varies by device, and a software-decoded proxy fallback is now implemented in draft PR #59 but has not yet passed CI or real-device camera-footage acceptance. Do not treat the 8192-pixel custom-canvas model limit as proof of 5.3K media support. See [Project status and acceptance matrix](docs/PROJECT_STATUS.md).
 
 ## Capability status
 
