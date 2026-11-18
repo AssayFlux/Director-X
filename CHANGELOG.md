@@ -42,3 +42,12 @@ The earlier 1 November workflow description is historical and was superseded by 
 - API 37 device/performance QA run [41553185619](https://github.com/AssayFlux/Director-X/actions/runs/41553185619) was cancelled. Full proxy device acceptance remains open; see `Debugging/ISSUES.md`.
 
 The current Android identity is `0.1.0` / version code `302`. Builds and runtime workflows must be verified on a real device before a release is described as tested or production-ready.
+
+
+## Consistency and acceptance review — 18 November 2026
+
+- Prepared a defensive fix for the invalid global `CUSTOM` aspect-ratio default; custom dimensions are project-scoped and legacy CUSTOM defaults fall back to 16:9.
+- Corrected the README repository map so JVM and instrumentation tests are not incorrectly described as manual-only.
+- Added the authoritative current engineering status and acceptance matrix at `docs/PROJECT_STATUS.md`.
+- Refreshed the issue register with current-main baseline, custom-canvas, splash, proxy, Room schema, native security, CI/documentation and branch-cleanup findings.
+- These changes are prepared on a maintenance branch. They are not yet merged and have not yet passed an Android build, automated test run or physical-device acceptance.
