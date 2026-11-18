@@ -188,19 +188,19 @@ Never substitute one label for another.
 **Current default branch:** `Alpha`  
 **Audited base before this maintenance branch:** `b4dd5d71138dad6d926df6a612ed66127fff02cb`
 
-This section supersedes earlier branch/status statements in this historical matrix where they conflict. Earlier run IDs and PR references below remain historical evidence only; they are not evidence about the current Alpha head.
+This section records the Alpha baseline and the active PR #59 implementation separately. Earlier run IDs and PR references remain historical evidence only; they are not evidence about the current PR head.
 
 ### Current verified state
 
 | Area | Current finding | Completion status |
 |---|---|---|
-| Repository branch | `Alpha` is the default and only branch | Current |
-| CI branch triggers | Updated on the maintenance branch to target `Alpha` | Change made; workflow run still required |
-| Logo/background assets | `Assets/Director-X Logo.svg` and `Assets/UI Design Texture.svg` exist; the redundant root SVG copy has been removed in draft PR #59 | Present; app integration not yet verified |
-| 5.3K source video | Current preset enum ends at 4K; the project model's 8192 dimension limit is not a playback/export guarantee | Not accepted |
-| Custom canvas | Model and Room migration exist; export still calculates dimensions from preset resolution/aspect ratio | Incomplete |
-| Proxy acceptance | Cache/cancellation foundations exist; real high-resolution source, worker, recovery, storage and physical-device gates remain | Incomplete |
-| Splash | No current Alpha splash implementation was found in the audited tree | Incomplete |
+| Repository branches | `Alpha` is the default; one active PR #59 branch carries the current implementation | Current |
+| CI branch triggers | Updated in PR #59 to target the default `Alpha` branch | Latest-head workflow result pending |
+| Logo/background assets | Supplied SVGs are packaged by Gradle and used in splash, Dashboard and Settings in PR #59 | Implemented in draft; device visual/performance check pending |
+| 5.3K source video | 5.3K-class auto-proxy path plus AVC/HEVC FFmpeg fallback implemented in PR #59 | Not accepted; real footage/device test pending |
+| Custom canvas | Project creation, preview and export-dimension propagation implemented in PR #59 | Not accepted; schema 11 and output-file/device checks pending |
+| Proxy acceptance | Tiered proxy, auto-generation for 5.3K-class media, AVC/HEVC fallback and cancellation updates implemented in PR #59 | Acceptance incomplete; recovery, storage, concurrency and device gates remain |
+| Splash | 1.3-second SVG-logo entry/exit splash implemented in PR #59 | Not accepted; cold-start and device visual checks pending |
 | Room schema | Database version 11 / migration 10→11 exist; tracked schema 11 snapshot was not found | Incomplete |
 | Native FFmpeg review | Security review date 2026-10-31 is expired | Release blocker until reviewed |
 | Physical device | No evidence of 5.3K acceptance on the target Android device | Not tested |
@@ -211,7 +211,7 @@ Director X must accept high-resolution source media for import, metadata inspect
 
 Playback is device-dependent. The app must query the actual decoder's format support, frame-rate/size limits and profile/bit-depth capability. If native real-time decoding is unavailable or unstable, the editor must offer a proxy workflow that can decode the original through a supported fallback, create a bounded editing proxy, preserve source timebase/orientation/audio, and keep the original source attached for final export. It must never silently replace the original media with a proxy in the export path.
 
-The current Media3 proxy path uses Transformer to decode the original. Its fallback currently tries alternate Android decoders; that is not proof of a software decode path for sources that exceed every device decoder's limits. A dedicated FFmpeg software-decode proxy fallback, cancellation fencing, progress, disk budgeting and recovery tests are required before claiming 5.3K editing on devices without a suitable hardware decoder.
+The Media3 proxy path first attempts the platform Transformer. PR #59 adds a dedicated FFmpeg software-decoding fallback after Media3 fails, restricted to Android-reported AVC/H.264 and HEVC source tracks. This is a source-level capability, not proof of sustained 5.3K decoding on every device. The fallback's native component inventory, real camera files, cancellation, progress, disk budgeting and recovery still require validation.
 
 ### 5.3K acceptance gates
 
@@ -244,7 +244,8 @@ A draft maintenance PR now carries these source changes:
 - Exact custom dimensions are carried through ExportConfig, Media3 encoder sizing, export output verification/history and export storage estimates. Explicit platform presets clear project-custom dimensions and remain authoritative.
 - The editor preview and smart-crop aspect ratio now use the resolved project canvas geometry; GIF gap frames use the same exact ratio.
 - Proxy temporary artifacts now have a distinct validation predicate. The prior implementation checked a `proxy_tmp_*.mp4` path with the committed-cache predicate, which rejects temporary filenames; successful temporary output can now be atomically promoted.
-- Proxy generation now attempts an FFmpeg software-capable decode/encode fallback after Media3 hardware-decoder attempts fail. The fallback supports SAF content URIs through the existing FFmpeg input adapter and retains the existing proxy tier's target height.
+- Proxy generation now attempts an FFmpeg software decode/encode fallback after Media3 hardware-decoder attempts fail. It accepts AVC/HEVC video MIME types only, supports SAF content URIs through the existing FFmpeg input adapter and retains the selected proxy tier's target height.
+- New projects default proxy editing on; automatic generation is limited to 5.3K-class and larger sources. The WorkManager request is cancelled when proxy editing is switched off.
 
 These are implementation changes under review, not verified acceptance. The draft PR must pass unit tests, lint and instrumentation. Real 5.3K footage, physical-device playback, cancellation, process death, storage pressure and final original-source export still require evidence. Room schema 11 and native security review remain open. Splash and in-app SVG integration are implemented in PR #59 but still require physical-device acceptance.
 
