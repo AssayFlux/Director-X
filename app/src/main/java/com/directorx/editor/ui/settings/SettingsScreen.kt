@@ -122,8 +122,7 @@ fun SettingsScreen(
     // Custom dimensions belong to an individual project, not a global default.
     // Exclude CUSTOM here; legacy persisted CUSTOM values display the safe 16:9 fallback.
     val defaultAspectRatioOptions = AspectRatio.entries.filterNot { it == AspectRatio.CUSTOM }
-    val effectiveDefaultAspectRatio = settings.defaultAspectRatio.takeUnless { it == AspectRatio.CUSTOM }
-        ?: AspectRatio.RATIO_16_9
+    val effectiveDefaultAspectRatio = resolveDefaultProjectAspectRatio(settings.defaultAspectRatio)
     val thumbnailCacheSizes = remember(context) {
         ThumbnailCachePolicy.availableSettingsSizes(
             maxMemoryBytes = Runtime.getRuntime().maxMemory(),
