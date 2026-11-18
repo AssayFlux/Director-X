@@ -69,6 +69,8 @@ import com.directorx.editor.ui.theme.ClearCutFilterChip
 import com.directorx.editor.ui.theme.LocalClearCutColors
 import com.directorx.editor.ui.theme.ClearCutMetricPill
 import com.directorx.editor.ui.theme.ClearCutPrimaryButton
+import com.directorx.editor.ui.theme.AssayFluxLogo
+import com.directorx.editor.ui.theme.AssayFluxTexture
 import com.directorx.editor.ui.theme.ClearCutScreenBackground
 import com.directorx.editor.ui.theme.ClearCutSecondaryButton
 import com.directorx.editor.ui.theme.Motion
@@ -159,6 +161,10 @@ fun SettingsScreen(
             .fillMaxSize()
             .testTag(ClearCutTestTags.SETTINGS_SCREEN)
     ) {
+        AssayFluxTexture(
+            modifier = Modifier.fillMaxSize(),
+            alpha = 0.045f,
+        )
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -1080,6 +1086,11 @@ private fun SettingsHero(
                 modifier = Modifier.testTag(ClearCutTestTags.SETTINGS_BACK)
             )
             Spacer(Modifier.width(Spacing.sm))
+            AssayFluxLogo(
+                modifier = Modifier.size(width = 52.dp, height = 32.dp),
+                contentDescription = stringResource(R.string.app_name),
+            )
+            Spacer(Modifier.width(Spacing.sm))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     stringResource(R.string.settings_title),
@@ -1096,6 +1107,11 @@ private fun SettingsHero(
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    stringResource(R.string.assayflux_developer_credit),
+                    color = LocalClearCutColors.current.subtext,
+                    style = MaterialTheme.typography.labelSmall,
                 )
             }
         }
