@@ -47,6 +47,7 @@ import com.directorx.editor.engine.sweepUnreferencedManagedMedia
 import com.directorx.editor.engine.db.ProjectDao
 import com.directorx.editor.engine.db.toProjectMediaAssetEntities
 import com.directorx.editor.model.AspectRatio
+import com.directorx.editor.model.resolveDefaultProjectAspectRatio
 import com.directorx.editor.model.Clip
 import com.directorx.editor.model.Project
 import com.directorx.editor.model.Resolution
