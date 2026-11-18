@@ -57,6 +57,8 @@ A green repository-hygiene check does not prove Android compilation. A green JVM
 
 The established package identity and release signing identity must remain stable for in-place upgrades. Historical upstream names, database identifiers and archive compatibility surfaces must not be renamed blindly; preserve required licence and attribution notices.
 
+> The technical audit sections below retain their original findings for traceability. Where they describe the pre-PR #59 Alpha baseline, the current implementation status is the executive matrix above and the 18 November refresh near the end of this document.
+
 ## Proxy workflow
 
 ### Merged foundations
@@ -78,14 +80,14 @@ The established package identity and release signing identity must remain stable
 
 The existing 320×240 trim fixture is not sufficient evidence for high-resolution proxy behavior. Until the gates above pass, report the proxy implementation as improved but not accepted.
 
-## Custom canvas
+## Historical custom canvas audit (before PR #59)
 
-### What exists on main
+### What existed on the Alpha baseline before PR #59
 
 - `Project` stores `customWidth` and `customHeight` and validates even dimensions from 2 through 8192 with aspect ratio 1:4 through 4:1.
 - Room database version 11 adds both columns in migration 10→11.
 - Project-document serialization includes custom dimensions.
-- Existing tests cover model validation and preset fallback, but do not establish the complete UI-to-export path.
+- At that baseline, tests covered model validation and preset fallback but did not establish the complete UI-to-export path. PR #59 now wires project creation, preview geometry and export dimensions; output-file and device acceptance remain open.
 
 ### Corrected default and regression coverage
 
@@ -99,9 +101,9 @@ The source correction and project-construction regression tests are merged. The 
 
 Draft [PR #56](https://github.com/AssayFlux/Director-X/pull/56) contains the candidate custom-canvas path, but GitHub currently reports it as dirty/non-mergeable. Its branch has an unresolved helper import and no tracked Room schema 11 snapshot; do not merge it until those issues are reconciled. Custom dimensions must ultimately be propagated through project creation/editing, document/archive round-trip, preview sizing, export configuration, VideoEngine/ExportDelegate and final encoder output. Verify actual exported width and height, not only the UI label or project metadata.
 
-## Splash
+## Historical splash audit (before PR #59)
 
-The AssayFlux splash GIF and view implementation are absent from audited main. They exist on an unmerged candidate branch. Review asset provenance/licensing, dimensions, size and resource loading; then test cold start, lifecycle interruption, background/foreground, exit timing, navigation and low-memory behavior. The requested visual treatment is a white background, centered artwork and 1.3-second display, subject to lifecycle-safe implementation.
+The pre-PR #59 Alpha baseline had no splash view or raw GIF. PR #59 now uses the supplied AssayFlux logo SVG in a white, centered 1.3-second entry/exit Compose overlay. This is an SVG implementation, not the previously proposed GIF. Cold-start cost, WebView rendering, background/foreground behavior, accessibility and physical-device timing remain acceptance gates.
 
 ## Database schema
 
@@ -135,7 +137,7 @@ Important held candidates remain explicit rather than being upgraded mechanicall
 
 The refresh script now regenerates hold reasons and unblock conditions from current metadata and preserves the previous decision in `previousReview` when it changes. This prevents stale candidate versions from remaining in the active reason text. The 30-day evidence policy remains in force.
 
-## CI truth
+## Historical CI truth (pre-PR #59)
 
 | Workflow | Responsibility | Does not prove |
 |---|---|---|
@@ -144,11 +146,11 @@ The refresh script now regenerates hold reasons and unblock conditions from curr
 | Repository hygiene | Identity, docs, metadata, feature claims and policy checks | Android compilation or runtime behavior |
 
 Recorded evidence at the time of audit:
-- Android unit verification: earlier runs exposed a missing helper import and stale dependency/document allowlist evidence. The import was fixed, PR #55 merged the project-construction regression test, the dependency snapshot is refreshed, and the tracked-document allowlist is corrected. Android verification [44349953257](https://github.com/AssayFlux/Director-X/actions/runs/44349953257) exposed one test-fixture mismatch after the version cleanup. The test now models a simulated upgrade from 0.1.0 to 0.1.1; rerun [44351352630](https://github.com/AssayFlux/Director-X/actions/runs/44351352630) is in progress. The previous completed main run [41556330546](https://github.com/AssayFlux/Director-X/actions/runs/41556330546) passed.
+- Android unit verification: earlier runs exposed a missing helper import and stale dependency/document allowlist evidence. The import was fixed, PR #55 merged the project-construction regression test, the dependency snapshot is refreshed, and the tracked-document allowlist is corrected. Earlier runs exposed a test-fixture mismatch and tracked-document allowlist gaps; those corrections are in the PR branch. Current-head verification is pending and must be checked from Actions rather than inferred from these historical run IDs.
 - Repository hygiene for the maintenance PR: [run 44344295278](https://github.com/AssayFlux/Director-X/actions/runs/44344295278) — passed, including README link/asset validation.
 - API 37 device/performance QA: follow-up run [44345410638](https://github.com/AssayFlux/Director-X/actions/runs/44345410638) is in progress. The earlier main run [41553185619](https://github.com/AssayFlux/Director-X/actions/runs/41553185619) was cancelled.
 
-No workflow publishes an installable product APK or production release. CI may assemble temporary QA/benchmark APKs. The installable APK is built manually by the maintainer using the documented Termux workflow. The README and Termux guide should be updated whenever workflow triggers or tasks change.
+No workflow publishes an installable product APK or production release. CI may assemble temporary QA/benchmark APKs. The installable APK is built manually by the maintainer using the documented Termux workflow. The README and Termux guide now identify Alpha as the default branch and must be kept aligned with workflow triggers.
 
 ## Capability boundaries
 
@@ -244,7 +246,7 @@ A draft maintenance PR now carries these source changes:
 - Proxy temporary artifacts now have a distinct validation predicate. The prior implementation checked a `proxy_tmp_*.mp4` path with the committed-cache predicate, which rejects temporary filenames; successful temporary output can now be atomically promoted.
 - Proxy generation now attempts an FFmpeg software-capable decode/encode fallback after Media3 hardware-decoder attempts fail. The fallback supports SAF content URIs through the existing FFmpeg input adapter and retains the existing proxy tier's target height.
 
-These are implementation changes under review, not verified acceptance. The draft PR must pass unit tests, lint and instrumentation. Real 5.3K footage, physical-device playback, cancellation, process death, storage pressure and final original-source export still require evidence. Room schema 11, splash, in-app SVG integration and native security review remain open.
+These are implementation changes under review, not verified acceptance. The draft PR must pass unit tests, lint and instrumentation. Real 5.3K footage, physical-device playback, cancellation, process death, storage pressure and final original-source export still require evidence. Room schema 11 and native security review remain open. Splash and in-app SVG integration are implemented in PR #59 but still require physical-device acceptance.
 
 
 ### Native security review update — 18 November 2026
