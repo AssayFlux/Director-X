@@ -225,9 +225,10 @@ def default_hold(key: str, pinned: str, latest: str) -> tuple[str, str]:
     if key == "agp":
         reason = (
             f"The catalog remains on AGP {pinned}; authoritative metadata reports {latest}. "
-            "The Gradle 9.8 wrapper can satisfy the AGP 9.5 Gradle 9.6 minimum, but the pinned "
-            "Kotlin Gradle plugin 2.4.10 is only fully compatible through AGP 9.1.0. "
-            "Upgrade the Kotlin/AGP toolchain as a coordinated pair and probe it before adoption."
+            "The Gradle 9.8 wrapper meets the AGP 9.5 Gradle 9.6 minimum. The formal compatibility "
+            "matrix for pinned KGP 2.4.10 ends at AGP 9.1.0. The existing AGP 9.4.1 / KGP 2.4.10 "
+            "pair passed its recorded strict probe, but the AGP 9.5.1 candidate has not been probed. "
+            "Keep this candidate held until the coordinated pair is validated."
         )
         unblock = (
             f"Select a Kotlin Gradle plugin release whose supported AGP range includes {latest}, "
