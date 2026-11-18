@@ -3,7 +3,7 @@
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
 **Branch audited:** `main`  
 **Historical audit baseline:** `7760187420b25776c2af624aef1df6a6a34b1559` (follow-up source fixes are recorded below)  
-**Current documentation review:** 2026-11-18 against `main` at `dc1acdb2dcb8c851a75092f145fed9c84f776d11` (PRs #53 and #55 merged)  
+**Current documentation review:** 2026-11-18 against `main` at `aa444fa06284bcf6adb5e497d6c65d8aab05e21a` (PRs #53 and #55 merged)  
 **Register status:** Historical findings retained; current implementation and CI state are summarized below. Source fixes, automated tests, managed-device QA and physical-device acceptance are tracked separately.
 
 ## Product direction reminder — UI upgrade scope is strictly limited
