@@ -320,6 +320,8 @@ class ProjectListViewModel @Inject constructor(
         frameRate: Int? = null,
         resolution: Resolution? = null,
         templateId: String? = null,
+        customWidth: Int? = null,
+        customHeight: Int? = null,
         trackTypes: List<TrackType> = listOf(TrackType.VIDEO, TrackType.AUDIO),
         onCreated: (String) -> Unit = {}
     ) {
@@ -335,7 +337,9 @@ class ProjectListViewModel @Inject constructor(
                 aspectRatio = aspectRatio ?: resolveDefaultProjectAspectRatio(settings.defaultAspectRatio),
                 frameRate = frameRate ?: settings.defaultFrameRate,
                 resolution = resolution ?: settings.defaultResolution,
-                templateId = templateId
+                templateId = templateId,
+                customWidth = customWidth ?: 0,
+                customHeight = customHeight ?: 0
             )
             val initialTracks = buildTracks(trackTypes, settings.defaultTrackHeight)
             val operation = beginOperation(
