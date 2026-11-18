@@ -40,6 +40,18 @@ class ProjectCanvasDimensionsTest {
     }
 
     @Test
+    fun acceptsFivePointThreeKCanvasRaster() {
+        val project = Project(
+            aspectRatio = AspectRatio.CUSTOM,
+            customWidth = 5312,
+            customHeight = 2988,
+        )
+
+        assertTrue(CanvasDimensions.isValid(5312, 2988))
+        assertEquals(CanvasDimensions(5312, 2988), project.canvasDimensions)
+    }
+
+    @Test
     fun customCannotBeUsedAsGlobalProjectDefault() {
         assertEquals(
             AspectRatio.RATIO_16_9,
