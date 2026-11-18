@@ -3,7 +3,7 @@
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
 **Branch audited:** `main`  
 **Historical audit baseline:** `7760187420b25776c2af624aef1df6a6a34b1559` (follow-up source fixes are recorded below)  
-**Current documentation review:** 2026-11-18 against `main` at `66f14c551e1d7429753e12bfa0b196f6a16445d9` (maintenance fixes are being prepared separately)  
+**Current documentation review:** 2026-11-18 against `main` at `69fe420a1de7d7de584afcdcbdb76475735fa1ab` (maintenance fixes are being prepared separately)  
 **Register status:** Historical findings retained; current implementation and CI state are summarized below. Source fixes, automated tests, managed-device QA and physical-device acceptance are tracked separately.
 
 ## Product direction reminder — UI upgrade scope is strictly limited
@@ -370,7 +370,7 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 
 ### Repository baseline and change-control
 
-- Audited default branch: `main`, HEAD `66f14c551e1d7429753e12bfa0b196f6a16445d9`.
+- Audited default branch: `main`, HEAD `69fe420a1de7d7de584afcdcbdb76475735fa1ab`.
 - The maintenance work for this review is isolated on `maintenance/consistency-and-docs-2026-11-18`; it is not yet merged into `main`.
 - The branch `fix/proxy-splash-custom-canvas-2026-11-04` contains a larger, unmerged implementation candidate. Do not merge it wholesale: review each source change and run the required checks. It is not evidence that the feature is present on `main`.
 - No claim in this register should be upgraded to RESOLVED — VERIFIED without the evidence required by that issue.
