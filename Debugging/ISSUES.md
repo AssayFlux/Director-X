@@ -568,5 +568,5 @@ The older `main`-branch references and workflow run IDs in this register are his
 
 - The supplied logo SVG now drives a 1.3-second white splash and the Dashboard/Settings brand marks.
 - The supplied UI background SVG is used subtly on Dashboard and Settings only; the editor workspace and its existing color system are not redesigned.
-- New projects default to proxy editing enabled. High-resolution import auto-starts selected-tier proxy generation; the software fallback accepts AVC/HEVC tracks only.
+- New projects default to proxy editing enabled. 5.3K-class and larger imports auto-start selected-tier proxy generation; the software fallback accepts AVC/HEVC tracks only.
 - These changes are implemented in the draft PR, not yet accepted. Validate SVG rendering/performance and 5.3K camera footage on the target Android device before closing the issues.
