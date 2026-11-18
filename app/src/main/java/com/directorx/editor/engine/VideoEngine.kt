@@ -1687,7 +1687,7 @@ class VideoEngine @Inject constructor(
     }
 
     private fun encoderSafeOutputDimensions(config: ExportConfig): Pair<Int, Int> {
-        val (width, height) = config.resolution.forAspect(config.aspectRatio)
+        val (width, height) = config.outputDimensions()
         val safe = Media3ExportRobustnessPolicy.encoderSafeDimensions(width, height)
         return safe.width to safe.height
     }
