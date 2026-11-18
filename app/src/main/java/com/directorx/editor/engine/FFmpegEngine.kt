@@ -20,6 +20,30 @@ import javax.inject.Singleton
 import kotlin.coroutines.resume
 
 /**
+ * Pure FFmpeg argument planner kept separate so proxy scaling/audio mapping
+ * can be regression-tested without requiring a native FFmpeg runtime.
+ */
+internal fun buildEditingProxyArguments(
+    inputPath: String,
+    outputPath: String,
+    targetHeight: Int,
+    videoEncoder: String,
+    includeAudio: Boolean,
+): List<String> {
+    val height = (targetHeight.coerceIn(144, 2160) / 2) * 2
+    require(height >= 144)
+    require(inputPath.isNotBlank() && outputPath.isNotBlank() && videoEncoder.isNotBlank())
+    return buildList {
+        addAll(listOf("-y", "-i", inputPath, "-map", "0:v:0"))
+        if (includeAudio) addAll(listOf("-map", "0:a:0?"))
+        addAll(listOf("-vf", "scale=-2:$height:flags=lanczos"))
+        addAll(listOf("-c:v", videoEncoder, "-pix_fmt", "yuv420p"))
+        if (includeAudio) addAll(listOf("-c:a", "aac", "-b:a", "128k"))
+        addAll(listOf("-movflags", "+faststart", outputPath))
+    }
+}
+
+/**
  * Engine for FFmpeg-backed export paths that Media3 Transformer does not cover.
  *
  * ## Dependency path
@@ -289,30 +313,6 @@ class FFmpegEngine @Inject constructor(
                 videoEncoder = encoder.ffmpegName,
                 includeAudio = hasAudio,
             )
-        }
-    }
-
-    /**
-     * Pure FFmpeg argument planner kept separate so proxy scaling/audio mapping
-     * can be regression-tested without requiring a native FFmpeg runtime.
-     */
-    internal fun buildEditingProxyArguments(
-        inputPath: String,
-        outputPath: String,
-        targetHeight: Int,
-        videoEncoder: String,
-        includeAudio: Boolean,
-    ): List<String> {
-        val height = (targetHeight.coerceIn(144, 2160) / 2) * 2
-        require(height >= 144)
-        require(inputPath.isNotBlank() && outputPath.isNotBlank() && videoEncoder.isNotBlank())
-        return buildList {
-            addAll(listOf("-y", "-i", inputPath, "-map", "0:v:0"))
-            if (includeAudio) addAll(listOf("-map", "0:a:0?"))
-            addAll(listOf("-vf", "scale=-2:$height:flags=lanczos"))
-            addAll(listOf("-c:v", videoEncoder, "-pix_fmt", "yuv420p"))
-            if (includeAudio) addAll(listOf("-c:a", "aac", "-b:a", "128k"))
-            addAll(listOf("-movflags", "+faststart", outputPath))
         }
     }
 
