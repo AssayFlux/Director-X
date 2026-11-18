@@ -399,6 +399,7 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - **Severity:** Critical
 - **Status:** OPEN — DEVICE / END-TO-END ACCEPTANCE PENDING.
 - **Merged foundations:** PRs #47, #48 and #49 address restart-safe temporary artifacts, cache-key namespace invalidation and Transformer cancellation fencing.
+- **PR #59 implementation:** Adds automatic selected-tier proxy generation for 5.3K-class and larger sources in new projects, an AVC/HEVC FFmpeg software-decoding fallback after Media3 failure, temporary-artifact validation and WorkManager cancellation when proxy editing is disabled.
 - **Still required:** Generate and inspect HALF, QUARTER and EIGHTH proxies from real high-resolution camera footage; prove selected-tier propagation through the actual WorkManager path; cancel during active transcoding; stress playback + export + proxy concurrently; kill/restart the process during work; exercise storage pressure and cache cleanup; verify exports always read original media rather than proxy media; complete acceptance on the target Moto G54 5G / Android 15.
 - **Fixture limitation:** The existing 320×240 trim fixture cannot prove high-resolution tier behavior.
 - **Closure rule:** A merged implementation or passing JVM suite is not a substitute for the listed end-to-end and physical-device evidence.
