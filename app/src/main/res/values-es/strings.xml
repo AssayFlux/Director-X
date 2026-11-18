@@ -1283,6 +1283,13 @@
     <string name="template_square_name">Cuadrado (Social)</string>
     <string name="template_square_desc">1:1 para Instagram/Facebook</string>
     <string name="template_square_duration">15-60 s</string>
+    <string name="template_custom_canvas_name">Lienzo personalizado</string>
+    <string name="template_custom_canvas_desc">Elige el ancho y alto exactos del proyecto</string>
+    <string name="project_custom_canvas_title">Dimensiones del lienzo</string>
+    <string name="project_custom_canvas_width">Ancho (px)</string>
+    <string name="project_custom_canvas_height">Alto (px)</string>
+    <string name="project_custom_canvas_invalid">Usa dimensiones pares de 2 a 8192 px y una proporción entre 1:4 y 4:1.</string>
+    <string name="project_custom_canvas_create">Crear proyecto</string>
     <string name="template_tracks_format">%1$d pistas</string>
     <string name="template_tracks_texts_format">%1$d pistas, %2$d textos</string>
     <string name="template_slots_format">%1$d ranuras</string>
