@@ -375,7 +375,7 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - The branch `fix/proxy-splash-custom-canvas-2026-11-04` contains a larger, unmerged implementation candidate. Do not merge it wholesale: review each source change and run the required checks. It is not evidence that the feature is present on `main`.
 - No claim in this register should be upgraded to RESOLVED — VERIFIED without the evidence required by that issue.
 
-### DX-CANVAS-004 — CUSTOM is invalid as a global default aspect ratio
+### DX-CANVAS-006 — CUSTOM is invalid as a global default aspect ratio
 
 - **Severity:** High
 - **Status:** FIX MERGED — automated verification pending.
@@ -433,7 +433,7 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - **Finding:** README described `src/test` and `src/androidTest` as manually run despite the workflows automating unit tests and managed-device instrumentation.
 - **Correction merged:** README repository map now identifies the relevant workflows while retaining local execution as an option.
 - **Workflow truth:** Android verification runs `:app:testQaUnitTest`; device/performance QA runs lint, API 37 managed-device instrumentation and macrobenchmark on relevant pull requests; repository hygiene checks repository policy and documentation. QA workflows may create temporary test/benchmark APKs. No workflow publishes a user-installable product APK or production release.
-- **Evidence limitation:** The latest recorded unit-test and repository-hygiene runs passed; the API 37 QA run was cancelled. Do not call device QA passed.
+- **Evidence limitation:** The prior main-branch unit-test run passed, while the maintenance PR's Android unit-test run and API 37 device/performance QA are still in progress as of this register update. Repository hygiene passed. Do not call device QA passed until its run completes.
 
 ### DX-BRANCH-001 — Stale maintenance branches
 
@@ -454,5 +454,5 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - **Severity:** Low
 - **Status:** CORRECTED ON MAIN — repository hygiene passed in run [44344295278](https://github.com/AssayFlux/Director-X/actions/runs/44344295278).
 - **Finding:** Two README image references pointed to `assets/icon.svg`, which does not exist in the current repository tree. The first two PR validation attempts failed at README link validation for this reason.
-- **Correction prepared:** Both README image references now use the existing `app/src/main/res/mipmap-xxxhdpi/ic_launcher.png` artwork.
+- **Correction merged:** Both README image references now use the existing `app/src/main/res/mipmap-xxxhdpi/ic_launcher.png` artwork.
 - **Verification evidence:** README link/asset validation passed in repository-hygiene run [44344295278](https://github.com/AssayFlux/Director-X/actions/runs/44344295278).
