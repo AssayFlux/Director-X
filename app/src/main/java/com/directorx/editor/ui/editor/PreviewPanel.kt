@@ -169,6 +169,8 @@ fun PreviewPanel(
     modifier: Modifier = Modifier,
     isLooping: Boolean = false,
     aspectRatio: AspectRatio = AspectRatio.RATIO_16_9,
+    canvasWidth: Int? = null,
+    canvasHeight: Int? = null,
     frameRate: Int = 30,
     onTogglePlayback: () -> Unit,
     onToggleLoop: () -> Unit = {},
@@ -250,7 +252,11 @@ fun PreviewPanel(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    val previewRatio = aspectRatio.toFloat().coerceAtLeast(0.1f)
+                    val previewRatio = if (canvasWidth != null && canvasHeight != null && canvasHeight > 0) {
+                        canvasWidth.toFloat() / canvasHeight.toFloat()
+                    } else {
+                        aspectRatio.toFloat()
+                    }.coerceAtLeast(0.1f)
                     val frameWidth = if (maxHeight * previewRatio <= maxWidth) {
                         maxHeight * previewRatio
                     } else {
