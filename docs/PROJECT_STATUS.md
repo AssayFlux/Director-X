@@ -131,7 +131,7 @@ No workflow publishes an installable product APK or production release. CI may a
 
 ## Recommended closure order
 
-1. Fix and regression-test the CUSTOM global-default crash.
+1. Confirm the merged CUSTOM-default correction with the running Android unit-test workflow and the regression test.
 2. Review and integrate custom canvas end-to-end, including real export dimensions.
 3. Review and integrate the splash implementation.
 4. Complete proxy end-to-end and physical-device acceptance.
