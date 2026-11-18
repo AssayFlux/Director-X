@@ -201,11 +201,9 @@ The source-level fixes for resolution-specific cache identity, saved background 
 ### DX-PROJECT-001 — Custom canvas dimensions are only partially propagated
 
 - **Severity:** High
-- **Status:** IN PROGRESS — model and project-document persistence exist; end-to-end UI, database, preview and export behavior still require verification.
-- **Confirmed implementation:** `Project.kt` contains `customWidth`, `customHeight`, `AspectRatio.CUSTOM`, validation through `CanvasDimensions`, and a computed `canvasDimensions` property. `ProjectDocument.kt` writes and reads the custom dimensions.
-- **Correction to previous finding:** It is inaccurate to say custom dimensions are absent from the project model or project-document serializer. Those foundations are already present and must be preserved.
-- **Remaining investigation and work:** Confirm the project-creation/edit UI; Room entity/schema/migration coverage; autosave and reopen; archive/import; templates; preview/crop sizing; and actual export renderer dimensions. `ExportConfig.kt` still has independent preset `resolution` and `aspectRatio` fields, so verify how the project canvas dimensions reach the renderer and how platform presets intentionally override them.
-- **Verification required:** Legacy project round trips; custom portrait, landscape and square dimensions; invalid/odd/boundary values; database migration tests; preview dimension assertions; and exported-file dimension inspection. Do not duplicate existing model/document fields or mark this resolved from source presence alone.
+- **Status:** IMPLEMENTED IN DRAFT PR #59 — acceptance pending.
+- **Confirmed implementation:** `Project.kt` and `ProjectDocument.kt` retain custom width/height and validation. PR #59 adds custom dimensions to project creation, preview geometry, `ExportConfig`, encoder sizing and output-dimension verification. Explicit platform presets remain authoritative and clear project-custom export dimensions.
+- **Remaining acceptance:** Generate/commit Room schema 11; test autosave/reopen, archive/import and templates; inspect actual output-file dimensions for custom portrait, landscape, square and 5.3K-sized canvases; validate physical-device behavior. Do not equate configuration propagation with proof that every device encoder supports every requested output size.
 
 ## Dashboard redesign — historical implementation log (2026-11-02)
 
