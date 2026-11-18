@@ -592,7 +592,7 @@ class ExportDelegate(
             runCatching { outputFile.delete() }
             return false
         }
-        val requestedDimensions = config.resolution.forAspect(config.aspectRatio)
+        val requestedDimensions = config.outputDimensions()
         val safeDimensions = Media3ExportRobustnessPolicy.encoderSafeDimensions(
             requestedDimensions.first,
             requestedDimensions.second,
@@ -1072,8 +1072,19 @@ class ExportDelegate(
 
         val totalDurationMs = resolvedRange?.durationMs ?: projectDurationMs
         val outputAspectRatio = currentState.exportConfig.outputAspectRatio(currentState.project.aspectRatio)
+        val projectCanvas = currentState.project.canvasDimensions
         val config = currentState.exportConfig
-            .copy(aspectRatio = outputAspectRatio)
+            .copy(
+                aspectRatio = outputAspectRatio,
+                customOutputWidth = projectCanvas.width.takeIf {
+                    currentState.project.aspectRatio == com.directorx.editor.model.AspectRatio.CUSTOM &&
+                        currentState.exportConfig.platformPreset == null
+                },
+                customOutputHeight = projectCanvas.height.takeIf {
+                    currentState.project.aspectRatio == com.directorx.editor.model.AspectRatio.CUSTOM &&
+                        currentState.exportConfig.platformPreset == null
+                },
+            )
             .resolveTargetSize(totalDurationMs)
         val baseChapters = if (config.includeChapterMarkers && config.chapters.isEmpty()) {
             currentState.timelineMarkers
