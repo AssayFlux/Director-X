@@ -5,7 +5,7 @@
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
 **Branch used for source review:** `main`  
 **Original source/code reference baseline:** `1a3b7b8fe6a744780bbe202c07087e0eac5add2f`
-**Current main reference checked for this refresh:** `73f704792e4572cd456723dd262f88098a5543f5`  
+**Current main reference checked for this refresh:** `1431a9ad28777f7172d1b94032b3a7c882090463`  
 **Scope:** Documentation, release text and repository-facing descriptions only.
 
 This document records the factual reference state used to align the repository documentation. The 2026-11-03 inventory and source measurements remain historical evidence; the 2026-11-18 refresh updates repository status and points to the current acceptance matrix. It does not claim that every historical measurement was re-measured. The exact documentation baseline is the Git commit that contains this file after the documentation-only change set is merged to `main`. The source reference SHA above identifies the code/configuration state against which these documents were checked.
@@ -114,6 +114,6 @@ Key corrections for this refresh:
 - Main still lacks end-to-end custom canvas propagation and the AssayFlux splash implementation.
 - Room database version 11 has no committed schema 11 JSON in the tracked schema directory.
 - The native FFmpeg security review expiry is 2026-10-31 and must be renewed through an actual dependency/advisory review before release.
-- A confirmed CUSTOM-default project-creation defect has a defensive correction merged in PR #53, with Android unit-test verification still running at this update.
+- A confirmed CUSTOM-default project-creation defect has a defensive correction merged in PR #53 and project-construction regression coverage merged in PR #55; Android unit-test verification is still running at this update.
 
 The merged maintenance patch keeps the targeted code correction and documentation reconciliation reviewable as PR #53; this document does not authorize broad application redesign or removal of upstream legal notices.
