@@ -26,7 +26,7 @@ class CrashReportNoticePolicyTest {
     @Test
     fun aRecordedCrashAndTheExitItCausedMakeOneNoticeNamingTheException() {
         val crashes = crashStore()
-        crashes.recordUncaughtException(Thread.currentThread(), IllegalStateException("decoder released"), "v3.81.0", now - hour)
+        crashes.recordUncaughtException(Thread.currentThread(), IllegalStateException("decoder released"), "0.1.0", now - hour)
         val exits = exitHistory(exit(at = now - hour + 400, reason = ProcessExitRecorder.REASON_CRASH, importance = 100))
 
         val notice = latest(crashes, exits)
@@ -34,7 +34,7 @@ class CrashReportNoticePolicyTest {
         assertNotNull(notice)
         assertEquals(CrashReportKind.CRASH, notice!!.kind)
         assertEquals("java.lang.IllegalStateException", notice.detail)
-        assertEquals("v3.81.0", notice.appVersion)
+        assertEquals("0.1.0", notice.appVersion)
         assertEquals(now - hour, notice.occurredAtEpochMs)
         // The exit lands after the record, and dismissing has to cover it too.
         assertEquals(now - hour + 400, notice.coversThroughEpochMs)
@@ -43,7 +43,7 @@ class CrashReportNoticePolicyTest {
     @Test
     fun onceSetAsideItStaysGoneUntilTheNextCrash() {
         val crashes = crashStore()
-        crashes.recordUncaughtException(Thread.currentThread(), IllegalStateException(), "v3.82.0", now - hour)
+        crashes.recordUncaughtException(Thread.currentThread(), IllegalStateException(), "0.1.0", now - hour)
         val exits = exitHistory(exit(at = now - hour + 400, reason = ProcessExitRecorder.REASON_CRASH, importance = 100))
         crashes.acknowledgeNoticesThrough(latest(crashes, exits)!!.coversThroughEpochMs)
 
@@ -51,7 +51,7 @@ class CrashReportNoticePolicyTest {
         val relaunched = CrashRecordStore.forDirectory(crashDir)
         assertNull(latest(relaunched, exits))
 
-        relaunched.recordUncaughtException(Thread.currentThread(), OutOfMemoryError(), "v3.82.0", now - 60_000)
+        relaunched.recordUncaughtException(Thread.currentThread(), OutOfMemoryError(), "0.1.0", now - 60_000)
         assertEquals("java.lang.OutOfMemoryError", latest(relaunched, exits)?.detail)
     }
 
@@ -67,7 +67,7 @@ class CrashReportNoticePolicyTest {
     @Test
     fun theAcknowledgementIsNeitherACrashRecordNorPartOfTheBundle() {
         val crashes = crashStore()
-        crashes.recordUncaughtException(Thread.currentThread(), IllegalStateException(), "v3.82.0", now - hour)
+        crashes.recordUncaughtException(Thread.currentThread(), IllegalStateException(), "0.1.0", now - hour)
         crashes.acknowledgeNoticesThrough(now)
         crashes.pruneOldRecords(retainCount = 1)
 
@@ -80,7 +80,7 @@ class CrashReportNoticePolicyTest {
     fun anUnreadableRecordIsSkipped() {
         val crashes = crashStore()
         File(crashDir, "crash-1-1.json").writeText("{ not json")
-        crashes.recordUncaughtException(Thread.currentThread(), IllegalArgumentException(), "v3.82.0", now - hour)
+        crashes.recordUncaughtException(Thread.currentThread(), IllegalArgumentException(), "0.1.0", now - hour)
 
         assertEquals(listOf("java.lang.IllegalArgumentException"), crashes.recentCrashes().map { it.rootClassName })
     }
@@ -121,7 +121,7 @@ class CrashReportNoticePolicyTest {
     @Test
     fun theNewestEventLeadsAndTheNoticeCoversThemAll() {
         val crashes = crashStore()
-        crashes.recordUncaughtException(Thread.currentThread(), IllegalStateException(), "v3.82.0", now - 3 * hour)
+        crashes.recordUncaughtException(Thread.currentThread(), IllegalStateException(), "0.1.0", now - 3 * hour)
         val exits = exitHistory(
             exit(at = now - hour, reason = ProcessExitRecorder.REASON_ANR, importance = 100),
             exit(at = now - 2 * hour, reason = ProcessExitRecorder.REASON_CRASH_NATIVE, importance = 100),
@@ -148,7 +148,7 @@ class CrashReportNoticePolicyTest {
     @Test
     fun aCrashExitLongAfterTheRecordIsItsOwnEvent() {
         val crashes = crashStore()
-        crashes.recordUncaughtException(Thread.currentThread(), IllegalStateException(), "v3.82.0", now - hour)
+        crashes.recordUncaughtException(Thread.currentThread(), IllegalStateException(), "0.1.0", now - hour)
         val laterExit = now - hour + CrashReportNoticePolicy.CRASH_EXIT_MATCH_MS + 1
 
         val notice = latest(crashes, exitHistory(exit(at = laterExit, reason = ProcessExitRecorder.REASON_CRASH, importance = 100)))
@@ -161,7 +161,7 @@ class CrashReportNoticePolicyTest {
     fun eventsOlderThanTwoWeeksAreHistory() {
         val crashes = crashStore()
         val edge = now - CrashReportNoticePolicy.LOOKBACK_MS
-        crashes.recordUncaughtException(Thread.currentThread(), IllegalStateException(), "v3.82.0", edge - 1)
+        crashes.recordUncaughtException(Thread.currentThread(), IllegalStateException(), "0.1.0", edge - 1)
         val exits = exitHistory(exit(at = edge - 1, reason = ProcessExitRecorder.REASON_ANR, importance = 100))
 
         assertNull(latest(crashes, exits))
@@ -175,20 +175,20 @@ class CrashReportNoticePolicyTest {
             occurredAtEpochMs = 1_791_244_920_000L, // 2026-10-06 00:02 UTC
             coversThroughEpochMs = 1_791_244_920_000L,
             detail = "java.lang.IllegalStateException",
-            appVersion = "v3.81.0",
+            appVersion = "0.1.0",
         )
-        val device = CrashReportDevice("v3.82.0", "samsung", "SM-S901U", "16", 36, "arm64-v8a")
+        val device = CrashReportDevice("0.1.0", "samsung", "SM-S901U", "16", 36, "arm64-v8a")
 
         val body = CrashReportNoticePolicy.issueBody(notice, device)
 
         assertTrue(body, body.contains("Director X closed unexpectedly (java.lang.IllegalStateException) at 2026-10-06 00:02 UTC."))
-        assertTrue(body, body.contains("- Director X: v3.82.0\n- Version it happened in: v3.81.0\n"))
+        assertTrue(body, body.contains("- Director X: 0.1.0\n- Version it happened in: 0.1.0\n"))
         assertTrue(body, body.contains("- Device: samsung SM-S901U\n"))
         assertTrue(body, body.contains("- Android: 16 (API 36)\n"))
         assertTrue(body, body.contains("- ABI: arm64-v8a\n"))
         assertFalse(
             "same version twice",
-            CrashReportNoticePolicy.issueBody(notice.copy(appVersion = "v3.82.0"), device).contains("happened in")
+            CrashReportNoticePolicy.issueBody(notice.copy(appVersion = "0.1.0"), device).contains("happened in")
         )
     }
 
