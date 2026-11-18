@@ -1290,6 +1290,7 @@
     <string name="project_custom_canvas_height">Alto (px)</string>
     <string name="project_custom_canvas_invalid">Usa dimensiones pares de 2 a 8192 px y una proporción entre 1:4 y 4:1.</string>
     <string name="project_custom_canvas_create">Crear proyecto</string>
+    <string name="assayflux_developer_credit">Diseñado por AssayFlux</string>
     <string name="template_tracks_format">%1$d pistas</string>
     <string name="template_tracks_texts_format">%1$d pistas, %2$d textos</string>
     <string name="template_slots_format">%1$d ranuras</string>
