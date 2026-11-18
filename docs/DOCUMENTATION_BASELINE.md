@@ -5,7 +5,7 @@
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
 **Branch used for source review:** `main`  
 **Original source/code reference baseline:** `1a3b7b8fe6a744780bbe202c07087e0eac5add2f`
-**Current main reference checked for this refresh:** `aa444fa06284bcf6adb5e497d6c65d8aab05e21a`  
+**Current main reference checked for this refresh:** `58ba5ccc712035fd53da687b3590e5fd2c92bf00`  
 **Scope:** Documentation, release text and repository-facing descriptions only.
 
 This document records the factual reference state used to align the repository documentation. The 2026-11-03 inventory and source measurements remain historical evidence; the 2026-11-18 refresh updates repository status and points to the current acceptance matrix. It does not claim that every historical measurement was re-measured. The exact documentation baseline is the Git commit that contains this file after the documentation-only change set is merged to `main`. The source reference SHA above identifies the code/configuration state against which these documents were checked.
