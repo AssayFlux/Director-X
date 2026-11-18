@@ -485,3 +485,12 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - **Correction merged:** Ran `scripts/refresh_dependency_freshness.py` against configured Maven metadata. The snapshot now covers 21 dependencies and records current latest-stable candidates. No version catalog pins were changed.
 - **Refresh-script correction:** Held-candidate reasons and unblock conditions are regenerated when metadata changes; previous reasoning is retained under `previousReview` rather than leaving stale candidate versions in active guidance.
 - **Decision:** Newer versions remain held until their compatibility probes pass. In particular, the AGP/Kotlin pair, Room 3 migration, ONNX per-ABI size, and MediaPipe/protobuf generated-code compatibility are not approved for automatic upgrades.
+
+
+### DX-HYGIENE-002 — Mirrored user-supplied design texture
+
+- **Severity:** Low
+- **Status:** ALLOWLIST CORRECTED — repository-hygiene rerun pending.
+- **Finding:** The exact-duplicate validator found `Assets/UI Design Texture.png` and `UI Design Texture.png` to be byte-identical. Both are user-supplied design-reference assets; no application or documentation reference currently selects one as the canonical path.
+- **Correction:** Preserved both files and added the pair to the explicit intentional-duplicate allowlist with a comment. The README repository map now documents the mirror.
+- **Verification required:** Confirm repository hygiene passes on the next main run.
