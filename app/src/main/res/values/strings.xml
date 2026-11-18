@@ -1335,6 +1335,7 @@
     <string name="project_custom_canvas_height">Height (px)</string>
     <string name="project_custom_canvas_invalid">Use even dimensions from 2 to 8192 px with an aspect ratio between 1:4 and 4:1.</string>
     <string name="project_custom_canvas_create">Create project</string>
+    <string name="assayflux_developer_credit">Designed by AssayFlux</string>
     <string name="template_tracks_format">%1$d tracks</string>
     <string name="template_tracks_texts_format">%1$d tracks, %2$d texts</string>
     <string name="template_slots_format">%1$d slots</string>
