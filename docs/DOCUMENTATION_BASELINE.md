@@ -1,12 +1,14 @@
 # Director X — Documentation Baseline
 
-**Review date:** 2026-11-03  
+**Original review date:** 2026-11-03
+**Status refresh:** 2026-11-18  
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
 **Branch used for source review:** `main`  
-**Source/code reference baseline before documentation edits:** `1a3b7b8fe6a744780bbe202c07087e0eac5add2f`  
+**Original source/code reference baseline:** `1a3b7b8fe6a744780bbe202c07087e0eac5add2f`
+**Current main reference checked for this refresh:** `69fe420a1de7d7de584afcdcbdb76475735fa1ab`  
 **Scope:** Documentation, release text and repository-facing descriptions only.
 
-This document records the factual reference state used to align the repository documentation. The exact documentation baseline is the Git commit that contains this file after the documentation-only change set is merged to `main`. The source reference SHA above identifies the code/configuration state against which these documents were checked.
+This document records the factual reference state used to align the repository documentation. The 2026-11-03 inventory and source measurements remain historical evidence; the 2026-11-18 refresh updates repository status and points to the current acceptance matrix. It does not claim that every historical measurement was re-measured. The exact documentation baseline is the Git commit that contains this file after the documentation-only change set is merged to `main`. The source reference SHA above identifies the code/configuration state against which these documents were checked.
 
 ## 1. Verified Android identity and build configuration
 
@@ -82,7 +84,7 @@ Historical localized changelog entries and legal/source-offer materials are reta
 
 ## 7. Documentation-only change boundary
 
-This documentation baseline must not change Kotlin/Java source, Android resources, manifests, Gradle files, dependency versions, Room schemas, scripts, CI workflow definitions, native binaries, signing configuration or app behavior. If a factual discrepancy requires one of those changes, record it as a separate engineering issue and obtain separate approval.
+The original 2026-11-03 documentation-only pass did not change Kotlin/Java source, Android resources, manifests, Gradle files, dependency versions, Room schemas, scripts, CI workflow definitions, native binaries, signing configuration or app behavior. That was a scope boundary for that historical pass, not a prohibition on later separately reviewed engineering fixes. The 2026-11-18 CUSTOM-default correction is tracked independently in PR #51; it does not authorize unrelated application changes.
 
 ## 8. Baseline update procedure
 
@@ -97,3 +99,21 @@ For future gradual upgrades:
 7. Record the resulting merged `main` commit as the next Director X baseline.
 
 Do not copy the source reference SHA above into future reports as if it were the final documentation commit. The merged commit containing this document is the documentation baseline for this review.
+
+
+## 9. Status refresh — 18 November 2026
+
+The authoritative current engineering state is maintained in [Project Status and Acceptance Matrix](PROJECT_STATUS.md). It supersedes this baseline wherever current implementation or acceptance status has changed.
+
+Key corrections for this refresh:
+
+- The current `main` baseline observed is `69fe420a1de7d7de584afcdcbdb76475735fa1ab`; the prior source baseline remains historical.
+- The README repository map previously described JVM and instrumentation tests as manual-only. The maintenance patch corrects that wording to reflect the Android verification and device-QA workflows.
+- Proxy PRs #47–#49 remain merged implementation improvements, not completed physical-device acceptance.
+- The API 37 device/performance QA run remains cancelled; do not represent it as passing.
+- Main still lacks end-to-end custom canvas propagation and the AssayFlux splash implementation.
+- Room database version 11 has no committed schema 11 JSON in the tracked schema directory.
+- The native FFmpeg security review expiry is 2026-10-31 and must be renewed through an actual dependency/advisory review before release.
+- A confirmed CUSTOM-default project-creation defect has a defensive correction prepared on a separate maintenance branch; compile and regression verification remain pending.
+
+The maintenance patch intentionally keeps code changes and documentation changes reviewable in one branch, but this document does not authorize broad application redesign or removal of upstream legal notices.

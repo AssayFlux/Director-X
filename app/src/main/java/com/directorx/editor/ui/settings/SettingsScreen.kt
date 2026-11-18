@@ -119,6 +119,10 @@ fun SettingsScreen(
         SettingsEditorModeOption("Pro", stringResource(R.string.settings_mode_pro))
     )
     val selectedEditorMode = selectedEditorModeOption(settings.editorMode, editorModeOptions)
+    // Custom dimensions belong to an individual project, not a global default.
+    // Exclude CUSTOM here; legacy persisted CUSTOM values display the safe 16:9 fallback.
+    val defaultAspectRatioOptions = AspectRatio.entries.filterNot { it == AspectRatio.CUSTOM }
+    val effectiveDefaultAspectRatio = resolveDefaultProjectAspectRatio(settings.defaultAspectRatio)
     val thumbnailCacheSizes = remember(context) {
         ThumbnailCachePolicy.availableSettingsSizes(
             maxMemoryBytes = Runtime.getRuntime().maxMemory(),
@@ -234,9 +238,9 @@ fun SettingsScreen(
                 accent = ClearCutAccents.Mauve,
                 label = stringResource(R.string.settings_default_aspect_ratio),
                 description = stringResource(R.string.settings_default_aspect_ratio_description),
-                value = settings.defaultAspectRatio.label,
-                options = AspectRatio.entries.map { it.label },
-                onSelected = { idx -> viewModel.setAspectRatio(AspectRatio.entries[idx]) }
+                value = effectiveDefaultAspectRatio.label,
+                options = defaultAspectRatioOptions.map { it.label },
+                onSelected = { idx -> viewModel.setAspectRatio(defaultAspectRatioOptions[idx]) }
             )
             SettingsDropdown(
                 icon = Icons.Default.Memory,

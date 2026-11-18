@@ -40,6 +40,18 @@ class ProjectCanvasDimensionsTest {
     }
 
     @Test
+    fun customCannotBeUsedAsGlobalProjectDefault() {
+        assertEquals(
+            AspectRatio.RATIO_16_9,
+            resolveDefaultProjectAspectRatio(AspectRatio.CUSTOM)
+        )
+        assertEquals(
+            AspectRatio.RATIO_9_16,
+            resolveDefaultProjectAspectRatio(AspectRatio.RATIO_9_16)
+        )
+    }
+
+    @Test
     fun presetProjectStillUsesPresetResolution() {
         val project = Project(
             aspectRatio = AspectRatio.RATIO_9_16,

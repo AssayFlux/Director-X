@@ -3,7 +3,7 @@
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
 **Branch audited:** `main`  
 **Historical audit baseline:** `7760187420b25776c2af624aef1df6a6a34b1559` (follow-up source fixes are recorded below)  
-**Current documentation review:** 2026-11-03 against `main` at `1a3b7b8fe6a744780bbe202c07087e0eac5add2f`  
+**Current documentation review:** 2026-11-18 against `main` at `69fe420a1de7d7de584afcdcbdb76475735fa1ab` (maintenance fixes are being prepared separately)  
 **Register status:** Historical findings retained; current implementation and CI state are summarized below. Source fixes, automated tests, managed-device QA and physical-device acceptance are tracked separately.
 
 ## Product direction reminder — UI upgrade scope is strictly limited
@@ -362,3 +362,97 @@ The source-level fixes for resolution-specific cache identity, saved background 
 - **Impact:** A busy codec budget can freeze the editor UI during background proxy generation, defeating the resource queue's intended behavior.
 - **Correction in PR #46:** Replace the blocking pipeline acquisition API with a suspending lease acquisition. The lease pool already moves permit waiting to `Dispatchers.IO`; Transformer construction/start remains on Main.
 - **Verification required:** Android unit tests, API 37 proxy instrumentation, and a stress test where another codec lease is held while proxy generation waits; confirm the main dispatcher remains responsive and the lease is released on success, failure, and cancellation.
+
+
+## Current audit addendum — 2026-11-18
+
+This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch state, CI status or current-main findings differ. The historical findings and their original evidence are retained for traceability.
+
+### Repository baseline and change-control
+
+- Audited default branch: `main`, HEAD `69fe420a1de7d7de584afcdcbdb76475735fa1ab`.
+- The maintenance work for this review is isolated on `maintenance/consistency-and-docs-2026-11-18`; it is not yet merged into `main`.
+- The branch `fix/proxy-splash-custom-canvas-2026-11-04` contains a larger, unmerged implementation candidate. Do not merge it wholesale: review each source change and run the required checks. It is not evidence that the feature is present on `main`.
+- No claim in this register should be upgraded to RESOLVED — VERIFIED without the evidence required by that issue.
+
+### DX-CANVAS-004 — CUSTOM is invalid as a global default aspect ratio
+
+- **Severity:** High
+- **Status:** FIX PREPARED ON MAINTENANCE BRANCH — verification pending.
+- **Affected files:** `ProjectListViewModel.kt`, `SettingsScreen.kt`.
+- **Finding:** Settings exposed `CUSTOM` as a global default aspect ratio, but a project created from that default received no custom width or height. The `Project` model validates custom dimensions and can reject this project during creation.
+- **Correction prepared:** Treat custom dimensions as project-scoped. Exclude `CUSTOM` from global default choices, display a safe 16:9 fallback for legacy persisted `CUSTOM` settings, and defensively fall back to 16:9 in project creation if an older setting still contains `CUSTOM`.
+- **Verification required:** Compile the Android app; add/run a regression test for a legacy CUSTOM setting; verify project creation from both normal defaults and templates; verify custom canvas dimensions remain project-specific. Until those checks pass, this is a prepared fix, not a verified resolution.
+
+### DX-CANVAS-005 — Custom canvas is not end-to-end on main
+
+- **Severity:** High
+- **Status:** OPEN — CONFIRMED.
+- **Finding:** Main has model/database/document foundations for custom dimensions, including Room version 11 and migration 10→11. It does not yet provide the complete creation-to-renderer path: custom-canvas UI and custom dimensions are not consistently carried through export configuration and final encoder sizing.
+- **Impact:** Persisted dimensions alone do not guarantee that a user can create, preview and export a custom-size project at the selected dimensions.
+- **Required correction:** Review and integrate the custom-canvas candidate in small, auditable changes. Propagate validated dimensions through project creation, document/archive round-trip, editor preview, export configuration, engine/delegate and final encoder output. Preserve preset behavior for existing projects.
+- **Verification required:** Unit tests for bounds/even dimensions and archive round-trip; UI/project creation tests; export tests that inspect actual output dimensions; regression tests for preset projects and rotated media.
+
+### DX-SPLASH-002 — AssayFlux splash is not integrated on main
+
+- **Severity:** Medium
+- **Status:** OPEN — CONFIRMED.
+- **Finding:** Main does not contain the AssayFlux splash view and GIF resource identified during the audit. Those assets/implementation are on an unmerged candidate branch only.
+- **Required correction:** Review GIF licensing/ownership, dimensions, file size and resource handling; integrate the splash view and resource without blocking startup or breaking lifecycle/navigation. Preserve the requested white background, centered artwork and 1.3-second presentation only if the implementation's timing and exit behavior are verified.
+- **Verification required:** Build, cold-start and background/foreground tests, navigation tests, low-memory behavior and a physical-device check. Do not describe splash integration as complete on main before merge.
+
+### DX-PROXY-ACCEPTANCE-001 — Proxy source fixes are not full acceptance
+
+- **Severity:** Critical
+- **Status:** OPEN — DEVICE / END-TO-END ACCEPTANCE PENDING.
+- **Merged foundations:** PRs #47, #48 and #49 address restart-safe temporary artifacts, cache-key namespace invalidation and Transformer cancellation fencing.
+- **Still required:** Generate and inspect HALF, QUARTER and EIGHTH proxies from real high-resolution camera footage; prove selected-tier propagation through the actual WorkManager path; cancel during active transcoding; stress playback + export + proxy concurrently; kill/restart the process during work; exercise storage pressure and cache cleanup; verify exports always read original media rather than proxy media; complete acceptance on the target Moto G54 5G / Android 15.
+- **Fixture limitation:** The existing 320×240 trim fixture cannot prove high-resolution tier behavior.
+- **Closure rule:** A merged implementation or passing JVM suite is not a substitute for the listed end-to-end and physical-device evidence.
+
+### DX-DB-011 — Room schema 11 snapshot is not committed
+
+- **Severity:** Medium
+- **Status:** OPEN — REPOSITORY SNAPSHOT INCOMPLETE; build impact not yet established.
+- **Finding:** `ProjectDatabase` declares version 11 and migration 10→11, but tracked schema snapshots stop at `10.json`.
+- **Required correction:** Generate schema 11 with the configured Room/KSP toolchain, inspect it against the entity and migration, commit `11.json`, and verify schema validation in CI/instrumentation.
+- **Caution:** The absence of the committed snapshot is a repository-maintenance gap; it is not, by itself, proof that the current unit-test workflow fails.
+
+### DX-SEC-FFMPEG-001 — Native dependency security review expired
+
+- **Severity:** Critical for release
+- **Status:** OPEN — RELEASE GATE.
+- **Finding:** `third_party/ffmpeg-kit-next/native-lock.json` has a top-level `reviewUntil` of 2026-10-31, which is earlier than this audit date. The release verification script rejects expired review dates and the release build attaches this verification.
+- **Required correction:** Perform a fresh review of the pinned native source revisions, enabled/disabled FFmpeg components, listed CVEs, reachability evidence, licences and generated SBOM. Update the lock and evidence only after the review is actually completed; do not extend the date mechanically.
+- **Impact:** Release readiness is blocked until the security review is renewed and the release verification passes. This finding does not automatically imply that an ordinary debug build is blocked.
+
+### DX-CI-DOC-001 — Repository map and automation descriptions drifted
+
+- **Severity:** Low
+- **Status:** CORRECTION PREPARED ON MAINTENANCE BRANCH.
+- **Finding:** README described `src/test` and `src/androidTest` as manually run despite the workflows automating unit tests and managed-device instrumentation.
+- **Correction prepared:** README repository map now identifies the relevant workflows while retaining local execution as an option.
+- **Workflow truth:** Android verification runs `:app:testQaUnitTest`; device/performance QA runs lint, API 37 managed-device instrumentation and macrobenchmark on relevant pull requests; repository hygiene checks repository policy and documentation. QA workflows may create temporary test/benchmark APKs. No workflow publishes a user-installable product APK or production release.
+- **Evidence limitation:** The latest recorded unit-test and repository-hygiene runs passed; the API 37 QA run was cancelled. Do not call device QA passed.
+
+### DX-BRANCH-001 — Stale maintenance branches
+
+- **Severity:** Low
+- **Status:** OPEN — CLEANUP AFTER REVIEW.
+- **Finding:** Several branches remain after their associated fixes were merged, alongside the larger unmerged splash/custom-canvas candidate.
+- **Required correction:** Compare each branch to main, preserve any unique commits, close/reconcile superseded work and delete only branches confirmed redundant. Never delete the candidate branch before its unique changes have been reviewed or safely ported.
+
+### Product capability boundaries
+
+- Export resolution presets currently top out at 4K. 8K export is not implemented or accepted.
+- Professional-camera compatibility is not established by generic Media3/FFmpeg support. Validate a representative corpus and codec/profile/bit-depth/chroma combinations before making broad compatibility claims.
+- Proxy, custom canvas and splash status must be reported independently: a source change, a CI result, and physical-device acceptance are different evidence levels.
+
+
+### DX-DOC-README-002 — README hero image pointed to a missing asset
+
+- **Severity:** Low
+- **Status:** CORRECTED ON MAINTENANCE BRANCH — repository-hygiene rerun pending.
+- **Finding:** Two README image references pointed to `assets/icon.svg`, which does not exist in the current repository tree. The first two PR validation attempts failed at README link validation for this reason.
+- **Correction prepared:** Both README image references now use the existing `app/src/main/res/mipmap-xxxhdpi/ic_launcher.png` artwork.
+- **Verification required:** Confirm the next repository-hygiene run passes README link/asset validation.
