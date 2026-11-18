@@ -50,7 +50,7 @@ The interface uses the supplied `Assets/Director-X Logo.svg` in the 1.3-second e
 | Audio and voiceover workflows | Audio denoising (DeepFilterNet) |
 | Project files and sharing | Scene detection, stabilization and auto color |
 
-**Capability note:** A dependency or roadmap entry is not proof that every feature is available on every device. Some features require model downloads; others remain planned. 5.3K source-media playback/editing is under validation: new projects enable automatic proxies for high-resolution clips, and a software-decoded fallback is implemented for H.264/HEVC sources when Media3 hardware decoding fails. Real camera-footage and Android-device acceptance are still required. Do not treat the 8192-pixel custom-canvas model limit as proof of 5.3K media support. See [Project status and acceptance matrix](docs/PROJECT_STATUS.md).
+**Capability note:** A dependency or roadmap entry is not proof that every feature is available on every device. Some features require model downloads; others remain planned. 5.3K source-media playback/editing is under validation: new projects enable automatic proxies for 5.3K-class and larger source clips, and a software-decoded fallback is implemented for H.264/HEVC sources when Media3 hardware decoding fails. Real camera-footage and Android-device acceptance are still required. Do not treat the 8192-pixel custom-canvas model limit as proof of 5.3K media support. See [Project status and acceptance matrix](docs/PROJECT_STATUS.md).
 
 ## Capability status
 
