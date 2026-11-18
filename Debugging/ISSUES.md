@@ -544,3 +544,11 @@ The older `main`-branch references and workflow run IDs in this register are his
 - **Finding:** `Project.canvasDimensions` is defined, but export code still resolves dimensions from `config.resolution.forAspect(config.aspectRatio)`. The current project model's maximum dimension of 8192 is a validation ceiling, not an encoder support statement.
 - **Required correction:** Carry explicit canvas dimensions through project creation/edit, persistence, preview composition, export configuration, render planner, encoder-safe dimension calculation, export history and output verification. Platform presets may override the project canvas only when the user explicitly selects that preset.
 - **Verification required:** Portrait, landscape, square and non-standard canvas round trips; actual output width/height inspection; encoder capability fallback; memory/thermal behavior on physical devices.
+
+
+### Implementation update — draft PR #59
+
+- DX-MEDIA-053K-001: FFmpeg software-decoded proxy fallback has been added after Media3's available hardware-decoder attempts fail. This closes the missing fallback implementation path in source, but the 5.3K source corpus and physical-device acceptance remain open.
+- DX-CANVAS-002: custom canvas creation, project dimension persistence, preview geometry, smart-crop ratio, export dimensions, storage estimates and output-history dimensions have been wired in the draft. Room schema 11 generation, migration validation, encoder output inspection and physical-device validation remain open.
+- Proxy artifact promotion: a source-level defect was found during this work. The code tested a temporary `proxy_tmp_*.mp4` using a predicate that deliberately rejects temporary filenames, preventing the successful artifact from being promoted. A dedicated temporary-artifact predicate and regression tests are included in the draft.
+- CI: draft PR #59 has repository hygiene and API 37 QA queued/in progress at the time of this note. No passing result is claimed here.
