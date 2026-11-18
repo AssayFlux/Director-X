@@ -3,12 +3,12 @@
 **Original review date:** 2026-11-03
 **Status refresh:** 2026-11-18  
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
-**Branch used for source review:** `main`  
+**Branch used for source review:** `Alpha`  
 **Original source/code reference baseline:** `1a3b7b8fe6a744780bbe202c07087e0eac5add2f`
-**Current main reference checked for this refresh:** `58ba5ccc712035fd53da687b3590e5fd2c92bf00`  
+**Current Alpha base reference checked for this refresh:** `b4dd5d71138dad6d926df6a612ed66127fff02cb`  
 **Scope:** Documentation, release text and repository-facing descriptions only.
 
-This document records the factual reference state used to align the repository documentation. The 2026-11-03 inventory and source measurements remain historical evidence; the 2026-11-18 refresh updates repository status and points to the current acceptance matrix. It does not claim that every historical measurement was re-measured. The exact documentation baseline is the Git commit that contains this file after the documentation-only change set is merged to `main`. The source reference SHA above identifies the code/configuration state against which these documents were checked.
+This document records the factual reference state used to align the repository documentation. The 2026-11-03 inventory and source measurements remain historical evidence; the 2026-11-18 refresh updates repository status and points to the current acceptance matrix. It does not claim that every historical measurement was re-measured. The exact documentation baseline is the Git commit that contains this file after the documentation-only change set is merged to `Alpha`. The source reference SHA above identifies the code/configuration state against which these documents were checked.
 
 ## 1. Verified Android identity and build configuration
 
@@ -90,7 +90,7 @@ The original 2026-11-03 documentation-only pass did not change Kotlin/Java sourc
 
 For future gradual upgrades:
 
-1. Read the current `main` commit before editing.
+1. Read the current default-branch commit before editing.
 2. Re-check the authoritative Gradle identity/version, manifests, dependency catalog, workflow definitions, capability registry and relevant source implementation.
 3. Update only the documentation that is affected by the verified change.
 4. Preserve historical release notes and third-party legal notices.
@@ -126,3 +126,14 @@ The source-backed freshness snapshot was refreshed with the repository's existin
 The refresh also corrected a stale-reason defect: when the latest stable candidate changes, the updater now regenerates the active hold explanation and unblock command, retaining the prior review under `previousReview`. The active dependency guidance therefore refers to current candidates rather than obsolete versions.
 
 The tracked-document policy now explicitly permits `docs/DOCUMENTATION_BASELINE.md` and `docs/PROJECT_STATUS.md` as public engineering documentation.
+
+
+## 10. AssayFlux identity and high-resolution media status — 18 November 2026
+
+The current product identity is **Director X**, with the product-owner credit **Designed by AssayFlux**. The supplied authoritative artwork is `Assets/Director-X Logo.svg` and `Assets/UI Design Texture.svg`. The UI texture is duplicated at repository root with the same blob SHA; the canonical asset location is `Assets/`.
+
+The default branch is `Alpha`. All current workflow branch filters, status reports, release references and repository badges must point to the actual default branch. References to `main` in earlier audit records are historical unless explicitly refreshed.
+
+5.3K source-media support is a requested capability, not an accepted feature yet. The resolution preset enum currently ends at 4K; source media dimensions and decoder capability are separately inspected. A project canvas validation ceiling of 8192 pixels does not establish 5.3K decoding or editing. Full 5.3K acceptance requires native playback where supported, a software-decoded proxy fallback where hardware decode is unavailable, original-source preservation, and physical-device evidence. See `docs/PROJECT_STATUS.md`.
+
+AssayFlux product surfaces must not contain unrelated third-party product branding. Required open-source licences, notices, source offers and accurate upstream attribution remain mandatory and must not be removed or rewritten to imply authorship by AssayFlux.
