@@ -508,3 +508,39 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - **Finding:** Replacing historical version strings with the current app version made the event version and current-device version identical, so the test incorrectly expected a “Version it happened in” line that production code correctly omits for same-version reports.
 - **Correction:** Keep the event version at the current release fixture `0.1.0`; model an upgraded install with `0.1.1` only as a simulated test value, and assert that the prior event version is shown only when it differs.
 - **Verification:** Rerun [44351352630](https://github.com/AssayFlux/Director-X/actions/runs/44351352630).
+
+
+## Current Alpha refresh — 18 November 2026
+
+**Product owner:** AssayFlux  
+**Product:** Director X  
+**Branch:** `Alpha` (default and only branch at the time of review)  
+**Base audited:** `b4dd5d71138dad6d926df6a612ed66127fff02cb`
+
+The older `main`-branch references and workflow run IDs in this register are historical. Current verification must be performed against Alpha and the maintenance branch before any issue is marked resolved.
+
+### DX-MEDIA-053K-001 — 5.3K source decoding and editing is not accepted
+
+- **Severity:** Critical for the requested feature
+- **Status:** OPEN — implementation and device acceptance required
+- **Finding:** The project resolution enum currently ends at 4K. Media diagnostics can inspect actual track dimensions and query a decoder for a source format, but the current proxy path delegates source decoding to Media3 Transformer and only tries alternate Android decoders. This does not establish a software decode fallback when every device decoder rejects a 5.3K profile/raster.
+- **Impact:** Some 5.3K camera files may import and display metadata but fail during preview, scrubbing or proxy generation on devices without a decoder capable of the source's exact dimensions/profile/bit depth.
+- **Required correction:** Add an explicit source capability decision based on actual codec, profile, level, raster, frame rate, bit depth, chroma and color metadata. For unsupported native decode, implement a bounded FFmpeg software-decode proxy path with SAF URI support, cancellation, progress, storage budgeting, atomic output promotion and restart recovery. Preserve original media references and guarantee final export uses originals.
+- **Verification required:** Representative 5.3K camera corpus; native and software fallback tests; HALF/QUARTER/EIGHTH proxy dimensions; audio/timestamp/rotation/HDR checks; active cancellation; process death; low-storage behavior; concurrent playback/export/proxy stress; final output inspection; physical-device acceptance. Do not claim support before these gates pass.
+
+### DX-BRAND-ASSET-001 — supplied SVG artwork is not yet verified as in-app UI artwork
+
+- **Severity:** High
+- **Status:** ASSETS PRESENT — APP INTEGRATION UNVERIFIED
+- **Assets:** `Assets/Director-X Logo.svg` and `Assets/UI Design Texture.svg`
+- **Finding:** Both supplied assets exist in the repository. The UI texture also exists at the repository root with the same blob SHA, so the root copy is an exact duplicate.
+- **Required correction:** Use the supplied logo and texture as the authoritative artwork for the app's own surfaces. Inspect the SVG source, dimensions, viewBox, filters, embedded resources and licensing before converting or loading them. Remove the duplicate only after confirming all references use the canonical `Assets/` path.
+- **Verification required:** App launcher/splash and approved UI-surface rendering on Android, density/scaling checks, accessibility contrast and repository duplicate validation.
+
+### DX-CANVAS-002 — custom canvas dimensions are not propagated to encoder output
+
+- **Severity:** High
+- **Status:** OPEN — CONFIRMED
+- **Finding:** `Project.canvasDimensions` is defined, but export code still resolves dimensions from `config.resolution.forAspect(config.aspectRatio)`. The current project model's maximum dimension of 8192 is a validation ceiling, not an encoder support statement.
+- **Required correction:** Carry explicit canvas dimensions through project creation/edit, persistence, preview composition, export configuration, render planner, encoder-safe dimension calculation, export history and output verification. Platform presets may override the project canvas only when the user explicitly selects that preset.
+- **Verification required:** Portrait, landscape, square and non-standard canvas round trips; actual output width/height inspection; encoder capability fallback; memory/thermal behavior on physical devices.
