@@ -59,3 +59,4 @@ The current Android identity is `0.1.0` / version code `302`. Builds and runtime
 - Removed the superseded pre-0.1.0 Fastlane changelog for version code 301 and aligned crash-report test fixtures with the current 0.1.0 app version.
 - Documented the mirrored user-supplied design texture and explicitly allowlisted the byte-identical pair rather than deleting either copy.
 - Repository hygiene passed after the intentional mirrored design texture was documented and allowlisted (run [44350163729](https://github.com/AssayFlux/Director-X/actions/runs/44350163729)).
+- Kept the native FFmpeg release gate open after the 2026-11-18 NVD review identified additional FFmpeg 8.1.2 advisories missing from the current component inventory; no review date was extended and no native binary was falsely marked secure.
