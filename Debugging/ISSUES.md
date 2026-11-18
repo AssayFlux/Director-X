@@ -398,7 +398,7 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 
 - **Severity:** Medium
 - **Status:** IMPLEMENTED IN DRAFT PR #59 — NOT ACCEPTED.
-- **Finding:** Draft PR #59 packages the supplied `Assets/Director-X Logo.svg` and displays it in a white, centered 1.3-second Compose splash overlay. It does not use the previously proposed GIF.
+- **Finding:** Draft PR #59 packages the supplied `Assets/Director-X Logo.svg` and displays it in a white, centered 1.3-second Compose entry/exit splash overlay. It does not use the previously proposed GIF.
 - **Required correction:** Validate the WebView SVG renderer, asset packaging, cold-start cost, lifecycle/background behavior and accessibility. Preserve the requested 1.3-second presentation and verify it on a physical device.
 - **Verification required:** Android build, cold-start and background/foreground tests, navigation tests, low-memory behavior and physical-device visual/performance checks. Do not mark the splash accepted before these pass.
 
