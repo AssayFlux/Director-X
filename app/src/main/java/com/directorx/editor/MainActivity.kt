@@ -260,10 +260,6 @@ class MainActivity : ComponentActivity() {
                                     .background(Color.White),
                                 contentAlignment = Alignment.Center,
                             ) {
-                                AssayFluxTexture(
-                                    modifier = Modifier.fillMaxSize(),
-                                    alpha = 0.035f,
-                                )
                                 Column(
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     verticalArrangement = Arrangement.spacedBy(10.dp),
