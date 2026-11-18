@@ -130,7 +130,7 @@ The tracked-document policy now explicitly permits `docs/DOCUMENTATION_BASELINE.
 
 ## 10. AssayFlux identity and high-resolution media status — 18 November 2026
 
-The current product identity is **Director X**, with the product-owner credit **Designed by AssayFlux**. The supplied authoritative artwork is `Assets/Director-X Logo.svg` and `Assets/UI Design Texture.svg`. The UI texture is duplicated at repository root with the same blob SHA; the canonical asset location is `Assets/`.
+The current product identity is **Director X**, with the product-owner credit **Designed by AssayFlux**. The supplied authoritative artwork is `Assets/Director-X Logo.svg` and `Assets/UI Design Texture.svg`. The redundant root SVG copy was removed in draft PR #59; the canonical asset location is `Assets/`.
 
 The default branch is `Alpha`. All current workflow branch filters, status reports, release references and repository badges must point to the actual default branch. References to `main` in earlier audit records are historical unless explicitly refreshed.
 
