@@ -1394,7 +1394,7 @@ class ExportDelegate(
                     }
                     val (logicalWidth, logicalHeight) = gifLogicalScreenSize(
                         targetWidth = maxWidth,
-                        aspectRatio = configWithChapters.aspectRatio.toFloat(),
+                        aspectRatio = configWithChapters.outputDimensions().let { it.first.toFloat() / it.second },
                         sourceSizes = sourceSizes,
                     )
 
@@ -1419,7 +1419,7 @@ class ExportDelegate(
                                         if (clip == null) {
                                             frameBitmap = createGapGifFrame(
                                                 maxWidth,
-                                                configWithChapters.aspectRatio,
+                                                configWithChapters.outputDimensions().let { it.first.toFloat() / it.second },
                                             )
                                         } else {
                                             // Respect speedCurve — `timelineOffsetToSourceMs`
@@ -2973,10 +2973,10 @@ class ExportDelegate(
 
     private fun createGapGifFrame(
         maxWidth: Int,
-        aspectRatio: com.directorx.editor.model.AspectRatio
+        aspectRatio: Float
     ): android.graphics.Bitmap {
         val width = maxWidth.coerceAtLeast(1)
-        val height = (width / aspectRatio.toFloat()).roundToInt().coerceAtLeast(1)
+        val height = (width / aspectRatio.coerceAtLeast(0.1f)).roundToInt().coerceAtLeast(1)
         return android.graphics.Bitmap
             .createBitmap(width, height, android.graphics.Bitmap.Config.ARGB_8888)
             .apply { eraseColor(android.graphics.Color.BLACK) }
