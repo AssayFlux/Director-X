@@ -164,7 +164,7 @@ fun ProjectListScreen(
             .testTag(ClearCutTestTags.PROJECTS_SCREEN)
     ) {
         AssayFluxTexture(
-            modifier = Modifier.matchParentSize(),
+            modifier = Modifier.fillMaxSize(),
             alpha = 0.045f,
         )
         val importTemplate = { templateImportLauncher.launch(arrayOf("*/*")) }
