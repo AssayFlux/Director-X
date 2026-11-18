@@ -52,3 +52,4 @@ The current Android identity is `0.1.0` / version code `302`. Builds and runtime
 - Refreshed the issue register with current-main baseline, custom-canvas, splash, proxy, Room schema, native security, CI/documentation and branch-cleanup findings.
 - Merged to `main` in PR [#53](https://github.com/AssayFlux/Director-X/pull/53). Repository hygiene passed in run [44344295278](https://github.com/AssayFlux/Director-X/actions/runs/44344295278); Android unit verification and API 37 device/performance QA are still running as of this update. No APK build or physical-device acceptance is claimed.
 - Corrected both broken README hero-image references discovered by the PR repository-hygiene validator; the follow-up repository-hygiene run passed.
+- Removed the obsolete root `assets/` entry from the README repository map after confirming the directory no longer exists in the tracked tree.
