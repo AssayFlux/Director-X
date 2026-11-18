@@ -465,3 +465,12 @@ This addendum supersedes the 2026-11-03 snapshot above wherever dates, branch st
 - **Finding:** The repository map still listed a root `assets/` directory after its last tracked icon asset had been removed. The README hero now uses the actual launcher resource under `app/src/main/res/`.
 - **Correction merged:** Removed the obsolete root `assets/` entry from the README repository map.
 - **Verification required:** The next repository-hygiene run should confirm README path and asset validation remains green.
+
+
+### DX-HYGIENE-001 — Duplicate allowlist retained a removed root icon path
+
+- **Severity:** Low
+- **Status:** CORRECTED ON MAIN — repository-hygiene validation pending.
+- **Finding:** `scripts/check_repository_duplicates.py` still listed `assets/icon.png` as an intentional duplicate after the root assets directory and icon had been removed.
+- **Correction merged:** Removed the obsolete allowlist group; the Fastlane store icon remains governed by its actual path.
+- **Verification required:** Confirm the repository-hygiene workflow passes and reports only existing intentional duplicate groups.
