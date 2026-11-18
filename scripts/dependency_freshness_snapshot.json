@@ -66,12 +66,6 @@
         "releaseChannel": "stable",
         "probe": "python scripts/probe_dependency_upgrade.py --dependency agp --version 9.5.1"
       },
-      "previousReview": {
-        "reviewedOn": "2026-10-05",
-        "latestStable": "9.4.1",
-        "reason": "Adopted 9.4.1 with Gradle 9.8.0 (wrapper checksum pinned from the published distribution hash) after a passing strict probe on 2026-10-05. Lint detector audit: the source detectors stay enabled, and lintQa, lintDebug and lintVitalRelease ran with no LintError (no detector crash), no errors, and 470 warnings plus 7 hints on lintDebug; :app:assembleRelease passed under strict verification.",
-        "unblockCondition": "Run `python scripts/refresh_dependency_freshness.py` before changing this pin."
-      },
       "lintReviewRequired": true
     },
     "kotlin": {
@@ -94,12 +88,6 @@
         "candidateVersion": "2.4.21",
         "releaseChannel": "stable",
         "probe": "python scripts/probe_dependency_upgrade.py --dependency kotlin --version 2.4.21"
-      },
-      "previousReview": {
-        "reviewedOn": "2026-10-05",
-        "latestStable": "2.4.20",
-        "reason": "The catalog pin 2.4.10 is below the 2.4.20 stable version reported by authoritative metadata; no compatibility probe has approved the change.",
-        "unblockCondition": "Run `python scripts/probe_dependency_upgrade.py --dependency kotlin --version 2.4.20` and retain the new pin only after the local compatibility probe passes."
       },
       "lintReviewRequired": true
     },
@@ -125,12 +113,6 @@
         "candidateVersion": "2.3.14",
         "releaseChannel": "stable",
         "probe": "python scripts/probe_dependency_upgrade.py --dependency ksp --version 2.3.14"
-      },
-      "previousReview": {
-        "reviewedOn": "2026-10-05",
-        "latestStable": "2.3.12",
-        "reason": "The catalog pin 2.3.11 is below the 2.3.12 stable version reported by authoritative metadata; no compatibility probe has approved the change.",
-        "unblockCondition": "Run `python scripts/probe_dependency_upgrade.py --dependency ksp --version 2.3.12` and retain the new pin only after the local compatibility probe passes."
       },
       "lintReviewRequired": true
     },
@@ -181,12 +163,6 @@
         "candidateVersion": "1.11.1",
         "releaseChannel": "stable",
         "probe": "python scripts/probe_dependency_upgrade.py --dependency media3 --version 1.11.1"
-      },
-      "previousReview": {
-        "reviewedOn": "2026-10-05",
-        "latestStable": "1.11.1",
-        "reason": "The catalog pin matches the latest stable version after a passing local compatibility probe.",
-        "unblockCondition": "Run `python scripts/refresh_dependency_freshness.py` before changing this pin."
       }
     },
     "hilt": {
@@ -420,12 +396,6 @@
         "candidateVersion": "5.5.1",
         "releaseChannel": "stable",
         "probe": "python scripts/probe_dependency_upgrade.py --dependency okhttp --version 5.5.1"
-      },
-      "previousReview": {
-        "reviewedOn": "2026-10-05",
-        "latestStable": "5.5.0",
-        "reason": "The catalog pin matches the latest stable version returned by authoritative metadata.",
-        "unblockCondition": "Run `python scripts/refresh_dependency_freshness.py` before changing this pin."
       }
     },
     "lottieCompose": {
@@ -472,12 +442,6 @@
         "candidateVersion": "1.32.0",
         "releaseChannel": "stable",
         "probe": "python scripts/probe_dependency_upgrade.py --dependency onnxruntime --version 1.32.0"
-      },
-      "previousReview": {
-        "reviewedOn": "2026-10-05",
-        "latestStable": "1.30.0",
-        "reason": "Adopted 1.28.0 on 2026-10-05: the strict-verification probe passed, all four per-ABI APKs stay inside their size budgets (compressed growth 0.9 to 1.5 MB per ABI), 16 KB alignment holds on arm64-v8a and x86_64, and on an API 35 x86_64 emulator LaMa inpainting runs through XNNPACK and Whisper transcribes the spoken acceptance clip. 1.29.0 and 1.30.0 are held on size: 1.30.0 grows the compressed native payload by 3.8 to 6.2 MB per ABI, past the 2 MB per-ABI growth budget.",
-        "unblockCondition": "Ship a reduced-operator ONNX Runtime build covering only the operators of the pinned Whisper, LaMa and upscale models, or raise the per-ABI growth budget deliberately, then run `python scripts/probe_dependency_upgrade.py --dependency onnxruntime --version 1.30.0`, the APK size check, and the on-device Whisper and inpainting fixtures before moving the pin."
       }
     },
     "mediapipe": {
@@ -502,12 +466,6 @@
         "candidateVersion": "1.2.3",
         "releaseChannel": "stable",
         "probe": "python scripts/probe_dependency_upgrade.py --dependency mediapipe --version 1.2.3"
-      },
-      "previousReview": {
-        "reviewedOn": "2026-10-05",
-        "latestStable": "1.0.0",
-        "reason": "The catalog pin matches the latest stable version returned by authoritative metadata.",
-        "unblockCondition": "Run `python scripts/refresh_dependency_freshness.py` before changing this pin."
       }
     },
     "protobufJavalite": {
@@ -530,12 +488,6 @@
         "candidateVersion": "4.36.2",
         "releaseChannel": "stable",
         "probe": "python scripts/probe_dependency_upgrade.py --dependency protobufJavalite --version 4.36.2"
-      },
-      "previousReview": {
-        "reviewedOn": "2026-10-05",
-        "latestStable": "4.36.2",
-        "reason": "The pin stays on protobuf 4.27.5 to cover MediaPipe's transitive 4.26.1 and GHSA-735f-pc8j-v9w8 without claiming that 4.35.1's gencode/runtime enforcement is compatible with MediaPipe 0.10.35 generated classes.",
-        "unblockCondition": "After MediaPipe ships a build with a protobuf floor at or above 4.35, run `python scripts/probe_dependency_upgrade.py --dependency protobufJavalite --version 4.35.1` and the generated-code tests before changing this pin."
       }
     },
     "robolectric": {
@@ -558,12 +510,6 @@
         "candidateVersion": "4.18.1",
         "releaseChannel": "stable",
         "probe": "python scripts/probe_dependency_upgrade.py --dependency robolectric --version 4.18.1"
-      },
-      "previousReview": {
-        "reviewedOn": "2026-10-05",
-        "latestStable": "4.17",
-        "reason": "The catalog pin 4.16.1 is below the 4.17 stable version reported by authoritative metadata; no compatibility probe has approved the change.",
-        "unblockCondition": "Run `python scripts/probe_dependency_upgrade.py --dependency robolectric --version 4.17` and retain the new pin only after the local compatibility probe passes."
       }
     },
     "androidxBenchmark": {
@@ -587,12 +533,6 @@
         "releaseChannel": "beta",
         "stableAlternative": "1.5.0",
         "probe": "python scripts/probe_dependency_upgrade.py --dependency androidxBenchmark --version 1.5.0"
-      },
-      "previousReview": {
-        "reviewedOn": "2026-10-05",
-        "latestStable": "1.5.0",
-        "reason": "The catalog intentionally uses pre-release 1.5.0-beta01; stable metadata stops at 1.4.1.",
-        "unblockCondition": "Wait for the stable 1.5.x benchmark line, then run `python scripts/probe_dependency_upgrade.py --dependency androidxBenchmark --version 1.4.1` before changing this pin."
       }
     }
   }
