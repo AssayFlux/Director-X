@@ -562,3 +562,11 @@ The older `main`-branch references and workflow run IDs in this register are his
 - **Required correction:** Inspect the AAR's exact configure transcript and decoder/encoder/filter inventories; explicitly disable or backport fixes for affected components; rebuild the AAR; update artifact/patch hashes and lock metadata; run native smoke tests and the complete Android suite.
 - **Evidence:** `docs/NATIVE_MEDIA_SECURITY_REVIEW_2026-11-18.md`
 - **Policy:** Do not extend `reviewUntil` without this evidence.
+
+
+### AssayFlux artwork and 5.3K implementation update — PR #59
+
+- The supplied logo SVG now drives a 1.3-second white splash and the Dashboard/Settings brand marks.
+- The supplied UI background SVG is used subtly on Dashboard and Settings only; the editor workspace and its existing color system are not redesigned.
+- New projects default to proxy editing enabled. High-resolution import auto-starts selected-tier proxy generation; the software fallback accepts AVC/HEVC tracks only.
+- These changes are implemented in the draft PR, not yet accepted. Validate SVG rendering/performance and 5.3K camera footage on the target Android device before closing the issues.
