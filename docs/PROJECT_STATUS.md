@@ -2,7 +2,7 @@
 
 **Review date:** 18 November 2026  
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
-**Audited baseline:** `main` at `1431a9ad28777f7172d1b94032b3a7c882090463`  
+**Audited baseline:** `main` at `efa84e0c55b902ab59b8d2b83df60f2812192b43`  
 **Maintenance work:** merged to `main` in PR [#53](https://github.com/AssayFlux/Director-X/pull/53)
 
 This is the authoritative status summary. It deliberately separates implementation presence, automated verification, and real-device acceptance. A feature is not complete merely because its model, UI setting, dependency or branch exists.
@@ -16,7 +16,7 @@ This is the authoritative status summary. It deliberately separates implementati
 | Proxy acceptance | **Not complete** | High-resolution tier, cancellation, restart, storage pressure, concurrent workload, original-media export and Moto G54 checks |
 | Custom canvas model/database | Partial foundation | Project dimensions and Room migration 10→11 exist |
 | Custom canvas creation-to-export | **Not complete** | UI and dimensions must flow through preview and actual encoder output |
-| CUSTOM global default crash | Correction merged | First Android unit-test run caught a missing helper import; fixed in main commit `5572f9a`; regression coverage merged in PR #55; Android verification runs `44345410795` and `44346056560` are in progress |
+| CUSTOM global default crash | Correction and regression coverage merged | Import fixed in `5572f9a`; latest Android verification run `44349406491` is in progress |
 | AssayFlux splash | **Not on main** | Implementation candidate is on unmerged branch; review and device checks required |
 | Room schema snapshot | Incomplete | Database version 11, tracked schema JSON only through 10; generate/inspect/commit 11 |
 | Native FFmpeg security review | **Expired release gate** | `reviewUntil=2026-10-31`; conduct new review before release |
@@ -73,7 +73,7 @@ The existing 320×240 trim fixture is not sufficient evidence for high-resolutio
 - Project-document serialization includes custom dimensions.
 - Existing tests cover model validation and preset fallback, but do not establish the complete UI-to-export path.
 
-### Confirmed defect and prepared correction
+### Corrected default and regression coverage
 
 The Settings screen exposed `CUSTOM` as a global default. Project creation applied that default without dimensions, while the Project model requires valid custom dimensions. This could throw during ordinary project creation.
 
@@ -107,6 +107,20 @@ Before a release:
 
 Do not mechanically extend the expiry date. The expired review is a release blocker; it does not automatically block an ordinary debug build.
 
+## Dependency freshness
+
+The dependency freshness snapshot was refreshed on **2026-11-18** by the repository's existing `scripts/refresh_dependency_freshness.py` using authoritative Maven metadata. The snapshot covers 21 dependencies: **5 current, 15 intentionally held, and 1 pre-release**. No dependency catalog pins were changed by this refresh.
+
+Important held candidates remain explicit rather than being upgraded mechanically:
+
+- AGP 9.5.1 and Kotlin Gradle Plugin 2.4.21 require a coordinated toolchain decision; the current AGP 9.4.1 / KGP 2.4.10 pair has a recorded passing strict probe, but the next pair has not been probed.
+- Room 3.0.3 is on the new `androidx.room3` coordinate and requires a migration, not a version-only edit.
+- ONNX Runtime 1.32.0 needs fresh per-ABI size, alignment, Whisper and inpainting evidence; the earlier 1.30.0 candidate exceeded the 2 MB per-ABI growth budget.
+- MediaPipe 1.2.3 and protobuf-javalite 4.36.2 remain held pending generated-code/runtime compatibility checks.
+- Other newer stable candidates remain held until their compatibility probes pass.
+
+The refresh script now regenerates hold reasons and unblock conditions from current metadata and preserves the previous decision in `previousReview` when it changes. This prevents stale candidate versions from remaining in the active reason text. The 30-day evidence policy remains in force.
+
 ## CI truth
 
 | Workflow | Responsibility | Does not prove |
@@ -116,7 +130,7 @@ Do not mechanically extend the expiry date. The expired review is a release bloc
 | Repository hygiene | Identity, docs, metadata, feature claims and policy checks | Android compilation or runtime behavior |
 
 Recorded evidence at the time of audit:
-- Android unit verification: the first run [44344294946](https://github.com/AssayFlux/Director-X/actions/runs/44344294946) failed on an unresolved helper import in `ProjectListViewModel.kt`. The missing import was added in main commit `5572f9a`; PR #55 merged the stronger regression test. Follow-up PR run [44345410795](https://github.com/AssayFlux/Director-X/actions/runs/44345410795) and main run [44346056560](https://github.com/AssayFlux/Director-X/actions/runs/44346056560) are in progress. The previous completed main run [41556330546](https://github.com/AssayFlux/Director-X/actions/runs/41556330546) passed.
+- Android unit verification: earlier runs exposed a missing helper import and stale dependency/document allowlist evidence. The import was fixed, PR #55 merged the project-construction regression test, the dependency snapshot is refreshed, and the tracked-document allowlist is corrected. Fresh main run [44349406491](https://github.com/AssayFlux/Director-X/actions/runs/44349406491) is in progress. The previous completed main run [41556330546](https://github.com/AssayFlux/Director-X/actions/runs/41556330546) passed.
 - Repository hygiene for the maintenance PR: [run 44344295278](https://github.com/AssayFlux/Director-X/actions/runs/44344295278) — passed, including README link/asset validation.
 - API 37 device/performance QA: follow-up run [44345410638](https://github.com/AssayFlux/Director-X/actions/runs/44345410638) is in progress. The earlier main run [41553185619](https://github.com/AssayFlux/Director-X/actions/runs/41553185619) was cancelled.
 
