@@ -331,8 +331,7 @@ class ProjectListViewModel @Inject constructor(
                 // CUSTOM is a project-level canvas choice and has no dimensions in app defaults.
                 // Older settings may still contain CUSTOM, so use a safe preset rather than
                 // constructing an invalid Project with zero customWidth/customHeight.
-                aspectRatio = aspectRatio ?: settings.defaultAspectRatio.takeUnless { it == AspectRatio.CUSTOM }
-                    ?: AspectRatio.RATIO_16_9,
+                aspectRatio = aspectRatio ?: resolveDefaultProjectAspectRatio(settings.defaultAspectRatio),
                 frameRate = frameRate ?: settings.defaultFrameRate,
                 resolution = resolution ?: settings.defaultResolution,
                 templateId = templateId
