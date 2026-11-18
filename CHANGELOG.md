@@ -54,3 +54,6 @@ The current Android identity is `0.1.0` / version code `302`. Builds and runtime
 - Corrected both broken README hero-image references discovered by the PR repository-hygiene validator; the follow-up repository-hygiene run passed.
 - Removed the obsolete root `assets/` entry from the README repository map after confirming the directory no longer exists in the tracked tree.
 - Removed the stale `assets/icon.png` intentional-duplicate allowlist entry after confirming the root asset was removed.
+- Refreshed the 21-entry dependency freshness snapshot from authoritative Maven metadata on 2026-11-18; no dependency pins were changed. Held candidates now carry current reasons/unblock steps and preserve prior review context.
+- Added the two public engineering status documents to the tracked-document audit allowlist.
+- Removed the superseded pre-0.1.0 Fastlane changelog for version code 301 and aligned crash-report test fixtures with the current 0.1.0 app version.
