@@ -125,7 +125,7 @@ class TrackedFilesAuditTest {
         }
 
         assertTrue(
-            "ClearCut only tracks approved local CI automation. Unapproved GitHub workflow, " +
+            "Director X only tracks approved local CI automation. Unapproved GitHub workflow, " +
                 "Dependabot, and Renovate files must not be tracked. Offenders: $offenders",
             offenders.isEmpty()
         )
