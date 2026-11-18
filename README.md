@@ -1,9 +1,6 @@
-<div align="center">
-
-<p>
-  <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" alt="Director X application icon" width="168" />
+<p align="center">
+  <img src="Assets/Director-X Logo.svg" alt="AssayFlux Pocket Host" width="100%">
 </p>
-
 # DIRECTOR X
 
 ### THE ANDROID VIDEO EDITOR
