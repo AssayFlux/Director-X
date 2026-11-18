@@ -1,31 +1,45 @@
 # Director X — Project Status and Acceptance Matrix
 
+**Product owner:** AssayFlux  
 **Review date:** 18 November 2026  
 **Repository:** [AssayFlux/Director-X](https://github.com/AssayFlux/Director-X)  
-**Audited baseline:** `main` at `58ba5ccc712035fd53da687b3590e5fd2c92bf00`  
-**Maintenance work:** merged to `main` in PR [#53](https://github.com/AssayFlux/Director-X/pull/53)
+**Default branch:** `Alpha` at `b4dd5d71138dad6d926df6a612ed66127fff02cb`  
+**Active implementation branch:** `assayflux/5.3k-media-and-branding`  
+**Active draft:** [PR #59](https://github.com/AssayFlux/Director-X/pull/59), not merged
 
-This is the authoritative status summary. It deliberately separates implementation presence, automated verification, and real-device acceptance. A feature is not complete merely because its model, UI setting, dependency or branch exists.
+This is the current acceptance summary. It separates implementation, automated verification and physical-device acceptance. PR #59 contains the current implementation work; none of its changes should be described as merged or release-ready until the relevant checks pass.
 
 ## Executive status
 
-| Area | Main-branch status | Evidence / next gate |
+| Area | Current status | Evidence / next gate |
 |---|---|---|
-| App identity | Aligned | Director X, AssayFlux, `com.directorx.editor`, versionName `0.1.0`, versionCode `302` |
-| Proxy reliability foundations | Merged | PRs #47–#49; end-to-end/device acceptance remains open |
-| Proxy acceptance | **Not complete** | High-resolution tier, cancellation, restart, storage pressure, concurrent workload, original-media export and Moto G54 checks |
-| Custom canvas model/database | Partial foundation | Project dimensions and Room migration 10→11 exist; Room schema 11 JSON still needs generation |
-| Custom canvas creation-to-export | **Implemented in draft PR #59; not accepted** | Project creation, preview geometry and export dimensions are wired; Room schema 11, exact output-file checks and device validation remain |
-| CUSTOM global default crash | Correction and regression coverage merged | Import fixed in `5572f9a`; latest Android verification run `44349406491` is in progress |
-| AssayFlux splash | **Implemented in draft PR #59; not accepted** | 1.3-second SVG-logo entry/exit splash overlay; device rendering and timing still require validation |
-| Room schema snapshot | Incomplete | Database version 11, tracked schema JSON only through 10; generate/inspect/commit 11 |
-| Native FFmpeg security review | **Expired release gate** | `reviewUntil=2026-10-31`; conduct new review before release |
-| CI unit tests | Current PR #59 run in progress | Check run 134991201705; no result claimed yet |
-| Repository hygiene | Last recorded run passed | Run 41574172284 |
-| API 37 device/performance QA | Current PR #59 run in progress | Check runs 134991181167 and 134991181852; not physical-device acceptance |
-| Physical-device acceptance | Not established by this audit | Target device: Moto G54 5G / Android 15 |
-| 8K export | Not implemented | Current preset enum ends at 4K |
-| Professional camera compatibility | Not established | Requires a documented codec/profile test corpus |
+| Product identity | Aligned | Director X; Designed by AssayFlux; `com.directorx.editor`; versionName `0.1.0`; versionCode `302` |
+| Default branch and CI | Corrected in PR #59 | Alpha is the default; workflow triggers and current README links target Alpha; latest-head CI still must pass |
+| Supplied logo and background SVGs | Integrated in PR #59 | Logo used in entry/exit splash and Dashboard/Settings headers; texture used on Dashboard/Settings only; physical rendering/performance check pending |
+| Splash | Implemented in PR #59; not accepted | White, centered SVG splash on entry and root-level exit; 1.3-second target; device timing/visual check pending |
+| 5.3K source playback/editing | Implementation in PR #59; not accepted | New projects auto-enable selected-tier proxy generation for 5.3K-class sources; AVC/HEVC FFmpeg software fallback is available after Media3 decode failure; real camera-footage/device acceptance pending |
+| Proxy reliability | Improved in PR #59; acceptance open | Temporary artifact validation, cancellation handling and WorkManager cancellation updated; test all tiers, active cancellation, process recovery, storage pressure and original-media export |
+| Custom canvas creation-to-export | Implemented in PR #59; not accepted | Custom dimensions flow through project creation, preview and export config; validate actual output dimensions and migration behavior |
+| Room schema snapshot | Incomplete | Database version 11 and migration 10→11 exist; tracked schema JSON 11 still needs generation, inspection and commit |
+| Native FFmpeg security review | **Release blocked** | `reviewUntil=2026-10-31` expired; additional upstream advisories need component/reachability review and a reproducible native build |
+| Repository hygiene | Latest recorded checks pending/current-head rerun | Duplicate SVG issue was corrected; confirm the latest Alpha-based run passes |
+| API 37 managed-device QA | Pending | Macrobenchmark/instrumentation must complete; managed-device QA is not physical-device acceptance |
+| Physical-device acceptance | Not established | Target manual device: Moto G54 5G / Android 15 |
+| 8K export | Not implemented | Current export preset enum ends at 4K; custom canvas dimensions alone do not establish 8K encoder support |
+| Professional-camera compatibility | Not established | Requires a representative codec/profile/bit-depth/chroma/rotation corpus and end-to-end testing |
+| Installable APK workflow | Manual | No distributable APK release build is required in GitHub CI; maintainer builds installable APKs manually in Termux |
+
+### Brand integration boundaries
+
+- `Assets/Director-X Logo.svg` is used in the 1.3-second splash and Dashboard/Settings headers.
+- `Assets/UI Design Texture.svg` is layered subtly behind Dashboard and Settings only.
+- The editor, timeline, preview/player, export workspace and existing color system are not redesigned.
+- Gradle copies only the two supplied SVGs into generated Android assets. The local WebView renderer disables JavaScript and network loads.
+- Existing upstream license and attribution notices remain where legally required; they are not product branding.
+
+### Verification policy
+
+A green repository-hygiene check does not prove Android compilation. A green JVM test suite does not prove instrumentation or device playback. Managed-device QA does not prove behavior on the Moto G54. The native FFmpeg release gate remains blocked until its component inventory, advisory disposition and rebuilt artifact are evidenced.
 
 ## Identity and build contract
 
