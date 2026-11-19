@@ -1,4 +1,4 @@
-name: Build FFmpegKitNext 9.0.2 Android artifact
+name: Build FFmpegKitNext with security-updated FFmpeg 9.x
 # FFmpeg source IDs are fetched as commits by the pinned preparation helper.
 
 on:
@@ -27,7 +27,7 @@ concurrency:
 
 jobs:
   build-native:
-    name: Reproducible FFmpegKitNext 9.0.2 Android build
+    name: Reproducible FFmpegKitNext Android build with pinned FFmpeg 9.x
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     steps:
@@ -68,10 +68,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          export version_ffmpeg=d59078794d80f5256d5def27e10bb5400a13195c
+          export version_ffmpeg=f8bb61cd57a714b4eb8a9f8002dbb5214eed48c7
           export RECONF_fribidi=1
           ./nix-android.sh -p android-r27d --enable-lib-libass --enable-lib-libjxl --enable-lib-android-media-codec --enable-lib-android-zlib --enable-lib-openh264 --jobs=8
-          test "$(git -C src/ffmpeg rev-parse HEAD)" = "d59078794d80f5256d5def27e10bb5400a13195c"
+          test "$(git -C src/ffmpeg rev-parse HEAD)" = "f8bb61cd57a714b4eb8a9f8002dbb5214eed48c7"
 
       - name: Verify generated AAR and POM
         shell: bash
@@ -109,7 +109,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ffmpeg-kit-next-9.0.2-android-r27d-${{ github.run_id }}
+          name: ffmpeg-kit-next-9x-security-updated-android-r27d-${{ github.run_id }}
           path: |
             build-output/*
             ffmpeg-kit-next/build.log
