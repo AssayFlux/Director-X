@@ -64,7 +64,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          export version_ffmpeg=d59078794d80f5256d5def27e10bb5400a13195c
           ./nix-android.sh -p android-r27d --enable-libass --enable-libjxl --enable-android-media-codec --enable-android-zlib --enable-openh264 --jobs=8
+          test "$(git -C src/ffmpeg rev-parse HEAD)" = "d59078794d80f5256d5def27e10bb5400a13195c"
 
       - name: Verify generated AAR and POM
         shell: bash

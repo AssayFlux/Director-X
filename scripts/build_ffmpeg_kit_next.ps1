@@ -59,6 +59,7 @@ else
   echo "Director X FFmpeg security patch does not apply cleanly." >&2
   exit 2
 fi
+export version_ffmpeg=d59078794d80f5256d5def27e10bb5400a13195c
 bash ./nix-android.sh -p android-r27d$skipFfmpeg --enable-libass --enable-libjxl --enable-android-media-codec --enable-android-zlib --enable-openh264 --jobs=8
 "@
 
