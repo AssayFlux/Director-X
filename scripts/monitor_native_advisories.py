@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import datetime as dt
 import json
 import sys
 import time
@@ -56,6 +57,9 @@ def main() -> int:
     lock = json.loads(LOCK.read_text(encoding="utf-8"))
     results = []
     seen = set()
+    review_until = dt.date.fromisoformat(lock["security"]["reviewUntil"])
+    today = dt.datetime.now(dt.timezone.utc).date()
+    review_expired = review_until < today
     for component in lock.get("components", []):
         purl = component.get("purl")
         if not purl or purl == "NOASSERTION":
@@ -80,6 +84,8 @@ def main() -> int:
         "monitor": "OSV package URL queries",
         "is_security_approval": False,
         "component_count": len(seen),
+        "security_review_until": review_until.isoformat(),
+        "security_review_expired": review_expired,
         "finding_count": len(results),
         "findings": results,
         "limitations": [
@@ -94,6 +100,9 @@ def main() -> int:
     blockers = [item for item in results if item["severity"] in {"HIGH", "CRITICAL"}]
     if blockers:
         print(f"::error::{len(blockers)} HIGH/CRITICAL OSV finding(s) require triage")
+    if review_expired:
+        print(f"::error::Native security review expired on {review_until}; a documented human review is required")
+    if blockers or review_expired:
         return 1
     print("OSV monitoring completed; this result is not a security approval.")
     return 0
