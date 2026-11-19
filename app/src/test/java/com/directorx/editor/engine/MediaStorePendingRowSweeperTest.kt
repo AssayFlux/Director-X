@@ -22,7 +22,7 @@ class MediaStorePendingRowSweeperTest {
 
     @Test
     fun startupWiresTheBoundedSweepThroughTheApplicationScope() {
-        val source = locate("app/src/main/java/com/directorx/editor/ClearCutApp.kt").readText()
+        val source = locate("app/src/main/java/com/directorx/editor/DirectorXApp.kt").readText()
         val sweeper = locate("app/src/main/java/com/directorx/editor/engine/MediaStorePendingRowSweeper.kt").readText()
 
         assertTrue(source.contains("mediaStorePendingRowSweeper.sweep()"))
