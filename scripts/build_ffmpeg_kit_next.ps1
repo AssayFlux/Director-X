@@ -19,7 +19,7 @@ if ($LASTEXITCODE -ne 0 -or $actualKitCommit -ne $expectedKitCommit) {
 }
 
 $patchPath = (Resolve-Path -LiteralPath (
-        Join-Path $PSScriptRoot "..\third_party\ffmpeg-kit-next\clearcut-security.patch"
+        Join-Path $PSScriptRoot "..\third_party\ffmpeg-kit-next\directorx-security.patch"
     ) -ErrorAction Stop).Path
 function ConvertTo-WslPath([string]$value) {
     $shellValue = $value.Replace("'", "'\''")
@@ -56,7 +56,7 @@ if git apply --reverse --check $patchLiteral >/dev/null 2>&1; then
 elif git apply --check $patchLiteral; then
   git apply $patchLiteral
 else
-  echo "ClearCut FFmpeg security patch does not apply cleanly." >&2
+  echo "Director X FFmpeg security patch does not apply cleanly." >&2
   exit 2
 fi
 bash ./nix-android.sh -p android-r27d$skipFfmpeg --enable-libass --enable-libjxl --enable-android-media-codec --enable-android-zlib --enable-openh264 --jobs=8
