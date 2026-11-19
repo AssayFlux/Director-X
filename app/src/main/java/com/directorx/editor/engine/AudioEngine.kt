@@ -456,7 +456,8 @@ class AudioEngine @Inject constructor(
                 .resource
             encoder.configure(format, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE)
             encoder.start()
-            muxer = MediaMuxer(outputFile.absolutePath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)
+            val activeMuxer = MediaMuxer(outputFile.absolutePath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)
+            muxer = activeMuxer
             val info = MediaCodec.BufferInfo()
             var consumedBytes = 0L
             java.io.FileInputStream(inputFile).buffered().use { source ->
@@ -507,7 +508,7 @@ class AudioEngine @Inject constructor(
                             }
                             outputBuffer.position(info.offset)
                             outputBuffer.limit(info.offset + info.size)
-                            muxer.writeSampleData(audioTrack, outputBuffer, info)
+                            activeMuxer.writeSampleData(audioTrack, outputBuffer, info)
                         }
                         if (info.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM != 0) outputEnded = true
                         encoder.releaseOutputBuffer(outputIndex, false)
@@ -515,8 +516,8 @@ class AudioEngine @Inject constructor(
                     }
                     if (outputIndex == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
                         if (muxerStarted) throw IllegalStateException("AAC encoder changed output format twice")
-                        audioTrack = muxer.addTrack(encoder.outputFormat)
-                        muxer.start()
+                        audioTrack = activeMuxer.addTrack(encoder.outputFormat)
+                        activeMuxer.start()
                         muxerStarted = true
                     }
                     onProgress((consumedBytes.toFloat() / totalBytes).coerceIn(0f, 1f))
