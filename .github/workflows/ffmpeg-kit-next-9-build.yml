@@ -6,13 +6,13 @@ on:
     branches: [ffmpeg-9-rebuild-diagnostics]
     paths:
       - "scripts/build_ffmpeg_kit_next.ps1"
-      - "third_party/ffmpeg-kit-next/directorx-security.patch"
+      - "third_party/ffmpeg-kit-next/directorx-security-9.0.patch"
       - ".github/workflows/ffmpeg-kit-next-9-build.yml"
   pull_request:
     branches: [Alpha]
     paths:
       - "scripts/build_ffmpeg_kit_next.ps1"
-      - "third_party/ffmpeg-kit-next/directorx-security.patch"
+      - "third_party/ffmpeg-kit-next/directorx-security-9.0.patch"
       - ".github/workflows/ffmpeg-kit-next-9-build.yml"
 
 permissions:
@@ -47,8 +47,8 @@ jobs:
           set -euo pipefail
           test "$(git -C ffmpeg-kit-next rev-parse HEAD)" = "9f04bf1e3c97def70b98e198cb80a57b43ef5b45"
           git -C ffmpeg-kit-next config core.autocrlf false
-          git -C ffmpeg-kit-next apply --check "$GITHUB_WORKSPACE/third_party/ffmpeg-kit-next/directorx-security.patch"
-          git -C ffmpeg-kit-next apply "$GITHUB_WORKSPACE/third_party/ffmpeg-kit-next/directorx-security.patch"
+          git -C ffmpeg-kit-next apply --check "$GITHUB_WORKSPACE/third_party/ffmpeg-kit-next/directorx-security-9.0.patch"
+          git -C ffmpeg-kit-next apply "$GITHUB_WORKSPACE/third_party/ffmpeg-kit-next/directorx-security-9.0.patch"
           bash -n ffmpeg-kit-next/scripts/android/ffmpeg.sh
           bash -n ffmpeg-kit-next/scripts/source.sh
 
