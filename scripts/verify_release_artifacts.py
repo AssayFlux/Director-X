@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate ClearCut release inputs, generated APKs, and local trust sidecars."""
+"""Validate Director X release inputs, generated APKs, and local trust sidecars."""
 from __future__ import annotations
 
 import argparse
@@ -240,7 +240,7 @@ def run_self_tests() -> None:
             version_strings = write_fixture(
                 root,
                 "app/src/main/res/values/strings.xml",
-                '<resources><string name="app_name">ClearCut</string></resources>\n',
+                '<resources><string name="app_name">Director X</string></resources>\n',
             )
             write_fixture(root, ".gitignore", "keystore.properties\n*.jks\n*.keystore\n")
 
@@ -328,7 +328,7 @@ def main() -> int:
         print(f"release verification failed: {error}", file=sys.stderr)
         return 1
 
-    print(f"ClearCut v{version_name} (versionCode {version_code}) local release trust verified.")
+    print(f"Director X v{version_name} (versionCode {version_code}) local release trust verified.")
     for apk in outputs:
         print(f"  - {apk.relative_to(ROOT)} ({apk.stat().st_size} bytes)")
     return 0
