@@ -62,6 +62,37 @@ import sys
 path = Path(sys.argv[1])
 text = path.read_text(encoding="utf-8")
 old = "./$(gen_unicode_version) $^ > $@"
+new = "python3 ./gen-unicode-version.py unidata/ReadMe.txt > $@"
+dependency = "\\t\\t$(gen_unicode_version)\\n"
+if text.count(dependency) != 1:
+    raise SystemExit("Expected exactly one generated executable prerequisite; refusing an ambiguous edit.")
+text = text.replace(dependency, "")
+if text.count(old) == 1:
+    text = text.replace(old, new)
+elif text.count(new) == 1:
+    print("FriBidi Unicode version rule already uses the bounded Python generator.")
+else:
+    raise SystemExit("Unexpected FriBidi Unicode generator recipe; refusing an ambiguous patch.")
+path.write_text(text, encoding="utf-8")
+
+generator = """#!/usr/bin/env python3
+import pathlib
+import re
+import sys
+
+source = pathlib.Path(sys.argv[1]).read_text(encoding="utf-8")
+match = re.search(r"\\bVersion\\s+(\\d+)\\.(\\d+)\\.(\\d+)\\b", source)
+if not match:
+    raise SystemExit("Could not determine Unicode version from pinned FriBidi ReadMe.txt")
+major, minor, micro = map(int, match.groups())
+print("/* fribidi-unicode-version.h: generated from pinned Unicode ReadMe.txt */")
+print(f'#define FRIBIDI_UNICODE_VERSION "{major}.{minor}.{micro}"')
+print(f"#define FRIBIDI_UNICODE_MAJOR_VERSION {major}")
+print(f"#define FRIBIDI_UNICODE_MINOR_VERSION {minor}")
+print(f"#define FRIBIDI_UNICODE_MICRO_VERSION {micro}")
+"""
+(path.parent / "gen-unicode-version.py").write_text(generator, encoding="utf-8")
+
 new = "./$(gen_unicode_version) unidata/ReadMe.txt unidata/BidiMirroring.txt > $@"
 if text.count(old) == 1:
     path.write_text(text.replace(old, new), encoding="utf-8")
