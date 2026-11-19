@@ -23,7 +23,7 @@ diff --git a/scripts/android/fribidi.sh b/scripts/android/fribidi.sh
 index 8d7c6f1..d2f6a11 100755
 --- a/scripts/android/fribidi.sh
 +++ b/scripts/android/fribidi.sh
-@@ -1,6 +1,27 @@
+@@ -1,6 +1,29 @@
  #!/bin/bash
  
  # ALWAYS CLEAN THE PREVIOUS BUILD

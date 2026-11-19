@@ -1,17 +1,8 @@
 name: Release candidate verification
 
 on:
+  # APK packaging is deliberately manual and reserved for the final release stage.
   workflow_dispatch:
-  pull_request:
-    branches: [Alpha]
-    paths:
-      - "app/**"
-      - "third_party/ffmpeg-kit-next/**"
-      - "scripts/**"
-      - "gradle/**"
-      - "*.gradle"
-      - "*.gradle.kts"
-      - ".github/workflows/release-candidate.yml"
 
 permissions:
   contents: read
