@@ -243,12 +243,12 @@ class PreviewCompositionPlayerTest {
         val sequences = listOf(sequence(upper), sequence(lower))
         return Composition.Builder(sequences)
             .setVideoCompositorSettings(
-                ClearCutVideoCompositorSettings(
+                DirectorXVideoCompositorSettings(
                     outputWidth = 64,
                     outputHeight = 64,
                     layers = listOf(
-                        ClearCutCompositorLayer(0, "upper", 1, 0.5f, BlendMode.NORMAL),
-                        ClearCutCompositorLayer(1, "lower", 0, 1f, BlendMode.NORMAL),
+                        DirectorXCompositorLayer(0, "upper", 1, 0.5f, BlendMode.NORMAL),
+                        DirectorXCompositorLayer(1, "lower", 0, 1f, BlendMode.NORMAL),
                     ),
                 )
             )
