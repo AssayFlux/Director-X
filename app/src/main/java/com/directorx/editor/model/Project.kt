@@ -115,7 +115,9 @@ enum class Resolution(val width: Int, val height: Int, val label: String) {
     HD_720P(1280, 720, "720p"),
     FHD_1080P(1920, 1080, "1080p"),
     QHD_1440P(2560, 1440, "1440p"),
-    UHD_4K(3840, 2160, "4K");
+    UHD_4K(3840, 2160, "4K"),
+    UHD_5_3K(5312, 2988, "5.3K"),
+    UHD_8K(7680, 4320, "8K");
 
     fun forAspect(aspect: AspectRatio): Pair<Int, Int> {
         val ratio = aspect.toFloat()

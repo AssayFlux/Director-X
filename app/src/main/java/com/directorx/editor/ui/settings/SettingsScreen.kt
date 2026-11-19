@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings as AndroidSettings
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
@@ -56,6 +57,7 @@ import androidx.core.content.FileProvider
 import androidx.core.content.ContextCompat
 import com.directorx.editor.BuildConfig
 import com.directorx.editor.R
+import com.directorx.editor.engine.EncoderCapabilityProbe
 import com.directorx.editor.engine.AppearanceMode
 import com.directorx.editor.engine.AppSettings
 import com.directorx.editor.engine.PrivacyDashboard
@@ -71,7 +73,6 @@ import com.directorx.editor.ui.theme.ClearCutFilterChip
 import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.ClearCutMetricPill
 import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.AssayFluxLogo
 import com.directorx.editor.ui.theme.AssayFluxTexture
 import com.directorx.editor.ui.theme.ClearCutScreenBackground
 import com.directorx.editor.ui.theme.ClearCutSecondaryButton
@@ -109,6 +110,9 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     var selectedCategory by remember { mutableStateOf<SettingsCategory?>(null) }
+    BackHandler {
+        if (selectedCategory != null) selectedCategory = null else onBack()
+    }
     // Each settings category is a separate destination with a fresh top-of-page scroll position.
     val scrollState = remember(selectedCategory) { ScrollState(0) }
     val settings by viewModel.settings.collectAsStateWithLifecycle()
@@ -129,6 +133,49 @@ fun SettingsScreen(
     // Exclude CUSTOM here; legacy persisted CUSTOM values display the safe 16:9 fallback.
     val defaultAspectRatioOptions = AspectRatio.entries.filterNot { it == AspectRatio.CUSTOM }
     val effectiveDefaultAspectRatio = resolveDefaultProjectAspectRatio(settings.defaultAspectRatio)
+    val defaultExportCodec = VideoCodec.entries.firstOrNull { it.name == settings.defaultCodec } ?: VideoCodec.H264
+    val defaultExportQuality = ExportQuality.entries.firstOrNull { it.name == settings.defaultExportQuality } ?: ExportQuality.HIGH
+    val defaultResolutionSupport = remember(
+        settings.defaultCodec, settings.defaultResolution, settings.defaultFrameRate,
+        settings.defaultExportQuality, effectiveDefaultAspectRatio
+    ) {
+        Resolution.entries.associateWith { candidate ->
+            val candidateConfig = ExportConfig(
+                resolution = candidate,
+                frameRate = settings.defaultFrameRate,
+                codec = defaultExportCodec,
+                quality = defaultExportQuality,
+            )
+            val (candidateWidth, candidateHeight) = candidate.forAspect(effectiveDefaultAspectRatio)
+            EncoderCapabilityProbe.check(
+                defaultExportCodec, candidateWidth, candidateHeight,
+                settings.defaultFrameRate, candidateConfig.videoBitrate
+            ).supported
+        }
+    }
+    val defaultResolutionOptions = Resolution.entries.filter {
+        defaultResolutionSupport[it] == true || it == settings.defaultResolution
+    }
+    val defaultFrameRateSupport = remember(
+        settings.defaultCodec, settings.defaultResolution, settings.defaultFrameRate,
+        settings.defaultExportQuality, effectiveDefaultAspectRatio
+    ) {
+        listOf(24, 30, 60, 120).associateWith { fps ->
+            val candidateConfig = ExportConfig(
+                resolution = settings.defaultResolution,
+                frameRate = fps,
+                codec = defaultExportCodec,
+                quality = defaultExportQuality,
+            )
+            val (candidateWidth, candidateHeight) = settings.defaultResolution.forAspect(effectiveDefaultAspectRatio)
+            EncoderCapabilityProbe.check(
+                defaultExportCodec, candidateWidth, candidateHeight, fps, candidateConfig.videoBitrate
+            ).supported
+        }
+    }
+    val defaultFrameRateOptions = listOf(24, 30, 60, 120).filter {
+        defaultFrameRateSupport[it] == true || it == settings.defaultFrameRate
+    }
     val thumbnailCacheSizes = remember(context) {
         ThumbnailCachePolicy.availableSettingsSizes(
             maxMemoryBytes = Runtime.getRuntime().maxMemory(),
@@ -230,8 +277,8 @@ fun SettingsScreen(
                 label = stringResource(R.string.settings_default_resolution),
                 description = stringResource(R.string.settings_default_resolution_description),
                 value = settings.defaultResolution.label,
-                options = Resolution.entries.map { it.label },
-                onSelected = { idx -> viewModel.setResolution(Resolution.entries[idx]) }
+                options = defaultResolutionOptions.map { it.label },
+                onSelected = { idx -> viewModel.setResolution(defaultResolutionOptions[idx]) }
             )
             SettingsDropdown(
                 icon = Icons.Default.Schedule,
@@ -239,8 +286,8 @@ fun SettingsScreen(
                 label = stringResource(R.string.settings_default_frame_rate),
                 description = stringResource(R.string.settings_default_frame_rate_description),
                 value = "${settings.defaultFrameRate}fps",
-                options = listOf("24fps", "30fps", "60fps"),
-                onSelected = { idx -> viewModel.setFrameRate(listOf(24, 30, 60)[idx]) }
+                options = defaultFrameRateOptions.map { "${it}fps" },
+                onSelected = { idx -> viewModel.setFrameRate(defaultFrameRateOptions[idx]) }
             )
             SettingsDropdown(
                 icon = Icons.Default.CropSquare,
@@ -778,30 +825,45 @@ fun SettingsScreen(
             ) {
                 Text(
                     text = "AUTHOR'S SECTION",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-                Text(
-                    text = "Md Safarujjaman",
                     style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(top = 5.dp)
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
                 )
                 Text(
                     text = "AssayFlux — building thoughtful tools where creativity meets engineering.",
                     style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 3.dp)
-                )
-                Image(
-                    painter = painterResource(R.drawable.assayflux_signature),
-                    contentDescription = "Md Safarujjaman's signature",
-                    contentScale = ContentScale.Fit,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                     modifier = Modifier
-                        .padding(top = 8.dp)
-                        .width(88.dp)
-                        .height(64.dp)
+                        .fillMaxWidth()
+                        .padding(top = 6.dp)
                 )
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.End)
+                        .padding(top = 14.dp),
+                    horizontalAlignment = Alignment.End
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.assayflux_signature),
+                        contentDescription = "Md Safarujjaman's signature",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .width(112.dp)
+                            .height(56.dp)
+                    )
+                    Text(
+                        text = "Md Safarujjaman",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        textAlign = androidx.compose.ui.text.style.TextAlign.End,
+                        modifier = Modifier.padding(top = 2.dp)
+                    )
+                }
             }
         }
         } // End SettingsCategory.APP content
@@ -1109,23 +1171,8 @@ private fun SettingsHero(
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.Top
         ) {
-            ClearCutChromeIconButton(
-                icon = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = stringResource(R.string.back),
-                onClick = onBack,
-                tint = LocalDirectorXColors.current.text,
-                containerColor = Color.Transparent,
-                borderColor = Color.Transparent,
-                modifier = Modifier.testTag(ClearCutTestTags.SETTINGS_BACK)
-            )
-            Spacer(Modifier.width(Spacing.sm))
-            AssayFluxLogo(
-                modifier = Modifier.size(width = 52.dp, height = 32.dp),
-                contentDescription = stringResource(R.string.app_name),
-            )
-            Spacer(Modifier.width(Spacing.sm))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     stringResource(R.string.settings_title),
@@ -1149,6 +1196,15 @@ private fun SettingsHero(
                     style = MaterialTheme.typography.labelSmall,
                 )
             }
+            ClearCutChromeIconButton(
+                icon = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = stringResource(R.string.back),
+                onClick = onBack,
+                tint = LocalDirectorXColors.current.text,
+                containerColor = Color.Transparent,
+                borderColor = Color.Transparent,
+                modifier = Modifier.testTag(ClearCutTestTags.SETTINGS_BACK)
+            )
         }
 
         HorizontalDivider(

@@ -272,6 +272,45 @@ fun ExportSheet(
     val semanticColors = LocalClearCutColors.current
     val availableCodecs = remember { ExportConfig.getAvailableCodecs() }
     val outputAspectRatio = config.outputAspectRatio(aspectRatio)
+    // Offer high-end modes only when the selected encoder advertises the exact
+    // dimensions, cadence, and bitrate. MediaCodec remains the final authority.
+    val resolutionSupport = remember(config.codec, config.frameRate, config.quality, config.bitrateOverride, outputAspectRatio) {
+        Resolution.entries.associateWith { candidate ->
+            val candidateConfig = config.copy(
+                resolution = candidate,
+                customOutputWidth = null,
+                customOutputHeight = null,
+                bitrateOverride = null,
+            )
+            val (candidateWidth, candidateHeight) = candidate.forAspect(outputAspectRatio)
+            EncoderCapabilityProbe.check(
+                candidateConfig.codec,
+                candidateWidth,
+                candidateHeight,
+                candidateConfig.frameRate,
+                candidateConfig.videoBitrate,
+            ).supported
+        }
+    }
+    val visibleResolutions = Resolution.entries.filter {
+        resolutionSupport[it] == true || it == config.resolution
+    }
+    val frameRateSupport = remember(config.codec, config.resolution, config.quality, config.bitrateOverride, outputAspectRatio) {
+        listOf(24, 30, 60, 120).associateWith { candidateFps ->
+            val candidateConfig = config.copy(frameRate = candidateFps, bitrateOverride = null)
+            val (candidateWidth, candidateHeight) = config.resolution.forAspect(outputAspectRatio)
+            EncoderCapabilityProbe.check(
+                candidateConfig.codec,
+                candidateWidth,
+                candidateHeight,
+                candidateFps,
+                candidateConfig.videoBitrate,
+            ).supported
+        }
+    }
+    val visibleFrameRates = listOf(24, 30, 60, 120).filter {
+        frameRateSupport[it] == true || it == config.frameRate
+    }
     val (width, height) = config.resolution.forAspect(outputAspectRatio)
     val resolvedRange = remember(config.timelineRange, timelineTimebase, totalDurationMs) {
         config.timelineRange?.resolve(timelineTimebase, totalDurationMs)
@@ -749,9 +788,15 @@ fun ExportSheet(
                 value = config.resolution.label,
                 accent = ClearCutAccents.Sky,
                 onClick = {
-                    val options = Resolution.entries
-                    val next = options[(options.indexOf(config.resolution) + 1) % options.size]
-                    onConfigChanged(config.copy(resolution = next, platformPreset = null))
+                    val options = visibleResolutions
+                    val next = options[(options.indexOf(config.resolution).coerceAtLeast(0) + 1) % options.size]
+                    onConfigChanged(config.copy(
+                        resolution = next,
+                        customOutputWidth = null,
+                        customOutputHeight = null,
+                        bitrateOverride = null,
+                        platformPreset = null,
+                    ))
                 }
             )
                 ExportSummarySettingRow(
@@ -760,9 +805,9 @@ fun ExportSheet(
                 value = stringResource(R.string.export_fps_value, config.frameRate),
                 accent = ClearCutAccents.Mauve,
                 onClick = {
-                    val options = listOf(24, 30, 60)
+                    val options = visibleFrameRates
                     val next = options[(options.indexOf(config.frameRate).coerceAtLeast(0) + 1) % options.size]
-                    onConfigChanged(config.copy(frameRate = next, platformPreset = null))
+                    onConfigChanged(config.copy(frameRate = next, bitrateOverride = null, platformPreset = null))
                 }
             )
                 ExportSummarySettingRow(
@@ -1277,9 +1322,10 @@ fun ExportSheet(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Resolution.entries.forEach { resolution ->
+                        visibleResolutions.forEach { resolution ->
                             FilterChip(
-                                onClick = { onConfigChanged(config.copy(resolution = resolution)) },
+                                onClick = { onConfigChanged(config.copy(resolution = resolution, customOutputWidth = null, customOutputHeight = null, bitrateOverride = null, platformPreset = null)) },
+                                enabled = resolutionSupport[resolution] == true,
                                 label = { Text(resolution.label, style = MaterialTheme.typography.labelMedium) },
                                 selected = config.resolution == resolution,
                                 colors = exportChipColors(ClearCutAccents.Rosewater)
@@ -1296,9 +1342,10 @@ fun ExportSheet(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        listOf(24, 30, 60).forEach { frameRate ->
+                        visibleFrameRates.forEach { frameRate ->
                             FilterChip(
-                                onClick = { onConfigChanged(config.copy(frameRate = frameRate)) },
+                                onClick = { onConfigChanged(config.copy(frameRate = frameRate, bitrateOverride = null, platformPreset = null)) },
+                                enabled = frameRateSupport[frameRate] == true,
                                 label = { Text(stringResource(R.string.export_fps_value, frameRate), style = MaterialTheme.typography.labelMedium) },
                                 selected = config.frameRate == frameRate,
                                 colors = exportChipColors(ClearCutAccents.Mauve)

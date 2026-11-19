@@ -5,19 +5,15 @@
     "developer": "AssayFlux"
   },
   "launcher": {
-    "asset": "Director-X Logo.svg",
+    "asset": "App Icon.png",
     "sourceDirectory": "Assets"
   },
   "splash": {
     "background": "#FFFFFF",
     "sequence": [
       {
-        "asset": "assayflux_splash.gif",
-        "durationMs": 1300
-      },
-      {
         "asset": "Director-X Logo.svg",
-        "durationMs": 500
+        "durationMs": 700
       }
     ],
     "transitionDurationMs": 200

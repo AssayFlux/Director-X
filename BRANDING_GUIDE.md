@@ -19,12 +19,12 @@ The validator checks the configuration's required fields, allowed values, and th
 
 - `launcher.asset`: launcher icon source.
 - `splash.sequence`: ordered splash assets and their display durations in milliseconds.
-- `splash.transitionDurationMs`: crossfade duration between the GIF and Director X logo.
+- `splash.transitionDurationMs`: retained transition setting for future splash artwork changes.
 - `splash.background`: splash background color.
 - `about.authorName`, `about.signatureAsset`, `about.assayFluxLine`: About page author identity.
 - `placements.dashboard/settings/editor`: intended logo and texture placement choices.
 
-The current splash sequence is 1,300 ms AssayFlux GIF, 200 ms crossfade, then 500 ms Director X logo (2,000 ms total). The app implementation and configuration must stay in sync.\n\nThe placement values are configuration selections. A UI placement is only active once its matching Android screen integration is implemented; do not assume changing this JSON alone moves UI elements.
+The launcher icon is generated from `Assets/App Icon.png`. The launch screen displays only the Director X SVG logo; the AssayFlux GIF is not shown. Keep the configured splash sequence consistent with the app implementation.\n\nThe placement values are configuration selections. A UI placement is only active once its matching Android screen integration is implemented; do not assume changing this JSON alone moves UI elements.
 
 ## Build
 

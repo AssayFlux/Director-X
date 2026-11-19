@@ -35,7 +35,7 @@ val validateDirectorXBranding by tasks.registering(Exec::class) {
 }
 val generateDirectorXLauncherIcons by tasks.registering(Exec::class) {
     group = "branding"
-    description = "Generates launcher icons from the approved Director X master SVG."
+    description = "Generates launcher icons from the supplied Director X app icon PNG."
     inputs.file(rootProject.file("branding/branding.json"))
     inputs.dir(rootProject.file("Assets"))
     inputs.file(rootProject.file("scripts/generate_launcher_icons.py"))

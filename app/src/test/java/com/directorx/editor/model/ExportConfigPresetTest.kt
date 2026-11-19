@@ -37,6 +37,19 @@ class ExportConfigPresetTest {
     }
 
     @Test
+    fun highResolutionPresetsResolveToExpectedDimensionsAndBitrates() {
+        val fivePointThreeK = ExportConfig(resolution = Resolution.UHD_5_3K)
+        val eightK = ExportConfig(resolution = Resolution.UHD_8K)
+
+        assertEquals(5312 to 2988, fivePointThreeK.outputDimensions())
+        assertEquals(7680 to 4320, eightK.outputDimensions())
+        assertEquals(2988 to 5312, fivePointThreeK.copy(aspectRatio = AspectRatio.RATIO_9_16).outputDimensions())
+        assertEquals(4320 to 7680, eightK.copy(aspectRatio = AspectRatio.RATIO_9_16).outputDimensions())
+        assertEquals(100_000_000, fivePointThreeK.videoBitrate)
+        assertEquals(160_000_000, eightK.videoBitrate)
+    }
+
+    @Test
     fun everyNamedPlatformPresetRequiresProgressiveMp4Metadata() {
         assertTrue(PlatformPreset.entries.all { it.requiresStreamSafeMp4 })
     }

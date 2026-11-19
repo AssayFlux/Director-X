@@ -221,6 +221,16 @@ data class ExportConfig(
             ExportQuality.MEDIUM -> 50_000_000
             ExportQuality.HIGH -> 80_000_000
         }
+        Resolution.UHD_5_3K -> when (quality) {
+            ExportQuality.LOW -> 45_000_000
+            ExportQuality.MEDIUM -> 70_000_000
+            ExportQuality.HIGH -> 100_000_000
+        }
+        Resolution.UHD_8K -> when (quality) {
+            ExportQuality.LOW -> 80_000_000
+            ExportQuality.MEDIUM -> 120_000_000
+            ExportQuality.HIGH -> 160_000_000
+        }
     }
 }
 
