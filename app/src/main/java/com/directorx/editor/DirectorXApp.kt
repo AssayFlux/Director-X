@@ -65,7 +65,8 @@ class DirectorXApp : Application(), Configuration.Provider {
             .build()
 
     companion object {
-        const val CHANNEL_EXPORT = "directorx_export"
+        // Stable Android notification-channel identifier; retained so existing user channel settings survive.
+        const val CHANNEL_EXPORT = "clearcut_export"
         // Source from BuildConfig so the constant can never drift from the gradle versionName.
         // Consumed by model-download User-Agent headers, crash reports, and the about dialog —
         // a stale value here would misreport the user's actual build.
