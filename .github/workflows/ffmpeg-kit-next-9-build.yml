@@ -8,6 +8,8 @@ on:
     paths:
       - "scripts/build_ffmpeg_kit_next.ps1"
       - "scripts/prepare_ffmpeg_kit_next_9_source.sh"
+      - "scripts/build_ffmpeg_kit_next.ps1"
+      - "scripts/prepare_ffmpeg_kit_next_9_source.sh"
       - "third_party/ffmpeg-kit-next/directorx-security-9.0.patch"
       - ".github/workflows/ffmpeg-kit-next-9-build.yml"
   pull_request:
@@ -68,6 +70,7 @@ jobs:
         run: |
           set -euo pipefail
           export version_ffmpeg=d59078794d80f5256d5def27e10bb5400a13195c
+          export RECONF_fribidi=1
           ./nix-android.sh -p android-r27d --enable-lib-libass --enable-lib-libjxl --enable-lib-android-media-codec --enable-lib-android-zlib --enable-lib-openh264 --jobs=8
           test "$(git -C src/ffmpeg rev-parse HEAD)" = "d59078794d80f5256d5def27e10bb5400a13195c"
 

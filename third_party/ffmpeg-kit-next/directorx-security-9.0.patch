@@ -19,4 +19,39 @@ index 24428f6..0ca135c 100755
 +CONFIGURE_POSTFIX+=" --disable-demuxer=iamf"
 +CONFIGURE_POSTFIX+=" --disable-decoder=zlib"
 +
-
+diff --git a/scripts/android/fribidi.sh b/scripts/android/fribidi.sh
+index 8d7c6f1..d2f6a11 100755
+--- a/scripts/android/fribidi.sh
++++ b/scripts/android/fribidi.sh
+@@ -1,6 +1,27 @@
+ #!/bin/bash
+ 
+ # ALWAYS CLEAN THE PREVIOUS BUILD
+ make distclean 2>/dev/null 1>/dev/null
+ 
++# Director X build correction for FriBidi v1.0.16:
++# Automake's $^ includes the gen-unicode-version executable itself as an
++# input file. It must receive only the two Unicode data files. Passing the
++# executable to the parser can read arbitrary binary strings and abort with
++# stack-smashing protection. Fail closed if the upstream recipe changes.
++FRIBIDI_MAKEFILE_AM="${BASEDIR}/src/${LIB_NAME}/gen.tab/Makefile.am"
++python3 - "${FRIBIDI_MAKEFILE_AM}" <<'PY'
++from pathlib import Path
++import sys
++
++path = Path(sys.argv[1])
++text = path.read_text(encoding="utf-8")
++old = "\t$(AM_V_GEN) ./$(gen_unicode_version) $^ > $@ \\\n"
++new = "\t$(AM_V_GEN) ./$(gen_unicode_version) unidata/ReadMe.txt unidata/BidiMirroring.txt > $@ \\\n"
++if text.count(old) == 1:
++    path.write_text(text.replace(old, new), encoding="utf-8")
++elif text.count(new) == 1:
++    print("FriBidi Unicode generator recipe already corrected.")
++else:
++    raise SystemExit("Unexpected FriBidi Unicode generator recipe; refusing an ambiguous patch.")
++PY
++
+ # REGENERATE BUILD FILES IF NECESSARY OR REQUESTED
+ if [[ ! -f "${BASEDIR}"/src/"${LIB_NAME}"/configure ]] || [[ ${RECONF_fribidi} -eq 1 ]]; then
+   autoreconf_library "${LIB_NAME}" 1>>"${BASEDIR}"/build.log 2>&1 || return 1
+ fi
