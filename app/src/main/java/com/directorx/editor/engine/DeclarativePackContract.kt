@@ -268,10 +268,12 @@ object DeclarativePackContract {
     }
 
     private fun parseVersion(value: String): List<Int>? =
-        Regex("^\\d+(?:\\.\\d+){0,3}(?:[-+][0-9A-Za-z.-]+)?$")
+        Regex("^[vV]?\\d+(?:\\.\\d+){0,3}(?:[-+][0-9A-Za-z.-]+)?$")
             .takeIf { it.matches(value.trim()) }
             ?.let {
                 value.trim()
+                    .removePrefix("v")
+                    .removePrefix("V")
                     .substringBefore('-')
                     .substringBefore('+')
                     .split('.')
