@@ -19,6 +19,8 @@ class BaselineProfileGenerator {
             openBlankEditor()
             openExportSheet()
             scrubTimelineViewport()
+            returnToProjectGallery()
+            openSettingsAndPrivacyDashboard()
         }
     }
 }
