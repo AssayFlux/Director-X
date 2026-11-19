@@ -21,9 +21,13 @@ index 24428f6..0ca135c 100755
 +
 
 diff --git a/scripts/source.sh b/scripts/source.sh
-index 0000000..0000000 100755
 --- a/scripts/source.sh
 +++ b/scripts/source.sh
-@@ -37,1 +37,1 @@
+@@ -34,7 +34,7 @@
+   ffmpeg)
+     SOURCE_REPO_URL="https://github.com/arthenica/FFmpeg"
+     SOURCE_ID="n9.0.2"
 -    SOURCE_TYPE="TAG"
 +    SOURCE_TYPE="COMMIT"
+     ;;
+   fontconfig)
