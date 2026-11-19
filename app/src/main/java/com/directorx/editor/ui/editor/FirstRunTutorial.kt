@@ -21,7 +21,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
@@ -105,13 +104,7 @@ fun FirstRunTutorial(
                     }
                 }
                 .background(
-                    Brush.verticalGradient(
-                        colorStops = arrayOf(
-                            0f to semanticColors.onAccent.copy(alpha = 0.96f),
-                            0.48f to semanticColors.background.copy(alpha = 0.96f),
-                            1f to semanticColors.onAccent.copy(alpha = 0.94f)
-                        )
-                    )
+                    MaterialTheme.colorScheme.surfaceContainerHigh
                 )
         )
         // Skip — quiet pill button. Bare text on a translucent backdrop is hard to discover
@@ -165,13 +158,7 @@ fun FirstRunTutorial(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .background(
-                            Brush.verticalGradient(
-                                colorStops = arrayOf(
-                                    0f to ClearCutAccents.Mauve.copy(alpha = 0.08f),
-                                    0.6f to semanticColors.panelHighest,
-                                    1f to semanticColors.panelHighest
-                                )
-                            )
+                            MaterialTheme.colorScheme.surfaceContainerHigh
                         )
                         .padding(horizontal = Spacing.xxl, vertical = Spacing.xxl)
                 ) {
