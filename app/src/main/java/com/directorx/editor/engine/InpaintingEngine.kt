@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import android.provider.OpenableColumns
 import com.directorx.editor.engine.AppLog
 import com.directorx.editor.model.Mask
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -258,8 +259,8 @@ class InpaintingEngine @Inject constructor(
         onProgress: (Float) -> Unit = {}
     ): InpaintingResult? = withContext(Dispatchers.IO) {
         val pixelBytes = bitmap.byteCount.toLong()
-        if (pixelBytes > NativeProcessingPolicy.MAX_IMAGE_INPUT_BYTES) {
-            AppLog.w(TAG, "inpaintFrame: bitmap $pixelBytes bytes exceeds limit ${NativeProcessingPolicy.MAX_IMAGE_INPUT_BYTES}")
+        if (pixelBytes > MAX_IMAGE_INPUT_BYTES) {
+            AppLog.w(TAG, "inpaintFrame: bitmap $pixelBytes bytes exceeds limit $MAX_IMAGE_INPUT_BYTES")
             return@withContext null
         }
 
@@ -390,11 +391,12 @@ class InpaintingEngine @Inject constructor(
         onProgress: (Float) -> Unit
     ): VideoInpaintingResult? = withContext(Dispatchers.IO) {
         val startTime = System.currentTimeMillis()
-        val v = NativeProcessingPolicy.validateVideoUri(context, uri, "inpaintVideo")
-        if (v != null) {
-            NativeProcessingPolicy.logAndReject(v)
+        val sourceSize = querySourceSize(uri)
+        if (sourceSize != null && sourceSize > MAX_VIDEO_INPUT_BYTES) {
+            AppLog.w(TAG, "inpaintVideo: source $sourceSize bytes exceeds limit $MAX_VIDEO_INPUT_BYTES")
             return@withContext null
         }
+        val outputFile = outputUri.path?.let(::File) ?: return@withContext null
         // Verify once per export. Calling the public frame method here would
         // hash the whole model for every frame.
         if (!isVerifiedModelReady()) {
@@ -424,7 +426,6 @@ class InpaintingEngine @Inject constructor(
 
             val frameIntervalMs = (1000f / fps.coerceIn(1f, 120f)).toLong().coerceAtLeast(16L)
             val totalFrames = ((durationMs / frameIntervalMs) + 1).toInt().coerceIn(1, 9000)
-            val outputFile = outputUri.path?.let(::File) ?: return@withContext null
             outputFile.parentFile?.mkdirs()
 
             val tempDir = File(context.cacheDir, "inpaint-frames-${System.currentTimeMillis()}")
@@ -504,6 +505,18 @@ class InpaintingEngine @Inject constructor(
         } finally {
             retrieverLease.close()
         }
+    }
+
+    private fun querySourceSize(uri: Uri): Long? {
+        if (uri.scheme == "file") return uri.path?.let(::File)?.takeIf { it.isFile }?.length()
+        return runCatching {
+            context.contentResolver.query(uri, arrayOf(OpenableColumns.SIZE), null, null, null)?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    val index = cursor.getColumnIndex(OpenableColumns.SIZE)
+                    if (index >= 0 && !cursor.isNull(index)) cursor.getLong(index) else null
+                } else null
+            }
+        }.getOrNull()
     }
 
     @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
