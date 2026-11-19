@@ -80,6 +80,28 @@ object DirectorXAccents {
     val Rosewater = Mocha.Rosewater
 }
 
+// Temporary source-compatibility bridge while remaining UI call sites are migrated.
+// These aliases are internal implementation names only; the public app identity is Director X.
+val LocalClearCutColors = LocalDirectorXColors
+
+object ClearCutAccents {
+    val Neutral = DirectorXAccents.Neutral
+    val Lavender = DirectorXAccents.Lavender
+    val Blue = DirectorXAccents.Blue
+    val Sapphire = DirectorXAccents.Sapphire
+    val Sky = DirectorXAccents.Sky
+    val Teal = DirectorXAccents.Teal
+    val Green = DirectorXAccents.Green
+    val Yellow = DirectorXAccents.Yellow
+    val Peach = DirectorXAccents.Peach
+    val Maroon = DirectorXAccents.Maroon
+    val Red = DirectorXAccents.Red
+    val Mauve = DirectorXAccents.Mauve
+    val Pink = DirectorXAccents.Pink
+    val Flamingo = DirectorXAccents.Flamingo
+    val Rosewater = DirectorXAccents.Rosewater
+}
+
 private val DirectorXDarkColorScheme = lightColorScheme(
     primary = Mocha.Sky,
     onPrimary = Mocha.Text,
