@@ -255,11 +255,11 @@ def spdx(lock: dict) -> dict:
         "spdxVersion": "SPDX-2.3",
         "dataLicense": "CC0-1.0",
         "SPDXID": "SPDXRef-DOCUMENT",
-        "name": "ClearCut-native-dependencies",
-        "documentNamespace": f"https://novacut.local/spdx/{namespace_hash}",
+        "name": "Director-X-native-dependencies",
+        "documentNamespace": f"https://assayflux.xyz/spdx/director-x/{namespace_hash}",
         "creationInfo": {
             "created": lock["source"]["builtAt"],
-            "creators": ["Organization: ClearCut"],
+            "creators": ["Organization: AssayFlux"],
         },
         "packages": packages,
     }
