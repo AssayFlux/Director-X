@@ -148,6 +148,8 @@ grep -q 'memcpy(lut, ctx->c23lut, sizeof(lut))' "${FFMPEG_SOURCE}/libavcodec/san
 grep -q 'Unsupported bit depth' "${FFMPEG_SOURCE}/libavcodec/dpxenc.c"
 grep -q 'src->width != avctx->width' "${FFMPEG_SOURCE}/libavcodec/encode.c"
 grep -q 's->block_len > 1024 \* 1024' "${FFMPEG_SOURCE}/libavcodec/interplayacm.c"
+grep -q 'redirects++ >= 8' "${FFMPEG_SOURCE}/libavformat/rtsp.c"
+grep -q 'ff_format_check_set_url' "${FFMPEG_SOURCE}/libavformat/rtsp.c"
 '''
 path.write_text(text.replace(anchor, insert + anchor), encoding="utf-8")
 print("Prepared pinned FFmpeg security backports.")
