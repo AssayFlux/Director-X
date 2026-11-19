@@ -59,7 +59,8 @@ def main() -> None:
 
     # Android adaptive icons use a 108dp foreground canvas but only the
     # centered 66dp-diameter circle is guaranteed visible across masks.
-    # The supplied 1.624:1 wordmark at 54dp wide is about 33dp tall;\n    # its corner radius stays within the 33dp safe-circle radius.
+    # The supplied 1.624:1 wordmark at 54dp wide is about 33dp tall;
+    # its corner radius stays within the 33dp safe-circle radius.
     for density, (foreground_size, legacy_size) in DENSITIES.items():
         folder = output / f"mipmap-{density}"
         folder.mkdir(parents=True, exist_ok=True)
@@ -72,6 +73,9 @@ def main() -> None:
     splash_folder.mkdir(parents=True, exist_ok=True)
     (splash_folder / "directorx_splash_logo.png").write_bytes(
         render_png(launcher, 432, fit_fraction=0.82))
+    compose_height = round(720 / 1.624)
+    (splash_folder / "directorx_compose_logo.png").write_bytes(
+        render_png(launcher, 720, compose_height, fit_fraction=0.98))
 
     values = output / "values"
     values.mkdir(parents=True, exist_ok=True)
