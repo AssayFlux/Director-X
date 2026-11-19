@@ -212,6 +212,12 @@ class NoiseReductionEngine @Inject constructor(
         } catch (e: CancellationException) {
             cleanupNoiseReductionFiles(partialFile, outputFile)
             throw e
+        } catch (e: AudioDecoderUnavailableException) {
+            cleanupNoiseReductionFiles(partialFile, outputFile)
+            NoiseReductionResult(
+                outcome = NoiseReductionOutcome.UNAVAILABLE,
+                detail = "Android could not decode this clip's audio on this device. The clip was left unchanged."
+            )
         } catch (e: Exception) {
             cleanupNoiseReductionFiles(partialFile, outputFile)
             AppLog.w(TAG, "Noise reduction failed: ${e.message}", e)
@@ -244,7 +250,7 @@ class NoiseReductionEngine @Inject constructor(
         try {
             val decoded = audioEngine.decodeToPcmWithFormat(uri)
             if (decoded.samples.isEmpty()) {
-                throw IllegalStateException("Android could not decode source audio")
+                throw AudioDecoderUnavailableException()
             }
             writeNormalizedMonoPcm(decoded, sourcePcm)
             reportProgress(onProgress, 0.15f)
@@ -318,6 +324,8 @@ class NoiseReductionEngine @Inject constructor(
             cleanedPcm.delete()
         }
     }
+
+    private class AudioDecoderUnavailableException : Exception()
 
     /**
      * Downmix and linearly resample decoded interleaved PCM to the 48 kHz mono
