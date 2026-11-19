@@ -97,9 +97,9 @@ def main() -> int:
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps(report, indent=2))
-    blockers = [item for item in results if item["severity"] in {"HIGH", "CRITICAL"}]
+    blockers = [item for item in results if item["severity"] in {"HIGH", "CRITICAL", "UNKNOWN"}]
     if blockers:
-        print(f"::error::{len(blockers)} HIGH/CRITICAL OSV finding(s) require triage")
+        print(f"::error::{len(blockers)} HIGH/CRITICAL/UNKNOWN OSV finding(s) require triage; unknown severity is not silently accepted")
     if review_expired:
         print(f"::error::Native security review expired on {review_until}; a documented human review is required")
     if blockers or review_expired:
