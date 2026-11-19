@@ -17,9 +17,10 @@
       },
       {
         "asset": "Director-X Logo.svg",
-        "durationMs": 5000
+        "durationMs": 500
       }
-    ]
+    ],
+    "transitionDurationMs": 200
   },
   "about": {
     "authorName": "Md Safarujjaman",
