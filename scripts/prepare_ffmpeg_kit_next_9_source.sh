@@ -127,37 +127,13 @@ insert = r'''# Director X security backports for FFmpeg 9.0.2:
 # CVE-2026-125250/251/260/261/266/207/216: GIF, VVC, generic encoder,
 # SGI, SANM, Interplay ACM and DPX boundary/initialization fixes.
 FFMPEG_SOURCE="${BASEDIR}/src/ffmpeg"
-FFMPEG_SECURITY_COMMITS=(
-  969c7eb091989a664cb7bf66a1f02051cc46cb52
-  d1434518fbd03789e3e5dc0657a7a9f1123ce074
-  71403a21b02a92b925e26e609e9bd3e48df451cf
-  2c2f6e96e31795ae95a8f8323a493ffbc493111f
-  ed27bfcbbbc0872c0195eaf4dd2c0c93b9f1778e
-  2c515eea07df719379e7f73deeeb7ccb8768433f
-  26c2980980295e5516f308c5a2792d2a72e43eae
-  c6e5b6105aa13f6b0df2a646da608078cfe52d79
-  053660fdb0d2403b838690689c47ad7685c3b10b
-  d42cb1925987cc27899441ce39fa7bd2647dc72e
-  aa5fd7d287db4f469fdcbe444f7f9f38c8c289c7
-  9b99973b2bbecee0b7e1e57035b95498b42f54a6
-  6ecaddb9c1d59cf7f5de16017122fecb2fa0c67c
-  ec887b13a88afbaf44fb28c3045bda5d434da8dc
-)
 FFMPEG_SECURITY_MASTER_PIN="2473872b7ceadbdf3235c0a482f58753e3f6dacb"
-if [[ "$(git -C "${FFMPEG_SOURCE}" rev-parse HEAD)" != "${FFMPEG_SECURITY_MASTER_PIN}" ]]; then
-for fix in "${FFMPEG_SECURITY_COMMITS[@]}"; do
-  if ! git -C "${FFMPEG_SOURCE}" cat-file -e "${fix}^{commit}" 2>/dev/null; then
-    git -C "${FFMPEG_SOURCE}" fetch --no-tags origin "${fix}"
-  fi
-  if git -C "${FFMPEG_SOURCE}" merge-base --is-ancestor "${fix}" HEAD; then
-    continue
-  fi
-  git -C "${FFMPEG_SOURCE}" show --format= "${fix}" | git -C "${FFMPEG_SOURCE}" apply --check -
-  git -C "${FFMPEG_SOURCE}" show --format= "${fix}" | git -C "${FFMPEG_SOURCE}" apply -
-done
-else
-  echo "Using pinned upstream FFmpeg 9.x security-updated commit ${FFMPEG_SECURITY_MASTER_PIN}; upstream backports are already present."
+ACTUAL_FFMPEG_SOURCE="$(git -C "${FFMPEG_SOURCE}" rev-parse HEAD)"
+if [[ "${ACTUAL_FFMPEG_SOURCE}" != "${FFMPEG_SECURITY_MASTER_PIN}" ]]; then
+  echo "::error::Refusing an unreviewed FFmpeg source revision: expected ${FFMPEG_SECURITY_MASTER_PIN}, got ${ACTUAL_FFMPEG_SOURCE}" >&2
+  exit 1
 fi
+echo "Verified exact official FFmpeg security source pin ${FFMPEG_SECURITY_MASTER_PIN}."
 git -C "${FFMPEG_SOURCE}" diff --check
 grep -q 'while (info)' "${FFMPEG_SOURCE}/libavutil/encryption_info.c"
 grep -q 'av_encryption_init_info_append_side_data' "${FFMPEG_SOURCE}/libavutil/encryption_info.c"
