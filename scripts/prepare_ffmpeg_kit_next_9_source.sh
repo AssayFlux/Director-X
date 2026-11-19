@@ -78,27 +78,15 @@ import sys
 
 path = Path(sys.argv[1])
 text = path.read_text(encoding="utf-8")
-dependency = "\t\t$(gen_unicode_version)\n"
-if text.count(dependency) == 1:
-    text = text.replace(dependency, "")
-elif dependency not in text:
-    raise SystemExit("Expected FriBidi generator executable prerequisite; refusing an ambiguous Makefile.")
-continued_dependency = "\t\tunidata/BidiMirroring.txt \\\n"
-plain_dependency = "\t\tunidata/BidiMirroring.txt\n"
-if text.count(continued_dependency) == 1:
-    text = text.replace(continued_dependency, plain_dependency)
-elif text.count(plain_dependency) != 1:
-    raise SystemExit("Expected final FriBidi Unicode data prerequisite; refusing an ambiguous Makefile.")
 old = "./$(gen_unicode_version) $^ > $@"
-new = "python3 ./gen-unicode-version.py unidata/ReadMe.txt > $@"
+new = "./$(gen_unicode_version) unidata/ReadMe.txt unidata/BidiMirroring.txt > $@"
 if text.count(old) == 1:
     text = text.replace(old, new)
 elif text.count(new) != 1:
-    raise SystemExit("Expected FriBidi Unicode generator recipe; refusing an ambiguous Makefile.")
+    raise SystemExit("Expected exactly one FriBidi Unicode generator recipe; refusing an ambiguous Makefile.")
 path.write_text(text, encoding="utf-8")
-print("Replaced FriBidi generator recipe with bounded Python version parsing.")
+print("Removed the generator executable from FriBidi's input-file arguments.")
 FRIBIDI_MAKE
-
 '''
 path.write_text(text.replace(anchor, insert + anchor), encoding="utf-8")
 print("Prepared post-configure FriBidi Makefile correction.")
