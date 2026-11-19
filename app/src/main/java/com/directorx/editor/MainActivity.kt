@@ -175,7 +175,7 @@ class MainActivity : ComponentActivity() {
                 var showAssayFluxSplash by remember { mutableStateOf(true) }
                 var exitingWithBrandSplash by remember { mutableStateOf(false) }
                 LaunchedEffect(Unit) {
-                    delay(1_100L)
+                    delay(1_300L)
                     if (!exitingWithBrandSplash) showAssayFluxSplash = false
                 }
                 BackHandler(enabled = currentRoute == "projects" && !exitingWithBrandSplash) {
