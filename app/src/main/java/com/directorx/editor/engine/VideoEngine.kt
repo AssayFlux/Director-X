@@ -225,7 +225,6 @@ class VideoEngine @Inject constructor(
     @ApplicationContext private val context: Context,
     private val segmentationEngine: SegmentationEngine,
     private val streamCopyEngine: StreamCopyExportEngine,
-    private val ffmpegEngine: FFmpegEngine,
     private val fontRegistry: FontRegistry,
     memoryTrimRegistry: MemoryTrimRegistry,
     private val productHealthLedger: ProductHealthLedger,
@@ -1157,7 +1156,7 @@ class VideoEngine @Inject constructor(
      * preflight probes this so an unavailable backend is disclosed before work
      * starts instead of degrading to forward video mid-render.
      */
-    fun isReverseRenderAvailable(): Boolean = ffmpegEngine.isAvailable()
+    fun isReverseRenderAvailable(): Boolean = false
 
     private suspend fun preRenderReversedClips(
         tracks: List<Track>,
@@ -1169,94 +1168,19 @@ class VideoEngine @Inject constructor(
         }
         if (reversedClips.isEmpty()) return tracks
 
-        // Both remaining fallbacks below are visible to export preflight, which
-        // requires the user to accept them before this runs. Repeat the
-        // disclosure at the point where the fallback is actually applied so
-        // the completed export never looks indistinguishable from a faithful
-        // reverse render.
-        val reverseRenderAvailable = ffmpegEngine.isAvailable()
-        if (!reverseRenderAvailable) {
-            reversedClips.forEach { (_, clip) ->
-                reverseRenderFallbackMessage(
-                    clipId = clip.id,
-                    clipDurationMs = clip.trimEndMs - clip.trimStartMs,
-                    reverseRenderAvailable = false,
-                )?.let(::appendExportWarning)
-            }
-            return tracks
-        }
-
-        val maxReverseDurationMs = MAX_REVERSE_CLIP_DURATION_MS
-        val clipReplacements = mutableMapOf<String, Clip>()
-
-        for ((index, pair) in reversedClips.withIndex()) {
-            // cancelExport() has no transformer to cancel while FFmpeg owns
-            // this phase — honor the CANCELLED state between clips so a
-            // cancelled export stops queueing minutes of reverse renders.
-            if (_exportState.value != ExportState.EXPORTING) break
-            val (_, clip) = pair
-            val clipDurationMs = clip.trimEndMs - clip.trimStartMs
+        // Media3 Transformer has no public reverse-playback effect. Do not
+        // pretend a forward render is a reversed clip: export preflight marks
+        // this capability unavailable and asks the user to accept the explicit
+        // forward-playback fallback before continuing.
+        reversedClips.forEach { (_, clip) ->
             reverseRenderFallbackMessage(
                 clipId = clip.id,
-                clipDurationMs = clipDurationMs,
-                reverseRenderAvailable = true,
-                maxDurationMs = maxReverseDurationMs,
-            )?.let { fallbackMessage ->
-                AppLog.w(TAG, fallbackMessage)
-                appendExportWarning(fallbackMessage)
-                continue
-            }
-
-            val tempFile = File(context.cacheDir, "reverse_${clip.id}_${System.nanoTime()}.mp4")
-            // Registered before the encode so a cancelled export cleans up the partial file too.
-            tempFiles.add(tempFile)
-            val success = ffmpegEngine.reverseClipToFile(
-                inputUri = clip.sourceUri,
-                outputFile = tempFile,
-                trimStartMs = clip.trimStartMs,
-                trimEndMs = clip.trimEndMs,
-                // Audio-less sources have no [0:a] to areverse — mapping it
-                // aborted the render and silently fell back to forward video.
-                hasAudio = hasAudioTrack(clip.sourceUri),
-                onProgress = { p ->
-                    val base = index.toFloat() / reversedClips.size
-                    val weight = 1f / reversedClips.size
-                    onProgress((base + p * weight) * 0.1f)
-                }
-            )
-
-            if (success && tempFile.exists() && tempFile.length() > 0) {
-                val reversedDurationMs = getVideoDuration(android.net.Uri.fromFile(tempFile))
-                    .takeIf { it > 0 } ?: clipDurationMs
-                clipReplacements[clip.id] = clip.copy(
-                    sourceUri = android.net.Uri.fromFile(tempFile),
-                    trimStartMs = 0L,
-                    trimEndMs = reversedDurationMs,
-                    sourceDurationMs = reversedDurationMs,
-                    isReversed = false
-                )
-                AppLog.d(TAG, "Pre-rendered reversed clip ${clip.id} → ${tempFile.name}")
-            } else {
-                tempFile.delete()
-                // Fail closed. Continuing here would export forward video for a
-                // clip the timeline shows reversed, with nothing but a log line
-                // to say so.
-                throw ExportStageException(
-                    stage = "reverse-render",
-                    subjectId = clip.id,
-                    message = "Reverse rendering failed for clip ${clip.id}. " +
-                        "Export stopped so it cannot ship forward video in place of the reversed clip."
-                )
-            }
+                clipDurationMs = clip.trimEndMs - clip.trimStartMs,
+                reverseRenderAvailable = false,
+            )?.let(::appendExportWarning)
         }
-
-        if (clipReplacements.isEmpty()) return tracks
-
-        return tracks.map { track ->
-            track.copy(clips = track.clips.map { clip ->
-                clipReplacements[clip.id] ?: clip
-            })
-        }
+        onProgress(1f)
+        return tracks
     }
 
     /**
