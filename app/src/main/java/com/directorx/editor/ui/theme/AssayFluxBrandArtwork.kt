@@ -5,13 +5,13 @@ import android.view.View
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.Image\nimport androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.Modifier\nimport androidx.compose.ui.layout.ContentScale\nimport androidx.compose.ui.res.painterResource
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.viewinterop.AndroidView\nimport com.directorx.editor.R
 
 /**
  * Renders the supplied AssayFlux SVG artwork with Android's built-in WebView SVG
@@ -22,12 +22,14 @@ fun AssayFluxLogo(
     modifier: Modifier = Modifier,
     contentDescription: String? = "Director X by AssayFlux",
 ) {
-    AssayFluxSvgArtwork(
-        assetName = "Director-X Logo.svg",
-        objectFit = "contain",
-        modifier = modifier,
-        alpha = 1f,
+    // Generated directly from Assets/Director-X Logo.svg. A packaged drawable
+    // avoids starting a WebView during the first Compose frame, preventing a
+    // blank/late logo flash after Android's native splash screen exits.
+    Image(
+        painter = painterResource(id = R.drawable.directorx_compose_logo),
         contentDescription = contentDescription,
+        contentScale = ContentScale.Fit,
+        modifier = modifier,
     )
 }
 
