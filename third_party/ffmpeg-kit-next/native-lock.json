@@ -139,7 +139,7 @@
     }
   ],
   "security": {
-    "profile": "clearcut-disabled-format-surface",
+    "profile": "directorx-disabled-format-surface",
     "reviewUntil": "2026-10-31",
     "disabledComponents": [
       "vobsub_demuxer",
