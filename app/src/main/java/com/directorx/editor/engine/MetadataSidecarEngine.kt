@@ -1,5 +1,7 @@
 package com.directorx.editor.engine
 
+import kotlinx.coroutines.ensureActive
+import android.media.MediaFormat
 import android.content.Context
 import android.media.MediaExtractor
 import android.net.Uri
@@ -247,7 +249,6 @@ object MetadataSidecarPolicy {
 @Singleton
 class MetadataSidecarEngine @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val ffmpegEngine: FFmpegEngine,
 ) {
     suspend fun export(
         uri: Uri,
@@ -319,22 +320,48 @@ class MetadataSidecarEngine @Inject constructor(
         track: MetadataSidecarTrack,
         format: MetadataSidecarFormat,
         outputFile: File,
-    ): Boolean {
-        if (track.trackIndex < 0 || !ffmpegEngine.isAvailable()) return false
-        val completed = withTimeoutOrNull(NativeProcessingPolicy.TIMEOUT_METADATA_SIDECAR_MS) {
-            ffmpegEngine.extractSubtitleTrack(uri, track.trackIndex, format, outputFile)
-        } ?: false
-        if (!completed || outputFile.length() <= 0L) return false
-        val bytes = readBoundedBytes(outputFile, MAX_SIDECAR_BYTES) ?: return false
-        val parsed = CaptionImportEngine.analyze(
-            bytes = bytes,
-            format = when (format) {
-                MetadataSidecarFormat.VTT -> CaptionImportEngine.Format.WEBVTT
-                MetadataSidecarFormat.SRT -> CaptionImportEngine.Format.SRT
-                else -> return false
-            },
-        )
-        return parsed.isValid
+    ): Boolean = withContext(Dispatchers.IO) {
+        if (track.trackIndex < 0) return@withContext false
+        val expectedFormat = when (format) {
+            MetadataSidecarFormat.VTT -> CaptionImportEngine.Format.WEBVTT
+            MetadataSidecarFormat.SRT -> CaptionImportEngine.Format.SRT
+            else -> return@withContext false
+        }
+        val extractor = MediaExtractor()
+        try {
+            extractor.setDataSource(context, uri, emptyMap())
+            if (track.trackIndex !in 0 until extractor.trackCount) return@withContext false
+            val mediaFormat = extractor.getTrackFormat(track.trackIndex)
+            val mime = mediaFormat.getString(MediaFormat.KEY_MIME).orEmpty()
+            if (!mime.startsWith("text/") && !mime.startsWith("application/")) {
+                return@withContext false
+            }
+            extractor.selectTrack(track.trackIndex)
+            val buffer = ByteBuffer.allocate(64 * 1024)
+            var totalBytes = 0L
+            outputFile.outputStream().buffered().use { stream ->
+                while (true) {
+                    coroutineContext.ensureActive()
+                    buffer.clear()
+                    val size = extractor.readSampleData(buffer, 0)
+                    if (size < 0) break
+                    if (size == 0 || totalBytes + size > MAX_SIDECAR_BYTES) {
+                        return@withContext false
+                    }
+                    stream.write(buffer.array(), 0, size)
+                    totalBytes += size
+                    extractor.advance()
+                }
+            }
+            if (totalBytes == 0L) return@withContext false
+            val bytes = readBoundedBytes(outputFile, MAX_SIDECAR_BYTES) ?: return@withContext false
+            CaptionImportEngine.analyze(bytes = bytes, format = expectedFormat).isValid
+        } catch (e: Exception) {
+            AppLog.w(TAG, "Subtitle sidecar extraction failed: ${e.javaClass.simpleName}")
+            false
+        } finally {
+            extractor.release()
+        }
     }
 
     private fun readNmeaPoints(uri: Uri, trackIndex: Int): List<GpsPoint> {
