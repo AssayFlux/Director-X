@@ -655,7 +655,7 @@ fun Timeline(
 
     // Keep clip bodies flat-colour; selection and missing-media states are
     // communicated by their dedicated fill and border colours.
-    val clipOverlayBrush = Color.Transparent
+    val clipOverlayColor = Color.Transparent
     val thumbnailCacheWindow = remember {
         LazyLayoutCacheWindow(
             ahead = TimelineScrollPerformancePolicy.CACHE_WINDOW_AHEAD_DP.dp,
@@ -1948,20 +1948,17 @@ fun Timeline(
                                         }
                                     }
 
-                                    // Hoist the per-clip background brush. Timeline recomposes on every
-                                    // playhead tick (~30 Hz during playback); without this, each visible
-                                    // clip allocates a fresh List + Brush per frame. Keying on the three
-                                    // values that actually drive the gradient lets Compose reuse the same
-                                    // Brush instance until selection or track-color state changes.
+                                    // Keep per-clip fills stable between playhead updates. Selection and
+                                    // missing-media states remain distinct through their solid fill and border.
                                     val isClipMissing = clip.id in missingClipIds
                                     var isClipContentVisible by remember(clip.id) { mutableStateOf(true) }
                                     val clipBackgroundColor = remember(isSelected, isMultiSelected, isClipMissing, clipColor) {
                                         when {
-                                                isClipMissing -> ClearCutAccents.Red.copy(alpha = 0.38f)
-                                                isSelected -> clipColor.copy(alpha = 0.64f)
-                                                isMultiSelected -> ClearCutAccents.Peach.copy(alpha = 0.58f)
-                                                else -> clipColor.copy(alpha = 0.44f)
-                                            }
+                                            isClipMissing -> ClearCutAccents.Red.copy(alpha = 0.38f)
+                                            isSelected -> clipColor.copy(alpha = 0.64f)
+                                            isMultiSelected -> ClearCutAccents.Peach.copy(alpha = 0.58f)
+                                            else -> clipColor.copy(alpha = 0.44f)
+                                        }
                                     }
                                     Box(
                                         modifier = Modifier
@@ -1970,7 +1967,7 @@ fun Timeline(
                                             .fillMaxHeight()
                                             .padding(vertical = 4.dp, horizontal = 1.dp)
                                             .clip(RoundedCornerShape(Radius.xs))
-                                            .background(clipBackgroundBrush)
+                                            .background(clipBackgroundColor)
                                             .alpha(if (track.isLocked) 0.7f else 1f)
                                             .then(
                                                 Modifier.border(
