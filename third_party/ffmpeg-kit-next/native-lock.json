@@ -13,7 +13,7 @@
     "commit": "3e223118e6e8fb6208693ecf3952e77cd096f587",
     "ffmpegRevision": "38b88335f99e76ed89ff3c93f877fdefce736c13",
     "ffmpegVersion": "8.1.2",
-    "securityPatch": "third_party/ffmpeg-kit-next/clearcut-security.patch",
+    "securityPatch": "third_party/ffmpeg-kit-next/directorx-security.patch",
     "securityPatchSha256": "0433ae68f6c8c78c35fc81eb7e2747fa27c513af4d6b97a423603c9132d41965",
     "builtAt": "2026-08-02T00:00:00Z",
     "reviewUntil": "2026-10-31"
@@ -22,7 +22,13 @@
     "command": "./nix-android.sh -p android-r27d --enable-libass --enable-libjxl --enable-android-media-codec --enable-android-zlib --enable-openh264 --jobs=8",
     "androidNdk": "27.3.13750724",
     "androidApi": 24,
-    "abis": ["armeabi-v7a", "armeabi-v7a-neon", "arm64-v8a", "x86", "x86_64"],
+    "abis": [
+      "armeabi-v7a",
+      "armeabi-v7a-neon",
+      "arm64-v8a",
+      "x86",
+      "x86_64"
+    ],
     "license": "LGPL-3.0-or-later"
   },
   "components": [
@@ -215,7 +221,9 @@
       "rationale": "The VobSub demuxer is disabled in the ClearCut security profile.",
       "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-64830",
-      "disabledComponents": ["vobsub_demuxer"]
+      "disabledComponents": [
+        "vobsub_demuxer"
+      ]
     },
     {
       "id": "CVE-2026-65703",
@@ -225,7 +233,9 @@
       "rationale": "The TDSC decoder is disabled in the ClearCut security profile.",
       "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-65703",
-      "disabledComponents": ["tdsc_decoder"]
+      "disabledComponents": [
+        "tdsc_decoder"
+      ]
     },
     {
       "id": "CVE-2026-66039",
@@ -235,7 +245,9 @@
       "rationale": "The MACE6 decoder is disabled in the ClearCut security profile.",
       "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66039",
-      "disabledComponents": ["mace6_decoder"]
+      "disabledComponents": [
+        "mace6_decoder"
+      ]
     },
     {
       "id": "CVE-2026-64835",
@@ -245,7 +257,11 @@
       "rationale": "The ADX decoder and ADX/AAX demuxers are disabled in the ClearCut security profile.",
       "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-64835",
-      "disabledComponents": ["adpcm_adx_decoder", "adx_demuxer", "aax_demuxer"]
+      "disabledComponents": [
+        "adpcm_adx_decoder",
+        "adx_demuxer",
+        "aax_demuxer"
+      ]
     },
     {
       "id": "CVE-2026-66040",
@@ -255,7 +271,10 @@
       "rationale": "The PNG and APNG encoders are disabled in the ClearCut security profile.",
       "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66040",
-      "disabledComponents": ["png_encoder", "apng_encoder"]
+      "disabledComponents": [
+        "png_encoder",
+        "apng_encoder"
+      ]
     },
     {
       "id": "CVE-2026-58049",
@@ -265,7 +284,9 @@
       "rationale": "The RASC decoder is disabled in the ClearCut security profile.",
       "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-58049",
-      "disabledComponents": ["rasc_decoder"]
+      "disabledComponents": [
+        "rasc_decoder"
+      ]
     },
     {
       "id": "CVE-2026-12706",
@@ -275,7 +296,9 @@
       "rationale": "The RASC decoder is disabled in the ClearCut security profile.",
       "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-12706",
-      "disabledComponents": ["rasc_decoder"]
+      "disabledComponents": [
+        "rasc_decoder"
+      ]
     },
     {
       "id": "CVE-2026-66037",
@@ -285,7 +308,9 @@
       "rationale": "The IAMF demuxer is disabled in the ClearCut security profile.",
       "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66037",
-      "disabledComponents": ["iamf_demuxer"]
+      "disabledComponents": [
+        "iamf_demuxer"
+      ]
     },
     {
       "id": "CVE-2026-66038",
@@ -295,7 +320,9 @@
       "rationale": "The ZLIB decoder used by the LCL path is disabled in the ClearCut security profile.",
       "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66038",
-      "disabledComponents": ["zlib_decoder"]
+      "disabledComponents": [
+        "zlib_decoder"
+      ]
     },
     {
       "id": "CVE-2026-64832",
