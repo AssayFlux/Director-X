@@ -28,7 +28,6 @@ import androidx.compose.ui.draganddrop.DragAndDropEvent
 import androidx.compose.ui.draganddrop.DragAndDropTarget
 import androidx.compose.ui.draganddrop.toAndroidDragEvent
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
@@ -1068,12 +1067,7 @@ private fun MediaSourceActionCard(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
-                    Brush.verticalGradient(
-                        listOf(
-                            color.copy(alpha = if (enabled) 0.18f else 0.07f),
-                            Color.Transparent
-                        )
-                    )
+                    MaterialTheme.colorScheme.surfaceContainerHigh
                 )
                 .padding(horizontal = 14.dp, vertical = 12.dp)
         ) {
