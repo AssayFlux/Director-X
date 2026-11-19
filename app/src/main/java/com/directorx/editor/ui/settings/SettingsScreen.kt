@@ -33,7 +33,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -769,6 +771,21 @@ fun SettingsScreen(
         ) {
             SettingsInfo(Icons.Default.Info, stringResource(R.string.settings_version), BuildConfig.VERSION_NAME, DirectorXAccents.Sapphire)
             SettingsInfo(Icons.Default.AutoAwesome, stringResource(R.string.brand_credit), "AssayFlux", DirectorXAccents.Mauve)
+            Text(
+                text = "AssayFlux is an independent technology initiative creating thoughtful tools for creativity, engineering, and innovation.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.fillMaxWidth().padding(top = 8.dp, start = 4.dp, end = 4.dp)
+            )
+            Image(
+                painter = painterResource(R.drawable.assayflux_signature),
+                contentDescription = "AssayFlux founder signature",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .padding(top = 12.dp, start = 4.dp)
+                    .width(104.dp)
+                    .height(112.dp)
+            )
         }
         } // End SettingsCategory.APP content
 
