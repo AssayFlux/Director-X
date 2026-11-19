@@ -320,7 +320,7 @@ class TimelineExchangeValidator @Inject constructor() {
                 Severity.WARNING,
                 path = clipPath,
                 message = "Reverse playback is preview-only; exported clip will play forward.",
-                suggestedFix = "Reverse rendering is not supported by the current AndroidX Media3 export path; disable reverse or accept the disclosed forward-playback export fallback."
+                suggestedFix = "Pre-render the reversed clip with FFmpegX once it ships."
             )
         }
 

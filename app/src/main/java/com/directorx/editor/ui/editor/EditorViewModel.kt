@@ -705,6 +705,7 @@ class EditorViewModel @Inject constructor(
     private val fontRegistry: FontRegistry,
     private val lutRegistry: com.directorx.editor.engine.LutRegistry,
     private val exportIncidentStore: ExportIncidentStore,
+    private val ffmpegEngine: com.directorx.editor.engine.FFmpegEngine,
     private val editorCoordinatorSet: EditorCoordinatorSet,
     @ApplicationContext private val appContext: Context,
     private val savedStateHandle: SavedStateHandle,
@@ -807,6 +808,7 @@ class EditorViewModel @Inject constructor(
         audioEngine = audioEngine,
         exportIncidentStore = exportIncidentStore,
         appVersion = com.directorx.editor.DirectorXApp.VERSION,
+        ffmpegEngine = ffmpegEngine,
         includeDiagnosticRawErrorText = { latestSettings?.includeDiagnosticRawErrorText == true },
         projectFingerprint = ::currentProjectFingerprint,
     )

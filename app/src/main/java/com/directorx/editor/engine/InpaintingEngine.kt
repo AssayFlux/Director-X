@@ -6,9 +6,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
-import android.os.Handler
-import android.os.Looper
-import android.provider.OpenableColumns
 import com.directorx.editor.engine.AppLog
 import com.directorx.editor.model.Mask
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -23,7 +20,6 @@ import java.io.File
 import java.nio.FloatBuffer
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.coroutines.resume
 
 /**
  * Image/video inpainting engine powered by LaMa (Large Mask Inpainting) with dilated convolutions.
@@ -80,7 +76,8 @@ enum class InpaintingModelState {
 @Singleton
 class InpaintingEngine @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val modelDownloadManager: ModelDownloadManager
+    private val modelDownloadManager: ModelDownloadManager,
+    private val ffmpegEngine: FFmpegEngine
 ) {
     private val modelDir = File(context.filesDir, "models/inpainting")
     private val modelFile = File(modelDir, MODEL_FILENAME)
@@ -94,8 +91,6 @@ class InpaintingEngine @Inject constructor(
 
     companion object {
         private const val TAG = "InpaintingEngine"
-        private const val MAX_IMAGE_INPUT_BYTES = 50L * 1024L * 1024L
-        private const val MAX_VIDEO_INPUT_BYTES = 4L * 1024L * 1024L * 1024L
         private const val MODEL_FILENAME = "lama_dilated.onnx"
         private const val MODEL_SIZE_BYTES = 182_781_794L // ~174 MiB
         private const val MODEL_INPUT_SIZE = 512
@@ -261,8 +256,8 @@ class InpaintingEngine @Inject constructor(
         onProgress: (Float) -> Unit = {}
     ): InpaintingResult? = withContext(Dispatchers.IO) {
         val pixelBytes = bitmap.byteCount.toLong()
-        if (pixelBytes > MAX_IMAGE_INPUT_BYTES) {
-            AppLog.w(TAG, "inpaintFrame: bitmap $pixelBytes bytes exceeds limit $MAX_IMAGE_INPUT_BYTES")
+        if (pixelBytes > NativeProcessingPolicy.MAX_IMAGE_INPUT_BYTES) {
+            AppLog.w(TAG, "inpaintFrame: bitmap $pixelBytes bytes exceeds limit ${NativeProcessingPolicy.MAX_IMAGE_INPUT_BYTES}")
             return@withContext null
         }
 
@@ -393,12 +388,11 @@ class InpaintingEngine @Inject constructor(
         onProgress: (Float) -> Unit
     ): VideoInpaintingResult? = withContext(Dispatchers.IO) {
         val startTime = System.currentTimeMillis()
-        val sourceSize = querySourceSize(uri)
-        if (sourceSize != null && sourceSize > MAX_VIDEO_INPUT_BYTES) {
-            AppLog.w(TAG, "inpaintVideo: source $sourceSize bytes exceeds limit $MAX_VIDEO_INPUT_BYTES")
+        val v = NativeProcessingPolicy.validateVideoUri(context, uri, "inpaintVideo")
+        if (v != null) {
+            NativeProcessingPolicy.logAndReject(v)
             return@withContext null
         }
-        val outputFile = outputUri.path?.let(::File) ?: return@withContext null
         // Verify once per export. Calling the public frame method here would
         // hash the whole model for every frame.
         if (!isVerifiedModelReady()) {
@@ -428,6 +422,7 @@ class InpaintingEngine @Inject constructor(
 
             val frameIntervalMs = (1000f / fps.coerceIn(1f, 120f)).toLong().coerceAtLeast(16L)
             val totalFrames = ((durationMs / frameIntervalMs) + 1).toInt().coerceIn(1, 9000)
+            val outputFile = outputUri.path?.let(::File) ?: return@withContext null
             outputFile.parentFile?.mkdirs()
 
             val tempDir = File(context.cacheDir, "inpaint-frames-${System.currentTimeMillis()}")
@@ -468,19 +463,17 @@ class InpaintingEngine @Inject constructor(
                 }
 
                 onProgress(0.95f)
-                val frameFiles = tempDir.listFiles()
-                    ?.filter { it.isFile && it.name.matches(Regex("frame_\\d{5}\\.png")) }
-                    ?.sortedBy { it.name }
-                    .orEmpty()
-                val encodeOk = encodeInpaintedFramesWithMedia3(
-                    sourceUri = uri,
-                    frameFiles = frameFiles,
-                    frameRate = fps.toInt().coerceIn(1, 120),
-                    outputUri = outputUri,
-                    durationMs = durationMs,
+                val pattern = File(tempDir, "frame_%05d.png").absolutePath
+                val encodeOk = ffmpegEngine.encodeImageSequenceWithAudio(
+                    inputUri = uri,
+                    framePattern = pattern,
+                    fps = fps.toInt().coerceIn(1, 120),
+                    outputFile = outputFile,
+                    onProgress = { progress -> onProgress(0.95f + progress * 0.05f) }
                 )
-                if (!encodeOk || outputFile.length() <= 0L) {
-                    AppLog.w(TAG, "Media3 encode of inpainted frame sequence failed")
+
+                if (!encodeOk || !outputFile.isFile || outputFile.length() <= 0L) {
+                    AppLog.w(TAG, "FFmpeg encode of inpainted frames failed")
                     return@withContext null
                 }
 
@@ -498,132 +491,11 @@ class InpaintingEngine @Inject constructor(
             } finally {
                 tempDir.deleteRecursively()
             }
-        } catch (e: CancellationException) {
-            outputFile.delete()
-            throw e
         } catch (e: Exception) {
             AppLog.e(TAG, "Video inpainting failed", e)
             null
         } finally {
             retrieverLease.close()
-        }
-    }
-
-    private fun querySourceSize(uri: Uri): Long? {
-        if (uri.scheme == "file") return uri.path?.let(::File)?.takeIf { it.isFile }?.length()
-        return runCatching {
-            context.contentResolver.query(uri, arrayOf(OpenableColumns.SIZE), null, null, null)?.use { cursor ->
-                if (cursor.moveToFirst()) {
-                    val index = cursor.getColumnIndex(OpenableColumns.SIZE)
-                    if (index >= 0 && !cursor.isNull(index)) cursor.getLong(index) else null
-                } else null
-            }
-        }.getOrNull()
-    }
-
-    @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
-    private suspend fun encodeInpaintedFramesWithMedia3(
-        sourceUri: Uri,
-        frameFiles: List<File>,
-        frameRate: Int,
-        outputUri: Uri,
-        durationMs: Long,
-    ): Boolean {
-        if (frameFiles.isEmpty() || outputUri.scheme != "file") return false
-        val outputPath = outputUri.path ?: return false
-        val frameDurationMs = (1_000L / frameRate).coerceAtLeast(1L)
-        val videoSequenceBuilder = androidx.media3.transformer.EditedMediaItemSequence.Builder(
-            setOf(androidx.media3.common.C.TRACK_TYPE_VIDEO)
-        )
-        frameFiles.forEach { frame ->
-            val mediaItem = androidx.media3.common.MediaItem.Builder()
-                .setUri(Uri.fromFile(frame))
-                .setImageDurationMs(frameDurationMs)
-                .build()
-            val edited = androidx.media3.transformer.EditedMediaItem.Builder(mediaItem)
-                .setFrameRate(frameRate)
-                .setRemoveAudio(true)
-                .build()
-            videoSequenceBuilder.addItem(edited)
-        }
-        val sequences = mutableListOf(videoSequenceBuilder.build())
-        val extractor = android.media.MediaExtractor()
-        try {
-            extractor.setDataSource(context, sourceUri, null)
-            val hasAudio = (0 until extractor.trackCount).any { index ->
-                extractor.getTrackFormat(index).getString(android.media.MediaFormat.KEY_MIME)
-                    ?.startsWith("audio/") == true
-            }
-            if (hasAudio) {
-                val frameSequenceDurationMs = (frameFiles.size.toLong() * frameDurationMs)
-                    .coerceAtMost(durationMs.coerceAtLeast(1L))
-                val audioItem = androidx.media3.common.MediaItem.Builder()
-                    .setUri(sourceUri)
-                    .setClippingConfiguration(
-                        androidx.media3.common.MediaItem.ClippingConfiguration.Builder()
-                            .setStartPositionMs(0L)
-                            .setEndPositionMs(frameSequenceDurationMs)
-                            .build()
-                    )
-                    .build()
-                val audioEdited = androidx.media3.transformer.EditedMediaItem.Builder(audioItem)
-                    .setRemoveVideo(true)
-                    .build()
-                sequences += androidx.media3.transformer.EditedMediaItemSequence.Builder(
-                    setOf(androidx.media3.common.C.TRACK_TYPE_AUDIO)
-                ).addItem(audioEdited).build()
-            }
-        } catch (e: Exception) {
-            AppLog.w(TAG, "Could not inspect source audio for inpainting export", e)
-            return false
-        } finally {
-            extractor.release()
-        }
-
-        return kotlinx.coroutines.withContext(Dispatchers.Main) {
-            kotlinx.coroutines.suspendCancellableCoroutine { continuation ->
-                val composition = androidx.media3.transformer.Composition.Builder(sequences).build()
-                val transformer = androidx.media3.transformer.Transformer.Builder(context)
-                    .setVideoMimeType(androidx.media3.common.MimeTypes.VIDEO_H264)
-                    .setAudioMimeType(androidx.media3.common.MimeTypes.AUDIO_AAC)
-                    .setAssetLoaderFactory(
-                        Media3DecoderFallback.assetLoaderFactory(context) { note ->
-                            AppLog.w(TAG, "Inpainting export: $note")
-                        }
-                    )
-                    .addListener(object : androidx.media3.transformer.Transformer.Listener {
-                        override fun onCompleted(
-                            composition: androidx.media3.transformer.Composition,
-                            exportResult: androidx.media3.transformer.ExportResult,
-                        ) {
-                            if (continuation.isActive) continuation.resume(true)
-                        }
-
-                        override fun onError(
-                            composition: androidx.media3.transformer.Composition,
-                            exportResult: androidx.media3.transformer.ExportResult,
-                            exportException: androidx.media3.transformer.ExportException,
-                        ) {
-                            AppLog.e(TAG, "Media3 inpainting export failed", exportException)
-                            if (continuation.isActive) continuation.resume(false)
-                        }
-                    })
-                    .build()
-                continuation.invokeOnCancellation {
-                    val posted = Handler(Looper.getMainLooper()).post {
-                        runCatching { transformer.cancel() }
-                    }
-                    if (!posted) AppLog.w(TAG, "Main looper rejected inpainting Transformer cancellation")
-                }
-                try {
-                    File(outputPath).parentFile?.mkdirs()
-                    File(outputPath).delete()
-                    transformer.start(composition, outputPath)
-                } catch (e: Exception) {
-                    AppLog.e(TAG, "Could not start Media3 inpainting export", e)
-                    if (continuation.isActive) continuation.resume(false)
-                }
-            }
         }
     }
 

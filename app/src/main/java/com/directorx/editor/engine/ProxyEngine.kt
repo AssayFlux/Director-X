@@ -150,6 +150,7 @@ internal fun shouldRetainProxyMapping(
 @Singleton
 class ProxyEngine @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val ffmpegEngine: FFmpegEngine,
     memoryTrimRegistry: MemoryTrimRegistry,
 ) {
     private val proxyDir = File(context.cacheDir, "proxies").also { it.mkdirs() }
@@ -406,17 +407,33 @@ class ProxyEngine @Inject constructor(
                         proxyMap.remove(key)
                     }
                 }
-                if (transformerResult == null) {
-                    // Media3 Transformer is the sole proxy backend. Do not silently
-                    // fall back to a bundled software transcoder: unsupported source
-                    // codecs fail cleanly and the original remains available.
+                if (transformerResult != null) {
+                    transformerResult
+                } else {
+                    // Media3's alternate hardware-decoder attempts can still fail when
+                    // the source raster/profile exceeds every device decoder. Fall back
+                    // to FFmpeg's software-capable source decode and a bounded proxy.
                     partialFile.delete()
-                    proxyMap.remove(key)
+                    AppLog.i("ProxyEngine", "Media3 proxy decode failed; trying FFmpeg software-decoded proxy")
+                    val encoded = ffmpegEngine.createEditingProxy(
+                        inputUri = sourceUri,
+                        outputFile = partialFile,
+                        targetHeight = targetHeight,
+                        onProgress = onProgress,
+                    )
+                    if (encoded && isUsableProxyTemporaryArtifact(partialFile) && partialFile.renameTo(outFile)) {
+                        val proxyUri = Uri.fromFile(outFile)
+                        proxyMap[key] = proxyUri
+                        proxyUri
+                    } else {
+                        partialFile.delete()
+                        proxyMap.remove(key)
+                        null
+                    }
                 }
-                transformerResult
             } catch (e: kotlinx.coroutines.CancellationException) {
                 // Preserve structured cancellation — don't mask it as a null result.
-                // Transformer cancellation owns process fencing. Leave
+                // Transformer/FFmpeg cancellation callbacks own process fencing. Leave
                 // any temporary file for the proxy-cache sweep after this key is inactive.
                 proxyMap.remove(key)
                 throw e

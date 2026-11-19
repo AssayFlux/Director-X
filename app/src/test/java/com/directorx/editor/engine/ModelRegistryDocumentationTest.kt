@@ -2,8 +2,12 @@ package com.directorx.editor.engine
 
 import org.junit.Assert.assertTrue
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.json.JSONObject
 import org.junit.Test
 import java.io.File
+import java.text.NumberFormat
+import java.util.Locale
 
 /**
  * R7.2 model registry closure guard.
@@ -171,10 +175,21 @@ class ModelRegistryDocumentationTest {
     }
 
     @Test
-    fun documentationAndRegistryContainNoFfmpegDependency() {
-        assertEquals(null, CapabilityRegistry.dependencyFor("ffmpeg"))
-        val docs = locateModelsDoc()?.readText().orEmpty()
-        assertTrue("docs/models.md still mentions FFmpeg", !docs.contains("FFmpeg", ignoreCase = true))
+    fun ffmpegNativeDocumentationMatchesLockAndLgplProfile() {
+        val lock = JSONObject(locateProjectFile("third_party/ffmpeg-kit-next/native-lock.json").readText())
+        val artifact = lock.getJSONObject("artifact")
+        val source = lock.getJSONObject("source")
+        val build = lock.getJSONObject("build")
+        val row = nativeDependencyRows().single { "ffmpeg-kit-next-8.1.0.aar" in it }
+        val formattedSize = NumberFormat.getIntegerInstance(Locale.US).format(artifact.getLong("size"))
+
+        assertTrue(row.contains("FFmpeg ${source.getString("ffmpegVersion")}"))
+        assertTrue(row.contains("$formattedSize-byte AAR"))
+        assertTrue(row.contains(artifact.getString("sha256")))
+        assertTrue(row.contains(build.getString("license")))
+        assertTrue(row.contains("x264 is not included"))
+        assertTrue(row.contains("GPL build flag is disabled"))
+        assertFalse(row.contains("4b7654925340bb4a5eb0c4e50350a6f664f4568a228d46e9e128eb032406fd00"))
     }
 
     private fun activeModelRows(): List<String> {

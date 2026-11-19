@@ -13,11 +13,12 @@
 # The optional integrations below are discovered by Class.forName. Keep only
 # the named probe classes and allow R8 to optimize their members. Optional
 # libraries remain optional: a missing class simply keeps the existing feature
-# gate false. Directly referenced DeepFilterNet methods remain
+# gate false. Directly referenced methods (FFmpeg and DeepFilterNet) remain
 # visible to R8 through normal call-graph analysis.
 -keep,allowoptimization class androidx.camera.video.VideoCapture
 -keep,allowoptimization class org.contentauth.c2pa.Builder
 -keep,allowoptimization class org.proofmode.simplec2pa.Manifest
+-keep,allowoptimization class com.arthenica.ffmpegkit.FFmpegKit
 -keep,allowoptimization class com.rikorose.deepfilternet.NativeDeepFilterNet
 -keep,allowoptimization class com.kaleyra.noise_filter.DeepFilterNet
 -keep,allowoptimization class io.github.thibaultbee.streampack.streamers.SingleStreamer

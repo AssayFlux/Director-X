@@ -44,6 +44,9 @@ object OpenSourceLicenses {
     fun noticeForArtifact(artifact: String): OpenSourceLicenseNotice? =
         notices.firstOrNull { it.artifact == artifact }
 
+    fun ffmpegKitNotice(): OpenSourceLicenseNotice =
+        requireNotNull(noticeForArtifact("third_party/ffmpeg-kit-next/ffmpeg-kit-next-8.1.0.aar"))
+
     fun dependenciesWithSourceOffers(): List<OpenSourceLicenseNotice> =
         notices.filter { !it.sourceOfferText.isNullOrBlank() }
 }

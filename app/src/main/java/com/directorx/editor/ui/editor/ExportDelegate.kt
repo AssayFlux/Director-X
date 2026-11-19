@@ -118,6 +118,7 @@ class ExportDelegate(
     private val audioEngine: com.directorx.editor.engine.AudioEngine? = null,
     private val exportIncidentStore: ExportIncidentStore? = null,
     private val appVersion: String = "unknown",
+    private val ffmpegEngine: com.directorx.editor.engine.FFmpegEngine? = null,
     private val includeDiagnosticRawErrorText: () -> Boolean = { false },
     private val projectFingerprint: (EditorState) -> String = { "" },
 ) {
@@ -1095,35 +1096,7 @@ class ExportDelegate(
             chapters = slicedExport?.chapters ?: baseChapters,
         )
         val tracks = slicedExport?.tracks ?: currentState.tracks
-        val timelineTextOverlays = slicedExport?.textOverlays ?: currentState.textOverlays
-        val burnInCaptionOverlays = if (configWithChapters.burnSubtitles) {
-            tracks.flatMap { track ->
-                track.clips.flatMap { clip ->
-                    clip.captions.map { caption ->
-                        com.directorx.editor.model.TextOverlay(
-                            id = "burned-caption-${caption.id}",
-                            text = caption.text,
-                            fontFamily = caption.style.fontFamily,
-                            fontSize = caption.style.fontSize,
-                            color = caption.style.color,
-                            backgroundColor = caption.style.backgroundColor,
-                            strokeColor = caption.style.outlineColor,
-                            strokeWidth = if (caption.style.outline) caption.style.outlineWidth else 0f,
-                            alignment = com.directorx.editor.model.TextAlignment.CENTER,
-                            positionX = 0.5f,
-                            positionY = caption.style.positionY,
-                            startTimeMs = caption.startTimeMs + clip.timelineStartMs,
-                            endTimeMs = caption.endTimeMs + clip.timelineStartMs,
-                        )
-                    }
-                }
-            }
-        } else {
-            emptyList()
-        }
-        // Burn-in captions are normal Media3 timeline text effects, not a
-        // post-export external subtitle-rendering pass.
-        val textOverlays = timelineTextOverlays + burnInCaptionOverlays
+        val textOverlays = slicedExport?.textOverlays ?: currentState.textOverlays
         val imageOverlays = slicedExport?.imageOverlays ?: currentState.imageOverlays
         val trackedObjects = slicedExport?.trackedObjects ?: currentState.trackedObjects
         val globalTransitions = slicedExport?.globalTransitions ?: currentState.globalTransitions
@@ -1754,7 +1727,89 @@ class ExportDelegate(
                     }
                 }
 
-                // Subtitle burn-in is already part of the Media3 composition via textOverlays.
+                if (configWithChapters.burnSubtitles) {
+                    val burnCaptions = tracks.flatMap { t -> t.clips }.flatMap { clip ->
+                        clip.captions.map { c ->
+                            c.copy(
+                                startTimeMs = c.startTimeMs + clip.timelineStartMs,
+                                endTimeMs = c.endTimeMs + clip.timelineStartMs
+                            )
+                        }
+                    }
+                    if (burnCaptions.isNotEmpty()) {
+                        var assFile: java.io.File? = null
+                        var burnedFile: java.io.File? = null
+                        try {
+                            val engine = ffmpegEngine?.takeIf { it.isAvailable() }
+                                ?: error("Subtitle burn-in engine is unavailable")
+                            assFile = java.io.File(
+                                outputFile.parentFile,
+                                "${outputFile.nameWithoutExtension}_burn.ass"
+                            )
+                            check(com.directorx.editor.engine.SubtitleExporter.export(
+                                burnCaptions, com.directorx.editor.model.SubtitleFormat.ASS, assFile
+                            )) { "Could not create the ASS burn-in document" }
+                            burnedFile = java.io.File(
+                                outputFile.parentFile,
+                                "${outputFile.nameWithoutExtension}_burned.mp4"
+                            )
+                            check(engine.burnSubtitles(outputFile, assFile, burnedFile)) {
+                                "libass subtitle rendering failed"
+                            }
+                            check(burnedFile.isFile && burnedFile.length() > 0L) {
+                                "Subtitle renderer produced no output"
+                            }
+                            check(outputFile.delete() && burnedFile.renameTo(outputFile)) {
+                                "Could not replace the uncaptioned export"
+                            }
+                        } catch (e: kotlinx.coroutines.CancellationException) {
+                            // cancelExport() already reported CANCELLED; a cancelled
+                            // export leaves no file, captioned or not.
+                            burnedFile?.delete()
+                            outputFile.delete()
+                            throw e
+                        } catch (e: Exception) {
+                            com.directorx.editor.engine.AppLog.e("ExportDelegate", "Requested subtitle burn-in failed", e)
+                            assFile?.delete()
+                            burnedFile?.delete()
+                            outputFile.delete()
+                            val message = exportFailureText(
+                                VideoEngine.ExportFailureCause.SUBTITLE_BURN_IN_FAILED
+                            )
+                            updateExport {
+                                it.copy(
+                                    state = ExportState.ERROR,
+                                    errorMessage = message,
+                                    lastExportedFilePath = null
+                                )
+                            }
+                            recordExportHistory(
+                                sourceState = currentState,
+                                status = ExportHistoryStatus.FAILED,
+                                startedAtMs = startedAtMs,
+                                outputFile = null,
+                                config = configWithChapters,
+                                timelineDurationMs = totalDurationMs,
+                                errorMessage = message,
+                                diagnosticSummary = "Requested subtitle burn-in failed.",
+                                healthReport = healthReport
+                            )
+                            recordExportIncident(
+                                sourceState = currentState,
+                                failedPhase = "subtitle-burn",
+                                error = e,
+                                errorMessage = e.message ?: e::class.java.simpleName,
+                                config = configWithChapters,
+                                timelineDurationMs = totalDurationMs,
+                                startedAtMs = startedAtMs,
+                                healthReport = healthReport
+                            )
+                            return@launch
+                        } finally {
+                            assFile?.delete()
+                        }
+                    }
+                }
 
                 // Finalize the `{sizeMB}` filename token (if used) by
                 // renaming the output to include the actual MB count.

@@ -6,9 +6,7 @@
       "label": "ONNX Runtime",
       "version": "1.28.0",
       "coordinate": "com.microsoft.onnxruntime:onnxruntime-android",
-      "catalogKeys": [
-        "onnxruntime"
-      ],
+      "catalogKeys": ["onnxruntime"],
       "purpose": "Whisper ASR and LaMa inpainting",
       "publicStatus": "bundled",
       "notice": {
@@ -24,9 +22,7 @@
       "label": "MediaPipe",
       "version": "1.0.0",
       "coordinate": "com.google.mediapipe:tasks-vision",
-      "catalogKeys": [
-        "mediapipe"
-      ],
+      "catalogKeys": ["mediapipe"],
       "purpose": "Selfie segmentation and smart reframe",
       "publicStatus": "bundled",
       "notice": {
@@ -42,9 +38,7 @@
       "label": "Lottie Compose",
       "version": "6.7.1",
       "coordinate": "com.airbnb.android:lottie-compose",
-      "catalogKeys": [
-        "lottieCompose"
-      ],
+      "catalogKeys": ["lottieCompose"],
       "purpose": "Animated title templates",
       "publicStatus": "bundled",
       "notice": {
@@ -60,9 +54,7 @@
       "label": "OkHttp",
       "version": "5.5.0",
       "coordinate": "com.squareup.okhttp3:okhttp",
-      "catalogKeys": [
-        "okhttp"
-      ],
+      "catalogKeys": ["okhttp"],
       "purpose": "Model downloads and future opt-in provider calls",
       "publicStatus": "bundled",
       "notice": {
@@ -78,9 +70,7 @@
       "label": "Media3",
       "version": "1.11.1",
       "coordinate": "androidx.media3",
-      "catalogKeys": [
-        "media3"
-      ],
+      "catalogKeys": ["media3"],
       "purpose": "Transformer, ExoPlayer, effects, and muxing",
       "publicStatus": "bundled",
       "notice": {
@@ -96,9 +86,7 @@
       "label": "Coil Compose",
       "version": "3.5.0",
       "coordinate": "io.coil-kt.coil3:coil-compose",
-      "catalogKeys": [
-        "coil"
-      ],
+      "catalogKeys": ["coil"],
       "purpose": "Image and video thumbnails",
       "publicStatus": "bundled",
       "notice": {
@@ -114,9 +102,7 @@
       "label": "Hilt / Dagger",
       "version": "2.60.1",
       "coordinate": "com.google.dagger:hilt-android",
-      "catalogKeys": [
-        "hilt"
-      ],
+      "catalogKeys": ["hilt"],
       "purpose": "Dependency injection",
       "publicStatus": "bundled",
       "notice": {
@@ -132,9 +118,7 @@
       "label": "Android DeepFilterNet",
       "version": "0.0.8",
       "coordinate": "io.github.kaleyravideo:android-deepfilternet",
-      "catalogKeys": [
-        "deepfilternet"
-      ],
+      "catalogKeys": ["deepfilternet"],
       "purpose": "On-device voiceover noise reduction",
       "publicStatus": "bundled",
       "notice": {
@@ -147,14 +131,29 @@
       }
     },
     {
+      "id": "ffmpeg",
+      "label": "FFmpegKitNext / FFmpeg",
+      "version": "8.1.0 (FFmpeg 8.1.2)",
+      "coordinate": "third_party/ffmpeg-kit-next/ffmpeg-kit-next-8.1.0.aar",
+      "catalogKeys": [],
+      "purpose": "LGPL FFmpeg paths not covered by Media3 Transformer",
+      "publicStatus": "bundled",
+      "notice": {
+        "name": "FFmpegKitNext / FFmpeg",
+        "licenseName": "GNU Lesser General Public License Version 3",
+        "licenseText": "This source-pinned build uses the LGPL profile and explicitly disables the advisory-covered native components recorded in native-lock.json. Redistribution must preserve the packaged licenses and corresponding-source offer.",
+        "licenseUrl": "https://www.gnu.org/licenses/lgpl-3.0.txt",
+        "projectUrl": "https://github.com/arthenica/ffmpeg-kit-next",
+        "sourceOfferText": "Exact corresponding-source recipe for this LGPL v3.0-or-later build:\nhttps://github.com/arthenica/ffmpeg-kit-next/tree/3e223118e6e8fb6208693ecf3952e77cd096f587\nCommand: ./nix-android.sh -p android-r27d --enable-libass --enable-libjxl --enable-android-media-codec --enable-android-zlib --enable-openh264 --jobs=8\nThe security patch at third_party/ffmpeg-kit-next/directorx-security.patch, complete recipe, checksums, disabled components, and source revisions are recorded in third_party/ffmpeg-kit-next/native-lock.json and the installed application resource res/raw/ffmpeg_kit_next_source_offer.txt.",
+        "complianceNote": "The AAR packages res/raw/license.txt, res/raw/license_*.txt, and res/raw/source.txt; Director X additionally packages res/raw/ffmpeg_kit_next_source_offer.txt with its exact source recipe."
+      }
+    },
+    {
       "id": "benchmark_profile",
       "label": "AndroidX Benchmark/ProfileInstaller",
       "version": "1.5.0-beta01 / 1.4.1",
       "coordinate": "androidx.benchmark:benchmark-macro-junit4 / androidx.profileinstaller:profileinstaller",
-      "catalogKeys": [
-        "androidxBenchmark",
-        "androidxProfileInstaller"
-      ],
+      "catalogKeys": ["androidxBenchmark", "androidxProfileInstaller"],
       "purpose": "Baseline profile generation and installation",
       "publicStatus": "bundled"
     },
@@ -185,15 +184,7 @@
       "onDevice": "Yes",
       "status": "available",
       "reachability": "model_gated",
-      "evidence": [
-        {
-          "path": "app/src/main/java/com/directorx/editor/engine/AiToolRequirements.kt",
-          "terms": [
-            "Tool.AUTO_CAPTIONS",
-            "Availability.MODEL_DOWNLOAD_REQUIRED"
-          ]
-        }
-      ]
+      "evidence": [{"path": "app/src/main/java/com/directorx/editor/engine/AiToolRequirements.kt", "terms": ["Tool.AUTO_CAPTIONS", "Availability.MODEL_DOWNLOAD_REQUIRED"]}]
     },
     {
       "id": "background_removal",
@@ -202,15 +193,7 @@
       "onDevice": "Yes",
       "status": "available",
       "reachability": "model_gated",
-      "evidence": [
-        {
-          "path": "app/src/main/java/com/directorx/editor/engine/AiToolRequirements.kt",
-          "terms": [
-            "Tool.REMOVE_BACKGROUND",
-            "Availability.MODEL_DOWNLOAD_REQUIRED"
-          ]
-        }
-      ]
+      "evidence": [{"path": "app/src/main/java/com/directorx/editor/engine/AiToolRequirements.kt", "terms": ["Tool.REMOVE_BACKGROUND", "Availability.MODEL_DOWNLOAD_REQUIRED"]}]
     },
     {
       "id": "ai_green_screen",
@@ -219,15 +202,7 @@
       "onDevice": "Planned",
       "status": "planned",
       "reachability": "dependency_missing",
-      "evidence": [
-        {
-          "path": "app/src/main/java/com/directorx/editor/engine/AiToolRequirements.kt",
-          "terms": [
-            "Tool.AI_BACKGROUND",
-            "Availability.DEPENDENCY_MISSING"
-          ]
-        }
-      ]
+      "evidence": [{"path": "app/src/main/java/com/directorx/editor/engine/AiToolRequirements.kt", "terms": ["Tool.AI_BACKGROUND", "Availability.DEPENDENCY_MISSING"]}]
     },
     {
       "id": "object_removal",
@@ -237,29 +212,9 @@
       "status": "available",
       "reachability": "model_gated",
       "evidence": [
-        {
-          "path": "app/src/main/java/com/directorx/editor/engine/AiToolRequirements.kt",
-          "terms": [
-            "Tool.OBJECT_REMOVE",
-            "Availability.MODEL_DOWNLOAD_REQUIRED"
-          ]
-        },
-        {
-          "path": "app/src/main/java/com/directorx/editor/engine/InpaintingEngine.kt",
-          "terms": [
-            "fun inpaintFrame",
-            "fun inpaintVideo",
-            "encodeInpaintedFramesWithMedia3"
-          ]
-        },
-        {
-          "path": "app/src/main/java/com/directorx/editor/ui/editor/AiToolsDelegate.kt",
-          "terms": [
-            "getSelectedMask",
-            "inpaintingEngine.inpaintVideo",
-            "inpaintingEngine.inpaintFrame"
-          ]
-        }
+        {"path": "app/src/main/java/com/directorx/editor/engine/AiToolRequirements.kt", "terms": ["Tool.OBJECT_REMOVE", "Availability.MODEL_DOWNLOAD_REQUIRED"]},
+        {"path": "app/src/main/java/com/directorx/editor/engine/InpaintingEngine.kt", "terms": ["fun inpaintFrame", "fun inpaintVideo", "encodeImageSequenceWithAudio"]},
+        {"path": "app/src/main/java/com/directorx/editor/ui/editor/AiToolsDelegate.kt", "terms": ["getSelectedMask", "inpaintingEngine.inpaintVideo", "inpaintingEngine.inpaintFrame"]}
       ]
     },
     {
@@ -269,15 +224,7 @@
       "onDevice": "Planned",
       "status": "planned",
       "reachability": "dependency_missing",
-      "evidence": [
-        {
-          "path": "app/src/main/java/com/directorx/editor/engine/AiToolRequirements.kt",
-          "terms": [
-            "Tool.AI_UPSCALE",
-            "Availability.DEPENDENCY_MISSING"
-          ]
-        }
-      ]
+      "evidence": [{"path": "app/src/main/java/com/directorx/editor/engine/AiToolRequirements.kt", "terms": ["Tool.AI_UPSCALE", "Availability.DEPENDENCY_MISSING"]}]
     },
     {
       "id": "frame_interpolation",
@@ -286,15 +233,7 @@
       "onDevice": "Planned",
       "status": "planned",
       "reachability": "dependency_missing",
-      "evidence": [
-        {
-          "path": "app/src/main/java/com/directorx/editor/engine/AiToolRequirements.kt",
-          "terms": [
-            "Tool.FRAME_INTERP",
-            "Availability.DEPENDENCY_MISSING"
-          ]
-        }
-      ]
+      "evidence": [{"path": "app/src/main/java/com/directorx/editor/engine/AiToolRequirements.kt", "terms": ["Tool.FRAME_INTERP", "Availability.DEPENDENCY_MISSING"]}]
     },
     {
       "id": "style_transfer",
@@ -303,15 +242,7 @@
       "onDevice": "Planned",
       "status": "planned",
       "reachability": "dependency_missing",
-      "evidence": [
-        {
-          "path": "app/src/main/java/com/directorx/editor/engine/AiToolRequirements.kt",
-          "terms": [
-            "Tool.AI_STYLE",
-            "Availability.DEPENDENCY_MISSING"
-          ]
-        }
-      ]
+      "evidence": [{"path": "app/src/main/java/com/directorx/editor/engine/AiToolRequirements.kt", "terms": ["Tool.AI_STYLE", "Availability.DEPENDENCY_MISSING"]}]
     },
     {
       "id": "stabilization",
@@ -321,29 +252,9 @@
       "status": "available",
       "reachability": "reachable",
       "evidence": [
-        {
-          "path": "app/src/main/java/com/directorx/editor/engine/AiToolRequirements.kt",
-          "terms": [
-            "Tool.AI_STABILIZE",
-            "modelDisplayName = \"Director X offline motion analysis\"",
-            "availability = Availability.READY"
-          ]
-        },
-        {
-          "path": "app/src/main/java/com/directorx/editor/engine/StabilizationEngine.kt",
-          "terms": [
-            "class StabilizationEngine",
-            "suspend fun analyzeMotion"
-          ]
-        },
-        {
-          "path": "app/src/main/java/com/directorx/editor/ui/editor/AiToolsDelegate.kt",
-          "terms": [
-            "StabilizationPreview",
-            "StabilizationData",
-            "EffectKind.STABILIZATION_LOCAL"
-          ]
-        }
+        {"path": "app/src/main/java/com/directorx/editor/engine/AiToolRequirements.kt", "terms": ["Tool.AI_STABILIZE", "modelDisplayName = \"Director X offline motion analysis\"", "availability = Availability.READY"]},
+        {"path": "app/src/main/java/com/directorx/editor/engine/StabilizationEngine.kt", "terms": ["class StabilizationEngine", "suspend fun analyzeMotion"]},
+        {"path": "app/src/main/java/com/directorx/editor/ui/editor/AiToolsDelegate.kt", "terms": ["StabilizationPreview", "StabilizationData", "EffectKind.STABILIZATION_LOCAL"]}
       ]
     },
     {
@@ -353,14 +264,7 @@
       "onDevice": "Yes",
       "status": "available",
       "reachability": "reachable",
-      "evidence": [
-        {
-          "path": "app/src/main/java/com/directorx/editor/ui/editor/EditorViewModel.kt",
-          "terms": [
-            "smartReframeEngine.analyzeForReframe"
-          ]
-        }
-      ]
+      "evidence": [{"path": "app/src/main/java/com/directorx/editor/ui/editor/EditorViewModel.kt", "terms": ["smartReframeEngine.analyzeForReframe"]}]
     },
     {
       "id": "tap_to_segment",
@@ -369,15 +273,7 @@
       "onDevice": "Planned",
       "status": "planned",
       "reachability": "dependency_missing",
-      "evidence": [
-        {
-          "path": "app/src/main/java/com/directorx/editor/engine/AiToolRequirements.kt",
-          "terms": [
-            "Tool.TAP_SEGMENT",
-            "Availability.DEPENDENCY_MISSING"
-          ]
-        }
-      ]
+      "evidence": [{"path": "app/src/main/java/com/directorx/editor/engine/AiToolRequirements.kt", "terms": ["Tool.TAP_SEGMENT", "Availability.DEPENDENCY_MISSING"]}]
     },
     {
       "id": "scene_detection",
@@ -386,14 +282,7 @@
       "onDevice": "Yes",
       "status": "available",
       "reachability": "reachable",
-      "evidence": [
-        {
-          "path": "app/src/main/java/com/directorx/editor/ai/AiFeatures.kt",
-          "terms": [
-            "suspend fun detectScenes"
-          ]
-        }
-      ]
+      "evidence": [{"path": "app/src/main/java/com/directorx/editor/ai/AiFeatures.kt", "terms": ["suspend fun detectScenes"]}]
     },
     {
       "id": "auto_color",
@@ -402,14 +291,7 @@
       "onDevice": "Yes",
       "status": "available",
       "reachability": "reachable",
-      "evidence": [
-        {
-          "path": "app/src/main/java/com/directorx/editor/ui/editor/AiToolsDelegate.kt",
-          "terms": [
-            "aiFeatures.autoColorCorrect"
-          ]
-        }
-      ]
+      "evidence": [{"path": "app/src/main/java/com/directorx/editor/ui/editor/AiToolsDelegate.kt", "terms": ["aiFeatures.autoColorCorrect"]}]
     },
     {
       "id": "hdr_encode_feature_gate",
@@ -418,16 +300,7 @@
       "onDevice": "Yes",
       "status": "available",
       "reachability": "reachable",
-      "evidence": [
-        {
-          "path": "app/src/main/java/com/directorx/editor/engine/EncoderCapabilityProbe.kt",
-          "terms": [
-            "FEATURE_HdrEditing",
-            "FEATURE_HlgEditing",
-            "isFeatureSupported"
-          ]
-        }
-      ]
+      "evidence": [{"path": "app/src/main/java/com/directorx/editor/engine/EncoderCapabilityProbe.kt", "terms": ["FEATURE_HdrEditing", "FEATURE_HlgEditing", "isFeatureSupported"]}]
     },
     {
       "id": "motion_tracking",
@@ -436,14 +309,7 @@
       "onDevice": "Yes",
       "status": "available",
       "reachability": "reachable",
-      "evidence": [
-        {
-          "path": "app/src/main/java/com/directorx/editor/ui/editor/TimelineEditing.kt",
-          "terms": [
-            "splitMotionTracking"
-          ]
-        }
-      ]
+      "evidence": [{"path": "app/src/main/java/com/directorx/editor/ui/editor/TimelineEditing.kt", "terms": ["splitMotionTracking"]}]
     },
     {
       "id": "audio_denoise",
@@ -452,15 +318,7 @@
       "onDevice": "Yes",
       "status": "available",
       "reachability": "reachable",
-      "evidence": [
-        {
-          "path": "app/src/main/java/com/directorx/editor/engine/NoiseReductionEngine.kt",
-          "terms": [
-            "class NoiseReductionEngine",
-            "DeepFilterNet 3"
-          ]
-        }
-      ]
+      "evidence": [{"path": "app/src/main/java/com/directorx/editor/engine/NoiseReductionEngine.kt", "terms": ["class NoiseReductionEngine", "DeepFilterNet 3"]}]
     }
   ]
 }

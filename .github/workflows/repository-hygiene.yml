@@ -29,6 +29,25 @@ jobs:
       - name: Detect unapproved exact duplicates
         run: python scripts/check_repository_duplicates.py
 
+      - name: Verify native FFmpeg patch lock and source offer
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          root = Path(".")
+          lock = json.loads((root / "third_party/ffmpeg-kit-next/native-lock.json").read_text())
+          patch = root / lock["source"]["securityPatch"]
+          assert patch.is_file(), f"native security patch missing: {patch}"
+          actual = hashlib.sha256(patch.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+          expected = lock["source"]["securityPatchSha256"]
+          assert actual == expected, f"native patch SHA-256 mismatch: expected={expected} actual={actual}"
+          offer = (root / "app/src/main/res/raw/ffmpeg_kit_next_source_offer.txt").read_text()
+          assert lock["source"]["securityPatch"] in offer, "LGPL source offer does not identify the locked security patch"
+          print(f"verified native patch: {patch} ({actual})")
+          PY
+
       - name: Validate Android package identity
         run: python scripts/validate_package_identity.py
 

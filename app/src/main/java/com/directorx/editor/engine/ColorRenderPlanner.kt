@@ -118,7 +118,7 @@ enum class ColorPlanIssue(val blocking: Boolean) {
     /** The graphics driver can't sample HDR frames, so nothing can stay HDR on this device. */
     DEVICE_CANNOT_PROCESS_HDR(true),
 
-    /** Caption burn-in uses the Media3 effect pipeline, which currently plans an SDR output for HDR sources. */
+    /** Caption burn-in re-encodes the finished file with FFmpeg's H.264 or MPEG-4 encoder, which drops HDR. */
     SUBTITLE_BURN_IN_IS_SDR(true),
 }
 

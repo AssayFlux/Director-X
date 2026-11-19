@@ -1,13 +1,14 @@
 # Director X — Engineering Status
 
-**Target branch:** `Alpha` (work is being prepared on `ffmpeg-removal-complete`)  
+**Branch:** `Alpha`  
+**Reviewed source baseline:** `785fd0a864db7ee8fce2cf69cfd0a394b487d376`  
 **Application:** `Director X`  
-**Developer credit:** `Designed by AssayFlux`  
+**Developer:** `Designed by AssayFlux`  
 **Version:** `v0.1.0`  
-**Android version code:** `1`  
+**Android version code:** `1` (release notation: `001`)  
 **Application ID:** `com.directorx.editor`
 
-This is an evidence-based status record. Source changes are not accepted as complete until the relevant automated checks and, where required, physical-device checks pass.
+This is an evidence-based status record. A source implementation is not accepted until the relevant automated checks and, where required, physical-device checks pass.
 
 ## Evidence rules
 
@@ -16,63 +17,95 @@ This is an evidence-based status record. Source changes are not accepted as comp
 - **Device accepted** means a named physical device was tested and evidence was recorded.
 - **Blocked / pending** means required evidence is unavailable. Do not infer acceptance from a UI control, source file, or emulator result.
 
-## FFmpeg removal and platform-media migration
+## Current repository work
 
-The project is moving to Android platform media APIs and AndroidX Media3. The bundled FFmpegKit/FFmpeg AAR, native lock, patch, source-offer, and associated security-review gates are being removed rather than renewed.
-
-| Area | Replacement | Current state |
+| Area | Current evidence | State |
 |---|---|---|
-| Normal export | Media3 Transformer | Existing primary export path retained |
-| Proxy generation | Media3 Transformer only | FFmpeg fallback removed |
-| Audio decode | MediaExtractor + MediaCodec via AudioEngine | Used by noise-reduction pipeline |
-| Audio AAC encode | MediaCodec + MediaMuxer via AudioEngine | Platform encoder added; device validation pending |
-| Noise reduction | DeepFilterNet 3 / spectral gate | Uses platform decode/encode; tests pending |
-| Inpainting frame assembly | Media3 Transformer image/audio composition | Implemented; instrumentation validation pending |
-| Mixed-render concat | Media3 Transformer sequence | Implemented; export validation pending |
-| Constant frame rate | Media3 edited-item frame-rate control | FFmpeg pre-normalization removed; validation pending |
-| Subtitle sidecar | MediaExtractor | Platform extraction and SRT/VTT validation implemented |
-| Subtitle burn-in | Media3 text overlays | Caption overlays are added to the export composition; style parity validation pending |
-| Reverse rendering | No public Media3 reverse effect | Not implemented; preflight must disclose the forward-playback fallback |
+| Repository hygiene | Run `44508933074` is running on the current `Alpha` baseline; latest completed hygiene run `44508826009` passed | **Current verification pending** |
+| README architecture and Tech Stack | Representative source map and version-catalog rows are present | **Committed; Android test run pending** |
+| Model registry | `docs/models.md` restored; FFmpeg AAR row now states the locked version, exact size, SHA-256, LGPL profile, and GPL/x264 exclusions | **Committed; Android test run pending** |
+| Native source-offer metadata | Lock, app source-offer resource, capability registry JSON, and generated Kotlin now name `directorx-security.patch`; patch SHA-256 is `3a8dcc1aac92be38857dc89c6d6dcaed4457933855340c2fc1a948b42f2f0da7` | **Path/checksum automated pass** |
+| Native security review | Review horizon in the lock expired on 2026-10-31. Current advisory sources confirm affected FFmpeg 8.1.2 components that the patch disables; shipped binary configure transcript and exact feature reachability have not been independently verified | **Blocked — not security-cleared** |
+| Legal notices | Root `LICENSE`, `UPSTREAM-LICENSE-MIT.txt`, `NOTICE`, `ACKNOWLEDGMENTS.md`, FFmpeg LGPL materials and other third-party notices are retained | **Preserved; do not remove required attribution** |
+| Product identity | Gradle still declares `com.directorx.editor`, `v0.1.0`, version code `1`; developer credit remains AssayFlux | **Source verified** |
+| Legacy identifiers | `clearcut.db`, `.clearcut` archive extensions, notification-channel IDs, and serialized OpenFX/C2PA keys remain compatibility identifiers; retired public product names remain only in migration/audit checks | **Intentionally retained** |
+| Launcher icon | Launcher generation now uses the supplied `Assets/App Icon.png` as its source for adaptive and legacy launcher resources; generated output still requires build and device visual verification | **Source updated; packaged verification pending** |
+| Splash | MainActivity renders the Director X SVG logo at 280 dp / 1.624 aspect ratio for a 700 ms entry and controlled exit; the unused GIF resource and legacy composable have been removed | **Source updated; current Android CI and physical-device timing/visual acceptance pending** |
+| Room database | `ProjectDatabase` is version 11, defines `MIGRATION_10_11`, and the generated version-11 schema snapshot is now checked in | **Snapshot committed; migration CI and real-database acceptance pending** |
+| Custom canvas | Dimension validation, project canvas fields, export configuration propagation, and migration SQL are present; complete persisted-project/archive/encoder/final-media round-trip is not yet evidenced | **Implemented; acceptance incomplete** |
+| Proxies | HALF/QUARTER/EIGHTH policy, rotation-aware dimensions, worker, artifact-commit rules, and unit tests are present; cancellation, retry/recovery, low-storage, playback/export concurrency, and original-media-only export are not accepted on device | **Implemented; acceptance incomplete** |
+| Physical device | No current evidence for Moto G54 5G / Android 15 in this audit | **Pending maintainer device test** |
 
-The migration is **not complete** while reverse rendering and any remaining FFmpeg references or artifacts remain. Do not report the app as FFmpeg-free until a repository-wide audit confirms that no runtime, build, documentation, licensing, or CI reference remains.
+## Automated verification history
 
-## Repository identity and compatibility
+- Current verification on the 2026-11-19 `Alpha` baseline is running as Android verification run `44508933281`; do not report it green until unit tests, lint, and managed-device instrumentation all complete.
+- Earlier Android verification run `44462304995` on `97814cb0a60af0ea87fe634b79d79e90e0124144` completed with **1,848 tests and 5 failures**:
+  - Settings category navigation/scroll position.
+  - Archive-transfer README wording.
+  - FFmpeg native dependency documentation mismatch.
+  - Crash-report banner copy transition.
+  - Crash-report document-picker launch assertion.
+- Source fixes were committed on the `Alpha` branch:
+  - Settings scroll resets when changing categories.
+  - README describes local file transfer without claiming an online backup service.
+  - FFmpeg model-registry row matches the locked AAR size, checksum, and LGPL profile.
+  - Capability registry JSON, generated Kotlin, and licence test now consistently name `directorx-security.patch`.
+  - Crash-report UI tests now allow the exit animation and ActivityResult launcher dispatch to settle.
+- Android verification run `44466317343` on `c5f4af7156d096cd0317fc114ae15886ddfdd8fb` completed with **1,848 tests and 3 failures**: Settings category navigation and the two crash-report banner copy/save UI tests.
+- A follow-up run `44467371760` was cancelled by later source pushes before its final result was recorded.
+- The latest splash integration is tracked in Android verification run `44469283816` on `62fde180e8a3afeb581515f893e0bd79fbd24524`; repository hygiene run `44469283880` initially exposed the expected duplicate asset pair, now allowlisted because the same approved GIF must exist both as a design source in `Assets/` and as an Android `res/raw` build resource. **Do not report the new revision as green until its rerun completes successfully.**
+- Repository hygiene run `44467371766` passed on `dce400461e3f0ccec45af59913814bbdf73e903e`; the latest run `44467648000` is pending after the splash cleanup.
+- Build instructions now use the same QA verification tasks as CI: `:app:testQaUnitTest` and `:app:lintQa`.
 
-- Keep user-visible branding as **Director X** and developer credit as **Designed by AssayFlux**.
-- Keep the application ID `com.directorx.editor`, version `v0.1.0`, and version code `1` unless explicitly approved.
-- Preserve database names, archive extensions/MIME associations, serialized metadata keys, notification channels, and external-format fields until an explicit migration is designed and tested.
-- Preserve all third-party notices for dependencies that remain bundled, including DeepFilterNet and other runtime dependencies.
+## Native media security gate
 
-## Automated verification
+The native AAR, POM, lock and patch are build inputs and must remain in `third_party/ffmpeg-kit-next/`. The lock and app source-offer resource point to the tracked `directorx-security.patch`; the repository-hygiene workflow verifies the patch file and checksum.
 
-An earlier draft PR (#84) was merged into `Alpha` while the migration was still incomplete. Its CI exposed:
-- A pre-existing FFmpeg native security-patch SHA mismatch in repository hygiene and release-candidate validation. The FFmpeg-only checks are being removed with the dependency.
-- A Kotlin compile error in subtitle sidecar logging (private file-level `TAG` reference), corrected on the continuation branch.
+The FFmpeg 8.1.2 upstream security page records fixes for CVE-2026-8461 and CVE-2026-30999. Other advisories affecting versions through 8.1.2 include vulnerabilities in VobSub, TDSC, MACE6, ADX/AAX, PNG/APNG, RASC, IAMF and ZLIB paths. The downstream patch disables the corresponding demuxers, decoders and encoders; CVE-2026-64832 is recorded as not reachable because the Android recipe does not enable CUDA/NVDEC. A fresh upstream/Debian advisory review has since identified additional 2026 CVE families, and even FFmpeg 9.0.2 has open advisories. See `docs/RELEASE_READINESS.md` for the expanded review scope. This is a source/configuration review only. The exact AAR's configure transcript, exported symbols and packaged component reachability have not been independently re-established.
 
-That run did **not** pass. The unit-test job failed at compilation; no successful test result was established for that revision. The current continuation branch has not yet completed a fresh QA unit-test, lint, or instrumentation run.
+The security review horizon remains expired. Updating the date would not constitute a security review. Until the exact binary and build configuration are independently checked and evidence is recorded, native security status remains **expired / not cleared**.
 
-Pull-request validation must run tests and lint without assembling APKs. APK assembly is reserved for a manual release-candidate workflow dispatch after the source and test gates pass.
+## Branding, legal and compatibility policy
 
-## Remaining release acceptance
+- Keep user-visible product branding as **Director X** and developer credit as **Designed by AssayFlux**.
+- Keep required inherited copyright, licence, attribution and corresponding-source materials. These are provenance obligations, not product branding.
+- Do not remove `UPSTREAM-LICENSE-MIT.txt`, the root `LICENSE`, `NOTICE`, or component-specific notices.
+- Preserve stable database names, archive extensions/MIME associations, serialized metadata keys, notification channels, and external-format fields until an explicit migration is designed and tested.
+- ClearCut references in legal derivative attribution and compatibility contracts are not defects. Stale human-facing product copy and generated SBOM identity should be corrected without breaking compatibility.
+- Previous application IDs and retired product labels in migration-validation metadata are historical evidence; retain them where identity checks depend on them.
 
-- Complete the repository-wide FFmpeg reference and artifact audit.
-- Finish or explicitly disclose any remaining unsupported media capabilities; no silent forward-render substitutions.
-- Run QA unit tests, Android lint, and relevant instrumentation tests on the final migration branch.
-- Verify platform AAC encoding and audio/video muxing on physical devices across supported codec profiles.
-- Verify inpainting retains source audio and correct duration.
-- Verify mixed-render concatenation and CFR output metadata.
-- Verify subtitle overlay timing, style, and export behavior.
-- Complete playback, proxy generation, audio processing, export, navigation, and large-project acceptance on supported physical devices.
-- Verify the release signing certificate matches the established published identity.
-- Build and inspect the final release APK set only after all gates pass.
+## Release acceptance matrix
 
-## Physical-device acceptance
+### Identity and build
+- Version remains `v0.1.0`; version code remains `1` (displayed as `001`).
+- Application ID remains `com.directorx.editor`.
+- Release signing certificate must match the established identity.
+- `android-verification.yml` runs Room schema generation, JVM unit tests, Android lint, and database/instrumentation checks. `release-candidate.yml` runs native supply-chain and package gates; it builds the APK only after all preceding gates pass. The native security gate is currently expired, so no APK has been built.
 
-No new physical-device acceptance is claimed in this migration. Record device model, Android version/build fingerprint, media fixtures, output metadata, memory/storage observations, and results. Emulator results do not substitute for physical-device acceptance.
+### Database and custom canvas
+- The Room version 11 schema snapshot is checked in from KSP output.
+- Verify every supported migration, including 10→11, against a real Room database.
+- Verify custom dimensions through project creation, persistence, archive import/export, preview, export planning, encoder configuration and final media metadata.
+- Cover portrait, landscape, square and unusual ratios; reject invalid dimensions before export.
+
+### Proxy media
+- Verify HALF, QUARTER and EIGHTH output dimensions and selected-tier propagation.
+- Test rotated media, H.264/HEVC, actual Transformer cancellation, interruption/retry, cleanup, low storage and playback during export.
+- Prove final exports use original media, never proxy files.
+
+### Splash and launcher
+- Verify the Director X SVG mark renders at the intended 280 dp width and 1.624 aspect ratio for the 700 ms entry and controlled-exit interval on a physical device.
+- Confirm the obsolete AssayFlux GIF asset and animation helper are absent from the packaged app.
+- Compare all packaged launcher densities/adaptive layers with the approved brand source.
+
+### Physical-device acceptance
+- Test on Moto G54 5G / Android 15.
+- Record build fingerprint, media fixtures, output metadata, memory/storage observations and results.
+- Emulator results do not substitute for physical-device acceptance.
 
 ## Non-negotiable boundaries
 
-- Do not change version, version code, application ID, or signing identity without explicit approval.
-- Do not remove required legal notices or attribution for dependencies that remain.
-- Do not claim all tests pass, reverse rendering works, or release readiness is established without reproducible evidence.
-- Do not build APKs during intermediate migration stages.
+- Do not change version, version code, application ID or signing identity without explicit approval.
+- Do not remove required legal notices or inherited attribution.
+- Do not redesign editor/timeline/preview/export surfaces as part of the Dashboard and Settings scope.
+- Do not claim 5.3K, 8K, HDR, native security clearance or physical-device acceptance without reproducible evidence.

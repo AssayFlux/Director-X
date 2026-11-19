@@ -22,6 +22,7 @@ import com.directorx.editor.engine.ExportHistoryStatus
 import com.directorx.editor.engine.ExportHistoryStore
 import com.directorx.editor.engine.ExportOutputVerifier
 import com.directorx.editor.engine.ExportState
+import com.directorx.editor.engine.FFmpegEngine
 import com.directorx.editor.engine.FontRegistry
 import com.directorx.editor.engine.MediaPipeUsageGate
 import com.directorx.editor.engine.MemoryTrimRegistry
@@ -253,7 +254,7 @@ class ExportServiceInterruptionInstrumentationTest {
 
     @Test
     fun aBatchWaitsForEachItemsCaptionBurnInBeforeTheNext() {
-        val (state, delegate, _) = buildDelegate(refuseServiceStart = false)
+        val (state, delegate, _) = buildDelegate(refuseServiceStart = false, ffmpeg = true)
         mirrorEngineState(state)
         state.update { current ->
             val clip = current.tracks.single().clips.single().copy(
@@ -338,6 +339,7 @@ class ExportServiceInterruptionInstrumentationTest {
 
     private fun buildDelegate(
         refuseServiceStart: Boolean,
+        ffmpeg: Boolean = false,
     ): Triple<MutableStateFlow<EditorState>, ExportDelegate, ServiceStartContext> {
         val source = File(workDir, "export-30s-av.mp4")
         instrumentation.context.assets.open("export-30s-av.mp4").use { input ->
@@ -373,6 +375,7 @@ class ExportServiceInterruptionInstrumentationTest {
             // The editor always passes a real fingerprint; a blank one is stored as
             // none, and resume then refuses the mismatch.
             projectFingerprint = { FINGERPRINT },
+            ffmpegEngine = if (ffmpeg) FFmpegEngine(target) else null,
         )
         return Triple(state, delegate, context)
     }
@@ -442,6 +445,7 @@ class ExportServiceInterruptionInstrumentationTest {
             context = context,
             segmentationEngine = segmentation,
             streamCopyEngine = StreamCopyExportEngine(StreamCopyMuxer(context)),
+            ffmpegEngine = FFmpegEngine(context),
             fontRegistry = FontRegistry(context),
             memoryTrimRegistry = MemoryTrimRegistry(),
             productHealthLedger = ProductHealthLedger(context),

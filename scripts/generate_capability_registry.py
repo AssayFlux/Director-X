@@ -68,6 +68,11 @@ def validate_data(data: dict[str, Any], root: Path = ROOT) -> None:
             for field in ("name", "licenseName", "licenseText", "licenseUrl", "projectUrl"):
                 if not isinstance(notice.get(field), str) or not notice[field].strip():
                     raise RegistryError(f"{dependency['id']} notice is missing {field}")
+        if dependency["id"] == "ffmpeg":
+            artifact = root / "third_party" / "ffmpeg-kit-next" / "ffmpeg-kit-next-8.1.0.aar"
+            if not artifact.is_file():
+                raise RegistryError(f"FFmpeg registry artifact is missing: {artifact}")
+
     for capability in capabilities:
         if capability.get("status") not in {"available", "planned", "not_wired"}:
             raise RegistryError(f"{capability['id']} has an unknown status")

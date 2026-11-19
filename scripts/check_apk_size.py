@@ -35,7 +35,7 @@ def output_path(relative: str, apk_root: Path = APK_ROOT) -> Path:
 
 
 # Google Play refuses an install artifact above 200 MB. A universal APK carrying
-# four ABIs' worth of ONNX Runtime, MediaPipe, and DeepFilterNet blows
+# four ABIs' worth of FFmpeg, ONNX Runtime, MediaPipe, and DeepFilterNet blows
 # straight through it; what a device actually downloads is one per-ABI APK, and
 # that is the number this ceiling applies to.
 PER_DEVICE_CEILING_BYTES = 200 * 1024 * 1024

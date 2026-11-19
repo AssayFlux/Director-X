@@ -135,6 +135,7 @@ class ProjectColorPolicyInstrumentationTest {
             context = context,
             segmentationEngine = segmentation,
             streamCopyEngine = StreamCopyExportEngine(StreamCopyMuxer(context)),
+            ffmpegEngine = FFmpegEngine(context),
             fontRegistry = FontRegistry(context),
             memoryTrimRegistry = MemoryTrimRegistry(),
             productHealthLedger = ProductHealthLedger(context),

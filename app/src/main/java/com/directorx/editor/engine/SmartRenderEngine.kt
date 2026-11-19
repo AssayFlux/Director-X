@@ -134,7 +134,7 @@ object SmartRenderEngine {
      * Stitching a timeline that mixes pass-through and re-encode segments
      * groups consecutive same-flag clips into runs so each run can be
      * exported by the right engine (StreamCopy for pass-through,
-     * Media3 Transformer for re-encode) and the outputs concatenated.
+     * Transformer / FFmpeg for re-encode) and the outputs concatenated.
      *
      * @param startMs Timeline start time of the first segment in the run.
      * @param endMs Timeline end time of the last segment in the run.
@@ -161,7 +161,8 @@ object SmartRenderEngine {
      * produce, so the gap-bridging step is left to a future bridge pass on
      * the composer side.
      *
-     * The composer stitches re-encoded run outputs through Media3 Transformer.
+     * The composer can stitch run outputs through the source-pinned
+     * FFmpegKitNext concat demuxer.
      */
     fun planRuns(segments: List<RenderSegment>): List<RenderRun> {
         if (segments.isEmpty()) return emptyList()

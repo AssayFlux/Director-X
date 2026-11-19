@@ -1,14 +1,12 @@
 package com.directorx.editor.engine
 
-import kotlinx.coroutines.ensureActive
-import android.media.MediaFormat
 import android.content.Context
 import android.media.MediaExtractor
 import android.net.Uri
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlin.coroutines.coroutineContext
+import kotlinx.coroutines.withTimeoutOrNull
 import java.io.File
 import java.nio.ByteBuffer
 import java.nio.charset.StandardCharsets
@@ -249,6 +247,7 @@ object MetadataSidecarPolicy {
 @Singleton
 class MetadataSidecarEngine @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val ffmpegEngine: FFmpegEngine,
 ) {
     suspend fun export(
         uri: Uri,
@@ -320,106 +319,22 @@ class MetadataSidecarEngine @Inject constructor(
         track: MetadataSidecarTrack,
         format: MetadataSidecarFormat,
         outputFile: File,
-    ): Boolean = withContext(Dispatchers.IO) {
-        if (track.trackIndex < 0) return@withContext false
-        val expectedFormat = when (format) {
-            MetadataSidecarFormat.VTT -> CaptionImportEngine.Format.WEBVTT
-            MetadataSidecarFormat.SRT -> CaptionImportEngine.Format.SRT
-            else -> return@withContext false
-        }
-        val extractor = MediaExtractor()
-        try {
-            extractor.setDataSource(context, uri, emptyMap())
-            if (track.trackIndex !in 0 until extractor.trackCount) return@withContext false
-            val mediaFormat = extractor.getTrackFormat(track.trackIndex)
-            val mime = mediaFormat.getString(MediaFormat.KEY_MIME).orEmpty().lowercase(Locale.ROOT)
-            val supportsPlainTextSamples = mime in setOf(
-                "text/vtt",
-                "application/x-subrip",
-                "application/tx3g",
-                "application/x-quicktime-tx3g",
-            )
-            if (!supportsPlainTextSamples) return@withContext false
-
-            extractor.selectTrack(track.trackIndex)
-            val maxSampleBytes = if (mediaFormat.containsKey(MediaFormat.KEY_MAX_INPUT_SIZE)) {
-                mediaFormat.getInteger(MediaFormat.KEY_MAX_INPUT_SIZE)
-                    .coerceIn(64 * 1024, MAX_SIDECAR_BYTES.toInt())
-            } else {
-                64 * 1024
-            }
-            val buffer = ByteBuffer.allocate(maxSampleBytes)
-            data class Cue(val startMs: Long, val text: String)
-            val cues = ArrayList<Cue>()
-            var totalBytes = 0L
-            while (true) {
-                coroutineContext.ensureActive()
-                val sampleTimeUs = extractor.sampleTime
-                if (sampleTimeUs < 0L) break
-                buffer.clear()
-                val size = extractor.readSampleData(buffer, 0)
-                if (size < 0) break
-                if (size == 0 || totalBytes + size > MAX_SIDECAR_BYTES) return@withContext false
-                totalBytes += size
-                val raw = buffer.array().copyOf(size)
-                val sampleText = when (mime) {
-                    "application/tx3g", "application/x-quicktime-tx3g" -> {
-                        if (raw.size < 2) "" else {
-                            val declared = ((raw[0].toInt() and 0xff) shl 8) or (raw[1].toInt() and 0xff)
-                            val count = declared.coerceAtMost(raw.size - 2)
-                            String(raw, 2, count, Charsets.UTF_8)
-                        }
-                    }
-                    else -> String(raw, Charsets.UTF_8)
-                }.lineSequence()
-                    .filterNot { line ->
-                        val trimmed = line.trim()
-                        trimmed.equals("WEBVTT", ignoreCase = true) ||
-                            trimmed.matches(Regex("\\d{2}:\\d{2}:\\d{2}[,.]\\d{3}\\s+-->.*")) ||
-                            trimmed.matches(Regex("\\d+"))
-                    }
-                    .joinToString("\n")
-                    .trim()
-                if (sampleText.isNotBlank()) cues += Cue(sampleTimeUs / 1_000L, sampleText)
-                if (cues.size > 100_000) return@withContext false
-                extractor.advance()
-            }
-            if (cues.isEmpty()) return@withContext false
-
-            fun timestamp(ms: Long, separator: Char): String {
-                val safe = ms.coerceAtLeast(0L)
-                val hours = safe / 3_600_000L
-                val minutes = (safe / 60_000L) % 60L
-                val seconds = (safe / 1_000L) % 60L
-                val millis = safe % 1_000L
-                return String.format(Locale.US, "%02d:%02d:%02d%c%03d", hours, minutes, seconds, separator, millis)
-            }
-            val output = buildString {
-                if (format == MetadataSidecarFormat.VTT) appendLine("WEBVTT").appendLine()
-                cues.forEachIndexed { index, cue ->
-                    val nextStart = cues.getOrNull(index + 1)?.startMs
-                    val endMs = (nextStart ?: (cue.startMs + 2_000L)).coerceAtLeast(cue.startMs + 1L)
-                    if (format == MetadataSidecarFormat.SRT) appendLine(index + 1)
-                    val separator = if (format == MetadataSidecarFormat.VTT) '.' else ','
-                    append(timestamp(cue.startMs, separator))
-                    append(" --> ")
-                    appendLine(timestamp(endMs, separator))
-                    appendLine(cue.text)
-                    appendLine()
-                }
-            }
-            if (output.toByteArray(Charsets.UTF_8).size.toLong() > MAX_SIDECAR_BYTES) return@withContext false
-            outputFile.writeText(output, Charsets.UTF_8)
-            val bytes = readBoundedBytes(outputFile, MAX_SIDECAR_BYTES) ?: return@withContext false
-            CaptionImportEngine.analyze(bytes = bytes, format = expectedFormat).isValid
-        } catch (e: kotlinx.coroutines.CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            AppLog.w("MetadataSidecarEngine", "Subtitle sidecar extraction failed: ${e.javaClass.simpleName}")
-            false
-        } finally {
-            extractor.release()
-        }
+    ): Boolean {
+        if (track.trackIndex < 0 || !ffmpegEngine.isAvailable()) return false
+        val completed = withTimeoutOrNull(NativeProcessingPolicy.TIMEOUT_METADATA_SIDECAR_MS) {
+            ffmpegEngine.extractSubtitleTrack(uri, track.trackIndex, format, outputFile)
+        } ?: false
+        if (!completed || outputFile.length() <= 0L) return false
+        val bytes = readBoundedBytes(outputFile, MAX_SIDECAR_BYTES) ?: return false
+        val parsed = CaptionImportEngine.analyze(
+            bytes = bytes,
+            format = when (format) {
+                MetadataSidecarFormat.VTT -> CaptionImportEngine.Format.WEBVTT
+                MetadataSidecarFormat.SRT -> CaptionImportEngine.Format.SRT
+                else -> return false
+            },
+        )
+        return parsed.isValid
     }
 
     private fun readNmeaPoints(uri: Uri, trackIndex: Int): List<GpsPoint> {
