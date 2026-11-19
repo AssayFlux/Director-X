@@ -22,6 +22,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExternalResource
+import org.junit.rules.RuleChain
+import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
@@ -45,8 +47,7 @@ class CrashReportBannerTest {
     private val crashedAt = System.currentTimeMillis() - 60 * 60 * 1000L
 
     // Planted before the activity starts, the way the last run's handler leaves it.
-    @get:Rule(order = 0)
-    val plantedCrash = object : ExternalResource() {
+    private val plantedCrash = object : ExternalResource() {
         override fun before() {
             CrashRecordStore(context).recordUncaughtException(
                 Thread.currentThread(),
@@ -57,8 +58,11 @@ class CrashReportBannerTest {
         }
     }
 
-    @get:Rule(order = 1)
-    val compose = createAndroidComposeRule<MainActivity>()
+    private val compose = createAndroidComposeRule<MainActivity>()
+
+    // RuleChain makes the crash record exist before ActivityRule launches MainActivity.
+    @get:Rule
+    val rules: TestRule = RuleChain.outerRule(plantedCrash).around(compose)
 
     @Test
     fun copySummaryPutsTheIssueBodyOnTheClipboardAndSetsTheCrashAside() {
