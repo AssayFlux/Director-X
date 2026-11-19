@@ -33,8 +33,8 @@ def validate(root: Path = ROOT) -> tuple[str, str]:
 
     settings_path = root / "app" / "src" / "main" / "java" / "com" / "directorx" / "editor" / "ui" / "settings" / "SettingsScreen.kt"
     settings = settings_path.read_text(encoding="utf-8")
-    if "\"v${BuildConfig.VERSION_NAME}\"" not in settings:
-        raise VersionConsistencyError("Settings must display BuildConfig.VERSION_NAME rather than a hardcoded app version")
+    if "BuildConfig.VERSION_NAME" not in settings:
+        raise VersionConsistencyError("Settings must display the exact Gradle version string without adding a prefix")
     if re.search(r"\"v[0-9]+[.][0-9]+[.][0-9]+\"", settings):
         raise VersionConsistencyError("Settings contains a hardcoded semantic app version")
     return version_name, version_code
