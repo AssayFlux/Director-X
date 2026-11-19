@@ -52,9 +52,9 @@ anchor = "# WORKAROUND TO DISABLE BUILDING OF doc FOLDER"
 if text.count(anchor) != 1:
     raise SystemExit("Expected exactly one post-configure FriBidi anchor; refusing an ambiguous edit.")
 insert = r'''# Director X FriBidi generated-Makefile correction:
-FRIBIDI_SOURCE_DIR="\${BASEDIR}/src/\${LIB_NAME}"
-FRIBIDI_GENERATOR="\${FRIBIDI_SOURCE_DIR}/gen.tab/gen-unicode-version.py"
-cat > "\${FRIBIDI_GENERATOR}" <<'FRIBIDI_GEN'
+FRIBIDI_SOURCE_DIR="${BASEDIR}/src/${LIB_NAME}"
+FRIBIDI_GENERATOR="${FRIBIDI_SOURCE_DIR}/gen.tab/gen-unicode-version.py"
+cat > "${FRIBIDI_GENERATOR}" <<'FRIBIDI_GEN'
 #!/usr/bin/env python3
 import pathlib
 import re
@@ -66,13 +66,13 @@ if not match:
     raise SystemExit("Could not determine Unicode version from pinned FriBidi ReadMe.txt")
 major, minor, micro = map(int, match.groups())
 print("/* fribidi-unicode-version.h: generated from pinned Unicode ReadMe.txt */")
-print(f'#define FRIBIDI_UNICODE_VERSION "\${major}.\${minor}.\${micro}"')
-print(f"#define FRIBIDI_UNICODE_MAJOR_VERSION \${major}")
-print(f"#define FRIBIDI_UNICODE_MINOR_VERSION \${minor}")
-print(f"#define FRIBIDI_UNICODE_MICRO_VERSION \${micro}")
+print(f'#define FRIBIDI_UNICODE_VERSION "${major}.${minor}.${micro}"')
+print(f"#define FRIBIDI_UNICODE_MAJOR_VERSION ${major}")
+print(f"#define FRIBIDI_UNICODE_MINOR_VERSION ${minor}")
+print(f"#define FRIBIDI_UNICODE_MICRO_VERSION ${micro}")
 FRIBIDI_GEN
-FRIBIDI_MAKEFILE="\${FRIBIDI_SOURCE_DIR}/gen.tab/Makefile"
-python3 - "\${FRIBIDI_MAKEFILE}" <<'FRIBIDI_MAKE'
+FRIBIDI_MAKEFILE="${FRIBIDI_SOURCE_DIR}/gen.tab/Makefile"
+python3 - "${FRIBIDI_MAKEFILE}" <<'FRIBIDI_MAKE'
 from pathlib import Path
 import sys
 
@@ -126,7 +126,7 @@ insert = r'''# Director X security backports for FFmpeg 9.0.2:
 # CVE-2026-125269: clear recycled H.264/H.265 SEI message slots.
 # CVE-2026-125250/251/260/261/266/207/216: GIF, VVC, generic encoder,
 # SGI, SANM, Interplay ACM and DPX boundary/initialization fixes.
-FFMPEG_SOURCE="\${BASEDIR}/src/ffmpeg"
+FFMPEG_SOURCE="${BASEDIR}/src/ffmpeg"
 FFMPEG_SECURITY_COMMITS=(
   969c7eb091989a664cb7bf66a1f02051cc46cb52
   d1434518fbd03789e3e5dc0657a7a9f1123ce074
@@ -144,34 +144,34 @@ FFMPEG_SECURITY_COMMITS=(
   ec887b13a88afbaf44fb28c3045bda5d434da8dc
 )
 FFMPEG_SECURITY_MASTER_PIN="f8bb61cd57a714b4eb8a9f8002dbb5214eed48c7"
-if [[ "$(git -C "\${FFMPEG_SOURCE}" rev-parse HEAD)" != "\${FFMPEG_SECURITY_MASTER_PIN}" ]]; then
-for fix in "\${FFMPEG_SECURITY_COMMITS[@]}"; do
-  if ! git -C "\${FFMPEG_SOURCE}" cat-file -e "\${fix}^{commit}" 2>/dev/null; then
-    git -C "\${FFMPEG_SOURCE}" fetch --no-tags origin "\${fix}"
+if [[ "$(git -C "${FFMPEG_SOURCE}" rev-parse HEAD)" != "${FFMPEG_SECURITY_MASTER_PIN}" ]]; then
+for fix in "${FFMPEG_SECURITY_COMMITS[@]}"; do
+  if ! git -C "${FFMPEG_SOURCE}" cat-file -e "${fix}^{commit}" 2>/dev/null; then
+    git -C "${FFMPEG_SOURCE}" fetch --no-tags origin "${fix}"
   fi
-  if git -C "\${FFMPEG_SOURCE}" merge-base --is-ancestor "\${fix}" HEAD; then
+  if git -C "${FFMPEG_SOURCE}" merge-base --is-ancestor "${fix}" HEAD; then
     continue
   fi
-  git -C "\${FFMPEG_SOURCE}" show --format= "\${fix}" | git -C "\${FFMPEG_SOURCE}" apply --check -
-  git -C "\${FFMPEG_SOURCE}" show --format= "\${fix}" | git -C "\${FFMPEG_SOURCE}" apply -
+  git -C "${FFMPEG_SOURCE}" show --format= "${fix}" | git -C "${FFMPEG_SOURCE}" apply --check -
+  git -C "${FFMPEG_SOURCE}" show --format= "${fix}" | git -C "${FFMPEG_SOURCE}" apply -
 done
 else
-  echo "Using pinned upstream FFmpeg 9.x security-updated commit \${FFMPEG_SECURITY_MASTER_PIN}; upstream backports are already present."
+  echo "Using pinned upstream FFmpeg 9.x security-updated commit ${FFMPEG_SECURITY_MASTER_PIN}; upstream backports are already present."
 fi
-git -C "\${FFMPEG_SOURCE}" diff --check
-grep -q 'while (info)' "\${FFMPEG_SOURCE}/libavutil/encryption_info.c"
-grep -q 'av_encryption_init_info_append_side_data' "\${FFMPEG_SOURCE}/libavutil/encryption_info.c"
-grep -q 'pssh_side_data' "\${FFMPEG_SOURCE}/libavformat/mov.c"
-grep -q 'if (!fromlen)' "\${FFMPEG_SOURCE}/libavutil/avstring.c"
-grep -Fq 'memset(&list->messages[list->nb_messages]' "\${FFMPEG_SOURCE}/libavcodec/cbs_sei.c"
-grep -Fq 'if ((ret = init_get_bits8(&gb, buf, buf_size)) < 0)' "\${FFMPEG_SOURCE}/libavcodec/g726.c"
-grep -q 'ptr_linesize = linesize' "\${FFMPEG_SOURCE}/libavcodec/gif.c"
-grep -q 'ptrdiff_t' "\${FFMPEG_SOURCE}/libavcodec/sgienc.c"
-grep -q 'av_size_mult(s->current_frame.nb_units' "\${FFMPEG_SOURCE}/libavcodec/vvc/refs.c"
-grep -q 'memcpy(lut, ctx->c23lut, sizeof(lut))' "\${FFMPEG_SOURCE}/libavcodec/sanm.c"
-grep -q 'Unsupported bit depth' "\${FFMPEG_SOURCE}/libavcodec/dpxenc.c"
-grep -q 'src->width != avctx->width' "\${FFMPEG_SOURCE}/libavcodec/encode.c"
-grep -q 's->block_len > 1024 \* 1024' "\${FFMPEG_SOURCE}/libavcodec/interplayacm.c"
+git -C "${FFMPEG_SOURCE}" diff --check
+grep -q 'while (info)' "${FFMPEG_SOURCE}/libavutil/encryption_info.c"
+grep -q 'av_encryption_init_info_append_side_data' "${FFMPEG_SOURCE}/libavutil/encryption_info.c"
+grep -q 'pssh_side_data' "${FFMPEG_SOURCE}/libavformat/mov.c"
+grep -q 'if (!fromlen)' "${FFMPEG_SOURCE}/libavutil/avstring.c"
+grep -Fq 'memset(&list->messages[list->nb_messages]' "${FFMPEG_SOURCE}/libavcodec/cbs_sei.c"
+grep -Fq 'if ((ret = init_get_bits8(&gb, buf, buf_size)) < 0)' "${FFMPEG_SOURCE}/libavcodec/g726.c"
+grep -q 'ptr_linesize = linesize' "${FFMPEG_SOURCE}/libavcodec/gif.c"
+grep -q 'ptrdiff_t' "${FFMPEG_SOURCE}/libavcodec/sgienc.c"
+grep -q 'av_size_mult(s->current_frame.nb_units' "${FFMPEG_SOURCE}/libavcodec/vvc/refs.c"
+grep -q 'memcpy(lut, ctx->c23lut, sizeof(lut))' "${FFMPEG_SOURCE}/libavcodec/sanm.c"
+grep -q 'Unsupported bit depth' "${FFMPEG_SOURCE}/libavcodec/dpxenc.c"
+grep -q 'src->width != avctx->width' "${FFMPEG_SOURCE}/libavcodec/encode.c"
+grep -q 's->block_len > 1024 \* 1024' "${FFMPEG_SOURCE}/libavcodec/interplayacm.c"
 '''
 path.write_text(text.replace(anchor, insert + anchor), encoding="utf-8")
 print("Prepared pinned FFmpeg security backports.")
