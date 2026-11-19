@@ -36,10 +36,9 @@ import kotlin.coroutines.resume
  * ClearCut pins `io.github.kaleyravideo:android-deepfilternet:0.0.8`, whose
  * bundled-model AAR ships an ~8 MB `deep_filter_mobile_model`, `libdf.so`
  * for Android ABIs, and the `NativeDeepFilterNet` JNI surface. `processAudio`
- * decodes source audio once to 48 kHz mono signed 16-bit PCM via [FFmpegEngine],
+ * decodes source audio once to 48 kHz mono signed 16-bit PCM via Android MediaExtractor/MediaCodec,
  * processes fixed-size DeepFilterNet frames, then re-encodes the cleaned PCM to
- * M4A. If FFmpeg or the native DeepFilterNet runtime is unavailable, the method
- * keeps the old pass-through behavior rather than failing the edit.
+ * M4A. If the platform decoder is unavailable, the operation reports an explicit failure.
  *
  * ## Model registry
  *
@@ -49,7 +48,7 @@ import kotlin.coroutines.resume
 @Singleton
 class NoiseReductionEngine @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val ffmpegEngine: FFmpegEngine
+    private val audioEngine: AudioEngine
 ) {
     companion object {
         // R6.6a target — DeepFilterNet 3 supersedes v2 with same JNI surface.
@@ -100,7 +99,7 @@ class NoiseReductionEngine @Inject constructor(
         /** Processing ran (or was not needed) but produced no measurable improvement. Nothing was written. */
         NO_OP,
 
-        /** No usable backend on this device — FFmpeg and/or DeepFilterNet missing. Nothing was written. */
+        /** No usable platform audio decoder is available on this device. Nothing was written. */
         UNAVAILABLE,
 
         /** A backend was available and failed. Nothing was written. */
@@ -137,20 +136,12 @@ class NoiseReductionEngine @Inject constructor(
      * must not substitute a guess.
      */
     suspend fun analyzeNoise(uri: Uri): NoiseProfile? = withContext(Dispatchers.IO) {
-        if (!ffmpegEngine.isAvailable()) {
-            AppLog.d(TAG, "analyzeNoise: FFmpeg unavailable, cannot measure")
-            return@withContext null
-        }
         val workDir = File(context.cacheDir, NOISE_REDUCED_DIR_NAME).also { it.mkdirs() }
-        val pcm = File.createTempFile("clearcut-nr-analyze-", ".pcm", workDir)
+        val pcm = File.createTempFile("directorx-nr-analyze-", ".pcm", workDir)
         try {
-            val extracted = ffmpegEngine.extractAudioToPcm16le(
-                inputUri = uri,
-                outputFile = pcm,
-                sampleRate = TARGET_MODEL_SAMPLE_RATE_HZ,
-                channels = 1
-            ) { }
-            if (!extracted) return@withContext null
+            val decoded = audioEngine.decodeToPcmWithFormat(uri)
+            if (decoded.samples.isEmpty()) return@withContext null
+            writeNormalizedMonoPcm(decoded, pcm)
             measureNoiseProfile(pcm, TARGET_MODEL_SAMPLE_RATE_HZ)
         } catch (e: CancellationException) {
             throw e
@@ -186,13 +177,6 @@ class NoiseReductionEngine @Inject constructor(
             return@withContext NoiseReductionResult(
                 outcome = NoiseReductionOutcome.NO_OP,
                 detail = "Noise reduction is off; the clip was left unchanged."
-            )
-        }
-
-        if (!ffmpegEngine.isAvailable()) {
-            return@withContext NoiseReductionResult(
-                outcome = NoiseReductionOutcome.UNAVAILABLE,
-                detail = "Audio decoding is unavailable on this device, so no noise reduction ran."
             )
         }
 
@@ -258,15 +242,12 @@ class NoiseReductionEngine @Inject constructor(
         val cleanedPcm = File.createTempFile("clearcut-nr-clean-", ".pcm", workDir)
         var deepFilterNet: DeepFilterNet? = null
         try {
-            val extracted = ffmpegEngine.extractAudioToPcm16le(
-                inputUri = uri,
-                outputFile = sourcePcm,
-                sampleRate = TARGET_MODEL_SAMPLE_RATE_HZ,
-                channels = 1
-            ) { progress -> reportProgress(onProgress, progress * 0.15f) }
-            if (!extracted) {
-                throw IllegalStateException("Could not decode source audio to 48 kHz PCM")
+            val decoded = audioEngine.decodeToPcmWithFormat(uri)
+            if (decoded.samples.isEmpty()) {
+                throw IllegalStateException("Android could not decode source audio")
             }
+            writeNormalizedMonoPcm(decoded, sourcePcm)
+            reportProgress(onProgress, 0.15f)
 
             val sourceProfile = measureNoiseProfile(sourcePcm, TARGET_MODEL_SAMPLE_RATE_HZ)
                 ?: throw IllegalStateException("Source audio was too short to measure")
@@ -305,14 +286,15 @@ class NoiseReductionEngine @Inject constructor(
                 )
             }
 
-            val encoded = ffmpegEngine.encodePcm16leToM4a(
+            val encoded = audioEngine.encodePcm16leToM4a(
                 inputFile = cleanedPcm,
                 outputFile = partialFile,
                 sampleRate = TARGET_MODEL_SAMPLE_RATE_HZ,
-                channels = 1
-            ) { progress -> reportProgress(onProgress, 0.70f + progress * 0.29f) }
+                channels = 1,
+                onProgress = { progress -> reportProgress(onProgress, 0.70f + progress * 0.29f) }
+            )
             if (!encoded) {
-                throw IllegalStateException("Could not encode cleaned PCM to M4A")
+                throw IllegalStateException("Android AAC encoding of cleaned PCM failed")
             }
 
             val finalizedFile = finalizeNoiseReducedAudioFile(partialFile, outputFile)
@@ -334,6 +316,44 @@ class NoiseReductionEngine @Inject constructor(
             runCatching { deepFilterNet?.release() }
             sourcePcm.delete()
             cleanedPcm.delete()
+        }
+    }
+
+    /**
+     * Downmix and linearly resample decoded interleaved PCM to the 48 kHz mono
+     * format required by DeepFilterNet. All conversion is local and bounded by
+     * AudioEngine's decoded-PCM memory budget.
+     */
+    private fun writeNormalizedMonoPcm(decoded: DecodedPcm, outputFile: File) {
+        require(decoded.sampleRate > 0 && decoded.channelCount > 0)
+        val inputFrames = decoded.samples.size / decoded.channelCount
+        require(inputFrames > 0) { "Decoded audio contains no complete sample frames" }
+        val mono = ShortArray(inputFrames) { frame ->
+            var sum = 0L
+            val offset = frame * decoded.channelCount
+            for (channel in 0 until decoded.channelCount) sum += decoded.samples[offset + channel].toLong()
+            (sum / decoded.channelCount).toInt().coerceIn(Short.MIN_VALUE.toInt(), Short.MAX_VALUE.toInt()).toShort()
+        }
+        val outputFrames = (inputFrames.toLong() * TARGET_MODEL_SAMPLE_RATE_HZ / decoded.sampleRate)
+            .coerceIn(1L, Int.MAX_VALUE.toLong()).toInt()
+        val normalized = ShortArray(outputFrames)
+        for (index in normalized.indices) {
+            val position = index.toDouble() * decoded.sampleRate / TARGET_MODEL_SAMPLE_RATE_HZ
+            val left = position.toInt().coerceIn(0, mono.lastIndex)
+            val right = (left + 1).coerceAtMost(mono.lastIndex)
+            val fraction = (position - left).coerceIn(0.0, 1.0)
+            val value = mono[left] * (1.0 - fraction) + mono[right] * fraction
+            normalized[index] = value.toInt().coerceIn(Short.MIN_VALUE.toInt(), Short.MAX_VALUE.toInt()).toShort()
+        }
+        java.io.BufferedOutputStream(outputFile.outputStream()).use { stream ->
+            val buffer = ByteBuffer.allocate(16 * 1024).order(ByteOrder.LITTLE_ENDIAN)
+            var index = 0
+            while (index < normalized.size) {
+                buffer.clear()
+                val count = minOf(buffer.capacity() / 2, normalized.size - index)
+                repeat(count) { buffer.putShort(normalized[index++]) }
+                stream.write(buffer.array(), 0, count * 2)
+            }
         }
     }
 
