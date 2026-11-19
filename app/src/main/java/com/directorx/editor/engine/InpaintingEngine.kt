@@ -94,6 +94,8 @@ class InpaintingEngine @Inject constructor(
 
     companion object {
         private const val TAG = "InpaintingEngine"
+        private const val MAX_IMAGE_INPUT_BYTES = 50L * 1024L * 1024L
+        private const val MAX_VIDEO_INPUT_BYTES = 4L * 1024L * 1024L * 1024L
         private const val MODEL_FILENAME = "lama_dilated.onnx"
         private const val MODEL_SIZE_BYTES = 182_781_794L // ~174 MiB
         private const val MODEL_INPUT_SIZE = 512
