@@ -771,21 +771,38 @@ fun SettingsScreen(
         ) {
             SettingsInfo(Icons.Default.Info, stringResource(R.string.settings_version), BuildConfig.VERSION_NAME, DirectorXAccents.Sapphire)
             SettingsInfo(Icons.Default.AutoAwesome, stringResource(R.string.brand_credit), "AssayFlux", DirectorXAccents.Mauve)
-            Text(
-                text = "AssayFlux is an independent technology initiative creating thoughtful tools for creativity, engineering, and innovation.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.fillMaxWidth().padding(top = 8.dp, start = 4.dp, end = 4.dp)
-            )
-            Image(
-                painter = painterResource(R.drawable.assayflux_signature),
-                contentDescription = "AssayFlux founder signature",
-                contentScale = ContentScale.Fit,
+            Column(
                 modifier = Modifier
-                    .padding(top = 12.dp, start = 4.dp)
-                    .width(104.dp)
-                    .height(112.dp)
-            )
+                    .fillMaxWidth()
+                    .padding(top = 14.dp, start = 4.dp, end = 4.dp)
+            ) {
+                Text(
+                    text = "AUTHOR'S SECTION",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = "Md Safarujjaman",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(top = 5.dp)
+                )
+                Text(
+                    text = "AssayFlux — building thoughtful tools where creativity meets engineering.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 3.dp)
+                )
+                Image(
+                    painter = painterResource(R.drawable.assayflux_signature),
+                    contentDescription = "Md Safarujjaman's signature",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .width(88.dp)
+                        .height(64.dp)
+                )
+            }
         }
         } // End SettingsCategory.APP content
 
