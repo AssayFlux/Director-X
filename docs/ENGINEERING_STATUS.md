@@ -1,7 +1,7 @@
 # Director X — Engineering Status
 
 **Branch:** `Alpha`  
-**Reviewed source baseline:** `909ab3542a456bc436079e8eb6beebc28f461abf`  
+**Reviewed source baseline:** `785fd0a864db7ee8fce2cf69cfd0a394b487d376`  
 **Application:** `Director X`  
 **Developer:** `Designed by AssayFlux`  
 **Version:** `v0.1.0`  
@@ -21,7 +21,7 @@ This is an evidence-based status record. A source implementation is not accepted
 
 | Area | Current evidence | State |
 |---|---|---|
-| Repository hygiene | Run `44466488707` passed on `8be65188eed91bae15c1877b92a8064d53ba887c`; the native patch/source-offer gate also passed on `c5f4af7156d096cd0317fc114ae15886ddfdd8fb` | **Automated pass** |
+| Repository hygiene | Run `44508933074` is running on the current `Alpha` baseline; latest completed hygiene run `44508826009` passed | **Current verification pending** |
 | README architecture and Tech Stack | Representative source map and version-catalog rows are present | **Committed; Android test run pending** |
 | Model registry | `docs/models.md` restored; FFmpeg AAR row now states the locked version, exact size, SHA-256, LGPL profile, and GPL/x264 exclusions | **Committed; Android test run pending** |
 | Native source-offer metadata | Lock, app source-offer resource, capability registry JSON, and generated Kotlin now name `directorx-security.patch`; patch SHA-256 is `3a8dcc1aac92be38857dc89c6d6dcaed4457933855340c2fc1a948b42f2f0da7` | **Path/checksum automated pass** |
@@ -30,15 +30,16 @@ This is an evidence-based status record. A source implementation is not accepted
 | Product identity | Gradle still declares `com.directorx.editor`, `v0.1.0`, version code `1`; developer credit remains AssayFlux | **Source verified** |
 | Legacy identifiers | `clearcut.db`, `.clearcut` archive extensions, notification-channel IDs, and serialized OpenFX/C2PA keys remain compatibility identifiers; retired public product names remain only in migration/audit checks | **Intentionally retained** |
 | Launcher icon | Launcher generation now uses the supplied `Assets/App Icon.png` as its source for adaptive and legacy launcher resources; generated output still requires build and device visual verification | **Source updated; packaged verification pending** |
-| Splash | MainActivity renders the Director X SVG logo at 280 dp / 1.624 aspect ratio for a 700 ms entry and controlled exit; PR #76 removes the unused GIF resource and legacy composable | **Source updated; Android CI and physical-device timing/visual acceptance pending** |
-| Room database | `ProjectDatabase` is version 11 and defines `MIGRATION_10_11` for `customWidth`/`customHeight`; checked-in schema snapshots currently stop at version 10 | **Schema 11 snapshot and migration acceptance outstanding** |
+| Splash | MainActivity renders the Director X SVG logo at 280 dp / 1.624 aspect ratio for a 700 ms entry and controlled exit; the unused GIF resource and legacy composable have been removed | **Source updated; current Android CI and physical-device timing/visual acceptance pending** |
+| Room database | `ProjectDatabase` is version 11, defines `MIGRATION_10_11`, and the generated version-11 schema snapshot is now checked in | **Snapshot committed; migration CI and real-database acceptance pending** |
 | Custom canvas | Dimension validation, project canvas fields, export configuration propagation, and migration SQL are present; complete persisted-project/archive/encoder/final-media round-trip is not yet evidenced | **Implemented; acceptance incomplete** |
 | Proxies | HALF/QUARTER/EIGHTH policy, rotation-aware dimensions, worker, artifact-commit rules, and unit tests are present; cancellation, retry/recovery, low-storage, playback/export concurrency, and original-media-only export are not accepted on device | **Implemented; acceptance incomplete** |
 | Physical device | No current evidence for Moto G54 5G / Android 15 in this audit | **Pending maintainer device test** |
 
 ## Automated verification history
 
-- Android verification run `44462304995` on `97814cb0a60af0ea87fe634b79d79e90e0124144` completed with **1,848 tests and 5 failures**:
+- Current verification on the 2026-11-19 `Alpha` baseline is running as Android verification run `44508933281`; do not report it green until unit tests, lint, and managed-device instrumentation all complete.
+- Earlier Android verification run `44462304995` on `97814cb0a60af0ea87fe634b79d79e90e0124144` completed with **1,848 tests and 5 failures**:
   - Settings category navigation/scroll position.
   - Archive-transfer README wording.
   - FFmpeg native dependency documentation mismatch.
@@ -60,7 +61,7 @@ This is an evidence-based status record. A source implementation is not accepted
 
 The native AAR, POM, lock and patch are build inputs and must remain in `third_party/ffmpeg-kit-next/`. The lock and app source-offer resource point to the tracked `directorx-security.patch`; the repository-hygiene workflow verifies the patch file and checksum.
 
-The FFmpeg 8.1.2 upstream security page records fixes for CVE-2026-8461 and CVE-2026-30999. Other advisories affecting versions through 8.1.2 include vulnerabilities in VobSub, TDSC, MACE6, ADX/AAX, PNG/APNG, RASC, IAMF and ZLIB paths. The downstream patch disables the corresponding demuxers, decoders and encoders; CVE-2026-64832 is recorded as not reachable because the Android recipe does not enable CUDA/NVDEC. This is a source/configuration review only. The exact AAR's configure transcript, exported symbols and packaged component reachability have not been re-established in this audit.
+The FFmpeg 8.1.2 upstream security page records fixes for CVE-2026-8461 and CVE-2026-30999. Other advisories affecting versions through 8.1.2 include vulnerabilities in VobSub, TDSC, MACE6, ADX/AAX, PNG/APNG, RASC, IAMF and ZLIB paths. The downstream patch disables the corresponding demuxers, decoders and encoders; CVE-2026-64832 is recorded as not reachable because the Android recipe does not enable CUDA/NVDEC. A fresh upstream/Debian advisory review has since identified additional 2026 CVE families, and even FFmpeg 9.0.2 has open advisories. See `docs/RELEASE_READINESS.md` for the expanded review scope. This is a source/configuration review only. The exact AAR's configure transcript, exported symbols and packaged component reachability have not been independently re-established.
 
 The security review horizon remains expired. Updating the date would not constitute a security review. Until the exact binary and build configuration are independently checked and evidence is recorded, native security status remains **expired / not cleared**.
 
@@ -82,7 +83,7 @@ The security review horizon remains expired. Updating the date would not constit
 - `android-verification.yml` runs Room schema generation, JVM unit tests, Android lint, and database/instrumentation checks. `release-candidate.yml` runs native supply-chain and package gates; it builds the APK only after all preceding gates pass. The native security gate is currently expired, so no APK has been built.
 
 ### Database and custom canvas
-- Generate and commit the Room version 11 schema snapshot from KSP output.
+- The Room version 11 schema snapshot is checked in from KSP output.
 - Verify every supported migration, including 10→11, against a real Room database.
 - Verify custom dimensions through project creation, persistence, archive import/export, preview, export planning, encoder configuration and final media metadata.
 - Cover portrait, landscape, square and unusual ratios; reject invalid dimensions before export.
