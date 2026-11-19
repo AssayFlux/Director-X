@@ -24,6 +24,16 @@ fun resolveSigningSecret(vararg keys: String): String? {
 
 val runtimeNoticeGeneratedDir = layout.buildDirectory.dir("generated/source/runtimeNotices")
 val assayFluxBrandAssetsDir = layout.buildDirectory.dir("generated/assets/assayfluxBrand")
+val directorXLauncherResDir = layout.buildDirectory.dir("generated/res/directorXLauncher")
+val generateDirectorXLauncherIcons by tasks.registering(Exec::class) {
+    group = "branding"
+    description = "Generates launcher icons from the approved Director X master SVG."
+    inputs.file(rootProject.file("Assets/Director-X Logo.svg"))
+    inputs.file(rootProject.file("scripts/generate_launcher_icons.py"))
+    outputs.dir(directorXLauncherResDir)
+    commandLine("python3", rootProject.file("scripts/generate_launcher_icons.py").absolutePath,
+        "--output", directorXLauncherResDir.get().asFile.absolutePath)
+}
 val copyAssayFluxBrandAssets by tasks.registering(Copy::class) {
     from(rootProject.file("Assets")) {
         include("Director-X Logo.svg", "UI Design Texture.svg")
@@ -172,7 +182,7 @@ android {
 
     sourceSets {
         getByName("main").java.directories.add(runtimeNoticeGeneratedDir.get().asFile.absolutePath)
-        getByName("main").assets.srcDir(assayFluxBrandAssetsDir.get().asFile)
+        getByName("main").assets.srcDir(assayFluxBrandAssetsDir.get().asFile)\n        getByName("main").res.srcDir(directorXLauncherResDir.get().asFile)
         getByName("androidTest").assets.directories += "$projectDir/schemas"
     }
 
@@ -185,7 +195,7 @@ android {
 }
 
 tasks.named("preBuild").configure {
-    dependsOn(copyAssayFluxBrandAssets)
+    dependsOn(copyAssayFluxBrandAssets, generateDirectorXLauncherIcons)
 }
 
 composeCompiler {
