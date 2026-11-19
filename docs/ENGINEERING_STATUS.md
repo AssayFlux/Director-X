@@ -30,7 +30,7 @@ This is an evidence-based status record. A source implementation is not accepted
 | Product identity | Gradle still declares `com.directorx.editor`, `v0.1.0`, version code `1`; developer credit remains AssayFlux | **Source verified** |
 | Legacy identifiers | `clearcut.db`, `.clearcut` archive extensions, notification-channel IDs, and serialized OpenFX/C2PA keys remain compatibility identifiers; retired public product names remain only in migration/audit checks | **Intentionally retained** |
 | Launcher icon | Launcher generation now uses the supplied `Assets/App Icon.png` as its source for adaptive and legacy launcher resources; generated output still requires build and device visual verification | **Source updated; packaged verification pending** |
-| Splash | MainActivity displays only the Director X SVG logo for 700 ms on entry and controlled exit; the AssayFlux GIF is no longer part of the launch sequence | **Source updated; Android CI/build and physical-device timing/visual acceptance pending** |
+| Splash | MainActivity renders the Director X SVG logo at 280 dp / 1.624 aspect ratio for a 700 ms entry and controlled exit; PR #76 removes the unused GIF resource and legacy composable | **Source updated; Android CI and physical-device timing/visual acceptance pending** |
 | Room database | `ProjectDatabase` is version 11 and defines `MIGRATION_10_11` for `customWidth`/`customHeight`; checked-in schema snapshots currently stop at version 10 | **Schema 11 snapshot and migration acceptance outstanding** |
 | Custom canvas | Dimension validation, project canvas fields, export configuration propagation, and migration SQL are present; complete persisted-project/archive/encoder/final-media round-trip is not yet evidenced | **Implemented; acceptance incomplete** |
 | Proxies | HALF/QUARTER/EIGHTH policy, rotation-aware dimensions, worker, artifact-commit rules, and unit tests are present; cancellation, retry/recovery, low-storage, playback/export concurrency, and original-media-only export are not accepted on device | **Implemented; acceptance incomplete** |
@@ -79,7 +79,7 @@ The security review horizon remains expired. Updating the date would not constit
 - Version remains `v0.1.0`; version code remains `1` (displayed as `001`).
 - Application ID remains `com.directorx.editor`.
 - Release signing certificate must match the established identity.
-- CI runs source hygiene and JVM unit tests only; the separate instrumentation/macrobenchmark workflow that built temporary test APKs has been removed. APK creation remains a maintainer-run task.
+- `android-verification.yml` runs Room schema generation, JVM unit tests, Android lint, and database/instrumentation checks. `release-candidate.yml` runs native supply-chain and package gates; it builds the APK only after all preceding gates pass. The native security gate is currently expired, so no APK has been built.
 
 ### Database and custom canvas
 - Generate and commit the Room version 11 schema snapshot from KSP output.
@@ -93,7 +93,8 @@ The security review horizon remains expired. Updating the date would not constit
 - Prove final exports use original media, never proxy files.
 
 ### Splash and launcher
-- Verify the packaged `app/src/main/res/raw/assayflux_splash.gif` is the exact approved 512×128, 26-frame source (72,244 bytes), and confirm the animation displays for the existing 1,300 ms entry and controlled-exit interval on device.
+- Verify the Director X SVG mark renders at the intended 280 dp width and 1.624 aspect ratio for the 700 ms entry and controlled-exit interval on a physical device.
+- Confirm the obsolete AssayFlux GIF asset and animation helper are absent from the packaged app.
 - Compare all packaged launcher densities/adaptive layers with the approved brand source.
 
 ### Physical-device acceptance
