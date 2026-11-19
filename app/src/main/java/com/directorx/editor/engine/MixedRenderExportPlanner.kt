@@ -8,11 +8,10 @@ import com.directorx.editor.model.TrackType
 /**
  * Pure planner for the Android mixed-render export path.
  *
- * The composer can describe any copy/re-encode run shape, but FFmpeg concat is
- * only safe to attempt for a narrow runtime envelope today: one visible video
+ * The mixed-render optimization is limited to a narrow runtime envelope today: one visible video
  * track, no separate audio/overlay/adjustment tracks, and no export-side
- * overlays/sidecar formats that would be lost by stream-copy runs. Anything
- * outside that shape falls back to the existing whole-timeline Transformer path.
+ * overlays/sidecar formats that would be lost by stream-copy runs. Eligible runs are concatenated
+ * by Media3 Transformer; anything outside that shape uses the whole-timeline Transformer path.
  */
 object MixedRenderExportPlanner {
 
