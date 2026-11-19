@@ -2,9 +2,11 @@ package com.directorx.editor.ui.projects
 
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsNotEnabled
-import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import com.directorx.editor.MainActivity
+import com.directorx.editor.DirectorXApp
 import com.directorx.editor.ui.ClearCutTestTags
 import com.directorx.editor.ui.theme.DirectorXTheme
 import java.util.concurrent.atomic.AtomicBoolean
@@ -19,11 +21,11 @@ import org.robolectric.annotation.GraphicsMode
 /** Verifies the crash notice's three accessible actions independently of ActivityResultRegistry. */
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(sdk = [35], qualifiers = "w360dp-h800dp-xxhdpi")
+@Config(application = DirectorXApp::class, sdk = [35], qualifiers = "w360dp-h800dp-xxhdpi")
 class CrashReportBannerTest {
 
     @get:Rule
-    val compose = createComposeRule()
+    val compose = createAndroidComposeRule<MainActivity>()
 
     private val occurredAt = System.currentTimeMillis() - 60 * 60 * 1000L
     private val notice = CrashReportNotice(
