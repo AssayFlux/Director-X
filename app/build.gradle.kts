@@ -708,7 +708,6 @@ tasks.withType<Test>().configureEach {
 
 tasks.configureEach {
     if (name == "preReleaseBuild") {
-        dependsOn(generateNativeSbom)
         dependsOn(verifyResolvedAdvisoryFloors)
     }
 }
