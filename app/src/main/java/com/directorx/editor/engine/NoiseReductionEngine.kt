@@ -443,8 +443,10 @@ class NoiseReductionEngine @Inject constructor(
             cachedDeepFilterNetAvailability = false
             return false
         }
-        val loader = context.classLoader ?: NoiseReductionEngine::class.java.classLoader
         val available = try {
+            // Some JVM/Robolectric contexts deliberately have no base Context.
+            // Keep context-derived class-loader access inside the guarded probe.
+            val loader = context.classLoader ?: NoiseReductionEngine::class.java.classLoader
             Class.forName(DEEPFILTERNET_CLASS_NAME, false, loader)
             Class.forName(DEEPFILTERNET_INTERFACE_NAME, false, loader)
             true
