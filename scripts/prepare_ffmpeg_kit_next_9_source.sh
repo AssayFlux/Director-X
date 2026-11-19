@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+# Fail closed: this helper only edits the exact FFmpeg 9.0.2 source selector.
 
 source_file="${1:-scripts/source.sh}"
 test -f "$source_file"
