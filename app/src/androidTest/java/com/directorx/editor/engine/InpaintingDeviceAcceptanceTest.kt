@@ -38,7 +38,6 @@ class InpaintingDeviceAcceptanceTest {
         val engine = InpaintingEngine(
             context = context,
             modelDownloadManager = ModelDownloadManager(context),
-            ffmpegEngine = FFmpegEngine(context),
         )
         assertTrue("LaMa model was not recognized as ready", engine.isModelReady())
         assertTrue(
@@ -69,13 +68,14 @@ class InpaintingDeviceAcceptanceTest {
                 assetName = "trim-boundary.mp4",
                 outputName = "inpaint-source.mp4",
             )
-            val audioVideo = File(context.cacheDir, "inpaint-source-audio.mp4")
-            val muxExit = FFmpegEngine(context).execute(
-                "-y -i ${sourceVideo.absolutePath} " +
-                    "-f lavfi -i anullsrc=channel_layout=mono:sample_rate=48000 " +
-                    "-shortest -c:v copy -c:a aac ${audioVideo.absolutePath}",
+            // Use a checked-in audio/video fixture; tests no longer synthesize media
+            // through a bundled command-line transcoder.
+            val audioVideo = copyAsset(
+                assetContext = testContext,
+                outputContext = context,
+                assetName = "audio-ends-early.mp4",
+                outputName = "inpaint-source-audio.mp4",
             )
-            assertEquals("Could not create an audio-bearing acceptance source", 0, muxExit)
             assertTrue(trackTypes(audioVideo).containsAll(setOf("video", "audio")))
 
             val outputVideo = File(context.cacheDir, "inpaint-output.mp4")
