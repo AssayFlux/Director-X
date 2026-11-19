@@ -807,7 +807,7 @@ class EditorViewModel @Inject constructor(
         },
         audioEngine = audioEngine,
         exportIncidentStore = exportIncidentStore,
-        appVersion = com.directorx.editor.ClearCutApp.VERSION,
+        appVersion = com.directorx.editor.DirectorXApp.VERSION,
         ffmpegEngine = ffmpegEngine,
         includeDiagnosticRawErrorText = { latestSettings?.includeDiagnosticRawErrorText == true },
         projectFingerprint = ::currentProjectFingerprint,
