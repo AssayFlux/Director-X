@@ -251,55 +251,6 @@ val mitLicense = RuntimeLicenseInfo(
     licenseUrl = "https://opensource.org/license/mit/",
     projectUrl = "https://opensource.org/license/mit/",
 )
-val bsd2License = RuntimeLicenseInfo(
-    licenseName = "BSD 2-Clause License",
-    licenseText = "BSD 2-Clause License. Redistribution must preserve the copyright notice, conditions, and disclaimer.",
-    licenseUrl = "https://opensource.org/license/bsd-2-clause/",
-    projectUrl = "https://opensource.org/license/bsd-2-clause/",
-)
-val bsd3License = RuntimeLicenseInfo(
-    licenseName = "BSD 3-Clause License",
-    licenseText = "BSD 3-Clause License. Redistribution must preserve the copyright notice, conditions, and disclaimer.",
-    licenseUrl = "https://opensource.org/license/bsd-3-clause/",
-    projectUrl = "https://opensource.org/license/bsd-3-clause/",
-)
-val iscLicense = RuntimeLicenseInfo(
-    licenseName = "ISC License",
-    licenseText = "ISC License. Permission to use, copy, modify, and distribute is granted subject to the included copyright and disclaimer.",
-    licenseUrl = "https://opensource.org/license/isc-license-txt/",
-    projectUrl = "https://opensource.org/license/isc-license-txt/",
-)
-val lgpl3License = RuntimeLicenseInfo(
-    licenseName = "GNU Lesser General Public License Version 3",
-    licenseText = "GNU LGPL v3. Redistribution must preserve the license and corresponding notices.",
-    licenseUrl = "https://www.gnu.org/licenses/lgpl-3.0.txt",
-    projectUrl = "https://www.gnu.org/licenses/lgpl-3.0.html",
-)
-val lgpl21License = RuntimeLicenseInfo(
-    licenseName = "GNU Lesser General Public License Version 2.1 or later",
-    licenseText = "GNU LGPL v2.1 or later. Redistribution must preserve the license and corresponding notices.",
-    licenseUrl = "https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt",
-    projectUrl = "https://www.gnu.org/licenses/lgpl-2.1.html",
-)
-val freetypeLicense = RuntimeLicenseInfo(
-    licenseName = "FreeType License",
-    licenseText = "FreeType License. Redistribution must preserve the license and its notices.",
-    licenseUrl = "https://freetype.org/license.html",
-    projectUrl = "https://freetype.org/",
-)
-val libpngLicense = RuntimeLicenseInfo(
-    licenseName = "libpng License",
-    licenseText = "libpng License. Redistribution must preserve the copyright notice and disclaimer.",
-    licenseUrl = "http://www.libpng.org/pub/png/src/libpng-LICENSE.txt",
-    projectUrl = "http://www.libpng.org/pub/png/libpng.html",
-)
-val llvmExceptionLicense = RuntimeLicenseInfo(
-    licenseName = "Apache License 2.0 with LLVM exception",
-    licenseText = "Apache License 2.0 with the LLVM exception. Redistribution must preserve the license and exception text.",
-    licenseUrl = "https://llvm.org/LICENSE.txt",
-    projectUrl = "https://llvm.org/",
-)
-
 fun RuntimeLicenseInfo.forProject(projectUrl: String): RuntimeLicenseInfo = copy(projectUrl = projectUrl)
 
 val runtimeLicensePolicies = listOf(
@@ -339,49 +290,6 @@ fun runtimeLicenseFor(group: String): RuntimeLicenseInfo? = runtimeLicensePolici
     }
     .maxByOrNull { policy -> policy.groupPrefixes.maxOf { it.length } }
     ?.license
-
-fun nativeLicenseFor(expression: String): RuntimeLicenseInfo = when (expression) {
-    "Apache-2.0" -> apacheLicense
-    "Apache-2.0-with-LLVM-exception" -> llvmExceptionLicense
-    "BSD-2-Clause" -> bsd2License
-    "BSD-3-Clause" -> bsd3License
-    "FTL" -> freetypeLicense
-    "ISC" -> iscLicense
-    "LGPL-2.1-or-later" -> lgpl21License
-    "LGPL-3.0-or-later" -> lgpl3License
-    "Libpng" -> libpngLicense
-    "MIT" -> mitLicense
-    else -> error("No native notice license mapping for $expression")
-}
-
-fun String.kotlinLiteral(): String = buildString {
-    append('"')
-    for (character in this@kotlinLiteral) {
-        when (character) {
-            '\\' -> append("\\\\")
-            '"' -> append("\\\"")
-            '\n' -> append("\\n")
-            '\r' -> append("\\r")
-            '\t' -> append("\\t")
-            else -> append(character)
-        }
-    }
-    append('"')
-}
-
-fun GeneratedRuntimeNotice.toKotlin(): String = buildString {
-    appendLine("        OpenSourceLicenseNotice(")
-    appendLine("            name = ${name.kotlinLiteral()},")
-    appendLine("            version = ${version.kotlinLiteral()},")
-    appendLine("            artifact = ${artifact.kotlinLiteral()},")
-    appendLine("            licenseName = ${license.licenseName.kotlinLiteral()},")
-    appendLine("            licenseText = ${license.licenseText.kotlinLiteral()},")
-    appendLine("            licenseUrl = ${license.licenseUrl.kotlinLiteral()},")
-    appendLine("            projectUrl = ${license.projectUrl.kotlinLiteral()},")
-    appendLine("            sourceOfferText = ${sourceOfferText?.kotlinLiteral() ?: "null"},")
-    appendLine("            complianceNote = ${complianceNote?.kotlinLiteral() ?: "null"},")
-    appendLine("        ),")
-}
 
 val generateRuntimeOpenSourceNotices by tasks.registering {
     group = "verification"
