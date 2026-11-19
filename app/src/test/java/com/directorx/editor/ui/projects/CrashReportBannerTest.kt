@@ -85,10 +85,9 @@ class CrashReportBannerTest {
         waitForBanner()
         val target = File(context.cacheDir, "picked-report.zip")
 
+        // The picker intentionally pauses the host Activity; performClick dispatches the
+        // ActivityResult launch synchronously, so do not wait for the host to become idle.
         compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_SAVE).performClick()
-        // Let the ActivityResult launcher dispatch its ACTION_CREATE_DOCUMENT intent.
-        compose.mainClock.advanceTimeBy(1_000L)
-        compose.waitForIdle()
         val activity = shadowOf(compose.activity)
         val request = activity.nextStartedActivityForResult.intent
         assertEquals(Intent.ACTION_CREATE_DOCUMENT, request.action)
