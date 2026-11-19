@@ -202,6 +202,7 @@ object CodecInstanceBudget {
     private const val UNKNOWN_CEILING = 4
     private const val VIDEO_FAMILY = "video/*"
     private val permits = CodecPermitRegistry(::declaredCeiling)
+    private val encoderPermits = CodecPermitRegistry(::declaredEncoderCeiling)
 
     private val decoderPool = CodecLeasePool(
         kind = "decoder",
@@ -260,7 +261,7 @@ object CodecInstanceBudget {
                 // Release is best-effort during cancellation and encoder errors.
             }
         },
-        permits = permits,
+        permits = encoderPermits,
     )
 
 
@@ -320,6 +321,7 @@ object CodecInstanceBudget {
     /** Test-only reset for the stress fixture. */
     internal fun clearForTests() {
         permits.clearForTests()
+        encoderPermits.clearForTests()
     }
 
     private fun declaredEncoderCeiling(mimeType: String): CodecCeiling {
