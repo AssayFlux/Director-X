@@ -9,8 +9,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
@@ -59,7 +57,6 @@ import com.directorx.editor.ui.editor.EditorScreen
 import com.directorx.editor.ui.editor.LocalTabletopPosture
 import com.directorx.editor.ui.projects.ProjectListScreen
 import com.directorx.editor.ui.settings.SettingsScreen
-import com.directorx.editor.ui.theme.AssayFluxAnimatedSplash
 import com.directorx.editor.ui.theme.AssayFluxLogo
 import com.directorx.editor.ui.theme.DirectorXTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -170,25 +167,18 @@ class MainActivity : ComponentActivity() {
                     pendingEditorOpen = null
                 }
 
-                // Exact 2.0s brand sequence: 1.3s GIF, 0.2s crossfade,
-                // then 0.5s Director X logo. The same sequence runs on exit.
-                var splashStage by remember { mutableIntStateOf(0) } // 0=GIF, 1=logo, 2=hidden
+                // Show only the Director X SVG mark during launch and exit.
+                var splashStage by remember { mutableIntStateOf(1) } // 1=logo, 2=hidden
                 var exitingWithBrandSplash by remember { mutableStateOf(false) }
                 LaunchedEffect(Unit) {
-                    delay(1_300L)
-                    splashStage = 1
-                    delay(200L) // Crossfade duration.
-                    delay(500L) // Full logo hold after the transition.
+                    delay(700L)
                     if (!exitingWithBrandSplash) splashStage = 2
                 }
                 BackHandler(enabled = currentRoute == "projects" && !exitingWithBrandSplash) {
                     exitingWithBrandSplash = true
-                    splashStage = 0
+                    splashStage = 1
                     lifecycleScope.launch {
-                        delay(1_300L)
-                        splashStage = 1
-                        delay(200L)
-                        delay(500L)
+                        delay(700L)
                         finish()
                     }
                 }
@@ -263,33 +253,19 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         }
-                        if (splashStage != 2) {
+                        if (splashStage == 1) {
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .background(Color.White),
                                 contentAlignment = Alignment.Center,
                             ) {
-                                Crossfade(
-                                    targetState = splashStage == 1,
-                                    animationSpec = tween(durationMillis = 200),
-                                    label = "Director X splash transition",
-                                ) { showDirectorXLogo ->
-                                    if (showDirectorXLogo) {
-                                        AssayFluxLogo(
-                                            modifier = Modifier
-                                                .width(280.dp)
-                                                .aspectRatio(1.624f),
-                                            contentDescription = "Director X by AssayFlux",
-                                        )
-                                    } else {
-                                        AssayFluxAnimatedSplash(
-                                            modifier = Modifier
-                                                .width(280.dp)
-                                                .aspectRatio(4f),
-                                        )
-                                    }
-                                }
+                                AssayFluxLogo(
+                                    modifier = Modifier
+                                        .width(280.dp)
+                                        .aspectRatio(1.624f),
+                                    contentDescription = "Director X",
+                                )
                             }
                         }
                     }
