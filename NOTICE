@@ -2,16 +2,6 @@ Director X — Third-Party Notices
 
 Director X includes third-party software and native components. Their original copyright notices, licence texts, source information and applicable source-offer materials must be preserved when redistributing builds. The root LICENSE applies only to material its copyright holder is entitled to license; it does not replace any third-party licence.
 
-## FFmpegKitNext and FFmpeg
-
-The vendored native bundle is FFmpegKitNext 8.1.0 with FFmpeg 8.1.2. Its pinned component inventory, source commits, licence expressions, checksums, build recipe and security metadata are recorded in `third_party/ffmpeg-kit-next/native-lock.json`. The native AAR and its POM are stored alongside that lock.
-
-The native lock records LGPL-3.0-or-later for FFmpegKitNext and FFmpeg, and individual licence expressions for OpenH264 and supporting libraries. Consult the lock and the corresponding upstream licence texts for the exact component obligations. The application also generates runtime open-source notices from the resolved release dependency graph; generate and inspect those notices for the exact release variant before distribution.
-
-The pinned native security review window in the lock expired on 2026-10-31. The disabled-format list and historical advisory entries are not a current security clearance. Re-review the exact shipped native binary, component reachability, advisories, patch and build recipe before making a release-safety claim.
-
-The source-offer recipe currently tracked by the Android app is `app/src/main/res/raw/ffmpeg_kit_next_source_offer.txt`. Confirm that the corresponding source and any required written offer/access mechanism are available for each distributed build.
-
 ## DeepFilterNet
 
 The project may include `io.github.kaleyravideo:android-deepfilternet:0.0.8` for on-device audio noise reduction. The Android wrapper and upstream DeepFilterNet code/model assets have their own licence terms. Retain and ship the applicable Apache-2.0 and MIT notices for the exact components included in a release.
