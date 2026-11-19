@@ -62,12 +62,6 @@ class InpaintingDeviceAcceptanceTest {
             assertEquals(120, still.outputBitmap.height)
             still.outputBitmap.recycle()
 
-            val sourceVideo = copyAsset(
-                assetContext = testContext,
-                outputContext = context,
-                assetName = "trim-boundary.mp4",
-                outputName = "inpaint-source.mp4",
-            )
             // Use a checked-in audio/video fixture; tests no longer synthesize media
             // through a bundled command-line transcoder.
             val audioVideo = copyAsset(
