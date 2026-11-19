@@ -106,7 +106,8 @@ fun SettingsScreen(
     onReplayTutorial: () -> Unit = {},
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
-    val scrollState = rememberScrollState()
+    // Each settings category is a separate destination with a fresh top-of-page scroll position.
+    val scrollState = remember(selectedCategory) { ScrollState(0) }
     val settings by viewModel.settings.collectAsStateWithLifecycle()
     val aiModelStorage by viewModel.aiModelStorage.collectAsStateWithLifecycle()
     val diagnosticExport by viewModel.diagnosticExport.collectAsStateWithLifecycle()
@@ -140,12 +141,6 @@ fun SettingsScreen(
     var showOpenSourceLicenses by remember { mutableStateOf(false) }
     var notificationStatusRefreshKey by remember { mutableIntStateOf(0) }
     var selectedCategory by remember { mutableStateOf<SettingsCategory?>(null) }
-
-    LaunchedEffect(selectedCategory) {
-        // Each category is a separate settings destination; never carry the previous
-        // destination's scroll offset into the next one.
-        scrollState.scrollTo(0)
-    }
 
     val projectStorage by viewModel.projectStorage.collectAsStateWithLifecycle()
     LaunchedEffect(Unit) {
