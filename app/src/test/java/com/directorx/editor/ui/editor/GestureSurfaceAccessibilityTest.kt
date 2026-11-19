@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.directorx.editor.model.CurvePoint
 import com.directorx.editor.model.Keyframe
 import com.directorx.editor.model.KeyframeProperty
-import com.directorx.editor.ui.theme.ClearCutTheme
+import com.directorx.editor.ui.theme.DirectorXTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -30,7 +30,7 @@ class GestureSurfaceAccessibilityTest {
     @Test
     fun transform_surface_exposes_state_and_every_transform_axis() {
         compose.setContent {
-            ClearCutTheme {
+            DirectorXTheme {
                 TransformOverlay(
                     positionX = 0f,
                     positionY = 0f,
@@ -64,7 +64,7 @@ class GestureSurfaceAccessibilityTest {
     @Test
     fun color_curve_surface_exposes_point_nudges_and_add_action() {
         compose.setContent {
-            ClearCutTheme {
+            DirectorXTheme {
                 CurveEditor(
                     points = listOf(CurvePoint(0f, 0f), CurvePoint(1f, 1f)),
                     color = androidx.compose.ui.graphics.Color.White,
@@ -85,7 +85,7 @@ class GestureSurfaceAccessibilityTest {
     @Test
     fun preview_surface_exposes_pan_zoom_and_rotation_actions() {
         compose.setContent {
-            ClearCutTheme {
+            DirectorXTheme {
                 Box(
                     modifier = Modifier.previewTransformAccessibilityModifier(
                         canTransformPreview = true,
@@ -113,7 +113,7 @@ class GestureSurfaceAccessibilityTest {
     fun keyframe_curve_surface_exposes_timing_and_value_nudges() {
         val keyframe = Keyframe(1_000L, KeyframeProperty.POSITION_X, 0f)
         compose.setContent {
-            ClearCutTheme {
+            DirectorXTheme {
                 CurveCanvas(
                     keyframes = listOf(keyframe),
                     clipDurationMs = 10_000L,
