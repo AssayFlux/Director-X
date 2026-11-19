@@ -72,7 +72,7 @@ class OpenSourceLicensesTest {
         assertTrue(notice.licenseText.contains("LGPL"))
         assertTrue(notice.sourceOfferText.orEmpty().contains("source", ignoreCase = true))
         assertTrue(notice.sourceOfferText.orEmpty().contains("LGPL v3.0-or-later"))
-        assertTrue(notice.sourceOfferText.orEmpty().contains("clearcut-security.patch"))
+        assertTrue(notice.sourceOfferText.orEmpty().contains("directorx-security.patch"))
         assertTrue(notice.sourceOfferText.orEmpty().contains("3e223118e6e8fb6208693ecf3952e77cd096f587"))
         assertTrue(notice.sourceOfferText.orEmpty().contains("nix-android.sh"))
         assertTrue(notice.complianceNote.orEmpty().contains("res/raw/source.txt"))
