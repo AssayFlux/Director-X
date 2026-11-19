@@ -25,24 +25,24 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  osv-monitor:
-    name: Monitor pinned native dependencies against OSV
+  advisory-monitor:
+    name: Monitor native dependencies against OSV, NVD and FFmpeg upstream
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Check out Director X
         uses: actions/checkout@v4
         with:
           persist-credentials: false
 
-      - name: Query OSV for every pinned native component
+      - name: Query independent advisory sources
         run: python3 scripts/monitor_native_advisories.py
 
       - name: Preserve machine-readable monitoring report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: native-osv-monitor-${{ github.run_id }}
-          path: app/build/reports/native-security/osv-monitor.json
+          name: native-advisory-monitor-${{ github.run_id }}
+          path: app/build/reports/native-security/advisory-monitor.json
           if-no-files-found: warn
-          retention-days: 90
+          retention-days: 180
