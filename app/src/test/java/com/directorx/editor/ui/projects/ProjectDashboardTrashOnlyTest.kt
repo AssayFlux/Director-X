@@ -6,7 +6,7 @@ import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.performScrollToNode
-import com.directorx.editor.ClearCutApp
+import com.directorx.editor.DirectorXApp
 import com.directorx.editor.MainActivity
 import com.directorx.editor.model.Project
 import com.directorx.editor.ui.ClearCutTestTags
@@ -28,7 +28,7 @@ import org.robolectric.annotation.GraphicsMode
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(
-    application = ClearCutApp::class,
+    application = DirectorXApp::class,
     sdk = [35],
     qualifiers = "w360dp-h800dp-xxhdpi",
 )
