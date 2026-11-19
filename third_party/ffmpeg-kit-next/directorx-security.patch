@@ -19,3 +19,11 @@ index 24428f6..0ca135c 100755
 +CONFIGURE_POSTFIX+=" --disable-demuxer=iamf"
 +CONFIGURE_POSTFIX+=" --disable-decoder=zlib"
 +
+
+diff --git a/scripts/source.sh b/scripts/source.sh
+index 0000000..0000000 100644
+--- a/scripts/source.sh
++++ b/scripts/source.sh
+@@ -37,1 +37,1 @@
+-    SOURCE_TYPE="TAG"
++    SOURCE_TYPE="COMMIT"
