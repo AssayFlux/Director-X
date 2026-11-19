@@ -582,10 +582,7 @@ class InpaintingEngine @Inject constructor(
 
         return kotlinx.coroutines.withContext(Dispatchers.Main) {
             kotlinx.coroutines.suspendCancellableCoroutine { continuation ->
-                val composition = androidx.media3.transformer.Composition.Builder(
-                    sequences.first(),
-                    *sequences.drop(1).toTypedArray(),
-                ).build()
+                val composition = androidx.media3.transformer.Composition.Builder(sequences).build()
                 val transformer = androidx.media3.transformer.Transformer.Builder(context)
                     .setVideoMimeType(androidx.media3.common.MimeTypes.VIDEO_H264)
                     .setAudioMimeType(androidx.media3.common.MimeTypes.AUDIO_AAC)
