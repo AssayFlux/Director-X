@@ -23,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
@@ -435,9 +434,7 @@ private fun BottomTabBar(
                                 .fillMaxHeight()
                                 .width(18.dp)
                                 .background(
-                                    Brush.horizontalGradient(
-                                        listOf(semanticColors.panel, semanticColors.panel.copy(alpha = 0f))
-                                    )
+                                    MaterialTheme.colorScheme.surface
                                 )
                         )
                     }
@@ -449,9 +446,7 @@ private fun BottomTabBar(
                                 .fillMaxHeight()
                                 .width(18.dp)
                                 .background(
-                                    Brush.horizontalGradient(
-                                        listOf(semanticColors.panel.copy(alpha = 0f), semanticColors.panel)
-                                    )
+                                    MaterialTheme.colorScheme.surface
                                 )
                         )
                     }
