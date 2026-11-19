@@ -1,7 +1,7 @@
 # Director X — Engineering Status
 
 **Branch:** `Alpha`  
-**Reviewed source baseline:** `8be65188eed91bae15c1877b92a8064d53ba887c`  
+**Reviewed source baseline:** `a75252d8c18311fbbd52113d8dc72b699176f8d7`  
 **Application:** `Director X`  
 **Developer:** `Designed by AssayFlux`  
 **Version:** `v0.1.0`  
@@ -30,7 +30,7 @@ This is an evidence-based status record. A source implementation is not accepted
 | Product identity | Gradle still declares `com.directorx.editor`, `v0.1.0`, version code `1`; developer credit remains AssayFlux | **Source verified** |
 | Legacy identifiers | `clearcut.db`, `.clearcut` archive extensions, notification-channel IDs, and serialized OpenFX/C2PA keys remain compatibility identifiers; retired public product names remain only in migration/audit checks | **Intentionally retained** |
 | Launcher icon | Manifest and adaptive-icon XML point to launcher mipmaps, but the packaged PNG artwork has not been visually compared against the approved `Assets/Director-X Logo.png` | **Pending visual/binary verification** |
-| Splash | Current MainActivity displays the SVG logo via the local WebView artwork component for 1,300 ms on entry and controlled exit. The approved `assayflux_splash.gif` (512×128, 26 frames, 72,244 bytes) is not present in this branch or its reachable path history; it was never pushed | **GIF requirement outstanding; exact approved asset must be restored** |
+| Splash | MainActivity now displays only the centered SVG logo on pure white for 1,300 ms on entry and controlled exit; extra app/developer text has been removed. The approved `assayflux_splash.gif` (512×128, 26 frames, 72,244 bytes) is not present in this branch or its reachable path history; it was never pushed | **GIF requirement outstanding; exact approved asset must be restored** |
 | Room database | `ProjectDatabase` is version 11 and defines `MIGRATION_10_11` for `customWidth`/`customHeight`; checked-in schema snapshots currently stop at version 10 | **Schema 11 snapshot and migration acceptance outstanding** |
 | Custom canvas | Dimension validation, project canvas fields, export configuration propagation, and migration SQL are present; complete persisted-project/archive/encoder/final-media round-trip is not yet evidenced | **Implemented; acceptance incomplete** |
 | Proxies | HALF/QUARTER/EIGHTH policy, rotation-aware dimensions, worker, artifact-commit rules, and unit tests are present; cancellation, retry/recovery, low-storage, playback/export concurrency, and original-media-only export are not accepted on device | **Implemented; acceptance incomplete** |
@@ -50,8 +50,10 @@ This is an evidence-based status record. A source implementation is not accepted
   - FFmpeg model-registry row matches the locked AAR size, checksum, and LGPL profile.
   - Capability registry JSON, generated Kotlin, and licence test now consistently name `directorx-security.patch`.
   - Crash-report UI tests now allow the exit animation and ActivityResult launcher dispatch to settle.
-- Android verification run `44466317343` is running on `c5f4af7156d096cd0317fc114ae15886ddfdd8fb`. It has not completed in the evidence available for this update. **Do not report Android tests as green until its final result is success.**
-- Repository hygiene run `44466488707` passed on `8be65188eed91bae15c1877b92a8064d53ba887c`.
+- Android verification run `44466317343` on `c5f4af7156d096cd0317fc114ae15886ddfdd8fb` completed with **1,848 tests and 3 failures**: Settings category navigation and the two crash-report banner copy/save UI tests.
+- A follow-up run `44467371760` was cancelled by later source pushes before its final result was recorded.
+- The latest source changes reset scroll state per Settings category, merge accessible secondary-button semantics, and remove extra text from the splash. Android verification run `44467648013` is pending on `a75252d8c18311fbbd52113d8dc72b699176f8d7`. **Do not report Android tests as green until this run completes successfully.**
+- Repository hygiene run `44467371766` passed on `dce400461e3f0ccec45af59913814bbdf73e903e`; the latest run `44467648000` is pending after the splash cleanup.
 - Build instructions now use the same QA verification tasks as CI: `:app:testQaUnitTest` and `:app:lintQa`.
 
 ## Native media security gate
@@ -77,7 +79,7 @@ The security review horizon remains expired. Updating the date would not constit
 - Version remains `v0.1.0`; version code remains `1` (displayed as `001`).
 - Application ID remains `com.directorx.editor`.
 - Release signing certificate must match the established identity.
-- CI must not build or publish APKs; APK creation remains a maintainer-run task.
+- CI runs source hygiene and JVM unit tests only; the separate instrumentation/macrobenchmark workflow that built temporary test APKs has been removed. APK creation remains a maintainer-run task.
 
 ### Database and custom canvas
 - Generate and commit the Room version 11 schema snapshot from KSP output.
