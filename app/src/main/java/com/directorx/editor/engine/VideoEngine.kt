@@ -1357,11 +1357,6 @@ class VideoEngine @Inject constructor(
             AppLog.d(TAG, "Mixed export skipped: overlays or tracked objects require whole-timeline Transformer")
             return false
         }
-        if (!ffmpegEngine.isAvailable()) {
-            AppLog.d(TAG, "Mixed export skipped: FFmpeg concat unavailable")
-            return false
-        }
-
         preflightMixedStreamCopyRuns(plan, tracks, config)?.let { reason ->
             AppLog.d(TAG, "Mixed export skipped: $reason")
             return false
@@ -1538,17 +1533,49 @@ class VideoEngine @Inject constructor(
                 outputFile = outputFile,
             )
             activeExportOutputFile = outputFile
-            val concatOk = runWhileExporting(_exportState, stopped = { ensureExportActive("mixed concat") }) {
-                ffmpegEngine.concat(
-                    inputFiles = concatInputs,
-                    outputFile = outputFile,
-                    onProgress = { progress ->
-                        publishMixedProgress(completedWeight, concatWeight, progress)
-                    }
+            val concatSequenceBuilder = EditedMediaItemSequence.Builder(
+                setOf(C.TRACK_TYPE_AUDIO, C.TRACK_TYPE_VIDEO)
+            )
+            concatInputs.forEach { input ->
+                concatSequenceBuilder.addItem(
+                    EditedMediaItem.Builder(MediaItem.fromUri(Uri.fromFile(input))).build()
                 )
             }
-            if (!concatOk) {
-                throw IllegalStateException("Mixed FFmpeg concat failed")
+            val concatComposition = Composition.Builder(concatSequenceBuilder.build()).build()
+            val concatStorageRequest = ExportStoragePolicy.request(
+                durationMs = tracks.maxOfOrNull { track ->
+                    track.clips.maxOfOrNull { clip -> track.effectiveTimelineEndMs(clip) } ?: 0L
+                }?.coerceAtLeast(0L) ?: 0L,
+                config = config,
+                tracks = tracks.map { track ->
+                    track.copy(clips = track.clips.map { it.copy(isReversed = false) })
+                },
+                sourceSizeBytes = { clip -> querySourceSize(context, clip.sourceUri).takeIf { it > 0L } },
+            )
+            var concatError: Exception? = null
+            runWhileExporting(_exportState, stopped = { ensureExportActive("mixed Media3 concat") }) {
+                startTransformerWithPolling(
+                    composition = concatComposition,
+                    mimeType = config.codec.mimeType,
+                    config = config,
+                    outputFile = outputFile,
+                    storageRequest = concatStorageRequest,
+                    onProgress = { progress ->
+                        publishMixedProgress(completedWeight, concatWeight, progress)
+                    },
+                    onComplete = {},
+                    onError = { error -> concatError = error },
+                    onFallbackApplied = onFallbackApplied,
+                    markCompleteOnFinish = false,
+                    expectedDurationMs = tracks.maxOfOrNull { track ->
+                        track.clips.maxOfOrNull { clip -> track.effectiveTimelineEndMs(clip) } ?: 0L
+                    }?.coerceAtLeast(0L) ?: 0L,
+                    metadataEntries = sourceMetadataEntries,
+                )
+            }
+            concatError?.let { throw IllegalStateException("Media3 segment concatenation failed", it) }
+            if (!outputFile.isFile || outputFile.length() <= 0L) {
+                throw IllegalStateException("Media3 segment concatenation produced no output")
             }
             ensureVerifiedExportOutput(
                 outputFile = outputFile,
