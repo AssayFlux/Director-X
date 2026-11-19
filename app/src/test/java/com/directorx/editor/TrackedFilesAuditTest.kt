@@ -80,25 +80,11 @@ class TrackedFilesAuditTest {
         // GitHub blob, so they must not be swept up by the local-only *.md rule.
         val releaseContractMarkdown = setOf(
             "README.md",
-            "CHANGELOG.md",
-            "docs/models.md",
-            "docs/DOCUMENTATION_BASELINE.md",
-            "docs/PROJECT_STATUS.md",
-            "docs/NATIVE_MEDIA_SECURITY_REVIEW_2026-11-18.md",
-            // These are tracked, public engineering status documents; other planning notes remain local.
-            // Dependency evidence is separately time-bounded by DependencyFreshnessTest.
+            "ACKNOWLEDGMENTS.md",
+            "docs/BUILD.md",
+            "docs/ENGINEERING_STATUS.md",
             "docs/privacy-policy.md",
             "docs/play-data-safety.md",
-            "docs/translations.md",
-            "ACKNOWLEDGMENTS.md",
-            "CONTRIBUTING.md",
-            "Debugging/ISSUES.md",
-            "Upgradations/BASELINE_MEASUREMENTS.md",
-            "Upgradations/README.md",
-            "Upgradations/UI_LAYOUT_UPGRADE_PLAN.md",
-            "Upgradations/UPGRADE_ROADMAP.md",
-            "docs/BRANDING_AND_COMPATIBILITY.md",
-            "docs/TERMUX_BUILD.md",
         )
         val trackedPrivateMarkdown = tracked.filter { path ->
             path.endsWith(".md") && path !in releaseContractMarkdown
