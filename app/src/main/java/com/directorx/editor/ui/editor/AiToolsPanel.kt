@@ -45,7 +45,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.pluralStringResource
@@ -1030,13 +1029,7 @@ private fun AiToolCard(
     ) {
         Box(
             modifier = Modifier.background(
-                Brush.verticalGradient(
-                    listOf(
-                        tool.color.copy(alpha = if (isEnabled) 0.16f else 0.08f),
-                        semanticColors.panelHighest,
-                        semanticColors.panelRaised
-                    )
-                )
+                MaterialTheme.colorScheme.surfaceContainerHigh
             )
         ) {
             Column(
