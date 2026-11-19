@@ -107,4 +107,54 @@ path.write_text(text.replace(anchor, insert + anchor), encoding="utf-8")
 print("Prepared the pinned FriBidi generator correction.")
 PY
 
+# Backport independently verified upstream FFmpeg security fixes onto the pinned
+# n9.0.2-derived fork. Keep the base revision pinned and verify every patch.
+python3 - "$kit_root/scripts/android/ffmpeg.sh" <<'PY'
+from pathlib import Path
+import sys
+
+path = Path(sys.argv[1])
+text = path.read_text(encoding="utf-8")
+marker = "# Director X security backports for FFmpeg 9.0.2:"
+if marker in text:
+    print("FFmpeg security backport hook already prepared.")
+    raise SystemExit(0)
+anchor = "# SET BUILD OPTIONS"
+if text.count(anchor) != 1:
+    raise SystemExit("Expected exactly one FFmpeg build-options anchor; refusing an ambiguous edit.")
+insert = r'''# Director X security backports for FFmpeg 9.0.2:
+# CVE-2026-107678: iterative free plus append-in-place PSSH side data.
+# CVE-2026-107676: initialize all HDR10+ serialized payload bits.
+# CVE-2026-107677: reject empty search strings in av_strireplace.
+# CVE-2026-125269: clear recycled H.264/H.265 SEI message slots.
+FFMPEG_SOURCE="\${BASEDIR}/src/ffmpeg"
+FFMPEG_SECURITY_COMMITS=(
+  969c7eb091989a664cb7bf66a1f02051cc46cb52
+  d1434518fbd03789e3e5dc0657a7a9f1123ce074
+  71403a21b02a92b925e26e609e9bd3e48df451cf
+  2c2f6e96e31795ae95a8f8323a493ffbc493111f
+  ed27bfcbbbc0872c0195eaf4dd2c0c93b9f1778e
+  2c515eea07df719379e7f73deeeb7ccb8768433f
+)
+for fix in "\${FFMPEG_SECURITY_COMMITS[@]}"; do
+  if ! git -C "\${FFMPEG_SOURCE}" cat-file -e "\${fix}^{commit}" 2>/dev/null; then
+    git -C "\${FFMPEG_SOURCE}" fetch --no-tags origin "\${fix}"
+  fi
+  if git -C "\${FFMPEG_SOURCE}" merge-base --is-ancestor "\${fix}" HEAD; then
+    continue
+  fi
+  git -C "\${FFMPEG_SOURCE}" show --format= "\${fix}" | git -C "\${FFMPEG_SOURCE}" apply --check -
+  git -C "\${FFMPEG_SOURCE}" show --format= "\${fix}" | git -C "\${FFMPEG_SOURCE}" apply -
+done
+git -C "\${FFMPEG_SOURCE}" diff --check
+grep -q 'while (info)' "\${FFMPEG_SOURCE}/libavutil/encryption_info.c"
+grep -q 'av_encryption_init_info_append_side_data' "\${FFMPEG_SOURCE}/libavutil/encryption_info.c"
+grep -q 'pssh_side_data' "\${FFMPEG_SOURCE}/libavformat/mov.c"
+grep -q 'if (!fromlen)' "\${FFMPEG_SOURCE}/libavutil/avstring.c"
+grep -q 'memset(&list->messages\\[list->nb_messages\\]' "\${FFMPEG_SOURCE}/libavcodec/cbs_sei.c"
+'''
+path.write_text(text.replace(anchor, insert + anchor), encoding="utf-8")
+print("Prepared pinned FFmpeg security backports.")
+PY
+
 bash -n "$source_file"
