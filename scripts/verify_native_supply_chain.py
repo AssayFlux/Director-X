@@ -28,6 +28,9 @@ REQUIRED_REACHABLE_CVES = {
     "CVE-2026-66037",
     "CVE-2026-66038",
     "CVE-2026-64832",
+    "CVE-2026-66036",
+    "CVE-2026-70629",
+    "CVE-2026-70631",
 }
 REQUIRED_CVE_COMPONENTS = {
     "CVE-2026-64830": {"vobsub_demuxer"},
@@ -40,6 +43,9 @@ REQUIRED_CVE_COMPONENTS = {
     "CVE-2026-66037": {"iamf_demuxer"},
     "CVE-2026-66038": {"zlib_decoder"},
     "CVE-2026-64832": set(),
+    "CVE-2026-66036": {"hqdn3d_filter"},
+    "CVE-2026-70629": {"rscc_decoder"},
+    "CVE-2026-70631": {"tiff_decoder"},
 }
 REQUIRED_PATCH_FLAGS = {
     "--disable-demuxer=vobsub",
@@ -53,6 +59,9 @@ REQUIRED_PATCH_FLAGS = {
     "--disable-decoder=rasc",
     "--disable-demuxer=iamf",
     "--disable-decoder=zlib",
+    "--disable-filter=hqdn3d",
+    "--disable-decoder=rscc",
+    "--disable-decoder=tiff",
 }
 
 
