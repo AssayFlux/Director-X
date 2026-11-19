@@ -1,0 +1,33 @@
+diff --git a/scripts/android/ffmpeg.sh b/scripts/android/ffmpeg.sh
+index 24428f6..0ca135c 100755
+--- a/scripts/android/ffmpeg.sh
++++ b/scripts/android/ffmpeg.sh
+@@ -365,0 +366,16 @@ fi
++# Director X security profile: media formats covered by the current FFmpeg
++# advisories are deliberately unavailable in the shipped Android build.
++# Keep this list explicit so the configure transcript and the native lock can
++# be compared during release review.
++CONFIGURE_POSTFIX+=" --disable-demuxer=vobsub"
++CONFIGURE_POSTFIX+=" --disable-decoder=tdsc"
++CONFIGURE_POSTFIX+=" --disable-decoder=mace6"
++CONFIGURE_POSTFIX+=" --disable-decoder=adpcm_adx"
++CONFIGURE_POSTFIX+=" --disable-demuxer=adx"
++CONFIGURE_POSTFIX+=" --disable-demuxer=aax"
++CONFIGURE_POSTFIX+=" --disable-encoder=png"
++CONFIGURE_POSTFIX+=" --disable-encoder=apng"
++CONFIGURE_POSTFIX+=" --disable-decoder=rasc"
++CONFIGURE_POSTFIX+=" --disable-demuxer=iamf"
++CONFIGURE_POSTFIX+=" --disable-decoder=zlib"
++
+
+diff --git a/scripts/source.sh b/scripts/source.sh
+--- a/scripts/source.sh
++++ b/scripts/source.sh
+@@ -34,7 +34,7 @@
+   ffmpeg)
+     SOURCE_REPO_URL="https://github.com/arthenica/FFmpeg"
+     SOURCE_ID="n9.0.2"
+-    SOURCE_TYPE="TAG"
++    SOURCE_TYPE="COMMIT"
+     ;;
+   fontconfig)
