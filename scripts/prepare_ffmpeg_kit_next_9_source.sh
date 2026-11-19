@@ -61,8 +61,8 @@ import sys
 
 path = Path(sys.argv[1])
 text = path.read_text(encoding="utf-8")
-old = "\\t$(AM_V_GEN) ./$(gen_unicode_version) $^ > $@ \\\\n"
-new = "\\t$(AM_V_GEN) ./$(gen_unicode_version) unidata/ReadMe.txt unidata/BidiMirroring.txt > $@ \\\\n"
+old = "./$(gen_unicode_version) $^ > $@"
+new = "./$(gen_unicode_version) unidata/ReadMe.txt unidata/BidiMirroring.txt > $@"
 if text.count(old) == 1:
     path.write_text(text.replace(old, new), encoding="utf-8")
 elif text.count(new) == 1:
