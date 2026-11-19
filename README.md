@@ -57,6 +57,12 @@ The authoritative engineering record is [docs/ENGINEERING_STATUS.md](docs/ENGINE
 
 Do not infer feature acceptance from the presence of a UI control or implementation class. The status document distinguishes implemented code, automated verification, and physical-device acceptance.
 
+## Android 17 audio hardening smoke check
+
+- Target SDK: 37 (Android 17).
+- Android 17 audio hardening: on a supported test device, run `adb shell cmd audio set-hardening throw`.
+- Exercise TTS preview, voiceover, and export while observing `AudioHardening` diagnostics. The export foreground service must remain a media-processing service and must not request microphone or media-playback foreground-service types.
+
 ## Build
 
 See [docs/BUILD.md](docs/BUILD.md). APKs are built manually by the maintainer; CI is not an APK distribution channel.
