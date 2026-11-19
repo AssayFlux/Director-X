@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# Fail closed: this helper only edits the exact FFmpeg 9.0.2 source selector.
+# Fail closed: this helper only edits the exact pinned FFmpeg 9.x source selector.
 
 source_file="${1:-scripts/source.sh}"
 test -f "$source_file"
@@ -12,9 +12,9 @@ import sys
 path = Path(sys.argv[1])
 text = path.read_text(encoding="utf-8")
 old = '''  ffmpeg)
-    SOURCE_REPO_URL="https://github.com/arthenica/FFmpeg"
-    SOURCE_ID="n9.0.2"
-    SOURCE_TYPE="TAG"
+    SOURCE_REPO_URL="https://github.com/FFmpeg/FFmpeg"
+    SOURCE_ID="2473872b7ceadbdf3235c0a482f58753e3f6dacb"
+    SOURCE_TYPE="COMMIT"
     ;;'''
 new = '''  ffmpeg)
     SOURCE_REPO_URL="https://github.com/arthenica/FFmpeg"
@@ -143,7 +143,7 @@ FFMPEG_SECURITY_COMMITS=(
   6ecaddb9c1d59cf7f5de16017122fecb2fa0c67c
   ec887b13a88afbaf44fb28c3045bda5d434da8dc
 )
-FFMPEG_SECURITY_MASTER_PIN="f8bb61cd57a714b4eb8a9f8002dbb5214eed48c7"
+FFMPEG_SECURITY_MASTER_PIN="2473872b7ceadbdf3235c0a482f58753e3f6dacb"
 if [[ "$(git -C "${FFMPEG_SOURCE}" rev-parse HEAD)" != "${FFMPEG_SECURITY_MASTER_PIN}" ]]; then
 for fix in "${FFMPEG_SECURITY_COMMITS[@]}"; do
   if ! git -C "${FFMPEG_SOURCE}" cat-file -e "${fix}^{commit}" 2>/dev/null; then
