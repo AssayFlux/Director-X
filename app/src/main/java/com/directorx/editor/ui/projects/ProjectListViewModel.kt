@@ -1132,7 +1132,7 @@ class ProjectListViewModel @Inject constructor(
     }
 
     /** Builds the diagnostic ZIP with the issue body inside and writes it where the user picked. */
-    fun saveCrashReport(target: Uri) {
+    fun saveCrashReport(target: Uri, requestedNotice: CrashReportNotice? = null) {
         if (crashReportSaveJob?.isActive == true) {
             // The button is disabled while a save runs, so this is a picker result
             // that outlived it. Leave nothing empty behind.
@@ -1140,9 +1140,12 @@ class ProjectListViewModel @Inject constructor(
             return
         }
         crashReportSaveJob = viewModelScope.launch {
-            // After a process death the picker can answer before the notice has loaded.
-            crashReportNoticeLoad?.join()
-            val notice = _crashReportNotice.value
+            // Prefer the exact notice shown when the picker was launched. If Android
+            // recreated the process while the picker was open, reload the latest one.
+            val notice = requestedNotice ?: run {
+                crashReportNoticeLoad?.join()
+                _crashReportNotice.value
+            }
             if (notice == null) {
                 deleteDocumentQuietly(target)
                 showToast(appContext.getString(R.string.crash_notice_report_failed))
@@ -1176,8 +1179,8 @@ class ProjectListViewModel @Inject constructor(
             .onFailure { AppLog.w(TAG, "Couldn't remove the unfinished crash report", it) }
     }
 
-    fun copyCrashReportSummary() {
-        val notice = _crashReportNotice.value ?: return
+    fun copyCrashReportSummary(requestedNotice: CrashReportNotice? = null) {
+        val notice = requestedNotice ?: _crashReportNotice.value ?: return
         appContext.getSystemService(ClipboardManager::class.java)?.setPrimaryClip(
             ClipData.newPlainText(
                 appContext.getString(R.string.crash_notice_clip_label),
@@ -1188,8 +1191,8 @@ class ProjectListViewModel @Inject constructor(
         showToast(appContext.getString(R.string.crash_notice_summary_copied))
     }
 
-    fun dismissCrashReportNotice() {
-        _crashReportNotice.value?.let(::acknowledgeCrashReportNotice)
+    fun dismissCrashReportNotice(requestedNotice: CrashReportNotice? = null) {
+        (requestedNotice ?: _crashReportNotice.value)?.let(::acknowledgeCrashReportNotice)
     }
 
     private fun crashReportIssueBody(notice: CrashReportNotice): String =
