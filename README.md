@@ -106,7 +106,7 @@ The following is a representative source map, not an exhaustive API or feature-a
 
 ## Archive Transfer
 
-Projects can be moved between devices using an explicit local archive export/import flow. This is file-based transfer, not automatic cloud backup or cloud synchronization.
+Projects can be moved between devices using an explicit local archive export/import flow. This is a local file-based transfer flow, not an online backup or synchronization service.
 
 ## Project status
 
