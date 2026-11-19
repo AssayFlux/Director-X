@@ -8,6 +8,12 @@ on:
       - "scripts/build_ffmpeg_kit_next.ps1"
       - "third_party/ffmpeg-kit-next/directorx-security.patch"
       - ".github/workflows/ffmpeg-kit-next-9-build.yml"
+  pull_request:
+    branches: [Alpha]
+    paths:
+      - "scripts/build_ffmpeg_kit_next.ps1"
+      - "third_party/ffmpeg-kit-next/directorx-security.patch"
+      - ".github/workflows/ffmpeg-kit-next-9-build.yml"
 
 permissions:
   contents: read
