@@ -39,7 +39,7 @@ import java.io.File
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(
-    application = ClearCutApp::class,
+    application = DirectorXApp::class,
     sdk = [35],
     qualifiers = "w360dp-h800dp-xxhdpi",
 )
