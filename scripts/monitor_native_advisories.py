@@ -133,7 +133,8 @@ def main() -> int:
     all_ids.update(item["id"] for item in osv_findings)
     all_ids.update(item["id"] for item in nvd_findings)
     all_ids.update(upstream_ids)
-    candidate_ids = {item["id"] for item in osv_findings + nvd_findings}\n    unreviewed = sorted(item for item in candidate_ids if item not in reviewed)
+    candidate_ids = {item["id"] for item in osv_findings + nvd_findings}
+    unreviewed = sorted(item for item in candidate_ids if item not in reviewed)
     high_unknown = [
         item for item in osv_findings + nvd_findings
         if item["severity"] in {"HIGH", "CRITICAL", "UNKNOWN"} and item["id"] not in reviewed
