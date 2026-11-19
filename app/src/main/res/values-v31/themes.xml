@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Android 12+ system splash: the same Director X SVG used by Compose,
+         rasterized at build time and padded to keep the full wordmark visible. -->
+    <style name="Theme.DirectorX" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:colorBackground">@color/base</item>
+        <item name="android:statusBarColor">@color/base</item>
+        <item name="android:navigationBarColor">@color/base</item>
+        <item name="android:windowBackground">@color/base</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowSplashScreenBackground">#FFFFFF</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/directorx_splash_logo</item>
+    </style>
+</resources>
