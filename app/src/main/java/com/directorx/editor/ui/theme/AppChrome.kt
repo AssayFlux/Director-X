@@ -200,7 +200,7 @@ fun ClearCutSecondaryButton(
                 scaleX = buttonScale
                 scaleY = buttonScale
             }
-            .semantics { contentDescription = text }
+            .semantics(mergeDescendants = true) { contentDescription = text }
             .defaultMinSize(minHeight = TouchTarget.minimum)
     ) {
         if (icon != null) {
