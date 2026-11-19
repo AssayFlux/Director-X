@@ -54,14 +54,14 @@ def main() -> None:
     background = data["splash"]["background"]
     # Launcher background is kept neutral and consistent with the selected branding.
     (values / "ic_launcher_colors.xml").write_text(
-        '<?xml version="1.0" encoding="utf-8"?>\\n'
-        f'<resources><color name="ic_launcher_background">{background}</color></resources>\\n',
+        '<?xml version="1.0" encoding="utf-8"?>\n'
+        f'<resources><color name="ic_launcher_background">{background}</color></resources>\n',
         encoding="utf-8")
-    adaptive = ('<?xml version="1.0" encoding="utf-8"?>\\n'
-        '<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">\\n'
-        '    <background android:drawable="@color/ic_launcher_background" />\\n'
-        '    <foreground android:drawable="@mipmap/ic_launcher_foreground" />\\n'
-        '</adaptive-icon>\\n')
+    adaptive = ('<?xml version="1.0" encoding="utf-8"?>\n'
+        '<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">\n'
+        '    <background android:drawable="@color/ic_launcher_background" />\n'
+        '    <foreground android:drawable="@mipmap/ic_launcher_foreground" />\n'
+        '</adaptive-icon>\n')
     folder = output / "mipmap-anydpi-v26"
     folder.mkdir(parents=True, exist_ok=True)
     for name in ("ic_launcher.xml", "ic_launcher_round.xml"):
