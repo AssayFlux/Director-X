@@ -2,10 +2,9 @@ package com.directorx.editor.ui.projects
 
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsNotEnabled
-import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import com.directorx.editor.MainActivity
 import com.directorx.editor.DirectorXApp
 import com.directorx.editor.ui.ClearCutTestTags
 import com.directorx.editor.ui.theme.DirectorXTheme
@@ -25,7 +24,7 @@ import org.robolectric.annotation.GraphicsMode
 class CrashReportBannerTest {
 
     @get:Rule
-    val compose = createAndroidComposeRule<MainActivity>()
+    val compose = createComposeRule()
 
     private val occurredAt = System.currentTimeMillis() - 60 * 60 * 1000L
     private val notice = CrashReportNotice(
