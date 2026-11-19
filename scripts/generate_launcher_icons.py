@@ -41,6 +41,8 @@ def main() -> None:
     for source in (launcher, signature):
         if not source.is_file() or source.stat().st_size == 0:
             raise SystemExit(f"Selected branding asset is missing or empty: {source}")
+    if launcher.suffix.lower() != ".png":
+        raise SystemExit("The approved launcher asset must be a PNG so Android receives the exact supplied app icon.")
     signature_output = output / "drawable-nodpi" / "assayflux_signature.png"
     signature_output.parent.mkdir(parents=True, exist_ok=True)
     signature_output.write_bytes(render_png(signature, 720, 360))
