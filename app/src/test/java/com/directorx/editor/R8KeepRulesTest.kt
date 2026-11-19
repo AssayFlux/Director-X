@@ -80,7 +80,6 @@ class R8KeepRulesTest {
             "androidx.camera.video.VideoCapture",
             "org.contentauth.c2pa.Builder",
             "org.proofmode.simplec2pa.Manifest",
-            "com.arthenica.ffmpegkit.FFmpegKit",
             "com.rikorose.deepfilternet.NativeDeepFilterNet",
             "com.kaleyra.noise_filter.DeepFilterNet",
             "io.github.thibaultbee.streampack.streamers.SingleStreamer",
