@@ -51,7 +51,8 @@
       "type": "object",
       "required": [
         "background",
-        "sequence"
+        "sequence",
+        "transitionDurationMs"
       ],
       "properties": {
         "background": {
@@ -80,6 +81,11 @@
             },
             "additionalProperties": false
           }
+        },
+        "transitionDurationMs": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
         }
       },
       "additionalProperties": false
