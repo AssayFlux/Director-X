@@ -72,7 +72,6 @@ import com.directorx.editor.ui.theme.ClearCutDialogIcon
 import com.directorx.editor.ui.theme.ClearCutFilterChip
 import com.directorx.editor.ui.theme.ClearCutMetricPill
 import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.AssayFluxLogo
 import com.directorx.editor.ui.theme.AssayFluxTexture
 import com.directorx.editor.ui.theme.ClearCutScreenBackground
 import com.directorx.editor.ui.theme.ClearCutSectionHeader
@@ -789,11 +788,6 @@ private fun ProjectHomeHero(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            AssayFluxLogo(
-                modifier = Modifier.size(width = 52.dp, height = 32.dp),
-                contentDescription = stringResource(R.string.app_name),
-            )
-            Spacer(Modifier.width(Spacing.sm))
             Text(
                 text = stringResource(R.string.projects_app_title),
                 color = LocalClearCutColors.current.text,
