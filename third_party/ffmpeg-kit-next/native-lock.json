@@ -14,7 +14,7 @@
     "ffmpegRevision": "38b88335f99e76ed89ff3c93f877fdefce736c13",
     "ffmpegVersion": "8.1.2",
     "securityPatch": "third_party/ffmpeg-kit-next/directorx-security.patch",
-    "securityPatchSha256": "3a8dcc1aac92be38857dc89c6d6dcaed4457933855340c2fc1a948b42f2f0da7",
+    "securityPatchSha256": "ea0e84f90aae8355324459c7e78c776fb344847f16dee0ed6bfb54b1412bfad2",
     "builtAt": "2026-08-02T00:00:00Z",
     "reviewUntil": "2026-10-31"
   },
@@ -152,7 +152,10 @@
       "apng_encoder",
       "rasc_decoder",
       "iamf_demuxer",
-      "zlib_decoder"
+      "zlib_decoder",
+      "hqdn3d_filter",
+      "rscc_decoder",
+      "tiff_decoder"
     ],
     "requiredAdvisories": [
       "CVE-2026-64830",
@@ -164,7 +167,10 @@
       "CVE-2026-12706",
       "CVE-2026-66037",
       "CVE-2026-66038",
-      "CVE-2026-64832"
+      "CVE-2026-64832",
+      "CVE-2026-66036",
+      "CVE-2026-70629",
+      "CVE-2026-70631"
     ],
     "reachability": {
       "CVE-2026-64832": {
@@ -333,6 +339,42 @@
       "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-64832",
       "disabledComponents": []
+    },
+    {
+      "id": "CVE-2026-66036",
+      "component": "FFmpeg",
+      "severity": "HIGH",
+      "status": "not_affected",
+      "rationale": "The hqdn3d filter is explicitly disabled in the Director X native security profile; the pinned FFmpeg configure also marks this filter GPL-only and the build does not enable GPL.",
+      "reviewUntil": "2026-10-31",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66036",
+      "disabledComponents": [
+        "hqdn3d_filter"
+      ]
+    },
+    {
+      "id": "CVE-2026-70629",
+      "component": "FFmpeg",
+      "severity": "MEDIUM",
+      "status": "not_affected",
+      "rationale": "The native RSCC decoder is explicitly disabled in the Director X native security profile.",
+      "reviewUntil": "2026-10-31",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-70629",
+      "disabledComponents": [
+        "rscc_decoder"
+      ]
+    },
+    {
+      "id": "CVE-2026-70631",
+      "component": "FFmpeg",
+      "severity": "MEDIUM",
+      "status": "not_affected",
+      "rationale": "The native TIFF decoder is explicitly disabled in the Director X native security profile.",
+      "reviewUntil": "2026-10-31",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-70631",
+      "disabledComponents": [
+        "tiff_decoder"
+      ]
     }
   ]
 }
