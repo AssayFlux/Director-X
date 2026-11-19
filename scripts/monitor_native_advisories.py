@@ -117,15 +117,15 @@ def main() -> int:
             (x.get("value", "") for x in cve.get("descriptions", []) if x.get("lang") == "en"),
             "",
         )
-        # NVD keywordSearch also returns unrelated CVEs whose references merely
-        # mention FFmpeg. Require a direct FFmpeg CPE or an explicit product
-        # mention in the advisory description before adding a triage candidate.
+        # NVD keywordSearch also returns unrelated CVEs that mention FFmpeg
+        # as an external tool (for example, Rails Active Storage). Require the
+        # exact FFmpeg vendor/product CPE; description-only matches are excluded.
         cpe_matches = []
         def collect_cpes(node):
             if isinstance(node, dict):
                 for match in node.get("cpeMatch", []):
                     criteria = str(match.get("criteria", "")).lower()
-                    if re.search(r"cpe:2\.3:[aho]:[^:]*ffmpeg[^:]*:", criteria):
+                    if re.search(r"^cpe:2\.3:[aho]:ffmpeg:ffmpeg:", criteria):
                         cpe_matches.append(criteria)
                 for child in node.get("nodes", []):
                     collect_cpes(child)
@@ -135,7 +135,7 @@ def main() -> int:
                 for child in node:
                     collect_cpes(child)
         collect_cpes(cve.get("configurations", []))
-        if not cpe_matches and not re.search(r"\bffmpeg\b", description, re.IGNORECASE):
+        if not cpe_matches:
             continue
         metrics = cve.get("metrics", {})
         scores = []
