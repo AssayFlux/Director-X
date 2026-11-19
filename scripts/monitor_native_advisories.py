@@ -128,7 +128,7 @@ def main() -> int:
         })
 
     upstream_html = get_text(FFMPEG_SECURITY)
-    upstream_ids = sorted(set(re.findall(r"CVE-\\d{4}-\\d{4,}", upstream_html)))
+    upstream_ids = sorted(set(re.findall(r"CVE-\d{4}-\d{4,}", upstream_html)))
     all_ids = set(reviewed)
     all_ids.update(item["id"] for item in osv_findings)
     all_ids.update(item["id"] for item in nvd_findings)
@@ -164,7 +164,7 @@ def main() -> int:
         ],
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\\n", encoding="utf-8")
+    OUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps(report, indent=2))
     if report["review_expired"]:
         print(f"::error::Native security review expired on {review_until}; human review required")
