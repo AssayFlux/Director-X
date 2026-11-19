@@ -49,7 +49,7 @@ class LocaleResourceCoverageTest {
         val localeTags = readLocaleConfigTags(File(resourceRoot, "xml/locales_config.xml"))
         val translatedLocaleTags = resourceRoot.listFiles()
             .orEmpty()
-            .filter { it.isDirectory && it.name.startsWith("values-") }
+            .filter { it.isDirectory && isTranslatedLocaleDirectory(it.name) }
             .map { androidLocaleTag(it.name) }
             .filter { it.isNotBlank() }
             .toSet()
@@ -227,6 +227,9 @@ class LocaleResourceCoverageTest {
             .toSet()
     }
 
+    private fun isTranslatedLocaleDirectory(directoryName: String): Boolean =
+        TRANSLATED_LOCALE_DIRECTORY.matches(directoryName)
+
     private fun androidLocaleTag(directoryName: String): String {
         val raw = directoryName.removePrefix("values-")
         return if (raw.startsWith("b+")) {
@@ -250,5 +253,6 @@ class LocaleResourceCoverageTest {
 
     private companion object {
         val FORMAT_PLACEHOLDER = Regex("%(?:\\d+\\$)?(?:\\.\\d+)?[a-zA-Z]")
+        val TRANSLATED_LOCALE_DIRECTORY = Regex("""values-(?:[a-z]{2,3}(?:-r[A-Z]{2})?|b\\+[A-Za-z0-9+]+)""")
     }
 }
