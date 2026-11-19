@@ -20,6 +20,7 @@ import java.io.File
 import java.nio.FloatBuffer
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.resume
 
 /**
  * Image/video inpainting engine powered by LaMa (Large Mask Inpainting) with dilated convolutions.
@@ -76,8 +77,7 @@ enum class InpaintingModelState {
 @Singleton
 class InpaintingEngine @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val modelDownloadManager: ModelDownloadManager,
-    private val ffmpegEngine: FFmpegEngine
+    private val modelDownloadManager: ModelDownloadManager
 ) {
     private val modelDir = File(context.filesDir, "models/inpainting")
     private val modelFile = File(modelDir, MODEL_FILENAME)
@@ -463,17 +463,19 @@ class InpaintingEngine @Inject constructor(
                 }
 
                 onProgress(0.95f)
-                val pattern = File(tempDir, "frame_%05d.png").absolutePath
-                val encodeOk = ffmpegEngine.encodeImageSequenceWithAudio(
-                    inputUri = uri,
-                    framePattern = pattern,
-                    fps = fps.toInt().coerceIn(1, 120),
-                    outputFile = outputFile,
-                    onProgress = { progress -> onProgress(0.95f + progress * 0.05f) }
+                val frameFiles = tempDir.listFiles()
+                    ?.filter { it.isFile && it.name.matches(Regex("frame_\\d{5}\\.png")) }
+                    ?.sortedBy { it.name }
+                    .orEmpty()
+                val encodeOk = encodeInpaintedFramesWithMedia3(
+                    sourceUri = uri,
+                    frameFiles = frameFiles,
+                    frameRate = fps.toInt().coerceIn(1, 120),
+                    outputUri = outputUri,
+                    durationMs = durationMs,
                 )
-
-                if (!encodeOk || !outputFile.isFile || outputFile.length() <= 0L) {
-                    AppLog.w(TAG, "FFmpeg encode of inpainted frames failed")
+                if (!encodeOk || outputFile.length() <= 0L) {
+                    AppLog.w(TAG, "Media3 encode of inpainted frame sequence failed")
                     return@withContext null
                 }
 
@@ -496,6 +498,107 @@ class InpaintingEngine @Inject constructor(
             null
         } finally {
             retrieverLease.close()
+        }
+    }
+
+    @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
+    private suspend fun encodeInpaintedFramesWithMedia3(
+        sourceUri: Uri,
+        frameFiles: List<File>,
+        frameRate: Int,
+        outputUri: Uri,
+        durationMs: Long,
+    ): Boolean {
+        if (frameFiles.isEmpty() || outputUri.scheme != "file") return false
+        val outputPath = outputUri.path ?: return false
+        val frameDurationMs = (1_000L / frameRate).coerceAtLeast(1L)
+        val videoSequenceBuilder = androidx.media3.transformer.EditedMediaItemSequence.Builder(
+            setOf(androidx.media3.common.C.TRACK_TYPE_VIDEO)
+        )
+        frameFiles.forEach { frame ->
+            val mediaItem = androidx.media3.common.MediaItem.Builder()
+                .setUri(Uri.fromFile(frame))
+                .setImageDurationMs(frameDurationMs)
+                .build()
+            val edited = androidx.media3.transformer.EditedMediaItem.Builder(mediaItem)
+                .setFrameRate(frameRate)
+                .setRemoveAudio(true)
+                .build()
+            videoSequenceBuilder.addItem(edited)
+        }
+        val sequences = mutableListOf(videoSequenceBuilder.build())
+        val extractor = android.media.MediaExtractor()
+        try {
+            extractor.setDataSource(context, sourceUri, null)
+            val hasAudio = (0 until extractor.trackCount).any { index ->
+                extractor.getTrackFormat(index).getString(android.media.MediaFormat.KEY_MIME)
+                    ?.startsWith("audio/") == true
+            }
+            if (hasAudio) {
+                val audioItem = androidx.media3.common.MediaItem.Builder()
+                    .setUri(sourceUri)
+                    .setClippingConfiguration(
+                        androidx.media3.common.MediaItem.ClippingConfiguration.Builder()
+                            .setStartPositionMs(0L)
+                            .setEndPositionMs(durationMs.coerceAtLeast(1L))
+                            .build()
+                    )
+                    .build()
+                val audioEdited = androidx.media3.transformer.EditedMediaItem.Builder(audioItem)
+                    .setRemoveVideo(true)
+                    .build()
+                sequences += androidx.media3.transformer.EditedMediaItemSequence.Builder(
+                    setOf(androidx.media3.common.C.TRACK_TYPE_AUDIO)
+                ).addItem(audioEdited).build()
+            }
+        } catch (e: Exception) {
+            AppLog.w(TAG, "Could not inspect source audio for inpainting export", e)
+            return false
+        } finally {
+            extractor.release()
+        }
+
+        return kotlinx.coroutines.withContext(Dispatchers.Main) {
+            kotlinx.coroutines.suspendCancellableCoroutine { continuation ->
+                val composition = androidx.media3.transformer.Composition.Builder(
+                    *sequences.toTypedArray()
+                ).build()
+                val transformer = androidx.media3.transformer.Transformer.Builder(context)
+                    .setVideoMimeType(androidx.media3.common.MimeTypes.VIDEO_H264)
+                    .setAudioMimeType(androidx.media3.common.MimeTypes.AUDIO_AAC)
+                    .setAssetLoaderFactory(
+                        Media3DecoderFallback.assetLoaderFactory(context) { note ->
+                            AppLog.w(TAG, "Inpainting export: $note")
+                        }
+                    )
+                    .addListener(object : androidx.media3.transformer.Transformer.Listener {
+                        override fun onCompleted(
+                            composition: androidx.media3.transformer.Composition,
+                            exportResult: androidx.media3.transformer.ExportResult,
+                        ) {
+                            if (continuation.isActive) continuation.resume(true)
+                        }
+
+                        override fun onError(
+                            composition: androidx.media3.transformer.Composition,
+                            exportResult: androidx.media3.transformer.ExportResult,
+                            exportException: androidx.media3.transformer.ExportException,
+                        ) {
+                            AppLog.e(TAG, "Media3 inpainting export failed", exportException)
+                            if (continuation.isActive) continuation.resume(false)
+                        }
+                    })
+                    .build()
+                continuation.invokeOnCancellation { runCatching { transformer.cancel() } }
+                try {
+                    File(outputPath).parentFile?.mkdirs()
+                    File(outputPath).delete()
+                    transformer.start(composition, outputPath)
+                } catch (e: Exception) {
+                    AppLog.e(TAG, "Could not start Media3 inpainting export", e)
+                    if (continuation.isActive) continuation.resume(false)
+                }
+            }
         }
     }
 
