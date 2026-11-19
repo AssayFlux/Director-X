@@ -21,7 +21,7 @@ import java.io.File
 class NoiseReductionOutcomeTest {
 
     private val context = RuntimeEnvironment.getApplication()
-    private val engine = NoiseReductionEngine(context, FFmpegEngine(context))
+    private val engine = NoiseReductionEngine(context, AudioEngine(context, MemoryTrimRegistry()))
     private val noiseReducedDir get() = File(context.filesDir, "noise_reduced")
 
     @Test
@@ -35,7 +35,7 @@ class NoiseReductionOutcomeTest {
 
     @Test
     fun missingBackendReportsUnavailableInsteadOfCopyingTheInput() = runBlocking {
-        // FFmpeg's native library is absent under Robolectric, which is exactly
+        // the Android media decoder is unavailable under Robolectric, which is exactly
         // the "no usable backend" device state.
         val result = engine.processAudio(Uri.parse("content://media/audio/1"), NoiseReductionEngine.NoiseReductionMode.MODERATE)
 
@@ -73,7 +73,7 @@ class NoiseReductionOutcomeTest {
     @Test
     fun deepFilterNetProbeIsFalseOnPlainJvmContexts() {
         val bareContext = object : ContextWrapper(null) {}
-        val bareEngine = NoiseReductionEngine(bareContext, FFmpegEngine(bareContext))
+        val bareEngine = NoiseReductionEngine(bareContext, AudioEngine(bareContext, MemoryTrimRegistry()))
 
         assertEquals(false, bareEngine.isDeepFilterNetAvailable())
     }
