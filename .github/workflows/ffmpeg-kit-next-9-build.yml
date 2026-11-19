@@ -1,4 +1,5 @@
 name: Build FFmpegKitNext 9.0.2 Android artifact
+# FFmpeg source IDs are fetched as commits by the pinned preparation helper.
 
 on:
   workflow_dispatch:
