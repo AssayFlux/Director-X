@@ -226,6 +226,7 @@ class DiagnosticExportBundlePrivacyTest {
                 )
             ),
             permissionSnapshots = DiagnosticExportEngine.collectRuntimePermissionSnapshots(context),
+            issueBody = "### What happened\\nDirector X closed unexpectedly (java.lang.IllegalStateException).",
             now = 1_718_200_000_000,
             retainCount = 1,
         )
@@ -244,6 +245,11 @@ class DiagnosticExportBundlePrivacyTest {
                     .use { it.readText() }
                 assertFalse(modelRegistry.contains("private-token"))
                 assertTrue(modelRegistry.contains("<redacted>"))
+
+                val issueBody = archive.getInputStream(archive.getEntry(DiagnosticExportEngine.ISSUE_BODY_ENTRY))
+                    .bufferedReader(Charsets.UTF_8)
+                    .use { it.readText() }
+                assertTrue(issueBody, issueBody.contains("Director X closed unexpectedly (java.lang.IllegalStateException)"))
 
                 val deviceInfo = archive.getInputStream(archive.getEntry("device-info.txt"))
                     .bufferedReader(Charsets.UTF_8)

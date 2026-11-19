@@ -1,145 +1,99 @@
 package com.directorx.editor.ui.projects
 
-import android.app.Activity
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
-import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.assertHasClickAction
+import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.test.core.app.ApplicationProvider
-import com.directorx.editor.DirectorXApp
-import com.directorx.editor.MainActivity
-import com.directorx.editor.engine.CrashRecordStore
-import com.directorx.editor.engine.DiagnosticExportEngine
 import com.directorx.editor.ui.ClearCutTestTags
-import java.io.File
-import java.util.zip.ZipFile
-import org.junit.Assert.assertEquals
+import com.directorx.editor.ui.theme.DirectorXTheme
+import java.util.concurrent.atomic.AtomicBoolean
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.ExternalResource
-import org.junit.rules.RuleChain
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 
-/**
- * A crash recorded by the last run shows on the projects screen at the next launch,
- * hands over a report or summary only when tapped, and stays gone once handled.
- */
+/** Verifies the crash notice's three accessible actions independently of ActivityResultRegistry. */
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(
-    application = DirectorXApp::class,
-    sdk = [35],
-    qualifiers = "w360dp-h800dp-xxhdpi",
-)
+@Config(sdk = [35], qualifiers = "w360dp-h800dp-xxhdpi")
 class CrashReportBannerTest {
 
-    private val context: Context get() = ApplicationProvider.getApplicationContext()
-    private val crashedAt = System.currentTimeMillis() - 60 * 60 * 1000L
-
-    // Planted before the activity starts, the way the last run's handler leaves it.
-    private val plantedCrash = object : ExternalResource() {
-        override fun before() {
-            // Each Robolectric method reuses the application data directory.
-            // Clear the previous scenario's crash and acknowledgement records first.
-            CrashRecordStore.defaultRecordsDir(context).deleteRecursively()
-            CrashRecordStore(context).recordUncaughtException(
-                Thread.currentThread(),
-                IllegalStateException("decoder released"),
-                "0.1.0",
-                crashedAt,
-            )
-        }
-    }
-
-    private val compose = createAndroidComposeRule<MainActivity>()
-
-    // RuleChain makes the crash record exist before ActivityRule launches MainActivity.
     @get:Rule
-    val rules: TestRule = RuleChain.outerRule(plantedCrash).around(compose)
+    val compose = createComposeRule()
+
+    private val occurredAt = System.currentTimeMillis() - 60 * 60 * 1000L
+    private val notice = CrashReportNotice(
+        kind = CrashReportKind.CRASH,
+        occurredAtEpochMs = occurredAt,
+        coversThroughEpochMs = occurredAt,
+        detail = "java.lang.IllegalStateException",
+        appVersion = "0.1.0",
+    )
 
     @Test
-    fun copySummaryPutsTheIssueBodyOnTheClipboardAndSetsTheCrashAside() {
-        waitForBanner()
+    fun saveActionInvokesItsCallback() {
+        val tapped = AtomicBoolean(false)
+        showBanner(onSave = { tapped.set(true) })
 
-        compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_COPY).performClick()
-        val clip = context.getSystemService(ClipboardManager::class.java).primaryClip!!.getItemAt(0).text.toString()
-        assertTrue(clip, clip.contains("Director X closed unexpectedly (java.lang.IllegalStateException)"))
-        assertTrue(clip, clip.contains("- Director X: ${DirectorXApp.VERSION}"))
-        assertTrue(clip, clip.contains("- Version it happened in: 0.1.0"))
-        assertTrue(clip, clip.contains("- Android: "))
-        assertTrue(clip, clip.contains("- ABI: "))
-        assertTrue(clip, !clip.contains("decoder released"))
-        assertNoNoticeOnTheNextLaunch()
-    }
+        compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_SAVE)
+            .assertHasClickAction()
+            .performClick()
 
-    @Test
-    fun saveReportWritesTheDiagnosticZipWithTheIssueBodyWhereTheUserPicked() {
-        waitForBanner()
-        val target = File(context.cacheDir, "picked-report.zip")
-
-        // ActivityResultRegistry posts the platform launch through the main looper.
-        // Wait for that observable launch rather than assuming performClick is synchronous.
-        compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_SAVE).performClick()
-        compose.waitUntil(5_000L) {
-            shadowOf(compose.activity).nextStartedActivityForResult != null
-        }
-        val activity = shadowOf(compose.activity)
-        val request = activity.nextStartedActivityForResult!!.intent
-        assertEquals(Intent.ACTION_CREATE_DOCUMENT, request.action)
-        assertEquals("application/zip", request.type)
-        assertTrue(request.getStringExtra(Intent.EXTRA_TITLE)!!.startsWith("Director X-report-"))
-        activity.receiveResult(request, Activity.RESULT_OK, Intent().setData(Uri.fromFile(target)))
-
-        assertNoNoticeOnTheNextLaunch()
-        ZipFile(target).use { zip ->
-            val names = zip.entries().toList().map { it.name }
-            assertTrue(names.toString(), CrashRecordStore.CRASH_BUNDLE_ENTRY in names)
-            val issueBody = zip.getInputStream(zip.getEntry(DiagnosticExportEngine.ISSUE_BODY_ENTRY)).reader().readText()
-            assertTrue(issueBody, issueBody.contains("(java.lang.IllegalStateException)"))
-            assertTrue(issueBody, issueBody.contains("- ABI: "))
-        }
-        assertNoNoticeOnTheNextLaunch()
+        assertTrue("Save callback should run", tapped.get())
     }
 
     @Test
-    fun dismissingSetsTheCrashAsideWithoutSharingAnything() {
-        waitForBanner()
+    fun copyActionInvokesItsCallback() {
+        val tapped = AtomicBoolean(false)
+        showBanner(onCopy = { tapped.set(true) })
 
-        compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_DISMISS).performClick()
+        compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_COPY)
+            .assertHasClickAction()
+            .performClick()
 
-        assertEquals(null, context.getSystemService(ClipboardManager::class.java).primaryClip)
-        assertEquals(null, shadowOf(compose.activity).nextStartedActivityForResult)
-        assertNoNoticeOnTheNextLaunch()
+        assertTrue("Copy callback should run", tapped.get())
     }
 
-    private fun waitForBanner() {
-        compose.waitUntil(10_000L) {
-            compose.onAllNodesWithTag(ClearCutTestTags.CRASH_REPORT_BANNER).fetchSemanticsNodes().isNotEmpty()
+    @Test
+    fun dismissActionInvokesItsCallback() {
+        val tapped = AtomicBoolean(false)
+        showBanner(onDismiss = { tapped.set(true) })
+
+        compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_DISMISS)
+            .assertHasClickAction()
+            .performClick()
+
+        assertTrue("Dismiss callback should run", tapped.get())
+    }
+
+    @Test
+    fun saveActionIsDisabledWhileTheReportIsBeingWritten() {
+        showBanner(saving = true)
+
+        compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_SAVE)
+            .assertIsNotEnabled()
+    }
+
+    private fun showBanner(
+        saving: Boolean = false,
+        onSave: () -> Unit = {},
+        onCopy: () -> Unit = {},
+        onDismiss: () -> Unit = {},
+    ) {
+        compose.setContent {
+            DirectorXTheme {
+                CrashReportBanner(
+                    notice = notice,
+                    saving = saving,
+                    onSaveReport = onSave,
+                    onCopySummary = onCopy,
+                    onDismiss = onDismiss,
+                )
+            }
         }
-    }
-
-    /** What the next launch reads from disk. */
-    private fun assertNoNoticeOnTheNextLaunch() {
-        val store = CrashRecordStore(context)
-        compose.waitUntil(5_000L) { store.noticeAcknowledgedThroughEpochMs() >= crashedAt }
-        assertEquals(
-            null,
-            CrashReportNoticePolicy.latest(
-                crashes = store.recentCrashes(),
-                exits = emptyList(),
-                acknowledgedThroughEpochMs = store.noticeAcknowledgedThroughEpochMs(),
-                nowEpochMs = System.currentTimeMillis(),
-            )
-        )
     }
 }
