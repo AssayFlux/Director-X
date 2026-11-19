@@ -40,12 +40,16 @@ def main() -> None:
             fail(f"selected asset is empty: {name}")
     if not re.fullmatch(r"#[0-9A-Fa-f]{6}", data["splash"]["background"]):
         fail("splash.background must be a six-digit hex color")
+    transition_ms = data["splash"]["transitionDurationMs"]
+    if not isinstance(transition_ms, int) or not 1 <= transition_ms <= 1000:
+        fail("splash.transitionDurationMs must be between 1 and 1000")
     for item in data["splash"]["sequence"]:
         if not isinstance(item["durationMs"], int) or not 250 <= item["durationMs"] <= 15000:
             fail("splash durationMs must be between 250 and 15000")
     print("[branding] Configuration valid; all selected assets exist in Assets/.")
     print(f"[branding] Launcher: {data['launcher']['asset']}")
     print("[branding] Splash: " + " -> ".join(f"{x['asset']} ({x['durationMs']} ms)" for x in data["splash"]["sequence"]))
+    print(f"[branding] Transition: {transition_ms} ms")
     print(f"[branding] Author: {data['about']['authorName']}")
 
 if __name__ == "__main__":
