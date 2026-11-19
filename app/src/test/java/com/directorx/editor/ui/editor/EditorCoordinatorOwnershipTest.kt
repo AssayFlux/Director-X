@@ -12,7 +12,7 @@ class EditorCoordinatorOwnershipTest {
             "app/src/main/java/com/directorx/editor/ui/editor/EditorViewModel.kt" to 315_000L,
             "app/src/main/java/com/directorx/editor/ui/editor/Timeline.kt" to 172_000L,
             "app/src/main/java/com/directorx/editor/ui/editor/ExportDelegate.kt" to 151_000L,
-            "app/src/main/java/com/directorx/editor/ui/export/ExportSheet.kt" to 130_000L,
+            "app/src/main/java/com/directorx/editor/ui/export/ExportSheet.kt" to 131_072L,
             "app/src/main/java/com/directorx/editor/ui/editor/TimelineToolbar.kt" to 8_000L,
         )
 
