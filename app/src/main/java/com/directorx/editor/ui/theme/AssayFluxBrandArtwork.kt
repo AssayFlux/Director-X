@@ -17,10 +17,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.viewinterop.AndroidView
 import com.directorx.editor.R
 
-/**
- * Renders the supplied AssayFlux SVG artwork with Android's built-in WebView SVG
- * renderer. The HTML is local, JavaScript is disabled, and network loads are blocked.
- */
+/** Displays a build-time raster generated directly from Assets/Director-X Logo.svg. */
 @Composable
 fun AssayFluxLogo(
     modifier: Modifier = Modifier,
@@ -52,6 +49,10 @@ fun AssayFluxTexture(
     )
 }
 
+/**
+ * Renders optional local SVG texture artwork in WebView. JavaScript is disabled
+ * and network loads are blocked; this path is not used for the startup logo.
+ */
 @Composable
 private fun AssayFluxSvgArtwork(
     assetName: String,
