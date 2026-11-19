@@ -32,11 +32,6 @@ INTENTIONAL_DUPLICATES = {
         "fastlane/metadata/android/en-US/privacy_policy_url.txt",
         "fastlane/metadata/android/es-ES/privacy_policy_url.txt",
     }),
-    # User-supplied design texture is intentionally mirrored at the root and in Assets/.
-    frozenset({
-        "Assets/assayflux_splash.gif",
-        "app/src/main/res/raw/assayflux_splash.gif",
-    }),
     frozenset({
         "Assets/UI Design Texture.png",
         "UI Design Texture.png",
