@@ -412,7 +412,7 @@ class VideoEngine @Inject constructor(
         /** The audio-only or stems encode failed. */
         AUDIO_ENCODE_FAILED,
 
-        /** The mixed FFmpeg/Transformer render path failed. */
+        /** The mixed Media3 Transformer render path failed. */
         MIXED_RENDER_FAILED,
 
         /** Burning subtitles into the video failed. */
@@ -1659,7 +1659,7 @@ class VideoEngine @Inject constructor(
             ?: compositionPlan.durationMs
         val reversedCount = visibleVideoTracks.sumOf { track -> track.clips.count { it.isReversed } }
         if (reversedCount > 0) {
-            AppLog.w(TAG, "Export: $reversedCount reversed clip(s) not pre-rendered (FFmpeg unavailable or over limit)")
+            AppLog.w(TAG, "Export: $reversedCount reversed clip(s) not pre-rendered (platform reverse renderer unavailable)")
         }
         val hdrOverlaySummary = HdrOverlayAssetInspector.inspect(
             context = context,
