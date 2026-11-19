@@ -141,6 +141,12 @@ fun SettingsScreen(
     var notificationStatusRefreshKey by remember { mutableIntStateOf(0) }
     var selectedCategory by remember { mutableStateOf<SettingsCategory?>(null) }
 
+    LaunchedEffect(selectedCategory) {
+        // Each category is a separate settings destination; never carry the previous
+        // destination's scroll offset into the next one.
+        scrollState.scrollTo(0)
+    }
+
     val projectStorage by viewModel.projectStorage.collectAsStateWithLifecycle()
     LaunchedEffect(Unit) {
         viewModel.refreshAiModelStorage()
