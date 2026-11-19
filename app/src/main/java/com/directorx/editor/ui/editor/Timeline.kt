@@ -2244,7 +2244,7 @@ fun Timeline(
                                         Box(
                                             modifier = Modifier
                                                 .fillMaxSize()
-                                                .background(clipOverlayBrush)
+                                                .background(clipOverlayColor)
                                         )
 
                                         if (isClipMissing) {
