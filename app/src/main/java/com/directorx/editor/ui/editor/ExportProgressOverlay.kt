@@ -15,7 +15,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -114,13 +113,7 @@ fun ExportProgressOverlay(
             Row(
                 modifier = Modifier
                     .background(
-                        Brush.horizontalGradient(
-                            listOf(
-                                ClearCutAccents.Mauve.copy(alpha = 0.12f),
-                                colors.panelHighest,
-                                colors.panelHighest
-                            )
-                        )
+                        MaterialTheme.colorScheme.surfaceContainerHigh
                     )
                     .padding(horizontal = Spacing.md, vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically,
