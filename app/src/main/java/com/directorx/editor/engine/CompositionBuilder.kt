@@ -15,7 +15,7 @@ internal data class CompositionBuildRequest(
     val hasMultipleVideoSequences: Boolean = false,
     /** From ColorRenderPlanner. Null leaves Media3's default, which only audio-only compositions do. */
     val hdrMode: ColorHdrMode? = null,
-    val compositorLayers: List<ClearCutCompositorLayer> = emptyList(),
+    val compositorLayers: List<DirectorXCompositorLayer> = emptyList(),
     val allowAudioTransmux: Boolean = true,
 )
 
@@ -30,7 +30,7 @@ internal object CompositionBuilder {
             )
         if (request.hasMultipleVideoSequences) {
             builder.setVideoCompositorSettings(
-                ClearCutVideoCompositorSettings(
+                DirectorXVideoCompositorSettings(
                     outputWidth = request.targetWidth,
                     outputHeight = request.targetHeight,
                     layers = request.compositorLayers,
