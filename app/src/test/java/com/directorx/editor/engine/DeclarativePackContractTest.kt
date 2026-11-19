@@ -28,6 +28,11 @@ class DeclarativePackContractTest {
         val accepted = DeclarativePackContract.inspect(root, DeclarativePackKind.STYLE)
         assertEquals(DeclarativePackIssue.NONE, accepted.issue)
         assertEquals(DeclarativePackContract.contentHash(root), accepted.contentHash)
+        assertEquals(
+            "A v-prefixed Android versionName must compare as semantic version 0.1.0",
+            DeclarativePackIssue.NONE,
+            DeclarativePackContract.inspect(root, DeclarativePackKind.STYLE, supportedAppVersion = "v0.1.0").issue,
+        )
 
         root.getJSONArray("styles").getJSONObject(0).put("name", "changed")
         val rejected = DeclarativePackContract.inspect(root, DeclarativePackKind.STYLE)
