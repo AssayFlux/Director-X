@@ -26,7 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf\nimport androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -60,7 +60,7 @@ import com.directorx.editor.ui.editor.EditorScreen
 import com.directorx.editor.ui.editor.LocalTabletopPosture
 import com.directorx.editor.ui.projects.ProjectListScreen
 import com.directorx.editor.ui.settings.SettingsScreen
-import com.directorx.editor.ui.theme.AssayFluxAnimatedSplash
+import com.directorx.editor.ui.theme.AssayFluxAnimatedSplash\nimport com.directorx.editor.ui.theme.AssayFluxLogo
 import com.directorx.editor.ui.theme.DirectorXTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -170,17 +170,24 @@ class MainActivity : ComponentActivity() {
                     pendingEditorOpen = null
                 }
 
-                var showAssayFluxSplash by remember { mutableStateOf(true) }
+                // Brand sequence: approved animated GIF for 1.3s, then the
+                // approved Director X SVG mark for 5s. Keep the same sequence
+                // on the controlled exit so startup and exit feel consistent.
+                var splashStage by remember { mutableIntStateOf(0) } // 0=GIF, 1=SVG, 2=hidden
                 var exitingWithBrandSplash by remember { mutableStateOf(false) }
                 LaunchedEffect(Unit) {
                     delay(1_300L)
-                    if (!exitingWithBrandSplash) showAssayFluxSplash = false
+                    splashStage = 1
+                    delay(5_000L)
+                    if (!exitingWithBrandSplash) splashStage = 2
                 }
                 BackHandler(enabled = currentRoute == "projects" && !exitingWithBrandSplash) {
                     exitingWithBrandSplash = true
-                    showAssayFluxSplash = true
+                    splashStage = 0
                     lifecycleScope.launch {
                         delay(1_300L)
+                        splashStage = 1
+                        delay(5_000L)
                         finish()
                     }
                 }
@@ -256,9 +263,9 @@ class MainActivity : ComponentActivity() {
                         }
                         }
                         AnimatedVisibility(
-                            visible = showAssayFluxSplash,
-                            enter = fadeIn(tween(100)),
-                            exit = fadeOut(tween(200)),
+                            visible = splashStage != 2,
+                            enter = fadeIn(tween(180)),
+                            exit = fadeOut(tween(220)),
                             modifier = Modifier.fillMaxSize(),
                         ) {
                             Box(
@@ -267,11 +274,20 @@ class MainActivity : ComponentActivity() {
                                     .background(Color.White),
                                 contentAlignment = Alignment.Center,
                             ) {
-                                AssayFluxAnimatedSplash(
-                                    modifier = Modifier
-                                        .width(280.dp)
-                                        .aspectRatio(4f),
-                                )
+                                if (splashStage == 0) {
+                                    AssayFluxAnimatedSplash(
+                                        modifier = Modifier
+                                            .width(280.dp)
+                                            .aspectRatio(4f),
+                                    )
+                                } else {
+                                    AssayFluxLogo(
+                                        modifier = Modifier
+                                            .width(280.dp)
+                                            .aspectRatio(1.624f),
+                                        contentDescription = "Director X by AssayFlux",
+                                    )
+                                }
                             }
                         }
                     }
