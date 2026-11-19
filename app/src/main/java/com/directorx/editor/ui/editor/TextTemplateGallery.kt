@@ -18,7 +18,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.toArgb
@@ -611,9 +610,7 @@ private fun TemplateCard(
                     .fillMaxWidth()
                     .height(118.dp)
                     .background(
-                        Brush.verticalGradient(
-                            listOf(accent.copy(alpha = 0.24f), semanticColors.backgroundMid, semanticColors.panel)
-                        )
+                        MaterialTheme.colorScheme.surfaceContainerHigh
                     ),
                 contentAlignment = Alignment.Center
             ) {
@@ -777,13 +774,7 @@ private fun AnimatedTemplateCard(
                     .fillMaxWidth()
                     .height(118.dp)
                     .background(
-                        Brush.verticalGradient(
-                            listOf(
-                                template.accent.copy(alpha = 0.26f),
-                                semanticColors.backgroundMid,
-                                semanticColors.panel
-                            )
-                        )
+                        MaterialTheme.colorScheme.surfaceContainerHigh
                     ),
                 contentAlignment = Alignment.Center
             ) {
