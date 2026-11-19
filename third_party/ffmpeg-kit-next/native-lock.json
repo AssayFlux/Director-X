@@ -14,7 +14,7 @@
     "ffmpegRevision": "38b88335f99e76ed89ff3c93f877fdefce736c13",
     "ffmpegVersion": "8.1.2",
     "securityPatch": "third_party/ffmpeg-kit-next/directorx-security.patch",
-    "securityPatchSha256": "0433ae68f6c8c78c35fc81eb7e2747fa27c513af4d6b97a423603c9132d41965",
+    "securityPatchSha256": "3a8dcc1aac92be38857dc89c6d6dcaed4457933855340c2fc1a948b42f2f0da7",
     "builtAt": "2026-08-02T00:00:00Z",
     "reviewUntil": "2026-10-31"
   },
