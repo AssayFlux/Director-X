@@ -824,7 +824,7 @@ fun SettingsScreen(
                     .padding(top = 14.dp, start = 4.dp, end = 4.dp)
             ) {
                 Text(
-                    text = "AUTHOR'S SECTION",
+                    text = stringResource(R.string.settings_author_section_heading),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
@@ -832,7 +832,7 @@ fun SettingsScreen(
                     modifier = Modifier.fillMaxWidth()
                 )
                 Text(
-                    text = "AssayFlux — building thoughtful tools where creativity meets engineering.",
+                    text = stringResource(R.string.settings_author_section_description),
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,

@@ -2,6 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Director X</string>
     <string name="brand_credit">Diseñado por AssayFlux</string>
+    <string name="settings_author_section_heading">SECCIÓN DEL AUTOR</string>
+    <string name="settings_author_section_description">AssayFlux — creando herramientas cuidadas donde la creatividad se une a la ingeniería.</string>
     <!-- Importación de listas de cortes y marcadores -->
     <string name="cut_list_import_empty">No hay nada que importar: primero pega rangos de tiempo o marcadores</string>
     <string name="cut_list_import_no_valid_rows">No hay filas válidas: hay que corregir %1$d línea(s)</string>
