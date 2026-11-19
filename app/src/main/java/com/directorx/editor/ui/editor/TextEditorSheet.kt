@@ -18,7 +18,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -189,13 +188,7 @@ fun TextEditorSheet(
                     .height(150.dp)
                     .clip(RoundedCornerShape(12.dp))
                     .background(
-                        Brush.verticalGradient(
-                            listOf(
-                                semanticColors.panel.copy(alpha = 0.98f),
-                                semanticColors.panelHighest,
-                                semanticColors.panel
-                            )
-                        )
+                        MaterialTheme.colorScheme.surfaceContainerHigh
                     )
                     .padding(20.dp),
                 contentAlignment = previewAlignment
