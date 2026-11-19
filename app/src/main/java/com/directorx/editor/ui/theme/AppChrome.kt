@@ -325,14 +325,14 @@ fun ClearCutChromeIconButton(
     contentDescription: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    buttonModifier: Modifier = Modifier,
     tint: Color = Color.Unspecified,
     containerColor: Color = Color.Unspecified,
     borderColor: Color = Color.Unspecified,
     shape: Shape = RoundedCornerShape(Radius.md),
     size: Dp = TouchTarget.minimum,
     iconSize: Dp = 18.dp,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    buttonModifier: Modifier = Modifier
 ) {
     val colors = LocalClearCutColors.current
     val interactionSource = remember { MutableInteractionSource() }
