@@ -1,0 +1,2 @@
+- Director X v0.1.0: foundational editing, project, preview, and export improvements.
+- Maintains the approved Director X identity and existing project compatibility.
