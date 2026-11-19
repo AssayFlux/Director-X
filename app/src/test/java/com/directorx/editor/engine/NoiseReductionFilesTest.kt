@@ -15,7 +15,7 @@ class NoiseReductionFilesTest {
         val context = object : android.content.ContextWrapper(null) {}
         val engine = NoiseReductionEngine(
             context = context,
-            ffmpegEngine = FFmpegEngine(context)
+            audioEngine = AudioEngine(context, MemoryTrimRegistry())
         )
 
         assertFalse(engine.isDeepFilterNetAvailable())
