@@ -62,7 +62,7 @@ else
   exit 2
 fi
 bash $prepareLiteral $sourceLiteral/scripts/source.sh
-export version_ffmpeg=f8bb61cd57a714b4eb8a9f8002dbb5214eed48c7
+export version_ffmpeg=2473872b7ceadbdf3235c0a482f58753e3f6dacb
 export RECONF_fribidi=1
 bash ./nix-android.sh -p android-r27d$skipFfmpeg --enable-lib-libass --enable-lib-libjxl --enable-lib-android-media-codec --enable-lib-android-zlib --enable-lib-openh264 --jobs=8
 "@
