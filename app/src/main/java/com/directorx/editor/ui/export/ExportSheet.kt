@@ -790,7 +790,13 @@ fun ExportSheet(
                 onClick = {
                     val options = visibleResolutions
                     val next = options[(options.indexOf(config.resolution).coerceAtLeast(0) + 1) % options.size]
-                    onConfigChanged(config.copy(resolution = next, platformPreset = null))
+                    onConfigChanged(config.copy(
+                        resolution = next,
+                        customOutputWidth = null,
+                        customOutputHeight = null,
+                        bitrateOverride = null,
+                        platformPreset = null,
+                    ))
                 }
             )
                 ExportSummarySettingRow(
@@ -801,7 +807,7 @@ fun ExportSheet(
                 onClick = {
                     val options = visibleFrameRates
                     val next = options[(options.indexOf(config.frameRate).coerceAtLeast(0) + 1) % options.size]
-                    onConfigChanged(config.copy(frameRate = next, platformPreset = null))
+                    onConfigChanged(config.copy(frameRate = next, bitrateOverride = null, platformPreset = null))
                 }
             )
                 ExportSummarySettingRow(
@@ -1318,7 +1324,7 @@ fun ExportSheet(
                     ) {
                         visibleResolutions.forEach { resolution ->
                             FilterChip(
-                                onClick = { onConfigChanged(config.copy(resolution = resolution, customOutputWidth = null, customOutputHeight = null, bitrateOverride = null)) },
+                                onClick = { onConfigChanged(config.copy(resolution = resolution, customOutputWidth = null, customOutputHeight = null, bitrateOverride = null, platformPreset = null)) },
                                 enabled = resolutionSupport[resolution] == true,
                                 label = { Text(resolution.label, style = MaterialTheme.typography.labelMedium) },
                                 selected = config.resolution == resolution,
@@ -1338,7 +1344,7 @@ fun ExportSheet(
                     ) {
                         visibleFrameRates.forEach { frameRate ->
                             FilterChip(
-                                onClick = { onConfigChanged(config.copy(frameRate = frameRate, bitrateOverride = null)) },
+                                onClick = { onConfigChanged(config.copy(frameRate = frameRate, bitrateOverride = null, platformPreset = null)) },
                                 enabled = frameRateSupport[frameRate] == true,
                                 label = { Text(stringResource(R.string.export_fps_value, frameRate), style = MaterialTheme.typography.labelMedium) },
                                 selected = config.frameRate == frameRate,
