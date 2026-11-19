@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate ClearCut OTIO output with the official OpenTimelineIO adapter.
+"""Validate Director X OTIO output with the official OpenTimelineIO adapter.
 
 Usage:
     python scripts/verify_otio_exports.py app/build/exports
@@ -69,7 +69,7 @@ def validate_file(otio, path: Path) -> None:
 
 
 def timeline_shape(timeline) -> list:
-    """The content a ClearCut export promises, reduced to comparable values.
+    """The content a Director X export promises, reduced to comparable values.
 
     Deliberately not a JSON diff: the adapter is free to reorder keys, normalise
     numbers and add defaults. What must survive is the edit itself — how many tracks,
@@ -101,13 +101,13 @@ def timeline_shape(timeline) -> list:
 
 
 def validate_structure(otio, timeline, root: dict, path: Path) -> None:
-    """Round-trip a ClearCut export through the adapter and prove nothing was lost.
+    """Round-trip a Director X export through the adapter and prove nothing was lost.
 
     Comparing the parsed timeline against the same file's JSON would be a tautology:
     both sides come from the same bytes, so any file agrees with itself. The real
-    question is whether the official adapter preserves ClearCut's edit through a
+    question is whether the official adapter preserves Director X's edit through a
     write and re-read, which is what an interchange claim actually rests on. Only
-    ClearCut's own exports are round-tripped, so third-party OTIO stays readable.
+    Director X's own exports are round-tripped, so third-party OTIO stays readable.
     """
     metadata = root.get("metadata") or {}
     if OTIO_SCHEMA_METADATA_KEY not in metadata:
@@ -124,7 +124,7 @@ def validate_structure(otio, timeline, root: dict, path: Path) -> None:
 
 
 def validate_contract_metadata(root: dict, path: Path) -> None:
-    """Validate ClearCut's optional metadata without rejecting third-party OTIO."""
+    """Validate Director X's optional metadata without rejecting third-party OTIO."""
     metadata = root.get("metadata") or {}
     declared_version = metadata.get(OTIO_SCHEMA_METADATA_KEY)
     declared_range = metadata.get(OTIO_ADAPTER_METADATA_KEY)
@@ -132,12 +132,12 @@ def validate_contract_metadata(root: dict, path: Path) -> None:
         return
     if declared_version not in SUPPORTED_OTIO_SCHEMA_VERSIONS:
         raise ValueError(
-            f"{path}: ClearCut OTIO schema version metadata must be one of "
+            f"{path}: Director X OTIO schema version metadata must be one of "
             f"{sorted(SUPPORTED_OTIO_SCHEMA_VERSIONS)}, got {declared_version!r}"
         )
     if declared_range != OTIO_ADAPTER_RANGE:
         raise ValueError(
-            f"{path}: ClearCut OTIO adapter range metadata must be {OTIO_ADAPTER_RANGE!r}, "
+            f"{path}: Director X OTIO adapter range metadata must be {OTIO_ADAPTER_RANGE!r}, "
             f"got {declared_range!r}"
         )
 
@@ -155,10 +155,10 @@ def _time_range(start: float, duration: float, rate: float) -> dict:
 
 
 def clearcut_export_fixture(rate: float = 24.0) -> dict:
-    """A timeline shaped like a real ClearCut export.
+    """A timeline shaped like a real Director X export.
 
     The gate used to self-test against a Timeline whose stack had no children, which
-    proved the adapter could load but nothing about ClearCut's actual output. This
+    proved the adapter could load but nothing about Director X's actual output. This
     mirrors what `TimelineExchangeEngine.buildOtioStack` emits: a video track carrying
     a clip with an external reference, an intentional gap, a speed effect and a
     transition, plus a separate audio track.
@@ -190,7 +190,7 @@ def clearcut_export_fixture(rate: float = 24.0) -> dict:
     }
     gap = {
         "OTIO_SCHEMA": "Gap.1",
-        "name": "ClearCut gap",
+        "name": "Director X gap",
         "effects": [],
         "markers": [],
         "enabled": True,
@@ -207,7 +207,7 @@ def clearcut_export_fixture(rate: float = 24.0) -> dict:
 
     return {
         "OTIO_SCHEMA": "Timeline.1",
-        "name": "ClearCut OTIO gate fixture",
+        "name": "Director X OTIO gate fixture",
         "metadata": {
             "clearcut_version": "3.0.0",
             "export_format": "otio",
