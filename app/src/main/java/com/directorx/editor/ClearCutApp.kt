@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltAndroidApp
-class ClearCutApp : Application(), Configuration.Provider {
+class DirectorXApp : Application(), Configuration.Provider {
 
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
@@ -65,11 +65,11 @@ class ClearCutApp : Application(), Configuration.Provider {
             .build()
 
     companion object {
-        const val CHANNEL_EXPORT = "clearcut_export"
+        const val CHANNEL_EXPORT = "directorx_export"
         // Source from BuildConfig so the constant can never drift from the gradle versionName.
         // Consumed by model-download User-Agent headers, crash reports, and the about dialog —
         // a stale value here would misreport the user's actual build.
-        val VERSION: String = "v${BuildConfig.VERSION_NAME}"
+        val VERSION: String = BuildConfig.VERSION_NAME
     }
 
     override fun onCreate() {
