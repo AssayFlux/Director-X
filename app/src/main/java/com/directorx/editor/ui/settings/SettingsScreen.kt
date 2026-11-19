@@ -62,11 +62,11 @@ import com.directorx.editor.engine.segmentation.SegmentationModelState
 import com.directorx.editor.engine.whisper.WhisperModelState
 import com.directorx.editor.model.*
 import com.directorx.editor.ui.ClearCutTestTags
-import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.DirectorXAccents
 import com.directorx.editor.ui.theme.ClearCutChromeIconButton
 import com.directorx.editor.ui.theme.ClearCutDialogIcon
 import com.directorx.editor.ui.theme.ClearCutFilterChip
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.ClearCutMetricPill
 import com.directorx.editor.ui.theme.ClearCutPrimaryButton
 import com.directorx.editor.ui.theme.AssayFluxLogo
@@ -198,7 +198,7 @@ fun SettingsScreen(
         settingsResetNotice?.let {
             SettingsFeedbackBanner(
                 message = stringResource(R.string.settings_reset_notice_message),
-                accentOverride = ClearCutAccents.Peach,
+                accentOverride = DirectorXAccents.Peach,
                 iconOverride = Icons.Default.Info,
                 onDismiss = viewModel::dismissSettingsResetNotice
             )
@@ -223,7 +223,7 @@ fun SettingsScreen(
         ) {
             SettingsDropdown(
                 icon = Icons.Default.Movie,
-                accent = ClearCutAccents.Rosewater,
+                accent = DirectorXAccents.Rosewater,
                 label = stringResource(R.string.settings_default_resolution),
                 description = stringResource(R.string.settings_default_resolution_description),
                 value = settings.defaultResolution.label,
@@ -232,7 +232,7 @@ fun SettingsScreen(
             )
             SettingsDropdown(
                 icon = Icons.Default.Schedule,
-                accent = ClearCutAccents.Sapphire,
+                accent = DirectorXAccents.Sapphire,
                 label = stringResource(R.string.settings_default_frame_rate),
                 description = stringResource(R.string.settings_default_frame_rate_description),
                 value = "${settings.defaultFrameRate}fps",
@@ -241,7 +241,7 @@ fun SettingsScreen(
             )
             SettingsDropdown(
                 icon = Icons.Default.CropSquare,
-                accent = ClearCutAccents.Mauve,
+                accent = DirectorXAccents.Mauve,
                 label = stringResource(R.string.settings_default_aspect_ratio),
                 description = stringResource(R.string.settings_default_aspect_ratio_description),
                 value = effectiveDefaultAspectRatio.label,
@@ -250,7 +250,7 @@ fun SettingsScreen(
             )
             SettingsDropdown(
                 icon = Icons.Default.Memory,
-                accent = ClearCutAccents.Peach,
+                accent = DirectorXAccents.Peach,
                 label = stringResource(R.string.settings_default_codec),
                 description = stringResource(R.string.settings_default_codec_description),
                 value = listOf("H.264", "H.265 (HEVC)", "AV1", "VP9")[
@@ -261,13 +261,13 @@ fun SettingsScreen(
             )
             SettingsTile(
                 icon = Icons.Default.Palette,
-                accent = ClearCutAccents.Teal,
+                accent = DirectorXAccents.Teal,
                 label = stringResource(R.string.settings_project_color_policy),
                 description = stringResource(R.string.settings_project_color_policy_description)
             ) {
                 SettingsStatusBadge(
                     text = stringResource(R.string.settings_project_color_new_default),
-                    accent = ClearCutAccents.Teal
+                    accent = DirectorXAccents.Teal
                 )
             }
         }
@@ -292,7 +292,7 @@ fun SettingsScreen(
         ) {
             SettingsToggle(
                 icon = Icons.Default.Save,
-                accent = ClearCutAccents.Mauve,
+                accent = DirectorXAccents.Mauve,
                 label = stringResource(R.string.settings_auto_save),
                 description = stringResource(R.string.settings_auto_save_description),
                 checked = settings.autoSaveEnabled,
@@ -301,7 +301,7 @@ fun SettingsScreen(
             if (settings.autoSaveEnabled) {
                 SettingsSlider(
                     icon = Icons.Default.Schedule,
-                    accent = ClearCutAccents.Sapphire,
+                    accent = DirectorXAccents.Sapphire,
                     label = stringResource(R.string.settings_auto_save_interval),
                     description = stringResource(R.string.settings_auto_save_description),
                     value = settings.autoSaveIntervalSec.toFloat(),
@@ -312,7 +312,7 @@ fun SettingsScreen(
             }
             SettingsDropdown(
                 icon = Icons.Default.Tune,
-                accent = ClearCutAccents.Sky,
+                accent = DirectorXAccents.Sky,
                 label = stringResource(R.string.settings_proxy_resolution),
                 description = stringResource(R.string.settings_proxy_resolution_description),
                 value = settings.proxyResolution.label,
@@ -321,7 +321,7 @@ fun SettingsScreen(
             )
             SettingsSwitch(
                 icon = Icons.Default.Layers,
-                accent = ClearCutAccents.Blue,
+                accent = DirectorXAccents.Blue,
                 label = stringResource(R.string.settings_enable_proxy),
                 description = stringResource(R.string.settings_enable_proxy_description),
                 checked = settings.proxyEnabled,
@@ -329,7 +329,7 @@ fun SettingsScreen(
             )
             SettingsSwitch(
                 icon = Icons.Default.GraphicEq,
-                accent = ClearCutAccents.Green,
+                accent = DirectorXAccents.Green,
                 label = stringResource(R.string.settings_show_waveforms),
                 description = stringResource(R.string.settings_show_waveforms_desc),
                 checked = settings.showWaveforms,
@@ -337,7 +337,7 @@ fun SettingsScreen(
             )
             SettingsSwitch(
                 icon = Icons.Default.MusicNote,
-                accent = ClearCutAccents.Green,
+                accent = DirectorXAccents.Green,
                 label = stringResource(R.string.settings_snap_beat),
                 description = stringResource(R.string.settings_snap_beat_desc),
                 checked = settings.snapToBeat,
@@ -345,7 +345,7 @@ fun SettingsScreen(
             )
             SettingsSwitch(
                 icon = Icons.Default.Bookmark,
-                accent = ClearCutAccents.Yellow,
+                accent = DirectorXAccents.Yellow,
                 label = stringResource(R.string.settings_snap_markers),
                 description = stringResource(R.string.settings_snap_markers_desc),
                 checked = settings.snapToMarker,
@@ -353,7 +353,7 @@ fun SettingsScreen(
             )
             SettingsChoiceHeader(
                 icon = Icons.Default.ViewStream,
-                accent = ClearCutAccents.Teal,
+                accent = DirectorXAccents.Teal,
                 label = stringResource(R.string.settings_default_track_height),
                 description = stringResource(R.string.settings_default_track_height_description)
             )
@@ -369,7 +369,7 @@ fun SettingsScreen(
                         selected = settings.defaultTrackHeight == height,
                         onClick = { viewModel.setDefaultTrackHeight(height) },
                         text = "${height}dp",
-                        accent = ClearCutAccents.Teal,
+                        accent = DirectorXAccents.Teal,
                         icon = if (settings.defaultTrackHeight == height) Icons.Default.Check else null
                     )
                 }
@@ -385,7 +385,7 @@ fun SettingsScreen(
         ) {
                 SettingsSwitch(
                     icon = Icons.Default.Wifi,
-                    accent = ClearCutAccents.Sapphire,
+                    accent = DirectorXAccents.Sapphire,
                     label = stringResource(R.string.settings_ai_wifi_only),
                     description = stringResource(R.string.settings_ai_wifi_only_description),
                     checked = settings.aiModelWifiOnly,
@@ -393,7 +393,7 @@ fun SettingsScreen(
                 )
                 SettingsSwitch(
                     icon = Icons.Default.PrivacyTip,
-                    accent = ClearCutAccents.Green,
+                    accent = DirectorXAccents.Green,
                     label = stringResource(R.string.settings_mediapipe_consent),
                     description = stringResource(R.string.settings_mediapipe_consent_description),
                     checked = settings.mediaPipeConsentVersion >=
@@ -407,7 +407,7 @@ fun SettingsScreen(
                 )
                 SettingsAiModelRow(
                     icon = Icons.Default.RecordVoiceOver,
-                    accent = ClearCutAccents.Mauve,
+                    accent = DirectorXAccents.Mauve,
                     label = stringResource(R.string.settings_whisper_model),
                     description = stringResource(R.string.ai_whisper_description),
                     stateLabel = whisperModelState.displayLabel(),
@@ -434,7 +434,7 @@ fun SettingsScreen(
                 )
                 SettingsAiModelRow(
                     icon = Icons.Default.PersonOff,
-                    accent = ClearCutAccents.Green,
+                    accent = DirectorXAccents.Green,
                     label = stringResource(R.string.settings_segmentation_model),
                     description = stringResource(R.string.ai_segmentation_description),
                     stateLabel = segmentationModelState.displayLabel(),
@@ -461,13 +461,13 @@ fun SettingsScreen(
                 )
                 SettingsTile(
                     icon = Icons.Default.Mic,
-                    accent = ClearCutAccents.Peach,
+                    accent = DirectorXAccents.Peach,
                     label = stringResource(R.string.settings_piper_model),
                     description = stringResource(R.string.settings_piper_system_voice_description)
                 ) {
                     SettingsStatusBadge(
                         text = stringResource(R.string.settings_piper_system_voice_status),
-                        accent = ClearCutAccents.Peach
+                        accent = DirectorXAccents.Peach
                     )
                 }
             }
@@ -482,7 +482,7 @@ fun SettingsScreen(
         ) {
             SettingsTile(
                 icon = Icons.Default.Storage,
-                accent = ClearCutAccents.Peach,
+                accent = DirectorXAccents.Peach,
                 label = stringResource(R.string.settings_project_storage_title),
                 description = stringResource(
                     R.string.settings_project_storage_proxy,
@@ -491,13 +491,13 @@ fun SettingsScreen(
             ) {
                 SettingsStatusBadge(
                     text = formatStorageBytes(projectStorage.totalBytes),
-                    accent = if (projectStorage.totalBytes > 0L) ClearCutAccents.Peach else LocalClearCutColors.current.overlay
+                    accent = if (projectStorage.totalBytes > 0L) DirectorXAccents.Peach else LocalDirectorXColors.current.overlay
                 )
             }
             if (projectStorage.proxyCacheBytes > 0L) {
                 SettingsActionRow(
                     icon = Icons.Default.DeleteSweep,
-                    accent = ClearCutAccents.Peach,
+                    accent = DirectorXAccents.Peach,
                     label = stringResource(R.string.settings_clear_proxy_cache),
                     description = formatStorageBytes(projectStorage.proxyCacheBytes),
                     actionLabel = if (projectStorage.isClearingProxies) "…" else stringResource(R.string.settings_clear_proxy_cache),
@@ -517,10 +517,10 @@ fun SettingsScreen(
             title = stringResource(R.string.settings_appearance),
             description = stringResource(R.string.settings_appearance_description)
         ) {
-            val appearanceModes = com.directorx.editor.ui.theme.ClearCutThemeDefaults.availableThemes
+            val appearanceModes = com.directorx.editor.ui.theme.DirectorXThemeDefaults.availableThemes
             SettingsDropdown(
                 icon = Icons.Default.Contrast,
-                accent = ClearCutAccents.Sky,
+                accent = DirectorXAccents.Sky,
                 label = stringResource(R.string.settings_appearance_mode),
                 description = stringResource(R.string.settings_appearance_mode_description),
                 value = settings.appearanceMode.displayLabel(),
@@ -536,7 +536,7 @@ fun SettingsScreen(
         ) {
             SettingsDropdown(
                 icon = Icons.Default.Tune,
-                accent = ClearCutAccents.Mauve,
+                accent = DirectorXAccents.Mauve,
                 label = stringResource(R.string.settings_default_mode),
                 description = stringResource(R.string.settings_default_mode_description),
                 value = selectedEditorMode.label,
@@ -545,7 +545,7 @@ fun SettingsScreen(
             )
             SettingsToggle(
                 icon = Icons.Default.TouchApp,
-                accent = ClearCutAccents.Sapphire,
+                accent = DirectorXAccents.Sapphire,
                 label = stringResource(R.string.settings_haptic_feedback),
                 description = stringResource(R.string.settings_haptic_desc),
                 checked = settings.hapticEnabled,
@@ -553,7 +553,7 @@ fun SettingsScreen(
             )
             SettingsChoiceHeader(
                 icon = Icons.Default.PhotoLibrary,
-                accent = ClearCutAccents.Peach,
+                accent = DirectorXAccents.Peach,
                 label = stringResource(R.string.settings_thumbnail_cache),
                 description = stringResource(R.string.settings_thumbnail_cache_description)
             )
@@ -574,14 +574,14 @@ fun SettingsScreen(
                             else viewModel.setThumbnailCacheSize(size)
                         },
                         text = label,
-                        accent = ClearCutAccents.Peach,
+                        accent = DirectorXAccents.Peach,
                         icon = if (settings.thumbnailCacheSizeMb == size) Icons.Default.Check else null
                     )
                 }
             }
             SettingsChoiceHeader(
                 icon = Icons.Default.HighQuality,
-                accent = ClearCutAccents.Yellow,
+                accent = DirectorXAccents.Yellow,
                 label = stringResource(R.string.settings_export_quality),
                 description = stringResource(R.string.settings_export_quality_description)
             )
@@ -602,7 +602,7 @@ fun SettingsScreen(
                         selected = settings.defaultExportQuality == key,
                         onClick = { viewModel.setDefaultExportQuality(key) },
                         text = label,
-                        accent = ClearCutAccents.Yellow,
+                        accent = DirectorXAccents.Yellow,
                         icon = if (settings.defaultExportQuality == key) Icons.Default.Check else null
                     )
                 }
@@ -616,7 +616,7 @@ fun SettingsScreen(
         ) {
             SettingsTile(
                 icon = Icons.Default.School,
-                accent = ClearCutAccents.Sapphire,
+                accent = DirectorXAccents.Sapphire,
                 label = stringResource(R.string.settings_replay_tutorial),
                 description = stringResource(R.string.settings_replay_tutorial_row_description),
                 onClick = onReplayTutorial,
@@ -624,7 +624,7 @@ fun SettingsScreen(
             ) {
                 ClearCutMetricPill(
                     text = stringResource(R.string.settings_replay_tutorial_action),
-                    accent = ClearCutAccents.Sapphire
+                    accent = DirectorXAccents.Sapphire
                 )
             }
         }
@@ -636,7 +636,7 @@ fun SettingsScreen(
         ) {
             SettingsSwitch(
                 icon = Icons.Default.ViewStream,
-                accent = ClearCutAccents.Teal,
+                accent = DirectorXAccents.Teal,
                 label = stringResource(R.string.settings_diagnostic_timeline_shape),
                 description = stringResource(R.string.settings_diagnostic_timeline_shape_description),
                 checked = settings.includeDiagnosticTimelineShape,
@@ -644,7 +644,7 @@ fun SettingsScreen(
             )
             SettingsSwitch(
                 icon = Icons.Default.BugReport,
-                accent = ClearCutAccents.Peach,
+                accent = DirectorXAccents.Peach,
                 label = stringResource(R.string.settings_diagnostic_raw_error_text),
                 description = stringResource(R.string.settings_diagnostic_raw_error_text_description),
                 checked = settings.includeDiagnosticRawErrorText,
@@ -652,7 +652,7 @@ fun SettingsScreen(
             )
             SettingsSwitch(
                 icon = Icons.Default.Memory,
-                accent = ClearCutAccents.Peach,
+                accent = DirectorXAccents.Peach,
                 label = stringResource(R.string.settings_diagnostic_heap_dump),
                 description = stringResource(R.string.settings_diagnostic_heap_dump_description),
                 checked = settings.includeDiagnosticHeapDump,
@@ -680,7 +680,7 @@ fun SettingsScreen(
         ) {
             SettingsActionRow(
                 icon = Icons.Default.Shield,
-                accent = ClearCutAccents.Mauve,
+                accent = DirectorXAccents.Mauve,
                 label = stringResource(R.string.settings_privacy_open_label),
                 description = stringResource(R.string.settings_privacy_open_description),
                 actionLabel = stringResource(R.string.settings_privacy_open_action),
@@ -696,7 +696,7 @@ fun SettingsScreen(
         ) {
             SettingsActionRow(
                 icon = Icons.Default.Info,
-                accent = ClearCutAccents.Teal,
+                accent = DirectorXAccents.Teal,
                 label = stringResource(R.string.settings_open_source_licenses),
                 description = stringResource(R.string.settings_open_source_licenses_description),
                 actionLabel = stringResource(R.string.settings_open_source_licenses_action),
@@ -714,7 +714,7 @@ fun SettingsScreen(
             ) {
                 SettingsSwitch(
                     icon = Icons.Default.SystemUpdate,
-                    accent = ClearCutAccents.Sky,
+                    accent = DirectorXAccents.Sky,
                     label = stringResource(R.string.settings_update_check_label),
                     description = stringResource(R.string.settings_update_check_description),
                     checked = settings.updateCheckEnabled,
@@ -724,7 +724,7 @@ fun SettingsScreen(
                     if (updateCheck.updateAvailable) {
                         SettingsActionRow(
                             icon = Icons.Default.NewReleases,
-                            accent = ClearCutAccents.Green,
+                            accent = DirectorXAccents.Green,
                             label = stringResource(
                                 R.string.settings_update_available_label,
                                 updateCheck.latestVersion.orEmpty()
@@ -744,7 +744,7 @@ fun SettingsScreen(
                     } else {
                         SettingsActionRow(
                             icon = Icons.Default.SystemUpdate,
-                            accent = ClearCutAccents.Sky,
+                            accent = DirectorXAccents.Sky,
                             label = stringResource(R.string.settings_update_check_now_label),
                             description = stringResource(R.string.settings_update_check_now_description),
                             actionLabel = if (updateCheck.isChecking) {
@@ -766,8 +766,8 @@ fun SettingsScreen(
             title = stringResource(R.string.settings_about),
             description = stringResource(R.string.settings_about_description)
         ) {
-            SettingsInfo(Icons.Default.Info, stringResource(R.string.settings_version), BuildConfig.VERSION_NAME, ClearCutAccents.Sapphire)
-            SettingsInfo(Icons.Default.AutoAwesome, stringResource(R.string.brand_credit), "AssayFlux", ClearCutAccents.Mauve)
+            SettingsInfo(Icons.Default.Info, stringResource(R.string.settings_version), BuildConfig.VERSION_NAME, DirectorXAccents.Sapphire)
+            SettingsInfo(Icons.Default.AutoAwesome, stringResource(R.string.brand_credit), "AssayFlux", DirectorXAccents.Mauve)
         }
         } // End SettingsCategory.APP content
 
@@ -800,7 +800,7 @@ fun SettingsScreen(
             ) {
                 androidx.compose.material3.Surface(
                     shape = androidx.compose.foundation.shape.RoundedCornerShape(Radius.xxl),
-                    color = LocalClearCutColors.current.panelHighest,
+                    color = LocalDirectorXColors.current.panelHighest,
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(min = 480.dp, max = 640.dp)
@@ -864,7 +864,7 @@ fun SettingsScreen(
             ) {
                 androidx.compose.material3.Surface(
                     shape = androidx.compose.foundation.shape.RoundedCornerShape(Radius.xxl),
-                    color = LocalClearCutColors.current.panelHighest,
+                    color = LocalDirectorXColors.current.panelHighest,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(560.dp)
@@ -900,7 +900,7 @@ fun SettingsScreen(
 
 @Composable
 private fun SettingsCategoryOverview(onSelect: (SettingsCategory) -> Unit) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -930,10 +930,10 @@ private fun SettingsCategoryOverview(onSelect: (SettingsCategory) -> Unit) {
             )
         ).forEach { (category, title, description) ->
             val (icon, accent) = when (category) {
-                SettingsCategory.EXPORT -> Icons.Default.Movie to ClearCutAccents.Rosewater
-                SettingsCategory.EDITING -> Icons.Default.Timeline to ClearCutAccents.Sapphire
-                SettingsCategory.AI_STORAGE -> Icons.Default.Psychology to ClearCutAccents.Green
-                SettingsCategory.APP -> Icons.Default.Tune to ClearCutAccents.Mauve
+                SettingsCategory.EXPORT -> Icons.Default.Movie to DirectorXAccents.Rosewater
+                SettingsCategory.EDITING -> Icons.Default.Timeline to DirectorXAccents.Sapphire
+                SettingsCategory.AI_STORAGE -> Icons.Default.Psychology to DirectorXAccents.Green
+                SettingsCategory.APP -> Icons.Default.Tune to DirectorXAccents.Mauve
             }
             Surface(
                 modifier = Modifier
@@ -1022,20 +1022,20 @@ private fun SettingsAiModelRemovalConfirmDialog(
         icon = {
             ClearCutDialogIcon(
                 icon = Icons.Default.Delete,
-                accent = ClearCutAccents.Red
+                accent = DirectorXAccents.Red
             )
         },
         title = {
             Text(
                 text = title,
-                color = LocalClearCutColors.current.text,
+                color = LocalDirectorXColors.current.text,
                 style = MaterialTheme.typography.titleLarge
             )
         },
         text = {
             Text(
                 text = body,
-                color = LocalClearCutColors.current.subtext,
+                color = LocalDirectorXColors.current.subtext,
                 style = MaterialTheme.typography.bodyMedium
             )
         },
@@ -1044,7 +1044,7 @@ private fun SettingsAiModelRemovalConfirmDialog(
                 text = stringResource(R.string.ai_model_remove_confirm),
                 onClick = onConfirm,
                 icon = Icons.Default.Delete,
-                contentColor = ClearCutAccents.Red
+                contentColor = DirectorXAccents.Red
             )
         },
         dismissButton = {
@@ -1053,9 +1053,9 @@ private fun SettingsAiModelRemovalConfirmDialog(
                 onClick = onDismissRequest
             )
         },
-        containerColor = LocalClearCutColors.current.panelHighest,
-        titleContentColor = LocalClearCutColors.current.text,
-        textContentColor = LocalClearCutColors.current.subtext,
+        containerColor = LocalDirectorXColors.current.panelHighest,
+        titleContentColor = LocalDirectorXColors.current.text,
+        textContentColor = LocalDirectorXColors.current.subtext,
         shape = RoundedCornerShape(Radius.xxl)
     )
 }
@@ -1080,7 +1080,7 @@ private fun SettingsHero(
                 icon = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = stringResource(R.string.back),
                 onClick = onBack,
-                tint = LocalClearCutColors.current.text,
+                tint = LocalDirectorXColors.current.text,
                 containerColor = Color.Transparent,
                 borderColor = Color.Transparent,
                 modifier = Modifier.testTag(ClearCutTestTags.SETTINGS_BACK)
@@ -1094,7 +1094,7 @@ private fun SettingsHero(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     stringResource(R.string.settings_title),
-                    color = LocalClearCutColors.current.text,
+                    color = LocalDirectorXColors.current.text,
                     style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
@@ -1103,14 +1103,14 @@ private fun SettingsHero(
                 Spacer(Modifier.height(4.dp))
                 Text(
                     stringResource(R.string.settings_subtitle),
-                    color = LocalClearCutColors.current.subtext,
+                    color = LocalDirectorXColors.current.subtext,
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     stringResource(R.string.assayflux_developer_credit),
-                    color = LocalClearCutColors.current.subtext,
+                    color = LocalDirectorXColors.current.subtext,
                     style = MaterialTheme.typography.labelSmall,
                 )
             }
@@ -1118,7 +1118,7 @@ private fun SettingsHero(
 
         HorizontalDivider(
             modifier = Modifier.padding(top = Spacing.lg),
-            color = LocalClearCutColors.current.cardStroke
+            color = LocalDirectorXColors.current.cardStroke
         )
 
         Row(
@@ -1129,20 +1129,20 @@ private fun SettingsHero(
                 icon = Icons.Default.Tune,
                 label = stringResource(R.string.settings_editor),
                 value = editorModeLabel,
-                accent = ClearCutAccents.Mauve,
+                accent = DirectorXAccents.Mauve,
                 modifier = Modifier.weight(1f)
             )
             Box(
                 modifier = Modifier
                     .width(1.dp)
                     .height(56.dp)
-                    .background(LocalClearCutColors.current.cardStroke)
+                    .background(LocalDirectorXColors.current.cardStroke)
             )
             SettingsOverviewStat(
                 icon = Icons.Default.Schedule,
                 label = stringResource(R.string.settings_auto_save),
                 value = if (settings.autoSaveEnabled) "${settings.autoSaveIntervalSec}s" else stringResource(R.string.settings_off),
-                accent = ClearCutAccents.Green,
+                accent = DirectorXAccents.Green,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -1184,7 +1184,7 @@ private fun SettingsOverviewStat(
             )
             Text(
                 text = value,
-                color = LocalClearCutColors.current.text,
+                color = LocalDirectorXColors.current.text,
                 style = MaterialTheme.typography.titleMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -1201,8 +1201,8 @@ private fun SettingsFeedbackBanner(
     iconOverride: ImageVector? = null,
     onDismiss: (() -> Unit)? = null
 ) {
-    val colors = LocalClearCutColors.current
-    val accent = accentOverride ?: if (isError) ClearCutAccents.Red else ClearCutAccents.Green
+    val colors = LocalDirectorXColors.current
+    val accent = accentOverride ?: if (isError) DirectorXAccents.Red else DirectorXAccents.Green
     val icon = iconOverride ?: if (isError) Icons.Default.Error else Icons.Default.CheckCircle
     Surface(
         modifier = Modifier
@@ -1230,7 +1230,7 @@ private fun SettingsFeedbackBanner(
             SettingsTileIcon(icon = icon, accent = accent)
             Text(
                 text = message,
-                color = LocalClearCutColors.current.text,
+                color = LocalDirectorXColors.current.text,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.weight(1f),
                 maxLines = 3,
@@ -1255,7 +1255,7 @@ private fun SettingsDiagnosticExportRow(
 ) {
     SettingsTile(
         icon = Icons.Default.ReportProblem,
-        accent = ClearCutAccents.Sapphire,
+        accent = DirectorXAccents.Sapphire,
         label = stringResource(R.string.settings_diagnostic_export),
         description = stringResource(R.string.settings_diagnostic_export_description)
     ) {
@@ -1271,19 +1271,19 @@ private fun SettingsDiagnosticExportRow(
                     ) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(16.dp),
-                            color = ClearCutAccents.Sapphire,
+                            color = DirectorXAccents.Sapphire,
                             strokeWidth = 2.dp
                         )
                         SettingsStatusBadge(
                             text = stringResource(R.string.settings_diagnostic_exporting),
-                            accent = ClearCutAccents.Sapphire
+                            accent = DirectorXAccents.Sapphire
                         )
                     }
                 }
                 state.bundle != null -> {
                     SettingsStatusBadge(
                         text = stringResource(R.string.settings_diagnostic_saved),
-                        accent = ClearCutAccents.Green
+                        accent = DirectorXAccents.Green
                     )
                     Text(
                         text = stringResource(
@@ -1291,7 +1291,7 @@ private fun SettingsDiagnosticExportRow(
                             state.bundle.fileName,
                             formatStorageBytes(state.bundle.sizeBytes)
                         ),
-                        color = LocalClearCutColors.current.subtext,
+                        color = LocalDirectorXColors.current.subtext,
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.widthIn(max = 190.dp),
                         maxLines = 2,
@@ -1305,14 +1305,14 @@ private fun SettingsDiagnosticExportRow(
                             text = stringResource(R.string.settings_diagnostic_share),
                             onClick = { onShare(state.bundle) },
                             icon = Icons.Default.Share,
-                            contentColor = ClearCutAccents.Green
+                            contentColor = DirectorXAccents.Green
                         )
                         ClearCutSecondaryButton(
                             text = stringResource(R.string.settings_diagnostic_rebuild),
                             onClick = onExport,
                             icon = Icons.Default.Refresh,
                             enabled = !state.isExporting,
-                            contentColor = ClearCutAccents.Sapphire
+                            contentColor = DirectorXAccents.Sapphire
                         )
                     }
                 }
@@ -1321,7 +1321,7 @@ private fun SettingsDiagnosticExportRow(
                         text = stringResource(R.string.settings_diagnostic_export_action),
                         onClick = onExport,
                         icon = Icons.Default.Save,
-                        contentColor = ClearCutAccents.Sapphire
+                        contentColor = DirectorXAccents.Sapphire
                     )
                 }
             }
@@ -1372,7 +1372,7 @@ private fun SettingsNotificationPermissionRow(
         Icon(
             imageVector = Icons.AutoMirrored.Filled.OpenInNew,
             contentDescription = stringResource(R.string.settings_export_notifications_open),
-            tint = LocalClearCutColors.current.subtext,
+            tint = LocalDirectorXColors.current.subtext,
             modifier = Modifier.size(18.dp)
         )
     }
@@ -1386,17 +1386,17 @@ private enum class NotificationPermissionSettingsStatus(
     Enabled(
         badgeResId = R.string.settings_export_notifications_enabled,
         descriptionResId = R.string.settings_export_notifications_enabled_description,
-        accent = ClearCutAccents.Green
+        accent = DirectorXAccents.Green
     ),
     Off(
         badgeResId = R.string.settings_export_notifications_off,
         descriptionResId = R.string.settings_export_notifications_off_description,
-        accent = ClearCutAccents.Yellow
+        accent = DirectorXAccents.Yellow
     ),
     NotRequired(
         badgeResId = R.string.settings_export_notifications_not_required,
         descriptionResId = R.string.settings_export_notifications_not_required_description,
-        accent = ClearCutAccents.Sapphire
+        accent = DirectorXAccents.Sapphire
     )
 }
 
@@ -1420,7 +1420,7 @@ private fun SettingsStorageOverview(
 ) {
     SettingsTile(
         icon = Icons.Default.Storage,
-        accent = ClearCutAccents.Rosewater,
+        accent = DirectorXAccents.Rosewater,
         label = stringResource(R.string.settings_ai_storage_title),
         description = stringResource(
             R.string.settings_ai_storage_description,
@@ -1430,7 +1430,7 @@ private fun SettingsStorageOverview(
     ) {
         SettingsStatusBadge(
             text = formatStorageBytes(totalBytes),
-            accent = if (totalBytes > 0L) ClearCutAccents.Rosewater else LocalClearCutColors.current.overlay
+            accent = if (totalBytes > 0L) DirectorXAccents.Rosewater else LocalDirectorXColors.current.overlay
         )
     }
 }
@@ -1514,10 +1514,10 @@ private fun SettingsAiModelRow(
                 SettingsStatusBadge(
                     text = stateLabel,
                     accent = when {
-                        canRemove -> ClearCutAccents.Green
-                        isError -> ClearCutAccents.Red
-                        isBusy -> ClearCutAccents.Sapphire
-                        else -> LocalClearCutColors.current.overlayStrong
+                        canRemove -> DirectorXAccents.Green
+                        isError -> DirectorXAccents.Red
+                        isBusy -> DirectorXAccents.Sapphire
+                        else -> LocalDirectorXColors.current.overlayStrong
                     }
                 )
             }
@@ -1525,7 +1525,7 @@ private fun SettingsAiModelRow(
                 text = actionLabel,
                 onClick = onAction,
                 enabled = !isBusy && (canRemove || networkAvailable),
-                contentColor = if (canRemove) ClearCutAccents.Red else accent,
+                contentColor = if (canRemove) DirectorXAccents.Red else accent,
                 icon = actionIcon
             )
         }
@@ -1600,7 +1600,7 @@ private fun SettingsSection(
     description: String? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -1652,7 +1652,7 @@ private fun SettingsDropdown(
     options: List<String>,
     onSelected: (Int) -> Unit
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     var expanded by remember { mutableStateOf(false) }
     Box {
         SettingsTile(
@@ -1684,7 +1684,7 @@ private fun SettingsDropdown(
                             Icon(
                                 imageVector = Icons.Default.Check,
                                 contentDescription = null,
-                                tint = ClearCutAccents.Rosewater,
+                                tint = DirectorXAccents.Rosewater,
                                 modifier = Modifier.size(18.dp)
                             )
                         }
@@ -1753,7 +1753,7 @@ private fun SettingsSlider(
                     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                         Text(
                             label,
-                            color = LocalClearCutColors.current.text,
+                            color = LocalDirectorXColors.current.text,
                             style = MaterialTheme.typography.titleSmall,
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis
@@ -1761,7 +1761,7 @@ private fun SettingsSlider(
                         description?.let {
                             Text(
                                 it,
-                                color = LocalClearCutColors.current.subtext,
+                                color = LocalDirectorXColors.current.subtext,
                                 style = MaterialTheme.typography.bodySmall,
                                 maxLines = 3,
                                 overflow = TextOverflow.Ellipsis
@@ -1787,7 +1787,7 @@ private fun SettingsSlider(
                 colors = SliderDefaults.colors(
                     thumbColor = accent,
                     activeTrackColor = accent,
-                    inactiveTrackColor = LocalClearCutColors.current.surface
+                    inactiveTrackColor = LocalDirectorXColors.current.surface
                 )
             )
         }
@@ -1808,7 +1808,7 @@ private fun SettingsInfo(
     ) {
         Text(
             text = value,
-            color = LocalClearCutColors.current.subtext,
+            color = LocalDirectorXColors.current.subtext,
             style = MaterialTheme.typography.bodyMedium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -1838,7 +1838,7 @@ private fun SettingsActionRow(
     ) {
         Text(
             text = actionLabel,
-            color = if (enabled) accent else LocalClearCutColors.current.disabledText,
+            color = if (enabled) accent else LocalDirectorXColors.current.disabledText,
             style = MaterialTheme.typography.labelLarge,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -1846,7 +1846,7 @@ private fun SettingsActionRow(
         Icon(
             imageVector = actionIcon,
             contentDescription = null,
-            tint = if (enabled) accent else LocalClearCutColors.current.disabledText,
+            tint = if (enabled) accent else LocalDirectorXColors.current.disabledText,
             modifier = Modifier.size(18.dp)
         )
     }
@@ -1868,14 +1868,14 @@ private fun SettingsChoiceHeader(
         Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(
                 label,
-                color = LocalClearCutColors.current.text,
+                color = LocalDirectorXColors.current.text,
                 style = MaterialTheme.typography.titleSmall,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
             Text(
                 description,
-                color = LocalClearCutColors.current.subtext,
+                color = LocalDirectorXColors.current.subtext,
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis
@@ -1910,9 +1910,9 @@ private fun SettingsSwitchTile(
             modifier = Modifier.clearAndSetSemantics { },
             colors = SwitchDefaults.colors(
                 checkedTrackColor = accent.copy(alpha = 0.8f),
-                checkedThumbColor = LocalClearCutColors.current.onAccent,
-                uncheckedTrackColor = LocalClearCutColors.current.surface,
-                uncheckedThumbColor = LocalClearCutColors.current.subtext
+                checkedThumbColor = LocalDirectorXColors.current.onAccent,
+                uncheckedTrackColor = LocalDirectorXColors.current.surface,
+                uncheckedThumbColor = LocalDirectorXColors.current.subtext
             )
         )
     }
@@ -1930,7 +1930,7 @@ private fun SettingsTile(
     semanticState: String? = null,
     trailing: @Composable RowScope.() -> Unit
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     val interactionSource = remember { MutableInteractionSource() }
     val pressed by interactionSource.collectIsPressedAsState()
     val tileContainer by animateColorAsState(
@@ -2048,7 +2048,7 @@ private fun SettingsTileText(
     label: String,
     description: String?,
     modifier: Modifier,
-    colors: com.directorx.editor.ui.theme.ClearCutSemanticColors
+    colors: com.directorx.editor.ui.theme.DirectorXSemanticColors
 ) {
     Column(
         modifier = modifier,
