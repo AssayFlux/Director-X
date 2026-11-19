@@ -5,6 +5,9 @@ on:
     branches: [Alpha]
     paths:
       - "app/**"
+      - "Assets/**"
+      - "branding/**"
+      - "scripts/**"
       - "gradle/**"
       - "*.gradle"
       - "*.gradle.kts"
@@ -16,6 +19,9 @@ on:
     branches: [Alpha]
     paths:
       - "app/**"
+      - "Assets/**"
+      - "branding/**"
+      - "scripts/**"
       - "gradle/**"
       - "*.gradle"
       - "*.gradle.kts"
@@ -49,7 +55,7 @@ jobs:
           python-version: "3.x"
 
       - name: Install SVG renderer
-        run: python -m pip install --disable-pip-version-check CairoSVG
+        run: python -m pip install --disable-pip-version-check CairoSVG Pillow
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -64,6 +70,9 @@ jobs:
         run: |
           chmod +x ./gradlew
           ./gradlew --version
+
+      - name: Validate repository branding selections
+        run: python scripts/validate_branding.py
 
       - name: Run Android unit tests
         run: ./gradlew --no-daemon --stacktrace --console=plain :app:testQaUnitTest
