@@ -133,6 +133,8 @@ insert = r'''# Director X security backports for FFmpeg 9.0.2:
 # CVE-2026-107676: initialize all HDR10+ serialized payload bits.
 # CVE-2026-107677: reject empty search strings in av_strireplace.
 # CVE-2026-125269: clear recycled H.264/H.265 SEI message slots.
+# CVE-2026-125250/251/260/261/266/207/216: GIF, VVC, generic encoder,
+# SGI, SANM, Interplay ACM and DPX boundary/initialization fixes.
 FFMPEG_SOURCE="\${BASEDIR}/src/ffmpeg"
 FFMPEG_SECURITY_COMMITS=(
   969c7eb091989a664cb7bf66a1f02051cc46cb52
@@ -141,6 +143,13 @@ FFMPEG_SECURITY_COMMITS=(
   2c2f6e96e31795ae95a8f8323a493ffbc493111f
   ed27bfcbbbc0872c0195eaf4dd2c0c93b9f1778e
   2c515eea07df719379e7f73deeeb7ccb8768433f
+  26c2980980295e5516f308c5a2792d2a72e43eae
+  c6e5b6105aa13f6b0df2a646da608078cfe52d79
+  053660fdb0d2403b838690689c47ad7685c3b10b
+  d42cb1925987cc27899441ce39fa7bd2647dc72e
+  aa5fd7d287db4f469fdcbe444f7f9f38c8c289c7
+  9b99973b2bbecee0b7e1e57035b95498b42f54a6
+  6ecaddb9c1d59cf7f5de16017122fecb2fa0c67c
 )
 for fix in "\${FFMPEG_SECURITY_COMMITS[@]}"; do
   if ! git -C "\${FFMPEG_SOURCE}" cat-file -e "\${fix}^{commit}" 2>/dev/null; then
@@ -163,4 +172,11 @@ path.write_text(text.replace(anchor, insert + anchor), encoding="utf-8")
 print("Prepared pinned FFmpeg security backports.")
 PY
 
+grep -q 'ptr_linesize = linesize' "${FFMPEG_SOURCE}/libavcodec/gif.c"
+grep -q 'ptrdiff_t' "${FFMPEG_SOURCE}/libavcodec/sgienc.c"
+grep -q 'av_size_mult(s->current_frame.nb_units' "${FFMPEG_SOURCE}/libavcodec/vvc/refs.c"
+grep -q 'memcpy(lut, ctx->c23lut, 256)' "${FFMPEG_SOURCE}/libavcodec/sanm.c"
+grep -q 'Unsupported bit depth' "${FFMPEG_SOURCE}/libavcodec/dpxenc.c"
+grep -q 'src->width != avctx->width' "${FFMPEG_SOURCE}/libavcodec/encode.c"
+grep -q 's->block_len > 1024 \* 1024' "${FFMPEG_SOURCE}/libavcodec/interplayacm.c"
 bash -n "$source_file"
