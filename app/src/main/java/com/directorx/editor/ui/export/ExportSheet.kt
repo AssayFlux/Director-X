@@ -57,7 +57,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
@@ -2596,13 +2595,7 @@ private fun ExportStateCard(
     ) {
         Box(
             modifier = Modifier.background(
-                Brush.verticalGradient(
-                    listOf(
-                        tint.copy(alpha = 0.12f),
-                        colors.panelHighest.copy(alpha = 0.82f),
-                        colors.panel
-                    )
-                )
+                MaterialTheme.colorScheme.surfaceContainerHigh
             )
         ) {
             Column(
