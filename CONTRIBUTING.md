@@ -4,9 +4,9 @@ Thank you for taking an interest in Director X.
 
 ## Project identity and provenance
 
-Director X is a derivative Android video editor based on the ClearCut project associated with [SysAdminDoc](https://github.com/SysAdminDoc). AssayFlux maintains the Director X product identity and subsequent project work. Preserve upstream copyright statements, the upstream MIT notice and all third-party licence/source obligations.
+Director X is an AssayFlux Android video editor built on an upstream open-source video-editing codebase. AssayFlux maintains the Director X product identity. Preserve all upstream copyright statements, licence notices, attribution and third-party licence/source obligations listed in [NOTICE](NOTICE) and [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md).
 
-Read [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md), [NOTICE](NOTICE), and [the branding and compatibility policy](docs/BRANDING_AND_COMPATIBILITY.md) before changing inherited code, archive formats, package identifiers or bundled native components.
+Read [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md), [NOTICE](NOTICE), and [the current engineering and compatibility requirements](docs/ENGINEERING_STATUS.md) before changing inherited code, archive formats, package identifiers or bundled native components.
 
 ## Before opening a pull request
 
@@ -14,7 +14,7 @@ Read [ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md), [NOTICE](NOTICE), and [the brandi
 - Explain the problem and expected behavior.
 - Keep changes focused and avoid unrelated formatting or dependency upgrades.
 - Preserve project/archive/database compatibility unless a migration is explicitly designed.
-- Update documentation and the changelog when behavior, configuration or release procedures change.
+- Update the current engineering documentation and release notes when behavior, configuration or release procedures change.
 - Include reproducible steps and relevant logs for bug fixes.
 - Do not add unverified screenshots, fake test results, generated APKs, signing secrets or private credentials.
 
@@ -24,7 +24,7 @@ GitHub Actions has three distinct lanes: Android unit tests (`:app:testQaUnitTes
 
 The maintainer builds installable APKs manually in Termux or another configured Android environment and performs physical-device testing. Contributors should state exactly which commands they ran and whether they completed successfully. Do not describe a change as tested if only source inspection was performed.
 
-For a maintainer build, follow [Build Director X in Termux](docs/TERMUX_BUILD.md). Useful optional local commands include:
+For a maintainer build, follow [Build Director X](docs/BUILD.md). Useful optional local commands include:
 
 ```bash
 ./gradlew :app:assembleDebug
