@@ -57,6 +57,7 @@ import androidx.core.content.FileProvider
 import androidx.core.content.ContextCompat
 import com.directorx.editor.BuildConfig
 import com.directorx.editor.R
+import com.directorx.editor.engine.EncoderCapabilityProbe
 import com.directorx.editor.engine.AppearanceMode
 import com.directorx.editor.engine.AppSettings
 import com.directorx.editor.engine.PrivacyDashboard
@@ -132,6 +133,49 @@ fun SettingsScreen(
     // Exclude CUSTOM here; legacy persisted CUSTOM values display the safe 16:9 fallback.
     val defaultAspectRatioOptions = AspectRatio.entries.filterNot { it == AspectRatio.CUSTOM }
     val effectiveDefaultAspectRatio = resolveDefaultProjectAspectRatio(settings.defaultAspectRatio)
+    val defaultExportCodec = VideoCodec.entries.firstOrNull { it.name == settings.defaultCodec } ?: VideoCodec.H264
+    val defaultExportQuality = ExportQuality.entries.firstOrNull { it.name == settings.defaultExportQuality } ?: ExportQuality.HIGH
+    val defaultResolutionSupport = remember(
+        settings.defaultCodec, settings.defaultResolution, settings.defaultFrameRate,
+        settings.defaultExportQuality, effectiveDefaultAspectRatio
+    ) {
+        Resolution.entries.associateWith { candidate ->
+            val candidateConfig = ExportConfig(
+                resolution = candidate,
+                frameRate = settings.defaultFrameRate,
+                codec = defaultExportCodec,
+                quality = defaultExportQuality,
+            )
+            val (candidateWidth, candidateHeight) = candidate.forAspect(effectiveDefaultAspectRatio)
+            EncoderCapabilityProbe.check(
+                defaultExportCodec, candidateWidth, candidateHeight,
+                settings.defaultFrameRate, candidateConfig.videoBitrate
+            ).supported
+        }
+    }
+    val defaultResolutionOptions = Resolution.entries.filter {
+        defaultResolutionSupport[it] == true || it == settings.defaultResolution
+    }
+    val defaultFrameRateSupport = remember(
+        settings.defaultCodec, settings.defaultResolution, settings.defaultFrameRate,
+        settings.defaultExportQuality, effectiveDefaultAspectRatio
+    ) {
+        listOf(24, 30, 60, 120).associateWith { fps ->
+            val candidateConfig = ExportConfig(
+                resolution = settings.defaultResolution,
+                frameRate = fps,
+                codec = defaultExportCodec,
+                quality = defaultExportQuality,
+            )
+            val (candidateWidth, candidateHeight) = settings.defaultResolution.forAspect(effectiveDefaultAspectRatio)
+            EncoderCapabilityProbe.check(
+                defaultExportCodec, candidateWidth, candidateHeight, fps, candidateConfig.videoBitrate
+            ).supported
+        }
+    }
+    val defaultFrameRateOptions = listOf(24, 30, 60, 120).filter {
+        defaultFrameRateSupport[it] == true || it == settings.defaultFrameRate
+    }
     val thumbnailCacheSizes = remember(context) {
         ThumbnailCachePolicy.availableSettingsSizes(
             maxMemoryBytes = Runtime.getRuntime().maxMemory(),
@@ -233,8 +277,8 @@ fun SettingsScreen(
                 label = stringResource(R.string.settings_default_resolution),
                 description = stringResource(R.string.settings_default_resolution_description),
                 value = settings.defaultResolution.label,
-                options = Resolution.entries.map { it.label },
-                onSelected = { idx -> viewModel.setResolution(Resolution.entries[idx]) }
+                options = defaultResolutionOptions.map { it.label },
+                onSelected = { idx -> viewModel.setResolution(defaultResolutionOptions[idx]) }
             )
             SettingsDropdown(
                 icon = Icons.Default.Schedule,
@@ -242,8 +286,8 @@ fun SettingsScreen(
                 label = stringResource(R.string.settings_default_frame_rate),
                 description = stringResource(R.string.settings_default_frame_rate_description),
                 value = "${settings.defaultFrameRate}fps",
-                options = listOf("24fps", "30fps", "60fps"),
-                onSelected = { idx -> viewModel.setFrameRate(listOf(24, 30, 60)[idx]) }
+                options = defaultFrameRateOptions.map { "${it}fps" },
+                onSelected = { idx -> viewModel.setFrameRate(defaultFrameRateOptions[idx]) }
             )
             SettingsDropdown(
                 icon = Icons.Default.CropSquare,
