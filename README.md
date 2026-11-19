@@ -83,6 +83,6 @@ The application identity is Director X. Required third-party licences, copyright
 
 The application ID is `com.directorx.editor`. Changing the package identity requires a **new install with an explicit export/import path**; it is not an in-place rename. The signing certificate and project/archive compatibility contracts must be preserved.
 
-## Contributions
+## Maintenance
 
 Changes must preserve project/archive compatibility, database migrations, original-media export, and explicit device capability checks. Do not claim 5.3K, 8K, HDR, or device acceptance without reproducible evidence.
