@@ -28,7 +28,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
@@ -165,13 +164,7 @@ fun PremiumPanelCard(
     ) {
         Box(
             modifier = Modifier.background(
-                Brush.verticalGradient(
-                    colorStops = arrayOf(
-                        0f to accent.copy(alpha = if (colors.highContrast) 0.16f else 0.10f),
-                        0.54f to colors.panelHighest,
-                        1f to colors.panelRaised.copy(alpha = 0.96f)
-                    )
-                )
+                MaterialTheme.colorScheme.surfaceContainerHigh
             )
         ) {
             Column(
