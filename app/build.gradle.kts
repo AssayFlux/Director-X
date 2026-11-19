@@ -73,10 +73,10 @@ android {
                     keyPassword = keyPass
                 }
             } else {
-                val storePath = resolveSigningSecret("CLEARCUT_STORE_FILE")
-                val storePass = resolveSigningSecret("CLEARCUT_STORE_PASSWORD", "CLEARCUT_KS_PASS")
-                val alias = resolveSigningSecret("CLEARCUT_KEY_ALIAS")
-                val keyPass = resolveSigningSecret("CLEARCUT_KEY_PASSWORD", "CLEARCUT_KEY_PASS")
+                val storePath = resolveSigningSecret("DIRECTORX_STORE_FILE")
+                val storePass = resolveSigningSecret("DIRECTORX_STORE_PASSWORD", "DIRECTORX_KS_PASS")
+                val alias = resolveSigningSecret("DIRECTORX_KEY_ALIAS")
+                val keyPass = resolveSigningSecret("DIRECTORX_KEY_PASSWORD", "DIRECTORX_KEY_PASS")
                 if (!storePath.isNullOrBlank() && !storePass.isNullOrBlank() && !alias.isNullOrBlank() && !keyPass.isNullOrBlank()) {
                     storeFile = rootProject.file(storePath)
                     storePassword = storePass
@@ -109,14 +109,14 @@ android {
         create("streaming") {
             initWith(getByName("debug"))
             applicationIdSuffix = ".streaming"
-            versionNameSuffix = "-streaming"
+            versionNameSuffix = ""
             matchingFallbacks += listOf("debug")
             buildConfigField("boolean", "LOCAL_NETWORK_STREAMING_ENABLED", "true")
         }
         create("qa") {
             initWith(getByName("debug"))
             applicationIdSuffix = ".qa"
-            versionNameSuffix = "-qa"
+            versionNameSuffix = ""
             matchingFallbacks += listOf("debug")
             buildConfigField("boolean", "QA_TIMELINE_HARNESS_ENABLED", "true")
         }
@@ -160,7 +160,7 @@ android {
         unitTests.isIncludeAndroidResources = true
         managedDevices {
             localDevices {
-                create("clearCutApi37") {
+                create("directorXApi37") {
                     device = "Pixel 6"
                     apiLevel = 37
                     systemImageSource = "google"
