@@ -51,6 +51,63 @@ Director X provides a multi-track editing workflow with preview, project persist
 | SAM 2.1 ONNX | Targeted | Future tracked-mask path; MobileSAM fallback (target) |
 <!-- capability-registry:dependencies:end -->
 
+
+## Tech Stack
+
+| Area | Version / implementation |
+|---|---|
+| Language | Kotlin 2.4.10 |
+| Video | Media3 1.11.1 |
+| Speech-to-Text | ONNX Runtime 1.28.0 |
+| Noise Reduction | Android DeepFilterNet 0.0.8 |
+| Segmentation | MediaPipe Tasks Vision 1.0.0 |
+| Animated Titles | Lottie Compose 6.7.1 |
+| Startup performance | AndroidX Benchmark 1.5.0-beta01 |
+| Database | Room 3.0.1 |
+
+## Architecture
+
+The following is a representative source map, not an exhaustive API or feature-availability promise. Entries are checked-in Kotlin source paths under `app/src/main/java/com/directorx/editor`.
+
+```text
+├── engine/AiDisclosurePolicy.kt
+├── engine/AiThumbnailEngine.kt
+├── engine/AiToolRequirements.kt
+├── engine/AiUsageLedger.kt
+├── engine/Android15MediaPolicy.kt
+├── engine/AndroidProjectDependencyProbe.kt
+├── engine/AppLog.kt
+├── engine/AppModule.kt
+├── engine/AppVersion.kt
+├── engine/AtomicFiles.kt
+├── engine/AudioDecodeBudget.kt
+├── engine/AudioDescriptionEngine.kt
+├── engine/AudioEffectsAudioProcessor.kt
+├── engine/AudioEffectsEngine.kt
+├── engine/AudioEngine.kt
+├── engine/AudioFocusPolicy.kt
+├── engine/AudioMasteringEngine.kt
+├── engine/AutoChapterEngine.kt
+├── engine/BatchExportPlanStore.kt
+├── engine/BeatDetectionEngine.kt
+├── engine/BidiTextPolicy.kt
+├── engine/BoundedIo.kt
+├── engine/C2paExportEngine.kt
+├── engine/CapabilityRegistry.kt
+├── engine/CapabilityRegistryGenerated.kt
+├── engine/CaptionFontFallbackPolicy.kt
+├── engine/CaptionImportEngine.kt
+├── engine/CaptionTextLayoutPolicy.kt
+├── engine/CaptionTranslationEngine.kt
+├── engine/CodecInstanceBudget.kt
+├── engine/ColorBlindGlEffect.kt
+└── engine/ColorBlindPreviewEngine.kt
+```
+
+## Archive Transfer
+
+Projects can be moved between devices using an explicit local archive export/import flow. This is file-based transfer, not automatic cloud backup or cloud synchronization.
+
 ## Project status
 
 The authoritative engineering record is [docs/ENGINEERING_STATUS.md](docs/ENGINEERING_STATUS.md). Build instructions are in [docs/BUILD.md](docs/BUILD.md). Privacy disclosures are in [docs/privacy-policy.md](docs/privacy-policy.md).
