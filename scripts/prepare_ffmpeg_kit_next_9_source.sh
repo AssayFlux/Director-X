@@ -67,6 +67,12 @@ dependency = "\\t\\t$(gen_unicode_version)\\n"
 if text.count(dependency) != 1:
     raise SystemExit("Expected exactly one generated executable prerequisite; refusing an ambiguous edit.")
 text = text.replace(dependency, "")
+continued_dependency = "\\t\\tunidata/BidiMirroring.txt \\\\n"
+plain_dependency = "\\t\\tunidata/BidiMirroring.txt\\n"
+if text.count(continued_dependency) == 1:
+    text = text.replace(continued_dependency, plain_dependency)
+elif text.count(plain_dependency) != 1:
+    raise SystemExit("Expected exactly one final FriBidi data dependency; refusing an ambiguous edit.")
 if text.count(old) == 1:
     text = text.replace(old, new)
 elif text.count(new) == 1:
