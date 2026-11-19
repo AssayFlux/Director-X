@@ -1,0 +1,48 @@
+name: Native dependency security monitoring
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 6 * * 1"
+  push:
+    branches: [Alpha]
+    paths:
+      - "third_party/ffmpeg-kit-next/native-lock.json"
+      - "scripts/monitor_native_advisories.py"
+      - ".github/workflows/native-security-monitor.yml"
+  pull_request:
+    branches: [Alpha]
+    paths:
+      - "third_party/ffmpeg-kit-next/native-lock.json"
+      - "scripts/monitor_native_advisories.py"
+      - ".github/workflows/native-security-monitor.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: native-security-monitor-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  osv-monitor:
+    name: Monitor pinned native dependencies against OSV
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Check out Director X
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Query OSV for every pinned native component
+        run: python3 scripts/monitor_native_advisories.py
+
+      - name: Preserve machine-readable monitoring report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-osv-monitor-${{ github.run_id }}
+          path: app/build/reports/native-security/osv-monitor.json
+          if-no-files-found: warn
+          retention-days: 90
