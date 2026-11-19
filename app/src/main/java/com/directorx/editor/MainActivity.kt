@@ -26,7 +26,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf\nimport androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -60,7 +61,8 @@ import com.directorx.editor.ui.editor.EditorScreen
 import com.directorx.editor.ui.editor.LocalTabletopPosture
 import com.directorx.editor.ui.projects.ProjectListScreen
 import com.directorx.editor.ui.settings.SettingsScreen
-import com.directorx.editor.ui.theme.AssayFluxAnimatedSplash\nimport com.directorx.editor.ui.theme.AssayFluxLogo
+import com.directorx.editor.ui.theme.AssayFluxAnimatedSplash
+import com.directorx.editor.ui.theme.AssayFluxLogo
 import com.directorx.editor.ui.theme.DirectorXTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
