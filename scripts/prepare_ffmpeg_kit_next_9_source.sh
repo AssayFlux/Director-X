@@ -74,18 +74,40 @@ FRIBIDI_GEN
 FRIBIDI_MAKEFILE="${FRIBIDI_SOURCE_DIR}/gen.tab/Makefile"
 python3 - "${FRIBIDI_MAKEFILE}" <<'FRIBIDI_MAKE'
 from pathlib import Path
+import re
 import sys
 
 path = Path(sys.argv[1])
 text = path.read_text(encoding="utf-8")
-old = "./$(gen_unicode_version) $^ > $@"
-new = "./$(gen_unicode_version) unidata/ReadMe.txt unidata/BidiMirroring.txt > $@"
-if text.count(old) == 1:
-    text = text.replace(old, new)
-elif text.count(new) != 1:
+lines = text.splitlines(keepends=True)
+dependency_index = next((
+    i for i, line in enumerate(lines)
+    if ("gen_unicode_version" in line or line.strip() == "gen-unicode-version")
+    and i > 0
+    and ("BidiMirroring.txt" in lines[i - 1] or "ReadMe.txt" in lines[i - 1])
+), None)
+if dependency_index is not None:
+    previous = dependency_index - 1
+    del lines[dependency_index]
+    lines[previous] = re.sub(r"\\\s*\n$", "\n", lines[previous])
+    text = "".join(lines)
+else:
+    if "gen-unicode-version" in text:
+        raise SystemExit("Could not safely identify FriBidi generator prerequisite; refusing an ambiguous Makefile.")
+
+old_recipes = (
+    "./$(gen_unicode_version) $^ > $@",
+    "./gen-unicode-version $^ > $@",
+)
+new_recipe = "python3 ./gen-unicode-version.py unidata/ReadMe.txt > $@"
+matches = [recipe for recipe in old_recipes if text.count(recipe) == 1]
+if len(matches) == 1:
+    text = text.replace(matches[0], new_recipe)
+elif text.count(new_recipe) != 1:
     raise SystemExit("Expected exactly one FriBidi Unicode generator recipe; refusing an ambiguous Makefile.")
 path.write_text(text, encoding="utf-8")
-print("Removed the generator executable from FriBidi's input-file arguments.")
+print("Replaced FriBidi generator recipe and removed executable prerequisite.")
+
 FRIBIDI_MAKE
 '''
 path.write_text(text.replace(anchor, insert + anchor), encoding="utf-8")
