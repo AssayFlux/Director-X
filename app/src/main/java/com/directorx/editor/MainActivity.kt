@@ -14,9 +14,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -269,27 +267,14 @@ class MainActivity : ComponentActivity() {
                                     .background(Color.White),
                                 contentAlignment = Alignment.Center,
                             ) {
-                                Column(
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                                ) {
-                                    AssayFluxLogo(
-                                        modifier = Modifier
-                                            .width(224.dp)
-                                            .height(138.dp)
-                                            .aspectRatio(2080f / 1281f),
-                                    )
-                                    Text(
-                                        text = stringResource(R.string.app_name),
-                                        color = Color(0xFF2C2621),
-                                        style = MaterialTheme.typography.headlineLarge,
-                                    )
-                                    Text(
-                                        text = stringResource(R.string.assayflux_developer_credit),
-                                        color = Color(0xFF8C8275),
-                                        style = MaterialTheme.typography.bodyMedium,
-                                    )
-                                }
+                                // SVG fallback only; restore the approved animated GIF at
+                                // res/raw/assayflux_splash.gif when the original binary is supplied.
+                                AssayFluxLogo(
+                                    modifier = Modifier
+                                        .width(224.dp)
+                                        .height(138.dp)
+                                        .aspectRatio(2080f / 1281f),
+                                )
                             }
                         }
                     }
