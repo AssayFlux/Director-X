@@ -28,7 +28,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.directorx.editor.R
@@ -138,9 +137,7 @@ private fun ScratchpadStatusPill(
         androidx.compose.foundation.layout.Row(
             modifier = Modifier
                 .background(
-                    Brush.horizontalGradient(
-                        listOf(accent.copy(alpha = 0.1f), semanticColors.panelHighest.copy(alpha = 0.0f))
-                    )
+                    MaterialTheme.colorScheme.surfaceContainerHigh
                 )
                 .padding(horizontal = Spacing.md, vertical = Spacing.sm),
             horizontalArrangement = Arrangement.spacedBy(Spacing.xs)
