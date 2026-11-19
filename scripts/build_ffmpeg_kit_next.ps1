@@ -32,6 +32,7 @@ function ConvertTo-WslPath([string]$value) {
 
 $sourceWsl = ConvertTo-WslPath $sourcePath
 $patchWsl = ConvertTo-WslPath $patchPath
+$prepareScript = ConvertTo-WslPath (Join-Path $PSScriptRoot "prepare_ffmpeg_kit_next_9_source.sh")
 
 function ConvertTo-WslShellLiteral([string]$value) {
     return "'" + $value.Replace("'", "'\''") + "'"
@@ -39,6 +40,7 @@ function ConvertTo-WslShellLiteral([string]$value) {
 
 $sourceLiteral = ConvertTo-WslShellLiteral $sourceWsl
 $patchLiteral = ConvertTo-WslShellLiteral $patchWsl
+$prepareLiteral = ConvertTo-WslShellLiteral $prepareScript
 $skipFfmpeg = if ($PackageOnly) { " --skip-ffmpeg" } else { "" }
 $command = @"
 set -e
@@ -59,7 +61,7 @@ else
   echo "Director X FFmpeg security patch does not apply cleanly." >&2
   exit 2
 fi
-bash ./scripts/prepare_ffmpeg_kit_next_9_source.sh
+bash $prepareLiteral $sourceLiteral/scripts/source.sh
 export version_ffmpeg=d59078794d80f5256d5def27e10bb5400a13195c
 bash ./nix-android.sh -p android-r27d$skipFfmpeg --enable-libass --enable-libjxl --enable-android-media-codec --enable-android-zlib --enable-openh264 --jobs=8
 "@
