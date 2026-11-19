@@ -99,13 +99,6 @@ print(f"#define FRIBIDI_UNICODE_MICRO_VERSION {micro}")
 """
 (path.parent / "gen-unicode-version.py").write_text(generator, encoding="utf-8")
 
-new = "./$(gen_unicode_version) unidata/ReadMe.txt unidata/BidiMirroring.txt > $@"
-if text.count(old) == 1:
-    path.write_text(text.replace(old, new), encoding="utf-8")
-elif text.count(new) == 1:
-    print("FriBidi Unicode generator recipe already corrected.")
-else:
-    raise SystemExit("Unexpected FriBidi Unicode generator recipe; refusing an ambiguous patch.")
 FRIBIDI_PY
 
 '''
@@ -150,7 +143,10 @@ FFMPEG_SECURITY_COMMITS=(
   aa5fd7d287db4f469fdcbe444f7f9f38c8c289c7
   9b99973b2bbecee0b7e1e57035b95498b42f54a6
   6ecaddb9c1d59cf7f5de16017122fecb2fa0c67c
+  ec887b13a88afbaf44fb28c3045bda5d434da8dc
 )
+FFMPEG_SECURITY_MASTER_PIN="f8bb61cd57a714b4eb8a9f8002dbb5214eed48c7"
+if [[ "$(git -C "\${FFMPEG_SOURCE}" rev-parse HEAD)" != "\${FFMPEG_SECURITY_MASTER_PIN}" ]]; then
 for fix in "\${FFMPEG_SECURITY_COMMITS[@]}"; do
   if ! git -C "\${FFMPEG_SOURCE}" cat-file -e "\${fix}^{commit}" 2>/dev/null; then
     git -C "\${FFMPEG_SOURCE}" fetch --no-tags origin "\${fix}"
@@ -161,12 +157,16 @@ for fix in "\${FFMPEG_SECURITY_COMMITS[@]}"; do
   git -C "\${FFMPEG_SOURCE}" show --format= "\${fix}" | git -C "\${FFMPEG_SOURCE}" apply --check -
   git -C "\${FFMPEG_SOURCE}" show --format= "\${fix}" | git -C "\${FFMPEG_SOURCE}" apply -
 done
+else
+  echo "Using pinned upstream FFmpeg 9.x security-updated commit \${FFMPEG_SECURITY_MASTER_PIN}; upstream backports are already present."
+fi
 git -C "\${FFMPEG_SOURCE}" diff --check
 grep -q 'while (info)' "\${FFMPEG_SOURCE}/libavutil/encryption_info.c"
 grep -q 'av_encryption_init_info_append_side_data' "\${FFMPEG_SOURCE}/libavutil/encryption_info.c"
 grep -q 'pssh_side_data' "\${FFMPEG_SOURCE}/libavformat/mov.c"
 grep -q 'if (!fromlen)' "\${FFMPEG_SOURCE}/libavutil/avstring.c"
 grep -Fq 'memset(&list->messages[list->nb_messages]' "\${FFMPEG_SOURCE}/libavcodec/cbs_sei.c"
+grep -Fq 'if ((ret = init_get_bits8(&gb, buf, buf_size)) < 0)' "\${FFMPEG_SOURCE}/libavcodec/g726.c"
 '''
 path.write_text(text.replace(anchor, insert + anchor), encoding="utf-8")
 print("Prepared pinned FFmpeg security backports.")
@@ -175,7 +175,7 @@ PY
 grep -q 'ptr_linesize = linesize' "${FFMPEG_SOURCE}/libavcodec/gif.c"
 grep -q 'ptrdiff_t' "${FFMPEG_SOURCE}/libavcodec/sgienc.c"
 grep -q 'av_size_mult(s->current_frame.nb_units' "${FFMPEG_SOURCE}/libavcodec/vvc/refs.c"
-grep -q 'memcpy(lut, ctx->c23lut, 256)' "${FFMPEG_SOURCE}/libavcodec/sanm.c"
+grep -q 'memcpy(lut, ctx->c23lut, sizeof(lut))' "${FFMPEG_SOURCE}/libavcodec/sanm.c"
 grep -q 'Unsupported bit depth' "${FFMPEG_SOURCE}/libavcodec/dpxenc.c"
 grep -q 'src->width != avctx->width' "${FFMPEG_SOURCE}/libavcodec/encode.c"
 grep -q 's->block_len > 1024 \* 1024' "${FFMPEG_SOURCE}/libavcodec/interplayacm.c"
