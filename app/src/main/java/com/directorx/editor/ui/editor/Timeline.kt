@@ -653,20 +653,9 @@ fun Timeline(
         )
     }
 
-    // Hoist the vertical gradient overlay applied on top of every clip body. The
-    // Timeline recomposes ~30 Hz during playback; without `remember` this brush
-    // was being allocated fresh per clip per frame (a 10-clip project = 300
-    // Brush + List allocations/sec). Brush contents are static, so one cached
-    // instance covers the entire session.
-    val clipOverlayBrush = remember {
-        Brush.verticalGradient(
-            listOf(
-                Color.Transparent,
-                semanticColors.onAccent.copy(alpha = 0.18f),
-                semanticColors.onAccent.copy(alpha = 0.42f)
-            )
-        )
-    }
+    // Keep clip bodies flat-colour; selection and missing-media states are
+    // communicated by their dedicated fill and border colours.
+    val clipOverlayBrush = Color.Transparent
     val thumbnailCacheWindow = remember {
         LazyLayoutCacheWindow(
             ahead = TimelineScrollPerformancePolicy.CACHE_WINDOW_AHEAD_DP.dp,
@@ -1024,13 +1013,7 @@ fun Timeline(
                                     modifier = Modifier
                                         .fillMaxSize()
                                         .background(
-                                            Brush.horizontalGradient(
-                                                listOf(
-                                                    trackColor.copy(alpha = 0.12f),
-                                                    semanticColors.onAccent,
-                                                    semanticColors.backgroundMid
-                                                )
-                                            )
+                                            semanticColors.panelHighest
                                         )
                                 ) {
                                     Column(
@@ -1407,12 +1390,7 @@ fun Timeline(
                                 .fillMaxWidth()
                                 .height(rulerHeight)
                                 .background(
-                                    Brush.horizontalGradient(
-                                        listOf(
-                                            semanticColors.onAccent,
-                                            semanticColors.backgroundMid
-                                        )
-                                    )
+                                    semanticColors.surfaceBase
                                 )
                                 .pointerInput(Unit) {
                                     detectTapGestures { offset ->
@@ -1603,13 +1581,7 @@ fun Timeline(
                                 .fillMaxWidth()
                                 .height(currentTrackHeight)
                                 .background(
-                                    Brush.horizontalGradient(
-                                        listOf(
-                                            trackColor.copy(alpha = 0.06f),
-                                            semanticColors.surfaceBase,
-                                            semanticColors.backgroundMid
-                                        )
-                                    )
+                                    semanticColors.backgroundMid
                                 )
                                 .border(
                                     width = 0.5.dp,
@@ -1988,27 +1960,13 @@ fun Timeline(
                                     // Brush instance until selection or track-color state changes.
                                     val isClipMissing = clip.id in missingClipIds
                                     var isClipContentVisible by remember(clip.id) { mutableStateOf(true) }
-                                    val clipBackgroundBrush = remember(isSelected, isMultiSelected, isClipMissing, clipColor) {
-                                        Brush.horizontalGradient(
-                                            when {
-                                                isClipMissing -> listOf(
-                                                    ClearCutAccents.Red.copy(alpha = 0.38f),
-                                                    semanticColors.onAccent.copy(alpha = 0.85f)
-                                                )
-                                                isSelected -> listOf(
-                                                    clipColor.copy(alpha = 0.64f),
-                                                    semanticColors.panelHighest.copy(alpha = 0.94f)
-                                                )
-                                                isMultiSelected -> listOf(
-                                                    ClearCutAccents.Peach.copy(alpha = 0.58f),
-                                                    semanticColors.panelHighest.copy(alpha = 0.9f)
-                                                )
-                                                else -> listOf(
-                                                    clipColor.copy(alpha = 0.44f),
-                                                    semanticColors.panel.copy(alpha = 0.92f)
-                                                )
+                                    val clipBackgroundColor = remember(isSelected, isMultiSelected, isClipMissing, clipColor) {
+                                        when {
+                                                isClipMissing -> ClearCutAccents.Red.copy(alpha = 0.38f)
+                                                isSelected -> clipColor.copy(alpha = 0.64f)
+                                                isMultiSelected -> ClearCutAccents.Peach.copy(alpha = 0.58f)
+                                                else -> clipColor.copy(alpha = 0.44f)
                                             }
-                                        )
                                     }
                                     Box(
                                         modifier = Modifier
@@ -2290,8 +2248,7 @@ fun Timeline(
                                             }
                                         }
 
-                                        // Hoisted Brush — see the `clipOverlayBrush` remember at the
-                                        // top of Timeline(). Previously allocated per clip per frame.
+                                        // Flat overlay retained as transparent so clip content stays unshaded.
                                         Box(
                                             modifier = Modifier
                                                 .fillMaxSize()
@@ -2475,12 +2432,7 @@ fun Timeline(
                                                     .width(with(density) { transWidthPx.coerceAtLeast(8f).toDp() })
                                                     .fillMaxHeight()
                                                     .background(
-                                                        Brush.horizontalGradient(
-                                                            colors = listOf(
-                                                                ClearCutAccents.Yellow.copy(alpha = 0.5f),
-                                                                ClearCutAccents.Yellow.copy(alpha = 0f)
-                                                            )
-                                                        )
+                                                        ClearCutAccents.Yellow.copy(alpha = 0.5f)
                                                     )
                                             ) {
                                                 // Transition type icon
@@ -2505,12 +2457,7 @@ fun Timeline(
                                                     .width(with(density) { transOutWidthPx.coerceAtLeast(8f).toDp() })
                                                     .fillMaxHeight()
                                                     .background(
-                                                        Brush.horizontalGradient(
-                                                            colors = listOf(
-                                                                ClearCutAccents.Yellow.copy(alpha = 0f),
-                                                                ClearCutAccents.Yellow.copy(alpha = 0.5f)
-                                                            )
-                                                        )
+                                                        ClearCutAccents.Yellow.copy(alpha = 0.5f)
                                                     )
                                             )
                                         }
