@@ -535,12 +535,14 @@ class InpaintingEngine @Inject constructor(
                     ?.startsWith("audio/") == true
             }
             if (hasAudio) {
+                val frameSequenceDurationMs = (frameFiles.size.toLong() * frameDurationMs)
+                    .coerceAtMost(durationMs.coerceAtLeast(1L))
                 val audioItem = androidx.media3.common.MediaItem.Builder()
                     .setUri(sourceUri)
                     .setClippingConfiguration(
                         androidx.media3.common.MediaItem.ClippingConfiguration.Builder()
                             .setStartPositionMs(0L)
-                            .setEndPositionMs(durationMs.coerceAtLeast(1L))
+                            .setEndPositionMs(frameSequenceDurationMs)
                             .build()
                     )
                     .build()
