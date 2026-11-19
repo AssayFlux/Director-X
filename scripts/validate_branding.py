@@ -24,6 +24,8 @@ def main() -> None:
     if data.get("brand", {}).get("developer") != "AssayFlux":
         fail("brand.developer must remain AssayFlux")
     references = [data["launcher"]["asset"], data["about"]["signatureAsset"]]
+    if Path(data["launcher"]["asset"]).suffix.lower() not in {".svg", ".png"}:
+        fail("launcher.asset must be an SVG or PNG")
     references.extend(item["asset"] for item in data["splash"]["sequence"])
     for area in ("dashboard", "settings", "editor"):
         placement = data["placements"][area]
