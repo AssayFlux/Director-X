@@ -141,7 +141,7 @@ android {
         }
     }
 
-    // The bundled FFmpeg, ONNX Runtime, MediaPipe, and DeepFilterNet native
+    // The bundled ONNX Runtime, MediaPipe, and DeepFilterNet native
     // libraries dominate the package: a single universal APK carries every ABI's
     // copy of all four, which is why the published artifact is ~350 MB while a
     // device only ever loads one ABI. Per-ABI APKs cut what a user downloads by
@@ -215,35 +215,6 @@ composeCompiler {
 
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
-}
-
-val ffmpegKitAar = rootProject.file("third_party/ffmpeg-kit-next/ffmpeg-kit-next-8.1.0.aar")
-val ffmpegKitAarSha256 = "7971240aff84ce59a4ab28400bb4af59d24c20ce68c25525d41d910246ccff62"
-
-fun File.sha256(): String {
-    val digest = MessageDigest.getInstance("SHA-256")
-    inputStream().buffered().use { input ->
-        val buffer = ByteArray(DEFAULT_BUFFER_SIZE)
-        while (true) {
-            val read = input.read(buffer)
-            if (read < 0) break
-            digest.update(buffer, 0, read)
-        }
-    }
-    return digest.digest().joinToString("") { "%02x".format(it) }
-}
-
-val verifyFfmpegKitAar by tasks.registering {
-    group = "verification"
-    description = "Verifies the source-pinned FFmpegKitNext AAR before compilation."
-    inputs.file(ffmpegKitAar)
-    doLast {
-        require(ffmpegKitAar.isFile) { "Missing vendored FFmpegKitNext AAR: $ffmpegKitAar" }
-        val actual = ffmpegKitAar.sha256()
-        require(actual == ffmpegKitAarSha256) {
-            "FFmpegKitNext AAR checksum mismatch: expected=$ffmpegKitAarSha256 actual=$actual"
-        }
-    }
 }
 
 data class RuntimeLicenseInfo(
@@ -343,7 +314,6 @@ val runtimeLicensePolicies = listOf(
     RuntimeLicensePolicy(listOf("org.jetbrains.kotlin"), apacheLicense.forProject("https://kotlinlang.org/")),
     RuntimeLicensePolicy(listOf("org.jetbrains"), apacheLicense.forProject("https://github.com/JetBrains")),
     RuntimeLicensePolicy(listOf("com.airbnb.android"), apacheLicense.forProject("https://github.com/airbnb/lottie-android")),
-    RuntimeLicensePolicy(listOf("com.arthenica"), apacheLicense.forProject("https://github.com/arthenica/ffmpeg-kit")),
     RuntimeLicensePolicy(listOf("com.google.dagger"), apacheLicense.forProject("https://dagger.dev/")),
     RuntimeLicensePolicy(listOf("com.google.mediapipe"), apacheLicense.forProject("https://mediapipe.dev/")),
     RuntimeLicensePolicy(listOf("com.google.firebase"), apacheLicense.forProject("https://firebase.google.com/")),
@@ -413,27 +383,14 @@ fun GeneratedRuntimeNotice.toKotlin(): String = buildString {
     appendLine("        ),")
 }
 
-fun nativeProjectUrl(purl: String): String {
-    val githubPath = purl.removePrefix("pkg:github/").substringBefore('@')
-    return if (githubPath != purl && githubPath.contains('/')) {
-        "https://github.com/$githubPath"
-    } else if (purl.contains("ffmpeg")) {
-        "https://ffmpeg.org/"
-    } else {
-        "https://developer.android.com/ndk"
-    }
-}
-
 val generateRuntimeOpenSourceNotices by tasks.registering {
     group = "verification"
     description = "Generates a complete, resolved-runtime open-source notice inventory."
     val registryFile = rootProject.file("scripts/capability_registry.json")
-    val nativeLockFile = rootProject.file("third_party/ffmpeg-kit-next/native-lock.json")
     val generatedFile = runtimeNoticeGeneratedDir.map { it.file("RuntimeOpenSourceLicensesGenerated.kt") }
     val reportFile = layout.buildDirectory.file("reports/runtime-notices/runtime-notices.json")
     inputs.files(
         registryFile,
-        nativeLockFile,
         rootProject.file("gradle/libs.versions.toml"),
         project.buildFile,
     )
@@ -487,30 +444,11 @@ val generateRuntimeOpenSourceNotices by tasks.registering {
             )
         }
 
-        val nativeLock = JsonSlurper().parse(nativeLockFile) as Map<*, *>
-        val nativeComponents = nativeLock["components"] as? List<*> ?: error("Native lock has no components list")
-        val nativeNotices = nativeComponents.map { rawComponent ->
-            val component = rawComponent as? Map<*, *> ?: error("Native lock component is not an object")
-            val name = component["name"] as? String ?: error("Native lock component has no name")
-            val version = component["version"] as? String ?: error("Native lock component $name has no version")
-            val purl = component["purl"] as? String ?: error("Native lock component $name has no purl")
-            val licenseExpression = component["license"] as? String ?: error("Native lock component $name has no license")
-            val artifact = "native:" + name.lowercase(Locale.ROOT).replace(Regex("[^a-z0-9]+"), "-").trim('-')
-            GeneratedRuntimeNotice(
-                name = name,
-                version = version,
-                artifact = artifact,
-                license = nativeLicenseFor(licenseExpression).forProject(nativeProjectUrl(purl)),
-                complianceNote = "Vendored native component recorded in third_party/ffmpeg-kit-next/native-lock.json.",
-                origin = "native-lock.json",
-            )
-        }
-
-        val notices = (runtimeNotices + nativeNotices).sortedBy { it.artifact }
+        val notices = runtimeNotices.sortedBy { it.artifact }
         val generatedText = buildString {
             appendLine("package com.directorx.editor.engine")
             appendLine()
-            appendLine("// Generated by the releaseRuntimeClasspath and native-lock notice task; do not edit.")
+            appendLine("// Generated by the releaseRuntimeClasspath notice task; do not edit.")
             appendLine("internal object RuntimeOpenSourceLicensesGenerated {")
             appendLine("    val notices: List<OpenSourceLicenseNotice> = listOf(")
             notices.forEach { append(it.toKotlin()) }
@@ -542,12 +480,11 @@ val generateRuntimeOpenSourceNotices by tasks.registering {
         val reportOutput = reportFile.get().asFile
         reportOutput.parentFile.mkdirs()
         reportOutput.writeText(JsonOutput.prettyPrint(JsonOutput.toJson(report)) + "\n")
-        logger.lifecycle("Runtime notice inventory generated: ${runtimeNotices.size} resolved + ${nativeNotices.size} native components")
+        logger.lifecycle("Runtime notice inventory generated: ${runtimeNotices.size} resolved components")
     }
 }
 
 tasks.named("preBuild").configure {
-    dependsOn(verifyFfmpegKitAar)
     dependsOn(generateRuntimeOpenSourceNotices)
 }
 
@@ -559,19 +496,6 @@ tasks.configureEach {
 
 tasks.withType<KotlinCompile>().configureEach {
     source(runtimeNoticeGeneratedDir.get().asFile)
-}
-
-val generateNativeSbom by tasks.registering(Exec::class) {
-    group = "verification"
-    description = "Validates native dependency provenance/advisories and writes deterministic SBOMs."
-    workingDir(rootProject.projectDir)
-    commandLine("python", "scripts/verify_native_supply_chain.py")
-    inputs.file(rootProject.file("third_party/ffmpeg-kit-next/native-lock.json"))
-    inputs.file(ffmpegKitAar)
-    outputs.files(
-        layout.buildDirectory.file("reports/native-sbom/cyclonedx.json"),
-        layout.buildDirectory.file("reports/native-sbom/spdx.json"),
-    )
 }
 
 /**
@@ -768,7 +692,6 @@ tasks.withType<Test>().configureEach {
         "docs/models.md",
         "scripts/capability_registry.json",
         "scripts/package_identity.json",
-        "third_party/ffmpeg-kit-next/native-lock.json",
         "gradle/libs.versions.toml",
         "gradle/wrapper/gradle-wrapper.properties",
         "fastlane/metadata/android/en-US/full_description.txt",
@@ -885,10 +808,6 @@ dependencies {
 
     // Tier 2: Lottie animated titles
     implementation(libs.lottie.compose)
-
-    // Source-pinned LGPL build: FFmpegKitNext 8.1.0 / FFmpeg 8.1.2, five Android ABIs.
-    implementation(files(ffmpegKitAar))
-    implementation("com.arthenica:smart-exception-java:0.2.1")
 
     // Tier A.2 / R6.6: DeepFilterNet Android noise reduction
     implementation(libs.android.deepfilternet)
