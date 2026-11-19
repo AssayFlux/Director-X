@@ -1,7 +1,7 @@
 # Director X — Engineering Status
 
 **Current branch:** Alpha  
-**Current repository baseline:** commit `282fbb57534e3bfbcb96b1e6e61102288570185a`  
+**Current repository baseline:** live `Alpha` branch head; verify the exact commit in GitHub before every release  
 **Application version:** `v0.1.0`  
 **Android version code:** `001`  
 **Application ID:** `com.directorx.editor`
