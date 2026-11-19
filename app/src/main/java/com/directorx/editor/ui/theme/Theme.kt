@@ -59,9 +59,9 @@ object Mocha {
 /**
  * Stable media/category accents. Feature surfaces may use these to preserve
  * identity, but structural chrome and readable content must use
- * [LocalClearCutColors] so the high-contrast cream scheme can strengthen them.
+ * [LocalDirectorXColors] so the high-contrast cream scheme can strengthen them.
  */
-object ClearCutAccents {
+object DirectorXAccents {
     /** Stable neutral accent for content that is defined outside composition. */
     val Neutral = Mocha.Subtext0
     val Lavender = Mocha.Lavender
@@ -80,7 +80,7 @@ object ClearCutAccents {
     val Rosewater = Mocha.Rosewater
 }
 
-private val ClearCutDarkColorScheme = lightColorScheme(
+private val DirectorXDarkColorScheme = lightColorScheme(
     primary = Mocha.Sky,
     onPrimary = Mocha.Text,
     primaryContainer = Color(0xFFE7D6A4),
@@ -117,7 +117,7 @@ private val ClearCutDarkColorScheme = lightColorScheme(
     surfaceContainerHighest = Mocha.PanelHighest
 )
 
-private val ClearCutHighContrastColorScheme = lightColorScheme(
+private val DirectorXHighContrastColorScheme = lightColorScheme(
     primary = Color(0xFFA77C14),
     onPrimary = Color(0xFF1D1915),
     primaryContainer = Color(0xFFE7D6A4),
@@ -154,7 +154,7 @@ private val ClearCutHighContrastColorScheme = lightColorScheme(
     surfaceContainerHighest = Color(0xFFD9CDB7)
 )
 
-data class ClearCutSemanticColors(
+data class DirectorXSemanticColors(
     val mode: AppearanceMode,
     val highContrast: Boolean,
     val background: Color,
@@ -186,13 +186,13 @@ data class ClearCutSemanticColors(
     val onAccent: Color,
 )
 
-val LocalClearCutColors = staticCompositionLocalOf {
-    ClearCutThemeDefaults.colorsFor(AppearanceMode.DARK)
+val LocalDirectorXColors = staticCompositionLocalOf {
+    DirectorXThemeDefaults.colorsFor(AppearanceMode.DARK)
 }
 
 /**
  * Ten independent Director X palettes. Semantic roles are deliberately centralized so
- * every Compose screen using LocalClearCutColors / MaterialTheme follows the selection.
+ * every Compose screen using LocalDirectorXColors / MaterialTheme follows the selection.
  */
 private data class DirectorXPalette(
     val canvas: Color, val panel: Color, val raised: Color, val highest: Color,
@@ -200,7 +200,7 @@ private data class DirectorXPalette(
     val tertiary: Color, val dark: Boolean = false
 )
 
-object ClearCutThemeDefaults {
+object DirectorXThemeDefaults {
     val availableThemes: List<AppearanceMode> = listOf(
         AppearanceMode.PRIMARY_BRAND, AppearanceMode.MIDNIGHT_CINEMA,
         AppearanceMode.FOREST_ATELIER, AppearanceMode.BURGUNDY_EDITORIAL,
@@ -251,13 +251,13 @@ object ClearCutThemeDefaults {
         )
     }
 
-    fun colorsFor(resolvedMode: AppearanceMode): ClearCutSemanticColors {
+    fun colorsFor(resolvedMode: AppearanceMode): DirectorXSemanticColors {
         val mode=resolveMode(resolvedMode); val p=palette(mode)
         val hc=resolvedMode==AppearanceMode.HIGH_CONTRAST || resolvedMode==AppearanceMode.HIGH_CONTRAST_DARK
         val text=if(hc) Color(0xFF17130F) else p.text
         val sub=if(hc) Color(0xFF302922) else p.subtext
         val stroke=if(hc) Color(0xFF554D45) else p.highest
-        return ClearCutSemanticColors(
+        return DirectorXSemanticColors(
             mode=mode,highContrast=hc,background=p.canvas,backgroundMid=p.panel,panel=p.panel,
             panelRaised=p.raised,panelHighest=p.highest,cardStroke=stroke,cardStrokeStrong=if(hc) text else p.subtext,
             text=text,subtext=sub,subtextStrong=p.subtext,disabledText=if(hc) Color(0xFF4B4238) else p.subtext,
@@ -278,10 +278,10 @@ object ClearCutThemeDefaults {
     }
 }
 
-private val ClearCutFontFamily = FontFamily.SansSerif
+private val DirectorXFontFamily = FontFamily.SansSerif
 private val DirectorXDisplayFontFamily = FontFamily.Serif
 
-private val ClearCutTypography = Typography(
+private val DirectorXTypography = Typography(
     displayLarge = TextStyle(
         fontFamily = DirectorXDisplayFontFamily,
         fontWeight = FontWeight.SemiBold,
@@ -316,49 +316,49 @@ private val ClearCutTypography = Typography(
         lineHeight = 22.sp
     ),
     titleMedium = TextStyle(
-        fontFamily = ClearCutFontFamily,
+        fontFamily = DirectorXFontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 16.sp,
         lineHeight = 20.sp
     ),
     titleSmall = TextStyle(
-        fontFamily = ClearCutFontFamily,
+        fontFamily = DirectorXFontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
         lineHeight = 18.sp
     ),
     bodyLarge = TextStyle(
-        fontFamily = ClearCutFontFamily,
+        fontFamily = DirectorXFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 15.sp,
         lineHeight = 21.sp
     ),
     bodyMedium = TextStyle(
-        fontFamily = ClearCutFontFamily,
+        fontFamily = DirectorXFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
         lineHeight = 20.sp
     ),
     bodySmall = TextStyle(
-        fontFamily = ClearCutFontFamily,
+        fontFamily = DirectorXFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
         lineHeight = 17.sp
     ),
     labelLarge = TextStyle(
-        fontFamily = ClearCutFontFamily,
+        fontFamily = DirectorXFontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 13.sp,
         lineHeight = 16.sp
     ),
     labelMedium = TextStyle(
-        fontFamily = ClearCutFontFamily,
+        fontFamily = DirectorXFontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 12.sp,
         lineHeight = 14.sp
     ),
     labelSmall = TextStyle(
-        fontFamily = ClearCutFontFamily,
+        fontFamily = DirectorXFontFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 11.sp,
         lineHeight = 13.sp,
@@ -366,7 +366,7 @@ private val ClearCutTypography = Typography(
     )
 )
 
-private val ClearCutShapes = Shapes(
+private val DirectorXShapes = Shapes(
     extraSmall = RoundedCornerShape(Radius.xs),
     small = RoundedCornerShape(Radius.sm),
     medium = RoundedCornerShape(Radius.md),
@@ -375,16 +375,16 @@ private val ClearCutShapes = Shapes(
 )
 
 @Composable
-fun ClearCutTheme(
+fun DirectorXTheme(
     appearanceMode: AppearanceMode = AppearanceMode.DARK,
     content: @Composable () -> Unit
 ) {
-    val resolvedMode = ClearCutThemeDefaults.resolveMode(appearanceMode)
-    CompositionLocalProvider(LocalClearCutColors provides ClearCutThemeDefaults.colorsFor(appearanceMode)) {
+    val resolvedMode = DirectorXThemeDefaults.resolveMode(appearanceMode)
+    CompositionLocalProvider(LocalDirectorXColors provides DirectorXThemeDefaults.colorsFor(appearanceMode)) {
         MaterialTheme(
-            colorScheme = ClearCutThemeDefaults.colorSchemeFor(if (appearanceMode == AppearanceMode.HIGH_CONTRAST || appearanceMode == AppearanceMode.HIGH_CONTRAST_DARK) appearanceMode else resolvedMode),
-            typography = ClearCutTypography,
-            shapes = ClearCutShapes,
+            colorScheme = DirectorXThemeDefaults.colorSchemeFor(if (appearanceMode == AppearanceMode.HIGH_CONTRAST || appearanceMode == AppearanceMode.HIGH_CONTRAST_DARK) appearanceMode else resolvedMode),
+            typography = DirectorXTypography,
+            shapes = DirectorXShapes,
             content = content
         )
     }
