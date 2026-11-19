@@ -151,7 +151,7 @@ grep -q 'while (info)' "\${FFMPEG_SOURCE}/libavutil/encryption_info.c"
 grep -q 'av_encryption_init_info_append_side_data' "\${FFMPEG_SOURCE}/libavutil/encryption_info.c"
 grep -q 'pssh_side_data' "\${FFMPEG_SOURCE}/libavformat/mov.c"
 grep -q 'if (!fromlen)' "\${FFMPEG_SOURCE}/libavutil/avstring.c"
-grep -q 'memset(&list->messages\\[list->nb_messages\\]' "\${FFMPEG_SOURCE}/libavcodec/cbs_sei.c"
+grep -Fq 'memset(&list->messages[list->nb_messages]' "\${FFMPEG_SOURCE}/libavcodec/cbs_sei.c"
 '''
 path.write_text(text.replace(anchor, insert + anchor), encoding="utf-8")
 print("Prepared pinned FFmpeg security backports.")
