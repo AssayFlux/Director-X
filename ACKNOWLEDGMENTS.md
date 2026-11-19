@@ -3,7 +3,7 @@
 **Product:** Director X  
 **Maintainer and product brand:** AssayFlux  
 **Repository:** https://github.com/AssayFlux/Director-X  
-**Primary branch:** `main`  
+**Primary branch:** `Alpha`  
 **Project type:** Android video-editing application  
 **Brand credit:** Designed and maintained by AssayFlux
 
@@ -47,7 +47,7 @@ The repository identifies AssayFlux as the current product maintainer and brand.
 - Documentation, release-readiness and verification tooling present in this repository.
 - Subsequent fixes, upgrades, replacements and original contributions made by AssayFlux maintainers and contributors.
 
-These are project-level categories, not a claim that every source file, line of code, dependency, test, model, or asset was originally authored by AssayFlux. For future upgrades, record new AssayFlux-authored modules and substantial rewrites in the changelog and commit history with their paths and dates.
+These are project-level categories, not a claim that every source file, line of code, dependency, test, model, or asset was originally authored by AssayFlux. For future upgrades, record new AssayFlux-authored modules and substantial rewrites in the commit history with their paths and dates.
 
 ### 2.3 Rights and ownership boundary
 
@@ -67,7 +67,7 @@ The current `app/build.gradle.kts` declares:
 - Java source/target compatibility: 17
 - Main UI/build technology: Kotlin and Jetpack Compose
 
-The installed application ID and Kotlin source namespace are both `com.directorx.editor`. The previous NovaCut package identity was `com.novacut.editor`; this is a new-install migration, not an in-place update. Existing installations under the previous application ID are separate apps; project transfer requires export/import. Keep the existing signing key for future updates to the Director X package.
+The installed application ID and Kotlin source namespace are both `com.directorx.editor`. The previous application ID is a separate Android installation; moving projects requires export/import. Keep the existing signing key for future updates to the Director X package.
 
 The Kotlin source tree and Room schema snapshot directory have been migrated to `com.directorx.editor`. Historical Room schema versions and their contents are preserved. Legacy serialized data identifiers and project formats remain unchanged.
 
@@ -211,7 +211,7 @@ Do not delete, merge away, overwrite or replace a licence file merely because it
 
 ## 10. Upgrade and contribution record
 
-For each future Director X upgrade, add a dated changelog entry that records:
+For each future Director X upgrade, record the following in the relevant commit description and current engineering status:
 
 1. New AssayFlux-authored modules, files or substantial rewrites, with paths.
 2. Upstream files retained, modified, replaced or removed, with their provenance.
