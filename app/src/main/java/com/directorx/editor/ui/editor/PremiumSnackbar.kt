@@ -33,7 +33,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -88,12 +87,7 @@ fun PremiumSnackbar(
                 .fillMaxWidth()
                 .height(IntrinsicSize.Min)
                 .background(
-                    Brush.horizontalGradient(
-                        listOf(
-                            accent.copy(alpha = if (colors.highContrast) 0.18f else 0.12f),
-                            Color.Transparent
-                        )
-                    )
+                    MaterialTheme.colorScheme.surfaceContainerHigh
                 ),
             verticalAlignment = Alignment.CenterVertically
         ) {
