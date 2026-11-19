@@ -1343,12 +1343,7 @@ fun Timeline(
                         .weight(1f)
                         .clip(RoundedCornerShape(Radius.sm))
                         .background(
-                            Brush.verticalGradient(
-                                listOf(
-                                    semanticColors.backgroundMid.copy(alpha = 0.98f),
-                                    semanticColors.surfaceBase
-                                )
-                            )
+                            semanticColors.surfaceBase
                         )
                         .border(1.dp, semanticColors.cardStroke.copy(alpha = 0.6f), RoundedCornerShape(Radius.sm))
                         .clipToBounds()
