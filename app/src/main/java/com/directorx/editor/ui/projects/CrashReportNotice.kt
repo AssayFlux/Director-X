@@ -251,7 +251,7 @@ internal fun CrashReportBanner(
                     icon = Icons.Default.Close,
                     contentDescription = stringResource(R.string.crash_notice_dismiss),
                     onClick = onDismiss,
-                    modifier = Modifier.testTag(ClearCutTestTags.CRASH_REPORT_DISMISS)
+                    buttonModifier = Modifier.testTag(ClearCutTestTags.CRASH_REPORT_DISMISS)
                 )
             }
             Row(

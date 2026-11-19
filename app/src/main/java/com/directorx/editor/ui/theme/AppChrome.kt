@@ -41,7 +41,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -332,7 +331,8 @@ fun ClearCutChromeIconButton(
     shape: Shape = RoundedCornerShape(Radius.md),
     size: Dp = TouchTarget.minimum,
     iconSize: Dp = 18.dp,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    buttonModifier: Modifier = Modifier
 ) {
     val colors = LocalClearCutColors.current
     val interactionSource = remember { MutableInteractionSource() }
@@ -374,8 +374,7 @@ fun ClearCutChromeIconButton(
             .defaultMinSize(
                 minWidth = TouchTarget.minimum,
                 minHeight = TouchTarget.minimum,
-            )
-            .semantics(mergeDescendants = true) {},
+            ),
         contentAlignment = Alignment.Center,
     ) {
         Surface(
@@ -395,7 +394,7 @@ fun ClearCutChromeIconButton(
             onClick = onClick,
             enabled = enabled,
             interactionSource = interactionSource,
-            modifier = Modifier.size(TouchTarget.minimum)
+            modifier = Modifier.size(TouchTarget.minimum).then(buttonModifier)
         ) {
             Icon(
                 imageVector = icon,
