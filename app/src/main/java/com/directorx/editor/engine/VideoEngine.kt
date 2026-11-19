@@ -239,7 +239,7 @@ class VideoEngine @Inject constructor(
     private data class VisualTrackSequence(
         val sequence: EditedMediaItemSequence,
         val hasEmbeddedAudio: Boolean,
-        val compositorLayer: ClearCutCompositorLayer
+        val compositorLayer: DirectorXCompositorLayer
     )
 
     private data class LottieBackendPlan(
@@ -1962,7 +1962,7 @@ class VideoEngine @Inject constructor(
                     degradationLedger = degradationLedger,
                 ),
                 hasEmbeddedAudio = hasEmbeddedAudio,
-                compositorLayer = ClearCutCompositorLayer(
+                compositorLayer = DirectorXCompositorLayer(
                     inputId = inputId,
                     trackId = track.id,
                     trackIndex = track.index,
