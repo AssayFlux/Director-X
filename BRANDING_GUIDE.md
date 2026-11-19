@@ -24,7 +24,7 @@ The validator checks the configuration's required fields, allowed values, and th
 - `about.authorName`, `about.signatureAsset`, `about.assayFluxLine`: About page author identity.
 - `placements.dashboard/settings/editor`: intended logo and texture placement choices.
 
-The launcher icon is generated from `Assets/App Icon.png`. The launch screen displays only the Director X SVG logo; the AssayFlux GIF is not shown. Keep the configured splash sequence consistent with the app implementation.\n\nThe placement values are configuration selections. A UI placement is only active once its matching Android screen integration is implemented; do not assume changing this JSON alone moves UI elements.
+The launcher icon is generated from the selected `launcher.asset` (currently `Assets/Director-X Logo.svg`). Adaptive-icon artwork is fitted inside Android's guaranteed safe circle, and a matching rasterized SVG is supplied to the Android 12+ native splash screen. The Compose loading screen also displays the same SVG. The AssayFlux GIF is not shown. Keep the configured splash sequence consistent with the app implementation.\n\nThe placement values are configuration selections. A UI placement is only active once its matching Android screen integration is implemented; do not assume changing this JSON alone moves UI elements.
 
 ## Build
 
