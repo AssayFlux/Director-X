@@ -21,7 +21,7 @@ class ObjectRemovalWiringTest {
         assertTrue(delegate.contains("inpaintingEngine.inpaintVideo"))
         assertTrue(delegate.contains("masks = current.masks.filterNot"))
         assertFalse(delegate.contains("ai_object_removal_unavailable_toast"))
-        assertTrue(engine.contains("encodeImageSequenceWithAudio"))
+        assertTrue(engine.contains("encodeInpaintedFramesWithMedia3"))
     }
 
     private fun locate(relativePath: String): File =
