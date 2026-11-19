@@ -82,6 +82,7 @@ class TrackedFilesAuditTest {
             "README.md",
             "ACKNOWLEDGMENTS.md",
             "docs/BUILD.md",
+            "docs/models.md",
             "docs/ENGINEERING_STATUS.md",
             "docs/privacy-policy.md",
             "docs/play-data-safety.md",
