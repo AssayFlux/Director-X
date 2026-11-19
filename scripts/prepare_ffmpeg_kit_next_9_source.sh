@@ -66,10 +66,10 @@ if not match:
     raise SystemExit("Could not determine Unicode version from pinned FriBidi ReadMe.txt")
 major, minor, micro = map(int, match.groups())
 print("/* fribidi-unicode-version.h: generated from pinned Unicode ReadMe.txt */")
-print(f'#define FRIBIDI_UNICODE_VERSION "${major}.${minor}.${micro}"')
-print(f"#define FRIBIDI_UNICODE_MAJOR_VERSION ${major}")
-print(f"#define FRIBIDI_UNICODE_MINOR_VERSION ${minor}")
-print(f"#define FRIBIDI_UNICODE_MICRO_VERSION ${micro}")
+print(f'#define FRIBIDI_UNICODE_VERSION "{major}.{minor}.{micro}"')
+print(f"#define FRIBIDI_UNICODE_MAJOR_VERSION {major}")
+print(f"#define FRIBIDI_UNICODE_MINOR_VERSION {minor}")
+print(f"#define FRIBIDI_UNICODE_MICRO_VERSION {micro}")
 FRIBIDI_GEN
 FRIBIDI_MAKEFILE="${FRIBIDI_SOURCE_DIR}/gen.tab/Makefile"
 python3 - "${FRIBIDI_MAKEFILE}" <<'FRIBIDI_MAKE'
@@ -177,4 +177,6 @@ path.write_text(text.replace(anchor, insert + anchor), encoding="utf-8")
 print("Prepared pinned FFmpeg security backports.")
 PY
 
+bash -n "$kit_root/scripts/android/fribidi.sh"
+bash -n "$kit_root/scripts/android/ffmpeg.sh"
 bash -n "$source_file"
