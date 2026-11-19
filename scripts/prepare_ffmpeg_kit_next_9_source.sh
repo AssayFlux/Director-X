@@ -175,7 +175,7 @@ PY
 grep -q 'ptr_linesize = linesize' "${FFMPEG_SOURCE}/libavcodec/gif.c"
 grep -q 'ptrdiff_t' "${FFMPEG_SOURCE}/libavcodec/sgienc.c"
 grep -q 'av_size_mult(s->current_frame.nb_units' "${FFMPEG_SOURCE}/libavcodec/vvc/refs.c"
-grep -q 'memcpy(lut, ctx->c23lut, 256)' "${FFMPEG_SOURCE}/libavcodec/sanm.c"
+grep -q 'memcpy(lut, ctx->c23lut, sizeof(lut))' "${FFMPEG_SOURCE}/libavcodec/sanm.c"
 grep -q 'Unsupported bit depth' "${FFMPEG_SOURCE}/libavcodec/dpxenc.c"
 grep -q 'src->width != avctx->width' "${FFMPEG_SOURCE}/libavcodec/encode.c"
 grep -q 's->block_len > 1024 \* 1024' "${FFMPEG_SOURCE}/libavcodec/interplayacm.c"
