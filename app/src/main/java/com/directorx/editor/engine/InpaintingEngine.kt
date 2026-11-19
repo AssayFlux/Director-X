@@ -6,6 +6,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import com.directorx.editor.engine.AppLog
 import com.directorx.editor.model.Mask
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -493,6 +495,9 @@ class InpaintingEngine @Inject constructor(
             } finally {
                 tempDir.deleteRecursively()
             }
+        } catch (e: CancellationException) {
+            outputFile.delete()
+            throw e
         } catch (e: Exception) {
             AppLog.e(TAG, "Video inpainting failed", e)
             null
@@ -591,7 +596,12 @@ class InpaintingEngine @Inject constructor(
                         }
                     })
                     .build()
-                continuation.invokeOnCancellation { runCatching { transformer.cancel() } }
+                continuation.invokeOnCancellation {
+                    val posted = Handler(Looper.getMainLooper()).post {
+                        runCatching { transformer.cancel() }
+                    }
+                    if (!posted) AppLog.w(TAG, "Main looper rejected inpainting Transformer cancellation")
+                }
                 try {
                     File(outputPath).parentFile?.mkdirs()
                     File(outputPath).delete()
