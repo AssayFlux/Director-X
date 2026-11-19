@@ -9,7 +9,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.coroutineContext
-import kotlinx.coroutines.withTimeoutOrNull
 import java.io.File
 import java.nio.ByteBuffer
 import java.nio.charset.StandardCharsets
@@ -338,7 +337,12 @@ class MetadataSidecarEngine @Inject constructor(
                 return@withContext false
             }
             extractor.selectTrack(track.trackIndex)
-            val buffer = ByteBuffer.allocate(64 * 1024)
+            val maxSampleBytes = if (mediaFormat.containsKey(MediaFormat.KEY_MAX_INPUT_SIZE)) {
+                mediaFormat.getInteger(MediaFormat.KEY_MAX_INPUT_SIZE).coerceIn(64 * 1024, MAX_SIDECAR_BYTES.toInt())
+            } else {
+                64 * 1024
+            }
+            val buffer = ByteBuffer.allocate(maxSampleBytes)
             var totalBytes = 0L
             outputFile.outputStream().buffered().use { stream ->
                 while (true) {
