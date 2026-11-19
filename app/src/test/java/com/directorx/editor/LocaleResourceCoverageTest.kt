@@ -70,7 +70,7 @@ class LocaleResourceCoverageTest {
         val localeTags = readLocaleConfigTags(File(resourceRoot, "xml/locales_config.xml"))
         val translatedDirectories = resourceRoot.listFiles()
             .orEmpty()
-            .filter { it.isDirectory && it.name.startsWith("values-") }
+            .filter { it.isDirectory && isTranslatedLocaleDirectory(it.name) }
 
         translatedDirectories.forEach { directory ->
             val androidTag = androidLocaleTag(directory.name)
