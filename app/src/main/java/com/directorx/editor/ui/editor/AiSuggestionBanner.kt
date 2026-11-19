@@ -15,7 +15,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
@@ -61,13 +60,7 @@ fun AiSuggestionBanner(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            Brush.horizontalGradient(
-                                listOf(
-                                    ClearCutAccents.Mauve.copy(alpha = 0.12f),
-                                    semanticColors.panelHighest.copy(alpha = 0.8f),
-                                    semanticColors.panel
-                                )
-                            )
+                            MaterialTheme.colorScheme.surfaceContainerHigh
                         )
                         .padding(horizontal = Spacing.md, vertical = Spacing.sm)
                 ) {
