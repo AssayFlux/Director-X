@@ -456,6 +456,7 @@ class AudioEngine @Inject constructor(
             encoder.start()
             muxer = MediaMuxer(outputFile.absolutePath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)
             val info = MediaCodec.BufferInfo()
+            var consumedBytes = 0L
             java.io.FileInputStream(inputFile).buffered().use { source ->
                 while (!outputEnded) {
                     ensureActive()
@@ -478,6 +479,7 @@ class AudioEngine @Inject constructor(
                             }
                             if (alignedCount > 0) {
                                 inputBuffer.put(chunk, 0, alignedCount)
+                                consumedBytes += alignedCount
                                 val ptsUs = submittedFrames * 1_000_000L / sampleRate
                                 submittedFrames += alignedCount / frameBytes
                                 encoder.queueInputBuffer(inputIndex, 0, alignedCount, ptsUs, 0)
@@ -515,7 +517,7 @@ class AudioEngine @Inject constructor(
                         muxer.start()
                         muxerStarted = true
                     }
-                    onProgress((source.channel.position().toFloat() / totalBytes).coerceIn(0f, 1f))
+                    onProgress((consumedBytes.toFloat() / totalBytes).coerceIn(0f, 1f))
                 }
             }
             muxerStarted && outputFile.isFile && outputFile.length() > 0L
