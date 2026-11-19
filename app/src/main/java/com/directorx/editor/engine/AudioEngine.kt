@@ -435,7 +435,7 @@ class AudioEngine @Inject constructor(
         outputFile.parentFile?.mkdirs()
         outputFile.delete()
         var encoderLease: CodecLease<MediaCodec>? = null
-        var encoder: MediaCodec? = null
+        lateinit var encoder: MediaCodec
         var muxer: MediaMuxer? = null
         var muxerStarted = false
         var inputEnded = false
