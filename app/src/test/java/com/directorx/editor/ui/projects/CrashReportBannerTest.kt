@@ -42,6 +42,7 @@ class CrashReportBannerTest {
         compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_SAVE)
             .assertHasClickAction()
             .performClick()
+        compose.waitForIdle()
 
         assertTrue("Save callback should run", tapped.get())
     }
@@ -54,6 +55,7 @@ class CrashReportBannerTest {
         compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_COPY)
             .assertHasClickAction()
             .performClick()
+        compose.waitForIdle()
 
         assertTrue("Copy callback should run", tapped.get())
     }
@@ -66,6 +68,7 @@ class CrashReportBannerTest {
         compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_DISMISS)
             .assertHasClickAction()
             .performClick()
+        compose.waitForIdle()
 
         assertTrue("Dismiss callback should run", tapped.get())
     }
