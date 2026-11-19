@@ -26,7 +26,10 @@ def main() -> None:
     references = [data["launcher"]["asset"], data["about"]["signatureAsset"]]
     if Path(data["launcher"]["asset"]).suffix.lower() not in {".svg", ".png"}:
         fail("launcher.asset must be an SVG or PNG")
-    splash_assets = [item["asset"] for item in data["splash"]["sequence"]]\n    if data["launcher"]["asset"] not in splash_assets:\n        fail("the launcher SVG must also appear in splash.sequence")\n    references.extend(splash_assets)
+    splash_assets = [item["asset"] for item in data["splash"]["sequence"]]
+    if data["launcher"]["asset"] not in splash_assets:
+        fail("the launcher SVG must also appear in splash.sequence")
+    references.extend(splash_assets)
     for area in ("dashboard", "settings", "editor"):
         placement = data["placements"][area]
         texture = placement["texture"]
