@@ -414,6 +414,126 @@ class AudioEngine @Inject constructor(
         }
     }
 
+    /**
+     * Encode interleaved signed 16-bit PCM into an AAC/M4A file using Android's
+     * platform MediaCodec encoder and MediaMuxer. Input must already match the
+     * requested sample rate/channel count; callers own resampling and cleanup.
+     */
+    suspend fun encodePcm16leToM4a(
+        inputFile: File,
+        outputFile: File,
+        sampleRate: Int,
+        channels: Int,
+        bitrate: Int = 128_000,
+        onProgress: (Float) -> Unit = {},
+    ): Boolean = withContext(Dispatchers.IO) {
+        if (!inputFile.isFile || inputFile.length() <= 0L ||
+            sampleRate !in 8_000..192_000 || channels !in 1..2
+        ) return@withContext false
+        val frameBytes = channels * 2
+        if (inputFile.length() % frameBytes != 0L) return@withContext false
+        outputFile.parentFile?.mkdirs()
+        outputFile.delete()
+        val pipelineLease = CodecInstanceBudget.acquirePipeline(MediaFormat.MIMETYPE_AUDIO_AAC)
+        var encoder: MediaCodec? = null
+        var muxer: MediaMuxer? = null
+        var muxerStarted = false
+        var inputEnded = false
+        var outputEnded = false
+        var audioTrack = -1
+        var submittedFrames = 0L
+        val totalBytes = inputFile.length()
+        try {
+            val format = MediaFormat.createAudioFormat(
+                MediaFormat.MIMETYPE_AUDIO_AAC, sampleRate, channels
+            ).apply {
+                setInteger(MediaFormat.KEY_AAC_PROFILE, MediaCodecInfo.CodecProfileLevel.AACObjectLC)
+                setInteger(MediaFormat.KEY_BIT_RATE, bitrate.coerceIn(32_000, 320_000))
+                setInteger(MediaFormat.KEY_MAX_INPUT_SIZE, 16 * 1024)
+            }
+            encoder = MediaCodec.createEncoderByType(MediaFormat.MIMETYPE_AUDIO_AAC)
+            encoder.configure(format, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE)
+            encoder.start()
+            muxer = MediaMuxer(outputFile.absolutePath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)
+            val info = MediaCodec.BufferInfo()
+            java.io.FileInputStream(inputFile).buffered().use { source ->
+                while (!outputEnded) {
+                    ensureActive()
+                    if (!inputEnded) {
+                        val inputIndex = encoder.dequeueInputBuffer(10_000)
+                        if (inputIndex >= 0) {
+                            val inputBuffer = encoder.getInputBuffer(inputIndex)
+                                ?: throw IllegalStateException("AAC encoder returned no input buffer")
+                            inputBuffer.clear()
+                            val chunk = ByteArray(inputBuffer.remaining())
+                            var count = 0
+                            var eof = false
+                            while (count < chunk.size && !eof) {
+                                val read = source.read(chunk, count, chunk.size - count)
+                                if (read < 0) eof = true else count += read
+                            }
+                            val alignedCount = count - (count % frameBytes)
+                            if (eof && alignedCount != count) {
+                                throw IllegalStateException("PCM input ended mid-sample frame")
+                            }
+                            if (alignedCount > 0) {
+                                inputBuffer.put(chunk, 0, alignedCount)
+                                val ptsUs = submittedFrames * 1_000_000L / sampleRate
+                                submittedFrames += alignedCount / frameBytes
+                                encoder.queueInputBuffer(inputIndex, 0, alignedCount, ptsUs, 0)
+                            } else if (eof) {
+                                val ptsUs = submittedFrames * 1_000_000L / sampleRate
+                                encoder.queueInputBuffer(
+                                    inputIndex, 0, 0, ptsUs,
+                                    MediaCodec.BUFFER_FLAG_END_OF_STREAM
+                                )
+                                inputEnded = true
+                            } else {
+                                encoder.queueInputBuffer(inputIndex, 0, 0, 0L, 0)
+                            }
+                        }
+                    }
+                    var outputIndex = encoder.dequeueOutputBuffer(info, 10_000)
+                    while (outputIndex >= 0) {
+                        val outputBuffer = encoder.getOutputBuffer(outputIndex)
+                        if (info.flags and MediaCodec.BUFFER_FLAG_CODEC_CONFIG != 0) info.size = 0
+                        if (info.size > 0 && outputBuffer != null) {
+                            if (!muxerStarted) {
+                                throw IllegalStateException("AAC encoder emitted samples before its output format")
+                            }
+                            outputBuffer.position(info.offset)
+                            outputBuffer.limit(info.offset + info.size)
+                            muxer.writeSampleData(audioTrack, outputBuffer, info)
+                        }
+                        if (info.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM != 0) outputEnded = true
+                        encoder.releaseOutputBuffer(outputIndex, false)
+                        outputIndex = if (outputEnded) -1 else encoder.dequeueOutputBuffer(info, 0)
+                    }
+                    if (outputIndex == MediaCodec.INFO_OUTPUT_FORMAT_CHANGED) {
+                        if (muxerStarted) throw IllegalStateException("AAC encoder changed output format twice")
+                        audioTrack = muxer.addTrack(encoder.outputFormat)
+                        muxer.start()
+                        muxerStarted = true
+                    }
+                    onProgress((source.channel.position().toFloat() / totalBytes).coerceIn(0f, 1f))
+                }
+            }
+            muxerStarted && outputFile.isFile && outputFile.length() > 0L
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            AppLog.w(TAG, "Platform AAC encoding failed", e)
+            false
+        } finally {
+            runCatching { encoder?.stop() }
+            runCatching { encoder?.release() }
+            if (muxerStarted) runCatching { muxer?.stop() }
+            runCatching { muxer?.release() }
+            pipelineLease.close()
+            if (!outputFile.isFile || outputFile.length() <= 0L) outputFile.delete()
+        }
+    }
+
     suspend fun probeAudioFormat(uri: Uri): AudioFormatInfo? = withContext(Dispatchers.IO) {
         val extractor = MediaExtractor()
         try {
