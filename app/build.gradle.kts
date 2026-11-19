@@ -251,6 +251,12 @@ val mitLicense = RuntimeLicenseInfo(
     licenseUrl = "https://opensource.org/license/mit/",
     projectUrl = "https://opensource.org/license/mit/",
 )
+val bsd3License = RuntimeLicenseInfo(
+    licenseName = "BSD 3-Clause License",
+    licenseText = "BSD 3-Clause License. Redistribution must preserve the copyright notice, conditions, and disclaimer.",
+    licenseUrl = "https://opensource.org/license/bsd-3-clause/",
+    projectUrl = "https://opensource.org/license/bsd-3-clause/",
+)
 fun RuntimeLicenseInfo.forProject(projectUrl: String): RuntimeLicenseInfo = copy(projectUrl = projectUrl)
 
 val runtimeLicensePolicies = listOf(
@@ -290,6 +296,35 @@ fun runtimeLicenseFor(group: String): RuntimeLicenseInfo? = runtimeLicensePolici
     }
     .maxByOrNull { policy -> policy.groupPrefixes.maxOf { it.length } }
     ?.license
+
+fun String.kotlinLiteral(): String = buildString {
+    append('"')
+    for (character in this@kotlinLiteral) {
+        when (character) {
+            '\\' -> append("\\\\")
+            '"' -> append("\\\"")
+            '\n' -> append("\\n")
+            '\r' -> append("\\r")
+            '\t' -> append("\\t")
+            else -> append(character)
+        }
+    }
+    append('"')
+}
+
+fun GeneratedRuntimeNotice.toKotlin(): String = buildString {
+    appendLine("        OpenSourceLicenseNotice(")
+    appendLine("            name = ${name.kotlinLiteral()},")
+    appendLine("            version = ${version.kotlinLiteral()},")
+    appendLine("            artifact = ${artifact.kotlinLiteral()},")
+    appendLine("            licenseName = ${license.licenseName.kotlinLiteral()},")
+    appendLine("            licenseText = ${license.licenseText.kotlinLiteral()},")
+    appendLine("            licenseUrl = ${license.licenseUrl.kotlinLiteral()},")
+    appendLine("            projectUrl = ${license.projectUrl.kotlinLiteral()},")
+    appendLine("            sourceOfferText = ${sourceOfferText?.kotlinLiteral() ?: "null"},")
+    appendLine("            complianceNote = ${complianceNote?.kotlinLiteral() ?: "null"},")
+    appendLine("        ),")
+}
 
 val generateRuntimeOpenSourceNotices by tasks.registering {
     group = "verification"
@@ -382,7 +417,6 @@ val generateRuntimeOpenSourceNotices by tasks.registering {
             "schemaVersion" to 1,
             "releaseConfiguration" to "releaseRuntimeClasspath",
             "runtimeComponentCount" to runtimeNotices.size,
-            "nativeComponentCount" to nativeNotices.size,
             "notices" to reportEntries,
         )
         val reportOutput = reportFile.get().asFile
