@@ -3,7 +3,7 @@ name: Build FFmpegKitNext 9.0.2 Android artifact
 on:
   workflow_dispatch:
   push:
-    branches: [upgrade-ffmpeg-9.0]
+    branches: [ffmpeg-9-rebuild-diagnostics]
     paths:
       - "scripts/build_ffmpeg_kit_next.ps1"
       - "third_party/ffmpeg-kit-next/directorx-security.patch"
@@ -50,6 +50,7 @@ jobs:
           git -C ffmpeg-kit-next apply --check "$GITHUB_WORKSPACE/third_party/ffmpeg-kit-next/directorx-security.patch"
           git -C ffmpeg-kit-next apply "$GITHUB_WORKSPACE/third_party/ffmpeg-kit-next/directorx-security.patch"
           bash -n ffmpeg-kit-next/scripts/android/ffmpeg.sh
+          bash -n ffmpeg-kit-next/scripts/source.sh
 
       - name: Install Nix
         uses: cachix/install-nix-action@v31
@@ -65,7 +66,7 @@ jobs:
         run: |
           set -euo pipefail
           export version_ffmpeg=d59078794d80f5256d5def27e10bb5400a13195c
-          ./nix-android.sh -p android-r27d --enable-libass --enable-libjxl --enable-android-media-codec --enable-android-zlib --enable-openh264 --jobs=8
+          ./nix-android.sh -p android-r27d --enable-lib-libass --enable-lib-libjxl --enable-lib-android-media-codec --enable-lib-android-zlib --enable-lib-openh264 --jobs=8
           test "$(git -C src/ffmpeg rev-parse HEAD)" = "d59078794d80f5256d5def27e10bb5400a13195c"
 
       - name: Verify generated AAR and POM
@@ -100,12 +101,13 @@ jobs:
           cp "${poms[0]}" build-output/
           sha256sum build-output/* | tee build-output/SHA256SUMS
 
-      - name: Upload native build and build log
+      - name: Upload native build diagnostics and successful artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ffmpeg-kit-next-9.0.2-android-r27d
+          name: ffmpeg-kit-next-9.0.2-android-r27d-${{ github.run_id }}
           path: |
             build-output/*
             ffmpeg-kit-next/build.log
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 30
