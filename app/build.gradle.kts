@@ -29,6 +29,7 @@ val generateDirectorXLauncherIcons by tasks.registering(Exec::class) {
     group = "branding"
     description = "Generates launcher icons from the approved Director X master SVG."
     inputs.file(rootProject.file("Assets/Director-X Logo.svg"))
+    inputs.file(rootProject.file("Assets/Author's Signature.svg"))
     inputs.file(rootProject.file("scripts/generate_launcher_icons.py"))
     outputs.dir(directorXLauncherResDir)
     commandLine("python3", rootProject.file("scripts/generate_launcher_icons.py").absolutePath,
