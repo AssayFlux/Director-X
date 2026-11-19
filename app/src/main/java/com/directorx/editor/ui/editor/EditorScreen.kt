@@ -53,7 +53,6 @@ import androidx.compose.ui.input.key.*
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.foundation.focusable
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import com.directorx.editor.engine.ExportState
@@ -1004,13 +1003,7 @@ fun EditorScreen(
                     Row(
                         modifier = Modifier
                             .background(
-                                Brush.horizontalGradient(
-                                    listOf(
-                                        ClearCutAccents.Peach.copy(alpha = 0.18f),
-                                        semanticColors.panelHighest.copy(alpha = 0.96f),
-                                        semanticColors.panel.copy(alpha = 0.98f)
-                                    )
-                                )
+                                MaterialTheme.colorScheme.surfaceContainerHigh
                             )
                             .padding(horizontal = 14.dp, vertical = 10.dp),
                         verticalAlignment = Alignment.CenterVertically
