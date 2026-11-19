@@ -19,7 +19,7 @@ if ($LASTEXITCODE -ne 0 -or $actualKitCommit -ne $expectedKitCommit) {
 }
 
 $patchPath = (Resolve-Path -LiteralPath (
-        Join-Path $PSScriptRoot "..\third_party\ffmpeg-kit-next\directorx-security.patch"
+        Join-Path $PSScriptRoot "..\third_party\ffmpeg-kit-next\directorx-security-9.0.patch"
     ) -ErrorAction Stop).Path
 function ConvertTo-WslPath([string]$value) {
     $shellValue = $value.Replace("'", "'\''")
