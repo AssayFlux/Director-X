@@ -41,6 +41,17 @@ The reviewer must reconcile the exact shipped AAR against, at minimum, the newer
 - CVE-2026-75141 through CVE-2026-75146
 - Any newer advisories published after the AAR's 2026-08-02 build date
 
+
+### Do not treat FFmpeg 9.0.2 as an automatic fix
+
+The Debian FFmpeg tracker now records multiple open vulnerabilities against FFmpeg 9.0.2 as well, including CVE-2026-125073, CVE-2026-125100 through CVE-2026-125104, CVE-2026-125225 through CVE-2026-125234, and CVE-2026-125263 through CVE-2026-125270. It also records additional 2026-75141/75142 findings. Therefore, simply replacing the current 8.1.2 library with 9.0.2 would not establish a clean security posture.
+
+The FFmpegKitNext upstream Android build instructions state that it does not publish binaries; consumers must build the AAR from source. Any upgrade must therefore include a reproducible Nix build, the exact new AAR/POM hashes, refreshed component inventory and SBOM, and a qualified review of the resulting binary. Treat the version number as a starting point for review, not as security evidence.
+
+References:
+- Debian FFmpeg tracker: https://tracker.debian.org/pkg/ffmpeg
+- FFmpegKitNext Android build instructions: https://github.com/arthenica/ffmpeg-kit-next/blob/v9.0.2/android/README.md
+
 These are review leads, not claims that every affected component is reachable in the Android package. Do not mark them `not_affected` from configure flags alone. Confirm the exact binary's compiled component surface and the actual application input paths, then record a reasoned decision and evidence per advisory. Keep the release gate closed until that work is completed by a qualified reviewer.
 
 Sources:
