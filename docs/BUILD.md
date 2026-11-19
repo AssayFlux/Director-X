@@ -42,8 +42,8 @@ Configure the Android SDK using the local Android development environment. Do no
 ## Verification
 
 ```sh
-./gradlew :app:testDebugUnitTest
-./gradlew :app:lintDebug
+./gradlew :app:testQaUnitTest
+./gradlew :app:lintQa
 ```
 
 Run the repository's verification scripts where relevant. A successful build is not evidence of device playback, proxy, custom-canvas, or export acceptance. See [ENGINEERING_STATUS.md](ENGINEERING_STATUS.md).
