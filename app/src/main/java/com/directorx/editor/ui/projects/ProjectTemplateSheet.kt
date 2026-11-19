@@ -15,7 +15,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
@@ -368,9 +367,7 @@ private fun UserTemplateCard(
                 .fillMaxWidth()
                 .height(74.dp)
                 .background(
-                    Brush.verticalGradient(
-                        listOf(ClearCutAccents.Mauve.copy(alpha = 0.24f), Color.Transparent)
-                    )
+                    MaterialTheme.colorScheme.surfaceContainerHigh
                 ),
             contentAlignment = Alignment.Center
         ) {
@@ -468,9 +465,7 @@ private fun ProjectTemplateCard(
                 .fillMaxWidth()
                 .height(86.dp)
                 .background(
-                    Brush.verticalGradient(
-                        listOf(template.accentColor.copy(alpha = 0.3f), Color.Transparent)
-                    )
+                    MaterialTheme.colorScheme.surfaceContainerHigh
                 ),
             contentAlignment = Alignment.TopStart
         ) {
