@@ -10,7 +10,7 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
-import com.directorx.editor.ClearCutApp
+import com.directorx.editor.DirectorXApp
 import com.directorx.editor.MainActivity
 import com.directorx.editor.engine.CrashRecordStore
 import com.directorx.editor.engine.DiagnosticExportEngine
@@ -35,7 +35,7 @@ import org.robolectric.annotation.GraphicsMode
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(
-    application = ClearCutApp::class,
+    application = DirectorXApp::class,
     sdk = [35],
     qualifiers = "w360dp-h800dp-xxhdpi",
 )
@@ -69,7 +69,7 @@ class CrashReportBannerTest {
         waitUntilBannerGone()
         val clip = context.getSystemService(ClipboardManager::class.java).primaryClip!!.getItemAt(0).text.toString()
         assertTrue(clip, clip.contains("Director X closed unexpectedly (java.lang.IllegalStateException)"))
-        assertTrue(clip, clip.contains("- Director X: ${ClearCutApp.VERSION}"))
+        assertTrue(clip, clip.contains("- Director X: ${DirectorXApp.VERSION}"))
         assertTrue(clip, clip.contains("- Version it happened in: 0.1.0"))
         assertTrue(clip, clip.contains("- Android: "))
         assertTrue(clip, clip.contains("- ABI: "))
