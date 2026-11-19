@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render selected Director X branding assets into Android resources."""
+"""Render the selected Director X PNG launcher asset and author signature into Android resources."""
 from __future__ import annotations
 import argparse
 import json
