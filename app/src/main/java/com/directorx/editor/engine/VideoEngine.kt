@@ -1259,72 +1259,27 @@ class VideoEngine @Inject constructor(
         }
     }
 
+    /**
+     * Media3 Transformer owns output cadence. Every edited item is assigned the
+     * requested frame rate in buildEditedMediaItem when constant-frame-rate
+     * export is selected, so no external pre-normalization transcode is needed.
+     */
     private suspend fun preRenderConstantFrameRateClips(
         tracks: List<Track>,
         frameRate: Int,
         tempFiles: MutableList<File>,
         onProgress: (Float) -> Unit,
     ): List<Track> {
-        val visualClips = tracks.flatMap { track ->
-            if (track.type == TrackType.VIDEO || track.type == TrackType.OVERLAY) {
-                track.clips
-                    .filterNot { clip -> isImageUri(clip.sourceUri) }
-                    .map { track to it }
-            } else {
-                emptyList()
-            }
-        }
-        if (visualClips.isEmpty()) return tracks
-        if (!ffmpegEngine.isAvailable()) {
+        if (frameRate !in 1..120) {
             throw ExportStageException(
                 stage = "cfr-normalize",
                 subjectId = null,
-                message = "Constant frame-rate export requires the bundled frame-normalization backend.",
+                message = "Requested constant frame rate is outside the supported 1–120 fps range.",
             )
         }
-
-        val clipReplacements = mutableMapOf<String, Clip>()
-        for ((index, pair) in visualClips.withIndex()) {
-            ensureExportActive("constant frame-rate pre-render")
-            val (_, clip) = pair
-            val tempFile = File(context.cacheDir, "cfr_${clip.id}_${System.nanoTime()}.mp4")
-            tempFiles.add(tempFile)
-            val success = ffmpegEngine.normalizeVideoFrameRate(
-                inputUri = clip.sourceUri,
-                outputFile = tempFile,
-                frameRate = frameRate,
-                onProgress = { progress ->
-                    val base = index.toFloat() / visualClips.size
-                    val weight = 1f / visualClips.size
-                    onProgress(base + progress * weight)
-                },
-            )
-            if (!success || !tempFile.isFile || tempFile.length() <= 0L) {
-                throw ExportStageException(
-                    stage = "cfr-normalize",
-                    subjectId = clip.id,
-                    message = "Constant frame-rate normalization failed for clip ${clip.id}.",
-                )
-            }
-            val normalizedDurationMs = getVideoDuration(Uri.fromFile(tempFile))
-                .takeIf { it > 0L }
-                ?: clip.sourceDurationMs
-            val safeTrimStartMs = clip.trimStartMs.coerceIn(0L, (normalizedDurationMs - 1L).coerceAtLeast(0L))
-            val safeTrimEndMs = clip.trimEndMs.coerceIn(
-                (safeTrimStartMs + 1L).coerceAtMost(normalizedDurationMs),
-                normalizedDurationMs.coerceAtLeast(safeTrimStartMs + 1L),
-            )
-            clipReplacements[clip.id] = clip.copy(
-                sourceUri = Uri.fromFile(tempFile),
-                sourceDurationMs = normalizedDurationMs,
-                trimStartMs = safeTrimStartMs,
-                trimEndMs = safeTrimEndMs,
-            )
-        }
-
-        return tracks.map { track ->
-            track.copy(clips = track.clips.map { clip -> clipReplacements[clip.id] ?: clip })
-        }
+        onProgress(1f)
+        AppLog.d(TAG, "Constant frame rate will be enforced by Media3 Transformer at $frameRate fps")
+        return tracks
     }
 
     @androidx.annotation.OptIn(UnstableApi::class)
@@ -2309,10 +2264,13 @@ class VideoEngine @Inject constructor(
             .setDurationUs(durationMsToUs(clip.sourceDurationMs.coerceAtLeast(1L)))
         if (mediaItem.localConfiguration?.imageDurationMs != C.TIME_UNSET) {
             // A still has no frame rate of its own, and Media3's ImageAssetLoader
-            // checkState()s one before any encoder opens. Without it every export
-            // containing a photo failed at once with a bare IllegalStateException
-            // (issue #54). A speed change below still applies its own cap.
+            // requires one before the encoder opens.
             itemBuilder.setFrameRate(config.frameRate.coerceAtLeast(1))
+        }
+        if (config.forceConstantFrameRate) {
+            // Media3's edited-item frame-rate control normalizes source cadence
+            // during the final encode, avoiding a separate software transcode.
+            itemBuilder.setFrameRate(config.frameRate.coerceIn(1, 120))
         }
 
         applyClipSpeed(
