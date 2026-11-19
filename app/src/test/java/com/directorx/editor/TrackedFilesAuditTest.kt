@@ -86,6 +86,11 @@ class TrackedFilesAuditTest {
             "docs/ENGINEERING_STATUS.md",
             "docs/privacy-policy.md",
             "docs/play-data-safety.md",
+            "BRANDING_GUIDE.md",
+            "docs/ARCHITECTURE_BOUNDARIES.md",
+            "docs/PERFORMANCE_VALIDATION.md",
+            "docs/RELEASE_READINESS.md",
+            "docs/UPGRADE_ROADMAP.md",
         )
         val trackedPrivateMarkdown = tracked.filter { path ->
             path.endsWith(".md") && path !in releaseContractMarkdown
@@ -189,6 +194,7 @@ class TrackedFilesAuditTest {
             ".github/workflows/android-verification.yml",
             ".github/workflows/android-device-qa.yml",
             ".github/workflows/repository-hygiene.yml",
+            ".github/workflows/release-candidate.yml",
         )
 
         private val REQUIRED_TRACKED = listOf(
