@@ -40,7 +40,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -175,12 +174,7 @@ fun BoxScope.EditorOverlayHost(
             Column(
                 modifier = Modifier
                     .background(
-                        Brush.verticalGradient(
-                            listOf(
-                                semanticColors.panelHighest.copy(alpha = 0.86f),
-                                semanticColors.panel
-                            )
-                        )
+                        MaterialTheme.colorScheme.surfaceContainerHigh
                     )
                     .padding(horizontal = Spacing.lg, vertical = Spacing.md),
                 verticalArrangement = Arrangement.spacedBy(Spacing.sm)
