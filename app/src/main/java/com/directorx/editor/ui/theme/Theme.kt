@@ -82,8 +82,6 @@ object DirectorXAccents {
 
 // Temporary source-compatibility bridge while remaining UI call sites are migrated.
 // These aliases are internal implementation names only; the public app identity is Director X.
-val LocalClearCutColors = LocalDirectorXColors
-
 object ClearCutAccents {
     val Neutral = DirectorXAccents.Neutral
     val Lavender = DirectorXAccents.Lavender
@@ -211,6 +209,10 @@ data class DirectorXSemanticColors(
 val LocalDirectorXColors = staticCompositionLocalOf {
     DirectorXThemeDefaults.colorsFor(AppearanceMode.DARK)
 }
+
+// Transitional source alias; remaining UI references are being renamed.
+val LocalClearCutColors = LocalDirectorXColors
+
 
 /**
  * Ten independent Director X palettes. Semantic roles are deliberately centralized so
