@@ -63,7 +63,7 @@ import com.directorx.editor.ui.editor.LocalTabletopPosture
 import com.directorx.editor.ui.projects.ProjectListScreen
 import com.directorx.editor.ui.settings.SettingsScreen
 import com.directorx.editor.ui.theme.AssayFluxLogo
-import com.directorx.editor.ui.theme.ClearCutTheme
+import com.directorx.editor.ui.theme.DirectorXTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -110,7 +110,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val settings by settingsRepository.settings.collectAsStateWithLifecycle(initialValue = AppSettings())
-            ClearCutTheme(appearanceMode = settings.appearanceMode) {
+            DirectorXTheme(appearanceMode = settings.appearanceMode) {
                 val navController = rememberNavController()
                 val currentBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = currentBackStackEntry?.destination?.route
