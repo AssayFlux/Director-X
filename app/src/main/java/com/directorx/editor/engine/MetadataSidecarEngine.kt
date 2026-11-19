@@ -362,7 +362,7 @@ class MetadataSidecarEngine @Inject constructor(
             val bytes = readBoundedBytes(outputFile, MAX_SIDECAR_BYTES) ?: return@withContext false
             CaptionImportEngine.analyze(bytes = bytes, format = expectedFormat).isValid
         } catch (e: Exception) {
-            AppLog.w(TAG, "Subtitle sidecar extraction failed: ${e.javaClass.simpleName}")
+            AppLog.w("MetadataSidecarEngine", "Subtitle sidecar extraction failed: ${e.javaClass.simpleName}")
             false
         } finally {
             extractor.release()
