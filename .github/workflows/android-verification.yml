@@ -93,7 +93,7 @@ jobs:
       - name: Run Android database and instrumentation tests
         run: |
           TASKS="$(./gradlew --no-daemon --console=plain :app:tasks --all)"
-          TEST_TASK="$(printf '%s\\n' "$TASKS" | python -c 'import re,sys; lines=sys.stdin.read().splitlines(); matches=[m.group(1) for line in lines if (m:=re.match(r"\\s*(directorXApi37\\w*QaAndroidTest)\\s+-", line))]; print(matches[0] if matches else "")')"
+          TEST_TASK="$(printf '%s\n' "$TASKS" | python -c 'import re,sys; lines=sys.stdin.read().splitlines(); matches=[m.group(1) for line in lines if (m:=re.match(r"\s*(directorXApi37\w*QaAndroidTest)\s+-", line))]; print(matches[0] if matches else "")')"
           test -n "$TEST_TASK" || { echo "Managed API 37 QA instrumentation task was not registered"; exit 1; }
           ./gradlew --no-daemon --stacktrace --console=plain ":app:$TEST_TASK"
 
