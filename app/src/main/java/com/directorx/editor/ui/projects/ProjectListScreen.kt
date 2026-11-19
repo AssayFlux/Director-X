@@ -117,6 +117,7 @@ fun ProjectListScreen(
     var customCanvasWidthText by remember { mutableStateOf("1920") }
     var customCanvasHeightText by remember { mutableStateOf("1080") }
     var customCanvasProjectName by remember { mutableStateOf("") }
+    var pendingCrashReportNotice by remember { mutableStateOf<CrashReportNotice?>(null) }
     val templateImportLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
     ) { uri ->
@@ -127,8 +128,10 @@ fun ProjectListScreen(
     val crashReportLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.CreateDocument("application/zip")
     ) { uri ->
+        val requestedNotice = pendingCrashReportNotice
+        pendingCrashReportNotice = null
         if (uri != null) {
-            viewModel.saveCrashReport(uri)
+            viewModel.saveCrashReport(uri, requestedNotice)
         }
     }
 
@@ -202,9 +205,12 @@ fun ProjectListScreen(
                     CrashReportBanner(
                         notice = notice,
                         saving = crashReportSaving,
-                        onSaveReport = { crashReportLauncher.launch(CrashReportNoticePolicy.reportFileName(notice)) },
-                        onCopySummary = viewModel::copyCrashReportSummary,
-                        onDismiss = viewModel::dismissCrashReportNotice,
+                        onSaveReport = {
+                            pendingCrashReportNotice = notice
+                            crashReportLauncher.launch(CrashReportNoticePolicy.reportFileName(notice))
+                        },
+                        onCopySummary = { viewModel.copyCrashReportSummary(notice) },
+                        onDismiss = { viewModel.dismissCrashReportNotice(notice) },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = Spacing.lg, vertical = Spacing.xs)
