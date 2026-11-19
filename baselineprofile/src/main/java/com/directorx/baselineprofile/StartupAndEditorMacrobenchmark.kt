@@ -81,4 +81,37 @@ class StartupAndEditorMacrobenchmark {
             scrubTimelineViewport()
         }
     }
+    @Test
+    fun eExportSheetOpenFrameTiming() {
+        benchmarkRule.measureRepeated(
+            packageName = DIRECTOR_X_PACKAGE,
+            metrics = listOf(FrameTimingMetric()),
+            compilationMode = CompilationMode.Partial(
+                baselineProfileMode = BaselineProfileMode.Require
+            ),
+            startupMode = StartupMode.COLD,
+            iterations = 3
+        ) {
+            openProjectGallery()
+            openBlankEditor()
+            openExportSheet()
+        }
+    }
+
+    @Test
+    fun fSettingsAndPrivacyNavigationFrameTiming() {
+        benchmarkRule.measureRepeated(
+            packageName = DIRECTOR_X_PACKAGE,
+            metrics = listOf(FrameTimingMetric()),
+            compilationMode = CompilationMode.Partial(
+                baselineProfileMode = BaselineProfileMode.Require
+            ),
+            startupMode = StartupMode.COLD,
+            iterations = 3
+        ) {
+            openProjectGallery()
+            openSettingsAndPrivacyDashboard()
+        }
+    }
+
 }
