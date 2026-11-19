@@ -74,9 +74,9 @@ jobs:
       - name: Validate repository branding selections
         run: python scripts/validate_branding.py
 
-      # KSP exports the Room schema for the current database version. Generate it
-      # before packaging androidTest assets so MigrationTestHelper can validate
-      # the complete committed migration chain (including the current schema).
+      # KSP exports the current Room schema before androidTest assets are packaged.
+      # The generated version-11 snapshot is uploaded so it can be reviewed and
+      # committed as the next checked-in migration baseline.
       - name: Generate and verify current Room schema
         run: |
           ./gradlew --no-daemon --stacktrace --console=plain :app:kspQaKotlin
@@ -105,5 +105,6 @@ jobs:
           path: |
             app/build/test-results/testQaUnitTest/**/*.xml
             app/build/reports/tests/testQaUnitTest/**
+            app/schemas/com.directorx.editor.engine.db.ProjectDatabase/11.json
           if-no-files-found: warn
           retention-days: 14
