@@ -253,6 +253,6 @@ class LocaleResourceCoverageTest {
 
     private companion object {
         val FORMAT_PLACEHOLDER = Regex("%(?:\\d+\\$)?(?:\\.\\d+)?[a-zA-Z]")
-        val TRANSLATED_LOCALE_DIRECTORY = Regex("""values-(?:[a-z]{2,3}(?:-r[A-Z]{2})?|b\\+[A-Za-z0-9+]+)""")
+        val TRANSLATED_LOCALE_DIRECTORY = Regex("""values-(?:[a-z]{2,3}(?:-r[A-Z]{2})?|b\+[A-Za-z0-9+]+)""")
     }
 }
