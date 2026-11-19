@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings as AndroidSettings
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
@@ -71,7 +72,6 @@ import com.directorx.editor.ui.theme.ClearCutFilterChip
 import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.ClearCutMetricPill
 import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.AssayFluxLogo
 import com.directorx.editor.ui.theme.AssayFluxTexture
 import com.directorx.editor.ui.theme.ClearCutScreenBackground
 import com.directorx.editor.ui.theme.ClearCutSecondaryButton
@@ -109,6 +109,9 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     var selectedCategory by remember { mutableStateOf<SettingsCategory?>(null) }
+    BackHandler {
+        if (selectedCategory != null) selectedCategory = null else onBack()
+    }
     // Each settings category is a separate destination with a fresh top-of-page scroll position.
     val scrollState = remember(selectedCategory) { ScrollState(0) }
     val settings by viewModel.settings.collectAsStateWithLifecycle()
@@ -778,30 +781,45 @@ fun SettingsScreen(
             ) {
                 Text(
                     text = "AUTHOR'S SECTION",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-                Text(
-                    text = "Md Safarujjaman",
                     style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(top = 5.dp)
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
                 )
                 Text(
                     text = "AssayFlux — building thoughtful tools where creativity meets engineering.",
                     style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 3.dp)
-                )
-                Image(
-                    painter = painterResource(R.drawable.assayflux_signature),
-                    contentDescription = "Md Safarujjaman's signature",
-                    contentScale = ContentScale.Fit,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
                     modifier = Modifier
-                        .padding(top = 8.dp)
-                        .width(88.dp)
-                        .height(64.dp)
+                        .fillMaxWidth()
+                        .padding(top = 6.dp)
                 )
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.End)
+                        .padding(top = 14.dp),
+                    horizontalAlignment = Alignment.End
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.assayflux_signature),
+                        contentDescription = "Md Safarujjaman's signature",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .width(112.dp)
+                            .height(56.dp)
+                    )
+                    Text(
+                        text = "Md Safarujjaman",
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        textAlign = androidx.compose.ui.text.style.TextAlign.End,
+                        modifier = Modifier.padding(top = 2.dp)
+                    )
+                }
             }
         }
         } // End SettingsCategory.APP content
@@ -1109,23 +1127,8 @@ private fun SettingsHero(
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.Top
         ) {
-            ClearCutChromeIconButton(
-                icon = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = stringResource(R.string.back),
-                onClick = onBack,
-                tint = LocalDirectorXColors.current.text,
-                containerColor = Color.Transparent,
-                borderColor = Color.Transparent,
-                modifier = Modifier.testTag(ClearCutTestTags.SETTINGS_BACK)
-            )
-            Spacer(Modifier.width(Spacing.sm))
-            AssayFluxLogo(
-                modifier = Modifier.size(width = 52.dp, height = 32.dp),
-                contentDescription = stringResource(R.string.app_name),
-            )
-            Spacer(Modifier.width(Spacing.sm))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     stringResource(R.string.settings_title),
@@ -1149,6 +1152,15 @@ private fun SettingsHero(
                     style = MaterialTheme.typography.labelSmall,
                 )
             }
+            ClearCutChromeIconButton(
+                icon = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = stringResource(R.string.back),
+                onClick = onBack,
+                tint = LocalDirectorXColors.current.text,
+                containerColor = Color.Transparent,
+                borderColor = Color.Transparent,
+                modifier = Modifier.testTag(ClearCutTestTags.SETTINGS_BACK)
+            )
         }
 
         HorizontalDivider(
