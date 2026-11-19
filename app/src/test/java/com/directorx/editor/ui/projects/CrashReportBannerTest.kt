@@ -49,6 +49,9 @@ class CrashReportBannerTest {
     // Planted before the activity starts, the way the last run's handler leaves it.
     private val plantedCrash = object : ExternalResource() {
         override fun before() {
+            // Each Robolectric method reuses the application data directory.
+            // Clear the previous scenario's crash and acknowledgement records first.
+            CrashRecordStore.defaultRecordsDir(context).deleteRecursively()
             CrashRecordStore(context).recordUncaughtException(
                 Thread.currentThread(),
                 IllegalStateException("decoder released"),
@@ -69,11 +72,6 @@ class CrashReportBannerTest {
         waitForBanner()
 
         compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_COPY).performClick()
-        // Complete AnimatedVisibility's exit transition before inspecting the semantics tree.
-        compose.mainClock.advanceTimeBy(1_000L)
-        compose.waitForIdle()
-
-        waitUntilBannerGone()
         val clip = context.getSystemService(ClipboardManager::class.java).primaryClip!!.getItemAt(0).text.toString()
         assertTrue(clip, clip.contains("Director X closed unexpectedly (java.lang.IllegalStateException)"))
         assertTrue(clip, clip.contains("- Director X: ${DirectorXApp.VERSION}"))
@@ -89,17 +87,20 @@ class CrashReportBannerTest {
         waitForBanner()
         val target = File(context.cacheDir, "picked-report.zip")
 
-        // The picker intentionally pauses the host Activity; performClick dispatches the
-        // ActivityResult launch synchronously, so do not wait for the host to become idle.
+        // ActivityResultRegistry posts the platform launch through the main looper.
+        // Wait for that observable launch rather than assuming performClick is synchronous.
         compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_SAVE).performClick()
+        compose.waitUntil(5_000L) {
+            shadowOf(compose.activity).nextStartedActivityForResult != null
+        }
         val activity = shadowOf(compose.activity)
-        val request = activity.nextStartedActivityForResult.intent
+        val request = activity.nextStartedActivityForResult!!.intent
         assertEquals(Intent.ACTION_CREATE_DOCUMENT, request.action)
         assertEquals("application/zip", request.type)
         assertTrue(request.getStringExtra(Intent.EXTRA_TITLE)!!.startsWith("Director X-report-"))
         activity.receiveResult(request, Activity.RESULT_OK, Intent().setData(Uri.fromFile(target)))
 
-        waitUntilBannerGone()
+        assertNoNoticeOnTheNextLaunch()
         ZipFile(target).use { zip ->
             val names = zip.entries().toList().map { it.name }
             assertTrue(names.toString(), CrashRecordStore.CRASH_BUNDLE_ENTRY in names)
@@ -116,7 +117,6 @@ class CrashReportBannerTest {
 
         compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_DISMISS).performClick()
 
-        waitUntilBannerGone()
         assertEquals(null, context.getSystemService(ClipboardManager::class.java).primaryClip)
         assertEquals(null, shadowOf(compose.activity).nextStartedActivityForResult)
         assertNoNoticeOnTheNextLaunch()
@@ -125,12 +125,6 @@ class CrashReportBannerTest {
     private fun waitForBanner() {
         compose.waitUntil(10_000L) {
             compose.onAllNodesWithTag(ClearCutTestTags.CRASH_REPORT_BANNER).fetchSemanticsNodes().isNotEmpty()
-        }
-    }
-
-    private fun waitUntilBannerGone() {
-        compose.waitUntil(10_000L) {
-            compose.onAllNodesWithTag(ClearCutTestTags.CRASH_REPORT_BANNER).fetchSemanticsNodes().isEmpty()
         }
     }
 
