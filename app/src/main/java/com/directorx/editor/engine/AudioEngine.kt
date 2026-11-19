@@ -434,7 +434,7 @@ class AudioEngine @Inject constructor(
         if (inputFile.length() % frameBytes != 0L) return@withContext false
         outputFile.parentFile?.mkdirs()
         outputFile.delete()
-        val pipelineLease = CodecInstanceBudget.acquirePipeline(MediaFormat.MIMETYPE_AUDIO_AAC)
+        var encoderLease: CodecLease<MediaCodec>? = null
         var encoder: MediaCodec? = null
         var muxer: MediaMuxer? = null
         var muxerStarted = false
@@ -451,7 +451,9 @@ class AudioEngine @Inject constructor(
                 setInteger(MediaFormat.KEY_BIT_RATE, bitrate.coerceIn(32_000, 320_000))
                 setInteger(MediaFormat.KEY_MAX_INPUT_SIZE, 16 * 1024)
             }
-            encoder = MediaCodec.createEncoderByType(MediaFormat.MIMETYPE_AUDIO_AAC)
+            encoder = CodecInstanceBudget.acquireEncoder(MediaFormat.MIMETYPE_AUDIO_AAC)
+                .also { encoderLease = it }
+                .resource
             encoder.configure(format, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE)
             encoder.start()
             muxer = MediaMuxer(outputFile.absolutePath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)
@@ -527,11 +529,9 @@ class AudioEngine @Inject constructor(
             AppLog.w(TAG, "Platform AAC encoding failed", e)
             false
         } finally {
-            runCatching { encoder?.stop() }
-            runCatching { encoder?.release() }
+            encoderLease?.close()
             if (muxerStarted) runCatching { muxer?.stop() }
             runCatching { muxer?.release() }
-            pipelineLease.close()
             if (!outputFile.isFile || outputFile.length() <= 0L) outputFile.delete()
         }
     }
