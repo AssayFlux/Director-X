@@ -68,10 +68,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          export version_ffmpeg=f8bb61cd57a714b4eb8a9f8002dbb5214eed48c7
+          export version_ffmpeg=2473872b7ceadbdf3235c0a482f58753e3f6dacb
           export RECONF_fribidi=1
           ./nix-android.sh -p android-r27d --enable-lib-libass --enable-lib-libjxl --enable-lib-android-media-codec --enable-lib-android-zlib --enable-lib-openh264 --jobs=8
-          test "$(git -C src/ffmpeg rev-parse HEAD)" = "f8bb61cd57a714b4eb8a9f8002dbb5214eed48c7"
+          test "$(git -C src/ffmpeg rev-parse HEAD)" = "2473872b7ceadbdf3235c0a482f58753e3f6dacb"
 
       - name: Verify generated AAR and POM
         shell: bash
