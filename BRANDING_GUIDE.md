@@ -18,12 +18,13 @@ The validator checks the configuration's required fields, allowed values, and th
 ## Configuration map
 
 - `launcher.asset`: launcher icon source.
-- `splash.sequence`: ordered splash assets and their durations in milliseconds.
+- `splash.sequence`: ordered splash assets and their display durations in milliseconds.
+- `splash.transitionDurationMs`: crossfade duration between the GIF and Director X logo.
 - `splash.background`: splash background color.
 - `about.authorName`, `about.signatureAsset`, `about.assayFluxLine`: About page author identity.
 - `placements.dashboard/settings/editor`: intended logo and texture placement choices.
 
-The placement values are configuration selections. A UI placement is only active once its matching Android screen integration is implemented; do not assume changing this JSON alone moves UI elements.
+The current splash sequence is 1,300 ms AssayFlux GIF, 200 ms crossfade, then 500 ms Director X logo (2,000 ms total). The app implementation and configuration must stay in sync.\n\nThe placement values are configuration selections. A UI placement is only active once its matching Android screen integration is implemented; do not assume changing this JSON alone moves UI elements.
 
 ## Build
 
