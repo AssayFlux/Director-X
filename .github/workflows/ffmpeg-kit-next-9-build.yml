@@ -6,6 +6,7 @@ on:
     branches: [ffmpeg-9-rebuild-diagnostics]
     paths:
       - "scripts/build_ffmpeg_kit_next.ps1"
+      - "scripts/prepare_ffmpeg_kit_next_9_source.sh"
       - "third_party/ffmpeg-kit-next/directorx-security-9.0.patch"
       - ".github/workflows/ffmpeg-kit-next-9-build.yml"
   pull_request:
@@ -50,7 +51,7 @@ jobs:
           git -C ffmpeg-kit-next apply --check "$GITHUB_WORKSPACE/third_party/ffmpeg-kit-next/directorx-security-9.0.patch"
           git -C ffmpeg-kit-next apply "$GITHUB_WORKSPACE/third_party/ffmpeg-kit-next/directorx-security-9.0.patch"
           bash -n ffmpeg-kit-next/scripts/android/ffmpeg.sh
-          bash -n ffmpeg-kit-next/scripts/source.sh
+          bash scripts/prepare_ffmpeg_kit_next_9_source.sh ffmpeg-kit-next/scripts/source.sh
 
       - name: Install Nix
         uses: cachix/install-nix-action@v31
