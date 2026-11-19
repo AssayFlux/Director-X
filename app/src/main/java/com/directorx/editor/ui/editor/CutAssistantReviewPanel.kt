@@ -42,7 +42,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -448,12 +447,7 @@ private fun CutProposalReviewCard(
     ) {
         Box(
             modifier = Modifier.background(
-                Brush.verticalGradient(
-                    listOf(
-                        accent.copy(alpha = if (isAccepted) 0.12f else 0.05f),
-                        semanticColors.panelHighest.copy(alpha = 0.98f)
-                    )
-                )
+                MaterialTheme.colorScheme.surfaceContainerHigh
             )
         ) {
             Row(
