@@ -132,7 +132,7 @@ The Gradle version catalog and app build declare or configure dependency familie
 
 This is a dependency-family summary, not a complete bill of materials. Transitive artifacts and their exact versions can change when Gradle resolves a different graph. For a release-grade inventory, run the repository's runtime notice-generation task against the exact release variant and archive its generated report alongside the release provenance.
 
-## 7. Tests, QA and maintenance tooling
+## 6. Tests, QA and maintenance tooling
 
 The repository contains unit and Android instrumentation test source sets, media fixtures, Room schema snapshots, and scripts for build/release verification. Current GitHub Actions runs `:app:testQaUnitTest` on relevant application/build pushes and pull requests. A separate pull-request device/performance workflow runs `:app:lintQa`, API 37 managed-device instrumentation and startup/editor macrobenchmark using temporary test targets. Repository hygiene runs its own metadata, identity, capability and policy validators. These workflows do not publish a user-installable APK or production release. The visible test coverage areas include media playback/export, audio processing, trimming, timeline behavior, database migration, UI layout, accessibility/QA assertions, media decoder fallback, project color policy and other editor workflows. A test's presence in the repository is not proof that it has passed; consult the linked workflow run for its actual result and retain physical-device acceptance as a separate gate.
 
@@ -151,7 +151,7 @@ The `scripts/` directory includes tooling for areas such as:
 
 The existence of these tests and scripts does not mean they have all passed. GitHub Actions runs Android unit tests on relevant application/build changes, and its separate pull-request device/performance lane runs `:app:lintQa`, API 37 managed-device instrumentation and startup/editor macrobenchmark. Repository hygiene runs independently. These workflows do not publish a user-installable APK or production release. The maintainer builds installable APKs and performs physical-device acceptance manually in Termux or another configured Android environment. Record exact commands, build variants, device/API levels, test outcomes and release artifact hashes for each release. Do not claim a successful build or device test without its result.
 
-## 8. Brand and design system
+## 7. Brand and design system
 
 The current Director X brand documentation uses:
 
@@ -166,7 +166,7 @@ The current Director X brand documentation uses:
 
 Brand artwork and store assets are product identity materials. Their presence does not change the copyright or licence status of the inherited source or bundled libraries.
 
-## 9. Licence and notice file map — do not remove required files
+## 8. Licence and notice file map — do not remove required files
 
 | File or location | Purpose |
 |---|---|
@@ -178,7 +178,7 @@ Brand artwork and store assets are product identity materials. Their presence do
 
 Do not delete, merge away, overwrite or replace a licence file merely because its contents look repetitive. Some licences require the original copyright and permission text to accompany copies or substantial portions. A summary in this document or in `NOTICE` is not a substitute for those required texts.
 
-## 10. Upgrade and contribution record
+## 9. Upgrade and contribution record
 
 For each future Director X upgrade, record the following in the relevant commit description and current engineering status:
 
@@ -192,7 +192,7 @@ For each future Director X upgrade, record the following in the relevant commit 
 
 Prefer commit history and a generated software bill of materials (SBOM) over manually asserting that an entire directory belongs to one author. Preserve provenance when copying, replacing or substantially modifying files.
 
-## 11. Important legal and verification limits
+## 10. Important legal and verification limits
 
 This file is a technical and historical acknowledgment, not legal advice, a copyright assignment, a relicensing instrument, or a complete legal review of the repository.
 
