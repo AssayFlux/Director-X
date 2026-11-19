@@ -1,0 +1,103 @@
+name: Build FFmpegKitNext 9.0.2 Android artifact
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [upgrade-ffmpeg-9.0]
+    paths:
+      - "scripts/build_ffmpeg_kit_next.ps1"
+      - "third_party/ffmpeg-kit-next/directorx-security.patch"
+      - ".github/workflows/ffmpeg-kit-next-9-build.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ffmpeg-kit-next-9-build-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-native:
+    name: Reproducible FFmpegKitNext 9.0.2 Android build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    steps:
+      - name: Check out Director X build recipe
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Check out pinned FFmpegKitNext source
+        uses: actions/checkout@v4
+        with:
+          repository: arthenica/ffmpeg-kit-next
+          ref: 9f04bf1e3c97def70b98e198cb80a57b43ef5b45
+          path: ffmpeg-kit-next
+          persist-credentials: false
+
+      - name: Verify source pins and apply Director X security profile
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C ffmpeg-kit-next rev-parse HEAD)" = "9f04bf1e3c97def70b98e198cb80a57b43ef5b45"
+          git -C ffmpeg-kit-next config core.autocrlf false
+          git -C ffmpeg-kit-next apply --check "$GITHUB_WORKSPACE/third_party/ffmpeg-kit-next/directorx-security.patch"
+          git -C ffmpeg-kit-next apply "$GITHUB_WORKSPACE/third_party/ffmpeg-kit-next/directorx-security.patch"
+          bash -n ffmpeg-kit-next/scripts/android/ffmpeg.sh
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            accept-flake-config = true
+
+      - name: Build all configured Android ABIs
+        working-directory: ffmpeg-kit-next
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./nix-android.sh -p android-r27d --enable-libass --enable-libjxl --enable-android-media-codec --enable-android-zlib --enable-openh264 --jobs=8
+
+      - name: Verify generated AAR and POM
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t aars < <(find ffmpeg-kit-next/prebuilt -type f -name 'ffmpeg-kit-next-9.0.2.aar' -print)
+          mapfile -t poms < <(find ffmpeg-kit-next/prebuilt -type f -name 'ffmpeg-kit-next-9.0.2.pom' -print)
+          test "${#aars[@]}" -eq 1
+          test "${#poms[@]}" -eq 1
+          python - "${aars[0]}" "${poms[0]}" <<'PY'
+          import sys, zipfile, xml.etree.ElementTree as ET
+          aar, pom = sys.argv[1:]
+          with zipfile.ZipFile(aar) as archive:
+              names = archive.namelist()
+              abi_dirs = {name.split('/')[1] for name in names if name.startswith('jni/') and name.endswith('.so') and len(name.split('/')) > 2}
+              required = {'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'}
+              missing = required - abi_dirs
+              if missing:
+                  raise SystemExit(f'AAR is missing ABI libraries: {sorted(missing)}; found {sorted(abi_dirs)}')
+              if not any(name.endswith('.so') for name in names):
+                  raise SystemExit('AAR contains no native shared libraries')
+          root = ET.parse(pom).getroot()
+          ns = {'m': 'http://maven.apache.org/POM/4.0.0'}
+          version = root.findtext('m:version', namespaces=ns)
+          if version != '9.0.2':
+              raise SystemExit(f'Unexpected FFmpegKitNext POM version: {version}')
+          print(f'Validated {aar}: ABIs={sorted(abi_dirs)}, POM version={version}')
+          PY
+          mkdir -p build-output
+          cp "${aars[0]}" build-output/
+          cp "${poms[0]}" build-output/
+          sha256sum build-output/* | tee build-output/SHA256SUMS
+
+      - name: Upload native build and build log
+        uses: actions/upload-artifact@v4
+        with:
+          name: ffmpeg-kit-next-9.0.2-android-r27d
+          path: |
+            build-output/*
+            ffmpeg-kit-next/build.log
+          if-no-files-found: error
+          retention-days: 30

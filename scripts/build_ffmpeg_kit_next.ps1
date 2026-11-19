@@ -6,7 +6,7 @@ param(
     [switch]$PackageOnly
 )
 
-$expectedKitCommit = "3e223118e6e8fb6208693ecf3952e77cd096f587"
+$expectedKitCommit = "9f04bf1e3c97def70b98e198cb80a57b43ef5b45"
 $sourcePath = (Resolve-Path -LiteralPath $SourceDirectory -ErrorAction Stop).Path
 $kitScript = Join-Path $sourcePath "nix-android.sh"
 if (-not (Test-Path -LiteralPath $kitScript -PathType Leaf)) {
