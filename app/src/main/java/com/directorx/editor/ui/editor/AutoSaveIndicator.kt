@@ -16,7 +16,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
@@ -91,12 +90,7 @@ fun AutoSaveIndicator(
                 horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
                 modifier = Modifier
                     .background(
-                        Brush.horizontalGradient(
-                            listOf(
-                                accent.copy(alpha = 0.12f),
-                                Color.Transparent
-                            )
-                        )
+                        MaterialTheme.colorScheme.surfaceContainerHigh
                     )
                     .padding(horizontal = 10.dp, vertical = 8.dp)
             ) {
