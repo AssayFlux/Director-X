@@ -44,6 +44,7 @@ class CrashReportBannerTest {
         compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_SAVE)
             .assertHasClickAction()
             .performClick()
+        compose.waitUntil(5_000L) { tapped.get() }
 
         assertTrue("Save callback should run", tapped.get())
     }
