@@ -1,7 +1,7 @@
 # Director X — Engineering Status
 
 **Branch:** `Alpha`  
-**Baseline recorded:** `8e57210baa625dc5687679036dc55f8733a49da3`  
+**Baseline recorded:** `662b0eb8ace3b6215dcf6ffdb9419759fee569fd`  
 **Application:** `Director X`  
 **Developer:** `Designed by AssayFlux`  
 **Version:** `v0.1.0`  
@@ -42,14 +42,14 @@ This is the current engineering record. A source-level implementation is not acc
 - Android verification run `44460366801` on commit `7c32d85fcbea61fadaa67d58b57c09cc430206d2` failed with 16 reported test failures.
 - The subsequent documentation repair added README Architecture and Tech Stack sections, restored `docs/models.md`, and corrected the tracked-Markdown audit allowlist.
 - Android verification run `44462038704` on commit `c32893a371e9de8f18aa8d4332ada4633b105a77` was still running when this record was prepared. It does not include later native-lock/SBOM/source-offer edits.
-- Repository hygiene run `44462073338` passed on commit `aa7351eba27dadc65445858ff0e4c2bcaceb7171`.
+- Repository hygiene run `44462073338` passed on commit `aa7351eba27dadc65445858ff0e4c2bcaceb7171`. Native patch/source-offer verification passed on `c9cc26e` and `0e7eb31` after correcting the SHA-256 and path.
 - Do not report the Android test suite as green until a completed run on the latest HEAD is successful.
 
 ## Native media security gate
 
 The native AAR, POM, lock and patch are build inputs and must remain in `third_party/ffmpeg-kit-next/`. The lock now points to the tracked `directorx-security.patch`, and the app's LGPL source-offer text points to the same file.
 
-The recorded patch SHA-256 has not yet been independently recalculated in this review. The security review horizon expired on 2026-10-31. Updating a filename or extending a date would not constitute a security review. Renewal requires inspecting the exact native build inputs and shipped binaries, verifying patch application and build flags, reviewing current advisories and reachability, recalculating artifact/patch hashes, and recording reproducible evidence. Until then, native security status is **expired / not cleared**.
+The patch SHA-256 was independently calculated by the GitHub Actions runner and matched the corrected lock value `3a8dcc1aac92be38857dc89c6d6dcaed4457933855340c2fc1a948b42f2f0da7`. Repository-hygiene run `44462388307` passed the native patch/source-offer check on the lock-fix commit. The security review horizon expired on 2026-10-31. Updating a filename or extending a date would not constitute a security review. Renewal still requires inspecting the exact native build inputs and shipped binaries, verifying patch application and build flags, reviewing current advisories and reachability, and recording reproducible evidence. Until then, native security status is **expired / not cleared**.
 
 ## Branding and compatibility policy
 
