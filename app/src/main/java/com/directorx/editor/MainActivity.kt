@@ -60,7 +60,7 @@ import com.directorx.editor.ui.editor.EditorScreen
 import com.directorx.editor.ui.editor.LocalTabletopPosture
 import com.directorx.editor.ui.projects.ProjectListScreen
 import com.directorx.editor.ui.settings.SettingsScreen
-import com.directorx.editor.ui.theme.AssayFluxLogo
+import com.directorx.editor.ui.theme.AssayFluxAnimatedSplash
 import com.directorx.editor.ui.theme.DirectorXTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -267,13 +267,10 @@ class MainActivity : ComponentActivity() {
                                     .background(Color.White),
                                 contentAlignment = Alignment.Center,
                             ) {
-                                // SVG fallback only; restore the approved animated GIF at
-                                // res/raw/assayflux_splash.gif when the original binary is supplied.
-                                AssayFluxLogo(
+                                AssayFluxAnimatedSplash(
                                     modifier = Modifier
-                                        .width(224.dp)
-                                        .height(138.dp)
-                                        .aspectRatio(2080f / 1281f),
+                                        .width(280.dp)
+                                        .aspectRatio(4f),
                                 )
                             }
                         }
