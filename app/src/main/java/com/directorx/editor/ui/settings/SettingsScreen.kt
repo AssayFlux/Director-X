@@ -27,7 +27,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -1307,12 +1306,7 @@ private fun SettingsFeedbackBanner(
         Row(
             modifier = Modifier
                 .background(
-                    Brush.horizontalGradient(
-                        listOf(
-                            accent.copy(alpha = if (colors.highContrast) 0.18f else 0.11f),
-                            colors.panelHighest
-                        )
-                    )
+                    MaterialTheme.colorScheme.surfaceContainerHigh
                 )
                 .padding(horizontal = 14.dp, vertical = 12.dp),
             horizontalArrangement = Arrangement.spacedBy(Spacing.md),
