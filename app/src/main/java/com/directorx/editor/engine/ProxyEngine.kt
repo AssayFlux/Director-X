@@ -61,6 +61,39 @@ internal fun isUsableProxyTemporaryArtifact(file: File): Boolean =
         file.name.startsWith("proxy_tmp_") && file.name.endsWith(".mp4")
 
 /**
+ * Temporary proxy outputs are never valid cache entries. After a process death they can
+ * remain indefinitely, so discard only managed temporary artifacts older than the grace
+ * period. Fresh files are left alone because an encoder may still be writing them.
+ */
+internal fun isAbandonedProxyTemporaryArtifact(
+    file: File,
+    nowMillis: Long,
+    maxAgeMillis: Long,
+): Boolean {
+    if (!file.isFile || !file.name.startsWith("proxy_tmp_") || !file.name.endsWith(".mp4")) {
+        return false
+    }
+    if (maxAgeMillis < 0L) return false
+    val modifiedAt = file.lastModified()
+    return modifiedAt > 0L && nowMillis >= modifiedAt && nowMillis - modifiedAt >= maxAgeMillis
+}
+
+/** Sweep only stale, direct-child proxy_tmp artifacts; never touch originals or committed proxies. */
+internal fun sweepAbandonedProxyTemporaryArtifacts(
+    proxyRoot: File,
+    nowMillis: Long = System.currentTimeMillis(),
+    maxAgeMillis: Long = 24L * 60L * 60L * 1000L,
+): Int {
+    val canonicalRoot = runCatching { proxyRoot.canonicalFile }.getOrNull() ?: return 0
+    return (proxyRoot.listFiles() ?: return 0).count { candidate ->
+        val canonicalFile = runCatching { candidate.canonicalFile }.getOrNull() ?: return@count false
+        canonicalFile.parentFile == canonicalRoot &&
+            isAbandonedProxyTemporaryArtifact(canonicalFile, nowMillis, maxAgeMillis) &&
+            canonicalFile.delete()
+    }
+}
+
+/**
  * Deletes only files directly inside the proxy cache with the managed filename
  * shape. Canonical-path checks reject traversal and symlinks escaping the cache.
  */
@@ -135,6 +168,10 @@ class ProxyEngine @Inject constructor(
         perKeyMutex.computeIfAbsent(key) { kotlinx.coroutines.sync.Mutex() }
 
     init {
+        val sweptPartials = sweepAbandonedProxyTemporaryArtifacts(proxyDir)
+        if (sweptPartials > 0) {
+            AppLog.i("ProxyEngine", "Removed $sweptPartials abandoned temporary proxy artifact(s)")
+        }
         memoryTrimRegistry.register(
             MemoryTrimAction.CLEAR_PROXY_SCRATCH,
             "proxy.generatedMediaCache",
