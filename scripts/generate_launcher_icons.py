@@ -17,6 +17,7 @@ CONFIG = ROOT / "branding" / "branding.json"
 ASSETS = ROOT / "Assets"
 DENSITIES = {"mdpi": (108, 48), "hdpi": (162, 72), "xhdpi": (216, 96),
              "xxhdpi": (324, 144), "xxxhdpi": (432, 192)}
+_SVG_CACHE: dict[Path, Image.Image] = {}
 
 def render_png(source: Path, width: int, height: int | None = None,
                fit_fraction: float = 0.82) -> bytes:
@@ -27,10 +28,15 @@ def render_png(source: Path, width: int, height: int | None = None,
     fit_width = max(1, round(width * fit_fraction))
     fit_height = max(1, round(height * fit_fraction))
     if source.suffix.lower() == ".svg":
-        # Render using the SVG's intrinsic aspect ratio, then fit it into the
-        # target bounds. CairoSVG honors the root viewBox/preserveAspectRatio.
-        rendered = cairosvg.svg2png(url=str(source), output_width=fit_width)
-        image = Image.open(BytesIO(rendered)).convert("RGBA")
+        # Each large source SVG is parsed only once; all density variants are
+        # downsampled from this full-size raster with the SVG aspect ratio kept.
+        key = source.resolve()
+        cached = _SVG_CACHE.get(key)
+        if cached is None:
+            rendered = cairosvg.svg2png(url=str(source), output_width=720)
+            cached = Image.open(BytesIO(rendered)).convert("RGBA")
+            _SVG_CACHE[key] = cached
+        image = cached.copy()
     else:
         image = Image.open(source).convert("RGBA")
     image.thumbnail((fit_width, fit_height), Image.Resampling.LANCZOS)
