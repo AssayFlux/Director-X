@@ -45,7 +45,6 @@ Director X provides a multi-track editing workflow with preview, project persist
 | Coil Compose | 3.5.0 | Image and video thumbnails |
 | Hilt / Dagger | 2.60.1 | Dependency injection |
 | Android DeepFilterNet | 0.0.8 | On-device voiceover noise reduction |
-| FFmpegKitNext / FFmpeg | 8.1.0 (FFmpeg 8.1.2) | LGPL FFmpeg paths not covered by Media3 Transformer |
 | AndroidX Benchmark/ProfileInstaller | 1.5.0-beta01 / 1.4.1 | Baseline profile generation and installation |
 | Sherpa-ONNX | 1.13.2 target | Future native Moonshine v2 ASR path (target) |
 | SAM 2.1 ONNX | Targeted | Future tracked-mask path; MobileSAM fallback (target) |

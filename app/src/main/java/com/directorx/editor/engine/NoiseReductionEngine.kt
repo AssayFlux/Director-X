@@ -212,6 +212,12 @@ class NoiseReductionEngine @Inject constructor(
         } catch (e: CancellationException) {
             cleanupNoiseReductionFiles(partialFile, outputFile)
             throw e
+        } catch (e: AudioDecoderUnavailableException) {
+            cleanupNoiseReductionFiles(partialFile, outputFile)
+            NoiseReductionResult(
+                outcome = NoiseReductionOutcome.UNAVAILABLE,
+                detail = "Android could not decode this clip's audio on this device. The clip was left unchanged."
+            )
         } catch (e: Exception) {
             cleanupNoiseReductionFiles(partialFile, outputFile)
             AppLog.w(TAG, "Noise reduction failed: ${e.message}", e)
@@ -244,7 +250,7 @@ class NoiseReductionEngine @Inject constructor(
         try {
             val decoded = audioEngine.decodeToPcmWithFormat(uri)
             if (decoded.samples.isEmpty()) {
-                throw IllegalStateException("Android could not decode source audio")
+                throw AudioDecoderUnavailableException()
             }
             writeNormalizedMonoPcm(decoded, sourcePcm)
             reportProgress(onProgress, 0.15f)
@@ -319,6 +325,8 @@ class NoiseReductionEngine @Inject constructor(
         }
     }
 
+    private class AudioDecoderUnavailableException : Exception()
+
     /**
      * Downmix and linearly resample decoded interleaved PCM to the 48 kHz mono
      * format required by DeepFilterNet. All conversion is local and bounded by
@@ -328,32 +336,35 @@ class NoiseReductionEngine @Inject constructor(
         require(decoded.sampleRate > 0 && decoded.channelCount > 0)
         val inputFrames = decoded.samples.size / decoded.channelCount
         require(inputFrames > 0) { "Decoded audio contains no complete sample frames" }
-        val mono = ShortArray(inputFrames) { frame ->
-            var sum = 0L
-            val offset = frame * decoded.channelCount
-            for (channel in 0 until decoded.channelCount) sum += decoded.samples[offset + channel].toLong()
-            (sum / decoded.channelCount).toInt().coerceIn(Short.MIN_VALUE.toInt(), Short.MAX_VALUE.toInt()).toShort()
-        }
         val outputFrames = (inputFrames.toLong() * TARGET_MODEL_SAMPLE_RATE_HZ / decoded.sampleRate)
             .coerceIn(1L, Int.MAX_VALUE.toLong()).toInt()
-        val normalized = ShortArray(outputFrames)
-        for (index in normalized.indices) {
-            val position = index.toDouble() * decoded.sampleRate / TARGET_MODEL_SAMPLE_RATE_HZ
-            val left = position.toInt().coerceIn(0, mono.lastIndex)
-            val right = (left + 1).coerceAtMost(mono.lastIndex)
-            val fraction = (position - left).coerceIn(0.0, 1.0)
-            val value = mono[left] * (1.0 - fraction) + mono[right] * fraction
-            normalized[index] = value.toInt().coerceIn(Short.MIN_VALUE.toInt(), Short.MAX_VALUE.toInt()).toShort()
+
+        fun monoAt(frame: Int): Double {
+            var sum = 0L
+            val offset = frame * decoded.channelCount
+            for (channel in 0 until decoded.channelCount) {
+                sum += decoded.samples[offset + channel].toLong()
+            }
+            return sum.toDouble() / decoded.channelCount
         }
+
         java.io.BufferedOutputStream(outputFile.outputStream()).use { stream ->
             val buffer = ByteBuffer.allocate(16 * 1024).order(ByteOrder.LITTLE_ENDIAN)
-            var index = 0
-            while (index < normalized.size) {
-                buffer.clear()
-                val count = minOf(buffer.capacity() / 2, normalized.size - index)
-                repeat(count) { buffer.putShort(normalized[index++]) }
-                stream.write(buffer.array(), 0, count * 2)
+            for (index in 0 until outputFrames) {
+                val position = index.toDouble() * decoded.sampleRate / TARGET_MODEL_SAMPLE_RATE_HZ
+                val left = position.toInt().coerceIn(0, inputFrames - 1)
+                val right = (left + 1).coerceAtMost(inputFrames - 1)
+                val fraction = (position - left).coerceIn(0.0, 1.0)
+                val value = monoAt(left) * (1.0 - fraction) + monoAt(right) * fraction
+                buffer.putShort(
+                    value.toInt().coerceIn(Short.MIN_VALUE.toInt(), Short.MAX_VALUE.toInt()).toShort()
+                )
+                if (buffer.remaining() < 2) {
+                    stream.write(buffer.array(), 0, buffer.position())
+                    buffer.clear()
+                }
             }
+            if (buffer.position() > 0) stream.write(buffer.array(), 0, buffer.position())
         }
     }
 

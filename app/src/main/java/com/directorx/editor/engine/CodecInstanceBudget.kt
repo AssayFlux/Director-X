@@ -202,6 +202,7 @@ object CodecInstanceBudget {
     private const val UNKNOWN_CEILING = 4
     private const val VIDEO_FAMILY = "video/*"
     private val permits = CodecPermitRegistry(::declaredCeiling)
+    private val encoderPermits = CodecPermitRegistry(::declaredEncoderCeiling)
 
     private val decoderPool = CodecLeasePool(
         kind = "decoder",
@@ -244,6 +245,26 @@ object CodecInstanceBudget {
         permits = permits,
     )
 
+    private val encoderPool = CodecLeasePool(
+        kind = "encoder",
+        ceilingForKey = ::declaredEncoderCeiling,
+        createResource = { mime -> MediaCodec.createEncoderByType(mime) },
+        closeResource = { codec ->
+            try {
+                codec.stop()
+            } catch (_: Exception) {
+                // A configure/start failure can leave the codec non-started.
+            }
+            try {
+                codec.release()
+            } catch (_: Exception) {
+                // Release is best-effort during cancellation and encoder errors.
+            }
+        },
+        permits = encoderPermits,
+    )
+
+
     private val pipelinePool = CodecLeasePool(
         kind = "pipeline",
         ceilingForKey = ::declaredCeiling,
@@ -254,6 +275,9 @@ object CodecInstanceBudget {
 
     internal suspend fun acquireDecoder(mimeType: String): CodecLease<MediaCodec> =
         decoderPool.acquire(mimeType)
+
+    internal suspend fun acquireEncoder(mimeType: String): CodecLease<MediaCodec> =
+        encoderPool.acquire(mimeType)
 
     internal suspend fun acquireRetriever(mimeType: String? = null): CodecLease<MediaMetadataRetriever> =
         retrieverPool.acquire(mimeType ?: VIDEO_FAMILY)
@@ -272,7 +296,7 @@ object CodecInstanceBudget {
         pipelinePool.acquire(mimeType ?: VIDEO_FAMILY)
 
     internal fun snapshots(): List<CodecLeaseSnapshot> =
-        (decoderPool.snapshots() + retrieverPool.snapshots() +
+        (decoderPool.snapshots() + encoderPool.snapshots() + retrieverPool.snapshots() +
             playerPool.snapshots() + pipelinePool.snapshots())
             .sortedWith(compareBy({ it.kind }, { it.mimeType }))
 
@@ -297,6 +321,27 @@ object CodecInstanceBudget {
     /** Test-only reset for the stress fixture. */
     internal fun clearForTests() {
         permits.clearForTests()
+        encoderPermits.clearForTests()
+    }
+
+    private fun declaredEncoderCeiling(mimeType: String): CodecCeiling {
+        val declared = runCatching {
+            MediaCodecList(MediaCodecList.REGULAR_CODECS).codecInfos
+                .asSequence()
+                .filter(MediaCodecInfo::isEncoder)
+                .flatMap { info ->
+                    info.supportedTypes.asSequence()
+                        .filter { supported -> matchesMime(mimeType, supported) }
+                        .mapNotNull { supported ->
+                            runCatching {
+                                info.getCapabilitiesForType(supported)
+                                    .maxSupportedInstances
+                            }.getOrNull()?.takeIf { it > 0 }
+                        }
+                }
+                .minOrNull()
+        }.getOrNull()
+        return CodecCeiling(declared = declared, effective = declared ?: UNKNOWN_CEILING)
     }
 
     private fun declaredCeiling(mimeType: String): CodecCeiling {

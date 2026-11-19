@@ -6,14 +6,14 @@ package com.directorx.editor.engine
  * `SmartRenderEngine.analyzeTimeline` produces per-clip [SmartRenderEngine.RenderSegment]s
  * and `planRuns` groups them into contiguous same-flag [SmartRenderEngine.RenderRun]s.
  * This composer plans the export-orchestration step: for each run, which engine
- * to use (`StreamCopy` for pass-through, `Transformer` / `FFmpeg` for re-encode),
+ * to use (`StreamCopy` for pass-through and `Transformer` for re-encode),
  * which temp file to write to, and how the resulting per-run outputs concatenate
  * into the final delivery file.
  *
  * Pure data — no I/O, no Android. The actual orchestration that consumes a
  * [CompositionPlan] lives in `VideoEngine.exportMixed(...)` (a follow-up
  * commit), and that path runs each [RunExecution] through the corresponding
- * engine and finishes with [CompositionPlan.concat] via `FFmpegEngine.concat()`.
+ * engine and finishes with [CompositionPlan.concat] via Media3 Transformer.
  *
  * Design intent (documented in `ROADMAP.md` Tier B.5):
  *  - **Don't pay the cost** of FFmpeg concat when the whole timeline is one run.
@@ -34,7 +34,7 @@ object MixedRenderComposer {
     /**
      * Which export engine a run should be handed to. Maps 1:1 to the
      * [SmartRenderEngine.RenderRun.needsReEncode] flag today; the abstraction
-     * lets future composers route a re-encode run through FFmpeg (libass burn-in,
+     * lets future composers route a re-encode run through Media3 Transformer (platform effects,
      * AV1 software fallback) vs the Media3 Transformer.
      */
     enum class Engine {

@@ -92,9 +92,6 @@ The build configuration, version catalog, source tree, tests and project scripts
 ### Media playback, editing and export
 
 - AndroidX Media3 modules including ExoPlayer, Transformer, effects, common, UI and muxer.
-- FFmpegKitNext 8.1.0, bundled as a local AAR and checksum-verified by the Gradle build.
-- FFmpeg 8.1.2 in the pinned native build metadata.
-- OpenH264, libass and supporting native media libraries recorded in the native lock.
 - Media import, playback, timeline, trim, audio, export and media-processing test areas represented in the source tree.
 
 ### On-device machine learning and media intelligence
@@ -112,36 +109,10 @@ The build configuration, version catalog, source tree, tests and project scripts
 - Release signing configuration and release-signing identity verification tooling.
 - ABI split configuration and APK size checks.
 - Lint configuration and baseline.
-- Build-time verification of the vendored FFmpegKitNext AAR checksum.
-- Runtime open-source notice generation from resolved release dependencies and the native component lock.
+- Runtime open-source notice generation from the resolved release dependency graph.
 
-## 5. Native media component inventory recorded in the repository
+## 5. Third-party Android/JVM dependency families
 
-The file `third_party/ffmpeg-kit-next/native-lock.json` is the source of truth for the pinned native bundle. It records FFmpegKitNext 8.1.0, FFmpeg 8.1.2 and the following named native components:
-
-| Component | Locked version | Licence expression in native lock |
-|---|---:|---|
-| FFmpegKitNext | 8.1.0 | LGPL-3.0-or-later |
-| FFmpeg | 8.1.2 | LGPL-3.0-or-later |
-| OpenH264 | 2.3.1 | BSD-2-Clause |
-| libass | 0.17.4 | ISC |
-| cpu-features | 0.11.0 | Apache-2.0 |
-| expat | 2.8.1 | MIT |
-| fontconfig | 2.18.1 | MIT |
-| freetype | 2.14.3 | FTL |
-| fribidi | 1.0.16 | LGPL-2.1-or-later |
-| harfbuzz | 14.2.1 | MIT |
-| libiconv | 1.17 | LGPL-2.1-or-later |
-| libjxl | 0.11.2 | BSD-3-Clause |
-| libpng | 1.6.58 | Libpng |
-| libuuid | 1.0.3 | BSD-3-Clause |
-| Android NDK libc++ | 27.3.13750724 | Apache-2.0-with-LLVM-exception |
-
-The lock also records source repository/commit information, build recipe, Android NDK/API/ABI configuration, AAR and POM checksums, security profile, disabled format components and advisory review metadata. Consult that machine-readable file for exact values; do not manually substitute guessed versions.
-
-The top-level `NOTICE` describes the FFmpegKitNext/FFmpeg and DeepFilterNet notice requirements currently recorded for the project. The Android source also contains runtime notice-generation logic in `app/build.gradle.kts`, including mappings for Apache, MIT, BSD, ISC, LGPL, FreeType, libpng and the LLVM exception. The generated runtime inventory is intended to reflect the resolved release runtime classpath; it should be regenerated and reviewed for each release.
-
-## 6. Third-party Android/JVM dependency families
 
 The Gradle version catalog and app build declare or configure dependency families including:
 
@@ -161,7 +132,7 @@ The Gradle version catalog and app build declare or configure dependency familie
 
 This is a dependency-family summary, not a complete bill of materials. Transitive artifacts and their exact versions can change when Gradle resolves a different graph. For a release-grade inventory, run the repository's runtime notice-generation task against the exact release variant and archive its generated report alongside the release provenance.
 
-## 7. Tests, QA and maintenance tooling
+## 6. Tests, QA and maintenance tooling
 
 The repository contains unit and Android instrumentation test source sets, media fixtures, Room schema snapshots, and scripts for build/release verification. Current GitHub Actions runs `:app:testQaUnitTest` on relevant application/build pushes and pull requests. A separate pull-request device/performance workflow runs `:app:lintQa`, API 37 managed-device instrumentation and startup/editor macrobenchmark using temporary test targets. Repository hygiene runs its own metadata, identity, capability and policy validators. These workflows do not publish a user-installable APK or production release. The visible test coverage areas include media playback/export, audio processing, trimming, timeline behavior, database migration, UI layout, accessibility/QA assertions, media decoder fallback, project color policy and other editor workflows. A test's presence in the repository is not proof that it has passed; consult the linked workflow run for its actual result and retain physical-device acceptance as a separate gate.
 
@@ -180,7 +151,7 @@ The `scripts/` directory includes tooling for areas such as:
 
 The existence of these tests and scripts does not mean they have all passed. GitHub Actions runs Android unit tests on relevant application/build changes, and its separate pull-request device/performance lane runs `:app:lintQa`, API 37 managed-device instrumentation and startup/editor macrobenchmark. Repository hygiene runs independently. These workflows do not publish a user-installable APK or production release. The maintainer builds installable APKs and performs physical-device acceptance manually in Termux or another configured Android environment. Record exact commands, build variants, device/API levels, test outcomes and release artifact hashes for each release. Do not claim a successful build or device test without its result.
 
-## 8. Brand and design system
+## 7. Brand and design system
 
 The current Director X brand documentation uses:
 
@@ -195,21 +166,19 @@ The current Director X brand documentation uses:
 
 Brand artwork and store assets are product identity materials. Their presence does not change the copyright or licence status of the inherited source or bundled libraries.
 
-## 9. Licence and notice file map — do not remove required files
+## 8. Licence and notice file map — do not remove required files
 
 | File or location | Purpose |
 |---|---|
 | `LICENSE` | Root MIT licence naming Md Safarujjaman; scope is limited to material its holder may license. |
 | `UPSTREAM-LICENSE-MIT.txt` | Retained upstream MIT notice naming SysAdminDoc. |
 | `NOTICE` | Project-level notices and distribution reminders for identified native/media components. |
-| `third_party/ffmpeg-kit-next/native-lock.json` | Pinned native component inventory, versions, source commits, licence expressions, checksums and security/build metadata. |
-| `third_party/ffmpeg-kit-next/ffmpeg-kit-next-8.1.0.aar` and POM | Vendored native dependency and its Maven metadata. |
 | Android `res/raw` licence/source resources | The NOTICE records that relevant upstream licence texts, source information and the source-offer recipe are packaged there; verify they remain present in the actual release artifact. |
 | Generated runtime open-source notices | Dependency-derived notice inventory generated by the Gradle task for the resolved release runtime graph. |
 
-Do not delete, merge away, overwrite or replace a licence file merely because its contents look repetitive. Some licences require the original copyright and permission text to accompany copies or substantial portions; some native components have distinct licence texts and source-offer obligations. A summary in this document or in `NOTICE` is not a substitute for those required texts.
+Do not delete, merge away, overwrite or replace a licence file merely because its contents look repetitive. Some licences require the original copyright and permission text to accompany copies or substantial portions. A summary in this document or in `NOTICE` is not a substitute for those required texts.
 
-## 10. Upgrade and contribution record
+## 9. Upgrade and contribution record
 
 For each future Director X upgrade, record the following in the relevant commit description and current engineering status:
 
@@ -223,7 +192,7 @@ For each future Director X upgrade, record the following in the relevant commit 
 
 Prefer commit history and a generated software bill of materials (SBOM) over manually asserting that an entire directory belongs to one author. Preserve provenance when copying, replacing or substantially modifying files.
 
-## 11. Important legal and verification limits
+## 10. Important legal and verification limits
 
 This file is a technical and historical acknowledgment, not legal advice, a copyright assignment, a relicensing instrument, or a complete legal review of the repository.
 

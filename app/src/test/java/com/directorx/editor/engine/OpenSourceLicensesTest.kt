@@ -24,7 +24,6 @@ class OpenSourceLicensesTest {
 
     @Test
     fun registryContainsReleaseNoticeObligationDependencies() {
-        assertNotNull(OpenSourceLicenses.noticeForArtifact("third_party/ffmpeg-kit-next/ffmpeg-kit-next-8.1.0.aar"))
         assertNotNull(OpenSourceLicenses.noticeForArtifact("io.github.kaleyravideo:android-deepfilternet"))
     }
 
@@ -42,11 +41,11 @@ class OpenSourceLicensesTest {
     }
 
     @Test
-    fun generatedInventoryCoversResolvedRuntimeAndVendoredNativeComponents() {
+    fun generatedInventoryCoversResolvedRuntimeComponentsWithoutVendoredFfmpeg() {
         val generatedArtifacts = RuntimeOpenSourceLicensesGenerated.notices.map { it.artifact }
 
         assertEquals(generatedArtifacts.size, generatedArtifacts.distinct().size)
-        assertTrue(RuntimeOpenSourceLicensesGenerated.notices.count { it.artifact.startsWith("native:") } >= 15)
+        assertTrue(RuntimeOpenSourceLicensesGenerated.notices.none { it.artifact.startsWith("native:") })
         assertTrue(RuntimeOpenSourceLicensesGenerated.notices.count { !it.artifact.startsWith("native:") } >= 200)
         RuntimeOpenSourceLicensesGenerated.notices.forEach { generated ->
             assertNotNull(OpenSourceLicenses.noticeForArtifact(generated.artifact))
@@ -60,23 +59,6 @@ class OpenSourceLicensesTest {
         assertEquals("available", objectRemoval.status)
         assertEquals("model_gated", objectRemoval.reachability)
         assertEquals("available", requireNotNull(CapabilityRegistry.capabilityFor("audio_denoise")).status)
-    }
-
-    @Test
-    fun ffmpegKitNoticePreservesSourceOfferAndLgplProfile() {
-        val notice = OpenSourceLicenses.ffmpegKitNotice()
-
-        assertTrue(notice.version.contains("8.1.0"))
-        assertTrue(notice.version.contains("FFmpeg 8.1.2"))
-        assertTrue(notice.licenseName.contains("Lesser General Public License"))
-        assertTrue(notice.licenseText.contains("LGPL"))
-        assertTrue(notice.sourceOfferText.orEmpty().contains("source", ignoreCase = true))
-        assertTrue(notice.sourceOfferText.orEmpty().contains("LGPL v3.0-or-later"))
-        assertTrue(notice.sourceOfferText.orEmpty().contains("directorx-security.patch"))
-        assertTrue(notice.sourceOfferText.orEmpty().contains("3e223118e6e8fb6208693ecf3952e77cd096f587"))
-        assertTrue(notice.sourceOfferText.orEmpty().contains("nix-android.sh"))
-        assertTrue(notice.complianceNote.orEmpty().contains("res/raw/source.txt"))
-        assertTrue(notice.complianceNote.orEmpty().contains("ffmpeg_kit_next_source_offer.txt"))
     }
 
     @Test
@@ -96,9 +78,7 @@ class OpenSourceLicensesTest {
     }
 
     @Test
-    fun onlyFfmpegKitCurrentlyNeedsSourceOfferCopy() {
-        val sourceOfferArtifacts = OpenSourceLicenses.dependenciesWithSourceOffers().map { it.artifact }
-
-        assertEquals(listOf("third_party/ffmpeg-kit-next/ffmpeg-kit-next-8.1.0.aar"), sourceOfferArtifacts)
+    fun noVendoredFfmpegSourceOfferRemains() {
+        assertTrue(OpenSourceLicenses.dependenciesWithSourceOffers().isEmpty())
     }
 }

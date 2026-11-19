@@ -68,7 +68,7 @@ This roadmap is the execution record for the staged engineering upgrade. Changes
 ## Stage 5 — Release readiness
 
 **Scope**
-- Complete native FFmpeg provenance/security review and dependency/license audit.
+- Complete AndroidX Media3 and platform-codec migration, dependency/license audit, and physical-device acceptance.
 - Complete physical-device acceptance, including the target device listed in the engineering status record.
 - Run full regression and performance acceptance.
 - Build APKs once, then inspect package identity, version, signing certificate, ABI splits, native library alignment, assets, and output size.
