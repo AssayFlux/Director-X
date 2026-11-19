@@ -21,7 +21,7 @@ index 24428f6..0ca135c 100755
 +
 
 diff --git a/scripts/source.sh b/scripts/source.sh
-index 0000000..0000000 100644
+index 0000000..0000000 100755
 --- a/scripts/source.sh
 +++ b/scripts/source.sh
 @@ -37,1 +37,1 @@
