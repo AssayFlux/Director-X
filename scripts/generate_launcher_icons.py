@@ -11,6 +11,7 @@ except ImportError as exc:
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "Assets" / "Director-X Logo.svg"
+SIGNATURE = ROOT / "Assets" / "Author's Signature.svg"
 DENSITIES = {"mdpi": (108, 48), "hdpi": (162, 72), "xhdpi": (216, 96),
              "xxhdpi": (324, 144), "xxxhdpi": (432, 192)}
 
@@ -21,6 +22,11 @@ def main() -> None:
     if not SOURCE.is_file() or SOURCE.stat().st_size < 100:
         raise SystemExit(f"Approved master logo is missing: {SOURCE}")
     svg = SOURCE.read_bytes()
+    if not SIGNATURE.is_file() or SIGNATURE.stat().st_size < 100:
+        raise SystemExit(f"Approved AssayFlux signature is missing: {SIGNATURE}")
+    signature_output = output / "drawable-nodpi" / "assayflux_signature.png"
+    signature_output.parent.mkdir(parents=True, exist_ok=True)
+    signature_output.write_bytes(cairosvg.svg2png(bytestring=SIGNATURE.read_bytes(), output_width=720))
     for density, (foreground_size, legacy_size) in DENSITIES.items():
         folder = output / f"mipmap-{density}"
         folder.mkdir(parents=True, exist_ok=True)
