@@ -11,7 +11,7 @@ import androidx.core.content.FileProvider
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
-import com.directorx.editor.ClearCutApp
+import com.directorx.editor.DirectorXApp
 import com.directorx.editor.MainActivity
 import com.directorx.editor.engine.ProjectShortcutPlanner
 import androidx.lifecycle.ViewModel
@@ -1193,7 +1193,7 @@ class ProjectListViewModel @Inject constructor(
     }
 
     private fun crashReportIssueBody(notice: CrashReportNotice): String =
-        CrashReportNoticePolicy.issueBody(notice, CrashReportDevice.current(ClearCutApp.VERSION))
+        CrashReportNoticePolicy.issueBody(notice, CrashReportDevice.current(DirectorXApp.VERSION))
 
     private fun acknowledgeCrashReportNotice(notice: CrashReportNotice) {
         if (_crashReportNotice.value == notice) _crashReportNotice.value = null
