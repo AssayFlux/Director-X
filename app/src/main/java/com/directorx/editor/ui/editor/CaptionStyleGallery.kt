@@ -29,7 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.stringResource
@@ -360,13 +359,7 @@ private fun CaptionStyleCard(
                     .fillMaxWidth()
                     .height(126.dp)
                     .background(
-                        Brush.verticalGradient(
-                            listOf(
-                                accent.copy(alpha = 0.28f),
-                                semanticColors.panelHighest,
-                                semanticColors.surfaceBase
-                            )
-                        )
+                        MaterialTheme.colorScheme.surfaceContainerHigh
                     ),
                 contentAlignment = when {
                     template.positionY > 0.7f -> Alignment.BottomCenter
