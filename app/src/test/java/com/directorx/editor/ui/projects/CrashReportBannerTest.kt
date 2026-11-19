@@ -65,6 +65,9 @@ class CrashReportBannerTest {
         waitForBanner()
 
         compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_COPY).performClick()
+        // Complete AnimatedVisibility's exit transition before inspecting the semantics tree.
+        compose.mainClock.advanceTimeBy(1_000L)
+        compose.waitForIdle()
 
         waitUntilBannerGone()
         val clip = context.getSystemService(ClipboardManager::class.java).primaryClip!!.getItemAt(0).text.toString()
@@ -83,6 +86,8 @@ class CrashReportBannerTest {
         val target = File(context.cacheDir, "picked-report.zip")
 
         compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_SAVE).performClick()
+        // Let the ActivityResult launcher dispatch its ACTION_CREATE_DOCUMENT intent.
+        compose.mainClock.advanceTimeBy(1_000L)
         compose.waitForIdle()
         val activity = shadowOf(compose.activity)
         val request = activity.nextStartedActivityForResult.intent
