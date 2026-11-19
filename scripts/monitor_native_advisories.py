@@ -113,6 +113,30 @@ def main() -> int:
     nvd_findings = []
     for item in nvd.get("vulnerabilities", []):
         cve = item.get("cve", {})
+        description = next(
+            (x.get("value", "") for x in cve.get("descriptions", []) if x.get("lang") == "en"),
+            "",
+        )
+        # NVD keywordSearch also returns unrelated CVEs whose references merely
+        # mention FFmpeg. Require a direct FFmpeg CPE or an explicit product
+        # mention in the advisory description before adding a triage candidate.
+        cpe_matches = []
+        def collect_cpes(node):
+            if isinstance(node, dict):
+                for match in node.get("cpeMatch", []):
+                    criteria = str(match.get("criteria", "")).lower()
+                    if re.search(r"cpe:2\.3:[aho]:[^:]*ffmpeg[^:]*:", criteria):
+                        cpe_matches.append(criteria)
+                for child in node.get("nodes", []):
+                    collect_cpes(child)
+                for child in node.get("children", []):
+                    collect_cpes(child)
+            elif isinstance(node, list):
+                for child in node:
+                    collect_cpes(child)
+        collect_cpes(cve.get("configurations", []))
+        if not cpe_matches and not re.search(r"\bffmpeg\b", description, re.IGNORECASE):
+            continue
         metrics = cve.get("metrics", {})
         scores = []
         for key in ("cvssMetricV40", "cvssMetricV31", "cvssMetricV30", "cvssMetricV2"):
@@ -123,7 +147,8 @@ def main() -> int:
             "id": cve.get("id", "UNKNOWN"),
             "severity": next((x.upper() for x in scores if x), "UNKNOWN"),
             "published": cve.get("published", ""),
-            "description": next((x.get("value", "") for x in cve.get("descriptions", []) if x.get("lang") == "en"), ""),
+            "description": description,
+            "ffmpeg_cpe_matches": cpe_matches,
             "url": "https://nvd.nist.gov/vuln/detail/" + cve.get("id", ""),
         })
 
