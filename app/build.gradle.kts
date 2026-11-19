@@ -25,11 +25,19 @@ fun resolveSigningSecret(vararg keys: String): String? {
 val runtimeNoticeGeneratedDir = layout.buildDirectory.dir("generated/source/runtimeNotices")
 val assayFluxBrandAssetsDir = layout.buildDirectory.dir("generated/assets/assayfluxBrand")
 val directorXLauncherResDir = layout.buildDirectory.dir("generated/res/directorXLauncher")
+val validateDirectorXBranding by tasks.registering(Exec::class) {
+    group = "branding"
+    description = "Validates selected branding assets and repository configuration."
+    inputs.file(rootProject.file("branding/branding.json"))
+    inputs.file(rootProject.file("scripts/validate_branding.py"))
+    inputs.dir(rootProject.file("Assets"))
+    commandLine("python3", rootProject.file("scripts/validate_branding.py").absolutePath)
+}
 val generateDirectorXLauncherIcons by tasks.registering(Exec::class) {
     group = "branding"
     description = "Generates launcher icons from the approved Director X master SVG."
-    inputs.file(rootProject.file("Assets/Director-X Logo.svg"))
-    inputs.file(rootProject.file("Assets/Author's Signature.svg"))
+    inputs.file(rootProject.file("branding/branding.json"))
+    inputs.dir(rootProject.file("Assets"))
     inputs.file(rootProject.file("scripts/generate_launcher_icons.py"))
     outputs.dir(directorXLauncherResDir)
     commandLine("python3", rootProject.file("scripts/generate_launcher_icons.py").absolutePath,
@@ -197,7 +205,7 @@ android {
 }
 
 tasks.named("preBuild").configure {
-    dependsOn(copyAssayFluxBrandAssets, generateDirectorXLauncherIcons)
+    dependsOn(validateDirectorXBranding, copyAssayFluxBrandAssets, generateDirectorXLauncherIcons)
 }
 
 composeCompiler {
