@@ -40,7 +40,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.semantics.Role
@@ -383,13 +382,7 @@ private fun ChannelStrip(
     ) {
         Box(
             modifier = Modifier.background(
-                Brush.verticalGradient(
-                    listOf(
-                        accent.copy(alpha = 0.12f),
-                        semanticColors.panelHighest,
-                        semanticColors.panelRaised
-                    )
-                )
+                MaterialTheme.colorScheme.surfaceContainerHigh
             )
         ) {
             Column(
@@ -682,13 +675,7 @@ private fun MasterBusStrip() {
     ) {
         Box(
             modifier = Modifier.background(
-                Brush.verticalGradient(
-                    listOf(
-                        ClearCutAccents.Mauve.copy(alpha = 0.16f),
-                        semanticColors.panelHighest,
-                        semanticColors.panelRaised
-                    )
-                )
+                MaterialTheme.colorScheme.surfaceContainerHigh
             )
         ) {
             Column(
