@@ -1,9 +1,0 @@
-# Director X — Release Notes
-
-## v0.1.0
-
-versionCode: 1
-
-- Director X v0.1.0 foundational editing, project, preview, and export improvements.
-- Maintains the approved Director X identity and existing project/archive compatibility.
-- Automated and physical-device acceptance remain separately tracked in docs/ENGINEERING_STATUS.md.
