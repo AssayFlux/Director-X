@@ -12,7 +12,7 @@ Director X provides a multi-track editing workflow with preview, project persist
 
 ## Project status
 
-The authoritative engineering record is [docs/ENGINEERING_STATUS.md](docs/ENGINEERING_STATUS.md). Build instructions are in [docs/BUILD.md](docs/BUILD.md). Privacy disclosures are in [docs/PRIVACY_POLICY.md](docs/PRIVACY_POLICY.md).
+The authoritative engineering record is [docs/ENGINEERING_STATUS.md](docs/ENGINEERING_STATUS.md). Build instructions are in [docs/BUILD.md](docs/BUILD.md). Privacy disclosures are in [docs/privacy-policy.md](docs/privacy-policy.md).
 
 Do not infer feature acceptance from the presence of a UI control or implementation class. The status document distinguishes implemented code, automated verification, and physical-device acceptance.
 
