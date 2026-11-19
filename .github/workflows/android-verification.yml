@@ -42,7 +42,7 @@ jobs:
   unit-tests:
     name: Android unit tests
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 120
     steps:
       - name: Check out Director X
         uses: actions/checkout@v4
@@ -74,8 +74,28 @@ jobs:
       - name: Validate repository branding selections
         run: python scripts/validate_branding.py
 
+      # KSP exports the Room schema for the current database version. Generate it
+      # before packaging androidTest assets so MigrationTestHelper can validate
+      # the complete committed migration chain (including the current schema).
+      - name: Generate and verify current Room schema
+        run: |
+          ./gradlew --no-daemon --stacktrace --console=plain :app:kspQaKotlin
+          test -s app/schemas/com.directorx.editor.engine.db.ProjectDatabase/11.json
+
       - name: Run Android unit tests
         run: ./gradlew --no-daemon --stacktrace --console=plain :app:testQaUnitTest
+
+      - name: Run Android lint
+        run: ./gradlew --no-daemon --stacktrace --console=plain :app:lintQa
+
+      # Use the configured API 37 managed device. Resolve the task name from
+      # Gradle's task catalogue rather than hard-coding AGP's generated name.
+      - name: Run Android database and instrumentation tests
+        run: |
+          TASKS="$(./gradlew --no-daemon --console=plain :app:tasks --all)"
+          TEST_TASK="$(printf '%s\\n' "$TASKS" | python -c 'import re,sys; lines=sys.stdin.read().splitlines(); matches=[m.group(1) for line in lines if (m:=re.match(r"\\s*(directorXApi37\\w*QaAndroidTest)\\s+-", line))]; print(matches[0] if matches else "")')"
+          test -n "$TEST_TASK" || { echo "Managed API 37 QA instrumentation task was not registered"; exit 1; }
+          ./gradlew --no-daemon --stacktrace --console=plain ":app:$TEST_TASK"
 
       - name: Upload Android unit-test reports
         if: always()
