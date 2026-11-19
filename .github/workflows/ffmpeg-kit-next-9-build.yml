@@ -4,7 +4,7 @@ name: Build FFmpegKitNext 9.0.2 Android artifact
 on:
   workflow_dispatch:
   push:
-    branches: [ffmpeg-9-rebuild-diagnostics]
+    branches: [ffmpeg-9-rebuild-diagnostics, ffmpeg9-native-upgrade-validation]
     paths:
       - "scripts/build_ffmpeg_kit_next.ps1"
       - "scripts/prepare_ffmpeg_kit_next_9_source.sh"
