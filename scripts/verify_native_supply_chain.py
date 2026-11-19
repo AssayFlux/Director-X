@@ -109,7 +109,7 @@ def validate(lock: dict, root: Path = ROOT, today: dt.date | None = None) -> Non
         raise ValueError("native security patch SHA-256 mismatch")
 
     security = lock.get("security", {})
-    if security.get("profile") != "clearcut-disabled-format-surface":
+    if security.get("profile") != "directorx-disabled-format-surface":
         raise ValueError("native security profile is missing or unsupported")
     disabled_components = set(security.get("disabledComponents", []))
     if not disabled_components:
