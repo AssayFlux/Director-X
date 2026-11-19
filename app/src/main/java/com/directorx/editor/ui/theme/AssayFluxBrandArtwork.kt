@@ -5,13 +5,17 @@ import android.view.View
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import androidx.compose.foundation.Image\nimport androidx.compose.runtime.Composable
+import androidx.compose.foundation.Image
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier\nimport androidx.compose.ui.layout.ContentScale\nimport androidx.compose.ui.res.painterResource
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.viewinterop.AndroidView\nimport com.directorx.editor.R
+import androidx.compose.ui.viewinterop.AndroidView
+import com.directorx.editor.R
 
 /**
  * Renders the supplied AssayFlux SVG artwork with Android's built-in WebView SVG
