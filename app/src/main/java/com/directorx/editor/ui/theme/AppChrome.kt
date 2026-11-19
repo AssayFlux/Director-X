@@ -370,10 +370,12 @@ fun ClearCutChromeIconButton(
         label = "chromeIconButtonScale"
     )
     Box(
-        modifier = modifier.defaultMinSize(
-            minWidth = TouchTarget.minimum,
-            minHeight = TouchTarget.minimum,
-        ),
+        modifier = modifier
+            .defaultMinSize(
+                minWidth = TouchTarget.minimum,
+                minHeight = TouchTarget.minimum,
+            )
+            .semantics(mergeDescendants = true) {},
         contentAlignment = Alignment.Center,
     ) {
         Surface(
