@@ -19,4 +19,3 @@ index 24428f6..0ca135c 100755
 +CONFIGURE_POSTFIX+=" --disable-demuxer=iamf"
 +CONFIGURE_POSTFIX+=" --disable-decoder=zlib"
 +CONFIGURE_POSTFIX+=" --enable-version3"
-
