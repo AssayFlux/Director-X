@@ -50,8 +50,8 @@ def main() -> int:
     if not aar_source.is_file() or not pom_source.is_file():
         raise SystemExit("Successful native workflow artifact is missing the 9.0.2 AAR or POM")
     pom_text = pom_source.read_text(encoding="utf-8")
-    if "<version>9.0.2</version>" not in pom_text:
-        raise SystemExit("Native POM does not identify version 9.0.2")
+    if "<version>9.0.2</version>" not in pom_text or "<artifactId>ffmpeg-kit-next</artifactId>" not in pom_text:
+        raise SystemExit("Native POM does not identify the FFmpegKitNext 9.0.2 artifact")
 
     aar_target = ROOT / NEW_AAR
     pom_target = ROOT / NEW_POM
@@ -65,6 +65,15 @@ def main() -> int:
 
     aar_hash = sha256(aar_target)
     pom_hash = sha256(pom_target)
+    sums_path = artifact_dir / "build-output" / "SHA256SUMS"
+    if not sums_path.is_file():
+        raise SystemExit("Native evidence is missing SHA256SUMS")
+    sums = {}
+    for line in sums_path.read_text(encoding="utf-8").splitlines():
+        digest, filename = line.split(maxsplit=1)
+        sums[Path(filename.strip().lstrip("*")).name] = digest
+    if sums.get(aar_source.name) != aar_hash or sums.get(pom_source.name) != pom_hash:
+        raise SystemExit("Promoted AAR/POM hashes do not match the native workflow SHA256SUMS")
     aar_size = aar_target.stat().st_size
     pom_size = pom_target.stat().st_size
     if aar_hash == OLD_AAR_SHA:
