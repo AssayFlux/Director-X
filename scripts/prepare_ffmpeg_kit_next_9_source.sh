@@ -206,7 +206,7 @@ for fix in "${FFMPEG_SECURITY_COMMITS[@]}"; do
 done
 # Port fork security fixes onto the exact n9.0.2 source; do not cherry-pick
 # incompatible fork-only context or change upstream library version macros.
-python3 - "${ffmpeg_source_dir}" <<'PY'
+python3 - "${ffmpeg_source_dir}" <<'FFMPEG_SECURITY_PY'
 from pathlib import Path
 import sys
 root = Path(sys.argv[1])
@@ -346,7 +346,7 @@ edit('libavcodec/cbs_sei.c', '    ++list->nb_messages;\n    return 0;\n',
      '    memset(&list->messages[list->nb_messages], 0, sizeof(*list->messages));\n    ++list->nb_messages;\n    return 0;\n', 'SEI slot')
 edit('libavcodec/sanm.c', '        bytestream2_get_bufferu(gb, ctx->c23lut, 256);\n',
      '        bytestream2_get_bufferu(gb, ctx->c23lut, 256);\n        memcpy(lut, ctx->c23lut, 256);\n', 'SANM LUT')
-PY
+FFMPEG_SECURITY_PY
 git -C "${ffmpeg_source_dir}" diff --check
 grep -q 'while (info)' "${ffmpeg_source_dir}/libavutil/encryption_info.c"
 grep -q 'mov_append_pssh_side_data' "${ffmpeg_source_dir}/libavformat/mov.c"
