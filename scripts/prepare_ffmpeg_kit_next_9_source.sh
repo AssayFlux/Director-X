@@ -241,7 +241,6 @@ FFMPEG_SECURITY_COMMITS=(
   50865f20b1f474e6b11735c88f668751bc9aa528
   c05d46ea2919da83233bf4216d3f58428bb54c59
   9b26bb4c9a4457d480899a1bf64ec080eceb1acd
-  0b007e0634de5b4424b9993c95a6c1c50de0115b
   839c93f261cd3e1719edfac4244a2d0055ce8841
   5d7b743bdfb724df21fd43a3d7f3258382eb578c
   26b4c37526fe0ecf1095b45daac08050f25f7659
@@ -451,6 +450,7 @@ elif sgi_text.count(sgi_old) != 0 or sgi_text.count(sgi_new) != 2:
 sgi_path.write_text(sgi_text, encoding='utf-8')
 edit('libavcodec/dpxenc.c', '        if (avctx->bits_per_raw_sample)\n            s->bits_per_component = avctx->bits_per_raw_sample;\n', '        if (avctx->bits_per_raw_sample == 10) {\n            s->bits_per_component = 10;\n        } else if (avctx->bits_per_raw_sample && avctx->bits_per_raw_sample != 16) {\n            av_log(avctx, AV_LOG_ERROR, "Unsupported bit depth: %d\\n", avctx->bits_per_raw_sample);\n            return AVERROR(EINVAL);\n        }\n', 'DPX RGB48 depth')
 edit('libavcodec/interplayacm.c', '    s->block_len = s->rows * s->cols;\n', '    s->block_len = s->rows * s->cols;\n    if (s->block_len > 1024 * 1024) {\n        av_log(avctx, AV_LOG_ERROR, "Block of %d samples is too large\\n", s->block_len);\n        return AVERROR_INVALIDDATA;\n    }\n', 'Interplay ACM allocation cap')
+edit('libavcodec/mpegaudiodec_template.c', '    init_get_bits(&s->gb, buf + HEADER_SIZE, (buf_size - HEADER_SIZE) * 8);\n    if (s->error_protection)', '    ret = init_get_bits8(&s->gb, buf + HEADER_SIZE, buf_size - HEADER_SIZE);\n    if (ret < 0)\n        return ret;\n    if (s->error_protection)', 'MP3 packet bit-reader bounds')
 FFMPEG_SECURITY_PY
 if [[ $? -ne 0 ]]; then exit 1; fi
 git -C "${ffmpeg_source_dir}" diff --check || exit 1
@@ -464,6 +464,7 @@ grep -q 'ptrdiff_t' "${ffmpeg_source_dir}/libavcodec/sgienc.c" || exit 1
 grep -q 'av_size_mult(s->current_frame.nb_units' "${ffmpeg_source_dir}/libavcodec/vvc/refs.c" || exit 1
 grep -q 'memcpy(lut, ctx->c23lut, 256)' "${ffmpeg_source_dir}/libavcodec/sanm.c" || exit 1
 grep -q 'Unsupported bit depth' "${ffmpeg_source_dir}/libavcodec/dpxenc.c" || exit 1
+grep -q 'ret = init_get_bits8(&s->gb, buf + HEADER_SIZE, buf_size - HEADER_SIZE)' "${ffmpeg_source_dir}/libavcodec/mpegaudiodec_template.c" || exit 1
 grep -q 'src->width != avctx->width' "${ffmpeg_source_dir}/libavcodec/encode.c" || exit 1
 grep -q 's->block_len > 1024 \* 1024' "${ffmpeg_source_dir}/libavcodec/interplayacm.c" || exit 1
 '''
