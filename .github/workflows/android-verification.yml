@@ -61,15 +61,48 @@ jobs:
           path: .tmp/ffmpeg-kit-next
           persist-credentials: false
 
-      - name: Test FFmpeg 8.1.3 source pin and 8.1.2 rollback
+      - name: Check out FFmpeg 8.1.2 source for security patch validation
+        uses: actions/checkout@v4
+        with:
+          repository: arthenica/FFmpeg
+          ref: n8.1.2
+          path: .tmp/ffmpeg-n8.1.2
+          persist-credentials: false
+
+      - name: Check out FFmpeg 8.1.3 source for security patch validation
+        uses: actions/checkout@v4
+        with:
+          repository: arthenica/FFmpeg
+          ref: n8.1.3
+          path: .tmp/ffmpeg-n8.1.3
+          persist-credentials: false
+
+      - name: Test FFmpeg source pins and PSD security backport on both fallback versions
         run: |
-          PATCH="$GITHUB_WORKSPACE/third_party/ffmpeg-kit-next/ffmpeg-source-tag-n8.1.3.patch"
-          git -C .tmp/ffmpeg-kit-next apply --check "$PATCH"
-          git -C .tmp/ffmpeg-kit-next apply "$PATCH"
+          TAG_PATCH="$GITHUB_WORKSPACE/third_party/ffmpeg-kit-next/ffmpeg-source-tag-n8.1.3.patch"
+          HOOK_PATCH="$GITHUB_WORKSPACE/third_party/ffmpeg-kit-next/ffmpeg-psd-backport-hook.patch"
+          PSD_PATCH="$GITHUB_WORKSPACE/third_party/ffmpeg-kit-next/ffmpeg-psd-cve-2026-125213.patch"
+
+          git -C .tmp/ffmpeg-kit-next apply --check "$TAG_PATCH"
+          git -C .tmp/ffmpeg-kit-next apply "$TAG_PATCH"
           grep -Fq 'SOURCE_ID="n8.1.3"' .tmp/ffmpeg-kit-next/scripts/source.sh
-          git -C .tmp/ffmpeg-kit-next apply --reverse --check "$PATCH"
-          git -C .tmp/ffmpeg-kit-next apply --reverse "$PATCH"
+          git -C .tmp/ffmpeg-kit-next apply --reverse --check "$TAG_PATCH"
+          git -C .tmp/ffmpeg-kit-next apply --reverse "$TAG_PATCH"
           grep -Fq 'SOURCE_ID="n8.1.2"' .tmp/ffmpeg-kit-next/scripts/source.sh
+
+          git -C .tmp/ffmpeg-kit-next apply --check "$HOOK_PATCH"
+          git -C .tmp/ffmpeg-kit-next apply "$HOOK_PATCH"
+          grep -Fq 'DIRECTORX_PSD_PATCH' .tmp/ffmpeg-kit-next/scripts/android/ffmpeg.sh
+          git -C .tmp/ffmpeg-kit-next apply --reverse --check "$HOOK_PATCH"
+          git -C .tmp/ffmpeg-kit-next apply --reverse "$HOOK_PATCH"
+
+          for SOURCE in .tmp/ffmpeg-n8.1.2 .tmp/ffmpeg-n8.1.3; do
+            git -C "$SOURCE" apply --check "$PSD_PATCH"
+            git -C "$SOURCE" apply "$PSD_PATCH"
+            grep -Fq 'if (s->uncompressed_size > INT_MAX)' "$SOURCE/libavcodec/psd.c"
+            git -C "$SOURCE" apply --reverse --check "$PSD_PATCH"
+            git -C "$SOURCE" apply --reverse "$PSD_PATCH"
+          done
 
       - name: Set up Python
         uses: actions/setup-python@v5
