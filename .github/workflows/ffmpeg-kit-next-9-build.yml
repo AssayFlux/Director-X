@@ -121,12 +121,16 @@ jobs:
           import pathlib, re, subprocess, zipfile, xml.etree.ElementTree as ET
           aar = pathlib.Path("build-output/ffmpeg-kit-next-9.0.2.aar")
           pom = pathlib.Path("build-output/ffmpeg-kit-next-9.0.2.pom")
-          required = {"armeabi-v7a", "armeabi-v7a-neon", "arm64-v8a", "x86", "x86_64"}
+          required = {"armeabi-v7a", "arm64-v8a", "x86", "x86_64"}
           with zipfile.ZipFile(aar) as z:
               names = z.namelist()
               abis = {n.split("/")[1] for n in names if n.startswith("jni/") and n.endswith(".so") and len(n.split("/")) > 2}
               if abis != required:
-                  raise SystemExit(f"ABI mismatch: required={sorted(required)} found={sorted(abis)}")
+                  raise SystemExit(f"ABI directory mismatch: required={sorted(required)} found={sorted(abis)}")
+              armv7_neon = {pathlib.PurePosixPath(n).name for n in names
+                            if n.startswith("jni/armeabi-v7a/") and n.endswith("_neon.so")}
+              if not armv7_neon:
+                  raise SystemExit("armeabi-v7a NEON variant libraries are missing")
               z.extractall("build-output/new-aar")
           root = ET.parse(pom).getroot()
           ns = {"m": "http://maven.apache.org/POM/4.0.0"}
