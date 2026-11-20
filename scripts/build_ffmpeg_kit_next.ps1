@@ -27,6 +27,12 @@ $patchPath = (Resolve-Path -LiteralPath (
 $candidatePinPatchPath = (Resolve-Path -LiteralPath (
         Join-Path $PSScriptRoot "..\third_party\ffmpeg-kit-next\ffmpeg-source-tag-n8.1.3.patch"
     ) -ErrorAction Stop).Path
+$psdHookPatchPath = (Resolve-Path -LiteralPath (
+        Join-Path $PSScriptRoot "..\third_party\ffmpeg-kit-next\ffmpeg-psd-backport-hook.patch"
+    ) -ErrorAction Stop).Path
+$psdPatchPath = (Resolve-Path -LiteralPath (
+        Join-Path $PSScriptRoot "..\third_party\ffmpeg-kit-next\ffmpeg-psd-cve-2026-125213.patch"
+    ) -ErrorAction Stop).Path
 
 function ConvertTo-WslPath([string]$value) {
     $shellValue = $value.Replace("'", "'\''")
@@ -43,8 +49,13 @@ function ConvertTo-WslShellLiteral([string]$value) {
 
 $sourceWsl = ConvertTo-WslPath $sourcePath
 $patchWsl = ConvertTo-WslPath $patchPath
+$psdHookPatchWsl = ConvertTo-WslPath $psdHookPatchPath
+$psdPatchWsl = ConvertTo-WslPath $psdPatchPath
 $sourceLiteral = ConvertTo-WslShellLiteral $sourceWsl
 $patchLiteral = ConvertTo-WslShellLiteral $patchWsl
+$psdHookPatchLiteral = ConvertTo-WslShellLiteral $psdHookPatchWsl
+$psdPatchLiteral = ConvertTo-WslShellLiteral $psdPatchWsl
+$ffmpegSourceLiteral = ConvertTo-WslShellLiteral "$sourceWsl/src/ffmpeg"
 
 $candidatePinPatchWsl = ConvertTo-WslPath $candidatePinPatchPath
 $candidatePinPatchLiteral = ConvertTo-WslShellLiteral $candidatePinPatchWsl
@@ -67,6 +78,20 @@ fi
 "@
 }
 
+$sourceCheckoutResetBlock = ""
+if (-not $PackageOnly) {
+    $sourceCheckoutResetBlock = @"
+ffmpeg_source_dir=$ffmpegSourceLiteral
+if [[ -d "`$ffmpeg_source_dir/.git" ]]; then
+  current_ffmpeg_tag=`$(git -C "`$ffmpeg_source_dir" describe --tags --exact-match HEAD 2>/dev/null || true)
+  if [[ "`$current_ffmpeg_tag" != "$FfmpegTag" ]]; then
+    rm -rf "`$ffmpeg_source_dir"
+  fi
+elif [[ -e "`$ffmpeg_source_dir" ]]; then
+  rm -rf "`$ffmpeg_source_dir"
+fi
+"@
+}
 $skipFfmpeg = if ($PackageOnly) { " --skip-ffmpeg" } else { "" }
 $command = @"
 set -e
@@ -87,7 +112,17 @@ else
   echo "Director X FFmpeg security patch does not apply cleanly." >&2
   exit 2
 fi
+if git apply --reverse --check $psdHookPatchLiteral >/dev/null 2>&1; then
+  :
+elif git apply --check $psdHookPatchLiteral; then
+  git apply $psdHookPatchLiteral
+else
+  echo "Director X PSD backport hook does not apply cleanly." >&2
+  exit 4
+fi
 $sourceTagPatchBlock
+$sourceCheckoutResetBlock
+export DIRECTORX_PSD_PATCH=$psdPatchLiteral
 bash ./nix-android.sh -p android-r27d$skipFfmpeg --enable-libass --enable-libjxl --enable-android-media-codec --enable-android-zlib --enable-openh264 --jobs=8
 "@
 
