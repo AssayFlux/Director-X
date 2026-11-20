@@ -69,7 +69,26 @@ for path in (Path("gen.tab/Makefile.in"), Path("gen.tab/Makefile")):
     if text.count(old) == 1:
         text = text.replace(old, new)
     elif text.count(new) != 1:
-        raise SystemExit(f"Expected one original FriBidi generator recipe in {path}; old={text.count(old)} new={text.count(new)}")
+        raise SystemExit(f"Expected one original FriBidi Unicode-version recipe in {path}; old={text.count(old)} new={text.count(new)}")
+
+    # The remaining six table generators also used Automake $^, which passes
+    # the generator executable itself as a data argument. Each generator then
+    # reads beyond its intended argv and trips stack protection. Pass only the
+    # declared Unicode data inputs and generated version header.
+    recipes = {
+        "./$(gen_bidi_type_tab) $(COMPRESSION) $^ > $@": "./$(gen_bidi_type_tab) $(COMPRESSION) unidata/UnicodeData.txt fribidi-unicode-version.h > $@",
+        "./$(gen_joining_type_tab) $(COMPRESSION) $^ > $@": "./$(gen_joining_type_tab) $(COMPRESSION) unidata/UnicodeData.txt unidata/ArabicShaping.txt fribidi-unicode-version.h > $@",
+        "./$(gen_arabic_shaping_tab) $(COMPRESSION) $^ > $@": "./$(gen_arabic_shaping_tab) $(COMPRESSION) unidata/UnicodeData.txt fribidi-unicode-version.h > $@",
+        "./$(gen_mirroring_tab) $(COMPRESSION) $^ > $@": "./$(gen_mirroring_tab) $(COMPRESSION) unidata/BidiMirroring.txt fribidi-unicode-version.h > $@",
+        "./$(gen_brackets_tab) $(COMPRESSION) $^ > $@": "./$(gen_brackets_tab) $(COMPRESSION) unidata/BidiBrackets.txt unidata/UnicodeData.txt fribidi-unicode-version.h > $@",
+        "./$(gen_brackets_type_tab) $(COMPRESSION) $^ > $@": "./$(gen_brackets_type_tab) $(COMPRESSION) unidata/BidiBrackets.txt fribidi-unicode-version.h > $@",
+    }
+    for source, target in recipes.items():
+        count = text.count(source)
+        if count == 1:
+            text = text.replace(source, target)
+        elif count != 0 or text.count(target) != 1:
+            raise SystemExit(f"Expected one original or corrected recipe in {path}: {source}; found {count}")
     path.write_text(text, encoding="utf-8")
     print(f"Patched FriBidi generator recipe in {path}")
 
