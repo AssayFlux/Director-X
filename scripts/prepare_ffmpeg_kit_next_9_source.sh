@@ -55,23 +55,22 @@ insert = '''# Director X build correction for FriBidi v1.0.16:
 # Automake's $^ includes the generator executable as an input file. The
 # upstream generator expects only the two Unicode data files; pass them
 # explicitly to prevent the extra executable path from corrupting argv.
-FRIBIDI_GENERATOR_MAKEFILE="gen.tab/Makefile"
 printf 'FriBidi generator working directory: %s\\n' "$PWD"
-python3 - "${FRIBIDI_GENERATOR_MAKEFILE}" <<'FRIBIDI_PY' || return 1
+python3 - <<'FRIBIDI_PY' || return 1
 from pathlib import Path
-import sys
 
-path = Path(sys.argv[1])
-if not path.is_file():
-    raise SystemExit(f"Expected configured FriBidi generator Makefile: {path}")
-text = path.read_text(encoding="utf-8")
 old = "./$(gen_unicode_version) $^ > $@"
 new = "./$(gen_unicode_version) unidata/ReadMe.txt unidata/BidiMirroring.txt > $@"
-if text.count(old) != 1:
-    raise SystemExit(f"Expected one original FriBidi generator recipe, found {text.count(old)} in {path}")
-text = text.replace(old, new)
-print(f"Patched FriBidi generator recipe in {path}")
-path.write_text(text, encoding="utf-8")
+for path in (Path("gen.tab/Makefile.in"), Path("gen.tab/Makefile")):
+    if not path.is_file():
+        raise SystemExit(f"Expected configured FriBidi generator file: {path}")
+    text = path.read_text(encoding="utf-8")
+    if text.count(old) == 1:
+        text = text.replace(old, new)
+    elif text.count(new) != 1:
+        raise SystemExit(f"Expected one original FriBidi generator recipe in {path}; old={text.count(old)} new={text.count(new)}")
+    path.write_text(text, encoding="utf-8")
+    print(f"Patched FriBidi generator recipe in {path}")
 FRIBIDI_PY
 
 '''
