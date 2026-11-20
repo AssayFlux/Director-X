@@ -48,57 +48,31 @@ marker = "# Director X build correction for FriBidi v1.0.16:"
 if marker in text:
     print("FriBidi generator correction already prepared.")
     raise SystemExit(0)
-anchor = "# REGENERATE BUILD FILES IF NECESSARY OR REQUESTED"
+anchor = "${SED_INLINE}"
 if text.count(anchor) != 1:
-    raise SystemExit("Expected exactly one FriBidi build-regeneration anchor; refusing an ambiguous edit.")
+    raise SystemExit("Expected exactly one post-configure FriBidi anchor; refusing an ambiguous edit.")
 insert = '''# Director X build correction for FriBidi v1.0.16:
-# Automake's $^ includes the generator executable itself as an input file.
-# Pass only the two Unicode data files to avoid parsing the executable.
-FRIBIDI_MAKEFILE_AM="${BASEDIR}/src/${LIB_NAME}/gen.tab/Makefile.am"
-python3 - "${FRIBIDI_MAKEFILE_AM}" <<'FRIBIDI_PY'
+# Automake's $^ includes the generator executable as an input file. The
+# upstream generator expects only the two Unicode data files; pass them
+# explicitly to prevent the extra executable path from corrupting argv.
+FRIBIDI_GENERATOR_MAKEFILE="${BASEDIR}/src/${LIB_NAME}/lib/gen.tab/Makefile"
+python3 - "${FRIBIDI_GENERATOR_MAKEFILE}" <<'FRIBIDI_PY'
 from pathlib import Path
 import sys
 
 path = Path(sys.argv[1])
+if not path.is_file():
+    raise SystemExit(f"Expected configured FriBidi generator Makefile: {path}")
 text = path.read_text(encoding="utf-8")
 old = "./$(gen_unicode_version) $^ > $@"
-new = "python3 ./gen-unicode-version.py unidata/ReadMe.txt > $@"
-dependency = "\\t\\t$(gen_unicode_version)\\n"
-if text.count(dependency) != 1:
-    raise SystemExit("Expected exactly one generated executable prerequisite; refusing an ambiguous edit.")
-text = text.replace(dependency, "")
-continued_dependency = "\\t\\tunidata/BidiMirroring.txt \\\\n"
-plain_dependency = "\\t\\tunidata/BidiMirroring.txt\\n"
-if text.count(continued_dependency) == 1:
-    text = text.replace(continued_dependency, plain_dependency)
-elif text.count(plain_dependency) != 1:
-    raise SystemExit("Expected exactly one final FriBidi data dependency; refusing an ambiguous edit.")
+new = "./$(gen_unicode_version) unidata/ReadMe.txt unidata/BidiMirroring.txt > $@"
 if text.count(old) == 1:
     text = text.replace(old, new)
 elif text.count(new) == 1:
-    print("FriBidi Unicode version rule already uses the bounded Python generator.")
+    print("FriBidi Unicode generator already uses explicit data-file arguments.")
 else:
     raise SystemExit("Unexpected FriBidi Unicode generator recipe; refusing an ambiguous patch.")
 path.write_text(text, encoding="utf-8")
-
-generator = """#!/usr/bin/env python3
-import pathlib
-import re
-import sys
-
-source = pathlib.Path(sys.argv[1]).read_text(encoding="utf-8")
-match = re.search(r"\\bVersion\\s+(\\d+)\\.(\\d+)\\.(\\d+)\\b", source)
-if not match:
-    raise SystemExit("Could not determine Unicode version from pinned FriBidi ReadMe.txt")
-major, minor, micro = map(int, match.groups())
-print("/* fribidi-unicode-version.h: generated from pinned Unicode ReadMe.txt */")
-print(f'#define FRIBIDI_UNICODE_VERSION "{major}.{minor}.{micro}"')
-print(f"#define FRIBIDI_UNICODE_MAJOR_VERSION {major}")
-print(f"#define FRIBIDI_UNICODE_MINOR_VERSION {minor}")
-print(f"#define FRIBIDI_UNICODE_MICRO_VERSION {micro}")
-"""
-(path.parent / "gen-unicode-version.py").write_text(generator, encoding="utf-8")
-
 FRIBIDI_PY
 
 '''
