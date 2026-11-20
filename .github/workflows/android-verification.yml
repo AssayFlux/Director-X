@@ -8,6 +8,7 @@ on:
       - "Assets/**"
       - "branding/**"
       - "scripts/**"
+      - "third_party/**"
       - "gradle/**"
       - "*.gradle"
       - "*.gradle.kts"
@@ -36,7 +37,7 @@ permissions:
 
 concurrency:
   group: android-verification-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   unit-tests:
