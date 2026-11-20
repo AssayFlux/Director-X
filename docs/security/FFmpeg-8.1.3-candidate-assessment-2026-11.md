@@ -100,6 +100,5 @@ Do not merge a native artifact update to Alpha or build a release APK until:
 - Signed FFmpeg tag: `n8.1.3`
 - Tag target commit: `1041abdc962f4cc4f394aa8de9dc5236c0c3b9e7`
 - Director X patch: `third_party/ffmpeg-kit-next/ffmpeg-source-tag-n8.1.3.patch`
-- Candidate patch SHA-256 (Git blob is not the file hash): use the build output/CI evidence for the file hash; do not substitute the Git blob SHA.
 
 The build driver preserves the default 8.1.2 behavior and accepts `-FfmpegTag n8.1.3` for Plan A. The reverse operation is deliberately included so a reused local checkout can return to 8.1.2 for Plan B. CI checks apply, selected source tag, reverse-apply and restored fallback tag. This verifies patch mechanics only; it does not build FFmpeg or attest an AAR.
