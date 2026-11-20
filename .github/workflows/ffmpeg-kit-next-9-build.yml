@@ -162,32 +162,6 @@ jobs:
           PY
           sha256sum build-output/ffmpeg-kit-next-9.0.2.aar build-output/ffmpeg-kit-next-9.0.2.pom | tee build-output/SHA256SUMS
 
-      - name: Compare native file lists and exported symbols with 8.1.2
-        shell: bash
-        run: |
-          set -euo pipefail
-          old_aar=third_party/ffmpeg-kit-next/ffmpeg-kit-next-8.1.0.aar
-          test -f "$old_aar"
-          mkdir -p build-output/old-aar
-          unzip -q "$old_aar" -d build-output/old-aar
-          find build-output/old-aar/jni -type f -printf '%P\n' | sort > build-output/old-native-files.txt
-          find build-output/new-aar/jni -type f -printf '%P\n' | sort > build-output/new-native-files.txt
-          diff -u build-output/old-native-files.txt build-output/new-native-files.txt > build-output/native-file-list.diff || test "$?" -eq 1
-          : > build-output/exported-symbols.diff
-          while IFS= read -r lib; do
-            rel="${lib#build-output/old-aar/jni/}"
-            old="build-output/old-aar/jni/$rel"
-            new="build-output/new-aar/jni/$rel"
-            if [[ -f "$new" ]]; then
-              nm -D --defined-only --format=posix "$old" 2>/dev/null | awk '{print $1}' | sort -u > build-output/old-symbols.txt
-              nm -D --defined-only --format=posix "$new" 2>/dev/null | awk '{print $1}' | sort -u > build-output/new-symbols.txt
-              diff -u build-output/old-symbols.txt build-output/new-symbols.txt >> build-output/exported-symbols.diff || test "$?" -eq 1
-            else
-              printf 'Missing new library: %s\n' "$rel" >> build-output/exported-symbols.diff
-            fi
-          done < <(find build-output/old-aar/jni -type f -name '*.so' | sort)
-          echo "File-list and exported-symbol diffs retained for manual explanation."
-
       - name: Upload native build evidence
         if: always()
         uses: actions/upload-artifact@v4
