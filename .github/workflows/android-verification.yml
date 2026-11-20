@@ -2,7 +2,7 @@ name: Android verification
 
 on:
   push:
-    branches: [Alpha]
+    branches: [Alpha, upgrade-ffmpeg-9.0.2]
     paths:
       - "app/**"
       - "Assets/**"
@@ -40,7 +40,7 @@ permissions:
 
 concurrency:
   group: android-verification-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   unit-tests:
@@ -142,6 +142,14 @@ jobs:
 
       - name: Run Android lint
         run: ./gradlew --no-daemon --stacktrace --console=plain :app:lintQa
+
+      - name: Enable KVM for managed API 37 emulator
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-system-x86 cpu-checker
+          test -e /dev/kvm
+          sudo chmod 666 /dev/kvm
+          kvm-ok
 
       # Use the configured API 37 managed device. Resolve the task name from
       # Gradle's task catalogue rather than hard-coding AGP's generated name.

@@ -19,7 +19,7 @@ old = '''  ffmpeg)
 new = '''  ffmpeg)
     SOURCE_REPO_URL="https://github.com/arthenica/FFmpeg"
     SOURCE_ID="n9.0.2"
-    SOURCE_TYPE="COMMIT"
+    SOURCE_TYPE="TAG"
     ;;'''
 count = text.count(old)
 if count == 0:
@@ -48,57 +48,76 @@ marker = "# Director X build correction for FriBidi v1.0.16:"
 if marker in text:
     print("FriBidi generator correction already prepared.")
     raise SystemExit(0)
-anchor = "# REGENERATE BUILD FILES IF NECESSARY OR REQUESTED"
+anchor = "${SED_INLINE}"
 if text.count(anchor) != 1:
-    raise SystemExit("Expected exactly one FriBidi build-regeneration anchor; refusing an ambiguous edit.")
+    raise SystemExit("Expected exactly one post-configure FriBidi anchor; refusing an ambiguous edit.")
 insert = '''# Director X build correction for FriBidi v1.0.16:
-# Automake's $^ includes the generator executable itself as an input file.
-# Pass only the two Unicode data files to avoid parsing the executable.
-FRIBIDI_MAKEFILE_AM="${BASEDIR}/src/${LIB_NAME}/gen.tab/Makefile.am"
-python3 - "${FRIBIDI_MAKEFILE_AM}" <<'FRIBIDI_PY'
+# Automake's $^ includes the generator executable as an input file. The
+# upstream generator expects only the two Unicode data files; pass them
+# explicitly to prevent the extra executable path from corrupting argv.
+printf 'FriBidi generator working directory: %s\\n' "$PWD"
+python3 - <<'FRIBIDI_PY' || return 1
 from pathlib import Path
-import sys
+import re
 
-path = Path(sys.argv[1])
-text = path.read_text(encoding="utf-8")
 old = "./$(gen_unicode_version) $^ > $@"
 new = "python3 ./gen-unicode-version.py unidata/ReadMe.txt > $@"
-dependency = "\\t\\t$(gen_unicode_version)\\n"
-if text.count(dependency) != 1:
-    raise SystemExit("Expected exactly one generated executable prerequisite; refusing an ambiguous edit.")
-text = text.replace(dependency, "")
-continued_dependency = "\\t\\tunidata/BidiMirroring.txt \\\\n"
-plain_dependency = "\\t\\tunidata/BidiMirroring.txt\\n"
-if text.count(continued_dependency) == 1:
-    text = text.replace(continued_dependency, plain_dependency)
-elif text.count(plain_dependency) != 1:
-    raise SystemExit("Expected exactly one final FriBidi data dependency; refusing an ambiguous edit.")
-if text.count(old) == 1:
-    text = text.replace(old, new)
-elif text.count(new) == 1:
-    print("FriBidi Unicode version rule already uses the bounded Python generator.")
-else:
-    raise SystemExit("Unexpected FriBidi Unicode generator recipe; refusing an ambiguous patch.")
-path.write_text(text, encoding="utf-8")
+for path in (Path("gen.tab/Makefile.in"), Path("gen.tab/Makefile")):
+    if not path.is_file():
+        raise SystemExit(f"Expected configured FriBidi generator file: {path}")
+    text = path.read_text(encoding="utf-8")
+    if text.count(old) == 1:
+        text = text.replace(old, new)
+    elif text.count(new) != 1:
+        raise SystemExit(f"Expected one original FriBidi Unicode-version recipe in {path}; old={text.count(old)} new={text.count(new)}")
+
+    # The remaining six table generators also used Automake $^, which passes
+    # the generator executable itself as a data argument. Each generator then
+    # reads beyond its intended argv and trips stack protection. Pass only the
+    # declared Unicode data inputs and generated version header.
+    recipes = {
+        "./$(gen_bidi_type_tab) $(COMPRESSION) $^ > $@": "./$(gen_bidi_type_tab) $(COMPRESSION) unidata/UnicodeData.txt fribidi-unicode-version.h > $@",
+        "./$(gen_joining_type_tab) $(COMPRESSION) $^ > $@": "./$(gen_joining_type_tab) $(COMPRESSION) unidata/UnicodeData.txt unidata/ArabicShaping.txt fribidi-unicode-version.h > $@",
+        "./$(gen_arabic_shaping_tab) $(COMPRESSION) $^ > $@": "./$(gen_arabic_shaping_tab) $(COMPRESSION) unidata/UnicodeData.txt fribidi-unicode-version.h > $@",
+        "./$(gen_mirroring_tab) $(COMPRESSION) $^ > $@": "./$(gen_mirroring_tab) $(COMPRESSION) unidata/BidiMirroring.txt fribidi-unicode-version.h > $@",
+        "./$(gen_brackets_tab) $(COMPRESSION) $^ > $@": "./$(gen_brackets_tab) $(COMPRESSION) unidata/BidiBrackets.txt unidata/UnicodeData.txt fribidi-unicode-version.h > $@",
+        "./$(gen_brackets_type_tab) $(COMPRESSION) $^ > $@": "./$(gen_brackets_type_tab) $(COMPRESSION) unidata/BidiBrackets.txt fribidi-unicode-version.h > $@",
+    }
+    for source, target in recipes.items():
+        count = text.count(source)
+        if count == 1:
+            text = text.replace(source, target)
+        elif count != 0 or text.count(target) != 1:
+            raise SystemExit(f"Expected one original or corrected recipe in {path}: {source}; found {count}")
+    path.write_text(text, encoding="utf-8")
+    print(f"Patched FriBidi generator recipe in {path}")
 
 generator = """#!/usr/bin/env python3
 import pathlib
-import re
 import sys
 
 source = pathlib.Path(sys.argv[1]).read_text(encoding="utf-8")
-match = re.search(r"\\bVersion\\s+(\\d+)\\.(\\d+)\\.(\\d+)\\b", source)
-if not match:
+version = None
+for line in source.splitlines():
+    for marker in ("Version ", "Unicode "):
+        if marker in line:
+            candidate = line.split(marker, 1)[1].split()[0].rstrip(".,;")
+            parts = candidate.split(".")
+            if len(parts) == 3 and all(part.isdigit() for part in parts):
+                version = tuple(map(int, parts))
+                break
+    if version is not None:
+        break
+if version is None:
     raise SystemExit("Could not determine Unicode version from pinned FriBidi ReadMe.txt")
-major, minor, micro = map(int, match.groups())
-print("/* fribidi-unicode-version.h: generated from pinned Unicode ReadMe.txt */")
+major, minor, micro = version
 print(f'#define FRIBIDI_UNICODE_VERSION "{major}.{minor}.{micro}"')
 print(f"#define FRIBIDI_UNICODE_MAJOR_VERSION {major}")
 print(f"#define FRIBIDI_UNICODE_MINOR_VERSION {minor}")
 print(f"#define FRIBIDI_UNICODE_MICRO_VERSION {micro}")
 """
-(path.parent / "gen-unicode-version.py").write_text(generator, encoding="utf-8")
-
+Path("gen.tab/gen-unicode-version.py").write_text(generator, encoding="utf-8")
+print("Installed bounded Python FriBidi Unicode-version generator.")
 FRIBIDI_PY
 
 '''
@@ -128,7 +147,7 @@ insert = r'''# Director X security backports for FFmpeg 9.0.2:
 # CVE-2026-125269: clear recycled H.264/H.265 SEI message slots.
 # CVE-2026-125250/251/260/261/266/207/216: GIF, VVC, generic encoder,
 # SGI, SANM, Interplay ACM and DPX boundary/initialization fixes.
-FFMPEG_SOURCE="${BASEDIR}/src/ffmpeg"
+ffmpeg_source_dir="$PWD"
 FFMPEG_SECURITY_COMMITS=(
   969c7eb091989a664cb7bf66a1f02051cc46cb52
   d1434518fbd03789e3e5dc0657a7a9f1123ce074
@@ -145,31 +164,31 @@ FFMPEG_SECURITY_COMMITS=(
   6ecaddb9c1d59cf7f5de16017122fecb2fa0c67c
 )
 for fix in "${FFMPEG_SECURITY_COMMITS[@]}"; do
-  if ! git -C "${FFMPEG_SOURCE}" cat-file -e "${fix}^{commit}" 2>/dev/null; then
-    git -C "${FFMPEG_SOURCE}" fetch --no-tags origin "${fix}"
+  if ! git -C "${ffmpeg_source_dir}" cat-file -e "${fix}^{commit}" 2>/dev/null; then
+    git -C "${ffmpeg_source_dir}" fetch --no-tags origin "${fix}"
   fi
-  if git -C "${FFMPEG_SOURCE}" merge-base --is-ancestor "${fix}" HEAD; then
+  if git -C "${ffmpeg_source_dir}" merge-base --is-ancestor "${fix}" HEAD; then
     continue
   fi
-  git -C "${FFMPEG_SOURCE}" show --format= "${fix}" | git -C "${FFMPEG_SOURCE}" apply --check -
-  git -C "${FFMPEG_SOURCE}" show --format= "${fix}" | git -C "${FFMPEG_SOURCE}" apply -
+  git -C "${ffmpeg_source_dir}" show --format= "${fix}" | git -C "${ffmpeg_source_dir}" apply --check -
+  git -C "${ffmpeg_source_dir}" show --format= "${fix}" | git -C "${ffmpeg_source_dir}" apply -
 done
-git -C "${FFMPEG_SOURCE}" diff --check
-grep -q 'while (info)' "${FFMPEG_SOURCE}/libavutil/encryption_info.c"
-grep -q 'av_encryption_init_info_append_side_data' "${FFMPEG_SOURCE}/libavutil/encryption_info.c"
-grep -q 'pssh_side_data' "${FFMPEG_SOURCE}/libavformat/mov.c"
-grep -q 'if (!fromlen)' "${FFMPEG_SOURCE}/libavutil/avstring.c"
-grep -Fq 'memset(&list->messages[list->nb_messages]' "${FFMPEG_SOURCE}/libavcodec/cbs_sei.c"
+git -C "${ffmpeg_source_dir}" diff --check
+grep -q 'while (info)' "${ffmpeg_source_dir}/libavutil/encryption_info.c"
+grep -q 'av_encryption_init_info_append_side_data' "${ffmpeg_source_dir}/libavutil/encryption_info.c"
+grep -q 'pssh_side_data' "${ffmpeg_source_dir}/libavformat/mov.c"
+grep -q 'if (!fromlen)' "${ffmpeg_source_dir}/libavutil/avstring.c"
+grep -Fq 'memset(&list->messages[list->nb_messages]' "${ffmpeg_source_dir}/libavcodec/cbs_sei.c"
+grep -q 'ptr_linesize = linesize' "${ffmpeg_source_dir}/libavcodec/gif.c"
+grep -q 'ptrdiff_t' "${ffmpeg_source_dir}/libavcodec/sgienc.c"
+grep -q 'av_size_mult(s->current_frame.nb_units' "${ffmpeg_source_dir}/libavcodec/vvc/refs.c"
+grep -q 'memcpy(lut, ctx->c23lut, 256)' "${ffmpeg_source_dir}/libavcodec/sanm.c"
+grep -q 'Unsupported bit depth' "${ffmpeg_source_dir}/libavcodec/dpxenc.c"
+grep -q 'src->width != avctx->width' "${ffmpeg_source_dir}/libavcodec/encode.c"
+grep -q 's->block_len > 1024 \* 1024' "${ffmpeg_source_dir}/libavcodec/interplayacm.c"
 '''
-path.write_text(text.replace(anchor, insert + anchor), encoding="utf-8")
+path.write_text(text.replace(anchor, insert + anchor).rstrip() + "\n", encoding="utf-8")
 print("Prepared pinned FFmpeg security backports.")
 PY
 
-grep -q 'ptr_linesize = linesize' "${FFMPEG_SOURCE}/libavcodec/gif.c"
-grep -q 'ptrdiff_t' "${FFMPEG_SOURCE}/libavcodec/sgienc.c"
-grep -q 'av_size_mult(s->current_frame.nb_units' "${FFMPEG_SOURCE}/libavcodec/vvc/refs.c"
-grep -q 'memcpy(lut, ctx->c23lut, 256)' "${FFMPEG_SOURCE}/libavcodec/sanm.c"
-grep -q 'Unsupported bit depth' "${FFMPEG_SOURCE}/libavcodec/dpxenc.c"
-grep -q 'src->width != avctx->width' "${FFMPEG_SOURCE}/libavcodec/encode.c"
-grep -q 's->block_len > 1024 \* 1024' "${FFMPEG_SOURCE}/libavcodec/interplayacm.c"
 bash -n "$source_file"
