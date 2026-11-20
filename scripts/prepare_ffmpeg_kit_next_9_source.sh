@@ -55,8 +55,8 @@ insert = '''# Director X build correction for FriBidi v1.0.16:
 # Automake's $^ includes the generator executable as an input file. The
 # upstream generator expects only the two Unicode data files; pass them
 # explicitly to prevent the extra executable path from corrupting argv.
-FRIBIDI_GENERATOR_MAKEFILE="${BASEDIR}/src/${LIB_NAME}/lib/gen.tab/Makefile"
-python3 - "${FRIBIDI_GENERATOR_MAKEFILE}" <<'FRIBIDI_PY'
+FRIBIDI_GENERATOR_MAKEFILE="${BASEDIR}/src/${LIB_NAME}/gen.tab/Makefile"
+python3 - "${FRIBIDI_GENERATOR_MAKEFILE}" <<'FRIBIDI_PY' || return 1
 from pathlib import Path
 import sys
 
