@@ -241,7 +241,7 @@ helper = '''static int mov_append_pssh_side_data(MOVContext *c, AVStream *st,
     if (old_side_data) {
         if (old_side_data->size < 4)
             return AVERROR_INVALIDDATA;
-        if (old_side_data->data != c->pssh_side_data)
+        if (old_side_data->data != c->pssh_side_data || st != c->pssh_stream)
             c->pssh_side_data_allocated = old_side_data->size;
         old_size = old_side_data->size;
         init_info_count = AV_RB32(old_side_data->data);
@@ -314,7 +314,7 @@ new_decl = '''    AVEncryptionInitInfo *info;
 if s.count(old_decl) != 1: raise SystemExit('PSSH declaration mismatch')
 s = s.replace(old_decl, new_decl)
 import re
-pattern = r"    // If there is existing initialization data, append to the list\\..*?        av_free\\(side_data\\);"
+pattern = r"    // If there is existing initialization data, append to the list\..*?        av_free\(side_data\);"
 replacement = """    ret = mov_append_pssh_side_data(c, st, info);
     if (ret < 0)
         goto finish;"""
