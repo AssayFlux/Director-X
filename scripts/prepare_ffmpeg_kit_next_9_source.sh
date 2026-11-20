@@ -184,11 +184,11 @@ insert = r'''export LDFLAGS="${LDFLAGS} -Wl,-z,max-page-size=16384 -Wl,-z,common
 # CVE-2026-107677: reject empty search strings in av_strireplace.
 # CVE-2026-125269/125250/125251/125260/125261/125266/125207/125216:
 # H.264/H.265 SEI, GIF, VVC, encoder, SGI, SANM, Interplay ACM and DPX.
-# Additional reachable-codec fixes cover the reviewed 125xxx/120xxx CVEs:
+# Additional reachable-codec fixes cover reviewed 125xxx/120xxx advisories:
 # AV1, AAC, Bink, CDXL, CFHD, DNG, DVBSub, DOVI, EXR, FLIC, FLAC, HAP,
-# Huffyuv, JPEG/JPEG-LS, Mimic, MLZ, MPC7, MPEG audio, Nellymoser, PCX,
-# ProRes, PSD, RoQ, SBG, Sun Raster, TAK, Targa, VMNC, Vorbis, VP9, VVC,
-# WavPack, WavPack, WavPack, WavPack and WavPack.
+# HEVC/MPEG-PS/VC-2 RTP, Huffyuv, JPEG/JPEG-LS, Mimic, MLZ, MPC7,
+# MPEG audio, Nellymoser, PCX, ProRes, PSD, RoQ, SBG, Sun Raster, TAK,
+# Targa, VMNC, Vorbis, VP9, VVC, WavPack and related muxers/filters.
 ffmpeg_source_dir="$PWD"
 FFMPEG_SECURITY_COMMITS=(
   969c7eb091989a664cb7bf66a1f02051cc46cb52
@@ -198,6 +198,7 @@ FFMPEG_SECURITY_COMMITS=(
   b8f159858e2fd29dae4fa34d9e713bbf9bbf190e
   0bfa350291b2118f6d590263dc1ee9cea766c0f1
   bc896c613ec0d4ad0108d62fbdda0196f69e7121
+  96eea3824100b195294ebba9570c6a66427a4920
   439b452f9fe916a9f7d8788ab6afee8fac846b0b
   ab28d57ba2ec07b41b4a60ed8806b13a39ec86fe
   733bec3e19759520ccdbeb6c3c0cae280bbe6dc5
@@ -251,6 +252,10 @@ FFMPEG_SECURITY_COMMITS=(
   ecd5dfc308a164757e7f25b1afefd8db21b43cf9
   edad2d0dafcf44fa315eab716fd0183ce808053b
   8702f12c9daa199cc4d7c17164b13c3cdcdc2436
+  acf5d7cdc1f9ae8752c23e1ea8d7f355ed780781
+  9d786e4b5e9b8482651928574de33772aeee7be1
+  1cdeb3c4e7f1f8566d846b9b451e01c376398818
+  65b0dab903e5975e036b30ecc58f5935d4f151e0
 )
 for fix in "${FFMPEG_SECURITY_COMMITS[@]}"; do
   if ! git -C "${ffmpeg_source_dir}" cat-file -e "${fix}^{commit}" 2>/dev/null; then
