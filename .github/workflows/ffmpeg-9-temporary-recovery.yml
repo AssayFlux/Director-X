@@ -1,0 +1,38 @@
+name: Temporary FFmpeg 9.0.2 recovery checks
+
+on:
+  workflow_run:
+    workflows: ["Build and verify FFmpegKitNext 9.0.2"]
+    types: [completed]
+    branches: [Alpha]
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  retry-failed-native-and-packaging-gates:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'failure' &&
+       github.event.workflow_run.run_attempt < 2)
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Retry only the failed FFmpeg verification job once
+        if: github.event_name == 'workflow_run'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          set -euo pipefail
+          gh api --method POST \
+            -H "Accept: application/vnd.github+json" \
+            "/repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}/rerun-failed-jobs"
+          echo "Requested one retry of the failed native build job. Its full job includes the AAR/POM/ABI/alignment/configure-profile gate, which was previously skipped after native compilation failed."
+
+      - name: Manual dispatch guidance
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "This temporary workflow is event-driven. Push a fix to the FFmpeg 9.0.2 build inputs to run the primary build and packaging gates."
+          echo "The Android instrumentation suite remains in android-verification.yml and must also pass before promotion."
