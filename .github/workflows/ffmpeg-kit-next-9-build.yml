@@ -1,0 +1,194 @@
+name: Build and verify FFmpegKitNext 9.0.2
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [upgrade-ffmpeg-9.0.2]
+    paths:
+      - "scripts/prepare_ffmpeg_kit_next_9_source.sh"
+      - "third_party/ffmpeg-kit-next/directorx-security.patch"
+      - ".github/workflows/ffmpeg-kit-next-9-build.yml"
+  pull_request:
+    branches: [Alpha]
+    paths:
+      - "scripts/prepare_ffmpeg_kit_next_9_source.sh"
+      - "third_party/ffmpeg-kit-next/directorx-security.patch"
+      - ".github/workflows/ffmpeg-kit-next-9-build.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ffmpeg-kit-next-9.0.2-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-native:
+    name: Verify release source and build five Android ABIs
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    steps:
+      - name: Check out Director X
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install verification tools
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install --yes gnupg xz-utils binutils
+
+      - name: Verify FFmpeg 9.0.2 release tarball signature
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p authenticity
+          cd authenticity
+          curl --fail --location --silent --show-error https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz -o ffmpeg-9.0.2.tar.xz
+          curl --fail --location --silent --show-error https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz.asc -o ffmpeg-9.0.2.tar.xz.asc
+          curl --fail --location --silent --show-error https://ffmpeg.org/ffmpeg-devel.asc | gpg --import
+          gpg --with-colons --fingerprint FCF986EA15E6E293A5644F10B4322F04D67658D8 | grep -F 'FCF986EA15E6E293A5644F10B4322F04D67658D8'
+          gpg --verify ffmpeg-9.0.2.tar.xz.asc ffmpeg-9.0.2.tar.xz
+
+      - name: Verify signed upstream n9.0.2 Git tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys DD1EC9E8DE085C629B3E1846B18E8928B3948D64
+          git clone --filter=blob:none https://git.ffmpeg.org/ffmpeg.git ffmpeg-upstream
+          git -C ffmpeg-upstream fetch --force --tags origin
+          git -C ffmpeg-upstream verify-tag n9.0.2
+          git -C ffmpeg-upstream verify-tag --raw n9.0.2 2>&1 | tee authenticity/tag-verification.txt
+          grep -F 'VALIDSIG DD1EC9E8DE085C629B3E1846B18E8928B3948D64' authenticity/tag-verification.txt
+          echo "FFMPEG_RELEASE_COMMIT=$(git -C ffmpeg-upstream rev-parse 'n9.0.2^{commit}')" >> "$GITHUB_ENV"
+
+      - name: Check out pinned FFmpegKitNext wrapper
+        uses: actions/checkout@v4
+        with:
+          repository: arthenica/ffmpeg-kit-next
+          ref: 9f04bf1e3c97def70b98e198cb80a57b43ef5b45
+          path: ffmpeg-kit-next
+          persist-credentials: false
+
+      - name: Apply Director X security profile and reviewed backports
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C ffmpeg-kit-next rev-parse HEAD)" = "9f04bf1e3c97def70b98e198cb80a57b43ef5b45"
+          git -C ffmpeg-kit-next config core.autocrlf false
+          git -C ffmpeg-kit-next apply --check "$GITHUB_WORKSPACE/third_party/ffmpeg-kit-next/directorx-security.patch"
+          git -C ffmpeg-kit-next apply "$GITHUB_WORKSPACE/third_party/ffmpeg-kit-next/directorx-security.patch"
+          bash "$GITHUB_WORKSPACE/scripts/prepare_ffmpeg_kit_next_9_source.sh" "$GITHUB_WORKSPACE/ffmpeg-kit-next/scripts/source.sh"
+          bash -n ffmpeg-kit-next/scripts/android/ffmpeg.sh
+          git -C ffmpeg-kit-next diff --check
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            accept-flake-config = true
+
+      - name: Build FFmpegKitNext for all configured Android ABIs
+        working-directory: ffmpeg-kit-next
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$GITHUB_WORKSPACE/build-output"
+          export version_ffmpeg=n9.0.2
+          export RECONF_fribidi=1
+          ./nix-android.sh -p android-r27d --enable-lib-libass --enable-lib-libjxl --enable-lib-android-media-codec --enable-lib-android-zlib --enable-lib-openh264 --jobs=8 2>&1 | tee "$GITHUB_WORKSPACE/build-output/native-build-transcript.log"
+          test "$(git -C src/ffmpeg rev-parse HEAD)" = "$FFMPEG_RELEASE_COMMIT"
+          cp build.log "$GITHUB_WORKSPACE/build-output/build.log"
+
+      - name: Verify AAR, POM, ABIs, alignment and configure profile
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t aars < <(find ffmpeg-kit-next/prebuilt -type f -name 'ffmpeg-kit-next-9.0.2.aar' -print)
+          mapfile -t poms < <(find ffmpeg-kit-next/prebuilt -type f -name 'ffmpeg-kit-next-9.0.2.pom' -print)
+          test "${#aars[@]}" -eq 1
+          test "${#poms[@]}" -eq 1
+          cp "${aars[0]}" build-output/ffmpeg-kit-next-9.0.2.aar
+          cp "${poms[0]}" build-output/ffmpeg-kit-next-9.0.2.pom
+          python3 - <<'PY'
+          import pathlib, re, subprocess, zipfile, xml.etree.ElementTree as ET
+          aar = pathlib.Path("build-output/ffmpeg-kit-next-9.0.2.aar")
+          pom = pathlib.Path("build-output/ffmpeg-kit-next-9.0.2.pom")
+          required = {"armeabi-v7a", "armeabi-v7a-neon", "arm64-v8a", "x86", "x86_64"}
+          with zipfile.ZipFile(aar) as z:
+              names = z.namelist()
+              abis = {n.split("/")[1] for n in names if n.startswith("jni/") and n.endswith(".so") and len(n.split("/")) > 2}
+              if abis != required:
+                  raise SystemExit(f"ABI mismatch: required={sorted(required)} found={sorted(abis)}")
+              z.extractall("build-output/new-aar")
+          root = ET.parse(pom).getroot()
+          ns = {"m": "http://maven.apache.org/POM/4.0.0"}
+          version = root.findtext("m:version", namespaces=ns)
+          if version != "9.0.2":
+              raise SystemExit(f"POM version mismatch: {version!r}")
+          patch = pathlib.Path("third_party/ffmpeg-kit-next/directorx-security.patch").read_text()
+          disabled = re.findall(r'--disable-(?:demuxer|decoder|encoder)=[A-Za-z0-9_]+', patch)
+          for abi in sorted(required):
+              libs = pathlib.Path("build-output/new-aar/jni", abi).glob("*.so")
+              for lib in libs:
+                  out = subprocess.check_output(["readelf", "-lW", str(lib)], text=True)
+                  aligns = [int(m.group(1), 16) for m in re.finditer(r"^\s*LOAD\s+.*?\s(0x[0-9a-fA-F]+)\s*$", out, re.M)]
+                  if not aligns or min(aligns) < 0x4000:
+                      raise SystemExit(f"16 KB LOAD alignment failure: {lib}: {aligns}")
+              avutil = pathlib.Path("build-output/new-aar/jni", abi, "libavutil.so")
+              strings = subprocess.check_output(["strings", "-a", str(avutil)], text=True, errors="replace")
+              configs = [line for line in strings.splitlines() if "--enable-version3" in line]
+              if not configs:
+                  raise SystemExit(f"--enable-version3 configure string missing in {avutil}")
+              config = "\n".join(configs)
+              for forbidden in ("--enable-gpl", "--enable-nonfree", "x264", "x265", "cuda", "nvdec"):
+                  if forbidden in config.lower():
+                      raise SystemExit(f"Forbidden configure token {forbidden!r} in {avutil}")
+              missing = [flag for flag in disabled if flag not in config]
+              if missing:
+                  raise SystemExit(f"Security disable flags missing from {avutil}: {missing}")
+          print(f"Verified POM={version}, ABIs={sorted(abis)}, AAR size={aar.stat().st_size}")
+          PY
+          sha256sum build-output/ffmpeg-kit-next-9.0.2.aar build-output/ffmpeg-kit-next-9.0.2.pom | tee build-output/SHA256SUMS
+
+      - name: Compare native file lists and exported symbols with 8.1.2
+        shell: bash
+        run: |
+          set -euo pipefail
+          old_aar=third_party/ffmpeg-kit-next/ffmpeg-kit-next-8.1.0.aar
+          test -f "$old_aar"
+          mkdir -p build-output/old-aar
+          unzip -q "$old_aar" -d build-output/old-aar
+          find build-output/old-aar/jni -type f -printf '%P\n' | sort > build-output/old-native-files.txt
+          find build-output/new-aar/jni -type f -printf '%P\n' | sort > build-output/new-native-files.txt
+          diff -u build-output/old-native-files.txt build-output/new-native-files.txt > build-output/native-file-list.diff || test "$?" -eq 1
+          : > build-output/exported-symbols.diff
+          while IFS= read -r lib; do
+            rel="${lib#build-output/old-aar/jni/}"
+            old="build-output/old-aar/jni/$rel"
+            new="build-output/new-aar/jni/$rel"
+            if [[ -f "$new" ]]; then
+              nm -D --defined-only --format=posix "$old" 2>/dev/null | awk '{print $1}' | sort -u > build-output/old-symbols.txt
+              nm -D --defined-only --format=posix "$new" 2>/dev/null | awk '{print $1}' | sort -u > build-output/new-symbols.txt
+              diff -u build-output/old-symbols.txt build-output/new-symbols.txt >> build-output/exported-symbols.diff || test "$?" -eq 1
+            else
+              printf 'Missing new library: %s\n' "$rel" >> build-output/exported-symbols.diff
+            fi
+          done < <(find build-output/old-aar/jni -type f -name '*.so' | sort)
+          echo "File-list and exported-symbol diffs retained for manual explanation."
+
+      - name: Upload native build evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ffmpeg-kit-next-9.0.2-evidence-${{ github.run_id }}
+          path: |
+            build-output/*
+            authenticity/*
+            ffmpeg-kit-next/build.log
+          if-no-files-found: warn
+          retention-days: 30
