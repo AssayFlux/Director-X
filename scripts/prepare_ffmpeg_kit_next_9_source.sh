@@ -193,6 +193,7 @@ FFMPEG_SECURITY_COMMITS=(
   b8f159858e2fd29dae4fa34d9e713bbf9bbf190e
   0bfa350291b2118f6d590263dc1ee9cea766c0f1
   bc896c613ec0d4ad0108d62fbdda0196f69e7121
+  f5d4fd186c68913240c4f6e9cda98443e1518b34
 )
 for fix in "${FFMPEG_SECURITY_COMMITS[@]}"; do
   if ! git -C "${ffmpeg_source_dir}" cat-file -e "${fix}^{commit}" 2>/dev/null; then
