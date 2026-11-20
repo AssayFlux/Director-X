@@ -6,12 +6,14 @@ on:
     branches: [Alpha, upgrade-ffmpeg-9.0.2]
     paths:
       - "scripts/prepare_ffmpeg_kit_next_9_source.sh"
+      - "scripts/verify_native_supply_chain.py"
       - "third_party/ffmpeg-kit-next/directorx-security.patch"
       - ".github/workflows/ffmpeg-kit-next-9-build.yml"
   pull_request:
     branches: [Alpha]
     paths:
       - "scripts/prepare_ffmpeg_kit_next_9_source.sh"
+      - "scripts/verify_native_supply_chain.py"
       - "third_party/ffmpeg-kit-next/directorx-security.patch"
       - ".github/workflows/ffmpeg-kit-next-9-build.yml"
 
@@ -140,21 +142,33 @@ jobs:
           patch = pathlib.Path("third_party/ffmpeg-kit-next/directorx-security.patch").read_text()
           disabled = re.findall(r'--disable-(?:demuxer|decoder|encoder)=[A-Za-z0-9_]+', patch)
           for abi in sorted(required):
-              libs = pathlib.Path("build-output/new-aar/jni", abi).glob("*.so")
+              libs = list(pathlib.Path("build-output/new-aar/jni", abi).glob("*.so"))
+              if not libs:
+                  raise SystemExit(f"No native libraries found for {abi}")
+              required_alignment = 0x4000 if abi in {"arm64-v8a", "x86_64"} else 0x1000
               for lib in libs:
                   out = subprocess.check_output(["readelf", "-lW", str(lib)], text=True)
                   aligns = [int(m.group(1), 16) for m in re.finditer(r"^\s*LOAD\s+.*?\s(0x[0-9a-fA-F]+)\s*$", out, re.M)]
-                  if not aligns or min(aligns) < 0x4000:
-                      raise SystemExit(f"16 KB LOAD alignment failure: {lib}: {aligns}")
+                  if not aligns or min(aligns) < required_alignment:
+                      raise SystemExit(f"{abi} LOAD alignment failure (required >= {required_alignment:#x}): {lib}: {aligns}")
+                  dynamic = subprocess.check_output(["readelf", "-dW", str(lib)], text=True, errors="replace")
+                  if re.search(r"Shared library: \[lib(?:x264|x265)\.so", dynamic, re.I):
+                      raise SystemExit(f"Forbidden x264/x265 dynamic dependency in {lib}")
               avutil = pathlib.Path("build-output/new-aar/jni", abi, "libavutil.so")
               strings = subprocess.check_output(["strings", "-a", str(avutil)], text=True, errors="replace")
               configs = [line for line in strings.splitlines() if "--enable-version3" in line]
               if not configs:
                   raise SystemExit(f"--enable-version3 configure string missing in {avutil}")
-              config = "\n".join(configs)
-              for forbidden in ("--enable-gpl", "--enable-nonfree", "x264", "x265", "cuda", "nvdec"):
-                  if forbidden in config.lower():
-                      raise SystemExit(f"Forbidden configure token {forbidden!r} in {avutil}")
+              config = "\n".join(configs).lower()
+              configure_options = set(re.findall(r"(?<!\S)--[a-z0-9][a-z0-9-]*(?:=[^\s]+)?", config))
+              forbidden_options = {
+                  "--enable-gpl", "--enable-nonfree", "--enable-cuda",
+                  "--enable-cuvid", "--enable-nvenc", "--enable-nvdec",
+                  "--enable-libx264", "--enable-libx265",
+              }
+              enabled_forbidden = sorted(configure_options & forbidden_options)
+              if enabled_forbidden:
+                  raise SystemExit(f"Forbidden enabled configure options in {avutil}: {enabled_forbidden}")
               missing = [flag for flag in disabled if flag not in config]
               if missing:
                   raise SystemExit(f"Security disable flags missing from {avutil}: {missing}")
