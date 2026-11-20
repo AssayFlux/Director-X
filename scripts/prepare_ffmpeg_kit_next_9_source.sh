@@ -168,7 +168,7 @@ grep -q 'Unsupported bit depth' "${FFMPEG_SOURCE}/libavcodec/dpxenc.c"
 grep -q 'src->width != avctx->width' "${FFMPEG_SOURCE}/libavcodec/encode.c"
 grep -q 's->block_len > 1024 \* 1024' "${FFMPEG_SOURCE}/libavcodec/interplayacm.c"
 '''
-path.write_text(text.replace(anchor, insert + anchor), encoding="utf-8")
+path.write_text(text.replace(anchor, insert + anchor).rstrip() + "\n", encoding="utf-8")
 print("Prepared pinned FFmpeg security backports.")
 PY
 
