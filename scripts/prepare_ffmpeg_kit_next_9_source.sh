@@ -62,7 +62,6 @@ import re
 
 old = "./$(gen_unicode_version) $^ > $@"
 new = "python3 ./gen-unicode-version.py unidata/ReadMe.txt > $@"
-dependency = "\\t\\t$(gen_unicode_version)\\n"
 for path in (Path("gen.tab/Makefile.in"), Path("gen.tab/Makefile")):
     if not path.is_file():
         raise SystemExit(f"Expected configured FriBidi generator file: {path}")
@@ -71,8 +70,6 @@ for path in (Path("gen.tab/Makefile.in"), Path("gen.tab/Makefile")):
         text = text.replace(old, new)
     elif text.count(new) != 1:
         raise SystemExit(f"Expected one original FriBidi generator recipe in {path}; old={text.count(old)} new={text.count(new)}")
-    if text.count(dependency) == 1:
-        text = text.replace(dependency, "")
     path.write_text(text, encoding="utf-8")
     print(f"Patched FriBidi generator recipe in {path}")
 
