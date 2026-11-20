@@ -25,7 +25,7 @@ import java.io.File
 class ProxyResolutionInstrumentationTest {
 
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
-    private val engine = ProxyEngine(context, MemoryTrimRegistry())
+    private val engine = ProxyEngine(context, FFmpegEngine(context), MemoryTrimRegistry())
     private val created = mutableListOf<File>()
 
     @After
