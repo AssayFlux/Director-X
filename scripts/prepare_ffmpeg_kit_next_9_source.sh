@@ -187,17 +187,11 @@ insert = r'''# Director X security backports for FFmpeg 9.0.2:
 ffmpeg_source_dir="$PWD"
 FFMPEG_SECURITY_COMMITS=(
   969c7eb091989a664cb7bf66a1f02051cc46cb52
-  d1434518fbd03789e3e5dc0657a7a9f1123ce074
-  71403a21b02a92b925e26e609e9bd3e48df451cf
   2c2f6e96e31795ae95a8f8323a493ffbc493111f
   ed27bfcbbbc0872c0195eaf4dd2c0c93b9f1778e
-  2c515eea07df719379e7f73deeeb7ccb8768433f
   26c2980980295e5516f308c5a2792d2a72e43eae
   c6e5b6105aa13f6b0df2a646da608078cfe52d79
-  053660fdb0d2403b838690689c47ad7685c3b10b
-  d42cb1925987cc27899441ce39fa7bd2647dc72e
   aa5fd7d287db4f469fdcbe444f7f9f38c8c289c7
-  9b99973b2bbecee0b7e1e57035b95498b42f54a6
   6ecaddb9c1d59cf7f5de16017122fecb2fa0c67c
 )
 for fix in "${FFMPEG_SECURITY_COMMITS[@]}"; do
@@ -210,9 +204,152 @@ for fix in "${FFMPEG_SECURITY_COMMITS[@]}"; do
   git -C "${ffmpeg_source_dir}" show --format= "${fix}" | git -C "${ffmpeg_source_dir}" apply --check -
   git -C "${ffmpeg_source_dir}" show --format= "${fix}" | git -C "${ffmpeg_source_dir}" apply -
 done
+# Port fork security fixes onto the exact n9.0.2 source; do not cherry-pick
+# incompatible fork-only context or change upstream library version macros.
+python3 - "${ffmpeg_source_dir}" <<'FFMPEG_SECURITY_PY'
+from pathlib import Path
+import sys
+root = Path(sys.argv[1])
+def edit(path, old, new, label):
+    p = root / path
+    s = p.read_text(encoding='utf-8')
+    if s.count(old) != 1:
+        raise SystemExit(f'{label}: expected one exact anchor in {path}, got {s.count(old)}')
+    p.write_text(s.replace(old, new), encoding='utf-8')
+
+# PSSH records are appended in place with tracked capacity: O(n) total work.
+mov = root / 'libavformat/mov.c'
+s = mov.read_text(encoding='utf-8')
+anchor = 'static int mov_read_pssh(MOVContext *c, AVIOContext *pb, MOVAtom atom)\n'
+helper = """static int mov_append_pssh_side_data(MOVContext *c, AVStream *st,
+                                     const AVEncryptionInitInfo *info)
+{
+    AVPacketSideData *old_side_data = NULL;
+    const AVEncryptionInitInfo *cur;
+    uint8_t *buffer, *cur_buffer;
+    uint64_t init_info_count, new_count, new_size;
+    size_t old_size;
+    unsigned int i;
+
+    for (i = 0; i < st->codecpar->nb_coded_side_data; i++) {
+        AVPacketSideData *sd = &st->codecpar->coded_side_data[i];
+        if (sd->type == AV_PKT_DATA_ENCRYPTION_INIT_INFO) {
+            old_side_data = sd;
+            break;
+        }
+    }
+    if (old_side_data) {
+        if (old_side_data->size < 4 || old_side_data->size > UINT32_MAX)
+            return AVERROR_INVALIDDATA;
+        if (old_side_data->data != c->pssh_side_data || st != c->pssh_stream)
+            c->pssh_side_data_allocated = old_side_data->size;
+        old_size = old_side_data->size;
+        init_info_count = AV_RB32(old_side_data->data);
+    } else {
+        c->pssh_side_data_allocated = 0;
+        old_size = 4;
+        init_info_count = 0;
+    }
+    new_count = init_info_count;
+    new_size = old_size;
+    for (cur = info; cur; cur = cur->next) {
+        uint64_t record_size = 16;
+        if (new_count == UINT32_MAX ||
+            cur->system_id_size > UINT32_MAX - record_size)
+            return AVERROR(EINVAL);
+        record_size += cur->system_id_size;
+        if (cur->data_size > UINT32_MAX - record_size)
+            return AVERROR(EINVAL);
+        record_size += cur->data_size;
+        if (cur->num_key_ids &&
+            cur->key_id_size > (UINT32_MAX - record_size) / cur->num_key_ids)
+            return AVERROR(EINVAL);
+        record_size += (uint64_t)cur->num_key_ids * cur->key_id_size;
+        if (record_size > UINT32_MAX - new_size)
+            return AVERROR(EINVAL);
+        new_count++;
+        new_size += record_size;
+    }
+    buffer = av_fast_realloc(old_side_data ? old_side_data->data : NULL,
+                             &c->pssh_side_data_allocated, (size_t)new_size);
+    if (!buffer)
+        return AVERROR(ENOMEM);
+    AV_WB32(buffer, (uint32_t)new_count);
+    cur_buffer = buffer + old_size;
+    for (cur = info; cur; cur = cur->next) {
+        AV_WB32(cur_buffer, cur->system_id_size);
+        AV_WB32(cur_buffer + 4, cur->num_key_ids);
+        AV_WB32(cur_buffer + 8, cur->key_id_size);
+        AV_WB32(cur_buffer + 12, cur->data_size);
+        cur_buffer += 16;
+        memcpy(cur_buffer, cur->system_id, cur->system_id_size);
+        cur_buffer += cur->system_id_size;
+        for (i = 0; i < cur->num_key_ids; i++) {
+            memcpy(cur_buffer, cur->key_ids[i], cur->key_id_size);
+            cur_buffer += cur->key_id_size;
+        }
+        if (cur->data_size) {
+            memcpy(cur_buffer, cur->data, cur->data_size);
+            cur_buffer += cur->data_size;
+        }
+    }
+    if (old_side_data) {
+        old_side_data->data = buffer;
+        old_side_data->size = (size_t)new_size;
+    } else if (!av_packet_side_data_add(&st->codecpar->coded_side_data,
+                                        &st->codecpar->nb_coded_side_data,
+                                        AV_PKT_DATA_ENCRYPTION_INIT_INFO,
+                                        buffer, (size_t)new_size, 0)) {
+        av_free(buffer);
+        c->pssh_side_data_allocated = 0;
+        return AVERROR(ENOMEM);
+    }
+    c->pssh_side_data = buffer;
+    c->pssh_stream = st;
+    return 0;
+}
+
+"""
+if s.count(anchor) != 1: raise SystemExit('PSSH helper anchor mismatch')
+s = s.replace(anchor, helper + anchor)
+old_decl = """    AVEncryptionInitInfo *info, *old_init_info;
+    uint8_t **key_ids;
+    AVStream *st;
+    const AVPacketSideData *old_side_data;
+    uint8_t *side_data, *extra_data;
+    size_t side_data_size;"""
+new_decl = """    AVEncryptionInitInfo *info;
+    uint8_t **key_ids;
+    AVStream *st;
+    uint8_t *extra_data;"""
+if s.count(old_decl) != 1: raise SystemExit('PSSH declaration mismatch')
+s = s.replace(old_decl, new_decl)
+import re
+pattern = r"    // If there is existing initialization data, append to the list\..*?        av_free\(side_data\);"
+replacement = """    ret = mov_append_pssh_side_data(c, st, info);
+    if (ret < 0)
+        goto finish;"""
+s, replaced = re.subn(pattern, replacement, s, flags=re.S)
+if replaced != 1: raise SystemExit(f"PSSH append block replacement count: {replaced}")
+mov.write_text(s, encoding='utf-8')
+
+edit('libavformat/isom.h', '    MOVFragmentIndex frag_index;\n    int atom_depth;',
+     '    MOVFragmentIndex frag_index;\n    uint8_t *pssh_side_data;\n    AVStream *pssh_stream;\n    unsigned int pssh_side_data_allocated;\n    int atom_depth;', 'PSSH context')
+edit('libavformat/mov.c', '    mov->found_mdat = 0;\n',
+     '    mov->found_mdat = 0;\n    mov->pssh_side_data = NULL;\n    mov->pssh_stream = NULL;\n    mov->pssh_side_data_allocated = 0;\n', 'PSSH reset')
+edit('libavcodec/vvc/refs.c',
+     '        frame->rpl = av_refstruct_allocz(s->current_frame.nb_units * sizeof(RefPicListTab));\n',
+     '        size_t rpl_size;\n        if (av_size_mult(s->current_frame.nb_units, sizeof(RefPicListTab), &rpl_size) < 0)\n            goto fail;\n        frame->rpl = av_refstruct_allocz(rpl_size);\n', 'VVC allocation')
+edit('libavcodec/encode.c', '    int ret;\n\n    if (avctx->codec->type == AVMEDIA_TYPE_AUDIO) {',
+     '    int ret;\n\n    if (avctx->codec->type == AVMEDIA_TYPE_VIDEO) {\n        const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(src->format);\n        if (!(desc && desc->flags & AV_PIX_FMT_FLAG_HWACCEL) &&\n            (src->format != avctx->pix_fmt || src->width != avctx->width || src->height != avctx->height)) {\n            av_log(avctx, AV_LOG_ERROR, "Frame size or pixel format does not match the encoder\\n");\n            return AVERROR(EINVAL);\n        }\n    }\n\n    if (avctx->codec->type == AVMEDIA_TYPE_AUDIO) {', 'encoder dimensions')
+edit('libavcodec/cbs_sei.c', '    ++list->nb_messages;\n    return 0;\n',
+     '    memset(&list->messages[list->nb_messages], 0, sizeof(*list->messages));\n    ++list->nb_messages;\n    return 0;\n', 'SEI slot')
+edit('libavcodec/sanm.c', '        bytestream2_get_bufferu(gb, ctx->c23lut, 256);\n',
+     '        bytestream2_get_bufferu(gb, ctx->c23lut, 256);\n        memcpy(lut, ctx->c23lut, 256);\n', 'SANM LUT')
+FFMPEG_SECURITY_PY
 git -C "${ffmpeg_source_dir}" diff --check
 grep -q 'while (info)' "${ffmpeg_source_dir}/libavutil/encryption_info.c"
-grep -q 'av_encryption_init_info_append_side_data' "${ffmpeg_source_dir}/libavutil/encryption_info.c"
+grep -q 'mov_append_pssh_side_data' "${ffmpeg_source_dir}/libavformat/mov.c"
 grep -q 'pssh_side_data' "${ffmpeg_source_dir}/libavformat/mov.c"
 grep -q 'if (!fromlen)' "${ffmpeg_source_dir}/libavutil/avstring.c"
 grep -Fq 'memset(&list->messages[list->nb_messages]' "${ffmpeg_source_dir}/libavcodec/cbs_sei.c"
