@@ -61,7 +61,7 @@ from pathlib import Path
 import re
 
 old = "./$(gen_unicode_version) $^ > $@"
-new = "./$(gen_unicode_version) unidata/ReadMe.txt unidata/BidiMirroring.txt > $@"
+new = "python3 ./gen-unicode-version.py unidata/ReadMe.txt > $@"
 for path in (Path("gen.tab/Makefile.in"), Path("gen.tab/Makefile")):
     if not path.is_file():
         raise SystemExit(f"Expected configured FriBidi generator file: {path}")
@@ -71,10 +71,10 @@ for path in (Path("gen.tab/Makefile.in"), Path("gen.tab/Makefile")):
     elif text.count(new) != 1:
         raise SystemExit(f"Expected one original FriBidi Unicode-version recipe in {path}; old={text.count(old)} new={text.count(new)}")
 
-    # The remaining six table generators also used Automake $^, which passes
-    # the generator executable itself as a data argument. Each generator then
-    # reads beyond its intended argv and trips stack protection. Pass only the
-    # declared Unicode data inputs only the declared Unicode data inputs.
+    # The six table generators consume a compression level followed by
+    # exactly the Unicode data inputs declared for each generated table.
+    # Automake $^ also includes the generated executable and version header,
+    # neither of which is a data file accepted by these generators.
     recipes = {
         "./$(gen_bidi_type_tab) $(COMPRESSION) $^ > $@": "./$(gen_bidi_type_tab) $(COMPRESSION) unidata/UnicodeData.txt > $@",
         "./$(gen_joining_type_tab) $(COMPRESSION) $^ > $@": "./$(gen_joining_type_tab) $(COMPRESSION) unidata/UnicodeData.txt unidata/ArabicShaping.txt > $@",
