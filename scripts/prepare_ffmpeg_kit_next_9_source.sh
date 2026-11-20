@@ -311,8 +311,8 @@ if s.count(anchor) != 1: raise SystemExit('PSSH helper anchor mismatch')
 s = s.replace(anchor, helper + anchor)
 s = s.replace("AVEncryptionInitInfo *info, *old_init_info;", "AVEncryptionInitInfo *info;")
 s = s.replace("    const AVPacketSideData *old_side_data;", "")
-    s = s.replace("    uint8_t *side_data, *extra_data;", "    uint8_t *extra_data;")
-    s = s.replace("    size_t side_data_size;", "")
+s = s.replace("    uint8_t *side_data, *extra_data;", "    uint8_t *extra_data;")
+s = s.replace("    size_t side_data_size;", "")
 pattern = r"    // If there is existing initialization data, append to the list\..*?        av_free\(side_data\);"
 replacement = """    ret = mov_append_pssh_side_data(c, st, info);
     if (ret < 0)
