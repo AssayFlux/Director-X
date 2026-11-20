@@ -161,10 +161,24 @@ jobs:
                   raise SystemExit(f"--enable-version3 configure string missing in {avutil}")
               config = "\n".join(configs).lower()
               configure_options = set(re.findall(r"(?<!\S)--[a-z0-9][a-z0-9-]*(?:=[^\s]+)?", config))
+              required_options = {
+                  "--disable-autodetect", "--disable-cuda", "--disable-cuvid",
+                  "--disable-nvenc", "--disable-vaapi", "--disable-vdpau",
+                  "--disable-videotoolbox",
+              }
+              missing_options = sorted(required_options - configure_options)
+              if missing_options:
+                  raise SystemExit(f"Required disabled configure options missing from {avutil}: {missing_options}")
               forbidden_options = {
                   "--enable-gpl", "--enable-nonfree", "--enable-cuda",
                   "--enable-cuvid", "--enable-nvenc", "--enable-nvdec",
-                  "--enable-libx264", "--enable-libx265",
+                  "--enable-vulkan", "--enable-vaapi", "--enable-vdpau",
+                  "--enable-videotoolbox", "--enable-qsv", "--enable-dxva2",
+                  "--enable-d3d11va", "--enable-d3d12va",
+                  "--enable-libx264", "--enable-libx265", "--enable-libxml2",
+                  "--enable-libssh", "--enable-libssh2", "--enable-librist",
+                  "--enable-libxevd", "--enable-libwebp", "--enable-libsvtjpegxs",
+                  "--enable-libaribcaption", "--enable-liblcevc_dec",
               }
               enabled_forbidden = sorted(configure_options & forbidden_options)
               if enabled_forbidden:
