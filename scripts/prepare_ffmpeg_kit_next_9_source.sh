@@ -142,6 +142,26 @@ path.write_text(text.replace(anchor, insert + anchor), encoding="utf-8")
 print("Prepared the pinned FriBidi generator correction.")
 PY
 
+# Build FreeType's API-name scanner with the Nix host compiler, not the
+# generic runner gcc selected by FreeType's configure script. The scanner is a
+# build-host executable; its output is consumed by the target static library.
+# Keep host stack protection enabled.
+python3 - "$kit_root/scripts/android/freetype.sh" <<'PY'
+from pathlib import Path
+import sys
+
+path = Path(sys.argv[1])
+text = path.read_text(encoding="utf-8")
+old = 'make -j$(get_cpu_count) || return 1'
+new = 'make -j$(get_cpu_count) CCexe="${HOST_CC}" CCexe_CFLAGS="-fstack-protector-strong" CCexe_LDFLAGS="-fstack-protector-strong" || return 1'
+if text.count(old) == 1:
+    text = text.replace(old, new)
+elif text.count(new) != 1:
+    raise SystemExit(f"Expected one FreeType make invocation; old={text.count(old)} new={text.count(new)}")
+path.write_text(text, encoding="utf-8")
+print("Configured FreeType apinames to use the hardened Nix host compiler.")
+PY
+
 # Backport independently verified upstream FFmpeg security fixes onto the pinned
 # n9.0.2-derived fork. Keep the base revision pinned and verify every patch.
 python3 - "$kit_root/scripts/android/ffmpeg.sh" <<'PY'
