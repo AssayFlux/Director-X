@@ -61,7 +61,7 @@ from pathlib import Path
 import re
 
 old = "./$(gen_unicode_version) $^ > $@"
-new = "./$(gen_unicode_version) unidata/ReadMe.txt unidata/BidiMirroring.txt gen-unicode-version > $@"
+new = "./$(gen_unicode_version) unidata/ReadMe.txt unidata/BidiMirroring.txt > $@"
 for path in (Path("gen.tab/Makefile.in"), Path("gen.tab/Makefile")):
     if not path.is_file():
         raise SystemExit(f"Expected configured FriBidi generator file: {path}")
