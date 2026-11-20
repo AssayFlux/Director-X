@@ -332,6 +332,17 @@ edit('libavcodec/cbs_sei.c', '    ++list->nb_messages;\n    return 0;\n',
      '    memset(&list->messages[list->nb_messages], 0, sizeof(*list->messages));\n    ++list->nb_messages;\n    return 0;\n', 'SEI slot')
 edit('libavcodec/sanm.c', '        bytestream2_get_bufferu(gb, ctx->c23lut, 256);\n',
      '        bytestream2_get_bufferu(gb, ctx->c23lut, 256);\n        memcpy(lut, ctx->c23lut, 256);\n', 'SANM LUT')
+edit('libavcodec/gif.c', '    const uint8_t *ptr;\n', '    const uint8_t *ptr;\n    int ptr_linesize = linesize;\n', 'GIF stride declaration')
+edit('libavcodec/gif.c', '            s->shrunk_buf = av_malloc(avctx->height * linesize);\n', '            s->shrunk_buf = av_malloc(avctx->height * avctx->width);\n', 'GIF buffer allocation')
+edit('libavcodec/gif.c', '        remap_frame_to_palette(buf, linesize, s->shrunk_buf, linesize, avctx->width, avctx->height, map);\n        ptr = s->shrunk_buf + y_start*linesize + x_start;\n', '        remap_frame_to_palette(buf, linesize, s->shrunk_buf, avctx->width, avctx->width, avctx->height, map);\n        ptr = s->shrunk_buf + y_start*avctx->width + x_start;\n        ptr_linesize = avctx->width;\n', 'GIF remap stride')
+edit('libavcodec/gif.c', '            ptr += linesize;\n', '            ptr += ptr_linesize;\n', 'GIF row stride one')
+edit('libavcodec/gif.c', '            ptr += linesize;\n', '            ptr += ptr_linesize;\n', 'GIF row stride two')
+edit('libavcodec/sgienc.c', '    unsigned int width, height, depth, dimension;\n    unsigned int bytes_per_channel, pixmax, put_be;\n', '    int width, height, depth, dimension;\n    int bytes_per_channel, pixmax, put_be;\n', 'SGI signed dimensions')
+edit('libavcodec/sgienc.c', '    if ((ret = ff_alloc_packet(avctx, pkt, bytes_per_channel * length)) < 0)\n', '    if ((ret = ff_alloc_packet(avctx, pkt, (int64_t)bytes_per_channel * length)) < 0)\n', 'SGI packet size')
+edit('libavcodec/sgienc.c', 'p->data[0] + p->linesize[0] * (height - 1)', 'p->data[0] + (ptrdiff_t)p->linesize[0] * (height - 1)', 'SGI signed stride one')
+edit('libavcodec/sgienc.c', 'p->data[0] + p->linesize[0] * (height - 1)', 'p->data[0] + (ptrdiff_t)p->linesize[0] * (height - 1)', 'SGI signed stride two')
+edit('libavcodec/dpxenc.c', '        if (avctx->bits_per_raw_sample)\n            s->bits_per_component = avctx->bits_per_raw_sample;\n', '        if (avctx->bits_per_raw_sample == 10) {\n            s->bits_per_component = 10;\n        } else if (avctx->bits_per_raw_sample && avctx->bits_per_raw_sample != 16) {\n            av_log(avctx, AV_LOG_ERROR, "Unsupported bit depth: %d\\n", avctx->bits_per_raw_sample);\n            return AVERROR(EINVAL);\n        }\n', 'DPX RGB48 depth')
+edit('libavcodec/interplayacm.c', '    s->block_len = s->rows * s->cols;\n', '    s->block_len = s->rows * s->cols;\n    if (s->block_len > 1024 * 1024) {\n        av_log(avctx, AV_LOG_ERROR, "Block of %d samples is too large\\n", s->block_len);\n        return AVERROR_INVALIDDATA;\n    }\n', 'Interplay ACM allocation cap')
 FFMPEG_SECURITY_PY
 if [[ $? -ne 0 ]]; then exit 1; fi
 git -C "${ffmpeg_source_dir}" diff --check || exit 1
