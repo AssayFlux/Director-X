@@ -526,7 +526,7 @@ require_ffmpeg_security_check "DPX bit-depth validation" "Unsupported bit depth"
 require_ffmpeg_security_check "MP3 bit-reader bounds" "ret = init_get_bits8(&s->gb, buf + HEADER_SIZE, buf_size - HEADER_SIZE)" "${ffmpeg_source_dir}/libavcodec/mpegaudiodec_template.c"
 require_ffmpeg_security_check "encoder frame-dimension validation" "src->width != avctx->width" "${ffmpeg_source_dir}/libavcodec/encode.c"
 require_ffmpeg_security_check "ProRes slice-size bound" "ctx->slice_size_upper_bound = mps" "${ffmpeg_source_dir}/libavcodec/proresenc_kostya_common.c"
-require_ffmpeg_security_check "ProRes packet reserve" "frame_size_upper_bound + ctx->slice_size_upper_bound" "${ffmpeg_source_dir}/libavcodec/proresenc_kostya.c"
+require_ffmpeg_security_check "ProRes packet reserve" "pkt_size = ctx->frame_size_upper_bound + slice_size_upper_bound" "${ffmpeg_source_dir}/libavcodec/proresenc_kostya.c"
 require_ffmpeg_security_check "ProRes oversized-frame rejection" "Frame too large to encode" "${ffmpeg_source_dir}/libavcodec/proresenc_kostya_common.c"
 require_ffmpeg_security_check "Interplay ACM allocation cap" "s->block_len > 1024 * 1024" "${ffmpeg_source_dir}/libavcodec/interplayacm.c"
 '''
