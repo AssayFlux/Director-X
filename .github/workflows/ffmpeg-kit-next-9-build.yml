@@ -57,8 +57,10 @@ jobs:
         run: |
           set -euo pipefail
           gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys DD1EC9E8DE085C629B3E1846B18E8928B3948D64
-          git clone --filter=blob:none https://git.ffmpeg.org/ffmpeg.git ffmpeg-upstream
-          git -C ffmpeg-upstream fetch --force --tags origin
+          git init ffmpeg-upstream
+          git -C ffmpeg-upstream remote add origin https://git.ffmpeg.org/ffmpeg.git
+          git -C ffmpeg-upstream fetch --depth=1 origin refs/tags/n9.0.2:refs/tags/n9.0.2
+          git -C ffmpeg-upstream checkout --detach n9.0.2
           git -C ffmpeg-upstream verify-tag n9.0.2
           git -C ffmpeg-upstream verify-tag --verbose n9.0.2 2>&1 | tee authenticity/tag-verification.txt
           grep -E 'Primary key fingerprint: DD1E C9E8 DE08 5C62 9B3E[[:space:]]+1846 B18E 8928 B394 8D64' authenticity/tag-verification.txt
