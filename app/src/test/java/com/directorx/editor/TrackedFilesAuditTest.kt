@@ -198,6 +198,7 @@ class TrackedFilesAuditTest {
             ".github/workflows/repository-hygiene.yml",
             ".github/workflows/release-candidate.yml",
             ".github/workflows/ffmpeg-kit-next-9-build.yml",
+            ".github/workflows/ffmpeg-kit-next-9-build.yml",
         )
 
         private val REQUIRED_TRACKED = listOf(
