@@ -295,6 +295,7 @@ helper = '''static int mov_append_pssh_side_data(MOVContext *c, AVStream *st,
         return AVERROR(ENOMEM);
     }
     c->pssh_side_data = buffer;
+    c->pssh_stream = st;
     return 0;
 }
 
