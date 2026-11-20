@@ -258,9 +258,9 @@ for fix in "${FFMPEG_SECURITY_COMMITS[@]}"; do
   if ! git -C "${ffmpeg_source_dir}" cat-file -e "${fix}^{commit}" 2>/dev/null; then
     git -C "${ffmpeg_source_dir}" fetch --no-tags origin "${fix}"
   fi
-  if git -C "${ffmpeg_source_dir}" merge-base --is-ancestor "${fix}" HEAD; then
-    continue
-  fi
+  # Check the patch against the actual working-tree contents, not only commit
+  # ancestry. A later fork commit can revert or replace an upstream fix while
+  # leaving the original commit in HEAD's history.
   patch_file="$(mktemp)"
   git -C "${ffmpeg_source_dir}" show --format= "${fix}" > "$patch_file"
   if git -C "${ffmpeg_source_dir}" apply --check "$patch_file"; then
