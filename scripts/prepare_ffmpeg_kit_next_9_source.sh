@@ -198,8 +198,21 @@ for fix in "${FFMPEG_SECURITY_COMMITS[@]}"; do
   if git -C "${ffmpeg_source_dir}" merge-base --is-ancestor "${fix}" HEAD; then
     continue
   fi
-  git -C "${ffmpeg_source_dir}" show --format= "${fix}" | git -C "${ffmpeg_source_dir}" apply --check - || exit 1
-  git -C "${ffmpeg_source_dir}" show --format= "${fix}" | git -C "${ffmpeg_source_dir}" apply - || exit 1
+  patch_file="$(mktemp)"
+  git -C "${ffmpeg_source_dir}" show --format= "${fix}" > "$patch_file"
+  if git -C "${ffmpeg_source_dir}" apply --check "$patch_file"; then
+    git -C "${ffmpeg_source_dir}" apply "$patch_file" || {
+      rm -f "$patch_file"
+      exit 1
+    }
+  elif git -C "${ffmpeg_source_dir}" apply --reverse --check "$patch_file"; then
+    echo "FFmpeg security backport already present: $fix"
+  else
+    echo "FFmpeg security backport is neither cleanly applicable nor already applied: $fix" >&2
+    rm -f "$patch_file"
+    exit 1
+  fi
+  rm -f "$patch_file"
 done
 # Port fork security fixes onto the exact n9.0.2 source; do not cherry-pick
 # incompatible fork-only context or change upstream library version macros.
@@ -211,8 +224,12 @@ root = Path(sys.argv[1])
 def edit(path, old, new, label):
     p = root / path
     s = p.read_text(encoding='utf-8')
+    if new in s:
+        if s.count(new) != 1:
+            raise SystemExit(f'{label}: corrected block is not unique in {path}')
+        return
     if s.count(old) != 1:
-        raise SystemExit(f'{label}: expected one exact anchor in {path}, got {s.count(old)}')
+        raise SystemExit(f'{label}: expected one original or corrected anchor in {path}; old={s.count(old)} new={s.count(new)}')
     p.write_text(s.replace(old, new), encoding='utf-8')
 
 # PSSH records are appended in place with tracked capacity: O(n) total work.
@@ -308,8 +325,13 @@ helper = """static int mov_append_pssh_side_data(MOVContext *c, AVStream *st,
 }
 
 """
-if s.count(anchor) != 1: raise SystemExit('PSSH helper anchor mismatch')
-s = s.replace(anchor, helper + anchor)
+if 'static int mov_append_pssh_side_data(' in s:
+    if s.count('static int mov_append_pssh_side_data(') != 1:
+        raise SystemExit('PSSH helper is duplicated')
+else:
+    if s.count(anchor) != 1:
+        raise SystemExit('PSSH helper anchor mismatch')
+    s = s.replace(anchor, helper + anchor)
 s = s.replace("AVEncryptionInitInfo *info, *old_init_info;", "AVEncryptionInitInfo *info;")
 s = s.replace("    const AVPacketSideData *old_side_data;", "")
 s = s.replace("    uint8_t *side_data, *extra_data;", "    uint8_t *extra_data;")
@@ -319,7 +341,10 @@ replacement = """    ret = mov_append_pssh_side_data(c, st, info);
     if (ret < 0)
         goto finish;"""
 s, replaced = re.subn(pattern, replacement, s, flags=re.S)
-if replaced != 1: raise SystemExit(f"PSSH append block replacement count: {replaced}")
+if replaced == 0 and s.count(replacement) == 1:
+    print("PSSH append transformation already present.")
+elif replaced != 1:
+    raise SystemExit(f"PSSH append block replacement count: {replaced}; replacement={s.count(replacement)}")
 mov.write_text(s, encoding='utf-8')
 
 edit('libavformat/isom.h', '    MOVFragmentIndex frag_index;\n    int atom_depth;',
@@ -341,17 +366,23 @@ edit('libavcodec/gif.c', '        remap_frame_to_palette(buf, linesize, s->shrun
 gif_path = root / 'libavcodec/gif.c'
 gif_text = gif_path.read_text(encoding='utf-8')
 gif_old = '            ptr += linesize;\n'
-if gif_text.count(gif_old) != 2:
-    raise SystemExit(f'GIF row stride anchors: {gif_text.count(gif_old)}')
-gif_path.write_text(gif_text.replace(gif_old, '            ptr += ptr_linesize;\n'), encoding='utf-8')
+gif_new = '            ptr += ptr_linesize;\n'
+if gif_text.count(gif_old) == 2:
+    gif_text = gif_text.replace(gif_old, gif_new)
+elif gif_text.count(gif_old) != 0 or gif_text.count(gif_new) != 2:
+    raise SystemExit(f'GIF row stride anchors: old={gif_text.count(gif_old)} new={gif_text.count(gif_new)}')
+gif_path.write_text(gif_text, encoding='utf-8')
 edit('libavcodec/sgienc.c', '    unsigned int width, height, depth, dimension;\n    unsigned int bytes_per_channel, pixmax, put_be;\n', '    int width, height, depth, dimension;\n    int bytes_per_channel, pixmax, put_be;\n', 'SGI signed dimensions')
 edit('libavcodec/sgienc.c', '    if ((ret = ff_alloc_packet(avctx, pkt, bytes_per_channel * length)) < 0)\n', '    if ((ret = ff_alloc_packet(avctx, pkt, (int64_t)bytes_per_channel * length)) < 0)\n', 'SGI packet size')
 sgi_path = root / 'libavcodec/sgienc.c'
 sgi_text = sgi_path.read_text(encoding='utf-8')
 sgi_old = 'p->data[0] + p->linesize[0] * (height - 1)'
-if sgi_text.count(sgi_old) != 2:
-    raise SystemExit(f'SGI signed-stride anchors: {sgi_text.count(sgi_old)}')
-sgi_path.write_text(sgi_text.replace(sgi_old, 'p->data[0] + (ptrdiff_t)p->linesize[0] * (height - 1)'), encoding='utf-8')
+sgi_new = 'p->data[0] + (ptrdiff_t)p->linesize[0] * (height - 1)'
+if sgi_text.count(sgi_old) == 2:
+    sgi_text = sgi_text.replace(sgi_old, sgi_new)
+elif sgi_text.count(sgi_old) != 0 or sgi_text.count(sgi_new) != 2:
+    raise SystemExit(f'SGI signed-stride anchors: old={sgi_text.count(sgi_old)} new={sgi_text.count(sgi_new)}')
+sgi_path.write_text(sgi_text, encoding='utf-8')
 edit('libavcodec/dpxenc.c', '        if (avctx->bits_per_raw_sample)\n            s->bits_per_component = avctx->bits_per_raw_sample;\n', '        if (avctx->bits_per_raw_sample == 10) {\n            s->bits_per_component = 10;\n        } else if (avctx->bits_per_raw_sample && avctx->bits_per_raw_sample != 16) {\n            av_log(avctx, AV_LOG_ERROR, "Unsupported bit depth: %d\\n", avctx->bits_per_raw_sample);\n            return AVERROR(EINVAL);\n        }\n', 'DPX RGB48 depth')
 edit('libavcodec/interplayacm.c', '    s->block_len = s->rows * s->cols;\n', '    s->block_len = s->rows * s->cols;\n    if (s->block_len > 1024 * 1024) {\n        av_log(avctx, AV_LOG_ERROR, "Block of %d samples is too large\\n", s->block_len);\n        return AVERROR_INVALIDDATA;\n    }\n', 'Interplay ACM allocation cap')
 FFMPEG_SECURITY_PY
