@@ -19,13 +19,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: ffmpeg-kit-next-9-build-${{ github.ref }}
-  cancel-in-progress: true
-
-
-concurrency:
   group: ffmpeg-kit-next-9.0.2-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build-native:
