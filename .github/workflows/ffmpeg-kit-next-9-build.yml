@@ -60,7 +60,7 @@ jobs:
           git clone --filter=blob:none https://git.ffmpeg.org/ffmpeg.git ffmpeg-upstream
           git -C ffmpeg-upstream fetch --force --tags origin
           git -C ffmpeg-upstream verify-tag n9.0.2
-          git -C ffmpeg-upstream verify-tag --raw n9.0.2 2>&1 | tee authenticity/tag-verification.txt
+          git -C ffmpeg-upstream verify-tag --verbose n9.0.2 2>&1 | tee authenticity/tag-verification.txt
           grep -F 'VALIDSIG DD1EC9E8DE085C629B3E1846B18E8928B3948D64' authenticity/tag-verification.txt
           echo "FFMPEG_RELEASE_COMMIT=$(git -C ffmpeg-upstream rev-parse 'n9.0.2^{commit}')" >> "$GITHUB_ENV"
 
