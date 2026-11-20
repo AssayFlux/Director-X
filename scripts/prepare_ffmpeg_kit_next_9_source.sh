@@ -89,6 +89,23 @@ for path in (Path("gen.tab/Makefile.in"), Path("gen.tab/Makefile")):
             text = text.replace(source, target)
         elif count != 0 or text.count(target) != 1:
             raise SystemExit(f"Expected one original or corrected recipe in {path}: {source}; found {count}")
+
+    # AX_PROG_CC_FOR_BUILD selected the runner's generic gcc while the Nix
+    # cross environment exposes its verified x86_64 host compiler as HOST_CC.
+    # Force only these host-side table generators to use HOST_CC; keep the
+    # hardening flags active and explicit.
+    old_cc = "CC = $(CC_FOR_BUILD)"
+    new_cc = "CC = $(HOST_CC)"
+    if text.count(old_cc) == 1:
+        text = text.replace(old_cc, new_cc)
+    elif text.count(new_cc) != 1:
+        raise SystemExit(f"Expected one FriBidi host compiler selector in {path}; old={text.count(old_cc)} new={text.count(new_cc)}")
+    old_flags = "CFLAGS = $(CFLAGS_FOR_BUILD)"
+    new_flags = "CFLAGS = $(CFLAGS_FOR_BUILD) -fstack-protector-strong"
+    if text.count(old_flags) == 1:
+        text = text.replace(old_flags, new_flags)
+    elif text.count(new_flags) != 1:
+        raise SystemExit(f"Expected one FriBidi host CFLAGS selector in {path}; old={text.count(old_flags)} new={text.count(new_flags)}")
     path.write_text(text, encoding="utf-8")
     print(f"Patched FriBidi generator recipe in {path}")
 
