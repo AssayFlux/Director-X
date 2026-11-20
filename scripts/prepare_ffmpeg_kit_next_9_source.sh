@@ -239,7 +239,7 @@ helper = '''static int mov_append_pssh_side_data(MOVContext *c, AVStream *st,
         }
     }
     if (old_side_data) {
-        if (old_side_data->size < 4)
+        if (old_side_data->size < 4 || old_side_data->size > UINT32_MAX)
             return AVERROR_INVALIDDATA;
         if (old_side_data->data != c->pssh_side_data || st != c->pssh_stream)
             c->pssh_side_data_allocated = old_side_data->size;
@@ -253,9 +253,19 @@ helper = '''static int mov_append_pssh_side_data(MOVContext *c, AVStream *st,
     new_count = init_info_count;
     new_size = old_size;
     for (cur = info; cur; cur = cur->next) {
-        uint64_t record_size = 16ULL + cur->system_id_size + cur->data_size +
-                               (uint64_t)cur->num_key_ids * cur->key_id_size;
-        if (new_count == UINT32_MAX || record_size > UINT32_MAX - new_size)
+        uint64_t record_size = 16;
+        if (new_count == UINT32_MAX ||
+            cur->system_id_size > UINT32_MAX - record_size)
+            return AVERROR(EINVAL);
+        record_size += cur->system_id_size;
+        if (cur->data_size > UINT32_MAX - record_size)
+            return AVERROR(EINVAL);
+        record_size += cur->data_size;
+        if (cur->num_key_ids &&
+            cur->key_id_size > (UINT32_MAX - record_size) / cur->num_key_ids)
+            return AVERROR(EINVAL);
+        record_size += (uint64_t)cur->num_key_ids * cur->key_id_size;
+        if (record_size > UINT32_MAX - new_size)
             return AVERROR(EINVAL);
         new_count++;
         new_size += record_size;
