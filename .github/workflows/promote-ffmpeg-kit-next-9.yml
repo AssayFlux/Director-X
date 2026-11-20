@@ -25,7 +25,44 @@ jobs:
         env:
           BUILT_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
-          test "$(git rev-parse HEAD)" = "$BUILT_SHA"
+          git merge-base --is-ancestor "$BUILT_SHA" HEAD
+          unexpected="$(git diff --name-only "$BUILT_SHA"..HEAD | grep -Ev '^(scripts/promote_ffmpeg_kit_next_9_artifact.py|.github/workflows/promote-ffmpeg-kit-next-9.yml)
+      - name: Download verified native build evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: ffmpeg-kit-next-9.0.2-evidence-${{ github.event.workflow_run.id }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: build-evidence
+
+      - name: Promote AAR, POM, lock and app references
+        env:
+          BUILD_RUN_ID: ${{ github.event.workflow_run.id }}
+          BUILD_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          BUILD_COMPLETED_AT: ${{ github.event.workflow_run.updated_at }}
+        run: |
+          python3 scripts/promote_ffmpeg_kit_next_9_artifact.py \
+            --artifact-dir build-evidence \
+            --run-id "$BUILD_RUN_ID" \
+            --head-sha "$BUILD_HEAD_SHA" \
+            --built-at "$BUILD_COMPLETED_AT"
+          python3 scripts/generate_capability_registry.py
+          ./gradlew :app:verifyFfmpegKitAar
+          git diff --check
+
+      - name: Commit promoted FFmpeg 9.0.2 dependency to Alpha
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "build(ffmpeg): vendor verified FFmpegKitNext 9.0.2 AAR"
+          git push origin HEAD:Alpha
+ || true)"
+          if [[ -n "$unexpected" ]]; then
+            echo "FFmpeg build inputs changed after the artifact was built:"
+            echo "$unexpected"
+            exit 1
+          fi
 
       - name: Download verified native build evidence
         uses: actions/download-artifact@v4
