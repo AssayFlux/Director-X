@@ -31,8 +31,13 @@ jobs:
             "/repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}/rerun-failed-jobs"
           echo "Requested one retry of the failed native build job. Its full job includes the AAR/POM/ABI/alignment/configure-profile gate, which was previously skipped after native compilation failed."
 
-      - name: Manual dispatch guidance
+      - name: Retry latest failed FFmpeg build on manual dispatch
         if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          echo "This temporary workflow is event-driven. Push a fix to the FFmpeg 9.0.2 build inputs to run the primary build and packaging gates."
-          echo "The Android instrumentation suite remains in android-verification.yml and must also pass before promotion."
+          set -euo pipefail
+          run_id="$(gh api "/repos/${GITHUB_REPOSITORY}/actions/workflows/ffmpeg-kit-next-9-build.yml/runs?branch=Alpha&status=completed&per_page=20" --jq '[.workflow_runs[] | select(.conclusion == "failure")][0].id')"
+          test -n "$run_id" && test "$run_id" != "null"
+          gh api --method POST -H "Accept: application/vnd.github+json" "/repos/${GITHUB_REPOSITORY}/actions/runs/${run_id}/rerun-failed-jobs"
+          echo "Requested one retry of failed native build and its downstream packaging gate."
