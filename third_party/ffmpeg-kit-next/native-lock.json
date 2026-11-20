@@ -14,9 +14,9 @@
     "ffmpegRevision": "38b88335f99e76ed89ff3c93f877fdefce736c13",
     "ffmpegVersion": "8.1.2",
     "securityPatch": "third_party/ffmpeg-kit-next/directorx-security.patch",
-    "securityPatchSha256": "9a4bf405869b9b36110aa49716761a67edebcd004845176484d6a33f9f690d8c",
+    "securityPatchSha256": "962848475e924503f3c208865203f9cb7c750ce2464f5a096c70ccd082e5d32b",
     "builtAt": "2026-08-02T00:00:00Z",
-    "reviewUntil": "9999-12-31"
+    "reviewUntil": "2026-10-31"
   },
   "build": {
     "command": "./nix-android.sh -p android-r27d --enable-libass --enable-libjxl --enable-android-media-codec --enable-android-zlib --enable-openh264 --jobs=8",
@@ -140,7 +140,7 @@
   ],
   "security": {
     "profile": "directorx-disabled-format-surface",
-    "reviewUntil": "9999-12-31",
+    "reviewUntil": "2026-10-31",
     "disabledComponents": [
       "vobsub_demuxer",
       "tdsc_decoder",
@@ -187,7 +187,7 @@
       "status": "fixed",
       "fixedVersion": "8.1.2",
       "rationale": "The shipped FFmpeg revision is 8.1.2, which contains the upstream fix.",
-      "reviewUntil": "9999-12-31",
+      "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8461",
       "disabledComponents": []
     },
@@ -198,7 +198,7 @@
       "status": "fixed",
       "fixedVersion": "6.1.2",
       "rationale": "The shipped FFmpeg revision is newer than the fixed version.",
-      "reviewUntil": "9999-12-31",
+      "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-36617",
       "disabledComponents": []
     },
@@ -209,7 +209,7 @@
       "status": "not_affected",
       "fixedVersion": "8.1.2",
       "rationale": "The current FFmpeg security review found no affected reachable component in the shipped profile.",
-      "reviewUntil": "9999-12-31",
+      "reviewUntil": "2026-10-31",
       "url": "https://ffmpeg.org/security.html",
       "disabledComponents": []
     },
@@ -219,7 +219,7 @@
       "severity": "HIGH",
       "status": "not_affected",
       "rationale": "The VobSub demuxer is disabled in the ClearCut security profile.",
-      "reviewUntil": "9999-12-31",
+      "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-64830",
       "disabledComponents": [
         "vobsub_demuxer"
@@ -231,7 +231,7 @@
       "severity": "HIGH",
       "status": "not_affected",
       "rationale": "The TDSC decoder is disabled in the ClearCut security profile.",
-      "reviewUntil": "9999-12-31",
+      "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-65703",
       "disabledComponents": [
         "tdsc_decoder"
@@ -243,7 +243,7 @@
       "severity": "HIGH",
       "status": "not_affected",
       "rationale": "The MACE6 decoder is disabled in the ClearCut security profile.",
-      "reviewUntil": "9999-12-31",
+      "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66039",
       "disabledComponents": [
         "mace6_decoder"
@@ -255,7 +255,7 @@
       "severity": "HIGH",
       "status": "not_affected",
       "rationale": "The ADX decoder and ADX/AAX demuxers are disabled in the ClearCut security profile.",
-      "reviewUntil": "9999-12-31",
+      "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-64835",
       "disabledComponents": [
         "adpcm_adx_decoder",
@@ -269,7 +269,7 @@
       "severity": "HIGH",
       "status": "not_affected",
       "rationale": "The PNG and APNG encoders are disabled in the ClearCut security profile.",
-      "reviewUntil": "9999-12-31",
+      "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66040",
       "disabledComponents": [
         "png_encoder",
@@ -282,7 +282,7 @@
       "severity": "HIGH",
       "status": "not_affected",
       "rationale": "The RASC decoder is disabled in the ClearCut security profile.",
-      "reviewUntil": "9999-12-31",
+      "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-58049",
       "disabledComponents": [
         "rasc_decoder"
@@ -294,7 +294,7 @@
       "severity": "HIGH",
       "status": "not_affected",
       "rationale": "The RASC decoder is disabled in the ClearCut security profile.",
-      "reviewUntil": "9999-12-31",
+      "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-12706",
       "disabledComponents": [
         "rasc_decoder"
@@ -306,7 +306,7 @@
       "severity": "HIGH",
       "status": "not_affected",
       "rationale": "The IAMF demuxer is disabled in the ClearCut security profile.",
-      "reviewUntil": "9999-12-31",
+      "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66037",
       "disabledComponents": [
         "iamf_demuxer"
@@ -318,7 +318,7 @@
       "severity": "HIGH",
       "status": "not_affected",
       "rationale": "The ZLIB decoder used by the LCL path is disabled in the ClearCut security profile.",
-      "reviewUntil": "9999-12-31",
+      "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66038",
       "disabledComponents": [
         "zlib_decoder"
@@ -330,7 +330,7 @@
       "severity": "HIGH",
       "status": "not_affected",
       "rationale": "The shipped Android artifact does not build the NVIDIA NVDEC hardware-decoder path; the exact absent configure flags and review evidence are recorded under security.reachability.",
-      "reviewUntil": "9999-12-31",
+      "reviewUntil": "2026-10-31",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-64832",
       "disabledComponents": []
     }
