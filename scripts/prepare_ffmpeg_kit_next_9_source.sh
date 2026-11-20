@@ -310,7 +310,9 @@ helper = """static int mov_append_pssh_side_data(MOVContext *c, AVStream *st,
 if s.count(anchor) != 1: raise SystemExit('PSSH helper anchor mismatch')
 s = s.replace(anchor, helper + anchor)
 s = s.replace("AVEncryptionInitInfo *info, *old_init_info;", "AVEncryptionInitInfo *info;")
-s = s.replace("    const AVPacketSideData *old_side_data;\\n    uint8_t *side_data, *extra_data;\\n    size_t side_data_size;", "    uint8_t *extra_data;")
+ s = s.replace("    const AVPacketSideData *old_side_data;", "")
+    s = s.replace("    uint8_t *side_data, *extra_data;", "    uint8_t *extra_data;")
+    s = s.replace("    size_t side_data_size;", "")
 pattern = r"    // If there is existing initialization data, append to the list\..*?        av_free\(side_data\);"
 replacement = """    ret = mov_append_pssh_side_data(c, st, info);
     if (ret < 0)
@@ -335,8 +337,12 @@ edit('libavcodec/sanm.c', '        bytestream2_get_bufferu(gb, ctx->c23lut, 256)
 edit('libavcodec/gif.c', '    const uint8_t *ptr;\n', '    const uint8_t *ptr;\n    int ptr_linesize = linesize;\n', 'GIF stride declaration')
 edit('libavcodec/gif.c', '            s->shrunk_buf = av_malloc(avctx->height * linesize);\n', '            s->shrunk_buf = av_malloc(avctx->height * avctx->width);\n', 'GIF buffer allocation')
 edit('libavcodec/gif.c', '        remap_frame_to_palette(buf, linesize, s->shrunk_buf, linesize, avctx->width, avctx->height, map);\n        ptr = s->shrunk_buf + y_start*linesize + x_start;\n', '        remap_frame_to_palette(buf, linesize, s->shrunk_buf, avctx->width, avctx->width, avctx->height, map);\n        ptr = s->shrunk_buf + y_start*avctx->width + x_start;\n        ptr_linesize = avctx->width;\n', 'GIF remap stride')
-edit('libavcodec/gif.c', '            ptr += linesize;\n', '            ptr += ptr_linesize;\n', 'GIF row stride one')
-edit('libavcodec/gif.c', '            ptr += linesize;\n', '            ptr += ptr_linesize;\n', 'GIF row stride two')
+gif_path = root / 'libavcodec/gif.c'
+gif_text = gif_path.read_text(encoding='utf-8')
+gif_old = '            ptr += linesize;\\n'
+if gif_text.count(gif_old) != 2:
+    raise SystemExit(f'GIF row stride anchors: {gif_text.count(gif_old)}')
+gif_path.write_text(gif_text.replace(gif_old, '            ptr += ptr_linesize;\\n'), encoding='utf-8')
 edit('libavcodec/sgienc.c', '    unsigned int width, height, depth, dimension;\n    unsigned int bytes_per_channel, pixmax, put_be;\n', '    int width, height, depth, dimension;\n    int bytes_per_channel, pixmax, put_be;\n', 'SGI signed dimensions')
 edit('libavcodec/sgienc.c', '    if ((ret = ff_alloc_packet(avctx, pkt, bytes_per_channel * length)) < 0)\n', '    if ((ret = ff_alloc_packet(avctx, pkt, (int64_t)bytes_per_channel * length)) < 0)\n', 'SGI packet size')
 edit('libavcodec/sgienc.c', 'p->data[0] + p->linesize[0] * (height - 1)', 'p->data[0] + (ptrdiff_t)p->linesize[0] * (height - 1)', 'SGI signed stride one')
