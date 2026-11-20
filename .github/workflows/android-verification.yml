@@ -143,6 +143,14 @@ jobs:
       - name: Run Android lint
         run: ./gradlew --no-daemon --stacktrace --console=plain :app:lintQa
 
+      - name: Enable KVM for managed API 37 emulator
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-kvm cpu-checker
+          test -e /dev/kvm
+          sudo chmod 666 /dev/kvm
+          kvm-ok
+
       # Use the configured API 37 managed device. Resolve the task name from
       # Gradle's task catalogue rather than hard-coding AGP's generated name.
       - name: Run Android database and instrumentation tests
