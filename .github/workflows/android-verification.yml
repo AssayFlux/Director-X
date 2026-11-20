@@ -40,7 +40,7 @@ permissions:
 
 concurrency:
   group: android-verification-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   unit-tests:
