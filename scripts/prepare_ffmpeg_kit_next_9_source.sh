@@ -75,16 +75,23 @@ for path in (Path("gen.tab/Makefile.in"), Path("gen.tab/Makefile")):
 
 generator = """#!/usr/bin/env python3
 import pathlib
-import re
 import sys
 
 source = pathlib.Path(sys.argv[1]).read_text(encoding="utf-8")
-match = re.search(r"\\bVersion\\s+(\\d+)\\.(\\d+)\\.(\\d+)\\b", source)
-if not match:
-    match = re.search(r"\\bUnicode\\s+(\\d+)\\.(\\d+)\\.(\\d+)\\b", source)
-if not match:
+version = None
+for line in source.splitlines():
+    for marker in ("Version ", "Unicode "):
+        if marker in line:
+            candidate = line.split(marker, 1)[1].split()[0].rstrip(".,;")
+            parts = candidate.split(".")
+            if len(parts) == 3 and all(part.isdigit() for part in parts):
+                version = tuple(map(int, parts))
+                break
+    if version is not None:
+        break
+if version is None:
     raise SystemExit("Could not determine Unicode version from pinned FriBidi ReadMe.txt")
-major, minor, micro = map(int, match.groups())
+major, minor, micro = version
 print(f'#define FRIBIDI_UNICODE_VERSION "{major}.{minor}.{micro}"')
 print(f"#define FRIBIDI_UNICODE_MAJOR_VERSION {major}")
 print(f"#define FRIBIDI_UNICODE_MINOR_VERSION {minor}")
