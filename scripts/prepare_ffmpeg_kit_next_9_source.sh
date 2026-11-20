@@ -182,18 +182,22 @@ insert = r'''export LDFLAGS="${LDFLAGS} -Wl,-z,max-page-size=16384 -Wl,-z,common
 # CVE-2026-107678: iterative free plus append-in-place PSSH side data.
 # CVE-2026-107676: initialize all HDR10+ serialized payload bits.
 # CVE-2026-107677: reject empty search strings in av_strireplace.
-# CVE-2026-125269: clear recycled H.264/H.265 SEI message slots.
-# CVE-2026-125250/251/260/261/266/207/216: GIF, VVC, generic encoder,
-# SGI, SANM, Interplay ACM and DPX boundary/initialization fixes.
+# CVE-2026-125269/125250/125251/125260/125261/125266/125207/125216:
+# H.264/H.265 SEI, GIF, VVC, encoder, SGI, SANM, Interplay ACM and DPX.
+# Additional reachable-codec fixes cover the reviewed 125xxx/120xxx CVEs:
+# AV1, AAC, Bink, CDXL, CFHD, DNG, DVBSub, DOVI, EXR, FLIC, FLAC, HAP,
+# Huffyuv, JPEG/JPEG-LS, Mimic, MLZ, MPC7, MPEG audio, Nellymoser, PCX,
+# ProRes, PSD, RoQ, SBG, Sun Raster, TAK, Targa, VMNC, Vorbis, VP9, VVC,
+# WavPack, WavPack, WavPack, WavPack and WavPack.
 ffmpeg_source_dir="$PWD"
 FFMPEG_SECURITY_COMMITS=(
   969c7eb091989a664cb7bf66a1f02051cc46cb52
   2c2f6e96e31795ae95a8f8323a493ffbc493111f
   ed27bfcbbbc0872c0195eaf4dd2c0c93b9f1778e
+  f5d4fd186c68913240c4f6e9cda98443e1518b34
   b8f159858e2fd29dae4fa34d9e713bbf9bbf190e
   0bfa350291b2118f6d590263dc1ee9cea766c0f1
   bc896c613ec0d4ad0108d62fbdda0196f69e7121
-  f5d4fd186c68913240c4f6e9cda98443e1518b34
   439b452f9fe916a9f7d8788ab6afee8fac846b0b
   ab28d57ba2ec07b41b4a60ed8806b13a39ec86fe
   733bec3e19759520ccdbeb6c3c0cae280bbe6dc5
@@ -203,12 +207,50 @@ FFMPEG_SECURITY_COMMITS=(
   6280907da48c4dd78f95ef5c713a29c7702153a3
   a9c070e52fecb7fb247db829130899db07953823
   ee457fdcdb3a069ef35910a2e1cacff10906b131
+  b89ce54d93bf644433dfa9fbc34f19c22237691a
   60bc31fcf6543505e6d2fc1a9399cca95f54ba4d
   27f612b306eb04f81138173f705df9a9b055b01d
   e621da8ecdbef8edb8336cc899b962159dc2465c
   7f80b2ad83f37a4998d9617495c92b28a7339a90
   bf0a2e4680df92d8de6514090d350152eb7845b8
   16d19ccbce802634662a9bf18a5679cf27da2848
+  11052ca4b01b021a135ec89ed7e86aa96dd3bf33
+  45f98d0819efe2b7ce93e9034b7e6a4ed6700621
+  1f4b2e22cfba19f94489ec4a17130f4f0d5d8a0c
+  3b1cbb5e0f66b85d15f1d3527436520b3f4711ec
+  90f5e61a1da2dcc0050169af8ca593530f26071b
+  bcce3232016695f5e482867519c45727a0a2a2c9
+  62c308e0416bb701447817fe6f0bff074d206215
+  972fe1ccd326538fe9a6b5d5094b7880b5443429
+  db77b0b8318ddb38b5a3227724da088a325a4308
+  f71410e0288f0c40ae2fb5e5a4d7428763d08a71
+  971ea9d6a2a9ae4c770936f0569cf40720d4c304
+  11c4b420183cb2d6cd4afaa53de57d400a45e09e
+  aa4b80b54ee8645b5a77fe835ab2bbae1c9c465c
+  9edd06f8612c242b83bf9e3d14aa85180015a211
+  c90bbc2036bac67e95777638bdc86157a775858a
+  50d206a75b5e60261d71b25657ae04891eb60290
+  cfb40c912927fdd2c1186b7b6aca468422da23db
+  f8c4c6400e835bf65e8b9cc12aba9e5c4d1c818c
+  5d59b7c45d7142bddd13ddc8891e72c5c7dc991b
+  f8f84348dfe1a80d38e7dbbcddcdd5d92a760dfd
+  968e9e948ed8c9ba90dbc875e60b843c755cf4ba
+  db98784a72600a94f7ebd5f016a37e01a505c27b
+  01e1bb126179879201429952cc2dcaea0d50d603
+  50865f20b1f474e6b11735c88f668751bc9aa528
+  c05d46ea2919da83233bf4216d3f58428bb54c59
+  9b26bb4c9a4457d480899a1bf64ec080eceb1acd
+  0b007e0634de5b4424b9993c95a6c1c50de0115b
+  839c93f261cd3e1719edfac4244a2d0055ce8841
+  5d7b743bdfb724df21fd43a3d7f3258382eb578c
+  26b4c37526fe0ecf1095b45daac08050f25f7659
+  5195d6f9729ad00b93e4d0f0bea309416fb4713e
+  7c73707355708c846f718cca90096bc1a33c8989
+  47313ad3f9f33b892384b976fb7c09b3c85fd74e
+  356a391bf57df2fb80fd61f2821c8c83d15ce180
+  ecd5dfc308a164757e7f25b1afefd8db21b43cf9
+  edad2d0dafcf44fa315eab716fd0183ce808053b
+  8702f12c9daa199cc4d7c17164b13c3cdcdc2436
 )
 for fix in "${FFMPEG_SECURITY_COMMITS[@]}"; do
   if ! git -C "${ffmpeg_source_dir}" cat-file -e "${fix}^{commit}" 2>/dev/null; then
