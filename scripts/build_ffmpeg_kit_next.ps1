@@ -3,6 +3,9 @@ param(
     [Parameter(Mandatory = $true)]
     [string]$SourceDirectory,
 
+    [ValidateSet("n8.1.2", "n8.1.3")]
+    [string]$FfmpegTag = "n8.1.2",
+
     [switch]$PackageOnly
 )
 
@@ -21,6 +24,13 @@ if ($LASTEXITCODE -ne 0 -or $actualKitCommit -ne $expectedKitCommit) {
 $patchPath = (Resolve-Path -LiteralPath (
         Join-Path $PSScriptRoot "..\third_party\ffmpeg-kit-next\directorx-security.patch"
     ) -ErrorAction Stop).Path
+$candidatePinPatchPath = $null
+if ($FfmpegTag -eq "n8.1.3") {
+    $candidatePinPatchPath = (Resolve-Path -LiteralPath (
+            Join-Path $PSScriptRoot "..\third_party\ffmpeg-kit-next\ffmpeg-source-tag-n8.1.3.patch"
+        ) -ErrorAction Stop).Path
+}
+
 function ConvertTo-WslPath([string]$value) {
     $shellValue = $value.Replace("'", "'\''")
     $translated = (& wsl.exe bash -lc "wslpath -a '$shellValue'").Trim()
@@ -30,15 +40,31 @@ function ConvertTo-WslPath([string]$value) {
     return $translated
 }
 
-$sourceWsl = ConvertTo-WslPath $sourcePath
-$patchWsl = ConvertTo-WslPath $patchPath
-
 function ConvertTo-WslShellLiteral([string]$value) {
     return "'" + $value.Replace("'", "'\''") + "'"
 }
 
+$sourceWsl = ConvertTo-WslPath $sourcePath
+$patchWsl = ConvertTo-WslPath $patchPath
 $sourceLiteral = ConvertTo-WslShellLiteral $sourceWsl
 $patchLiteral = ConvertTo-WslShellLiteral $patchWsl
+
+$sourceTagPatchBlock = ""
+if ($FfmpegTag -eq "n8.1.3") {
+    $candidatePinPatchWsl = ConvertTo-WslPath $candidatePinPatchPath
+    $candidatePinPatchLiteral = ConvertTo-WslShellLiteral $candidatePinPatchWsl
+    $sourceTagPatchBlock = @"
+if git apply --reverse --check $candidatePinPatchLiteral >/dev/null 2>&1; then
+  :
+elif git apply --check $candidatePinPatchLiteral; then
+  git apply $candidatePinPatchLiteral
+else
+  echo "Director X FFmpeg 8.1.3 source-pin patch does not apply cleanly." >&2
+  exit 3
+fi
+"@
+}
+
 $skipFfmpeg = if ($PackageOnly) { " --skip-ffmpeg" } else { "" }
 $command = @"
 set -e
@@ -59,6 +85,7 @@ else
   echo "Director X FFmpeg security patch does not apply cleanly." >&2
   exit 2
 fi
+$sourceTagPatchBlock
 bash ./nix-android.sh -p android-r27d$skipFfmpeg --enable-libass --enable-libjxl --enable-android-media-codec --enable-android-zlib --enable-openh264 --jobs=8
 "@
 
