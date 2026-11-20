@@ -160,11 +160,6 @@ grep -q 'av_encryption_init_info_append_side_data' "${FFMPEG_SOURCE}/libavutil/e
 grep -q 'pssh_side_data' "${FFMPEG_SOURCE}/libavformat/mov.c"
 grep -q 'if (!fromlen)' "${FFMPEG_SOURCE}/libavutil/avstring.c"
 grep -Fq 'memset(&list->messages[list->nb_messages]' "${FFMPEG_SOURCE}/libavcodec/cbs_sei.c"
-'''
-path.write_text(text.replace(anchor, insert + anchor), encoding="utf-8")
-print("Prepared pinned FFmpeg security backports.")
-PY
-
 grep -q 'ptr_linesize = linesize' "${FFMPEG_SOURCE}/libavcodec/gif.c"
 grep -q 'ptrdiff_t' "${FFMPEG_SOURCE}/libavcodec/sgienc.c"
 grep -q 'av_size_mult(s->current_frame.nb_units' "${FFMPEG_SOURCE}/libavcodec/vvc/refs.c"
@@ -172,4 +167,9 @@ grep -q 'memcpy(lut, ctx->c23lut, 256)' "${FFMPEG_SOURCE}/libavcodec/sanm.c"
 grep -q 'Unsupported bit depth' "${FFMPEG_SOURCE}/libavcodec/dpxenc.c"
 grep -q 'src->width != avctx->width' "${FFMPEG_SOURCE}/libavcodec/encode.c"
 grep -q 's->block_len > 1024 \* 1024' "${FFMPEG_SOURCE}/libavcodec/interplayacm.c"
+'''
+path.write_text(text.replace(anchor, insert + anchor), encoding="utf-8")
+print("Prepared pinned FFmpeg security backports.")
+PY
+
 bash -n "$source_file"
