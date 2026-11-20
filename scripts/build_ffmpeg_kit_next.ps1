@@ -24,12 +24,9 @@ if ($LASTEXITCODE -ne 0 -or $actualKitCommit -ne $expectedKitCommit) {
 $patchPath = (Resolve-Path -LiteralPath (
         Join-Path $PSScriptRoot "..\third_party\ffmpeg-kit-next\directorx-security.patch"
     ) -ErrorAction Stop).Path
-$candidatePinPatchPath = $null
-if ($FfmpegTag -eq "n8.1.3") {
-    $candidatePinPatchPath = (Resolve-Path -LiteralPath (
-            Join-Path $PSScriptRoot "..\third_party\ffmpeg-kit-next\ffmpeg-source-tag-n8.1.3.patch"
-        ) -ErrorAction Stop).Path
-}
+$candidatePinPatchPath = (Resolve-Path -LiteralPath (
+        Join-Path $PSScriptRoot "..\third_party\ffmpeg-kit-next\ffmpeg-source-tag-n8.1.3.patch"
+    ) -ErrorAction Stop).Path
 
 function ConvertTo-WslPath([string]$value) {
     $shellValue = $value.Replace("'", "'\''")
@@ -49,10 +46,9 @@ $patchWsl = ConvertTo-WslPath $patchPath
 $sourceLiteral = ConvertTo-WslShellLiteral $sourceWsl
 $patchLiteral = ConvertTo-WslShellLiteral $patchWsl
 
-$sourceTagPatchBlock = ""
+$candidatePinPatchWsl = ConvertTo-WslPath $candidatePinPatchPath
+$candidatePinPatchLiteral = ConvertTo-WslShellLiteral $candidatePinPatchWsl
 if ($FfmpegTag -eq "n8.1.3") {
-    $candidatePinPatchWsl = ConvertTo-WslPath $candidatePinPatchPath
-    $candidatePinPatchLiteral = ConvertTo-WslShellLiteral $candidatePinPatchWsl
     $sourceTagPatchBlock = @"
 if git apply --reverse --check $candidatePinPatchLiteral >/dev/null 2>&1; then
   :
@@ -61,6 +57,12 @@ elif git apply --check $candidatePinPatchLiteral; then
 else
   echo "Director X FFmpeg 8.1.3 source-pin patch does not apply cleanly." >&2
   exit 3
+fi
+"@
+} else {
+    $sourceTagPatchBlock = @"
+if git apply --reverse --check $candidatePinPatchLiteral >/dev/null 2>&1; then
+  git apply --reverse $candidatePinPatchLiteral
 fi
 "@
 }
