@@ -177,7 +177,8 @@ if marker in text:
 anchor = "# SET BUILD OPTIONS"
 if text.count(anchor) != 1:
     raise SystemExit("Expected exactly one FFmpeg build-options anchor; refusing an ambiguous edit.")
-insert = r'''# Director X security backports for FFmpeg 9.0.2:
+insert = r'''export LDFLAGS="${LDFLAGS} -Wl,-z,max-page-size=16384 -Wl,-z,common-page-size=16384"
+# Director X security backports for FFmpeg 9.0.2:
 # CVE-2026-107678: iterative free plus append-in-place PSSH side data.
 # CVE-2026-107676: initialize all HDR10+ serialized payload bits.
 # CVE-2026-107677: reject empty search strings in av_strireplace.
@@ -189,10 +190,6 @@ FFMPEG_SECURITY_COMMITS=(
   969c7eb091989a664cb7bf66a1f02051cc46cb52
   2c2f6e96e31795ae95a8f8323a493ffbc493111f
   ed27bfcbbbc0872c0195eaf4dd2c0c93b9f1778e
-  26c2980980295e5516f308c5a2792d2a72e43eae
-  c6e5b6105aa13f6b0df2a646da608078cfe52d79
-  aa5fd7d287db4f469fdcbe444f7f9f38c8c289c7
-  6ecaddb9c1d59cf7f5de16017122fecb2fa0c67c
 )
 for fix in "${FFMPEG_SECURITY_COMMITS[@]}"; do
   if ! git -C "${ffmpeg_source_dir}" cat-file -e "${fix}^{commit}" 2>/dev/null; then
@@ -201,8 +198,8 @@ for fix in "${FFMPEG_SECURITY_COMMITS[@]}"; do
   if git -C "${ffmpeg_source_dir}" merge-base --is-ancestor "${fix}" HEAD; then
     continue
   fi
-  git -C "${ffmpeg_source_dir}" show --format= "${fix}" | git -C "${ffmpeg_source_dir}" apply --check -
-  git -C "${ffmpeg_source_dir}" show --format= "${fix}" | git -C "${ffmpeg_source_dir}" apply -
+  git -C "${ffmpeg_source_dir}" show --format= "${fix}" | git -C "${ffmpeg_source_dir}" apply --check - || exit 1
+  git -C "${ffmpeg_source_dir}" show --format= "${fix}" | git -C "${ffmpeg_source_dir}" apply - || exit 1
 done
 # Port fork security fixes onto the exact n9.0.2 source; do not cherry-pick
 # incompatible fork-only context or change upstream library version macros.
@@ -312,19 +309,8 @@ helper = """static int mov_append_pssh_side_data(MOVContext *c, AVStream *st,
 """
 if s.count(anchor) != 1: raise SystemExit('PSSH helper anchor mismatch')
 s = s.replace(anchor, helper + anchor)
-old_decl = """    AVEncryptionInitInfo *info, *old_init_info;
-    uint8_t **key_ids;
-    AVStream *st;
-    const AVPacketSideData *old_side_data;
-    uint8_t *side_data, *extra_data;
-    size_t side_data_size;"""
-new_decl = """    AVEncryptionInitInfo *info;
-    uint8_t **key_ids;
-    AVStream *st;
-    uint8_t *extra_data;"""
-if s.count(old_decl) != 1: raise SystemExit('PSSH declaration mismatch')
-s = s.replace(old_decl, new_decl)
-import re
+s = s.replace("AVEncryptionInitInfo *info, *old_init_info;", "AVEncryptionInitInfo *info;")
+s = s.replace("    const AVPacketSideData *old_side_data;\\n    uint8_t *side_data, *extra_data;\\n    size_t side_data_size;", "    uint8_t *extra_data;")
 pattern = r"    // If there is existing initialization data, append to the list\..*?        av_free\(side_data\);"
 replacement = """    ret = mov_append_pssh_side_data(c, st, info);
     if (ret < 0)
@@ -347,19 +333,20 @@ edit('libavcodec/cbs_sei.c', '    ++list->nb_messages;\n    return 0;\n',
 edit('libavcodec/sanm.c', '        bytestream2_get_bufferu(gb, ctx->c23lut, 256);\n',
      '        bytestream2_get_bufferu(gb, ctx->c23lut, 256);\n        memcpy(lut, ctx->c23lut, 256);\n', 'SANM LUT')
 FFMPEG_SECURITY_PY
-git -C "${ffmpeg_source_dir}" diff --check
-grep -q 'while (info)' "${ffmpeg_source_dir}/libavutil/encryption_info.c"
-grep -q 'mov_append_pssh_side_data' "${ffmpeg_source_dir}/libavformat/mov.c"
-grep -q 'pssh_side_data' "${ffmpeg_source_dir}/libavformat/mov.c"
-grep -q 'if (!fromlen)' "${ffmpeg_source_dir}/libavutil/avstring.c"
-grep -Fq 'memset(&list->messages[list->nb_messages]' "${ffmpeg_source_dir}/libavcodec/cbs_sei.c"
-grep -q 'ptr_linesize = linesize' "${ffmpeg_source_dir}/libavcodec/gif.c"
-grep -q 'ptrdiff_t' "${ffmpeg_source_dir}/libavcodec/sgienc.c"
-grep -q 'av_size_mult(s->current_frame.nb_units' "${ffmpeg_source_dir}/libavcodec/vvc/refs.c"
-grep -q 'memcpy(lut, ctx->c23lut, 256)' "${ffmpeg_source_dir}/libavcodec/sanm.c"
-grep -q 'Unsupported bit depth' "${ffmpeg_source_dir}/libavcodec/dpxenc.c"
-grep -q 'src->width != avctx->width' "${ffmpeg_source_dir}/libavcodec/encode.c"
-grep -q 's->block_len > 1024 \* 1024' "${ffmpeg_source_dir}/libavcodec/interplayacm.c"
+if [[ $? -ne 0 ]]; then exit 1; fi
+git -C "${ffmpeg_source_dir}" diff --check || exit 1
+grep -q 'while (info)' "${ffmpeg_source_dir}/libavutil/encryption_info.c" || exit 1
+grep -q 'mov_append_pssh_side_data' "${ffmpeg_source_dir}/libavformat/mov.c" || exit 1
+grep -q 'pssh_side_data' "${ffmpeg_source_dir}/libavformat/mov.c" || exit 1
+grep -q 'if (!fromlen)' "${ffmpeg_source_dir}/libavutil/avstring.c" || exit 1
+grep -Fq 'memset(&list->messages[list->nb_messages]' "${ffmpeg_source_dir}/libavcodec/cbs_sei.c" || exit 1
+grep -q 'ptr_linesize = linesize' "${ffmpeg_source_dir}/libavcodec/gif.c" || exit 1
+grep -q 'ptrdiff_t' "${ffmpeg_source_dir}/libavcodec/sgienc.c" || exit 1
+grep -q 'av_size_mult(s->current_frame.nb_units' "${ffmpeg_source_dir}/libavcodec/vvc/refs.c" || exit 1
+grep -q 'memcpy(lut, ctx->c23lut, 256)' "${ffmpeg_source_dir}/libavcodec/sanm.c" || exit 1
+grep -q 'Unsupported bit depth' "${ffmpeg_source_dir}/libavcodec/dpxenc.c" || exit 1
+grep -q 'src->width != avctx->width' "${ffmpeg_source_dir}/libavcodec/encode.c" || exit 1
+grep -q 's->block_len > 1024 \* 1024' "${ffmpeg_source_dir}/libavcodec/interplayacm.c" || exit 1
 '''
 path.write_text(text.replace(anchor, insert + anchor).rstrip() + "\n", encoding="utf-8")
 print("Prepared pinned FFmpeg security backports.")
