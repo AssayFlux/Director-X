@@ -186,6 +186,10 @@ insert = r'''# Director X security backports for FFmpeg 9.0.2:
 # SGI, SANM, Interplay ACM and DPX boundary/initialization fixes.
 ffmpeg_source_dir="$PWD"
 FFMPEG_SECURITY_COMMITS=(
+  # CVE-2026-66036: hqdn3d dynamic frame-size allocation/validation.
+  5d7112c60e6f0f0742ce47d448e6da0718a70f4c
+  # CVE-2026-65704: prevent TY Series2 AC-3 packet-size underflow.
+  de771bd52774a52d45b0e2c82e56995a1ef40df7
   969c7eb091989a664cb7bf66a1f02051cc46cb52
   d1434518fbd03789e3e5dc0657a7a9f1123ce074
   71403a21b02a92b925e26e609e9bd3e48df451cf
@@ -215,6 +219,11 @@ grep -q 'while (info)' "${ffmpeg_source_dir}/libavutil/encryption_info.c"
 grep -q 'av_encryption_init_info_append_side_data' "${ffmpeg_source_dir}/libavutil/encryption_info.c"
 grep -q 'pssh_side_data' "${ffmpeg_source_dir}/libavformat/mov.c"
 grep -q 'if (!fromlen)' "${ffmpeg_source_dir}/libavutil/avstring.c"
+# Confirm the two post-8.1.2 high-severity fixes are present in the actual
+# patched FFmpeg source tree before any Android ABI compilation begins.
+grep -Fq 'strcmp(link->dst->filter->name, "hqdn3d")' "${ffmpeg_source_dir}/libavfilter/avfilter.c"
+grep -Fq 'if (in->width != s->width || in->height != s->height)' "${ffmpeg_source_dir}/libavfilter/vf_hqdn3d.c"
+grep -Fq 'pkt->size -= FFMIN(pkt->size, 2)' "${ffmpeg_source_dir}/libavformat/ty.c"
 grep -Fq 'memset(&list->messages[list->nb_messages]' "${ffmpeg_source_dir}/libavcodec/cbs_sei.c"
 grep -q 'ptr_linesize = linesize' "${ffmpeg_source_dir}/libavcodec/gif.c"
 grep -q 'ptrdiff_t' "${ffmpeg_source_dir}/libavcodec/sgienc.c"
