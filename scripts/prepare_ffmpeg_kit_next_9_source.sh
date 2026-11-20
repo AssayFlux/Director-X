@@ -313,40 +313,19 @@ new_decl = '''    AVEncryptionInitInfo *info;
     uint8_t *extra_data;'''
 if s.count(old_decl) != 1: raise SystemExit('PSSH declaration mismatch')
 s = s.replace(old_decl, new_decl)
-old_logic = '''    // If there is existing initialization data, append to the list.
-    old_side_data = av_packet_side_data_get(st->codecpar->coded_side_data, st->codecpar->nb_coded_side_data,
-                                            AV_PKT_DATA_ENCRYPTION_INIT_INFO);
-    if (old_side_data) {
-        old_init_info = av_encryption_init_info_get_side_data(old_side_data->data, old_side_data->size);
-        if (old_init_info) {
-            // Append to the end of the list.
-            for (AVEncryptionInitInfo *cur = old_init_info;; cur = cur->next) {
-                if (!cur->next) { cur->next = info; break; }
-            }
-            info = old_init_info;
-        } else {
-            ret = AVERROR(ENOMEM);
-            goto finish;
-        }
-    }
-    side_data = av_encryption_init_info_add_side_data(info, &side_data_size);
-    if (!side_data) { ret = AVERROR(ENOMEM); goto finish; }
-    if (!av_packet_side_data_add(&st->codecpar->coded_side_data,
-                                 &st->codecpar->nb_coded_side_data,
-                                 AV_PKT_DATA_ENCRYPTION_INIT_INFO,
-                                 side_data, side_data_size, 0))
-        av_free(side_data);'''
-new_logic = '''    ret = mov_append_pssh_side_data(c, st, info);
+import re
+pattern = r"    // If there is existing initialization data, append to the list\\..*?        av_free\\(side_data\\);"
+replacement = """    ret = mov_append_pssh_side_data(c, st, info);
     if (ret < 0)
-        goto finish;'''
-if s.count(old_logic) != 1: raise SystemExit('PSSH append block mismatch')
-s = s.replace(old_logic, new_logic)
+        goto finish;"""
+s, replaced = re.subn(pattern, replacement, s, flags=re.S)
+if replaced != 1: raise SystemExit(f"PSSH append block replacement count: {replaced}")
 mov.write_text(s, encoding='utf-8')
 
 edit('libavformat/isom.h', '    MOVFragmentIndex frag_index;\n    int atom_depth;',
-     '    MOVFragmentIndex frag_index;\n    uint8_t *pssh_side_data;\n    unsigned int pssh_side_data_allocated;\n    int atom_depth;', 'PSSH context')
+     '    MOVFragmentIndex frag_index;\n    uint8_t *pssh_side_data;\n    AVStream *pssh_stream;\n    unsigned int pssh_side_data_allocated;\n    int atom_depth;', 'PSSH context')
 edit('libavformat/mov.c', '    mov->found_mdat = 0;\n',
-     '    mov->found_mdat = 0;\n    mov->pssh_side_data = NULL;\n    mov->pssh_side_data_allocated = 0;\n', 'PSSH reset')
+     '    mov->found_mdat = 0;\n    mov->pssh_side_data = NULL;\n    mov->pssh_stream = NULL;\n    mov->pssh_side_data_allocated = 0;\n', 'PSSH reset')
 edit('libavcodec/vvc/refs.c',
      '        frame->rpl = av_refstruct_allocz(s->current_frame.nb_units * sizeof(RefPicListTab));\n',
      '        size_t rpl_size;\n        if (av_size_mult(s->current_frame.nb_units, sizeof(RefPicListTab), &rpl_size) < 0)\n            goto fail;\n        frame->rpl = av_refstruct_allocz(rpl_size);\n', 'VVC allocation')
