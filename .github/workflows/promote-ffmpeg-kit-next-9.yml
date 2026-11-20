@@ -1,0 +1,59 @@
+name: Promote FFmpegKitNext 9.0.2 artifact
+
+on:
+  workflow_run:
+    workflows: ["Build and verify FFmpegKitNext 9.0.2"]
+    types: [completed]
+    branches: [Alpha]
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  promote:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out the exact built source
+        uses: actions/checkout@v4
+        with:
+          ref: Alpha
+          fetch-depth: 0
+
+      - name: Reject stale build evidence
+        env:
+          BUILT_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$BUILT_SHA"
+
+      - name: Download verified native build evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: ffmpeg-kit-next-9.0.2-evidence-${{ github.event.workflow_run.id }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: build-evidence
+
+      - name: Promote AAR, POM, lock and app references
+        env:
+          BUILD_RUN_ID: ${{ github.event.workflow_run.id }}
+          BUILD_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          BUILD_COMPLETED_AT: ${{ github.event.workflow_run.updated_at }}
+        run: |
+          python3 scripts/promote_ffmpeg_kit_next_9_artifact.py \
+            --artifact-dir build-evidence \
+            --run-id "$BUILD_RUN_ID" \
+            --head-sha "$BUILD_HEAD_SHA" \
+            --built-at "$BUILD_COMPLETED_AT"
+          python3 scripts/generate_capability_registry.py
+          ./gradlew :app:verifyFfmpegKitAar
+          git diff --check
+
+      - name: Commit promoted FFmpeg 9.0.2 dependency to Alpha
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "build(ffmpeg): vendor verified FFmpegKitNext 9.0.2 AAR"
+          git push origin HEAD:Alpha
