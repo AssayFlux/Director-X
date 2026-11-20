@@ -282,7 +282,6 @@ done
 python3 - "${ffmpeg_source_dir}" <<'FFMPEG_SECURITY_PY'
 from pathlib import Path
 import re
-import subprocess
 import sys
 root = Path(sys.argv[1])
 def edit(path, old, new, label):
@@ -296,15 +295,25 @@ def edit(path, old, new, label):
         raise SystemExit(f'{label}: expected one original or corrected anchor in {path}; old={s.count(old)} new={s.count(new)}')
     p.write_text(s.replace(old, new), encoding='utf-8')
 
-# Port the ProRes worst-case slice reserve to the exact 9.0.2 source before
-# applying the follow-up 64-bit frame-size fix (439b452f).
+def remove(path, block, label):
+    p = root / path
+    s = p.read_text(encoding='utf-8')
+    count = s.count(block)
+    if count == 0:
+        return
+    if count != 1:
+        raise SystemExit(f'{label}: expected one removable block in {path}, found {count}')
+    p.write_text(s.replace(block, ''), encoding='utf-8')
+
+# Port the ProRes worst-case slice reserve and 64-bit frame-size fix to
+# the exact 9.0.2 source; upstream commit 439b452f assumes 96eea382 already applied.
 edit('libavcodec/proresenc_kostya.c',
      '    int max_slice_size = (ctx->frame_size_upper_bound - 200) / (ctx->pictures_per_frame * ctx->slices_per_picture + 1);\n    uint8_t frame_flags;\n',
      '    int max_slice_size = (ctx->frame_size_upper_bound - 200) / (ctx->pictures_per_frame * ctx->slices_per_picture + 1);\n    int slice_size_upper_bound = ctx->mbs_per_slice * (ctx->chroma_factor == CFACTOR_Y444 ? 768 : 512) * 8;\n    uint8_t frame_flags;\n',
      'ProRes slice upper-bound declaration')
 edit('libavcodec/proresenc_kostya.c',
      '    uint8_t frame_flags;\n\n    ctx->pic = pic;\n',
-     '    uint8_t frame_flags;\n\n    if (ctx->alpha_bits)\n        slice_size_upper_bound += (ctx->mbs_per_slice * 256 * (1 + ctx->alpha_bits + 1) + 7) >> 3;\n\n    ctx->pic = pic;\n',
+     '    uint8_t frame_flags;\n\n    if (ctx->alpha_bits)\n        slice_size_upper_bound += ctx->mbs_per_slice * 256 * (1 + ctx->alpha_bits + 1) + 7 >> 3;\n\n    ctx->pic = pic;\n',
      'ProRes alpha slice upper bound')
 edit('libavcodec/proresenc_kostya.c',
      '    pkt_size = ctx->frame_size_upper_bound;\n',
@@ -318,22 +327,21 @@ edit('libavcodec/proresenc_kostya.c',
      '                    delta = FFMAX(delta, 2 * max_slice_size);\n',
      '                    delta = FFMAX(delta, slice_size_upper_bound);\n',
      'ProRes packet growth bound')
-
-prores_fix = '439b452f9fe916a9f7d8788ab6afee8fac846b0b'
-if subprocess.run(['git', '-C', str(root), 'cat-file', '-e', f'{prores_fix}^{{commit}}'],
-                  stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode:
-    subprocess.run(['git', '-C', str(root), 'fetch', '--no-tags', 'origin', prores_fix], check=True)
-prores_patch = subprocess.check_output(['git', '-C', str(root), 'show', '--format=', prores_fix])
-apply_check = subprocess.run(['git', '-C', str(root), 'apply', '--check', '-'],
-                             input=prores_patch, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-if apply_check.returncode == 0:
-    subprocess.run(['git', '-C', str(root), 'apply', '-'], input=prores_patch, check=True)
-else:
-    reverse_check = subprocess.run(['git', '-C', str(root), 'apply', '--reverse', '--check', '-'],
-                                   input=prores_patch, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    if reverse_check.returncode != 0:
-        raise SystemExit('ProRes 64-bit frame-size backport is neither applicable nor already applied')
-    print('ProRes 64-bit frame-size backport already present.')
+edit('libavcodec/proresenc_kostya.c',
+     '    int slice_size_upper_bound = ctx->mbs_per_slice * (ctx->chroma_factor == CFACTOR_Y444 ? 768 : 512) * 8;\n',
+     '    int slice_size_upper_bound = ctx->slice_size_upper_bound;\n',
+     'ProRes shared slice bound')
+remove('libavcodec/proresenc_kostya.c',
+       '    if (ctx->alpha_bits)\n        slice_size_upper_bound += ctx->mbs_per_slice * 256 * (1 + ctx->alpha_bits + 1) + 7 >> 3;\n\n',
+       'ProRes duplicate alpha bound')
+edit('libavcodec/proresenc_kostya_common.h',
+     '    int frame_size_upper_bound;\n',
+     '    int frame_size_upper_bound;\n    int slice_size_upper_bound;\n',
+     'ProRes context slice bound')
+edit('libavcodec/proresenc_kostya_common.c',
+     '    ctx->frame_size_upper_bound = (ctx->pictures_per_frame *\n                                   ctx->slices_per_picture + 1) *\n                                  (2 + 2 * ctx->num_planes +\n                                   (mps * ctx->bits_per_mb) / 8)\n                                  + 200;\n\n    if (ctx->alpha_bits) {\n         // The alpha plane is run-coded and might exceed the bit budget.\n         ctx->frame_size_upper_bound += (ctx->pictures_per_frame *\n                                         ctx->slices_per_picture + 1) *\n         /* num pixels per slice */     (ctx->mbs_per_slice * 256 *\n         /* bits per pixel */            (1 + ctx->alpha_bits + 1) + 7 >> 3);\n    }\n',
+     '    int64_t frame_size_upper_bound = (int64_t)(ctx->pictures_per_frame *\n                                   ctx->slices_per_picture + 1) *\n                                  (2 + 2 * ctx->num_planes +\n                                   (mps * ctx->bits_per_mb) / 8)\n                                  + 200;\n    ctx->slice_size_upper_bound = mps * (ctx->chroma_factor == CFACTOR_Y444 ? 768 : 512) * 8;\n\n    if (ctx->alpha_bits) {\n        int alpha_slice_size = (mps * 256 * (1 + ctx->alpha_bits + 1) + 7) >> 3;\n        frame_size_upper_bound += (int64_t)(ctx->pictures_per_frame *\n                                            ctx->slices_per_picture + 1) * alpha_slice_size;\n        ctx->slice_size_upper_bound += alpha_slice_size;\n    }\n\n    if (frame_size_upper_bound + ctx->slice_size_upper_bound + FF_INPUT_BUFFER_MIN_SIZE > INT_MAX) {\n        av_log(avctx, AV_LOG_ERROR, "Frame too large to encode\\n");\n        return AVERROR(EINVAL);\n    }\n    ctx->frame_size_upper_bound = frame_size_upper_bound;\n',
+     'ProRes 64-bit frame-size bound')
 
 # PSSH records are appended in place with tracked capacity: O(n) total work.
 mov = root / 'libavformat/mov.c'
