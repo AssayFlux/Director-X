@@ -82,17 +82,16 @@ $sourceCheckoutResetBlock = ""
 if (-not $PackageOnly) {
     $sourceCheckoutResetBlock = @"
 ffmpeg_source_dir=$ffmpegSourceLiteral
-if [[ -d "${ffmpeg_source_dir}/.git" ]]; then
-  current_ffmpeg_tag=$(git -C "${ffmpeg_source_dir}" describe --tags --exact-match HEAD 2>/dev/null || true)
-  if [[ "${current_ffmpeg_tag}" != "$FfmpegTag" ]]; then
-    rm -rf "${ffmpeg_source_dir}"
+if [[ -d "`$ffmpeg_source_dir/.git" ]]; then
+  current_ffmpeg_tag=`$(git -C "`$ffmpeg_source_dir" describe --tags --exact-match HEAD 2>/dev/null || true)
+  if [[ "`$current_ffmpeg_tag" != "$FfmpegTag" ]]; then
+    rm -rf "`$ffmpeg_source_dir"
   fi
-elif [[ -e "${ffmpeg_source_dir}" ]]; then
-  rm -rf "${ffmpeg_source_dir}"
+elif [[ -e "`$ffmpeg_source_dir" ]]; then
+  rm -rf "`$ffmpeg_source_dir"
 fi
 "@
 }
-
 $skipFfmpeg = if ($PackageOnly) { " --skip-ffmpeg" } else { "" }
 $command = @"
 set -e
