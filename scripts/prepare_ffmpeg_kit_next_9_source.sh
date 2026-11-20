@@ -99,13 +99,6 @@ print(f"#define FRIBIDI_UNICODE_MICRO_VERSION {micro}")
 """
 (path.parent / "gen-unicode-version.py").write_text(generator, encoding="utf-8")
 
-new = "./$(gen_unicode_version) unidata/ReadMe.txt unidata/BidiMirroring.txt > $@"
-if text.count(old) == 1:
-    path.write_text(text.replace(old, new), encoding="utf-8")
-elif text.count(new) == 1:
-    print("FriBidi Unicode generator recipe already corrected.")
-else:
-    raise SystemExit("Unexpected FriBidi Unicode generator recipe; refusing an ambiguous patch.")
 FRIBIDI_PY
 
 '''
