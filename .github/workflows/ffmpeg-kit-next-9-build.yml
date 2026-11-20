@@ -61,7 +61,7 @@ jobs:
           git -C ffmpeg-upstream fetch --force --tags origin
           git -C ffmpeg-upstream verify-tag n9.0.2
           git -C ffmpeg-upstream verify-tag --verbose n9.0.2 2>&1 | tee authenticity/tag-verification.txt
-          grep -F 'VALIDSIG DD1EC9E8DE085C629B3E1846B18E8928B3948D64' authenticity/tag-verification.txt
+          grep -E 'Primary key fingerprint: DD1E C9E8 DE08 5C62 9B3E[[:space:]]+1846 B18E 8928 B394 8D64' authenticity/tag-verification.txt
           echo "FFMPEG_RELEASE_COMMIT=$(git -C ffmpeg-upstream rev-parse 'n9.0.2^{commit}')" >> "$GITHUB_ENV"
 
       - name: Check out pinned FFmpegKitNext wrapper
