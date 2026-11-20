@@ -58,9 +58,11 @@ insert = '''# Director X build correction for FriBidi v1.0.16:
 printf 'FriBidi generator working directory: %s\\n' "$PWD"
 python3 - <<'FRIBIDI_PY' || return 1
 from pathlib import Path
+import re
 
 old = "./$(gen_unicode_version) $^ > $@"
-new = "./$(gen_unicode_version) unidata/ReadMe.txt unidata/BidiMirroring.txt > $@"
+new = "python3 ./gen-unicode-version.py unidata/ReadMe.txt > $@"
+dependency = "\\t\\t$(gen_unicode_version)\\n"
 for path in (Path("gen.tab/Makefile.in"), Path("gen.tab/Makefile")):
     if not path.is_file():
         raise SystemExit(f"Expected configured FriBidi generator file: {path}")
@@ -69,8 +71,30 @@ for path in (Path("gen.tab/Makefile.in"), Path("gen.tab/Makefile")):
         text = text.replace(old, new)
     elif text.count(new) != 1:
         raise SystemExit(f"Expected one original FriBidi generator recipe in {path}; old={text.count(old)} new={text.count(new)}")
+    if text.count(dependency) == 1:
+        text = text.replace(dependency, "")
     path.write_text(text, encoding="utf-8")
     print(f"Patched FriBidi generator recipe in {path}")
+
+generator = """#!/usr/bin/env python3
+import pathlib
+import re
+import sys
+
+source = pathlib.Path(sys.argv[1]).read_text(encoding="utf-8")
+match = re.search(r"\\bVersion\\s+(\\d+)\\.(\\d+)\\.(\\d+)\\b", source)
+if not match:
+    match = re.search(r"\\bUnicode\\s+(\\d+)\\.(\\d+)\\.(\\d+)\\b", source)
+if not match:
+    raise SystemExit("Could not determine Unicode version from pinned FriBidi ReadMe.txt")
+major, minor, micro = map(int, match.groups())
+print(f'#define FRIBIDI_UNICODE_VERSION "{major}.{minor}.{micro}"')
+print(f"#define FRIBIDI_UNICODE_MAJOR_VERSION {major}")
+print(f"#define FRIBIDI_UNICODE_MINOR_VERSION {minor}")
+print(f"#define FRIBIDI_UNICODE_MICRO_VERSION {micro}")
+"""
+Path("gen.tab/gen-unicode-version.py").write_text(generator, encoding="utf-8")
+print("Installed bounded Python FriBidi Unicode-version generator.")
 FRIBIDI_PY
 
 '''
