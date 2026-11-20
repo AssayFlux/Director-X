@@ -345,8 +345,12 @@ if gif_text.count(gif_old) != 2:
 gif_path.write_text(gif_text.replace(gif_old, '            ptr += ptr_linesize;\n'), encoding='utf-8')
 edit('libavcodec/sgienc.c', '    unsigned int width, height, depth, dimension;\n    unsigned int bytes_per_channel, pixmax, put_be;\n', '    int width, height, depth, dimension;\n    int bytes_per_channel, pixmax, put_be;\n', 'SGI signed dimensions')
 edit('libavcodec/sgienc.c', '    if ((ret = ff_alloc_packet(avctx, pkt, bytes_per_channel * length)) < 0)\n', '    if ((ret = ff_alloc_packet(avctx, pkt, (int64_t)bytes_per_channel * length)) < 0)\n', 'SGI packet size')
-edit('libavcodec/sgienc.c', 'p->data[0] + p->linesize[0] * (height - 1)', 'p->data[0] + (ptrdiff_t)p->linesize[0] * (height - 1)', 'SGI signed stride one')
-edit('libavcodec/sgienc.c', 'p->data[0] + p->linesize[0] * (height - 1)', 'p->data[0] + (ptrdiff_t)p->linesize[0] * (height - 1)', 'SGI signed stride two')
+sgi_path = root / 'libavcodec/sgienc.c'
+sgi_text = sgi_path.read_text(encoding='utf-8')
+sgi_old = 'p->data[0] + p->linesize[0] * (height - 1)'
+if sgi_text.count(sgi_old) != 2:
+    raise SystemExit(f'SGI signed-stride anchors: {sgi_text.count(sgi_old)}')
+sgi_path.write_text(sgi_text.replace(sgi_old, 'p->data[0] + (ptrdiff_t)p->linesize[0] * (height - 1)'), encoding='utf-8')
 edit('libavcodec/dpxenc.c', '        if (avctx->bits_per_raw_sample)\n            s->bits_per_component = avctx->bits_per_raw_sample;\n', '        if (avctx->bits_per_raw_sample == 10) {\n            s->bits_per_component = 10;\n        } else if (avctx->bits_per_raw_sample && avctx->bits_per_raw_sample != 16) {\n            av_log(avctx, AV_LOG_ERROR, "Unsupported bit depth: %d\\n", avctx->bits_per_raw_sample);\n            return AVERROR(EINVAL);\n        }\n', 'DPX RGB48 depth')
 edit('libavcodec/interplayacm.c', '    s->block_len = s->rows * s->cols;\n', '    s->block_len = s->rows * s->cols;\n    if (s->block_len > 1024 * 1024) {\n        av_log(avctx, AV_LOG_ERROR, "Block of %d samples is too large\\n", s->block_len);\n        return AVERROR_INVALIDDATA;\n    }\n', 'Interplay ACM allocation cap')
 FFMPEG_SECURITY_PY
