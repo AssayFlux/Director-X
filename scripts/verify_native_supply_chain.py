@@ -28,6 +28,7 @@ REQUIRED_REACHABLE_CVES = {
     "CVE-2026-66037",
     "CVE-2026-66038",
     "CVE-2026-64832",
+    "CVE-2026-120210",
 }
 REQUIRED_CVE_COMPONENTS = {
     "CVE-2026-64830": {"vobsub_demuxer"},
@@ -40,6 +41,7 @@ REQUIRED_CVE_COMPONENTS = {
     "CVE-2026-66037": {"iamf_demuxer"},
     "CVE-2026-66038": {"zlib_decoder"},
     "CVE-2026-64832": set(),
+    "CVE-2026-120210": {"imf_demuxer"},
 }
 REQUIRED_PATCH_FLAGS = {
     "--disable-demuxer=vobsub",
@@ -53,6 +55,7 @@ REQUIRED_PATCH_FLAGS = {
     "--disable-decoder=rasc",
     "--disable-demuxer=iamf",
     "--disable-decoder=zlib",
+    "--disable-demuxer=imf",
 }
 
 
@@ -273,7 +276,7 @@ def write_json(path: Path, value: dict) -> None:
 def self_test(lock: dict) -> None:
     validate(lock)
     affected = copy.deepcopy(lock)
-    affected_id = sorted(REQUIRED_REACHABLE_CVES)[0]
+    affected_id = "CVE-2026-64830"
     next(item for item in affected["advisories"] if item["id"] == affected_id)["status"] = "affected"
     try:
         validate(affected)

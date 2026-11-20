@@ -198,8 +198,6 @@ FFMPEG_SECURITY_COMMITS=(
   b8f159858e2fd29dae4fa34d9e713bbf9bbf190e
   0bfa350291b2118f6d590263dc1ee9cea766c0f1
   bc896c613ec0d4ad0108d62fbdda0196f69e7121
-  96eea3824100b195294ebba9570c6a66427a4920
-  439b452f9fe916a9f7d8788ab6afee8fac846b0b
   ab28d57ba2ec07b41b4a60ed8806b13a39ec86fe
   733bec3e19759520ccdbeb6c3c0cae280bbe6dc5
   a13e27336a61a3452e1ab8b4bb132c4174c67498
@@ -284,6 +282,7 @@ done
 python3 - "${ffmpeg_source_dir}" <<'FFMPEG_SECURITY_PY'
 from pathlib import Path
 import re
+import subprocess
 import sys
 root = Path(sys.argv[1])
 def edit(path, old, new, label):
@@ -296,6 +295,45 @@ def edit(path, old, new, label):
     if s.count(old) != 1:
         raise SystemExit(f'{label}: expected one original or corrected anchor in {path}; old={s.count(old)} new={s.count(new)}')
     p.write_text(s.replace(old, new), encoding='utf-8')
+
+# Port the ProRes worst-case slice reserve to the exact 9.0.2 source before
+# applying the follow-up 64-bit frame-size fix (439b452f).
+edit('libavcodec/proresenc_kostya.c',
+     '    int max_slice_size = (ctx->frame_size_upper_bound - 200) / (ctx->pictures_per_frame * ctx->slices_per_picture + 1);\n    uint8_t frame_flags;\n',
+     '    int max_slice_size = (ctx->frame_size_upper_bound - 200) / (ctx->pictures_per_frame * ctx->slices_per_picture + 1);\n    int slice_size_upper_bound = ctx->mbs_per_slice * (ctx->chroma_factor == CFACTOR_Y444 ? 768 : 512) * 8;\n    uint8_t frame_flags;\n',
+     'ProRes slice upper-bound declaration')
+edit('libavcodec/proresenc_kostya.c',
+     '    uint8_t frame_flags;\n\n    ctx->pic = pic;\n',
+     '    uint8_t frame_flags;\n\n    if (ctx->alpha_bits)\n        slice_size_upper_bound += (ctx->mbs_per_slice * 256 * (1 + ctx->alpha_bits + 1) + 7) >> 3;\n\n    ctx->pic = pic;\n',
+     'ProRes alpha slice upper bound')
+edit('libavcodec/proresenc_kostya.c',
+     '    pkt_size = ctx->frame_size_upper_bound;\n',
+     '    pkt_size = ctx->frame_size_upper_bound + slice_size_upper_bound;\n',
+     'ProRes initial packet reserve')
+edit('libavcodec/proresenc_kostya.c',
+     '                if (pkt_size <= buf - orig_buf + 2 * max_slice_size) {\n',
+     '                if (pkt_size - (buf - orig_buf) < slice_size_upper_bound) {\n',
+     'ProRes packet reserve condition')
+edit('libavcodec/proresenc_kostya.c',
+     '                    delta = FFMAX(delta, 2 * max_slice_size);\n',
+     '                    delta = FFMAX(delta, slice_size_upper_bound);\n',
+     'ProRes packet growth bound')
+
+prores_fix = '439b452f9fe916a9f7d8788ab6afee8fac846b0b'
+if subprocess.run(['git', '-C', str(root), 'cat-file', '-e', f'{prores_fix}^{{commit}}'],
+                  stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode:
+    subprocess.run(['git', '-C', str(root), 'fetch', '--no-tags', 'origin', prores_fix], check=True)
+prores_patch = subprocess.check_output(['git', '-C', str(root), 'show', '--format=', prores_fix])
+apply_check = subprocess.run(['git', '-C', str(root), 'apply', '--check', '-'],
+                             input=prores_patch, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+if apply_check.returncode == 0:
+    subprocess.run(['git', '-C', str(root), 'apply', '-'], input=prores_patch, check=True)
+else:
+    reverse_check = subprocess.run(['git', '-C', str(root), 'apply', '--reverse', '--check', '-'],
+                                   input=prores_patch, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if reverse_check.returncode != 0:
+        raise SystemExit('ProRes 64-bit frame-size backport is neither applicable nor already applied')
+    print('ProRes 64-bit frame-size backport already present.')
 
 # PSSH records are appended in place with tracked capacity: O(n) total work.
 mov = root / 'libavformat/mov.c'
@@ -466,6 +504,9 @@ grep -q 'memcpy(lut, ctx->c23lut, 256)' "${ffmpeg_source_dir}/libavcodec/sanm.c"
 grep -q 'Unsupported bit depth' "${ffmpeg_source_dir}/libavcodec/dpxenc.c" || exit 1
 grep -q 'ret = init_get_bits8(&s->gb, buf + HEADER_SIZE, buf_size - HEADER_SIZE)' "${ffmpeg_source_dir}/libavcodec/mpegaudiodec_template.c" || exit 1
 grep -q 'src->width != avctx->width' "${ffmpeg_source_dir}/libavcodec/encode.c" || exit 1
+grep -q 'ctx->slice_size_upper_bound = mps' "${ffmpeg_source_dir}/libavcodec/proresenc_kostya_common.c" || exit 1
+grep -q 'frame_size_upper_bound + ctx->slice_size_upper_bound' "${ffmpeg_source_dir}/libavcodec/proresenc_kostya.c" || exit 1
+grep -q 'Frame too large to encode' "${ffmpeg_source_dir}/libavcodec/proresenc_kostya_common.c" || exit 1
 grep -q 's->block_len > 1024 \* 1024' "${ffmpeg_source_dir}/libavcodec/interplayacm.c" || exit 1
 '''
 path.write_text(text.replace(anchor, insert + anchor).rstrip() + "\n", encoding="utf-8")

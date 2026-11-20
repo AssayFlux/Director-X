@@ -14,7 +14,7 @@
     "ffmpegRevision": "38b88335f99e76ed89ff3c93f877fdefce736c13",
     "ffmpegVersion": "8.1.2",
     "securityPatch": "third_party/ffmpeg-kit-next/directorx-security.patch",
-    "securityPatchSha256": "0dfaec621b5c1b8e37face076d3cc64a09cd098120921da1f4034d6bc8c8d080",
+    "securityPatchSha256": "9bef0a69f02c26bc7fa2620009ca15da962221dbd39342fb2466cbf9b4c6d4bc",
     "builtAt": "2026-08-02T00:00:00Z",
     "reviewUntil": "2026-10-31"
   },
@@ -142,29 +142,31 @@
     "profile": "directorx-disabled-format-surface",
     "reviewUntil": "2026-10-31",
     "disabledComponents": [
-      "vobsub_demuxer",
-      "tdsc_decoder",
-      "mace6_decoder",
+      "aax_demuxer",
       "adpcm_adx_decoder",
       "adx_demuxer",
-      "aax_demuxer",
-      "png_encoder",
       "apng_encoder",
-      "rasc_decoder",
       "iamf_demuxer",
+      "imf_demuxer",
+      "mace6_decoder",
+      "png_encoder",
+      "rasc_decoder",
+      "tdsc_decoder",
+      "vobsub_demuxer",
       "zlib_decoder"
     ],
     "requiredAdvisories": [
-      "CVE-2026-64830",
-      "CVE-2026-65703",
-      "CVE-2026-66039",
-      "CVE-2026-64835",
-      "CVE-2026-66040",
-      "CVE-2026-58049",
+      "CVE-2026-120210",
       "CVE-2026-12706",
+      "CVE-2026-58049",
+      "CVE-2026-64830",
+      "CVE-2026-64832",
+      "CVE-2026-64835",
+      "CVE-2026-65703",
       "CVE-2026-66037",
       "CVE-2026-66038",
-      "CVE-2026-64832"
+      "CVE-2026-66039",
+      "CVE-2026-66040"
     ],
     "reachability": {
       "CVE-2026-64832": {
@@ -181,17 +183,6 @@
   },
   "advisories": [
     {
-      "id": "CVE-2026-8461",
-      "component": "FFmpeg",
-      "severity": "HIGH",
-      "status": "fixed",
-      "fixedVersion": "8.1.2",
-      "rationale": "The shipped FFmpeg revision is 8.1.2, which contains the upstream fix.",
-      "reviewUntil": "2026-10-31",
-      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8461",
-      "disabledComponents": []
-    },
-    {
       "id": "CVE-2024-36617",
       "component": "FFmpeg",
       "severity": "MEDIUM",
@@ -203,6 +194,30 @@
       "disabledComponents": []
     },
     {
+      "id": "CVE-2026-120210",
+      "component": "FFmpeg",
+      "severity": "MEDIUM",
+      "status": "not_affected",
+      "rationale": "The IMF demuxer is disabled in the Director X profile with --disable-demuxer=imf; the native build verifier checks the exact configure option in each ABI.",
+      "reviewUntil": "2026-10-31",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-120210",
+      "disabledComponents": [
+        "imf_demuxer"
+      ]
+    },
+    {
+      "id": "CVE-2026-12706",
+      "component": "FFmpeg",
+      "severity": "HIGH",
+      "status": "not_affected",
+      "rationale": "The RASC decoder is disabled in the ClearCut security profile.",
+      "reviewUntil": "2026-10-31",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-12706",
+      "disabledComponents": [
+        "rasc_decoder"
+      ]
+    },
+    {
       "id": "CVE-2026-30999",
       "component": "FFmpeg",
       "severity": "UNKNOWN",
@@ -212,6 +227,18 @@
       "reviewUntil": "2026-10-31",
       "url": "https://ffmpeg.org/security.html",
       "disabledComponents": []
+    },
+    {
+      "id": "CVE-2026-58049",
+      "component": "FFmpeg",
+      "severity": "HIGH",
+      "status": "not_affected",
+      "rationale": "The RASC decoder is disabled in the ClearCut security profile.",
+      "reviewUntil": "2026-10-31",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-58049",
+      "disabledComponents": [
+        "rasc_decoder"
+      ]
     },
     {
       "id": "CVE-2026-64830",
@@ -226,28 +253,14 @@
       ]
     },
     {
-      "id": "CVE-2026-65703",
+      "id": "CVE-2026-64832",
       "component": "FFmpeg",
       "severity": "HIGH",
       "status": "not_affected",
-      "rationale": "The TDSC decoder is disabled in the ClearCut security profile.",
+      "rationale": "The shipped Android artifact does not build the NVIDIA NVDEC hardware-decoder path; the exact absent configure flags and review evidence are recorded under security.reachability.",
       "reviewUntil": "2026-10-31",
-      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-65703",
-      "disabledComponents": [
-        "tdsc_decoder"
-      ]
-    },
-    {
-      "id": "CVE-2026-66039",
-      "component": "FFmpeg",
-      "severity": "HIGH",
-      "status": "not_affected",
-      "rationale": "The MACE6 decoder is disabled in the ClearCut security profile.",
-      "reviewUntil": "2026-10-31",
-      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66039",
-      "disabledComponents": [
-        "mace6_decoder"
-      ]
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-64832",
+      "disabledComponents": []
     },
     {
       "id": "CVE-2026-64835",
@@ -264,40 +277,15 @@
       ]
     },
     {
-      "id": "CVE-2026-66040",
+      "id": "CVE-2026-65703",
       "component": "FFmpeg",
       "severity": "HIGH",
       "status": "not_affected",
-      "rationale": "The PNG and APNG encoders are disabled in the ClearCut security profile.",
+      "rationale": "The TDSC decoder is disabled in the ClearCut security profile.",
       "reviewUntil": "2026-10-31",
-      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66040",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-65703",
       "disabledComponents": [
-        "png_encoder",
-        "apng_encoder"
-      ]
-    },
-    {
-      "id": "CVE-2026-58049",
-      "component": "FFmpeg",
-      "severity": "HIGH",
-      "status": "not_affected",
-      "rationale": "The RASC decoder is disabled in the ClearCut security profile.",
-      "reviewUntil": "2026-10-31",
-      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-58049",
-      "disabledComponents": [
-        "rasc_decoder"
-      ]
-    },
-    {
-      "id": "CVE-2026-12706",
-      "component": "FFmpeg",
-      "severity": "HIGH",
-      "status": "not_affected",
-      "rationale": "The RASC decoder is disabled in the ClearCut security profile.",
-      "reviewUntil": "2026-10-31",
-      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-12706",
-      "disabledComponents": [
-        "rasc_decoder"
+        "tdsc_decoder"
       ]
     },
     {
@@ -325,13 +313,39 @@
       ]
     },
     {
-      "id": "CVE-2026-64832",
+      "id": "CVE-2026-66039",
       "component": "FFmpeg",
       "severity": "HIGH",
       "status": "not_affected",
-      "rationale": "The shipped Android artifact does not build the NVIDIA NVDEC hardware-decoder path; the exact absent configure flags and review evidence are recorded under security.reachability.",
+      "rationale": "The MACE6 decoder is disabled in the ClearCut security profile.",
       "reviewUntil": "2026-10-31",
-      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-64832",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66039",
+      "disabledComponents": [
+        "mace6_decoder"
+      ]
+    },
+    {
+      "id": "CVE-2026-66040",
+      "component": "FFmpeg",
+      "severity": "HIGH",
+      "status": "not_affected",
+      "rationale": "The PNG and APNG encoders are disabled in the ClearCut security profile.",
+      "reviewUntil": "2026-10-31",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66040",
+      "disabledComponents": [
+        "png_encoder",
+        "apng_encoder"
+      ]
+    },
+    {
+      "id": "CVE-2026-8461",
+      "component": "FFmpeg",
+      "severity": "HIGH",
+      "status": "fixed",
+      "fixedVersion": "8.1.2",
+      "rationale": "The shipped FFmpeg revision is 8.1.2, which contains the upstream fix.",
+      "reviewUntil": "2026-10-31",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8461",
       "disabledComponents": []
     }
   ]
