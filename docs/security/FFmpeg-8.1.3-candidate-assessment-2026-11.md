@@ -3,8 +3,8 @@
 **Status: preferred 8.x candidate; native security approval BLOCKED pending source and binary verification.**
 
 Date: 2026-11-20  
-Alpha baseline: `9eeb3ebf3cb009bcee623e35b36b3d398e480110`  
-Working branch: `work/ffmpeg-8.1.3-build-candidate`
+Alpha baseline: `e243c6e833796cc24203b7ed64f55085aaa5730a`  
+Status update: PR #119 merged into Alpha; source/patch CI checks passed on 2026-11-20.
 
 ## Decision
 
@@ -53,11 +53,11 @@ Three additional findings have a concrete mitigation in the Director X candidate
 
 | Advisory | Affected path | Candidate mitigation | Status |
 |---|---|---|---|
-| CVE-2026-125213 | PSD decoder; heap buffer overflow on 32-bit builds | Backport upstream guard rejecting `uncompressed_size > INT_MAX` before allocation/decode | Patch added; CI apply test pending |
+| CVE-2026-125213 | PSD decoder; heap buffer overflow on 32-bit builds | Backport upstream guard rejecting `uncompressed_size > INT_MAX` before allocation/decode | Backport patch and wrapper hook merged; CI apply/reverse passed on both n8.1.2 and n8.1.3 (run 44651701118) |
 | CVE-2026-125197 | LCL/ZLIB multithread decoder path | Existing profile disables the ZLIB decoder (`--disable-decoder=zlib`) | Must verify in configure transcript and final AAR |
 | CVE-2026-125218 | APNG encoder | Existing profile disables the APNG encoder (`--disable-encoder=apng`) | Must verify in configure transcript and final AAR |
 
-The PSD source at both n8.1.2 and n8.1.3 contains the vulnerable size calculation without the `INT_MAX` guard. The upstream fix is commit `aa4b80b54ee8645b5a77fe835ab2bbae1c9c465c`. Director X now carries that small backport in `ffmpeg-psd-cve-2026-125213.patch`, plus a wrapper hook that applies it after the FFmpeg source checkout. The build script applies this patch for both Plan A and Plan B. CI is configured to check apply/reverse against both exact FFmpeg tags and to check the hook against the pinned FFmpegKitNext commit.
+The PSD source at both n8.1.2 and n8.1.3 contains the vulnerable size calculation without the `INT_MAX` guard. The upstream fix is commit `aa4b80b54ee8645b5a77fe835ab2bbae1c9c465c`. Director X now carries that small backport in `ffmpeg-psd-cve-2026-125213.patch`, plus a wrapper hook that applies it after the FFmpeg source checkout. The build script applies this patch for both Plan A and Plan B. CI checks apply/reverse against both exact FFmpeg tags and checks the hook against the pinned FFmpegKitNext commit; these checks passed on Alpha after PR #119.
 
 This is not yet a complete advisory inventory. Debian's FFmpeg tracker and current CVE records list many further 2026 advisories; each must be mapped to the exact 8.1.3 source, build-enabled components and Director X media surface before any security review can be renewed. Do not infer that the list above is exhaustive.
 
@@ -85,7 +85,7 @@ Use only if 8.1.3 has an unresolved integration/regression issue:
 - `scripts/build_ffmpeg_kit_next.ps1` requires Windows + WSL and a local checkout of the exact FFmpegKitNext source commit.
 - The build script now accepts `-FfmpegTag n8.1.2` (default/fallback) or `-FfmpegTag n8.1.3` (candidate). It retains the exact wrapper commit, applies/reverses the source-tag patch, and discards a stale FFmpeg source checkout when switching tags.
 - The build script applies a separate PSD decoder backport for both versions through a pinned hook in `scripts/android/ffmpeg.sh`.
-- CI checks the wrapper hook against the exact FFmpegKitNext commit and the PSD backport against both FFmpeg tags, including reverse-apply.
+- CI checks the wrapper hook against the exact FFmpegKitNext commit and the PSD backport against both FFmpeg tags, including reverse-apply; this source-level validation passed after PR #119 merged.
 - `scripts/verify_native_supply_chain.py` rejects the expired review and validates AAR/POM hashes and patch inventory. Do not weaken this gate or extend dates to bypass it.
 - GitHub text-file operations cannot rebuild or attest the vendored native AAR.
 - No replacement AAR/POM, configure transcript, five-ABI payload inventory or native regression results exist yet.
