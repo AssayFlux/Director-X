@@ -499,23 +499,36 @@ edit('libavcodec/interplayacm.c', '    s->block_len = s->rows * s->cols;\n', '  
 edit('libavcodec/mpegaudiodec_template.c', '    init_get_bits(&s->gb, buf + HEADER_SIZE, (buf_size - HEADER_SIZE) * 8);\n    if (s->error_protection)', '    ret = init_get_bits8(&s->gb, buf + HEADER_SIZE, buf_size - HEADER_SIZE);\n    if (ret < 0)\n        return ret;\n    if (s->error_protection)', 'MP3 packet bit-reader bounds')
 FFMPEG_SECURITY_PY
 if [[ $? -ne 0 ]]; then exit 1; fi
-git -C "${ffmpeg_source_dir}" diff --check || exit 1
-grep -q 'while (info)' "${ffmpeg_source_dir}/libavutil/encryption_info.c" || exit 1
-grep -q 'mov_append_pssh_side_data' "${ffmpeg_source_dir}/libavformat/mov.c" || exit 1
-grep -q 'pssh_side_data' "${ffmpeg_source_dir}/libavformat/mov.c" || exit 1
-grep -q 'if (!fromlen)' "${ffmpeg_source_dir}/libavutil/avstring.c" || exit 1
-grep -Fq 'memset(&list->messages[list->nb_messages]' "${ffmpeg_source_dir}/libavcodec/cbs_sei.c" || exit 1
-grep -q 'ptr_linesize = linesize' "${ffmpeg_source_dir}/libavcodec/gif.c" || exit 1
-grep -q 'ptrdiff_t' "${ffmpeg_source_dir}/libavcodec/sgienc.c" || exit 1
-grep -q 'av_size_mult(s->current_frame.nb_units' "${ffmpeg_source_dir}/libavcodec/vvc/refs.c" || exit 1
-grep -q 'memcpy(lut, ctx->c23lut, 256)' "${ffmpeg_source_dir}/libavcodec/sanm.c" || exit 1
-grep -q 'Unsupported bit depth' "${ffmpeg_source_dir}/libavcodec/dpxenc.c" || exit 1
-grep -q 'ret = init_get_bits8(&s->gb, buf + HEADER_SIZE, buf_size - HEADER_SIZE)' "${ffmpeg_source_dir}/libavcodec/mpegaudiodec_template.c" || exit 1
-grep -q 'src->width != avctx->width' "${ffmpeg_source_dir}/libavcodec/encode.c" || exit 1
-grep -q 'ctx->slice_size_upper_bound = mps' "${ffmpeg_source_dir}/libavcodec/proresenc_kostya_common.c" || exit 1
-grep -q 'frame_size_upper_bound + ctx->slice_size_upper_bound' "${ffmpeg_source_dir}/libavcodec/proresenc_kostya.c" || exit 1
-grep -q 'Frame too large to encode' "${ffmpeg_source_dir}/libavcodec/proresenc_kostya_common.c" || exit 1
-grep -q 's->block_len > 1024 \* 1024' "${ffmpeg_source_dir}/libavcodec/interplayacm.c" || exit 1
+if ! git -C "${ffmpeg_source_dir}" diff --check; then
+  echo "FFmpeg security backport diff whitespace validation failed" >&2
+  exit 1
+fi
+require_ffmpeg_security_check() {
+  local label="$1"
+  local pattern="$2"
+  local file="$3"
+  if ! grep -Fq -- "$pattern" "$file"; then
+    echo "FFmpeg security verification failed: $label ($file; expected literal: $pattern)" >&2
+    exit 1
+  fi
+  echo "FFmpeg security verification passed: $label"
+}
+require_ffmpeg_security_check "encryption-info iterative free" "while (info)" "${ffmpeg_source_dir}/libavutil/encryption_info.c"
+require_ffmpeg_security_check "PSSH append helper" "mov_append_pssh_side_data" "${ffmpeg_source_dir}/libavformat/mov.c"
+require_ffmpeg_security_check "PSSH capacity tracking" "pssh_side_data" "${ffmpeg_source_dir}/libavformat/mov.c"
+require_ffmpeg_security_check "empty search-string guard" "if (!fromlen)" "${ffmpeg_source_dir}/libavutil/avstring.c"
+require_ffmpeg_security_check "SEI slot initialization" "memset(&list->messages[list->nb_messages]" "${ffmpeg_source_dir}/libavcodec/cbs_sei.c"
+require_ffmpeg_security_check "GIF stride initialization" "ptr_linesize = linesize" "${ffmpeg_source_dir}/libavcodec/gif.c"
+require_ffmpeg_security_check "SGI signed-stride handling" "ptrdiff_t" "${ffmpeg_source_dir}/libavcodec/sgienc.c"
+require_ffmpeg_security_check "VVC allocation overflow guard" "av_size_mult(s->current_frame.nb_units" "${ffmpeg_source_dir}/libavcodec/vvc/refs.c"
+require_ffmpeg_security_check "SANM LUT initialization" "memcpy(lut, ctx->c23lut, 256)" "${ffmpeg_source_dir}/libavcodec/sanm.c"
+require_ffmpeg_security_check "DPX bit-depth validation" "Unsupported bit depth" "${ffmpeg_source_dir}/libavcodec/dpxenc.c"
+require_ffmpeg_security_check "MP3 bit-reader bounds" "ret = init_get_bits8(&s->gb, buf + HEADER_SIZE, buf_size - HEADER_SIZE)" "${ffmpeg_source_dir}/libavcodec/mpegaudiodec_template.c"
+require_ffmpeg_security_check "encoder frame-dimension validation" "src->width != avctx->width" "${ffmpeg_source_dir}/libavcodec/encode.c"
+require_ffmpeg_security_check "ProRes slice-size bound" "ctx->slice_size_upper_bound = mps" "${ffmpeg_source_dir}/libavcodec/proresenc_kostya_common.c"
+require_ffmpeg_security_check "ProRes packet reserve" "frame_size_upper_bound + ctx->slice_size_upper_bound" "${ffmpeg_source_dir}/libavcodec/proresenc_kostya.c"
+require_ffmpeg_security_check "ProRes oversized-frame rejection" "Frame too large to encode" "${ffmpeg_source_dir}/libavcodec/proresenc_kostya_common.c"
+require_ffmpeg_security_check "Interplay ACM allocation cap" "s->block_len > 1024 * 1024" "${ffmpeg_source_dir}/libavcodec/interplayacm.c"
 '''
 path.write_text(text.replace(anchor, insert + anchor).rstrip() + "\n", encoding="utf-8")
 print("Prepared pinned FFmpeg security backports.")
