@@ -221,7 +221,7 @@ def edit(path, old, new, label):
 mov = root / 'libavformat/mov.c'
 s = mov.read_text(encoding='utf-8')
 anchor = 'static int mov_read_pssh(MOVContext *c, AVIOContext *pb, MOVAtom atom)\n'
-helper = '''static int mov_append_pssh_side_data(MOVContext *c, AVStream *st,
+helper = """static int mov_append_pssh_side_data(MOVContext *c, AVStream *st,
                                      const AVEncryptionInitInfo *info)
 {
     AVPacketSideData *old_side_data = NULL;
@@ -309,19 +309,19 @@ helper = '''static int mov_append_pssh_side_data(MOVContext *c, AVStream *st,
     return 0;
 }
 
-'''
+"""
 if s.count(anchor) != 1: raise SystemExit('PSSH helper anchor mismatch')
 s = s.replace(anchor, helper + anchor)
-old_decl = '''    AVEncryptionInitInfo *info, *old_init_info;
+old_decl = """    AVEncryptionInitInfo *info, *old_init_info;
     uint8_t **key_ids;
     AVStream *st;
     const AVPacketSideData *old_side_data;
     uint8_t *side_data, *extra_data;
-    size_t side_data_size;'''
-new_decl = '''    AVEncryptionInitInfo *info;
+    size_t side_data_size;"""
+new_decl = """    AVEncryptionInitInfo *info;
     uint8_t **key_ids;
     AVStream *st;
-    uint8_t *extra_data;'''
+    uint8_t *extra_data;"""
 if s.count(old_decl) != 1: raise SystemExit('PSSH declaration mismatch')
 s = s.replace(old_decl, new_decl)
 import re
