@@ -34,24 +34,23 @@ The openSUSE FFmpeg 8.1.3 package changelog records removal of downstream backpo
 
 This is useful corroboration that those fixes are present in the FFmpeg 8.1.3 source used by that distributor. It is not a substitute for validating the exact official tag against the FFmpegKitNext checkout and the resulting Android binaries. Reconcile every advisory against upstream commits and the exact tag before marking it fixed.
 
-## Special case: CVE-2026-66036 (`hqdn3d`)
+## CVE-2026-66036 (`hqdn3d`) — source-level mitigation present in 8.1.3
 
-The same openSUSE changelog says the main `hqdn3d` feature patch was not accepted upstream for 8.x, while a companion shim was merged. Therefore do not assume FFmpeg 8.1.3 fully resolves CVE-2026-66036 simply because it includes the merged shim.
+The main upstream change `5d7112c60e6f0f0742ce47d448e6da0718a70f4c` supports dynamic frame sizes. The 8.x release branch did not take that feature patch, but the companion safety shim `e3d0c719fddd259709c8e275942ab56af3afc35d` was merged.
 
-A repository code search found no literal `hqdn3d` filter invocation. However, `FFmpegEngine.execute(command)` is a general command entry point, so this alone does not prove the filter unreachable.
+Direct inspection of `libavfilter/vf_hqdn3d.c` at the signed `n8.1.3` tag confirms:
+- `config_input()` records the configured pixel format, width and height in the filter context.
+- `filter_frame()` checks incoming frame format and dimensions against those recorded values before calling the denoiser.
+- If a frame changes dimensions/format without filter-graph reinitialization, the filter logs an error, frees the frame and returns `AVERROR(EINVAL)` rather than processing it with undersized buffers.
 
-Required decision:
-1. Audit every call site and command construction path for caller-controlled filter strings.
-2. If the filter is not a product requirement, disable `hqdn3d` at configure time and verify it is absent from the built filter registry.
-3. If it is required, review the merged shim against the advisory and exact 8.1.3 source. Do not blindly transplant the rejected feature patch.
-4. Keep the advisory unresolved until the chosen mitigation is built and tested.
+That is the required fail-closed mitigation for the reported out-of-bounds write when reinitialization is disabled. **Do not disable `hqdn3d` by default**; retain the filter and add a native regression test using a variable-resolution input with `-reinit_filter 0`, confirming a clean error and no crash or sanitizer finding. This is source-level evidence only until the built Android AAR is tested.
 
 ## Plan A — FFmpeg 8.1.3
 
 1. Keep the FFmpegKitNext wrapper pinned to commit `3e223118e6e8fb6208693ecf3952e77cd096f587`. Its `scripts/source.sh` pins FFmpeg with `SOURCE_ID="n8.1.2"`; the new `ffmpeg-source-tag-n8.1.3.patch` changes only that tag to `n8.1.3`.
 2. The `arthenica/FFmpeg` `n8.1.3` annotated tag is signature-verified and dereferences to commit `1041abdc962f4cc4f394aa8de9dc5236c0c3b9e7`. The patch is applied only when the build script is invoked with `-FfmpegTag n8.1.3`; the default remains `n8.1.2` and the script reverses the candidate patch when returning to Plan B.
 3. Reconcile all current advisories against that exact tag, including any disclosures after the tag date.
-4. Resolve CVE-2026-66036 as described above; retain the existing Director X disabled-format profile unless a documented feature audit justifies changes.
+4. Preserve `hqdn3d` with the 8.1.3 merged fail-closed guard and add the variable-resolution malformed-input regression test described above; retain the existing Director X disabled-format profile.
 5. Build the FFmpegKitNext wrapper and FFmpeg for all five configured ABIs using the pinned NDK r27d/API 24 recipe.
 6. Inspect configure output, linked objects and AAR contents. Verify required Director X codecs/filters remain available.
 7. Update AAR/POM, lock hashes, source provenance, patch digest, SBOM and advisory evidence atomically.
@@ -79,7 +78,7 @@ Use only if 8.1.3 has an unresolved integration/regression issue:
 Do not merge a native artifact update to Alpha or build a release APK until:
 - exact source/tag provenance is verified;
 - all applicable HIGH/CRITICAL advisories are fixed or proven unreachable with build evidence;
-- CVE-2026-66036 has a documented, tested mitigation;
+- the `hqdn3d` guard passes the variable-resolution malformed-input regression test;
 - AAR/POM sizes and hashes match the updated lock;
 - all five ABIs and required product features are present;
 - native and Android regression/security gates pass;
@@ -102,3 +101,5 @@ Do not merge a native artifact update to Alpha or build a release APK until:
 - Director X patch: `third_party/ffmpeg-kit-next/ffmpeg-source-tag-n8.1.3.patch`
 
 The build driver preserves the default 8.1.2 behavior and accepts `-FfmpegTag n8.1.3` for Plan A. The reverse operation is deliberately included so a reused local checkout can return to 8.1.2 for Plan B. CI checks apply, selected source tag, reverse-apply and restored fallback tag. This verifies patch mechanics only; it does not build FFmpeg or attest an AAR.
+
+Source evidence for the `hqdn3d` guard: `https://github.com/arthenica/FFmpeg/blob/n8.1.3/libavfilter/vf_hqdn3d.c` and merged shim commit `https://github.com/arthenica/FFmpeg/commit/e3d0c719fddd259709c8e275942ab56af3afc35d`.
