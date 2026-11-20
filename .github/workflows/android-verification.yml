@@ -146,7 +146,7 @@ jobs:
       - name: Enable KVM for managed API 37 emulator
         run: |
           sudo apt-get update
-          sudo apt-get install -y qemu-kvm cpu-checker
+          sudo apt-get install -y qemu-system-x86 cpu-checker
           test -e /dev/kvm
           sudo chmod 666 /dev/kvm
           kvm-ok
