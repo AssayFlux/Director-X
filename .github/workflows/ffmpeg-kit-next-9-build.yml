@@ -3,7 +3,7 @@ name: Build and verify FFmpegKitNext 9.0.2
 on:
   workflow_dispatch:
   push:
-    branches: [upgrade-ffmpeg-9.0.2]
+    branches: [Alpha, upgrade-ffmpeg-9.0.2]
     paths:
       - "scripts/prepare_ffmpeg_kit_next_9_source.sh"
       - "third_party/ffmpeg-kit-next/directorx-security.patch"
