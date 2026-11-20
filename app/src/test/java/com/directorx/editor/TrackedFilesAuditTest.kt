@@ -91,6 +91,8 @@ class TrackedFilesAuditTest {
             "docs/PERFORMANCE_VALIDATION.md",
             "docs/RELEASE_READINESS.md",
             "docs/UPGRADE_ROADMAP.md",
+            "docs/security/FFmpeg-8.1.3-candidate-assessment-2026-11.md",
+            "docs/security/FFmpeg-Native-Review-2026-11.md",
         )
         val trackedPrivateMarkdown = tracked.filter { path ->
             path.endsWith(".md") && path !in releaseContractMarkdown
