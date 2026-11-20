@@ -3,8 +3,8 @@
 **Status: preferred 8.x candidate; native security approval BLOCKED pending source and binary verification.**
 
 Date: 2026-11-20  
-Alpha baseline: `fb2ceee8f7430ffeffeb7decce284ddec5d2b4a5`  
-Working branch: `work/ffmpeg-8x-remediation-2026-11-v2`
+Alpha baseline: `9eeb3ebf3cb009bcee623e35b36b3d398e480110`  
+Working branch: `work/ffmpeg-8.1.3-build-candidate`
 
 ## Decision
 
@@ -48,8 +48,8 @@ Required decision:
 
 ## Plan A — FFmpeg 8.1.3
 
-1. Obtain the exact FFmpegKitNext source checkout and inspect how its build recipe pins/downloads FFmpeg. The current build script hard-pins FFmpegKitNext commit `3e223118e6e8fb6208693ecf3952e77cd096f587`; changing only native-lock.json does not change the source that gets built.
-2. Pin and verify the official FFmpeg 8.1.3 tag, signature and source revision.
+1. Keep the FFmpegKitNext wrapper pinned to commit `3e223118e6e8fb6208693ecf3952e77cd096f587`. Its `scripts/source.sh` pins FFmpeg with `SOURCE_ID="n8.1.2"`; the new `ffmpeg-source-tag-n8.1.3.patch` changes only that tag to `n8.1.3`.
+2. The `arthenica/FFmpeg` `n8.1.3` annotated tag is signature-verified and dereferences to commit `1041abdc962f4cc4f394aa8de9dc5236c0c3b9e7`. The patch is applied only when the build script is invoked with `-FfmpegTag n8.1.3`; the default remains `n8.1.2` and the script reverses the candidate patch when returning to Plan B.
 3. Reconcile all current advisories against that exact tag, including any disclosures after the tag date.
 4. Resolve CVE-2026-66036 as described above; retain the existing Director X disabled-format profile unless a documented feature audit justifies changes.
 5. Build the FFmpegKitNext wrapper and FFmpeg for all five configured ABIs using the pinned NDK r27d/API 24 recipe.
@@ -68,7 +68,8 @@ Use only if 8.1.3 has an unresolved integration/regression issue:
 ## Build and verification constraints
 
 - `scripts/build_ffmpeg_kit_next.ps1` requires Windows + WSL and a local checkout of the exact FFmpegKitNext source commit.
-- The checked-in script rejects any different FFmpegKitNext commit until its source pin and build recipe are deliberately updated together.
+- The build script now accepts `-FfmpegTag n8.1.2` (default/fallback) or `-FfmpegTag n8.1.3` (candidate). It retains the exact wrapper commit and applies/reverses a separate, one-line source-tag patch.
+- CI now checks that the source-tag patch applies to the exact FFmpegKitNext commit, selects `n8.1.3`, and reverses cleanly back to `n8.1.2`.
 - `scripts/verify_native_supply_chain.py` rejects the expired review and validates AAR/POM hashes and patch inventory. Do not weaken this gate or extend dates to bypass it.
 - GitHub text-file operations cannot rebuild or attest the vendored native AAR.
 - No replacement AAR/POM, configure transcript, five-ABI payload inventory or native regression results exist yet.
@@ -90,3 +91,15 @@ Do not merge a native artifact update to Alpha or build a release APK until:
 - FFmpeg security page: https://ffmpeg.org/security.html
 - openSUSE FFmpeg 8.1.3 changelog: https://fr2.rpmfind.net/linux/RPM/opensuse/tumbleweed/x86_64/ffmpeg-8-libavformat-devel-8.1.3-4.1.x86_64.html
 - openSUSE FFmpeg 8.1.3 mini-libs changelog: https://www.rpmfind.net/linux/RPM/opensuse/tumbleweed/x86_64/ffmpeg-8-mini-libs-8.1.3-2.1.x86_64.html
+
+
+## Verified source-pin implementation
+
+- FFmpegKitNext source commit: `3e223118e6e8fb6208693ecf3952e77cd096f587`
+- FFmpeg source repository used by that wrapper: `https://github.com/arthenica/FFmpeg`
+- Signed FFmpeg tag: `n8.1.3`
+- Tag target commit: `1041abdc962f4cc4f394aa8de9dc5236c0c3b9e7`
+- Director X patch: `third_party/ffmpeg-kit-next/ffmpeg-source-tag-n8.1.3.patch`
+- Candidate patch SHA-256 (Git blob is not the file hash): use the build output/CI evidence for the file hash; do not substitute the Git blob SHA.
+
+The build driver preserves the default 8.1.2 behavior and accepts `-FfmpegTag n8.1.3` for Plan A. The reverse operation is deliberately included so a reused local checkout can return to 8.1.2 for Plan B. CI checks apply, selected source tag, reverse-apply and restored fallback tag. This verifies patch mechanics only; it does not build FFmpeg or attest an AAR.
