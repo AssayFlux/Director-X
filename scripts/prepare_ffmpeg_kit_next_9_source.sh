@@ -205,6 +205,7 @@ done
 # incompatible fork-only context or change upstream library version macros.
 python3 - "${ffmpeg_source_dir}" <<'FFMPEG_SECURITY_PY'
 from pathlib import Path
+import re
 import sys
 root = Path(sys.argv[1])
 def edit(path, old, new, label):
