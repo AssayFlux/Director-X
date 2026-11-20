@@ -1,7 +1,7 @@
 diff --git a/scripts/android/ffmpeg.sh b/scripts/android/ffmpeg.sh
 --- a/scripts/android/ffmpeg.sh
 +++ b/scripts/android/ffmpeg.sh
-@@ -413,6 +413,17 @@
+@@ -413,6 +413,16 @@
  ########################### CUSTOMIZATIONS #######################
  cd "${BASEDIR}" 1>>"${BASEDIR}"/build.log 2>&1 || return 1
  cd "${BASEDIR}"/src/"${LIB_NAME}" 1>>"${BASEDIR}"/build.log 2>&1 || return 1
