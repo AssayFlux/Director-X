@@ -19,7 +19,7 @@ old = '''  ffmpeg)
 new = '''  ffmpeg)
     SOURCE_REPO_URL="https://github.com/arthenica/FFmpeg"
     SOURCE_ID="n9.0.2"
-    SOURCE_TYPE="COMMIT"
+    SOURCE_TYPE="TAG"
     ;;'''
 count = text.count(old)
 if count == 0:
