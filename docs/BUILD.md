@@ -23,7 +23,7 @@ APK outputs are under `app/build/outputs/apk/`.
 
 ## CI verification
 
-The general Android CI workflow is `.github/workflows/android-full-ci.yml`. It runs independent jobs for native SBOM/provenance and resolved advisory checks, Android lint, JVM unit tests, API 37 managed-device instrumentation (including Android migration tests), and QA APK packaging with native 16 KB alignment checks.
+The general Android CI workflow is `.github/workflows/android-full-ci.yml`. It runs independent jobs for native SBOM/provenance and resolved advisory checks, Android lint, JVM unit tests, API 35 emulator instrumentation (including Android migration tests), and QA APK packaging with native 16 KB alignment checks.
 
 The focused FFmpeg integration workflow remains `.github/workflows/ffmpeg-9-app-verify.yml`; it is not a replacement for the full-app workflow.
 
@@ -46,7 +46,7 @@ A release build must fail rather than silently fall back to a different signing 
 ./gradlew :app:verifyResolvedAdvisoryFloors
 ./gradlew :app:lintQa
 ./gradlew :app:testQaUnitTest
-./gradlew :app:directorXApi37QaAndroidTest
+./gradlew :app:connectedQaAndroidTest
 ./gradlew :app:assembleQa
 ```
 

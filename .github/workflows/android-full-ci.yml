@@ -73,12 +73,12 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
-      - name: Install Android compile SDK and managed-device image
+      - name: Install Android compile SDK
         run: |
           set -euo pipefail
           SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
           test -x "$SDKMANAGER"
-          "$SDKMANAGER" --channel=3 "platforms;android-37.0" "build-tools;37.0.0" "system-images;android-37;google_apis;arm64-v8a"
+          "$SDKMANAGER" --channel=3 "platforms;android-37.0" "build-tools;37.0.0"
       - name: Install Python asset renderers
         run: |
           set -euo pipefail
@@ -86,8 +86,14 @@ jobs:
           sudo apt-get install --yes python3-cairosvg python3-pil
           python3 -c "import cairosvg; from PIL import Image"
       - uses: gradle/actions/setup-gradle@v4
-      - name: Run managed-device QA instrumentation suite
-        run: bash ./gradlew --no-daemon :app:directorXApi37QaAndroidTest
+      - name: Run QA instrumentation suite on API 35 emulator
+        uses: ReactiveCircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          disable-animations: true
+          script: bash ./gradlew --no-daemon :app:connectedQaAndroidTest
 
   qa-package:
     name: QA APK assembly and native alignment

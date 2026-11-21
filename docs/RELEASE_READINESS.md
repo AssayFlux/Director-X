@@ -7,7 +7,7 @@
 - Vendored AAR SHA-256: `44e96b4cb4a1b35e7a38d8cdc1a9707aaae17fffd83cee7f1da56663bd87b2f6`
 - Latest recorded QA verification before the full-app workflow: run [44914650116](https://github.com/AssayFlux/Director-X/actions/runs/44914650116), commit `bd7875884a600f1ea30511d6ee5269c6aaabde9c`.
 - That run passed `:app:verifyFfmpegKitAar`, `:app:testQaUnitTest` (1,852 tests), `:app:assembleQa`, packaged-native 16 KB alignment checks, and QA APK artifact upload.
-- It did **not** run Android lint, managed-device instrumentation, or the native SBOM/advisory Gradle tasks.
+- It did **not** run Android lint, Android emulator instrumentation, or the native SBOM/advisory Gradle tasks.
 
 ## Automated release-candidate gates
 
@@ -16,7 +16,7 @@ The dedicated `.github/workflows/android-full-ci.yml` workflow runs independent 
 1. Native SBOM/provenance generation and resolved dependency advisory-floor verification.
 2. Android `lintQa`.
 3. The complete `testQaUnitTest` JVM suite.
-4. Managed-device Android instrumentation on the configured API 37 device. This includes the checked-in Android instrumentation tests, including Room migration coverage where present.
+4. Android emulator instrumentation (API 35) on the configured API 35 emulator. This includes the checked-in Android instrumentation tests, including Room migration coverage where present.
 5. QA APK assembly, FFmpegKitNext AAR checksum verification, native 16 KB alignment checks, SHA-256 manifest generation, and artifact upload.
 
 A successful QA artifact is a validation build, not a production release. The production release must use the established private signing identity; no keystore or password belongs in the repository.

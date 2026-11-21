@@ -25,9 +25,9 @@ This record distinguishes source implementation, automated verification, and phy
 
 ## CI contract
 
-`.github/workflows/android-full-ci.yml` is the general Android verification workflow. It separates static/supply-chain checks, JVM unit tests, API 37 managed-device instrumentation, and QA packaging into independent jobs. It runs on pushes and pull requests targeting `Alpha`, and can be started manually.
+`.github/workflows/android-full-ci.yml` is the general Android verification workflow. It separates static/supply-chain checks, JVM unit tests, API 35 Android emulator instrumentation (API 35), and QA packaging into independent jobs. It runs on pushes and pull requests targeting `Alpha`, and can be started manually.
 
-The older `ffmpeg-9-app-verify.yml` remains the focused FFmpeg/app integration lane. A pass in that workflow must not be represented as a pass of lint, managed-device instrumentation, or the native SBOM/advisory tasks.
+The older `ffmpeg-9-app-verify.yml` remains the focused FFmpeg/app integration lane. A pass in that workflow must not be represented as a pass of lint, Android emulator instrumentation (API 35), or the native SBOM/advisory tasks.
 
 ## Native media dependency
 
@@ -40,7 +40,7 @@ The older `ffmpeg-9-app-verify.yml` remains the focused FFmpeg/app integration l
 
 ## Product and compatibility acceptance still pending
 
-- Room schema and migration source are checked in; managed-device instrumentation is now a CI gate. Real upgrade-path acceptance against supported historical user databases remains pending until that test evidence is reviewed.
+- Room schema and migration source are checked in; Android emulator instrumentation (API 35) is now a CI gate. Real upgrade-path acceptance against supported historical user databases remains pending until that test evidence is reviewed.
 - Custom canvas dimensions are implemented in source; full persisted-project/archive/preview/export/final-media round-trip acceptance is not yet recorded.
 - Proxy generation policy and worker implementation are present; cancellation, retry/recovery, low-storage, playback/export concurrency, and original-media-only export need device-level acceptance.
 - Physical-device playback, proxy, export, navigation, large-project, and performance checks remain maintainer responsibilities.
