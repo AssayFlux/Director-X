@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 # Fail closed: this helper only edits the exact FFmpeg 9.0.2 source selector.
+# The native workflow builds each Android architecture independently via nix-android.sh --arch.
 
 source_file="${1:-scripts/source.sh}"
 test -f "$source_file"
