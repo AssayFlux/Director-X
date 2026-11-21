@@ -47,11 +47,24 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: build-evidence/build-output
 
+      - name: Read native build provenance
+        id: provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, pathlib
+          data = json.loads(pathlib.Path("build-evidence/build-output/native-build-provenance.json").read_text(encoding="utf-8"))
+          for key, value in (("run_id", data["runId"]), ("head_sha", data["headSha"]), ("built_at", data["builtAt"])):
+              if not value:
+                  raise SystemExit(f"Missing native provenance field: {key}")
+              print(f"{key}={value}")
+          PY
+
       - name: Promote AAR, POM, lock and app references
         env:
-          BUILD_RUN_ID: ${{ steps.source.outputs.run_id }}
-          BUILD_HEAD_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
-          BUILD_COMPLETED_AT: ${{ github.event.workflow_run.updated_at || github.event.repository.updated_at }}
+          BUILD_RUN_ID: ${{ steps.provenance.outputs.run_id }}
+          BUILD_HEAD_SHA: ${{ steps.provenance.outputs.head_sha }}
+          BUILD_COMPLETED_AT: ${{ steps.provenance.outputs.built_at }}
         run: |
           set -euo pipefail
           python3 scripts/promote_ffmpeg_kit_next_9_artifact.py \
@@ -59,6 +72,7 @@ jobs:
             --run-id "$BUILD_RUN_ID" \
             --head-sha "$BUILD_HEAD_SHA" \
             --built-at "$BUILD_COMPLETED_AT"
+          git diff --check
           git diff --check
 
       - name: Commit FFmpeg 9.0.2 promotion to Alpha
