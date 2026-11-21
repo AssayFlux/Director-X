@@ -66,6 +66,17 @@ jobs:
               print(f"{key}={value}")
           PY
 
+      - name: Verify source-bound native provenance before promotion
+        env:
+          BUILD_RUN_ID: ${{ steps.provenance.outputs.run_id }}
+          BUILD_HEAD_SHA: ${{ steps.provenance.outputs.head_sha }}
+        run: |
+          set -euo pipefail
+          git fetch origin "$BUILD_HEAD_SHA"
+          python3 scripts/verify_ffmpeg_promotion_provenance.py \
+            --verify --revision "$BUILD_HEAD_SHA" --run-id "$BUILD_RUN_ID" \
+            --manifest build-evidence/build-output/native-build-provenance.json
+
       - name: Promote AAR, POM, lock and app references
         env:
           BUILD_RUN_ID: ${{ steps.provenance.outputs.run_id }}
