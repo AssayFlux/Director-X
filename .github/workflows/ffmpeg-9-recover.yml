@@ -1,0 +1,29 @@
+name: FFmpeg 9.0.2 - Recover failed ABI jobs
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Failed FFmpeg 9.0.2 native-build run ID
+        required: true
+        type: string
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  retry-failed-abis:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Retry only failed native ABI jobs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ inputs.run_id }}
+        run: |
+          set -euo pipefail
+          [[ "$RUN_ID" =~ ^[0-9]+$ ]]
+          gh api --method POST \
+            -H "Accept: application/vnd.github+json" \
+            "/repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}/rerun-failed-jobs"
+          echo "Requested retry of failed jobs only; successful ABI jobs are retained."
