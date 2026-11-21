@@ -54,7 +54,8 @@ jobs:
           set -euo pipefail
           python3 - <<'PY' >> "$GITHUB_OUTPUT"
           import json, pathlib
-          data = json.loads(pathlib.Path("build-evidence/build-output/native-build-provenance.json").read_text(encoding="utf-8"))
+          raw = pathlib.Path("build-evidence/build-output/native-build-provenance.json").read_text(encoding="utf-8").removesuffix("\\\\n")
+data = json.loads(raw)
           for key, value in (("run_id", data["runId"]), ("head_sha", data["headSha"]), ("built_at", data["builtAt"])):
               if not value:
                   raise SystemExit(f"Missing native provenance field: {key}")
