@@ -66,6 +66,13 @@ jobs:
           SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
           test -x "$SDKMANAGER"
           "$SDKMANAGER" --channel=3 "platforms;android-37.0" "build-tools;37.0.0"
+      - name: Install Python asset renderers
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/directorx-renderers"
+          "$RUNNER_TEMP/directorx-renderers/bin/python" -m pip install --disable-pip-version-check CairoSVG Pillow
+          echo "$RUNNER_TEMP/directorx-renderers/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/directorx-renderers/bin/python" -c "import cairosvg; from PIL import Image"
       - uses: gradle/actions/setup-gradle@v4
       - name: Run complete QA JVM test suite
         run: bash ./gradlew --no-daemon :app:testQaUnitTest
