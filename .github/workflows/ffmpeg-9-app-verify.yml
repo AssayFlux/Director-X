@@ -49,9 +49,13 @@ jobs:
       - name: Verify FFmpegKitNext artifact and app integration
         run: |
           set -euo pipefail
-          ./gradlew --no-daemon :app:verifyFfmpegKitAar :app:testDebugUnitTest :app:assembleDebug
+          ./gradlew --no-daemon :app:verifyFfmpegKitAar :app:testQaUnitTest :app:assembleQa
 
       - name: Verify packaged FFmpegKitNext native libraries
         run: |
           set -euo pipefail
-          python3 scripts/check_16kb_alignment.py app/build/outputs/apk/debug/app-debug.apk
+          mapfile -t apks < <(find app/build/outputs/apk -type f -name '*.apk' | sort)
+          test "${#apks[@]}" -gt 0
+          for apk in "${apks[@]}"; do
+            python3 scripts/check_16kb_alignment.py "$apk"
+          done
