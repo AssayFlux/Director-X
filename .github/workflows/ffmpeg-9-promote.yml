@@ -1,0 +1,71 @@
+name: FFmpeg 9.0.2 - Promote dependency
+
+on:
+  workflow_run:
+    workflows: ["FFmpeg 9.0.2 - Assemble native package"]
+    types: [completed]
+    branches: [Alpha]
+  workflow_dispatch:
+    inputs:
+      assembly_run_id:
+        description: Successful package-assembly run ID
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  promote:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: Alpha
+          fetch-depth: 0
+
+      - name: Select assembly run
+        id: source
+        env:
+          EVENT_RUN_ID: ${{ github.event.workflow_run.id }}
+          INPUT_RUN_ID: ${{ inputs.assembly_run_id }}
+        run: |
+          set -euo pipefail
+          if [[ -n "$INPUT_RUN_ID" ]]; then
+            echo "run_id=$INPUT_RUN_ID" >> "$GITHUB_OUTPUT"
+          else
+            echo "run_id=$EVENT_RUN_ID" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Download assembled FFmpeg 9.0.2 candidate
+        uses: actions/download-artifact@v4
+        with:
+          pattern: ffmpeg-kit-next-9.0.2-release-candidate-${{ steps.source.outputs.run_id }}
+          run-id: ${{ steps.source.outputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: build-evidence
+
+      - name: Promote AAR, POM, lock and app references
+        env:
+          BUILD_RUN_ID: ${{ steps.source.outputs.run_id }}
+          BUILD_HEAD_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+          BUILD_COMPLETED_AT: ${{ github.event.workflow_run.updated_at || github.event.repository.updated_at }}
+        run: |
+          set -euo pipefail
+          python3 scripts/promote_ffmpeg_kit_next_9_artifact.py \
+            --artifact-dir build-evidence \
+            --run-id "$BUILD_RUN_ID" \
+            --head-sha "$BUILD_HEAD_SHA" \
+            --built-at "$BUILD_COMPLETED_AT"
+          git diff --check
+
+      - name: Commit FFmpeg 9.0.2 promotion to Alpha
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "build(ffmpeg): promote FFmpegKitNext 9.0.2"
+          git push origin HEAD:Alpha
