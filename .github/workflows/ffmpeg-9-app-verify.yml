@@ -52,7 +52,7 @@ jobs:
       - name: Verify FFmpegKitNext artifact and app integration
         run: |
           set -euo pipefail
-          ./gradlew --no-daemon :app:verifyFfmpegKitAar :app:testQaUnitTest :app:assembleQa
+          bash ./gradlew --no-daemon :app:verifyFfmpegKitAar :app:testQaUnitTest :app:assembleQa
 
       - name: Verify packaged FFmpegKitNext native libraries
         run: |
