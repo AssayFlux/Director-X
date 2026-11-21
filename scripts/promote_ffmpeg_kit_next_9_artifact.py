@@ -191,9 +191,16 @@ def main() -> int:
     replace_text("app/src/main/res/raw/ffmpeg_kit_next_source_offer.txt",
                  "https://github.com/arthenica/ffmpeg-kit-next/tree/3e223118e6e8fb6208693ecf3952e77cd096f587",
                  f"https://github.com/arthenica/ffmpeg-kit-next/tree/{WRAPPER_COMMIT}", 1)
-    replace_text("app/src/main/res/raw/ffmpeg_kit_next_source_offer.txt",
-                 "Android NDK 27.3.13750724, Android API 24, OpenH264 2.3.1",
-                 f"FFmpeg source revision {FFMPEG_COMMIT}; Android NDK 27.3.13750724, Android API 24, OpenH264 2.3.1", 1)
+    offer_path = ROOT / "app/src/main/res/raw/ffmpeg_kit_next_source_offer.txt"
+    offer_text = offer_path.read_text(encoding="utf-8")
+    offer_text, offer_count = re.subn(
+        r"(?m)^Build inputs: .*?$",
+        f"Build inputs: FFmpeg source revision {FFMPEG_COMMIT}; Android NDK 27.3.13750724, Android API 24, OpenH264 2.3.1",
+        offer_text,
+    )
+    if offer_count != 1:
+        raise SystemExit(f"{offer_path}: expected one Build inputs line, found {offer_count}")
+    offer_path.write_text(offer_text, encoding="utf-8")
     replace_text("app/src/main/res/raw/ffmpeg_kit_next_source_offer.txt",
                  "./nix-android.sh -p android-r27d --enable-libass --enable-libjxl --enable-android-media-codec --enable-android-zlib --enable-openh264 --jobs=8",
                  "./nix-android.sh -p android-r27d --arch=<ABI> --enable-lib-libass --enable-lib-libjxl --enable-lib-android-media-codec --enable-lib-android-zlib --enable-lib-openh264 --jobs=8", 1)
