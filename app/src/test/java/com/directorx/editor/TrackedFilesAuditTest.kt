@@ -197,6 +197,7 @@ class TrackedFilesAuditTest {
             ".github/workflows/ffmpeg-9-native-build.yml",
             ".github/workflows/ffmpeg-9-promote.yml",
             ".github/workflows/ffmpeg-9-recover.yml",
+            ".github/workflows/android-full-ci.yml",
         )
 
         private val REQUIRED_TRACKED = listOf(
