@@ -79,7 +79,6 @@ jobs:
             --head-sha "$BUILD_HEAD_SHA" \
             --built-at "$BUILD_COMPLETED_AT"
           git diff --check
-          git diff --check
 
       - name: Commit FFmpeg 9.0.2 promotion to Alpha
         run: |
