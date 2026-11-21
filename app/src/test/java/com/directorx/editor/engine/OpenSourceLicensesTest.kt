@@ -73,7 +73,7 @@ class OpenSourceLicensesTest {
         assertTrue(notice.sourceOfferText.orEmpty().contains("source", ignoreCase = true))
         assertTrue(notice.sourceOfferText.orEmpty().contains("LGPL v3.0-or-later"))
         assertTrue(notice.sourceOfferText.orEmpty().contains("directorx-security.patch"))
-        assertTrue(notice.sourceOfferText.orEmpty().contains("3e223118e6e8fb6208693ecf3952e77cd096f587"))
+        assertTrue(notice.sourceOfferText.orEmpty().contains("9f04bf1e3c97def70b98e198cb80a57b43ef5b45"))
         assertTrue(notice.sourceOfferText.orEmpty().contains("nix-android.sh"))
         assertTrue(notice.complianceNote.orEmpty().contains("res/raw/source.txt"))
         assertTrue(notice.complianceNote.orEmpty().contains("ffmpeg_kit_next_source_offer.txt"))
