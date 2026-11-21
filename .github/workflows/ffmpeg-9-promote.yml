@@ -57,7 +57,7 @@ jobs:
           python3 - <<'PY' >> "$GITHUB_OUTPUT"
           import json, pathlib
           raw = pathlib.Path("build-evidence/build-output/native-build-provenance.json").read_text(encoding="utf-8")
-          if raw.endswith("\\n"):
+          if raw.endswith("\n"):
               raw = raw[:-2]
           data = json.loads(raw)
           for key, value in (("run_id", data["runId"]), ("head_sha", data["headSha"]), ("built_at", data["builtAt"])):
