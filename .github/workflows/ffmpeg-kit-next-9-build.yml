@@ -21,7 +21,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: ffmpeg-kit-next-9.0.2-v3-${{ github.ref }}
+  group: ffmpeg-kit-next-9.0.2-v4-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
