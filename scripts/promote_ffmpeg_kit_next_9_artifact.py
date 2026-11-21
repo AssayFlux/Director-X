@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 WRAPPER_COMMIT = "9f04bf1e3c97def70b98e198cb80a57b43ef5b45"
-FFMPEG_COMMIT = "ce8f11b9fac4cd7ccfb41ca7c01bc17f5cda8cc3"
+FFMPEG_COMMIT = "946fcce07b6dcd0331c8cc609192aeff5e1924f8"
 OLD_AAR = "third_party/ffmpeg-kit-next/ffmpeg-kit-next-8.1.0.aar"
 OLD_POM = "third_party/ffmpeg-kit-next/ffmpeg-kit-next-8.1.0.pom"
 NEW_AAR = "third_party/ffmpeg-kit-next/ffmpeg-kit-next-9.0.2.aar"
@@ -100,6 +100,11 @@ def main() -> int:
     })
     lock["source"]["securityPatchSha256"] = sha256(ROOT / lock["source"]["securityPatch"])
     lock["build"]["abis"] = ["armeabi-v7a", "armeabi-v7a-neon", "arm64-v8a", "x86", "x86_64"]
+    lock["build"]["command"] = (
+        "./nix-android.sh -p android-r27d --arch=<ABI> --enable-lib-libass "
+        "--enable-lib-libjxl --enable-lib-android-media-codec --enable-lib-android-zlib "
+        "--enable-lib-openh264 --jobs=8"
+    )
     for component in lock["components"]:
         if component["name"] == "ffmpeg-kit-next":
             component.update({
@@ -151,12 +156,21 @@ def main() -> int:
     ffmpeg_entry = next(item for item in registry["dependencies"] if item["id"] == "ffmpeg")
     ffmpeg_entry["version"] = "9.0.2 (FFmpeg 9.0.2)"
     ffmpeg_entry["coordinate"] = NEW_AAR
-    registry_path.write_text(json.dumps(registry, indent=2) + "\n", encoding="utf-8")
+    ffmpeg_entry["notice"]["sourceOfferText"] = (
+        "Exact corresponding-source recipe for this LGPL v3.0-or-later build:\\n"
+        f"https://github.com/arthenica/ffmpeg-kit-next/tree/{WRAPPER_COMMIT}\\n"
+        f"FFmpeg source revision {FFMPEG_COMMIT}; configure command: "
+        "./nix-android.sh -p android-r27d --arch=<ABI> --enable-lib-libass --enable-lib-libjxl "
+        "--enable-lib-android-media-codec --enable-lib-android-zlib --enable-lib-openh264 --jobs=8\\n"
+        "The security patch, complete recipe, checksums, disabled components, and source revisions "
+        "are recorded in third_party/ffmpeg-kit-next/native-lock.json and the installed source-offer resource."
+    )
+    registry_path.write_text(json.dumps(registry, indent=2) + "\\n", encoding="utf-8")
 
     replace_text("NOTICE", "FFmpegKitNext 8.1.0 with FFmpeg 8.1.2", "FFmpegKitNext 9.0.2 with FFmpeg 9.0.2", 1)
+    replace_text("ACKNOWLEDGMENTS.md", "ffmpeg-kit-next-8.1.0.aar", "ffmpeg-kit-next-9.0.2.aar")
     replace_text("ACKNOWLEDGMENTS.md", "8.1.0", "9.0.2")
     replace_text("ACKNOWLEDGMENTS.md", "8.1.2", "9.0.2")
-    replace_text("ACKNOWLEDGMENTS.md", "ffmpeg-kit-next-8.1.0.aar", "ffmpeg-kit-next-9.0.2.aar")
     replace_text("app/src/main/res/raw/ffmpeg_kit_next_source_offer.txt",
                  "FFmpegKitNext 8.1.0 with FFmpeg 8.1.2.",
                  "FFmpegKitNext 9.0.2 with FFmpeg 9.0.2.", 1)
@@ -166,6 +180,12 @@ def main() -> int:
     replace_text("app/src/main/res/raw/ffmpeg_kit_next_source_offer.txt",
                  "Android NDK 27.3.13750724, Android API 24, OpenH264 2.3.1",
                  f"FFmpeg source revision {FFMPEG_COMMIT}; Android NDK 27.3.13750724, Android API 24, OpenH264 2.3.1", 1)
+    replace_text("app/src/main/res/raw/ffmpeg_kit_next_source_offer.txt",
+                 "./nix-android.sh -p android-r27d --enable-libass --enable-libjxl --enable-android-media-codec --enable-android-zlib --enable-openh264 --jobs=8",
+                 "./nix-android.sh -p android-r27d --arch=<ABI> --enable-lib-libass --enable-lib-libjxl --enable-lib-android-media-codec --enable-lib-android-zlib --enable-lib-openh264 --jobs=8", 1)
+
+    import subprocess, sys
+    subprocess.run([sys.executable, "scripts/generate_capability_registry.py"], cwd=ROOT, check=True)
 
     models_path = ROOT / "docs/models.md"
     models_text = models_path.read_text(encoding="utf-8")
