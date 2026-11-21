@@ -96,7 +96,15 @@ jobs:
                   for name in libs:
                       target = merged / name
                       target.parent.mkdir(parents=True, exist_ok=True)
-                      target.write_bytes(z.read(name))
+                      payload = z.read(name)
+                      if target.exists():
+                          # Keep the baseline ARMv7 runtime helper when the NEON
+                          # variant ships a same-named library; retain its suffixed
+                          # NEON-specific libraries alongside the baseline set.
+                          if label != "armeabi-v7a-neon" and target.read_bytes() != payload:
+                              raise SystemExit(f"Conflicting native library payload: {name} ({label})")
+                          continue
+                      target.write_bytes(payload)
           out = pathlib.Path("build-output/ffmpeg-kit-next-9.0.2.aar")
           out.parent.mkdir(parents=True, exist_ok=True)
           with zipfile.ZipFile(out, "w", compression=zipfile.ZIP_DEFLATED) as z:
