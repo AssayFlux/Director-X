@@ -47,6 +47,15 @@ jobs:
         run: bash ./gradlew --no-daemon :app:generateNativeSbom
       - name: Verify resolved dependency advisory floors
         run: bash ./gradlew --no-daemon :app:verifyResolvedAdvisoryFloors
+      - name: Exercise native promotion provenance guard
+        env:
+          SOURCE_REVISION: ${{ github.sha }}
+          NATIVE_RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          manifest="$RUNNER_TEMP/native-build-provenance.json"
+          python3 scripts/verify_ffmpeg_promotion_provenance.py --create --revision "$SOURCE_REVISION" --run-id "$NATIVE_RUN_ID" --built-at "CI self-test" --manifest "$manifest"
+          python3 scripts/verify_ffmpeg_promotion_provenance.py --verify --revision "$SOURCE_REVISION" --run-id "$NATIVE_RUN_ID" --manifest "$manifest"
       - name: Run Android lint
         run: bash ./gradlew --no-daemon :app:lintQa
 
