@@ -142,7 +142,6 @@ def main() -> int:
     replace_text("app/build.gradle.kts",
                  "FFmpegKitNext 8.1.0 / FFmpeg 8.1.2, five Android ABIs.",
                  "FFmpegKitNext 9.0.2 / FFmpeg 9.0.2, five Android ABIs.", 1)
-    replace_text("scripts/generate_capability_registry.py", OLD_AAR, NEW_AAR, 1)
     replace_text("app/src/main/java/com/directorx/editor/engine/OpenSourceLicenses.kt", OLD_AAR, NEW_AAR, 1)
     replace_text("app/src/test/java/com/directorx/editor/engine/OpenSourceLicensesTest.kt", OLD_AAR, NEW_AAR, 2)
     replace_text("app/src/test/java/com/directorx/editor/engine/OpenSourceLicensesTest.kt", "8.1.0", "9.0.2")
