@@ -559,9 +559,12 @@ python3 - "$0" <<'PY'
 from pathlib import Path
 import ast, re, sys
 source = Path(sys.argv[1]).read_text(encoding="utf-8")
-blocks = re.findall(r"<<'FFMPEG_SECURITY_PY'\n(.*?)\nFFMPEG_SECURITY_PY", source, re.S)
-if len(blocks) != 1:
-    raise SystemExit(f"Expected one FFmpeg security Python block, found {len(blocks)}")
+start = "<<'FFMPEG_SECURITY_PY'\n"
+end = "\nFFMPEG_SECURITY_PY"
+if source.count(start) != 1 or source.count(end) != 1:
+    raise SystemExit("Expected exactly one FFmpeg security Python block")
+block = source.split(start, 1)[1].split(end, 1)[0]
+ast.parse(block, filename="embedded-ffmpeg-security.py")
 ast.parse(blocks[0], filename="embedded-ffmpeg-security.py")
 print("Embedded FFmpeg security Python syntax validated.")
 PY
