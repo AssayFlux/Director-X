@@ -5,10 +5,6 @@ on:
     workflows: ["FFmpeg 9.0.2 - Native ABI builds"]
     types: [completed]
     branches: [Alpha]
-  push:
-    branches: [Alpha]
-    paths:
-      - ".github/workflows/ffmpeg-9-assemble.yml"
   workflow_dispatch:
     inputs:
       build_run_id:
@@ -22,7 +18,7 @@ permissions:
 
 jobs:
   assemble:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
@@ -41,8 +37,6 @@ jobs:
           set -euo pipefail
           RUN_ID="$INPUT_RUN_ID"
           if [[ -z "$RUN_ID" ]]; then RUN_ID="$EVENT_RUN_ID"; fi
-          # One-time recovery path: assemble the already successful five-ABI build.
-          if [[ -z "$RUN_ID" && "$GITHUB_EVENT_NAME" == "push" ]]; then RUN_ID="44905134014"; fi
           [[ "$RUN_ID" =~ ^[0-9]+$ ]]
           run_json="$(gh api "/repos/$GITHUB_REPOSITORY/actions/runs/$RUN_ID")"
           jq -e '.head_branch == "Alpha" and .conclusion == "success" and .path == ".github/workflows/ffmpeg-9-native-build.yml"' <<<"$run_json" >/dev/null
