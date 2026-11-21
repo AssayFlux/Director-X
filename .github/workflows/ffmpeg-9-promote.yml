@@ -45,7 +45,7 @@ jobs:
           pattern: ffmpeg-kit-next-9.0.2-release-candidate-${{ steps.source.outputs.run_id }}
           run-id: ${{ steps.source.outputs.run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path: build-evidence
+          path: build-evidence/build-output
 
       - name: Promote AAR, POM, lock and app references
         env:
