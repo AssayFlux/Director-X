@@ -192,14 +192,11 @@ class TrackedFilesAuditTest {
         )
 
         private val APPROVED_AUTOMATION_FILES = setOf(
-            ".github/workflows/ci.yml",
-            ".github/workflows/android-verification.yml",
-            ".github/workflows/android-device-qa.yml",
-            ".github/workflows/repository-hygiene.yml",
-            ".github/workflows/release-candidate.yml",
-            ".github/workflows/ffmpeg-kit-next-9-build.yml",
-            ".github/workflows/promote-ffmpeg-kit-next-9.yml",
-            ".github/workflows/ffmpeg-9-temporary-recovery.yml",
+            ".github/workflows/ffmpeg-9-app-verify.yml",
+            ".github/workflows/ffmpeg-9-assemble.yml",
+            ".github/workflows/ffmpeg-9-native-build.yml",
+            ".github/workflows/ffmpeg-9-promote.yml",
+            ".github/workflows/ffmpeg-9-recover.yml",
         )
 
         private val REQUIRED_TRACKED = listOf(
