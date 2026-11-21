@@ -5,6 +5,10 @@ on:
     workflows: ["FFmpeg 9.0.2 - Native ABI builds"]
     types: [completed]
     branches: [Alpha]
+  push:
+    branches: [Alpha]
+    paths:
+      - ".github/workflows/ffmpeg-9-assemble.yml"
   workflow_dispatch:
     inputs:
       build_run_id:
@@ -18,7 +22,7 @@ permissions:
 
 jobs:
   assemble:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
@@ -27,18 +31,32 @@ jobs:
           ref: Alpha
           persist-credentials: false
 
-      - name: Select native build run
+      - name: Validate native build run and select provenance
         id: source
         env:
           EVENT_RUN_ID: ${{ github.event.workflow_run.id }}
           INPUT_RUN_ID: ${{ inputs.build_run_id }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          if [[ -n "$INPUT_RUN_ID" ]]; then
-            echo "run_id=$INPUT_RUN_ID" >> "$GITHUB_OUTPUT"
-          else
-            echo "run_id=$EVENT_RUN_ID" >> "$GITHUB_OUTPUT"
-          fi
+          RUN_ID="$INPUT_RUN_ID"
+          if [[ -z "$RUN_ID" ]]; then RUN_ID="$EVENT_RUN_ID"; fi
+          # One-time recovery path: assemble the already successful five-ABI build.
+          if [[ -z "$RUN_ID" && "$GITHUB_EVENT_NAME" == "push" ]]; then RUN_ID="44905134014"; fi
+          [[ "$RUN_ID" =~ ^[0-9]+$ ]]
+          run_json="$(gh api "/repos/$GITHUB_REPOSITORY/actions/runs/$RUN_ID")"
+          jq -e '.head_branch == "Alpha" and .conclusion == "success" and .path == ".github/workflows/ffmpeg-9-native-build.yml"' <<<"$run_json" >/dev/null
+          artifacts_json="$(gh api "/repos/$GITHUB_REPOSITORY/actions/runs/$RUN_ID/artifacts?per_page=100")"
+          for abi in armeabi-v7a armeabi-v7a-neon arm64-v8a x86 x86_64; do
+            expected="ffmpeg-kit-next-9.0.2-abi-$abi-$RUN_ID"
+            jq -e --arg name "$expected" '.artifacts | any(.name == $name and .expired == false)' <<<"$artifacts_json" >/dev/null || {
+              echo "Missing or expired ABI artifact: $expected" >&2
+              exit 1
+            }
+          done
+          echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+          echo "head_sha=$(jq -r '.head_sha' <<<"$run_json")" >> "$GITHUB_OUTPUT"
+          echo "built_at=$(jq -r '.updated_at' <<<"$run_json")" >> "$GITHUB_OUTPUT"
 
       - name: Download the five independent ABI artifacts
         uses: actions/download-artifact@v4
@@ -131,8 +149,8 @@ jobs:
       - name: Record native build provenance
         env:
           NATIVE_RUN_ID: ${{ steps.source.outputs.run_id }}
-          NATIVE_HEAD_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
-          NATIVE_BUILT_AT: ${{ github.event.workflow_run.updated_at || github.event.repository.updated_at }}
+          NATIVE_HEAD_SHA: ${{ steps.source.outputs.head_sha }}
+          NATIVE_BUILT_AT: ${{ steps.source.outputs.built_at }}
         run: |
           set -euo pipefail
           python3 - <<'PY'
