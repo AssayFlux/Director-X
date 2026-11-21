@@ -1,0 +1,132 @@
+name: FFmpeg 9.0.2 - Native ABI builds
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [Alpha]
+    paths:
+      - "scripts/prepare_ffmpeg_kit_next_9_source.sh"
+      - "third_party/ffmpeg-kit-next/directorx-security.patch"
+      - ".github/workflows/ffmpeg-9-native-build.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ffmpeg-9-native-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build ${{ matrix.label }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        include:
+          - label: armeabi-v7a
+            arch: arm-v7a
+          - label: armeabi-v7a-neon
+            arch: arm-v7a-neon
+          - label: arm64-v8a
+            arch: arm64-v8a
+          - label: x86
+            arch: x86
+          - label: x86_64
+            arch: x86-64
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Install source verification tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install --yes gnupg xz-utils binutils
+
+      - name: Verify FFmpeg 9.0.2 signed release
+        run: |
+          set -euo pipefail
+          mkdir -p authenticity
+          cd authenticity
+          curl --fail --location --silent --show-error https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz -o ffmpeg-9.0.2.tar.xz
+          curl --fail --location --silent --show-error https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz.asc -o ffmpeg-9.0.2.tar.xz.asc
+          curl --fail --location --silent --show-error https://ffmpeg.org/ffmpeg-devel.asc | gpg --import
+          gpg --with-colons --fingerprint FCF986EA15E6E293A5644F10B4322F04D67658D8 | grep -F FCF986EA15E6E293A5644F10B4322F04D67658D8
+          gpg --verify ffmpeg-9.0.2.tar.xz.asc ffmpeg-9.0.2.tar.xz
+          echo "Verified FFmpeg release tarball SHA-256:"
+          sha256sum ffmpeg-9.0.2.tar.xz | tee release-sha256.txt
+          grep -F "8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e" release-sha256.txt
+
+      - name: Verify signed upstream n9.0.2 tag
+        run: |
+          set -euo pipefail
+          gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys DD1EC9E8DE085C629B3E1846B18E8928B3948D64
+          git init ffmpeg-upstream
+          git -C ffmpeg-upstream remote add origin https://github.com/FFmpeg/FFmpeg.git
+          git -C ffmpeg-upstream fetch --depth=1 origin refs/tags/n9.0.2:refs/tags/n9.0.2
+          test "$(git -C ffmpeg-upstream rev-parse 'n9.0.2^{commit}')" = "ce8f11b9fac4cd7ccfb41ca7c01bc17f5cda8cc3"
+          git -C ffmpeg-upstream verify-tag n9.0.2
+
+      - name: Check out pinned FFmpegKitNext wrapper
+        uses: actions/checkout@v4
+        with:
+          repository: arthenica/ffmpeg-kit-next
+          ref: 9f04bf1e3c97def70b98e198cb80a57b43ef5b45
+          path: ffmpeg-kit-next
+          persist-credentials: false
+
+      - name: Apply pinned Director X native security profile
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C ffmpeg-kit-next rev-parse HEAD)" = "9f04bf1e3c97def70b98e198cb80a57b43ef5b45"
+          git -C ffmpeg-kit-next config core.autocrlf false
+          git -C ffmpeg-kit-next apply --check "$GITHUB_WORKSPACE/third_party/ffmpeg-kit-next/directorx-security.patch"
+          git -C ffmpeg-kit-next apply "$GITHUB_WORKSPACE/third_party/ffmpeg-kit-next/directorx-security.patch"
+          bash "$GITHUB_WORKSPACE/scripts/prepare_ffmpeg_kit_next_9_source.sh" "$GITHUB_WORKSPACE/ffmpeg-kit-next/scripts/source.sh"
+          bash -n ffmpeg-kit-next/scripts/android/ffmpeg.sh
+          git -C ffmpeg-kit-next diff --check
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            accept-flake-config = true
+
+      - name: Compile only this Android ABI
+        working-directory: ffmpeg-kit-next
+        shell: bash
+        env:
+          ABI_ARCH: ${{ matrix.arch }}
+          ABI_LABEL: ${{ matrix.label }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$GITHUB_WORKSPACE/build-output"
+          export version_ffmpeg=n9.0.2
+          export RECONF_fribidi=1
+          ./nix-android.sh -p android-r27d --arch="$ABI_ARCH" --enable-lib-libass --enable-lib-libjxl --enable-lib-android-media-codec --enable-lib-android-zlib --enable-lib-openh264 --jobs=8 2>&1 | tee "$GITHUB_WORKSPACE/build-output/native-build-transcript-$ABI_LABEL.log"
+          test "$(git -C src/ffmpeg rev-parse HEAD)" = "ce8f11b9fac4cd7ccfb41ca7c01bc17f5cda8cc3"
+          cp build.log "$GITHUB_WORKSPACE/build-output/build-$ABI_LABEL.log"
+          mapfile -t aars < <(find prebuilt -type f -name 'ffmpeg-kit-next-9.0.2.aar' -print)
+          mapfile -t poms < <(find prebuilt -type f -name 'ffmpeg-kit-next-9.0.2.pom' -print)
+          test "${#aars[@]}" -eq 1
+          test "${#poms[@]}" -eq 1
+          cp "${aars[0]}" "$GITHUB_WORKSPACE/build-output/ffmpeg-kit-next-9.0.2-$ABI_LABEL.aar"
+          cp "${poms[0]}" "$GITHUB_WORKSPACE/build-output/ffmpeg-kit-next-9.0.2-$ABI_LABEL.pom"
+
+      - name: Upload this ABI output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ffmpeg-kit-next-9.0.2-abi-${{ matrix.label }}-${{ github.run_id }}
+          path: |
+            build-output/*
+            authenticity/*
+          if-no-files-found: warn
+          retention-days: 30
