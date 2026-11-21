@@ -3,7 +3,7 @@
 from __future__ import annotations
 import argparse, hashlib, json, pathlib, subprocess
 ROOT=pathlib.Path(__file__).resolve().parents[1]
-FILES=["third_party/ffmpeg-kit-next/directorx-security.patch","third_party/ffmpeg-kit-next/native-lock.json","scripts/prepare_ffmpeg_kit_next_9_source.sh",".github/workflows/ffmpeg-9-native-build.yml"]
+FILES=["third_party/ffmpeg-kit-next/directorx-security.patch","scripts/prepare_ffmpeg_kit_next_9_source.sh",".github/workflows/ffmpeg-9-native-build.yml"]
 def digest(b): return hashlib.sha256(b.replace(b"\r\n",b"\n")).hexdigest()
 def show(rev,path): return subprocess.check_output(["git","show",f"{rev}:{path}"],cwd=ROOT)
 def main():
@@ -16,6 +16,10 @@ def main():
   committed=show(a.revision,rel); working=(ROOT/rel).read_bytes()
   if digest(committed)!=digest(working): raise SystemExit(f"source checkout mismatch for {rel}")
   entries[rel]=digest(committed)
+ lock=json.loads((ROOT/"third_party/ffmpeg-kit-next/native-lock.json").read_text(encoding="utf-8"))
+ if lock["source"]["commit"]!="9f04bf1e3c97def70b98e198cb80a57b43ef5b45" or lock["source"]["ffmpegRevision"]!="946fcce07b6dcd0331c8cc609192aeff5e1924f8": raise SystemExit("current native lock does not pin the promoted FFmpeg 9.0.2 sources")
+ if lock["source"]["securityPatchSha256"]!=entries["third_party/ffmpeg-kit-next/directorx-security.patch"]: raise SystemExit("native lock security patch digest mismatch")
+ if lock["build"]["abis"]!=["armeabi-v7a","armeabi-v7a-neon","arm64-v8a","x86","x86_64"]: raise SystemExit("native lock ABI inventory mismatch")
  path=pathlib.Path(a.manifest)
  if a.create:
   data={"schemaVersion":1,"runId":a.run_id,"headSha":a.revision,"builtAt":a.built_at,"files":entries,"wrapperCommit":"9f04bf1e3c97def70b98e198cb80a57b43ef5b45","ffmpegCommit":"946fcce07b6dcd0331c8cc609192aeff5e1924f8"}
