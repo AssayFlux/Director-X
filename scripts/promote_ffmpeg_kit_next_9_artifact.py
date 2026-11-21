@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 WRAPPER_COMMIT = "9f04bf1e3c97def70b98e198cb80a57b43ef5b45"
-FFMPEG_COMMIT = "946fcce07b6dcd0331c8cc609192aeff5e1924f8"
+FFMPEG_COMMIT = "ce8f11b9fac4cd7ccfb41ca7c01bc17f5cda8cc3"
 OLD_AAR = "third_party/ffmpeg-kit-next/ffmpeg-kit-next-8.1.0.aar"
 OLD_POM = "third_party/ffmpeg-kit-next/ffmpeg-kit-next-8.1.0.pom"
 NEW_AAR = "third_party/ffmpeg-kit-next/ffmpeg-kit-next-9.0.2.aar"
