@@ -565,7 +565,6 @@ if source.count(start) != 1 or source.count(end) != 1:
     raise SystemExit("Expected exactly one FFmpeg security Python block")
 block = source.split(start, 1)[1].split(end, 1)[0]
 ast.parse(block, filename="embedded-ffmpeg-security.py")
-ast.parse(blocks[0], filename="embedded-ffmpeg-security.py")
 print("Embedded FFmpeg security Python syntax validated.")
 PY
 
