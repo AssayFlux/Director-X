@@ -477,7 +477,7 @@ edit('libavformat/mov.c', '    mov->found_mdat = 0;\n',
 # Port upstream a13e2733 explicitly: acquire SPS/PPS references only
 # after frame-buffer allocation succeeds. This avoids leaking references when
 # metadata attachment or buffer allocation fails. Keep the overflow guard too.
-edit('libavcodec/vvc/refs.c', '        frame->sps = av_refstruct_ref_c(fc->ps.sps);\n        frame->pps = av_refstruct_ref_c(fc->ps.pps);\n\n        // Add LCEVC SEI metadata here, as it's needed in get_buffer()\n', '        // Add LCEVC SEI metadata here, as it's needed in get_buffer()\n', 'VVC delayed SPS/PPS references (remove early acquisition)')
+edit('libavcodec/vvc/refs.c', '        frame->sps = av_refstruct_ref_c(fc->ps.sps);\n        frame->pps = av_refstruct_ref_c(fc->ps.pps);\n\n        // Add LCEVC SEI metadata here, as it is needed in get_buffer()\n', '        // Add LCEVC SEI metadata here, as it is needed in get_buffer()\n', 'VVC delayed SPS/PPS references (remove early acquisition)')
 edit('libavcodec/vvc/refs.c',
      '        ret = ff_thread_get_buffer(s->avctx, frame->frame, AV_GET_BUFFER_FLAG_REF);\n        if (ret < 0)\n            return NULL;\n\n',
      '        ret = ff_thread_get_buffer(s->avctx, frame->frame, AV_GET_BUFFER_FLAG_REF);\n        if (ret < 0)\n            return NULL;\n\n        frame->sps = av_refstruct_ref_c(fc->ps.sps);\n        frame->pps = av_refstruct_ref_c(fc->ps.pps);\n\n',
