@@ -7,7 +7,7 @@ FILES=["third_party/ffmpeg-kit-next/directorx-security.patch","scripts/prepare_f
 def digest(b): return hashlib.sha256(b.replace(b"\r\n",b"\n")).hexdigest()
 def show(rev,path): return subprocess.check_output(["git","show",f"{rev}:{path}"],cwd=ROOT)
 def main():
- p=argparse.ArgumentParser(); p.add_argument("--create",action="store_true"); p.add_argument("--verify",action="store_true"); p.add_argument("--revision",required=True); p.add_argument("--run-id",required=True); p.add_argument("--built-at",default=""); p.add_argument("--manifest",default="build-output/native-build-provenance.json"); a=p.parse_args()
+ p=argparse.ArgumentParser(); p.add_argument("--create",action="store_true"); p.add_argument("--verify",action="store_true"); p.add_argument("--revision",required=True); p.add_argument("--run-id",required=True); p.add_argument("--built-at",default=""); p.add_argument("--manifest",default="build-output/native-build-provenance.json"); p.add_argument("--aar"); p.add_argument("--pom"); a=p.parse_args()
  if a.create==a.verify: raise SystemExit("choose exactly one of --create or --verify")
  if len(a.revision)!=40 or any(c not in "0123456789abcdef" for c in a.revision): raise SystemExit("invalid source revision")
  if not a.run_id.isdigit(): raise SystemExit("invalid native workflow run ID")
@@ -21,7 +21,7 @@ def main():
  if lock["source"]["securityPatchSha256"]!=entries["third_party/ffmpeg-kit-next/directorx-security.patch"]: raise SystemExit("native lock security patch digest mismatch")
  if lock["build"]["abis"]!=["armeabi-v7a","armeabi-v7a-neon","arm64-v8a","x86","x86_64"]: raise SystemExit("native lock ABI inventory mismatch")
  path=pathlib.Path(a.manifest)
- aar=path.parent/"ffmpeg-kit-next-9.0.2.aar"; pom=path.parent/"ffmpeg-kit-next-9.0.2.pom"
+ aar=pathlib.Path(a.aar) if a.aar else path.parent/"ffmpeg-kit-next-9.0.2.aar"; pom=pathlib.Path(a.pom) if a.pom else path.parent/"ffmpeg-kit-next-9.0.2.pom"
  if not aar.is_file() or not pom.is_file(): raise SystemExit("assembled AAR/POM missing for provenance binding")
  artifact_hashes={"aarSha256":hashlib.sha256(aar.read_bytes()).hexdigest(),"pomSha256":hashlib.sha256(pom.read_bytes()).hexdigest()}
  if a.create:

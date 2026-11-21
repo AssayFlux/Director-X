@@ -54,8 +54,8 @@ jobs:
         run: |
           set -euo pipefail
           manifest="$RUNNER_TEMP/native-build-provenance.json"
-          python3 scripts/verify_ffmpeg_promotion_provenance.py --create --revision "$SOURCE_REVISION" --run-id "$NATIVE_RUN_ID" --built-at "CI self-test" --manifest "$manifest"
-          python3 scripts/verify_ffmpeg_promotion_provenance.py --verify --revision "$SOURCE_REVISION" --run-id "$NATIVE_RUN_ID" --manifest "$manifest"
+          python3 scripts/verify_ffmpeg_promotion_provenance.py --create --revision "$SOURCE_REVISION" --run-id "$NATIVE_RUN_ID" --built-at "CI self-test" --manifest "$manifest" --aar third_party/ffmpeg-kit-next/ffmpeg-kit-next-9.0.2.aar --pom third_party/ffmpeg-kit-next/ffmpeg-kit-next-9.0.2.pom
+          python3 scripts/verify_ffmpeg_promotion_provenance.py --verify --revision "$SOURCE_REVISION" --run-id "$NATIVE_RUN_ID" --manifest "$manifest" --aar third_party/ffmpeg-kit-next/ffmpeg-kit-next-9.0.2.aar --pom third_party/ffmpeg-kit-next/ffmpeg-kit-next-9.0.2.pom
       - name: Run Android lint
         run: bash ./gradlew --no-daemon :app:lintQa
 
