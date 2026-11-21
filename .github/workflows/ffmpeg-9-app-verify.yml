@@ -69,3 +69,14 @@ jobs:
           for apk in "${apks[@]}"; do
             python3 scripts/check_16kb_alignment.py "$apk"
           done
+          (cd app/build/outputs/apk/qa && find . -type f -name '*.apk' -print0 | sort -z | xargs -0 sha256sum) > app/build/outputs/apk/qa/SHA256SUMS
+
+      - name: Upload verified QA APKs
+        uses: actions/upload-artifact@v4
+        with:
+          name: directorx-qa-apks-${{ github.sha }}
+          path: |
+            app/build/outputs/apk/qa/**/*.apk
+            app/build/outputs/apk/qa/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 14
