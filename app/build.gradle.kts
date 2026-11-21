@@ -218,7 +218,7 @@ ksp {
 }
 
 val ffmpegKitAar = rootProject.file("third_party/ffmpeg-kit-next/ffmpeg-kit-next-9.0.2.aar")
-val ffmpegKitAarSha256 = "80f95f1e384765102f3b780cee0a68631c5b9d4cca1a659a1a2c05a5c3c19dfe"
+val ffmpegKitAarSha256 = "44e96b4cb4a1b35e7a38d8cdc1a9707aaae17fffd83cee7f1da56663bd87b2f6"
 
 fun File.sha256(): String {
     val digest = MessageDigest.getInstance("SHA-256")

@@ -6,7 +6,7 @@ https://github.com/arthenica/ffmpeg-kit-next/tree/9f04bf1e3c97def70b98e198cb80a5
 Reproduction command:
 ./nix-android.sh -p android-r27d --arch=<ABI> --enable-lib-libass --enable-lib-libjxl --enable-lib-android-media-codec --enable-lib-android-zlib --enable-lib-openh264 --jobs=8
 
-Build inputs: FFmpeg source revision 946fcce07b6dcd0331c8cc609192aeff5e1924f8; Android NDK 27.3.13750724, Android API 24, OpenH264 2.3.1
+Build inputs: FFmpeg source revision 946fcce07b6dcd0331c8cc609192aeff5e1924f8; FFmpeg source revision 946fcce07b6dcd0331c8cc609192aeff5e1924f8; Android NDK 27.3.13750724, Android API 24, OpenH264 2.3.1
 commit 0a48f4d2e9be2abb4fb01b4c3be83cf44ce91a6e, libass 0.17.4 commit
 bbb3c7f1570a4a021e52683f3fbdf74fe492ae84. The Director X downstream security patch
 at third_party/ffmpeg-kit-next/directorx-security.patch disables the

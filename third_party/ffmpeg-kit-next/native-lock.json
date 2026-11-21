@@ -2,8 +2,8 @@
   "schemaVersion": 2,
   "artifact": {
     "path": "third_party/ffmpeg-kit-next/ffmpeg-kit-next-9.0.2.aar",
-    "size": 62703887,
-    "sha256": "80f95f1e384765102f3b780cee0a68631c5b9d4cca1a659a1a2c05a5c3c19dfe",
+    "size": 62703876,
+    "sha256": "44e96b4cb4a1b35e7a38d8cdc1a9707aaae17fffd83cee7f1da56663bd87b2f6",
     "pomPath": "third_party/ffmpeg-kit-next/ffmpeg-kit-next-9.0.2.pom",
     "pomSize": 856,
     "pomSha256": "5155f70d1f51723aed0ebe3d7fcedfed0ab7e12e7f72fa3497df9f016ef60839",
