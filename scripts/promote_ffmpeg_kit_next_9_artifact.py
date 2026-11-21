@@ -156,7 +156,7 @@ def main() -> int:
     ffmpeg_entry["version"] = "9.0.2 (FFmpeg 9.0.2)"
     ffmpeg_entry["coordinate"] = NEW_AAR
     ffmpeg_entry["notice"]["sourceOfferText"] = (
-        "Exact corresponding-source recipe for this LGPL v3.0-or-later build:\\n"
+        "Exact corresponding-source recipe for this LGPL v3.0-or-later build:\n"
         f"https://github.com/arthenica/ffmpeg-kit-next/tree/{WRAPPER_COMMIT}\\n"
         f"FFmpeg source revision {FFMPEG_COMMIT}; configure command: "
         "./nix-android.sh -p android-r27d --arch=<ABI> --enable-lib-libass --enable-lib-libjxl "
