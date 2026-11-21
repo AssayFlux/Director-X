@@ -146,6 +146,7 @@ def main() -> int:
     replace_text("app/src/test/java/com/directorx/editor/engine/OpenSourceLicensesTest.kt", OLD_AAR, NEW_AAR, 2)
     replace_text("app/src/test/java/com/directorx/editor/engine/OpenSourceLicensesTest.kt", "8.1.0", "9.0.2")
     replace_text("app/src/test/java/com/directorx/editor/engine/OpenSourceLicensesTest.kt", "FFmpeg 8.1.2", "FFmpeg 9.0.2")
+    replace_text("app/src/test/java/com/directorx/editor/engine/OpenSourceLicensesTest.kt", "3e223118e6e8fb6208693ecf3952e77cd096f587", WRAPPER_COMMIT, 1)
     replace_text("app/src/test/java/com/directorx/editor/engine/ModelRegistryDocumentationTest.kt", "ffmpeg-kit-next-8.1.0.aar", "ffmpeg-kit-next-9.0.2.aar", 1)
     replace_text("app/src/main/java/com/directorx/editor/engine/FFmpegEngine.kt", "8.1.0", "9.0.2")
     replace_text("app/src/main/java/com/directorx/editor/engine/FFmpegEngine.kt", "8.1.2", "9.0.2")
@@ -161,8 +162,9 @@ def main() -> int:
         f"FFmpeg source revision {FFMPEG_COMMIT}; configure command: "
         "./nix-android.sh -p android-r27d --arch=<ABI> --enable-lib-libass --enable-lib-libjxl "
         "--enable-lib-android-media-codec --enable-lib-android-zlib --enable-lib-openh264 --jobs=8\n"
-        "The security patch, complete recipe, checksums, disabled components, and source revisions "
-        "are recorded in third_party/ffmpeg-kit-next/native-lock.json and the installed source-offer resource."
+        "The security patch at third_party/ffmpeg-kit-next/directorx-security.patch, complete recipe, checksums, "
+        "disabled components, and source revisions are recorded in third_party/ffmpeg-kit-next/native-lock.json "
+        "and the installed source-offer resource."
     )
     registry_path.write_text(json.dumps(registry, indent=2) + "\n", encoding="utf-8")
 
