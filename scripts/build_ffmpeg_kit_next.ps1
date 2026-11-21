@@ -6,8 +6,14 @@ param(
     [ValidateSet("n8.1.2", "n8.1.3")]
     [string]$FfmpegTag = "n8.1.2",
 
-    [switch]$PackageOnly
+    [switch]$PackageOnly,
+
+    [switch]$AllowLegacy8x
 )
+
+if (-not $AllowLegacy8x) {
+    throw "This is the retired FFmpeg 8.1.x builder. Use .github/workflows/ffmpeg-9-native-build.yml for the supported FFmpeg 9.0.2 build. Pass -AllowLegacy8x only for an intentional historical 8.x reproduction."
+}
 
 $expectedKitCommit = "3e223118e6e8fb6208693ecf3952e77cd096f587"
 $sourcePath = (Resolve-Path -LiteralPath $SourceDirectory -ErrorAction Stop).Path
