@@ -21,14 +21,29 @@ permissions:
   contents: read
 
 concurrency:
-  group: ffmpeg-kit-next-9.0.2-v2-${{ github.ref }}
+  group: ffmpeg-kit-next-9.0.2-v3-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   build-native:
-    name: Verify release source and build five Android ABIs
+    name: Build Android ABI ${{ matrix.label }}
     runs-on: ubuntu-24.04
     timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        include:
+          - label: armeabi-v7a
+            arch: arm-v7a
+          - label: armeabi-v7a-neon
+            arch: arm-v7a-neon
+          - label: arm64-v8a
+            arch: arm64-v8a
+          - label: x86
+            arch: x86
+          - label: x86_64
+            arch: x86-64
     steps:
       - name: Check out Director X
         uses: actions/checkout@v4
@@ -97,19 +112,105 @@ jobs:
             experimental-features = nix-command flakes
             accept-flake-config = true
 
-      - name: Build FFmpegKitNext for all configured Android ABIs
+      - name: Build only ${{ matrix.label }}
         working-directory: ffmpeg-kit-next
         shell: bash
+        env:
+          ABI_ARCH: ${{ matrix.arch }}
+          ABI_LABEL: ${{ matrix.label }}
         run: |
           set -euo pipefail
           mkdir -p "$GITHUB_WORKSPACE/build-output"
           export version_ffmpeg=n9.0.2
           export RECONF_fribidi=1
-          ./nix-android.sh -p android-r27d --enable-lib-libass --enable-lib-libjxl --enable-lib-android-media-codec --enable-lib-android-zlib --enable-lib-openh264 --jobs=8 2>&1 | tee "$GITHUB_WORKSPACE/build-output/native-build-transcript.log"
+          ./nix-android.sh -p android-r27d --arch="$ABI_ARCH" --enable-lib-libass --enable-lib-libjxl --enable-lib-android-media-codec --enable-lib-android-zlib --enable-lib-openh264 --jobs=8 2>&1 | tee "$GITHUB_WORKSPACE/build-output/native-build-transcript-$ABI_LABEL.log"
           test "$(git -C src/ffmpeg rev-parse HEAD)" = "$FFMPEG_RELEASE_COMMIT"
-          cp build.log "$GITHUB_WORKSPACE/build-output/build.log"
+          cp build.log "$GITHUB_WORKSPACE/build-output/build-$ABI_LABEL.log"
+          mapfile -t aars < <(find prebuilt -type f -name 'ffmpeg-kit-next-9.0.2.aar' -print)
+          mapfile -t poms < <(find prebuilt -type f -name 'ffmpeg-kit-next-9.0.2.pom' -print)
+          test "${#aars[@]}" -eq 1
+          test "${#poms[@]}" -eq 1
+          cp "${aars[0]}" "$GITHUB_WORKSPACE/build-output/ffmpeg-kit-next-9.0.2-$ABI_LABEL.aar"
+          cp "${poms[0]}" "$GITHUB_WORKSPACE/build-output/ffmpeg-kit-next-9.0.2-$ABI_LABEL.pom"
 
-      - name: Verify AAR, POM, ABIs, alignment and configure profile
+      - name: Upload ABI build output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ffmpeg-kit-next-9.0.2-abi-${{ matrix.label }}-${{ github.run_id }}
+          path: |
+            build-output/*
+            authenticity/*
+          if-no-files-found: warn
+          retention-days: 30
+
+  verify-native:
+    name: Merge and verify all five Android ABIs
+    needs: build-native
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out Director X
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Download ABI outputs
+        uses: actions/download-artifact@v4
+        with:
+          pattern: ffmpeg-kit-next-9.0.2-abi-*-${{ github.run_id }}
+          path: abi-output
+          merge-multiple: true
+
+      - name: Merge per-ABI AARs into one release AAR
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import pathlib, zipfile, shutil
+          root = pathlib.Path("abi-output")
+          labels = ["armeabi-v7a", "armeabi-v7a-neon", "arm64-v8a", "x86", "x86_64"]
+          base = root / "ffmpeg-kit-next-9.0.2-arm64-v8a.aar"
+          if not base.is_file():
+              raise SystemExit(f"Missing base AAR: {base}")
+          merged = pathlib.Path("build-output/merged-aar")
+          merged.mkdir(parents=True, exist_ok=True)
+          with zipfile.ZipFile(base) as z:
+              z.extractall(merged)
+          jni = merged / "jni"
+          if jni.exists():
+              shutil.rmtree(jni)
+          jni.mkdir()
+          for label in labels:
+              aar = root / f"ffmpeg-kit-next-9.0.2-{label}.aar"
+              pom = root / f"ffmpeg-kit-next-9.0.2-{label}.pom"
+              if not aar.is_file() or not pom.is_file():
+                  raise SystemExit(f"ABI output missing for {label}")
+              with zipfile.ZipFile(aar) as z:
+                  entries = [n for n in z.namelist() if n.startswith("jni/") and n.endswith(".so")]
+                  if not entries:
+                      raise SystemExit(f"No JNI libraries in {aar}")
+                  for name in entries:
+                      target = merged / name
+                      target.parent.mkdir(parents=True, exist_ok=True)
+                      target.write_bytes(z.read(name))
+          out = pathlib.Path("build-output/ffmpeg-kit-next-9.0.2.aar")
+          out.parent.mkdir(parents=True, exist_ok=True)
+          with zipfile.ZipFile(out, "w", compression=zipfile.ZIP_DEFLATED) as z:
+              for path in sorted(merged.rglob("*")):
+                  if path.is_file():
+                      z.write(path, path.relative_to(merged).as_posix())
+          shutil.copy2(root / "ffmpeg-kit-next-9.0.2-arm64-v8a.pom",
+                       pathlib.Path("build-output/ffmpeg-kit-next-9.0.2.pom"))
+          PY
+          mkdir -p build-output
+          for label in armeabi-v7a armeabi-v7a-neon arm64-v8a x86 x86_64; do
+            test -f "abi-output/native-build-transcript-$label.log"
+            test -f "abi-output/build-$label.log"
+          done
+          cp abi-output/*log build-output/ 2>/dev/null || true
+
+      - name: Verify merged AAR, POM, ABIs, alignment and configure profile
         shell: bash
         run: |
           set -euo pipefail
@@ -197,7 +298,6 @@ jobs:
           name: ffmpeg-kit-next-9.0.2-evidence-${{ github.run_id }}
           path: |
             build-output/*
-            authenticity/*
-            ffmpeg-kit-next/build.log
+            abi-output/*
           if-no-files-found: warn
           retention-days: 30
