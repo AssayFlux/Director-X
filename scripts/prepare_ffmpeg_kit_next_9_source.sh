@@ -261,6 +261,13 @@ for fix in "${FFMPEG_SECURITY_COMMITS[@]}"; do
   # Check the patch against the actual working-tree contents, not only commit
   # ancestry. A later fork commit can revert or replace an upstream fix while
   # leaving the original commit in HEAD's history.
+  # This VVC fix is ported explicitly below because Director X also
+  # applies an allocation-overflow guard in the same function. Applying the
+  # upstream hunk first would collide with that independent hardening edit.
+  if [[ "$fix" == "a13e27336a61a3452e1ab8b4bb132c4174c67498" ]]; then
+    echo "Deferring VVC SPS/PPS lifetime fix to the verified source-level port: $fix"
+    continue
+  fi
   patch_file="$(mktemp)"
   git -C "${ffmpeg_source_dir}" show --format= "${fix}" > "$patch_file"
   if git -C "${ffmpeg_source_dir}" apply --check "$patch_file"; then
@@ -462,6 +469,17 @@ edit('libavformat/isom.h', '    MOVFragmentIndex frag_index;\n    int atom_depth
      '    MOVFragmentIndex frag_index;\n    uint8_t *pssh_side_data;\n    AVStream *pssh_stream;\n    unsigned int pssh_side_data_allocated;\n    int atom_depth;', 'PSSH context')
 edit('libavformat/mov.c', '    mov->found_mdat = 0;\n',
      '    mov->found_mdat = 0;\n    mov->pssh_side_data = NULL;\n    mov->pssh_stream = NULL;\n    mov->pssh_side_data_allocated = 0;\n', 'PSSH reset')
+# Port upstream a13e2733 explicitly: acquire SPS/PPS references only
+# after frame-buffer allocation succeeds. This avoids leaking references when
+# metadata attachment or buffer allocation fails. Keep the overflow guard too.
+edit('libavcodec/vvc/refs.c',
+     '        frame->sps = av_refstruct_ref_c(fc->ps.sps);\n        frame->pps = av_refstruct_ref_c(fc->ps.pps);\n\n        // Add LCEVC SEI metadata here, as it is needed in get_buffer()\n',
+     '        // Add LCEVC SEI metadata here, as it is needed in get_buffer()\n',
+     'VVC delayed SPS/PPS references (remove early acquisition)')
+edit('libavcodec/vvc/refs.c',
+     '        ret = ff_thread_get_buffer(s->avctx, frame->frame, AV_GET_BUFFER_FLAG_REF);\n        if (ret < 0)\n            return NULL;\n\n',
+     '        ret = ff_thread_get_buffer(s->avctx, frame->frame, AV_GET_BUFFER_FLAG_REF);\n        if (ret < 0)\n            return NULL;\n\n        frame->sps = av_refstruct_ref_c(fc->ps.sps);\n        frame->pps = av_refstruct_ref_c(fc->ps.pps);\n\n',
+     'VVC delayed SPS/PPS references (acquire after buffer)')
 edit('libavcodec/vvc/refs.c',
      '        frame->rpl = av_refstruct_allocz(s->current_frame.nb_units * sizeof(RefPicListTab));\n',
      '        size_t rpl_size;\n        if (av_size_mult(s->current_frame.nb_units, sizeof(RefPicListTab), &rpl_size) < 0)\n            goto fail;\n        frame->rpl = av_refstruct_allocz(rpl_size);\n', 'VVC allocation')
