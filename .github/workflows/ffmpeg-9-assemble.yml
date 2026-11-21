@@ -99,7 +99,7 @@ jobs:
                       payload = z.read(name)
                       if target.exists():
                           # Keep the baseline ARMv7 runtime helper when the NEON
-                          # variant ships a same-named library; retain its suffixed
+                          # NEON variant ships a same-named helper; retain its suffixed
                           # NEON-specific libraries alongside the baseline set.
                           if label != "armeabi-v7a-neon" and target.read_bytes() != payload:
                               raise SystemExit(f"Conflicting native library payload: {name} ({label})")
