@@ -12,7 +12,7 @@ permissions:
 
 concurrency:
   group: android-full-ci-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 env:
   ANDROID_HOME: /usr/local/lib/android/sdk
