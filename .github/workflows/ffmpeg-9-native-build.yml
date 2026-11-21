@@ -111,7 +111,8 @@ jobs:
           capture_build_log() {
             status=$?
             if [[ -f build.log ]]; then
-                fi
+              cp build.log "$GITHUB_WORKSPACE/build-output/build-$ABI_LABEL.log"
+            fi
             exit "$status"
           }
           trap capture_build_log EXIT
@@ -119,7 +120,6 @@ jobs:
           export RECONF_fribidi=1
           ./nix-android.sh -p android-r27d --arch="$ABI_ARCH" --enable-lib-libass --enable-lib-libjxl --enable-lib-android-media-codec --enable-lib-android-zlib --enable-lib-openh264 --jobs=8 2>&1 | tee "$GITHUB_WORKSPACE/build-output/native-build-transcript-$ABI_LABEL.log"
           test "$(git -C src/ffmpeg rev-parse HEAD)" = "946fcce07b6dcd0331c8cc609192aeff5e1924f8"
-          cp build.log "$GITHUB_WORKSPACE/build-output/build-$ABI_LABEL.log"
           mapfile -t aars < <(find prebuilt -type f -name 'ffmpeg-kit-next-9.0.2.aar' -print)
           mapfile -t poms < <(find prebuilt -type f -name 'ffmpeg-kit-next-9.0.2.pom' -print)
           test "${#aars[@]}" -eq 1
