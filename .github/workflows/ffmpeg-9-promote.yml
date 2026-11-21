@@ -71,6 +71,19 @@ jobs:
           set -euo pipefail
           python3 scripts/verify_native_supply_chain.py
 
+      - name: Require complete Android CI for the exact promotion checkout
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          checkout_sha="$(git rev-parse HEAD)"
+          runs="$(gh api "/repos/$GITHUB_REPOSITORY/actions/workflows/android-full-ci.yml/runs?branch=Alpha&per_page=50")"
+          if ! jq -e --arg sha "$checkout_sha" '.workflow_runs | any(.head_sha == $sha and .conclusion == "success")' <<<"$runs" >/dev/null; then
+            echo "Promotion blocked: Android full verification has not passed for Alpha@$checkout_sha." >&2
+            echo "Wait for the exact-commit Android full CI run to pass, then dispatch this promotion workflow again." >&2
+            exit 1
+          fi
+
       - name: Verify source-bound native provenance before promotion
         env:
           BUILD_RUN_ID: ${{ steps.provenance.outputs.run_id }}
