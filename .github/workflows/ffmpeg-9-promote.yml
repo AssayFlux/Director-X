@@ -46,6 +46,7 @@ jobs:
           run-id: ${{ steps.source.outputs.run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: build-evidence/build-output
+          merge-multiple: true
 
       - name: Read native build provenance
         id: provenance
