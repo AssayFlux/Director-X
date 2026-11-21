@@ -24,7 +24,7 @@ class OpenSourceLicensesTest {
 
     @Test
     fun registryContainsReleaseNoticeObligationDependencies() {
-        assertNotNull(OpenSourceLicenses.noticeForArtifact("third_party/ffmpeg-kit-next/ffmpeg-kit-next-8.1.0.aar"))
+        assertNotNull(OpenSourceLicenses.noticeForArtifact("third_party/ffmpeg-kit-next/ffmpeg-kit-next-9.0.2.aar"))
         assertNotNull(OpenSourceLicenses.noticeForArtifact("io.github.kaleyravideo:android-deepfilternet"))
     }
 
@@ -66,8 +66,8 @@ class OpenSourceLicensesTest {
     fun ffmpegKitNoticePreservesSourceOfferAndLgplProfile() {
         val notice = OpenSourceLicenses.ffmpegKitNotice()
 
-        assertTrue(notice.version.contains("8.1.0"))
-        assertTrue(notice.version.contains("FFmpeg 8.1.2"))
+        assertTrue(notice.version.contains("9.0.2"))
+        assertTrue(notice.version.contains("FFmpeg 9.0.2"))
         assertTrue(notice.licenseName.contains("Lesser General Public License"))
         assertTrue(notice.licenseText.contains("LGPL"))
         assertTrue(notice.sourceOfferText.orEmpty().contains("source", ignoreCase = true))
@@ -99,6 +99,6 @@ class OpenSourceLicensesTest {
     fun onlyFfmpegKitCurrentlyNeedsSourceOfferCopy() {
         val sourceOfferArtifacts = OpenSourceLicenses.dependenciesWithSourceOffers().map { it.artifact }
 
-        assertEquals(listOf("third_party/ffmpeg-kit-next/ffmpeg-kit-next-8.1.0.aar"), sourceOfferArtifacts)
+        assertEquals(listOf("third_party/ffmpeg-kit-next/ffmpeg-kit-next-9.0.2.aar"), sourceOfferArtifacts)
     }
 }

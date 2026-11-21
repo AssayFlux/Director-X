@@ -4,7 +4,7 @@ Director X includes third-party software and native components. Their original c
 
 ## FFmpegKitNext and FFmpeg
 
-The vendored native bundle is FFmpegKitNext 8.1.0 with FFmpeg 8.1.2. Its pinned component inventory, source commits, licence expressions, checksums, build recipe and security metadata are recorded in `third_party/ffmpeg-kit-next/native-lock.json`. The native AAR and its POM are stored alongside that lock.
+The vendored native bundle is FFmpegKitNext 9.0.2 with FFmpeg 9.0.2. Its pinned component inventory, source commits, licence expressions, checksums, build recipe and security metadata are recorded in `third_party/ffmpeg-kit-next/native-lock.json`. The native AAR and its POM are stored alongside that lock.
 
 The native lock records LGPL-3.0-or-later for FFmpegKitNext and FFmpeg, and individual licence expressions for OpenH264 and supporting libraries. Consult the lock and the corresponding upstream licence texts for the exact component obligations. The application also generates runtime open-source notices from the resolved release dependency graph; generate and inspect those notices for the exact release variant before distribution.
 

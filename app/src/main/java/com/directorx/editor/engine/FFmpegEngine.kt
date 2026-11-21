@@ -56,8 +56,8 @@ internal fun buildEditingProxyArguments(
  *
  * ## Dependency path
  *
- * Director X vendors a source-pinned LGPL-profile FFmpegKitNext 8.1.0 AAR
- * carrying FFmpeg 8.1.2. Local gates verify its checksum, source/build lock,
+ * Director X vendors a source-pinned LGPL-profile FFmpegKitNext 9.0.2 AAR
+ * carrying FFmpeg 9.0.2. Local gates verify its checksum, source/build lock,
  * disabled-format advisory coverage, deterministic SBOMs, and 16 KB page
  * alignment.
  *
@@ -115,7 +115,7 @@ internal fun buildEditingProxyArguments(
  *
  * Not documented. No published native .so artifacts to verify. The project
  * does not mention Android 16 / API 35+ 16KB page alignment anywhere.
- * Director X's FFmpegKitNext 8.1.0 build targets NDK r27d and is verified by the
+ * Director X's FFmpegKitNext 9.0.2 build targets NDK r27d and is verified by the
  * local `scripts/check_16kb_alignment.py` gate.
  *
  * ### APK size comparison

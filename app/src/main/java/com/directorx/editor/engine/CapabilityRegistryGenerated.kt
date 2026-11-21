@@ -201,8 +201,8 @@ internal object CapabilityRegistryGenerated {
         PublicDependencyRecord(
             id = "ffmpeg",
             label = "FFmpegKitNext / FFmpeg",
-            version = "8.1.0 (FFmpeg 8.1.2)",
-            coordinate = "third_party/ffmpeg-kit-next/ffmpeg-kit-next-8.1.0.aar",
+            version = "9.0.2 (FFmpeg 9.0.2)",
+            coordinate = "third_party/ffmpeg-kit-next/ffmpeg-kit-next-9.0.2.aar",
             catalogKeys = emptyList(),
             purpose = "LGPL FFmpeg paths not covered by Media3 Transformer",
             publicStatus = "bundled",
@@ -327,13 +327,13 @@ internal object CapabilityRegistryGenerated {
         ),
         OpenSourceLicenseNotice(
             name = "FFmpegKitNext / FFmpeg",
-            version = "8.1.0 (FFmpeg 8.1.2)",
-            artifact = "third_party/ffmpeg-kit-next/ffmpeg-kit-next-8.1.0.aar",
+            version = "9.0.2 (FFmpeg 9.0.2)",
+            artifact = "third_party/ffmpeg-kit-next/ffmpeg-kit-next-9.0.2.aar",
             licenseName = "GNU Lesser General Public License Version 3",
             licenseText = "This source-pinned build uses the LGPL profile and explicitly disables the advisory-covered native components recorded in native-lock.json. Redistribution must preserve the packaged licenses and corresponding-source offer.",
             licenseUrl = "https://www.gnu.org/licenses/lgpl-3.0.txt",
             projectUrl = "https://github.com/arthenica/ffmpeg-kit-next",
-            sourceOfferText = "Exact corresponding-source recipe for this LGPL v3.0-or-later build:\nhttps://github.com/arthenica/ffmpeg-kit-next/tree/3e223118e6e8fb6208693ecf3952e77cd096f587\nCommand: ./nix-android.sh -p android-r27d --enable-libass --enable-libjxl --enable-android-media-codec --enable-android-zlib --enable-openh264 --jobs=8\nThe security patch at third_party/ffmpeg-kit-next/directorx-security.patch, complete recipe, checksums, disabled components, and source revisions are recorded in third_party/ffmpeg-kit-next/native-lock.json and the installed application resource res/raw/ffmpeg_kit_next_source_offer.txt.",
+            sourceOfferText = "Exact corresponding-source recipe for this LGPL v3.0-or-later build:\nhttps://github.com/arthenica/ffmpeg-kit-next/tree/9f04bf1e3c97def70b98e198cb80a57b43ef5b45\nFFmpeg source revision 946fcce07b6dcd0331c8cc609192aeff5e1924f8; configure command: ./nix-android.sh -p android-r27d --arch=<ABI> --enable-lib-libass --enable-lib-libjxl --enable-lib-android-media-codec --enable-lib-android-zlib --enable-lib-openh264 --jobs=8\nThe security patch, complete recipe, checksums, disabled components, and source revisions are recorded in third_party/ffmpeg-kit-next/native-lock.json and the installed source-offer resource.",
             complianceNote = "The AAR packages res/raw/license.txt, res/raw/license_*.txt, and res/raw/source.txt; Director X additionally packages res/raw/ffmpeg_kit_next_source_offer.txt with its exact source recipe.",
         ),
     )

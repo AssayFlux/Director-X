@@ -180,7 +180,7 @@ class ModelRegistryDocumentationTest {
         val artifact = lock.getJSONObject("artifact")
         val source = lock.getJSONObject("source")
         val build = lock.getJSONObject("build")
-        val row = nativeDependencyRows().single { "ffmpeg-kit-next-8.1.0.aar" in it }
+        val row = nativeDependencyRows().single { "ffmpeg-kit-next-9.0.2.aar" in it }
         val formattedSize = NumberFormat.getIntegerInstance(Locale.US).format(artifact.getLong("size"))
 
         assertTrue(row.contains("FFmpeg ${source.getString("ffmpegVersion")}"))
