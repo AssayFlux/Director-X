@@ -21,11 +21,14 @@ def main():
  if lock["source"]["securityPatchSha256"]!=entries["third_party/ffmpeg-kit-next/directorx-security.patch"]: raise SystemExit("native lock security patch digest mismatch")
  if lock["build"]["abis"]!=["armeabi-v7a","armeabi-v7a-neon","arm64-v8a","x86","x86_64"]: raise SystemExit("native lock ABI inventory mismatch")
  path=pathlib.Path(a.manifest)
+ aar=path.parent/"ffmpeg-kit-next-9.0.2.aar"; pom=path.parent/"ffmpeg-kit-next-9.0.2.pom"
+ if not aar.is_file() or not pom.is_file(): raise SystemExit("assembled AAR/POM missing for provenance binding")
+ artifact_hashes={"aarSha256":hashlib.sha256(aar.read_bytes()).hexdigest(),"pomSha256":hashlib.sha256(pom.read_bytes()).hexdigest()}
  if a.create:
-  data={"schemaVersion":1,"runId":a.run_id,"headSha":a.revision,"builtAt":a.built_at,"files":entries,"wrapperCommit":"9f04bf1e3c97def70b98e198cb80a57b43ef5b45","ffmpegCommit":"946fcce07b6dcd0331c8cc609192aeff5e1924f8"}
+  data={"schemaVersion":1,"runId":a.run_id,"headSha":a.revision,"builtAt":a.built_at,"files":entries,"wrapperCommit":"9f04bf1e3c97def70b98e198cb80a57b43ef5b45","ffmpegCommit":"946fcce07b6dcd0331c8cc609192aeff5e1924f8",**artifact_hashes}
   path.parent.mkdir(parents=True,exist_ok=True); path.write_text(json.dumps(data,indent=2,sort_keys=True)+"\n",encoding="utf-8"); print("Created source-bound native provenance manifest"); return
  data=json.loads(path.read_text(encoding="utf-8"))
- expected={"schemaVersion":1,"runId":a.run_id,"headSha":a.revision,"files":entries,"wrapperCommit":"9f04bf1e3c97def70b98e198cb80a57b43ef5b45","ffmpegCommit":"946fcce07b6dcd0331c8cc609192aeff5e1924f8"}
+ expected={"schemaVersion":1,"runId":a.run_id,"headSha":a.revision,"files":entries,"wrapperCommit":"9f04bf1e3c97def70b98e198cb80a57b43ef5b45","ffmpegCommit":"946fcce07b6dcd0331c8cc609192aeff5e1924f8",**artifact_hashes}
  for k,v in expected.items():
   if data.get(k)!=v: raise SystemExit(f"native provenance mismatch: {k}")
  if not data.get("builtAt"): raise SystemExit("native provenance missing builtAt")
