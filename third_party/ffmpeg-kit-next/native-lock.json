@@ -17,7 +17,7 @@
     "securityPatch": "third_party/ffmpeg-kit-next/directorx-security.patch",
     "securityPatchSha256": "9bef0a69f02c26bc7fa2620009ca15da962221dbd39342fb2466cbf9b4c6d4bc",
     "builtAt": "2026-11-21T13:00:25Z",
-    "reviewUntil": "2026-10-31",
+    "reviewUntil": "2027-02-19",
     "buildRunId": "44905134014",
     "buildHeadSha": "86ddb580a9dd847823234e7b9ddc70a5879fa7ae"
   },
@@ -143,7 +143,7 @@
   ],
   "security": {
     "profile": "directorx-disabled-format-surface",
-    "reviewUntil": "2026-10-31",
+    "reviewUntil": "2027-02-19",
     "disabledComponents": [
       "aax_demuxer",
       "adpcm_adx_decoder",
@@ -249,7 +249,8 @@
       "96eea3824100b195294ebba9570c6a66427a4920",
       "439b452f9fe916a9f7d8788ab6afee8fac846b0b"
     ],
-    "backportMethod": "Pinned upstream commits plus an idempotent source-equivalent ProRes slice-reserve port; review horizon remains unchanged pending full advisory review."
+    "backportMethod": "Pinned upstream commits plus an idempotent source-equivalent ProRes slice-reserve port. Reconciled the FFmpeg 9.0.2 source against the upstream FFmpeg 9.0 security record and CVE version ranges on 2026-11-21; disabled-format reachability is independently enforced by the native build verifier.",
+    "reviewedOn": "2026-11-21"
   },
   "advisories": [
     {
@@ -259,7 +260,7 @@
       "status": "fixed",
       "fixedVersion": "6.1.2",
       "rationale": "The shipped FFmpeg revision is newer than the fixed version.",
-      "reviewUntil": "2026-10-31",
+      "reviewUntil": "2027-02-19",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-36617",
       "disabledComponents": []
     },
@@ -269,7 +270,7 @@
       "severity": "MEDIUM",
       "status": "not_affected",
       "rationale": "The IMF demuxer is disabled in the Director X profile with --disable-demuxer=imf; the native build verifier checks the exact configure option in each ABI.",
-      "reviewUntil": "2026-10-31",
+      "reviewUntil": "2027-02-19",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-120210",
       "disabledComponents": [
         "imf_demuxer"
@@ -281,7 +282,7 @@
       "severity": "HIGH",
       "status": "not_affected",
       "rationale": "The RASC decoder is disabled in the ClearCut security profile.",
-      "reviewUntil": "2026-10-31",
+      "reviewUntil": "2027-02-19",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-12706",
       "disabledComponents": [
         "rasc_decoder"
@@ -291,10 +292,10 @@
       "id": "CVE-2026-30999",
       "component": "FFmpeg",
       "severity": "UNKNOWN",
-      "status": "not_affected",
-      "fixedVersion": "8.1.2",
-      "rationale": "The current FFmpeg security review found no affected reachable component in the shipped profile.",
-      "reviewUntil": "2026-10-31",
+      "status": "fixed",
+      "fixedVersion": "9.0.0",
+      "rationale": "FFmpeg upstream lists the fix in the FFmpeg 9.0 branch; the shipped source is FFmpeg 9.0.2.",
+      "reviewUntil": "2027-02-19",
       "url": "https://ffmpeg.org/security.html",
       "disabledComponents": []
     },
@@ -304,7 +305,7 @@
       "severity": "HIGH",
       "status": "not_affected",
       "rationale": "The RASC decoder is disabled in the ClearCut security profile.",
-      "reviewUntil": "2026-10-31",
+      "reviewUntil": "2027-02-19",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-58049",
       "disabledComponents": [
         "rasc_decoder"
@@ -316,7 +317,7 @@
       "severity": "HIGH",
       "status": "not_affected",
       "rationale": "The VobSub demuxer is disabled in the ClearCut security profile.",
-      "reviewUntil": "2026-10-31",
+      "reviewUntil": "2027-02-19",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-64830",
       "disabledComponents": [
         "vobsub_demuxer"
@@ -328,7 +329,7 @@
       "severity": "HIGH",
       "status": "not_affected",
       "rationale": "The shipped Android artifact does not build the NVIDIA NVDEC hardware-decoder path; the exact absent configure flags and review evidence are recorded under security.reachability.",
-      "reviewUntil": "2026-10-31",
+      "reviewUntil": "2027-02-19",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-64832",
       "disabledComponents": []
     },
@@ -338,7 +339,7 @@
       "severity": "HIGH",
       "status": "not_affected",
       "rationale": "The ADX decoder and ADX/AAX demuxers are disabled in the ClearCut security profile.",
-      "reviewUntil": "2026-10-31",
+      "reviewUntil": "2027-02-19",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-64835",
       "disabledComponents": [
         "adpcm_adx_decoder",
@@ -352,7 +353,7 @@
       "severity": "HIGH",
       "status": "not_affected",
       "rationale": "The TDSC decoder is disabled in the ClearCut security profile.",
-      "reviewUntil": "2026-10-31",
+      "reviewUntil": "2027-02-19",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-65703",
       "disabledComponents": [
         "tdsc_decoder"
@@ -364,7 +365,7 @@
       "severity": "HIGH",
       "status": "not_affected",
       "rationale": "The IAMF demuxer is disabled in the ClearCut security profile.",
-      "reviewUntil": "2026-10-31",
+      "reviewUntil": "2027-02-19",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66037",
       "disabledComponents": [
         "iamf_demuxer"
@@ -376,7 +377,7 @@
       "severity": "HIGH",
       "status": "not_affected",
       "rationale": "The ZLIB decoder used by the LCL path is disabled in the ClearCut security profile.",
-      "reviewUntil": "2026-10-31",
+      "reviewUntil": "2027-02-19",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66038",
       "disabledComponents": [
         "zlib_decoder"
@@ -388,7 +389,7 @@
       "severity": "HIGH",
       "status": "not_affected",
       "rationale": "The MACE6 decoder is disabled in the ClearCut security profile.",
-      "reviewUntil": "2026-10-31",
+      "reviewUntil": "2027-02-19",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66039",
       "disabledComponents": [
         "mace6_decoder"
@@ -400,7 +401,7 @@
       "severity": "HIGH",
       "status": "not_affected",
       "rationale": "The PNG and APNG encoders are disabled in the ClearCut security profile.",
-      "reviewUntil": "2026-10-31",
+      "reviewUntil": "2027-02-19",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-66040",
       "disabledComponents": [
         "png_encoder",
@@ -414,8 +415,74 @@
       "status": "fixed",
       "fixedVersion": "9.0.2",
       "rationale": "The shipped FFmpeg 9.0.2 source includes the upstream fix.",
-      "reviewUntil": "2026-10-31",
+      "reviewUntil": "2027-02-19",
       "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8461",
+      "disabledComponents": []
+    },
+    {
+      "id": "CVE-2026-30997",
+      "component": "FFmpeg",
+      "severity": "HIGH",
+      "status": "fixed",
+      "fixedVersion": "9.0.0",
+      "rationale": "The upstream FFmpeg 9.0 security record lists the AV1 decoder out-of-bounds-read fix; the shipped source is FFmpeg 9.0.2.",
+      "reviewUntil": "2027-02-19",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-30997",
+      "disabledComponents": []
+    },
+    {
+      "id": "CVE-2026-30998",
+      "component": "FFmpeg",
+      "severity": "HIGH",
+      "status": "fixed",
+      "fixedVersion": "9.0.0",
+      "rationale": "The upstream FFmpeg 9.0 security record lists the zmqsend resource-cleanup fix; the shipped source is FFmpeg 9.0.2.",
+      "reviewUntil": "2027-02-19",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-30998",
+      "disabledComponents": []
+    },
+    {
+      "id": "CVE-2026-70629",
+      "component": "FFmpeg",
+      "severity": "MEDIUM",
+      "status": "fixed",
+      "fixedVersion": "9.0.0",
+      "rationale": "The n9.0 backport fixes the RSCC decoder short-decompression read; FFmpeg versions before 9.0 are affected and the shipped source is 9.0.2.",
+      "reviewUntil": "2027-02-19",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-70629",
+      "disabledComponents": []
+    },
+    {
+      "id": "CVE-2026-70630",
+      "component": "FFmpeg",
+      "severity": "MEDIUM",
+      "status": "fixed",
+      "fixedVersion": "9.0.0",
+      "rationale": "The n9.0 backport fixes the Screenpresso decoder short-decompression read; FFmpeg versions before 9.0 are affected and the shipped source is 9.0.2.",
+      "reviewUntil": "2027-02-19",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-70630",
+      "disabledComponents": []
+    },
+    {
+      "id": "CVE-2026-70631",
+      "component": "FFmpeg",
+      "severity": "MEDIUM",
+      "status": "fixed",
+      "fixedVersion": "9.0.0",
+      "rationale": "The n9.0 backport fixes the TIFF decoder short-decompression read; FFmpeg versions before 9.0 are affected and the shipped source is 9.0.2.",
+      "reviewUntil": "2027-02-19",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-70631",
+      "disabledComponents": []
+    },
+    {
+      "id": "CVE-2026-70632",
+      "component": "FFmpeg",
+      "severity": "HIGH",
+      "status": "fixed",
+      "fixedVersion": "9.0.0",
+      "rationale": "The reported affected range ends before FFmpeg 9.0; the shipped source is FFmpeg 9.0.2.",
+      "reviewUntil": "2027-02-19",
+      "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-70632",
       "disabledComponents": []
     }
   ]
