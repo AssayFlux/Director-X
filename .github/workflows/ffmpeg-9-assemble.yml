@@ -1,0 +1,137 @@
+name: FFmpeg 9.0.2 - Assemble native package
+
+on:
+  workflow_run:
+    workflows: ["FFmpeg 9.0.2 - Native ABI builds"]
+    types: [completed]
+    branches: [Alpha]
+  workflow_dispatch:
+    inputs:
+      build_run_id:
+        description: Completed native-build run ID to assemble
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  assemble:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: Alpha
+          persist-credentials: false
+
+      - name: Select native build run
+        id: source
+        env:
+          EVENT_RUN_ID: ${{ github.event.workflow_run.id }}
+          INPUT_RUN_ID: ${{ inputs.build_run_id }}
+        run: |
+          set -euo pipefail
+          if [[ -n "$INPUT_RUN_ID" ]]; then
+            echo "run_id=$INPUT_RUN_ID" >> "$GITHUB_OUTPUT"
+          else
+            echo "run_id=$EVENT_RUN_ID" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Download the five independent ABI artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: ffmpeg-kit-next-9.0.2-abi-*-${{ steps.source.outputs.run_id }}
+          run-id: ${{ steps.source.outputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: abi-output
+
+      - name: Merge the ABI-specific AARs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import pathlib, shutil, zipfile
+          root = pathlib.Path("abi-output")
+          labels = ["armeabi-v7a", "armeabi-v7a-neon", "arm64-v8a", "x86", "x86_64"]
+          files = list(root.rglob("ffmpeg-kit-next-9.0.2-arm64-v8a.aar"))
+          if len(files) != 1:
+              raise SystemExit(f"Expected one arm64 base AAR, found {len(files)}")
+          merged = pathlib.Path("build-output/merged-aar")
+          merged.mkdir(parents=True, exist_ok=True)
+          with zipfile.ZipFile(files[0]) as z:
+              z.extractall(merged)
+          jni = merged / "jni"
+          if jni.exists():
+              shutil.rmtree(jni)
+          jni.mkdir()
+          for label in labels:
+              matches = list(root.rglob(f"ffmpeg-kit-next-9.0.2-{label}.aar"))
+              if len(matches) != 1:
+                  raise SystemExit(f"Expected one AAR for {label}, found {len(matches)}")
+              with zipfile.ZipFile(matches[0]) as z:
+                  libs = [n for n in z.namelist() if n.startswith("jni/") and n.endswith(".so")]
+                  if not libs:
+                      raise SystemExit(f"No native shared libraries in {label} AAR")
+                  for name in libs:
+                      target = merged / name
+                      target.parent.mkdir(parents=True, exist_ok=True)
+                      target.write_bytes(z.read(name))
+          out = pathlib.Path("build-output/ffmpeg-kit-next-9.0.2.aar")
+          out.parent.mkdir(parents=True, exist_ok=True)
+          with zipfile.ZipFile(out, "w", compression=zipfile.ZIP_DEFLATED) as z:
+              for p in sorted(merged.rglob("*")):
+                  if p.is_file():
+                      z.write(p, p.relative_to(merged).as_posix())
+          poms = list(root.rglob("ffmpeg-kit-next-9.0.2-arm64-v8a.pom"))
+          if len(poms) != 1:
+              raise SystemExit(f"Expected one arm64 POM, found {len(poms)}")
+          shutil.copy2(poms[0], "build-output/ffmpeg-kit-next-9.0.2.pom")
+          PY
+
+      - name: Verify package identity, five targets and native alignment
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import pathlib, re, subprocess, zipfile, xml.etree.ElementTree as ET
+          aar = pathlib.Path("build-output/ffmpeg-kit-next-9.0.2.aar")
+          pom = pathlib.Path("build-output/ffmpeg-kit-next-9.0.2.pom")
+          if not aar.is_file() or not pom.is_file():
+              raise SystemExit("Merged AAR or POM is missing")
+          ns = {"m": "http://maven.apache.org/POM/4.0.0"}
+          if ET.parse(pom).getroot().findtext("m:version", namespaces=ns) != "9.0.2":
+              raise SystemExit("POM is not version 9.0.2")
+          extracted = pathlib.Path("build-output/extracted")
+          with zipfile.ZipFile(aar) as z:
+              names = z.namelist()
+              abis = {n.split("/")[1] for n in names if n.startswith("jni/") and n.endswith(".so") and len(n.split("/")) > 2}
+              expected = {"armeabi-v7a", "arm64-v8a", "x86", "x86_64"}
+              if abis != expected:
+                  raise SystemExit(f"ABI directories mismatch: {sorted(abis)}")
+              if not any(n.startswith("jni/armeabi-v7a/") and "_neon" in n and n.endswith(".so") for n in names):
+                  raise SystemExit("armeabi-v7a NEON libraries are absent")
+              z.extractall(extracted)
+          for abi in sorted(expected):
+              libs = list((extracted / "jni" / abi).glob("*.so"))
+              if not libs:
+                  raise SystemExit(f"No shared libraries for {abi}")
+              minimum = 0x4000 if abi in {"arm64-v8a", "x86_64"} else 0x1000
+              for lib in libs:
+                  info = subprocess.check_output(["readelf", "-lW", str(lib)], text=True)
+                  aligns = [int(x, 16) for x in re.findall(r"^\\s*LOAD\\s+.*?\\s(0x[0-9a-fA-F]+)\\s*$", info, re.M)]
+                  if not aligns or min(aligns) < minimum:
+                      raise SystemExit(f"LOAD alignment failure: {lib} {aligns}")
+          sha = subprocess.check_output(["sha256sum", str(aar), str(pom)], text=True)
+          pathlib.Path("build-output/SHA256SUMS").write_text(sha)
+          print(f"Verified FFmpegKitNext 9.0.2 package; AAR={aar.stat().st_size} bytes")
+          PY
+
+      - name: Upload assembled promotion candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: ffmpeg-kit-next-9.0.2-release-candidate-${{ github.run_id }}
+          path: build-output/
+          if-no-files-found: error
+          retention-days: 30
