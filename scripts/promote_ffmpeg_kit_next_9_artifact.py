@@ -31,8 +31,12 @@ def replace_text(relative: str, old: str, new: str, expected: int | None = None)
     path = ROOT / relative
     text = path.read_text(encoding="utf-8")
     count = text.count(old)
-    if count == 0 or (expected is not None and count != expected):
-        raise SystemExit(f"{relative}: expected {expected or 'at least one'} occurrence of {old!r}, found {count}")
+    if count == 0:
+        if new in text:
+            return
+        raise SystemExit(f"{relative}: neither the expected old nor new text was found: {old!r}")
+    if expected is not None and count != expected:
+        raise SystemExit(f"{relative}: expected {expected} occurrence(s) of {old!r}, found {count}")
     path.write_text(text.replace(old, new), encoding="utf-8")
 
 
@@ -138,7 +142,16 @@ def main() -> int:
     lock_path.write_text(json.dumps(lock, indent=2) + "\n", encoding="utf-8")
 
     replace_text("app/build.gradle.kts", OLD_AAR, NEW_AAR, 1)
-    replace_text("app/build.gradle.kts", OLD_AAR_SHA, aar_hash, 1)
+    gradle_path = ROOT / "app/build.gradle.kts"
+    gradle_text = gradle_path.read_text(encoding="utf-8")
+    gradle_text, hash_count = re.subn(
+        r'(?m)^(\s*val ffmpegKitAarSha256 = ")[0-9a-f]{64}("$)',
+        rf"\g<1>{aar_hash}\2",
+        gradle_text,
+    )
+    if hash_count != 1:
+        raise SystemExit(f"app/build.gradle.kts: expected one FFmpegKitNext checksum declaration, found {hash_count}")
+    gradle_path.write_text(gradle_text, encoding="utf-8")
     replace_text("app/build.gradle.kts",
                  "FFmpegKitNext 8.1.0 / FFmpeg 8.1.2, five Android ABIs.",
                  "FFmpegKitNext 9.0.2 / FFmpeg 9.0.2, five Android ABIs.", 1)
@@ -191,6 +204,8 @@ def main() -> int:
     models_path = ROOT / "docs/models.md"
     models_text = models_path.read_text(encoding="utf-8")
     old_row = next((line for line in models_text.splitlines() if "ffmpeg-kit-next-8.1.0.aar" in line), None)
+    if old_row is None:
+        old_row = next((line for line in models_text.splitlines() if "ffmpeg-kit-next-9.0.2.aar" in line), None)
     if old_row is None:
         raise SystemExit("docs/models.md is missing the active FFmpeg native dependency row")
     new_row = (
