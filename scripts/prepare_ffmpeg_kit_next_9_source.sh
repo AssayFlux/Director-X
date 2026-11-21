@@ -269,6 +269,10 @@ for fix in "${FFMPEG_SECURITY_COMMITS[@]}"; do
     echo "Deferring VVC SPS/PPS lifetime fix to the verified source-level port: $fix"
     continue
   fi
+  if [[ "$fix" == "053660fdb0d2403b838690689c47ad7685c3b10b" ]]; then
+    echo "Deferring VVC allocation-overflow fix to the verified source-level port: $fix"
+    continue
+  fi
   patch_file="$(mktemp)"
   git -C "${ffmpeg_source_dir}" show --format= "${fix}" > "$patch_file"
   if git -C "${ffmpeg_source_dir}" apply --check "$patch_file"; then
