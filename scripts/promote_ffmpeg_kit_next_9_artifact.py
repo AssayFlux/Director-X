@@ -157,14 +157,14 @@ def main() -> int:
     ffmpeg_entry["coordinate"] = NEW_AAR
     ffmpeg_entry["notice"]["sourceOfferText"] = (
         "Exact corresponding-source recipe for this LGPL v3.0-or-later build:\n"
-        f"https://github.com/arthenica/ffmpeg-kit-next/tree/{WRAPPER_COMMIT}\\n"
+        f"https://github.com/arthenica/ffmpeg-kit-next/tree/{WRAPPER_COMMIT}\n"
         f"FFmpeg source revision {FFMPEG_COMMIT}; configure command: "
         "./nix-android.sh -p android-r27d --arch=<ABI> --enable-lib-libass --enable-lib-libjxl "
-        "--enable-lib-android-media-codec --enable-lib-android-zlib --enable-lib-openh264 --jobs=8\\n"
+        "--enable-lib-android-media-codec --enable-lib-android-zlib --enable-lib-openh264 --jobs=8\n"
         "The security patch, complete recipe, checksums, disabled components, and source revisions "
         "are recorded in third_party/ffmpeg-kit-next/native-lock.json and the installed source-offer resource."
     )
-    registry_path.write_text(json.dumps(registry, indent=2) + "\\n", encoding="utf-8")
+    registry_path.write_text(json.dumps(registry, indent=2) + "\n", encoding="utf-8")
 
     replace_text("NOTICE", "FFmpegKitNext 8.1.0 with FFmpeg 8.1.2", "FFmpegKitNext 9.0.2 with FFmpeg 9.0.2", 1)
     replace_text("ACKNOWLEDGMENTS.md", "ffmpeg-kit-next-8.1.0.aar", "ffmpeg-kit-next-9.0.2.aar")
