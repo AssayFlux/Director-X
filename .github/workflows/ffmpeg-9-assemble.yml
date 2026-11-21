@@ -120,7 +120,7 @@ jobs:
               minimum = 0x4000 if abi in {"arm64-v8a", "x86_64"} else 0x1000
               for lib in libs:
                   info = subprocess.check_output(["readelf", "-lW", str(lib)], text=True)
-                  aligns = [int(x, 16) for x in re.findall(r"^\\s*LOAD\\s+.*?\\s(0x[0-9a-fA-F]+)\\s*$", info, re.M)]
+                  aligns = [int(x, 16) for x in re.findall(r"^\s*LOAD\s+.*?\s(0x[0-9a-fA-F]+)\s*$", info, re.M)]
                   if not aligns or min(aligns) < minimum:
                       raise SystemExit(f"LOAD alignment failure: {lib} {aligns}")
           sha = subprocess.check_output(["sha256sum", str(aar), str(pom)], text=True)
