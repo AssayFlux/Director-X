@@ -26,18 +26,20 @@ jobs:
           ref: Alpha
           fetch-depth: 0
 
-      - name: Select assembly run
+      - name: Validate successful assembly run
         id: source
         env:
           EVENT_RUN_ID: ${{ github.event.workflow_run.id }}
           INPUT_RUN_ID: ${{ inputs.assembly_run_id }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          if [[ -n "$INPUT_RUN_ID" ]]; then
-            echo "run_id=$INPUT_RUN_ID" >> "$GITHUB_OUTPUT"
-          else
-            echo "run_id=$EVENT_RUN_ID" >> "$GITHUB_OUTPUT"
-          fi
+          RUN_ID="$INPUT_RUN_ID"
+          if [[ -z "$RUN_ID" ]]; then RUN_ID="$EVENT_RUN_ID"; fi
+          [[ "$RUN_ID" =~ ^[0-9]+$ ]]
+          run_json="$(gh api "/repos/$GITHUB_REPOSITORY/actions/runs/$RUN_ID")"
+          jq -e '.head_branch == "Alpha" and .conclusion == "success" and .path == ".github/workflows/ffmpeg-9-assemble.yml"' <<<"$run_json" >/dev/null
+          echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
 
       - name: Download assembled FFmpeg 9.0.2 candidate
         uses: actions/download-artifact@v4
@@ -54,8 +56,10 @@ jobs:
           set -euo pipefail
           python3 - <<'PY' >> "$GITHUB_OUTPUT"
           import json, pathlib
-          raw = pathlib.Path("build-evidence/build-output/native-build-provenance.json").read_text(encoding="utf-8").removesuffix("\\\\n")
-data = json.loads(raw)
+          raw = pathlib.Path("build-evidence/build-output/native-build-provenance.json").read_text(encoding="utf-8")
+          if raw.endswith("\\n"):
+              raw = raw[:-2]
+          data = json.loads(raw)
           for key, value in (("run_id", data["runId"]), ("head_sha", data["headSha"]), ("built_at", data["builtAt"])):
               if not value:
                   raise SystemExit(f"Missing native provenance field: {key}")
