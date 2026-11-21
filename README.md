@@ -120,9 +120,9 @@ Do not infer feature acceptance from the presence of a UI control or implementat
 - Android 17 audio hardening: on a supported test device, run `adb shell cmd audio set-hardening throw`.
 - Exercise TTS preview, voiceover, and export while observing `AudioHardening` diagnostics. The export foreground service must remain a media-processing service and must not request microphone or media-playback foreground-service types.
 
-## Build
+## Build and verification
 
-See [docs/BUILD.md](docs/BUILD.md). APKs are built manually by the maintainer; CI is not an APK distribution channel.
+See [docs/BUILD.md](docs/BUILD.md). The `android-full-ci.yml` workflow runs lint, JVM tests, managed-device instrumentation, native supply-chain checks, and QA APK packaging. QA APKs are temporary validation artifacts downloadable from the successful GitHub Actions run; they are not production releases. Production release signing remains a controlled maintainer operation.
 
 ## Branding and assets
 

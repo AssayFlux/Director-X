@@ -1,77 +1,41 @@
-# Stage 5 — Release readiness
+# Release readiness
 
-## Purpose
+## Current baseline
 
-Stage 5 is the final release-candidate gate. It is the first stage allowed to assemble APKs. APK packaging must happen only after source, test, native supply-chain, and package-policy checks pass.
+- Branch: `Alpha`
+- FFmpegKitNext: FFmpeg 9.0.2
+- Vendored AAR SHA-256: `44e96b4cb4a1b35e7a38d8cdc1a9707aaae17fffd83cee7f1da56663bd87b2f6`
+- Latest recorded QA verification before the full-app workflow: run [44914650116](https://github.com/AssayFlux/Director-X/actions/runs/44914650116), commit `bd7875884a600f1ea30511d6ee5269c6aaabde9c`.
+- That run passed `:app:verifyFfmpegKitAar`, `:app:testQaUnitTest` (1,852 tests), `:app:assembleQa`, packaged-native 16 KB alignment checks, and QA APK artifact upload.
+- It did **not** run Android lint, managed-device instrumentation, or the native SBOM/advisory Gradle tasks.
 
-## Automated gates added
+## Automated release-candidate gates
 
-The `.github/workflows/release-candidate.yml` workflow:
-1. Verifies the pinned FFmpegKitNext AAR, provenance, security patch, advisory inventory, review horizon, and reachability decisions.
-2. Generates CycloneDX and SPDX SBOMs.
-3. Validates package identity, version consistency, public claims, and APK/alignment validator self-tests.
-4. Runs QA unit tests and Android lint.
-5. Only after those gates pass, assembles debug APKs (universal plus ABI splits).
-6. Validates APK metadata and native ABI contents, checks 16 KB ELF LOAD alignment, and uploads APK/SBOM artifacts.
+The dedicated `.github/workflows/android-full-ci.yml` workflow runs independent jobs for:
 
-The workflow deliberately does not sign a release with a repository-stored or fallback key. A production release must use the established private signing identity in the maintainer's secure environment.
+1. Native SBOM/provenance generation and resolved dependency advisory-floor verification.
+2. Android `lintQa`.
+3. The complete `testQaUnitTest` JVM suite.
+4. Managed-device Android instrumentation on the configured API 37 device. This includes the checked-in Android instrumentation tests, including Room migration coverage where present.
+5. QA APK assembly, FFmpegKitNext AAR checksum verification, native 16 KB alignment checks, SHA-256 manifest generation, and artifact upload.
 
-## Blocking issue: FFmpeg native security review expired
+A successful QA artifact is a validation build, not a production release. The production release must use the established private signing identity; no keystore or password belongs in the repository.
 
-The checked-in native lock records both source and security review horizons as `2026-10-31`. The current date is after that horizon. The supply-chain validator correctly rejects an expired review.
+## Native FFmpeg security posture
 
-This must not be "fixed" by merely extending the date. Before a release candidate can pass:
-- Re-review the exact packaged AAR SHA-256 and its source commit/build recipe.
-- Reconcile the complete advisory inventory against current upstream advisories.
-- Validate disabled-component and reachability claims against the actual packaged native binaries and build configuration.
-- Record reviewer, evidence, and a new review horizon in the native lock only after that work is complete.
-- Run `python scripts/verify_native_supply_chain.py` and retain generated SBOMs.
+FFmpeg 9.0.2 promotion and its five-ABI native build completed successfully. The native lock's advisory inventory was reconciled against the upstream FFmpeg 9.0 security record on 2026-11-21, with review horizon recorded through 2027-02-19.
 
-The existing lock identifies AAR SHA-256 `7971240aff84ce59a4ab28400bb4af59d24c20ce68c25525d41d910246ccff62`, size 62,247,665 bytes, and FFmpeg source revision `38b88335f99e76ed89ff3c93f877fdefce736c13`. These are provenance references, not proof of a current security clearance.
-
-## Advisory drift requiring the renewed review
-
-A fresh upstream advisory check on 2026-11-19 found that the prior review scope is no longer sufficient. FFmpeg's current security page lists additional fixes in 9.0 that are not listed in the 8.1.2 release section, including CVE-2026-12706, CVE-2026-66038, CVE-2026-70629, and CVE-2026-70631. Debian's tracker also records multiple vulnerabilities affecting FFmpeg through 8.1.2, including CVE-2026-66038, CVE-2026-66039, CVE-2026-66040, and the later 2026-70628 through 2026-70632 family.
-
-The reviewer must reconcile the exact shipped AAR against, at minimum, the newer advisory families below and any subsequent upstream updates:
-
-- CVE-2026-65704, CVE-2026-65705, CVE-2026-65706
-- CVE-2026-66036 and CVE-2026-66041
-- CVE-2026-70628 through CVE-2026-70632
-- CVE-2026-75141 through CVE-2026-75146
-- Any newer advisories published after the AAR's 2026-08-02 build date
-
-
-### Do not treat FFmpeg 9.0.2 as an automatic fix
-
-The Debian FFmpeg tracker now records multiple open vulnerabilities against FFmpeg 9.0.2 as well, including CVE-2026-125073, CVE-2026-125100 through CVE-2026-125104, CVE-2026-125225 through CVE-2026-125234, and CVE-2026-125263 through CVE-2026-125270. It also records additional 2026-75141/75142 findings. Therefore, simply replacing the current 8.1.2 library with 9.0.2 would not establish a clean security posture.
-
-The FFmpegKitNext upstream Android build instructions state that it does not publish binaries; consumers must build the AAR from source. Any upgrade must therefore include a reproducible Nix build, the exact new AAR/POM hashes, refreshed component inventory and SBOM, and a qualified review of the resulting binary. Treat the version number as a starting point for review, not as security evidence.
-
-References:
-- Debian FFmpeg tracker: https://tracker.debian.org/pkg/ffmpeg
-- FFmpegKitNext Android build instructions: https://github.com/arthenica/ffmpeg-kit-next/blob/v9.0.2/android/README.md
-
-These are review leads, not claims that every affected component is reachable in the Android package. Do not mark them `not_affected` from configure flags alone. Confirm the exact binary's compiled component surface and the actual application input paths, then record a reasoned decision and evidence per advisory. Keep the release gate closed until that work is completed by a qualified reviewer.
-
-Sources:
-- FFmpeg upstream security advisories: https://ffmpeg.org/security.html
-- Debian FFmpeg security tracker: https://security-tracker.debian.org/tracker/source-package/ffmpeg
-- Debian advisory detail for current FFmpeg findings: https://tracker.debian.org/action-items/2390585
+That reconciliation is a source/advisory review record, not an independent binary security certification. The exact packaged component reachability and native binary surface still require the configured native supply-chain verifier and, where stated by the verifier/reviewer, independent binary evidence. Do not describe the native package as independently security-certified until that evidence exists.
 
 ## Remaining release acceptance
 
-- Resolve all QA unit-test failures and managed-device/instrumentation failures.
-- Complete physical-device acceptance for playback, proxy generation, export, navigation, and large projects.
-- Run startup/editor/export Macrobenchmarks on recorded hardware and retain results.
-- Verify the release signing certificate matches the established published identity.
-- Build and inspect the final release-signed APK set after all gates pass.
-- Install and smoke-test the exact release APKs on supported physical devices.
+- Require the new full-app workflow to pass on the exact release-candidate commit.
+- Review and retain native SBOM, resolved dependency report, and advisory-floor results.
+- Complete physical-device acceptance for playback, proxy generation/recovery, export, navigation, and large projects on supported hardware.
+- Verify the established release signing certificate.
+- Build, inspect, install, and smoke-test the exact release-signed APK set.
+- Record device model, OS/build fingerprint, test fixtures, output metadata, and results.
 
-## APK build policy
+## Artifact policy
 
-The automated workflow builds debug-signed APKs for validation and artifact inspection only. The production release-signed APK must be built by the maintainer with the established private key. No keystore or password belongs in the repository.
-
-## Current status
-
-Stage 5 automation is prepared. Release acceptance is **blocked** until the native security review is renewed with evidence and the automated/device test gates pass. No release-ready claim is made by this document.
+CI-generated QA APKs are debug/QA validation artifacts only. They are downloadable from the successful GitHub Actions run's Artifacts section and expire according to the workflow retention setting. They are not signed production releases and are not a substitute for maintainer release acceptance.

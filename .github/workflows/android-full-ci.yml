@@ -1,0 +1,134 @@
+name: Android full verification
+
+on:
+  push:
+    branches: [Alpha]
+  pull_request:
+    branches: [Alpha]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-full-ci-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  ANDROID_HOME: /usr/local/lib/android/sdk
+  ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+
+jobs:
+  static-and-supply-chain:
+    name: Static analysis and supply-chain checks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install Android compile SDK
+        run: |
+          set -euo pipefail
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
+          test -x "$SDKMANAGER"
+          "$SDKMANAGER" --channel=3 "platforms;android-37.0" "build-tools;37.0.0"
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Verify native SBOM and provenance
+        run: bash ./gradlew --no-daemon :app:generateNativeSbom
+      - name: Verify resolved dependency advisory floors
+        run: bash ./gradlew --no-daemon :app:verifyResolvedAdvisoryFloors
+      - name: Run Android lint
+        run: bash ./gradlew --no-daemon :app:lintQa
+
+  unit-tests:
+    name: JVM unit tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install Android compile SDK
+        run: |
+          set -euo pipefail
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
+          test -x "$SDKMANAGER"
+          "$SDKMANAGER" --channel=3 "platforms;android-37.0" "build-tools;37.0.0"
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Run complete QA JVM test suite
+        run: bash ./gradlew --no-daemon :app:testQaUnitTest
+
+  managed-device-instrumentation:
+    name: Android instrumentation and Room migration tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install Android compile SDK and managed-device image
+        run: |
+          set -euo pipefail
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
+          test -x "$SDKMANAGER"
+          "$SDKMANAGER" --channel=3 "platforms;android-37.0" "build-tools;37.0.0" "system-images;android-37;google_apis;arm64-v8a"
+      - name: Install Python asset renderers
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install --yes python3-cairosvg python3-pil
+          python3 -c "import cairosvg; from PIL import Image"
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Run managed-device QA instrumentation suite
+        run: bash ./gradlew --no-daemon :app:directorXApi37QaAndroidTest
+
+  qa-package:
+    name: QA APK assembly and native alignment
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install Android compile SDK
+        run: |
+          set -euo pipefail
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
+          test -x "$SDKMANAGER"
+          "$SDKMANAGER" --channel=3 "platforms;android-37.0" "build-tools;37.0.0"
+      - name: Install Python asset renderers
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install --yes python3-cairosvg python3-pil
+          python3 -c "import cairosvg; from PIL import Image"
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Verify FFmpegKitNext and assemble QA APKs
+        run: bash ./gradlew --no-daemon :app:verifyFfmpegKitAar :app:assembleQa
+      - name: Verify packaged native libraries and create checksums
+        run: |
+          set -euo pipefail
+          mapfile -t apks < <(find app/build/outputs/apk/qa -type f -name '*.apk' | sort)
+          test "${#apks[@]}" -gt 0
+          for apk in "${apks[@]}"; do
+            python3 scripts/check_16kb_alignment.py "$apk"
+          done
+          (cd app/build/outputs/apk/qa && find . -type f -name '*.apk' -print0 | sort -z | xargs -0 sha256sum) > app/build/outputs/apk/qa/SHA256SUMS
+      - name: Upload QA APKs
+        uses: actions/upload-artifact@v4
+        with:
+          name: directorx-qa-apks-${{ github.sha }}
+          path: |
+            app/build/outputs/apk/qa/**/*.apk
+            app/build/outputs/apk/qa/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 14

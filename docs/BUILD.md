@@ -1,4 +1,4 @@
-# Director X — Build Guide
+# Director X — Build guide
 
 ## Approved identity
 
@@ -11,8 +11,6 @@
 
 ## Maintainer build
 
-The maintainer builds APKs manually. CI is used for source verification and tests, not APK publishing.
-
 From the repository root:
 
 ```sh
@@ -21,13 +19,19 @@ chmod +x ./gradlew
 ./gradlew :app:assembleDebug
 ```
 
-APK outputs are under:
+APK outputs are under `app/build/outputs/apk/`.
 
-```
-app/build/outputs/apk/
-```
+## CI verification
 
-Build the ABI-specific or universal artifacts using the Gradle split configuration already defined by the project. Inspect the output APK's package name, version name, version code, signing certificate, supported ABIs, and native library alignment before installation.
+The general Android CI workflow is `.github/workflows/android-full-ci.yml`. It runs independent jobs for native SBOM/provenance and resolved advisory checks, Android lint, JVM unit tests, API 37 managed-device instrumentation (including Android migration tests), and QA APK packaging with native 16 KB alignment checks.
+
+The focused FFmpeg integration workflow remains `.github/workflows/ffmpeg-9-app-verify.yml`; it is not a replacement for the full-app workflow.
+
+A successful QA run uploads debug/QA APKs and a SHA-256 manifest to the GitHub Actions run's Artifacts section. These artifacts are temporary validation builds, not production releases.
+
+## Android SDK
+
+Configure the Android SDK using the local Android development environment. Do not commit machine-specific `local.properties`. CI installs compile SDK 37 and the required build tools.
 
 ## Release signing
 
@@ -35,15 +39,15 @@ Release builds must use the established signing identity. Configure secrets loca
 
 A release build must fail rather than silently fall back to a different signing key.
 
-## Android SDK
-
-Configure the Android SDK using the local Android development environment. Do not commit machine-specific `local.properties`. Ensure the installed SDK includes the project's compile/target SDK and required build tools.
-
-## Verification
+## Verification commands
 
 ```sh
-./gradlew :app:testQaUnitTest
+./gradlew :app:generateNativeSbom
+./gradlew :app:verifyResolvedAdvisoryFloors
 ./gradlew :app:lintQa
+./gradlew :app:testQaUnitTest
+./gradlew :app:directorXApi37QaAndroidTest
+./gradlew :app:assembleQa
 ```
 
-Run the repository's verification scripts where relevant. A successful build is not evidence of device playback, proxy, custom-canvas, or export acceptance. See [ENGINEERING_STATUS.md](ENGINEERING_STATUS.md).
+Run `python scripts/check_16kb_alignment.py <apk>` on each packaged APK. A successful build or emulator run is not evidence of physical-device playback, proxy, custom-canvas, or export acceptance. See [ENGINEERING_STATUS.md](ENGINEERING_STATUS.md) and [RELEASE_READINESS.md](RELEASE_READINESS.md).
