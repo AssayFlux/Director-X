@@ -214,12 +214,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mapfile -t aars < <(find ffmpeg-kit-next/prebuilt -type f -name 'ffmpeg-kit-next-9.0.2.aar' -print)
-          mapfile -t poms < <(find ffmpeg-kit-next/prebuilt -type f -name 'ffmpeg-kit-next-9.0.2.pom' -print)
-          test "${#aars[@]}" -eq 1
-          test "${#poms[@]}" -eq 1
-          cp "${aars[0]}" build-output/ffmpeg-kit-next-9.0.2.aar
-          cp "${poms[0]}" build-output/ffmpeg-kit-next-9.0.2.pom
+          test -s build-output/ffmpeg-kit-next-9.0.2.aar
+          test -s build-output/ffmpeg-kit-next-9.0.2.pom
           python3 - <<'PY'
           import pathlib, re, subprocess, zipfile, xml.etree.ElementTree as ET
           aar = pathlib.Path("build-output/ffmpeg-kit-next-9.0.2.aar")
