@@ -33,7 +33,7 @@ def main():
   data={"schemaVersion":1,"runId":a.run_id,"headSha":a.revision,"builtAt":a.built_at,"files":entries,"wrapperCommit":"9f04bf1e3c97def70b98e198cb80a57b43ef5b45","ffmpegCommit":"946fcce07b6dcd0331c8cc609192aeff5e1924f8","nativeLockSha256":lock_sha,**artifact_hashes}
   path.parent.mkdir(parents=True,exist_ok=True); path.write_text(json.dumps(data,indent=2,sort_keys=True)+"\n",encoding="utf-8"); print("Created source-bound native provenance manifest"); return
  data=json.loads(path.read_text(encoding="utf-8"))
- expected={"schemaVersion":1,"runId":a.run_id,"headSha":a.revision,"files":entries,"wrapperCommit":"9f04bf1e3c97def70b98e198cb80a57b43ef5b45","ffmpegCommit":"946fcce07b6dcd0331c8cc609192aeff5e1924f8",**artifact_hashes}
+ expected={"schemaVersion":1,"runId":a.run_id,"headSha":a.revision,"files":entries,"wrapperCommit":"9f04bf1e3c97def70b98e198cb80a57b43ef5b45","ffmpegCommit":"946fcce07b6dcd0331c8cc609192aeff5e1924f8","nativeLockSha256":lock_sha,**artifact_hashes}
  for k,v in expected.items():
   if data.get(k)!=v: raise SystemExit(f"native provenance mismatch: {k}")
  if not data.get("builtAt"): raise SystemExit("native provenance missing builtAt")
