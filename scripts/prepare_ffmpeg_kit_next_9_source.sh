@@ -559,7 +559,7 @@ python3 - "$0" <<'PY'
 from pathlib import Path
 import ast, re, sys
 source = Path(sys.argv[1]).read_text(encoding="utf-8")
-blocks = re.findall(r"<<'FFMPEG_SECURITY_PY'\\n(.*?)\\nFFMPEG_SECURITY_PY", source, re.S)
+blocks = re.findall(r"<<'FFMPEG_SECURITY_PY'\n(.*?)\nFFMPEG_SECURITY_PY", source, re.S)
 if len(blocks) != 1:
     raise SystemExit(f"Expected one FFmpeg security Python block, found {len(blocks)}")
 ast.parse(blocks[0], filename="embedded-ffmpeg-security.py")
