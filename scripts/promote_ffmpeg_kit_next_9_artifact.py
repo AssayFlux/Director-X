@@ -219,7 +219,7 @@ def main() -> int:
         f"| `ffmpeg-kit-next-9.0.2.aar` / FFmpeg 9.0.2 | Active source-pinned native dep | "
         f"Vendored build from `arthenica/ffmpeg-kit-next@{WRAPPER_COMMIT}`; exact recipe and component revisions in "
         f"`third_party/ffmpeg-kit-next/native-lock.json` | Five Android build targets; 16 KB LOAD alignment verified "
-        f"for arm64-v8a and x86_64 | LGPL-3.0-or-later build; security review remains open pending advisory reconciliation | "
+        f"for arm64-v8a and x86_64 | LGPL-3.0-or-later build; advisory reconciliation recorded 2026-11-21, review horizon 2027-02-19 | "
         f"The recorded artifact is {aar_size:,}-byte AAR with SHA-256 `{aar_hash}`; native SBOM is generated from the updated lock. |"
     )
     models_path.write_text(models_text.replace(old_row, new_row), encoding="utf-8")

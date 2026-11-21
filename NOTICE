@@ -8,7 +8,7 @@ The vendored native bundle is FFmpegKitNext 9.0.2 with FFmpeg 9.0.2. Its pinned 
 
 The native lock records LGPL-3.0-or-later for FFmpegKitNext and FFmpeg, and individual licence expressions for OpenH264 and supporting libraries. Consult the lock and the corresponding upstream licence texts for the exact component obligations. The application also generates runtime open-source notices from the resolved release dependency graph; generate and inspect those notices for the exact release variant before distribution.
 
-The pinned native security review window in the lock expired on 2026-10-31. The disabled-format list and historical advisory entries are not a current security clearance. Re-review the exact shipped native binary, component reachability, advisories, patch and build recipe before making a release-safety claim.
+The native lock records an advisory reconciliation performed on 2026-11-21, with source and security review horizons through 2027-02-19. This is a recorded review decision, not a guarantee that no vulnerabilities exist; rerun scripts/verify_native_supply_chain.py and review new upstream advisories before each release.
 
 The source-offer recipe currently tracked by the Android app is `app/src/main/res/raw/ffmpeg_kit_next_source_offer.txt`. Confirm that the corresponding source and any required written offer/access mechanism are available for each distributed build.
 

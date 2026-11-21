@@ -723,8 +723,8 @@ val verifyReleaseSigningIdentity = tasks.register("verifyReleaseSigningIdentity"
         if (storeFile == null || !storeFile.exists()) {
             throw GradleException(
                 "No release keystore resolved. Create keystore.properties (gitignored) with " +
-                    "storeFile/storePassword/keyAlias/keyPassword, or export CLEARCUT_STORE_FILE, " +
-                    "CLEARCUT_STORE_PASSWORD, CLEARCUT_KEY_ALIAS and CLEARCUT_KEY_PASSWORD. " +
+                    "storeFile/storePassword/keyAlias/keyPassword, or export DIRECTORX_STORE_FILE, " +
+                    "DIRECTORX_STORE_PASSWORD, DIRECTORX_KEY_ALIAS and DIRECTORX_KEY_PASSWORD. " +
                     "The release build no longer falls back to the debug key: a release signed " +
                     "with a different certificate cannot update any existing install."
             )
