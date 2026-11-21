@@ -69,7 +69,9 @@ def validate_data(data: dict[str, Any], root: Path = ROOT) -> None:
                 if not isinstance(notice.get(field), str) or not notice[field].strip():
                     raise RegistryError(f"{dependency['id']} notice is missing {field}")
         if dependency["id"] == "ffmpeg":
-            artifact = root / "third_party" / "ffmpeg-kit-next" / "ffmpeg-kit-next-8.1.0.aar"
+            lock_path = root / "third_party" / "ffmpeg-kit-next" / "native-lock.json"
+            lock = json.loads(lock_path.read_text(encoding="utf-8"))
+            artifact = root / lock["artifact"]["path"]
             if not artifact.is_file():
                 raise RegistryError(f"FFmpeg registry artifact is missing: {artifact}")
 
