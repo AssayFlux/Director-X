@@ -477,10 +477,7 @@ edit('libavformat/mov.c', '    mov->found_mdat = 0;\n',
 # Port upstream a13e2733 explicitly: acquire SPS/PPS references only
 # after frame-buffer allocation succeeds. This avoids leaking references when
 # metadata attachment or buffer allocation fails. Keep the overflow guard too.
-edit('libavcodec/vvc/refs.c',
-     '        frame->sps = av_refstruct_ref_c(fc->ps.sps);\n        frame->pps = av_refstruct_ref_c(fc->ps.pps);\n\n        // Add LCEVC SEI metadata here, as it's needed in get_buffer()\n',
-     '        // Add LCEVC SEI metadata here, as it's needed in get_buffer()\n',
-     'VVC delayed SPS/PPS references (remove early acquisition)')
+edit('libavcodec/vvc/refs.c', '        frame->sps = av_refstruct_ref_c(fc->ps.sps);\n        frame->pps = av_refstruct_ref_c(fc->ps.pps);\n\n        // Add LCEVC SEI metadata here, as it's needed in get_buffer()\n', '        // Add LCEVC SEI metadata here, as it's needed in get_buffer()\n', 'VVC delayed SPS/PPS references (remove early acquisition)')
 edit('libavcodec/vvc/refs.c',
      '        ret = ff_thread_get_buffer(s->avctx, frame->frame, AV_GET_BUFFER_FLAG_REF);\n        if (ret < 0)\n            return NULL;\n\n',
      '        ret = ff_thread_get_buffer(s->avctx, frame->frame, AV_GET_BUFFER_FLAG_REF);\n        if (ret < 0)\n            return NULL;\n\n        frame->sps = av_refstruct_ref_c(fc->ps.sps);\n        frame->pps = av_refstruct_ref_c(fc->ps.pps);\n\n',
@@ -555,6 +552,18 @@ require_ffmpeg_security_check "Interplay ACM allocation cap" "s->block_len > 102
 '''
 path.write_text(text.replace(anchor, insert + anchor).rstrip() + "\n", encoding="utf-8")
 print("Prepared pinned FFmpeg security backports.")
+PY
+
+# Parse the embedded security backport Python before any source edits/build.
+python3 - "$0" <<'PY'
+from pathlib import Path
+import ast, re, sys
+source = Path(sys.argv[1]).read_text(encoding="utf-8")
+blocks = re.findall(r"<<'FFMPEG_SECURITY_PY'\\n(.*?)\\nFFMPEG_SECURITY_PY", source, re.S)
+if len(blocks) != 1:
+    raise SystemExit(f"Expected one FFmpeg security Python block, found {len(blocks)}")
+ast.parse(blocks[0], filename="embedded-ffmpeg-security.py")
+print("Embedded FFmpeg security Python syntax validated.")
 PY
 
 bash -n "$source_file"
