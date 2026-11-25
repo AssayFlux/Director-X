@@ -42,9 +42,9 @@ import com.directorx.editor.model.Clip
 import com.directorx.editor.model.ImageOverlayType
 import com.directorx.editor.model.TrackType
 import com.directorx.editor.ui.export.BatchExportPanel
-import com.directorx.editor.ui.theme.ClearCutDialogIcon
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.DirectorXDialogIcon
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
 import com.directorx.editor.ui.theme.Radius
 import java.io.File
 
@@ -67,7 +67,7 @@ fun BoxScope.EditorUtilityPanelHost(
         AlertDialog(
             onDismissRequest = viewModel::dismissSnapshotRestore,
             icon = {
-                ClearCutDialogIcon(
+                DirectorXDialogIcon(
                     icon = Icons.Default.Restore,
                     accent = DirectorXAccents.Green
                 )
@@ -90,14 +90,14 @@ fun BoxScope.EditorUtilityPanelHost(
                 )
             },
             confirmButton = {
-                ClearCutPrimaryButton(
+                DirectorXPrimaryButton(
                     text = stringResource(R.string.snapshot_restore_confirm),
                     onClick = viewModel::restoreDeletedSnapshot,
                     icon = Icons.Default.Restore
                 )
             },
             dismissButton = {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.panel_snapshot_cancel),
                     onClick = viewModel::dismissSnapshotRestore
                 )
@@ -159,7 +159,7 @@ fun BoxScope.EditorUtilityPanelHost(
         AlertDialog(
             onDismissRequest = viewModel::dismissAiRequirementPrompt,
             icon = {
-                ClearCutDialogIcon(
+                DirectorXDialogIcon(
                     icon = Icons.Default.Download,
                     accent = DirectorXAccents.Mauve
                 )
@@ -198,7 +198,7 @@ fun BoxScope.EditorUtilityPanelHost(
                 }
             },
             confirmButton = {
-                ClearCutPrimaryButton(
+                DirectorXPrimaryButton(
                     text = prompt.actionLabel,
                     onClick = {
                         viewModel.dismissAiRequirementPrompt()
@@ -208,7 +208,7 @@ fun BoxScope.EditorUtilityPanelHost(
                 )
             },
             dismissButton = {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.ai_requirement_not_now),
                     onClick = viewModel::dismissAiRequirementPrompt,
                     icon = Icons.Default.Close
@@ -589,7 +589,7 @@ fun BoxScope.EditorUtilityPanelHost(
             AlertDialog(
                 onDismissRequest = { pendingBackupImportUri = null },
                 icon = {
-                    ClearCutDialogIcon(
+                    DirectorXDialogIcon(
                         icon = Icons.Default.Restore,
                         accent = DirectorXAccents.Blue
                     )
@@ -609,7 +609,7 @@ fun BoxScope.EditorUtilityPanelHost(
                     )
                 },
                 confirmButton = {
-                    ClearCutPrimaryButton(
+                    DirectorXPrimaryButton(
                         text = stringResource(R.string.panel_cloud_backup_import_confirm_action),
                         onClick = {
                             pendingBackupImportUri = null
@@ -619,7 +619,7 @@ fun BoxScope.EditorUtilityPanelHost(
                     )
                 },
                 dismissButton = {
-                    ClearCutSecondaryButton(
+                    DirectorXSecondaryButton(
                         text = stringResource(R.string.editor_cancel),
                         onClick = { pendingBackupImportUri = null },
                         icon = Icons.Default.Close
