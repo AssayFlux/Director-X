@@ -763,7 +763,6 @@ fun EditorScreen(
                 else -> AppLog.w("EditorScreen", "Unknown action: $actionId")
             }
         }
-        val hasClips = state.tracks.any { it.clips.isNotEmpty() }
         val scaledToolbarHeight = maxOf(
             68.dp,
             with(LocalDensity.current) { 31.sp.toDp() } + 8.dp
