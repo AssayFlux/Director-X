@@ -113,17 +113,9 @@ Projects can be moved between devices using an explicit local archive export/imp
 
 ## Project status
 
-The authoritative engineering record is [docs/ENGINEERING_STATUS.md](docs/ENGINEERING_STATUS.md). Build instructions are in [docs/BUILD.md](docs/BUILD.md). Privacy disclosures are in [docs/privacy-policy.md](docs/privacy-policy.md).
+The current privacy disclosure is [docs/privacy-policy.md](docs/privacy-policy.md). Build and verification workflows are maintained in `.github/workflows/`.
 
-## Engineering quality programmes
-
-The current P2 product-quality audit covers responsiveness, memory/lifecycle, database scale, privacy/security, accessibility, and automated quality gates. Its evidence and open acceptance criteria are tracked in [docs/P2_PRODUCT_QUALITY_AUDIT_2026-11-24.md](docs/P2_PRODUCT_QUALITY_AUDIT_2026-11-24.md). This is an engineering audit, separate from the product feature-upgrade roadmap; it does not imply P2 is complete or release-ready.
-
-## Director X product upgrade programme
-
-The separate three-upgrade product programme (Upgrade 1: Foundation and Monetization; Upgrade 2: Complete AI Ecosystem; Upgrade 3: Cloud AI and Professional Expansion) is specified in [docs/DIRECTOR_X_PRODUCT_UPGRADE_PLAN.md](docs/DIRECTOR_X_PRODUCT_UPGRADE_PLAN.md). It is independent of the original five-stage engineering roadmap in [docs/UPGRADE_ROADMAP.md](docs/UPGRADE_ROADMAP.md). The product-upgrade plan defines target scope and acceptance gates; it does not imply that planned features are already implemented or verified.
-
-Do not infer feature acceptance from the presence of a UI control or implementation class. The status document distinguishes implemented code, automated verification, and physical-device acceptance.
+Do not infer feature acceptance from the presence of a UI control or implementation class. Automated verification and physical-device acceptance are separate gates.
 
 ## Android 17 audio hardening smoke check
 
@@ -133,9 +125,7 @@ Do not infer feature acceptance from the presence of a UI control or implementat
 
 ## Build and verification
 
-See [docs/BUILD.md](docs/BUILD.md). The `android-full-ci.yml` workflow runs lint, JVM tests, managed-device instrumentation, native supply-chain checks, and QA APK packaging. QA APKs are temporary validation artifacts downloadable from the successful GitHub Actions run; they are not production releases. Production release signing remains a controlled maintainer operation.
-
-Google Play listing preparation, store asset requirements, privacy/contact blockers, and owner-only submission steps are tracked in [Google Play listing preparation](docs/RELEASE_READINESS.md#google-play-listing-preparation).
+The `android-full-ci.yml` workflow runs Android lint, JVM tests, managed-device instrumentation, native supply-chain checks, and QA APK packaging. The `code-quality.yml` workflow runs code-quality and security analysis. QA APKs are temporary validation artifacts, not production releases. Production release signing remains a controlled maintainer operation.
 
 ## Branding and assets
 
@@ -156,10 +146,3 @@ The application ID is `com.directorx.editor`. Changing the package identity requ
 ## Maintenance
 
 Changes must preserve project/archive compatibility, database migrations, original-media export, and explicit device capability checks. Do not claim 5.3K, 8K, HDR, or device acceptance without reproducible evidence.
-
-
-## Current QA status (2026-11-24)
-
-The previous detailed API 35/API 37 device findings are recorded against source revision `b44ed4cb66fb60674dabb16f28dc0ff72018364a` in [workflow run #349](https://github.com/AssayFlux/Director-X/actions/runs/45303741071). The subsequent screenshot-integration revision `46d293e10bdb80be82be641a06565ba4b5d60593` was checked by [Android workflow run #370](https://github.com/AssayFlux/Director-X/actions/runs/45314862774): QA APK assembly/native alignment passed, while the duplicate audit and two tracked-file JVM policy tests failed because their allowlists had not been updated for intentional screenshot copies, the CodeQL workflow, and newly public release docs. [Code quality run #17](https://github.com/AssayFlux/Director-X/actions/runs/45314862797) passed.
-
-PR [#150](https://github.com/AssayFlux/Director-X/pull/150) updates those narrow policy allowlists. Its full Android workflow is running; no pass is claimed yet. The Android instrumentation and API 37 reliability findings remain separate unresolved release blockers. See [the engineering status record](docs/ENGINEERING_STATUS.md) for the source-revision-specific evidence. Production release remains blocked pending physical-device acceptance and independent signing-key custody verification.
