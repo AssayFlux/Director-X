@@ -27,7 +27,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.directorx.editor.model.TrackType
-import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXChromeIconButton
 import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.TouchTarget
@@ -63,7 +63,7 @@ internal fun TimelineToolbarButton(
         highlight -> actionAccent
         else -> colors.text
     }
-    ClearCutChromeIconButton(
+    DirectorXChromeIconButton(
         icon = icon,
         contentDescription = contentDescription,
         onClick = onClick,
@@ -147,7 +147,7 @@ internal fun TimelineMiniIconButton(
     onClick: () -> Unit
 ) {
     val colors = LocalDirectorXColors.current
-    ClearCutChromeIconButton(
+    DirectorXChromeIconButton(
         icon = icon,
         contentDescription = contentDescription,
         onClick = onClick,
