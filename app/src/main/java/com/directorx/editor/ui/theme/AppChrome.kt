@@ -221,7 +221,6 @@ fun DirectorXSecondaryButton(
             style = MaterialTheme.typography.labelLarge,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.requiredHeightIn(min = TouchTarget.minimum),
         )
     }
 }
