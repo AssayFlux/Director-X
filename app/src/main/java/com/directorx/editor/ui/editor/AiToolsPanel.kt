@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -76,7 +76,7 @@ data class AiToolConfig(
     val requiresClip: Boolean = true,
     @StringRes val readinessResId: Int = R.string.ai_tool_status_ready,
     @StringRes val readinessHintResId: Int = R.string.ai_tool_ready_hint,
-    val readinessAccent: Color = ClearCutAccents.Green
+    val readinessAccent: Color = DirectorXAccents.Green
 )
 
 val aiTools = listOf(
@@ -85,140 +85,140 @@ val aiTools = listOf(
         R.string.ai_tool_cut_assistant,
         R.string.ai_tool_cut_assistant_desc,
         Icons.Default.ContentCut,
-        ClearCutAccents.Peach,
+        DirectorXAccents.Peach,
         requiresClip = false,
         readinessResId = R.string.ai_tool_status_review,
         readinessHintResId = R.string.ai_tool_hint_review,
-        readinessAccent = ClearCutAccents.Peach
+        readinessAccent = DirectorXAccents.Peach
     ),
     AiToolConfig(
         "auto_captions",
         R.string.ai_tool_auto_captions,
         R.string.ai_tool_auto_captions_desc,
         Icons.Default.ClosedCaption,
-        ClearCutAccents.Blue,
+        DirectorXAccents.Blue,
         readinessResId = R.string.ai_tool_status_whisper,
         readinessHintResId = R.string.ai_tool_hint_whisper_optional,
-        readinessAccent = ClearCutAccents.Blue
+        readinessAccent = DirectorXAccents.Blue
     ),
     AiToolConfig(
         "remove_bg",
         R.string.ai_tool_remove_bg,
         R.string.ai_tool_remove_bg_desc,
         Icons.Default.Wallpaper,
-        ClearCutAccents.Green,
+        DirectorXAccents.Green,
         readinessResId = R.string.ai_tool_status_fallback,
         readinessHintResId = R.string.ai_tool_hint_segmentation_fallback,
-        readinessAccent = ClearCutAccents.Teal
+        readinessAccent = DirectorXAccents.Teal
     ),
     AiToolConfig(
         "bg_replace",
         R.string.tool_replace_bg,
         R.string.ai_tool_bg_replace_desc,
         Icons.Default.PhotoFilter,
-        ClearCutAccents.Lavender,
+        DirectorXAccents.Lavender,
         readinessResId = R.string.ai_tool_status_model_gated,
         readinessHintResId = R.string.ai_tool_hint_model_required,
-        readinessAccent = ClearCutAccents.Peach
+        readinessAccent = DirectorXAccents.Peach
     ),
     AiToolConfig(
         "scene_detect",
         R.string.ai_tool_scene_detect,
         R.string.ai_tool_scene_detect_desc,
         Icons.Default.ContentCut,
-        ClearCutAccents.Peach
+        DirectorXAccents.Peach
     ),
     AiToolConfig(
         "track_motion",
         R.string.ai_tool_track_motion,
         R.string.ai_tool_track_motion_desc,
         Icons.Default.GpsFixed,
-        ClearCutAccents.Mauve
+        DirectorXAccents.Mauve
     ),
     AiToolConfig(
         "face_track",
         R.string.tool_face_track,
         R.string.ai_tool_face_track_desc,
         Icons.Default.Face,
-        ClearCutAccents.Mauve
+        DirectorXAccents.Mauve
     ),
     AiToolConfig(
         "smart_crop",
         R.string.ai_tool_smart_crop,
         R.string.ai_tool_smart_crop_desc,
         Icons.Default.Crop,
-        ClearCutAccents.Teal
+        DirectorXAccents.Teal
     ),
     AiToolConfig(
         "auto_color",
         R.string.ai_tool_auto_color,
         R.string.ai_tool_auto_color_desc,
         Icons.Default.Palette,
-        ClearCutAccents.Yellow
+        DirectorXAccents.Yellow
     ),
     AiToolConfig(
         "stabilize",
         R.string.ai_tool_stabilize,
         R.string.ai_tool_stabilize_desc,
         Icons.Default.Straighten,
-        ClearCutAccents.Sapphire
+        DirectorXAccents.Sapphire
     ),
     AiToolConfig(
         "denoise",
         R.string.ai_tool_denoise,
         R.string.ai_tool_denoise_desc,
         Icons.AutoMirrored.Filled.VolumeOff,
-        ClearCutAccents.Flamingo
+        DirectorXAccents.Flamingo
     ),
     AiToolConfig(
         "video_upscale",
         R.string.ai_tool_ai_upscale,
         R.string.ai_tool_ai_upscale_desc,
         Icons.Default.ZoomIn,
-        ClearCutAccents.Rosewater,
+        DirectorXAccents.Rosewater,
         readinessResId = R.string.ai_tool_status_model_gated,
         readinessHintResId = R.string.ai_tool_hint_model_required,
-        readinessAccent = ClearCutAccents.Peach
+        readinessAccent = DirectorXAccents.Peach
     ),
     AiToolConfig(
         "frame_interp",
         R.string.tool_frame_interp,
         R.string.ai_tool_frame_interp_desc,
         Icons.Default.SlowMotionVideo,
-        ClearCutAccents.Sky,
+        DirectorXAccents.Sky,
         readinessResId = R.string.ai_tool_status_model_gated,
         readinessHintResId = R.string.ai_tool_hint_model_required,
-        readinessAccent = ClearCutAccents.Peach
+        readinessAccent = DirectorXAccents.Peach
     ),
     AiToolConfig(
         "ai_background",
         R.string.ai_tool_ai_background,
         R.string.ai_tool_ai_background_desc,
         Icons.Default.PhotoFilter,
-        ClearCutAccents.Lavender,
+        DirectorXAccents.Lavender,
         readinessResId = R.string.ai_tool_status_model_gated,
         readinessHintResId = R.string.ai_tool_hint_model_required,
-        readinessAccent = ClearCutAccents.Peach
+        readinessAccent = DirectorXAccents.Peach
     ),
     AiToolConfig(
         "ai_stabilize",
         R.string.ai_tool_ai_stabilize,
         R.string.ai_tool_ai_stabilize_desc,
         Icons.Default.Straighten,
-        ClearCutAccents.Sky,
+        DirectorXAccents.Sky,
         readinessResId = R.string.ai_tool_status_ready,
         readinessHintResId = R.string.ai_tool_hint_stabilize_local,
-        readinessAccent = ClearCutAccents.Teal
+        readinessAccent = DirectorXAccents.Teal
     ),
     AiToolConfig(
         "ai_style_transfer",
         R.string.ai_tool_style_transfer,
         R.string.ai_tool_style_transfer_desc,
         Icons.Default.Style,
-        ClearCutAccents.Maroon,
+        DirectorXAccents.Maroon,
         readinessResId = R.string.ai_tool_status_model_gated,
         readinessHintResId = R.string.ai_tool_hint_model_required,
-        readinessAccent = ClearCutAccents.Peach
+        readinessAccent = DirectorXAccents.Peach
     )
 )
 
@@ -261,7 +261,7 @@ fun AiToolsPanel(
     onDeleteInpainting: () -> Unit = {},
     networkAvailable: Boolean = true,
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val readyTools = aiTools.filter { !it.requiresClip || hasSelectedClip }
     val lockedTools = aiTools.filter { it.requiresClip && !hasSelectedClip }
     var pendingModelRemoval by remember { mutableStateOf<AiModelRemovalTarget?>(null) }
@@ -270,12 +270,12 @@ fun AiToolsPanel(
         title = stringResource(R.string.ai_tools_title),
         subtitle = "Stage on-device assists, model downloads, and clip-aware magic.",
         icon = Icons.Default.AutoAwesome,
-        accent = ClearCutAccents.Mauve,
+        accent = DirectorXAccents.Mauve,
         onClose = onClose,
         modifier = modifier,
         scrollable = true
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -307,7 +307,7 @@ fun AiToolsPanel(
                 ) {
                     PremiumPanelPill(
                         text = "${readyTools.size} ready",
-                        accent = ClearCutAccents.Mauve
+                        accent = DirectorXAccents.Mauve
                     )
                     PremiumPanelPill(
                         text = if (hasSelectedClip) {
@@ -315,11 +315,11 @@ fun AiToolsPanel(
                         } else {
                             stringResource(R.string.ai_tools_awaiting_clip)
                         },
-                        accent = if (hasSelectedClip) ClearCutAccents.Green else ClearCutAccents.Peach
+                        accent = if (hasSelectedClip) DirectorXAccents.Green else DirectorXAccents.Peach
                     )
                     PremiumPanelPill(
                         text = stringResource(R.string.ai_on_device),
-                        accent = ClearCutAccents.Blue
+                        accent = DirectorXAccents.Blue
                     )
                 }
             }
@@ -327,7 +327,7 @@ fun AiToolsPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Sapphire) {
+        PremiumPanelCard(accent = DirectorXAccents.Sapphire) {
             Text(
                 text = stringResource(R.string.ai_stabilization_profiles_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -490,7 +490,7 @@ fun AiToolsPanel(
             val normalizedProgress = processingProgress.coerceIn(0f, 1f)
 
             PremiumPanelCard(
-                accent = ClearCutAccents.Mauve,
+                accent = DirectorXAccents.Mauve,
                 modifier = Modifier.semantics {
                     liveRegion = LiveRegionMode.Polite
                 }
@@ -520,14 +520,14 @@ fun AiToolsPanel(
                                     .fillMaxWidth()
                                     .height(5.dp)
                                     .clip(RoundedCornerShape(Radius.sm)),
-                                color = ClearCutAccents.Mauve,
+                                color = DirectorXAccents.Mauve,
                                 trackColor = semanticColors.surface
                             )
                         }
                     } else {
                         CircularProgressIndicator(
                             modifier = Modifier.size(22.dp),
-                            color = ClearCutAccents.Mauve,
+                            color = DirectorXAccents.Mauve,
                             strokeWidth = 2.dp
                         )
                         Column(modifier = Modifier.weight(1f)) {
@@ -547,7 +547,7 @@ fun AiToolsPanel(
                     ClearCutSecondaryButton(
                         text = stringResource(R.string.cancel),
                         onClick = onCancelProcessing,
-                        contentColor = ClearCutAccents.Red,
+                        contentColor = DirectorXAccents.Red,
                         icon = Icons.Default.Close,
                         modifier = Modifier.widthIn(min = 112.dp)
                     )
@@ -560,7 +560,7 @@ fun AiToolsPanel(
         AiToolSection(
             title = stringResource(R.string.ai_tools_ready_now),
             description = stringResource(R.string.ai_tools_ready_now_description),
-            accent = ClearCutAccents.Blue,
+            accent = DirectorXAccents.Blue,
             tools = readyTools,
             toolsEnabled = true,
             processingTool = processingTool,
@@ -573,7 +573,7 @@ fun AiToolsPanel(
             AiToolSection(
                 title = stringResource(R.string.ai_tools_needs_clip),
                 description = stringResource(R.string.ai_tools_needs_clip_description),
-                accent = ClearCutAccents.Peach,
+                accent = DirectorXAccents.Peach,
                 tools = lockedTools,
                 toolsEnabled = false,
                 processingTool = processingTool,
@@ -621,14 +621,14 @@ private fun StabilizationPreviewDialog(
     onDismissRequest: () -> Unit,
     onApply: () -> Unit,
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val motionData = preview.motionData
     AlertDialog(
         onDismissRequest = onDismissRequest,
         icon = {
             ClearCutDialogIcon(
                 icon = Icons.Default.Straighten,
-                accent = ClearCutAccents.Sapphire,
+                accent = DirectorXAccents.Sapphire,
             )
         },
         title = {
@@ -678,14 +678,14 @@ private fun StabilizationProfileImportDialog(
     onDismissRequest: () -> Unit,
     onApply: () -> Unit,
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val profile = validation.profile
     AlertDialog(
         onDismissRequest = onDismissRequest,
         icon = {
             ClearCutDialogIcon(
                 icon = Icons.Default.Straighten,
-                accent = if (profile != null) ClearCutAccents.Sapphire else ClearCutAccents.Red,
+                accent = if (profile != null) DirectorXAccents.Sapphire else DirectorXAccents.Red,
             )
         },
         title = {
@@ -723,7 +723,7 @@ private fun StabilizationProfileImportDialog(
                 validation.warnings.forEach { warning ->
                     Text(
                         text = warning,
-                        color = ClearCutAccents.Peach,
+                        color = DirectorXAccents.Peach,
                         style = MaterialTheme.typography.bodySmall,
                     )
                 }
@@ -777,7 +777,7 @@ private fun AiToolSection(
     onToolSelected: (String) -> Unit,
     onDisabledToolTapped: (String) -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     PremiumPanelCard(accent = accent) {
         Text(
             text = title,
@@ -819,7 +819,7 @@ private fun AiModelRemovalConfirmDialog(
     onDismissRequest: () -> Unit,
     onConfirm: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val title = when (target) {
         AiModelRemovalTarget.WHISPER -> stringResource(R.string.ai_remove_whisper_title)
         AiModelRemovalTarget.SEGMENTATION -> stringResource(R.string.ai_remove_segmentation_title)
@@ -836,7 +836,7 @@ private fun AiModelRemovalConfirmDialog(
         icon = {
             ClearCutDialogIcon(
                 icon = Icons.Default.Delete,
-                accent = ClearCutAccents.Red
+                accent = DirectorXAccents.Red
             )
         },
         title = {
@@ -858,7 +858,7 @@ private fun AiModelRemovalConfirmDialog(
                 text = stringResource(R.string.ai_model_remove_confirm),
                 onClick = onConfirm,
                 icon = Icons.Default.Delete,
-                contentColor = ClearCutAccents.Red
+                contentColor = DirectorXAccents.Red
             )
         },
         dismissButton = {
@@ -888,7 +888,7 @@ private fun ModelStatusCard(
     onSecondaryAction: (() -> Unit)?,
     networkAvailable: Boolean,
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val hasPrimaryAction = primaryActionLabel != null && onPrimaryAction != null
     val hasSecondaryAction = secondaryActionLabel != null && onSecondaryAction != null
     val displayDescription = if (!networkAvailable && hasPrimaryAction) {
@@ -990,7 +990,7 @@ private fun ModelStatusCard(
                     ClearCutSecondaryButton(
                         text = secondaryActionLabel,
                         onClick = onSecondaryAction,
-                        contentColor = ClearCutAccents.Red,
+                        contentColor = DirectorXAccents.Red,
                         icon = Icons.Default.Delete,
                         modifier = Modifier.widthIn(min = 112.dp)
                     )
@@ -1007,7 +1007,7 @@ private fun AiToolCard(
     isProcessing: Boolean,
     onClick: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val toolLabel = stringResource(tool.nameResId)
     Surface(
         modifier = Modifier
@@ -1078,7 +1078,7 @@ private fun AiToolCard(
                         accent = when {
                             isProcessing -> tool.color
                             isEnabled -> tool.readinessAccent
-                            else -> ClearCutAccents.Peach
+                            else -> DirectorXAccents.Peach
                         }
                     )
                 }
@@ -1115,33 +1115,33 @@ private fun AiToolCard(
 
 @Composable
 private fun modelAccent(state: WhisperModelState): Color {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     return when (state) {
-        WhisperModelState.READY -> ClearCutAccents.Blue
-        WhisperModelState.DOWNLOADING -> ClearCutAccents.Yellow
-        WhisperModelState.ERROR -> ClearCutAccents.Red
+        WhisperModelState.READY -> DirectorXAccents.Blue
+        WhisperModelState.DOWNLOADING -> DirectorXAccents.Yellow
+        WhisperModelState.ERROR -> DirectorXAccents.Red
         WhisperModelState.NOT_DOWNLOADED -> semanticColors.surfaceHigh
     }
 }
 
 @Composable
 private fun segmentationAccent(state: SegmentationModelState): Color {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     return when (state) {
-        SegmentationModelState.READY -> ClearCutAccents.Green
-        SegmentationModelState.DOWNLOADING -> ClearCutAccents.Yellow
-        SegmentationModelState.ERROR -> ClearCutAccents.Red
+        SegmentationModelState.READY -> DirectorXAccents.Green
+        SegmentationModelState.DOWNLOADING -> DirectorXAccents.Yellow
+        SegmentationModelState.ERROR -> DirectorXAccents.Red
         SegmentationModelState.NOT_DOWNLOADED -> semanticColors.surfaceHigh
     }
 }
 
 @Composable
 private fun inpaintingAccent(state: InpaintingModelState): Color {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     return when (state) {
-        InpaintingModelState.READY -> ClearCutAccents.Mauve
-        InpaintingModelState.DOWNLOADING -> ClearCutAccents.Yellow
-        InpaintingModelState.ERROR -> ClearCutAccents.Red
+        InpaintingModelState.READY -> DirectorXAccents.Mauve
+        InpaintingModelState.DOWNLOADING -> DirectorXAccents.Yellow
+        InpaintingModelState.ERROR -> DirectorXAccents.Red
         InpaintingModelState.NOT_DOWNLOADED -> semanticColors.surfaceHigh
     }
 }
