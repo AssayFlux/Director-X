@@ -9,7 +9,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.engine.AppearanceMode
 import com.directorx.editor.engine.DesktopOverride
 import org.junit.Assert.assertEquals
@@ -35,74 +35,74 @@ class DirectorXSmokeTest {
 
     @Test
     fun projectEditorExportAndSettingsSurfacesOpen() {
-        compose.onNodeWithTag(ClearCutTestTags.PROJECTS_SCREEN).assertIsDisplayed()
+        compose.onNodeWithTag(DirectorXTestTags.PROJECTS_SCREEN).assertIsDisplayed()
         compose.assertAccessibilityChecksPass()
 
-        compose.onNodeWithTag(ClearCutTestTags.PROJECTS_CREATE_PROJECT).performClick()
-        compose.onNodeWithTag(ClearCutTestTags.TEMPLATE_SHEET).assertIsDisplayed()
-        compose.onNodeWithTag(ClearCutTestTags.TEMPLATE_BLANK)
+        compose.onNodeWithTag(DirectorXTestTags.PROJECTS_CREATE_PROJECT).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.TEMPLATE_SHEET).assertIsDisplayed()
+        compose.onNodeWithTag(DirectorXTestTags.TEMPLATE_BLANK)
             .performScrollTo()
             .performClick()
 
-        compose.waitUntilAtLeastOneExists(ClearCutTestTags.EDITOR_SCREEN)
+        compose.waitUntilAtLeastOneExists(DirectorXTestTags.EDITOR_SCREEN)
         compose.waitForIdle()
         assertTrue(
-            compose.onAllNodesWithTag(ClearCutTestTags.TUTORIAL_SCREEN)
+            compose.onAllNodesWithTag(DirectorXTestTags.TUTORIAL_SCREEN)
                 .fetchSemanticsNodes()
                 .isEmpty()
         )
         dismissTutorialIfPresent()
         compose.assertAccessibilityChecksPass()
 
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_EMPTY_ADD_MEDIA).assertIsDisplayed().performClick()
-        compose.onNodeWithTag(ClearCutTestTags.MEDIA_PICKER_SHEET).assertIsDisplayed()
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_EMPTY_ADD_MEDIA).assertIsDisplayed().performClick()
+        compose.onNodeWithTag(DirectorXTestTags.MEDIA_PICKER_SHEET).assertIsDisplayed()
         compose.assertAccessibilityChecksPass()
-        compose.onNodeWithTag(ClearCutTestTags.MEDIA_PICKER_CLOSE).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.MEDIA_PICKER_CLOSE).performClick()
 
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_EXPORT).assertIsDisplayed().performClick()
-        compose.onNodeWithTag(ClearCutTestTags.EXPORT_SHEET).assertIsDisplayed()
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_EXPORT).assertIsDisplayed().performClick()
+        compose.onNodeWithTag(DirectorXTestTags.EXPORT_SHEET).assertIsDisplayed()
         compose.assertAccessibilityChecksPass()
-        compose.onNodeWithTag(ClearCutTestTags.EXPORT_CLOSE).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.EXPORT_CLOSE).performClick()
 
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_BACK).performClick()
-        compose.waitUntilAtLeastOneExists(ClearCutTestTags.PROJECTS_SCREEN)
-        compose.waitUntilNoNodesExist(ClearCutTestTags.EDITOR_SCREEN)
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_BACK).performClick()
+        compose.waitUntilAtLeastOneExists(DirectorXTestTags.PROJECTS_SCREEN)
+        compose.waitUntilNoNodesExist(DirectorXTestTags.EDITOR_SCREEN)
 
-        compose.onNodeWithTag(ClearCutTestTags.PROJECTS_SETTINGS).performClick()
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_SCREEN).assertIsDisplayed()
+        compose.onNodeWithTag(DirectorXTestTags.PROJECTS_SETTINGS).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_SCREEN).assertIsDisplayed()
         compose.assertAccessibilityChecksPass()
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_CATEGORY_APP).performClick()
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_PRIVACY_OPEN)
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_CATEGORY_APP).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_PRIVACY_OPEN)
             .performScrollTo()
             .performClick()
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_PRIVACY_DASHBOARD).assertIsDisplayed()
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_PRIVACY_DASHBOARD).assertIsDisplayed()
         compose.assertAccessibilityChecksPass()
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_PRIVACY_CLOSE).performClick()
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_LICENSES_OPEN)
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_PRIVACY_CLOSE).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_LICENSES_OPEN)
             .performScrollTo()
             .performClick()
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_LICENSES_DIALOG).assertIsDisplayed()
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_LICENSES_DIALOG).assertIsDisplayed()
         compose.assertAccessibilityChecksPass()
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_LICENSES_CLOSE).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_LICENSES_CLOSE).performClick()
 
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_REPLAY_TUTORIAL)
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_REPLAY_TUTORIAL)
             .performScrollTo()
             .performClick()
-        compose.waitUntilAtLeastOneExists(ClearCutTestTags.EDITOR_SCREEN)
-        compose.onNodeWithTag(ClearCutTestTags.TUTORIAL_SCREEN).assertIsDisplayed()
-        compose.onNodeWithTag(ClearCutTestTags.TUTORIAL_SKIP).performClick()
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_SCREEN).assertIsDisplayed()
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_BACK).performClick()
-        compose.waitUntilAtLeastOneExists(ClearCutTestTags.SETTINGS_SCREEN)
-        compose.waitUntilNoNodesExist(ClearCutTestTags.EDITOR_SCREEN)
+        compose.waitUntilAtLeastOneExists(DirectorXTestTags.EDITOR_SCREEN)
+        compose.onNodeWithTag(DirectorXTestTags.TUTORIAL_SCREEN).assertIsDisplayed()
+        compose.onNodeWithTag(DirectorXTestTags.TUTORIAL_SKIP).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_SCREEN).assertIsDisplayed()
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_BACK).performClick()
+        compose.waitUntilAtLeastOneExists(DirectorXTestTags.SETTINGS_SCREEN)
+        compose.waitUntilNoNodesExist(DirectorXTestTags.EDITOR_SCREEN)
 
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_BACK)
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_BACK)
             .performScrollTo()
             .performClick()
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_BACK).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_BACK).performClick()
 
-        compose.waitUntilAtLeastOneExists(ClearCutTestTags.PROJECTS_SCREEN)
-        compose.waitUntilNoNodesExist(ClearCutTestTags.SETTINGS_SCREEN)
+        compose.waitUntilAtLeastOneExists(DirectorXTestTags.PROJECTS_SCREEN)
+        compose.waitUntilNoNodesExist(DirectorXTestTags.SETTINGS_SCREEN)
     }
 
     @Test
@@ -110,21 +110,21 @@ class DirectorXSmokeTest {
     fun pseudoLocalesRenderExpandedAndRtlExportSurfaces() {
         try {
             setApplicationLocale("en-XA")
-            compose.waitUntilAtLeastOneExists(ClearCutTestTags.PROJECTS_SCREEN)
-            compose.onNodeWithTag(ClearCutTestTags.PROJECTS_SCREEN).assertIsDisplayed()
-            compose.onNodeWithTag(ClearCutTestTags.PROJECTS_CREATE_PROJECT).performClick()
-            compose.onNodeWithTag(ClearCutTestTags.TEMPLATE_BLANK)
+            compose.waitUntilAtLeastOneExists(DirectorXTestTags.PROJECTS_SCREEN)
+            compose.onNodeWithTag(DirectorXTestTags.PROJECTS_SCREEN).assertIsDisplayed()
+            compose.onNodeWithTag(DirectorXTestTags.PROJECTS_CREATE_PROJECT).performClick()
+            compose.onNodeWithTag(DirectorXTestTags.TEMPLATE_BLANK)
                 .performScrollTo()
                 .performClick()
-            compose.waitUntilAtLeastOneExists(ClearCutTestTags.EDITOR_SCREEN)
+            compose.waitUntilAtLeastOneExists(DirectorXTestTags.EDITOR_SCREEN)
             dismissTutorialIfPresent()
-            compose.onNodeWithTag(ClearCutTestTags.EDITOR_EXPORT).performClick()
-            compose.onNodeWithTag(ClearCutTestTags.EXPORT_SHEET).assertIsDisplayed()
+            compose.onNodeWithTag(DirectorXTestTags.EDITOR_EXPORT).performClick()
+            compose.onNodeWithTag(DirectorXTestTags.EXPORT_SHEET).assertIsDisplayed()
             compose.assertAccessibilityChecksPass()
             assertTrue(compose.onRoot().captureToImage().width > 0)
 
             setApplicationLocale("ar-XB")
-            compose.onNodeWithTag(ClearCutTestTags.EXPORT_SHEET).assertIsDisplayed()
+            compose.onNodeWithTag(DirectorXTestTags.EXPORT_SHEET).assertIsDisplayed()
             compose.assertAccessibilityChecksPass()
             assertEquals(
                 android.view.View.LAYOUT_DIRECTION_RTL,
@@ -142,35 +142,35 @@ class DirectorXSmokeTest {
     fun highContrastPhoneAndDesktopEditorSurfacesRender() {
         try {
             updateAppearance(AppearanceMode.HIGH_CONTRAST, DesktopOverride.FORCE_OFF)
-            compose.waitUntilAtLeastOneExists(ClearCutTestTags.PROJECTS_SCREEN)
-            compose.onNodeWithTag(ClearCutTestTags.PROJECTS_CREATE_PROJECT).performClick()
-            compose.onNodeWithTag(ClearCutTestTags.TEMPLATE_BLANK)
+            compose.waitUntilAtLeastOneExists(DirectorXTestTags.PROJECTS_SCREEN)
+            compose.onNodeWithTag(DirectorXTestTags.PROJECTS_CREATE_PROJECT).performClick()
+            compose.onNodeWithTag(DirectorXTestTags.TEMPLATE_BLANK)
                 .performScrollTo()
                 .performClick()
-            compose.waitUntilAtLeastOneExists(ClearCutTestTags.EDITOR_SCREEN)
+            compose.waitUntilAtLeastOneExists(DirectorXTestTags.EDITOR_SCREEN)
             dismissTutorialIfPresent()
             compose.assertAccessibilityChecksPass()
             assertTrue(compose.onRoot().captureToImage().width > 0)
 
-            compose.onNodeWithTag(ClearCutTestTags.EDITOR_EMPTY_ADD_MEDIA).performClick()
-            compose.onNodeWithTag(ClearCutTestTags.MEDIA_PICKER_SHEET).assertIsDisplayed()
+            compose.onNodeWithTag(DirectorXTestTags.EDITOR_EMPTY_ADD_MEDIA).performClick()
+            compose.onNodeWithTag(DirectorXTestTags.MEDIA_PICKER_SHEET).assertIsDisplayed()
             compose.assertAccessibilityChecksPass()
             assertTrue(compose.onRoot().captureToImage().width > 0)
-            compose.onNodeWithTag(ClearCutTestTags.MEDIA_PICKER_CLOSE).performClick()
+            compose.onNodeWithTag(DirectorXTestTags.MEDIA_PICKER_CLOSE).performClick()
 
-            compose.onNodeWithTag(ClearCutTestTags.EDITOR_EXPORT).performClick()
-            compose.onNodeWithTag(ClearCutTestTags.EXPORT_SHEET).assertIsDisplayed()
+            compose.onNodeWithTag(DirectorXTestTags.EDITOR_EXPORT).performClick()
+            compose.onNodeWithTag(DirectorXTestTags.EXPORT_SHEET).assertIsDisplayed()
             compose.assertAccessibilityChecksPass()
             assertTrue(compose.onRoot().captureToImage().width > 0)
-            compose.onNodeWithTag(ClearCutTestTags.EXPORT_CLOSE).performClick()
+            compose.onNodeWithTag(DirectorXTestTags.EXPORT_CLOSE).performClick()
 
             updateAppearance(AppearanceMode.HIGH_CONTRAST, DesktopOverride.FORCE_ON)
-            compose.waitUntilAtLeastOneExists(ClearCutTestTags.EDITOR_DESKTOP_SIDEBAR)
-            compose.onNodeWithTag(ClearCutTestTags.EDITOR_DESKTOP_SIDEBAR).assertIsDisplayed()
+            compose.waitUntilAtLeastOneExists(DirectorXTestTags.EDITOR_DESKTOP_SIDEBAR)
+            compose.onNodeWithTag(DirectorXTestTags.EDITOR_DESKTOP_SIDEBAR).assertIsDisplayed()
             compose.assertAccessibilityChecksPass()
             assertTrue(compose.onRoot().captureToImage().width > 0)
-            compose.onNodeWithTag(ClearCutTestTags.EDITOR_EXPORT).performClick()
-            compose.onNodeWithTag(ClearCutTestTags.EXPORT_SHEET).assertIsDisplayed()
+            compose.onNodeWithTag(DirectorXTestTags.EDITOR_EXPORT).performClick()
+            compose.onNodeWithTag(DirectorXTestTags.EXPORT_SHEET).assertIsDisplayed()
             compose.assertAccessibilityChecksPass()
             assertTrue(compose.onRoot().captureToImage().width > 0)
         } finally {
@@ -208,18 +208,18 @@ class DirectorXSmokeTest {
     private fun dismissTutorialIfPresent() {
         runCatching {
             compose.waitUntil(timeoutMillis = 1_200L) {
-                compose.onAllNodesWithTag(ClearCutTestTags.TUTORIAL_SKIP)
+                compose.onAllNodesWithTag(DirectorXTestTags.TUTORIAL_SKIP)
                     .fetchSemanticsNodes()
                     .isNotEmpty()
             }
         }
         val tutorialNodes = runCatching {
-            compose.onAllNodesWithTag(ClearCutTestTags.TUTORIAL_SKIP).fetchSemanticsNodes()
+            compose.onAllNodesWithTag(DirectorXTestTags.TUTORIAL_SKIP).fetchSemanticsNodes()
         }.getOrDefault(emptyList())
         if (tutorialNodes.isNotEmpty()) {
-            compose.onNodeWithTag(ClearCutTestTags.TUTORIAL_SKIP).performClick()
+            compose.onNodeWithTag(DirectorXTestTags.TUTORIAL_SKIP).performClick()
             compose.waitUntil(timeoutMillis = 5_000L) {
-                compose.onAllNodesWithTag(ClearCutTestTags.TUTORIAL_SKIP)
+                compose.onAllNodesWithTag(DirectorXTestTags.TUTORIAL_SKIP)
                     .fetchSemanticsNodes()
                     .isEmpty()
             }
