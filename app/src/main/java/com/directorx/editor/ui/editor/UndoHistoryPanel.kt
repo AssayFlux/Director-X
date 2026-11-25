@@ -26,7 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -72,7 +72,7 @@ fun UndoHistoryPanel(
         accent = ClearCutAccents.Mauve,
         onClose = onClose,
         closeContentDescription = stringResource(R.string.undo_history_close),
-        closeButtonTestTag = ClearCutTestTags.UNDO_HISTORY_CLOSE,
+        closeButtonTestTag = DirectorXTestTags.UNDO_HISTORY_CLOSE,
         modifier = modifier,
         scrollable = true
     ) {
@@ -303,7 +303,7 @@ private fun UndoHistoryRow(
                         style = MaterialTheme.typography.titleSmall,
                         color = if (isFuture) semanticColors.subtext else semanticColors.text,
                         fontWeight = if (isCurrent) FontWeight.SemiBold else FontWeight.Medium,
-                        modifier = Modifier.testTag(ClearCutTestTags.UNDO_HISTORY_ENTRY_DESCRIPTION)
+                        modifier = Modifier.testTag(DirectorXTestTags.UNDO_HISTORY_ENTRY_DESCRIPTION)
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
