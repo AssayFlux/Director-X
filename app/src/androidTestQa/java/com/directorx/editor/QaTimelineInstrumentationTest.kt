@@ -22,7 +22,7 @@ import com.directorx.editor.engine.ProjectAutoSave
 import com.directorx.editor.engine.db.ProjectDatabase
 import com.directorx.editor.model.Clip
 import com.directorx.editor.model.Project
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -88,7 +88,7 @@ class QaTimelineInstrumentationTest {
     fun importEditUndoRedoAndRelaunchStayInsideQaStorage() {
         val fixture = stageFixture()
         sendFixtureToMainActivity(fixture)
-        waitForTag(ClearCutTestTags.EDITOR_SCREEN)
+        waitForTag(DirectorXTestTags.EDITOR_SCREEN)
         dismissTutorialIfPresent()
 
         val project = awaitProject()
@@ -99,22 +99,22 @@ class QaTimelineInstrumentationTest {
 
         // Exercise trim through the editor's real tool rail and numeric controls.
         selectClip(importedClip)
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_TOOL_TAB_PREFIX + "edit")
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_TOOL_TAB_PREFIX + "edit")
             .performClick()
-        waitForTag(ClearCutTestTags.EDITOR_TOOL_ACTION_PREFIX + "trim")
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_TOOL_ACTION_PREFIX + "trim")
+        waitForTag(DirectorXTestTags.EDITOR_TOOL_ACTION_PREFIX + "trim")
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_TOOL_ACTION_PREFIX + "trim")
             .performClick()
-        waitForTag(ClearCutTestTags.TIMELINE_TRIM_START)
-        compose.onNodeWithTag(ClearCutTestTags.TIMELINE_TRIM_START)
+        waitForTag(DirectorXTestTags.TIMELINE_TRIM_START)
+        compose.onNodeWithTag(DirectorXTestTags.TIMELINE_TRIM_START)
             .performTextReplacement("0.20")
-        compose.onNodeWithTag(ClearCutTestTags.TIMELINE_TRIM_END)
+        compose.onNodeWithTag(DirectorXTestTags.TIMELINE_TRIM_END)
             .performTextReplacement("2.50")
         // Trims land on project frames, and the fixture is 30 fps: 0.20 s and 2.50 s
         // are frame 6 and frame 75 exactly, where 0.25 s would round to 267 ms.
         // Done on the keyboard hands focus back to the editor, which commits the
         // typed trim's undo entry, saves it, and lets the arrow key below reach the
         // editor's shortcuts.
-        compose.onNodeWithTag(ClearCutTestTags.TIMELINE_TRIM_END)
+        compose.onNodeWithTag(DirectorXTestTags.TIMELINE_TRIM_END)
             .performImeAction()
         val trimmedState = awaitState {
             videoClips(it).singleOrNull()?.let { clip ->
@@ -127,35 +127,35 @@ class QaTimelineInstrumentationTest {
         // Keyboard seeking is pointer-free and deterministic. Committing the trim
         // leaves the playhead on its out point at the end of the clip, and the
         // editor's left-arrow contract moves it back one second, inside the clip.
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_SCREEN)
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_SCREEN)
             .performKeyInput { pressKey(Key.DirectionLeft) }
-        waitForTag(ClearCutTestTags.TIMELINE_SPLIT)
-        compose.onNodeWithTag(ClearCutTestTags.TIMELINE_SPLIT)
+        waitForTag(DirectorXTestTags.TIMELINE_SPLIT)
+        compose.onNodeWithTag(DirectorXTestTags.TIMELINE_SPLIT)
             .assertIsEnabled()
             .performClick()
         awaitState { videoClips(it).size == 2 }
 
-        waitForTag(ClearCutTestTags.TIMELINE_DELETE)
-        compose.onNodeWithTag(ClearCutTestTags.TIMELINE_DELETE)
+        waitForTag(DirectorXTestTags.TIMELINE_DELETE)
+        compose.onNodeWithTag(DirectorXTestTags.TIMELINE_DELETE)
             .assertIsEnabled()
             .performClick()
         awaitState { videoClips(it).size == 1 }
 
-        clickBarOrOverflowAction(ClearCutTestTags.EDITOR_UNDO, ClearCutTestTags.EDITOR_OVERFLOW_UNDO)
+        clickBarOrOverflowAction(DirectorXTestTags.EDITOR_UNDO, DirectorXTestTags.EDITOR_OVERFLOW_UNDO)
         awaitState { videoClips(it).size == 2 }
 
-        clickBarOrOverflowAction(ClearCutTestTags.EDITOR_REDO, ClearCutTestTags.EDITOR_OVERFLOW_REDO)
+        clickBarOrOverflowAction(DirectorXTestTags.EDITOR_REDO, DirectorXTestTags.EDITOR_OVERFLOW_REDO)
         val redoneState = awaitState { videoClips(it).size == 1 }
         assertEquals(200L, videoClips(redoneState).single().trimStartMs)
 
         // Recreate the activity, not the process: this exercises the same
         // SavedStateHandle/navigation path used by a relaunch from Recents.
         compose.activityRule.scenario.recreate()
-        waitForTag(ClearCutTestTags.EDITOR_SCREEN)
+        waitForTag(DirectorXTestTags.EDITOR_SCREEN)
         val restoredState = awaitState { videoClips(it).size == 1 }
         assertEquals(200L, videoClips(restoredState).single().trimStartMs)
         assertTrue(restoredState.projectId == project.id)
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_SCREEN).assertIsDisplayed()
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_SCREEN).assertIsDisplayed()
     }
 
     /** Compact top bars move Undo and Redo into the overflow menu. */
@@ -164,7 +164,7 @@ class QaTimelineInstrumentationTest {
             compose.onNodeWithTag(barTag).assertIsEnabled().performClick()
             return
         }
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_OVERFLOW).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_OVERFLOW).performClick()
         waitForTag(overflowTag)
         compose.onNodeWithTag(overflowTag).assertIsEnabled().performClick()
     }
@@ -205,7 +205,7 @@ class QaTimelineInstrumentationTest {
     }
 
     private fun selectClip(clip: Clip) {
-        compose.onNodeWithTag(ClearCutTestTags.TIMELINE_CLIP_PREFIX + clip.id)
+        compose.onNodeWithTag(DirectorXTestTags.TIMELINE_CLIP_PREFIX + clip.id)
             .performClick()
     }
 
@@ -243,16 +243,16 @@ class QaTimelineInstrumentationTest {
     private fun dismissTutorialIfPresent() {
         runCatching {
             compose.waitUntil(timeoutMillis = 2_000L) {
-                compose.onAllNodesWithTag(ClearCutTestTags.TUTORIAL_SKIP)
+                compose.onAllNodesWithTag(DirectorXTestTags.TUTORIAL_SKIP)
                     .fetchSemanticsNodes()
                     .isNotEmpty()
             }
         }
-        if (compose.onAllNodesWithTag(ClearCutTestTags.TUTORIAL_SKIP)
+        if (compose.onAllNodesWithTag(DirectorXTestTags.TUTORIAL_SKIP)
                 .fetchSemanticsNodes()
                 .isNotEmpty()
         ) {
-            compose.onNodeWithTag(ClearCutTestTags.TUTORIAL_SKIP).performClick()
+            compose.onNodeWithTag(DirectorXTestTags.TUTORIAL_SKIP).performClick()
         }
     }
 
