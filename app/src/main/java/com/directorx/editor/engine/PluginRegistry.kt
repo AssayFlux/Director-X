@@ -7,13 +7,13 @@ import java.util.Locale
 /**
  * R5.7a — Plugin registry.
  *
- * ClearCut's first plugin format was `.clearcut-template`, defined by
+ * Director X's first plugin format was `.clearcut-template`, defined by
  * [TemplateManager] + [TemplateCompatibility]. This registry promotes the
  * concept to a small family of share-able assets so they all flow through
  * one share-intent path and one compatibility-check entry point:
  *
  *   - `.clearcut-template`  — project templates (existing).
- *   - `.ncfx`              — effect packs (chains of ClearCut effects,
+ *   - `.ncfx`              — effect packs (chains of Director X effects,
  *                            including bounded embedded LUT bytes when
  *                            available, never absolute-path-based references).
  *   - `.ncstyle`           — caption + text style packs.
@@ -21,7 +21,7 @@ import java.util.Locale
  *                            promoted to first-class plugin so the share
  *                            sheet treats them like the others).
  *   - `.ncfxd`             — OpenFX descriptor JSON (R5.7b). Carries metadata
- *                            that maps a ClearCut effect's parameters to the
+ *                            that maps a Director X effect's parameters to the
  *                            OpenFX-named parameters, so NLE round-trip
  *                            (C.14) can preserve effect intent across
  *                            DaVinci Resolve / Premiere imports.
