@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -59,7 +59,7 @@ fun AudioNormPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var selectedMode by remember { mutableStateOf(NormalizationMode.YOUTUBE) }
     var customLufs by remember { mutableFloatStateOf(-14f) }
     val targetLufs = if (selectedMode == NormalizationMode.CUSTOM) customLufs else selectedMode.targetLufs
@@ -68,12 +68,12 @@ fun AudioNormPanel(
         title = stringResource(R.string.audio_norm_title),
         subtitle = stringResource(R.string.audio_norm_subtitle),
         icon = Icons.Default.GraphicEq,
-        accent = ClearCutAccents.Mauve,
+        accent = DirectorXAccents.Mauve,
         onClose = onClose,
         modifier = modifier,
         scrollable = true
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -101,11 +101,11 @@ fun AudioNormPanel(
                 ) {
                     PremiumPanelPill(
                         text = stringResource(R.string.audio_norm_current_percent, (currentVolume * 100f).toInt()),
-                        accent = ClearCutAccents.Blue
+                        accent = DirectorXAccents.Blue
                     )
                     PremiumPanelPill(
                         text = formatLufs(targetLufs),
-                        accent = ClearCutAccents.Mauve
+                        accent = DirectorXAccents.Mauve
                     )
                 }
             }
@@ -113,7 +113,7 @@ fun AudioNormPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = DirectorXAccents.Blue) {
             Text(
                 text = stringResource(R.string.audio_norm_profiles_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -139,7 +139,7 @@ fun AudioNormPanel(
         if (selectedMode == NormalizationMode.CUSTOM) {
             Spacer(modifier = Modifier.height(12.dp))
 
-            PremiumPanelCard(accent = ClearCutAccents.Peach) {
+            PremiumPanelCard(accent = DirectorXAccents.Peach) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -162,7 +162,7 @@ fun AudioNormPanel(
                     Spacer(modifier = Modifier.width(12.dp))
                     PremiumPanelPill(
                         text = formatLufs(customLufs),
-                        accent = ClearCutAccents.Peach
+                        accent = DirectorXAccents.Peach
                     )
                 }
 
@@ -171,8 +171,8 @@ fun AudioNormPanel(
                     onValueChange = { customLufs = it },
                     valueRange = -30f..-5f,
                     colors = SliderDefaults.colors(
-                        thumbColor = ClearCutAccents.Peach,
-                        activeTrackColor = ClearCutAccents.Peach.copy(alpha = 0.7f),
+                        thumbColor = DirectorXAccents.Peach,
+                        activeTrackColor = DirectorXAccents.Peach.copy(alpha = 0.7f),
                         inactiveTrackColor = semanticColors.surface
                     )
                 )
@@ -189,7 +189,7 @@ fun AudioNormPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Green) {
+        PremiumPanelCard(accent = DirectorXAccents.Green) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -212,14 +212,14 @@ fun AudioNormPanel(
                 Spacer(modifier = Modifier.width(12.dp))
                 PremiumPanelPill(
                     text = stringResource(selectedMode.labelResId),
-                    accent = ClearCutAccents.Green
+                    accent = DirectorXAccents.Green
                 )
             }
 
             Button(
                 onClick = { onNormalize(targetLufs) },
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = ClearCutAccents.Mauve),
+                colors = ButtonDefaults.buttonColors(containerColor = DirectorXAccents.Mauve),
                 shape = RoundedCornerShape(12.dp),
                 enabled = hasSelectedClip
             ) {
@@ -236,7 +236,7 @@ fun AudioNormPanel(
             Button(
                 onClick = { onNormalizeAll(targetLufs) },
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = ClearCutAccents.Green),
+                colors = ButtonDefaults.buttonColors(containerColor = DirectorXAccents.Green),
                 shape = RoundedCornerShape(12.dp)
             ) {
                 androidx.compose.material3.Icon(
@@ -256,12 +256,12 @@ private fun NormalizationModeRow(
     selected: Boolean,
     onSelect: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val accent = when (mode) {
-        NormalizationMode.CUSTOM -> ClearCutAccents.Peach
-        NormalizationMode.LOUD -> ClearCutAccents.Red
-        NormalizationMode.BROADCAST, NormalizationMode.CINEMA -> ClearCutAccents.Blue
-        else -> ClearCutAccents.Mauve
+        NormalizationMode.CUSTOM -> DirectorXAccents.Peach
+        NormalizationMode.LOUD -> DirectorXAccents.Red
+        NormalizationMode.BROADCAST, NormalizationMode.CINEMA -> DirectorXAccents.Blue
+        else -> DirectorXAccents.Mauve
     }
 
     Surface(
