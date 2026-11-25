@@ -179,6 +179,9 @@ internal fun playbackSessionNeedsReset(
     playbackState == Player.STATE_IDLE || playbackState == Player.STATE_ENDED ||
     (playbackState == Player.STATE_BUFFERING && !playbackRequested)
 
+/** A CompositionPlayer cannot service seeks until prepare() has created its internal player. */
+internal fun canSeekPreviewPlayer(compositionPrepared: Boolean): Boolean = compositionPrepared
+
 internal fun canCoalesceAdjacentPreviewCuts(left: Clip, right: Clip): Boolean =
     left.timelineEndMs == right.timelineStartMs &&
         left.trimEndMs == right.trimStartMs &&
@@ -259,6 +262,10 @@ class VideoEngine @Inject constructor(
     )
 
     private var player: CompositionPlayer? = null
+    // getPlayer() is also used to attach the preview surface before a project is
+    // loaded. CompositionPlayer.seekTo() dereferences its internal player, which
+    // does not exist until prepare() has run for a composition.
+    private var previewCompositionPrepared = false
     private var playerLease: CodecLease<Unit>? = null
     private var playerListener: Player.Listener? = null
 
@@ -438,6 +445,7 @@ class VideoEngine @Inject constructor(
                 val previewAudioAttributes = DirectorXAudioFocusPolicy.buildPreviewAttributes()
                 logAndroid15LoudnessIntegration("Preview")
                 val graphWatch = EndOfInputWatchingVideoGraphFactory(MultipleInputVideoGraph.Factory())
+                previewCompositionPrepared = false
                 player = CompositionPlayer.Builder(context)
                     .setLoadControl(loadControl)
                     .setVideoGraphFactory(graphWatch)
@@ -529,6 +537,7 @@ class VideoEngine @Inject constructor(
         previewTracks = tracks
         previewMissingClipIds = missingClipIds
         previewConfig = config
+        previewCompositionPrepared = false
         previewCompositionPlan = PreviewCompositionPlan.create(tracks)
         val composition = buildPreviewComposition(
             plan = previewCompositionPlan,
@@ -540,10 +549,15 @@ class VideoEngine @Inject constructor(
         p.setComposition(composition, startPositionMs.coerceIn(0L, previewCompositionPlan.durationMs))
         setPreviewSpeed(1f)
         p.prepare()
+        previewCompositionPrepared = true
         if (resumePlayback) p.play()
     }
 
     fun seekTo(positionMs: Long) {
+        if (!canSeekPreviewPlayer(previewCompositionPrepared)) {
+            AppLog.d(TAG, "Ignoring preview seek before a composition has been prepared")
+            return
+        }
         if (renewSpentPreviewPlayer(positionMs)) return
         player?.seekTo(positionMs.coerceIn(0L, previewCompositionPlan.durationMs))
     }
@@ -569,6 +583,10 @@ class VideoEngine @Inject constructor(
     fun play() { player?.play() }
 
     fun playFromTimelinePosition(positionMs: Long, restartSession: Boolean = false) {
+        if (!canSeekPreviewPlayer(previewCompositionPrepared)) {
+            AppLog.w(TAG, "Ignoring playback request before a preview composition has been prepared")
+            return
+        }
         if (renewSpentPreviewPlayer(positionMs)) {
             player?.play()
             return
