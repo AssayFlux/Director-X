@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -79,7 +79,7 @@ fun FirstRunTutorial(
     onComplete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var currentStep by remember { mutableIntStateOf(0) }
 
     Box(
@@ -174,7 +174,7 @@ fun FirstRunTutorial(
                     Icon(
                         imageVector = tutorialStep.arrowIcon,
                         contentDescription = null,
-                        tint = ClearCutAccents.Mauve.copy(alpha = 0.85f),
+                        tint = DirectorXAccents.Mauve.copy(alpha = 0.85f),
                         modifier = Modifier.size(24.dp)
                     )
 
@@ -186,16 +186,16 @@ fun FirstRunTutorial(
                         modifier = Modifier
                             .size(64.dp)
                             .clip(CircleShape)
-                            .background(ClearCutAccents.Mauve.copy(alpha = 0.14f))
+                            .background(DirectorXAccents.Mauve.copy(alpha = 0.14f))
                             .border(
-                                BorderStroke(1.dp, ClearCutAccents.Mauve.copy(alpha = 0.24f)),
+                                BorderStroke(1.dp, DirectorXAccents.Mauve.copy(alpha = 0.24f)),
                                 CircleShape
                             )
                     ) {
                         Icon(
                             imageVector = tutorialStep.icon,
                             contentDescription = null,
-                            tint = ClearCutAccents.Mauve,
+                            tint = DirectorXAccents.Mauve,
                             modifier = Modifier.size(30.dp)
                         )
                     }
@@ -261,7 +261,7 @@ fun FirstRunTutorial(
                                     .height(8.dp)
                                     .clip(RoundedCornerShape(Radius.sm))
                                     .background(
-                                        if (index == step) ClearCutAccents.Mauve
+                                        if (index == step) DirectorXAccents.Mauve
                                         else semanticColors.surface.copy(alpha = 0.7f)
                                     )
                             )
