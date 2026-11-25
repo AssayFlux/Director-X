@@ -787,7 +787,7 @@ fun EditorScreen(
         // preview flexible on normal/large phones, while protecting short windows
         // and large-font layouts from clipping the timeline or bottom tool rail.
         val minimumEditorContentHeight = scaledToolbarHeight +
-            previewMinHeight + timelineMinHeight + measuredBottomToolRailHeight + 24.dp
+            previewMinHeight + timelineMaxHeight + measuredBottomToolRailHeight + 48.dp
         val scrollEditorContent = !isImmersivePreview &&
             screenHeightDp.dp < minimumEditorContentHeight
         Column(
