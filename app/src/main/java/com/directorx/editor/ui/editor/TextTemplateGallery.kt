@@ -2,8 +2,8 @@
 
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -280,7 +280,7 @@ fun TextTemplateGallery(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var selectedCategory by remember { mutableStateOf<TextTemplateCategory?>(null) }
     var showAnimated by remember { mutableStateOf(false) }
     val animatedTemplates = remember { animatedTextTemplates() }
@@ -298,7 +298,7 @@ fun TextTemplateGallery(
             animatedTemplates.filter { it.category == selectedCategory }
         }
     }
-    val accent = if (showAnimated) ClearCutAccents.Yellow else ClearCutAccents.Sapphire
+    val accent = if (showAnimated) DirectorXAccents.Yellow else DirectorXAccents.Sapphire
 
     PremiumEditorPanel(
         title = stringResource(R.string.panel_text_template_title),
@@ -345,7 +345,7 @@ fun TextTemplateGallery(
                                     R.string.panel_text_template_insert_at,
                                     formatTemplateTime(playheadMs)
                                 ),
-                                accent = ClearCutAccents.Sky
+                                accent = DirectorXAccents.Sky
                             )
                             PremiumPanelPill(
                                 text = if (showAnimated) {
@@ -353,7 +353,7 @@ fun TextTemplateGallery(
                                 } else {
                                     stringResource(R.string.panel_text_template_static)
                                 },
-                                accent = ClearCutAccents.Pink
+                                accent = DirectorXAccents.Pink
                             )
                         }
                     }
@@ -397,7 +397,7 @@ fun TextTemplateGallery(
                                     R.string.panel_text_template_insert_at,
                                     formatTemplateTime(playheadMs)
                                 ),
-                                accent = ClearCutAccents.Sky
+                                accent = DirectorXAccents.Sky
                             )
                             PremiumPanelPill(
                                 text = if (showAnimated) {
@@ -405,7 +405,7 @@ fun TextTemplateGallery(
                                 } else {
                                     stringResource(R.string.panel_text_template_static)
                                 },
-                                accent = ClearCutAccents.Pink
+                                accent = DirectorXAccents.Pink
                             )
                         }
                     }
@@ -420,7 +420,7 @@ fun TextTemplateGallery(
                             title = stringResource(R.string.panel_text_template_static),
                             subtitle = stringResource(R.string.panel_text_template_static_subtitle),
                             selected = !showAnimated,
-                            accent = ClearCutAccents.Sapphire,
+                            accent = DirectorXAccents.Sapphire,
                             onClick = { showAnimated = false },
                             modifier = Modifier.fillMaxWidth()
                         )
@@ -428,7 +428,7 @@ fun TextTemplateGallery(
                             title = stringResource(R.string.panel_text_template_animated),
                             subtitle = stringResource(R.string.panel_text_template_animated_subtitle),
                             selected = showAnimated,
-                            accent = ClearCutAccents.Yellow,
+                            accent = DirectorXAccents.Yellow,
                             onClick = { showAnimated = true },
                             modifier = Modifier.fillMaxWidth()
                         )
@@ -442,7 +442,7 @@ fun TextTemplateGallery(
                             title = stringResource(R.string.panel_text_template_static),
                             subtitle = stringResource(R.string.panel_text_template_static_subtitle),
                             selected = !showAnimated,
-                            accent = ClearCutAccents.Sapphire,
+                            accent = DirectorXAccents.Sapphire,
                             onClick = { showAnimated = false },
                             modifier = Modifier.weight(1f)
                         )
@@ -450,7 +450,7 @@ fun TextTemplateGallery(
                             title = stringResource(R.string.panel_text_template_animated),
                             subtitle = stringResource(R.string.panel_text_template_animated_subtitle),
                             selected = showAnimated,
-                            accent = ClearCutAccents.Yellow,
+                            accent = DirectorXAccents.Yellow,
                             onClick = { showAnimated = true },
                             modifier = Modifier.weight(1f)
                         )
@@ -482,14 +482,14 @@ fun TextTemplateGallery(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = if (showAnimated) ClearCutAccents.Peach else ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = if (showAnimated) DirectorXAccents.Peach else DirectorXAccents.Blue) {
             Text(
                 text = if (showAnimated) {
                     stringResource(R.string.panel_text_template_collection_animated_title)
                 } else {
                     stringResource(R.string.panel_text_template_collection_static_title)
                 },
-                color = ClearCutAccents.Rosewater,
+                color = DirectorXAccents.Rosewater,
                 style = MaterialTheme.typography.labelLarge
             )
             Text(
@@ -511,14 +511,14 @@ fun TextTemplateGallery(
                         if (showAnimated) visibleAnimatedTemplates.size else visibleStaticTemplates.size,
                         if (showAnimated) visibleAnimatedTemplates.size else visibleStaticTemplates.size
                     ),
-                    accent = if (showAnimated) ClearCutAccents.Yellow else ClearCutAccents.Sapphire
+                    accent = if (showAnimated) DirectorXAccents.Yellow else DirectorXAccents.Sapphire
                 )
                 PremiumPanelPill(
                     text = stringResource(
                         R.string.panel_text_template_category_format,
                         selectedCategory?.displayName ?: stringResource(R.string.panel_text_template_all)
                     ),
-                    accent = selectedCategory?.let(::templateCategoryAccent) ?: ClearCutAccents.Sky
+                    accent = selectedCategory?.let(::templateCategoryAccent) ?: DirectorXAccents.Sky
                 )
             }
         }
@@ -527,7 +527,7 @@ fun TextTemplateGallery(
 
         if (showAnimated) {
             if (visibleAnimatedTemplates.isEmpty()) {
-                TemplateEmptyState(accent = ClearCutAccents.Peach)
+                TemplateEmptyState(accent = DirectorXAccents.Peach)
             } else {
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(minSize = 160.dp),
@@ -547,7 +547,7 @@ fun TextTemplateGallery(
             }
         } else {
             if (visibleStaticTemplates.isEmpty()) {
-                TemplateEmptyState(accent = ClearCutAccents.Blue)
+                TemplateEmptyState(accent = DirectorXAccents.Blue)
             } else {
                 LazyVerticalGrid(
                     columns = GridCells.Adaptive(minSize = 160.dp),
@@ -574,7 +574,7 @@ private fun TemplateEmptyState(
     accent: Color,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     PremiumPanelCard(accent = accent, modifier = modifier) {
         Text(
             text = stringResource(R.string.panel_text_template_empty_title),
@@ -595,7 +595,7 @@ private fun TemplateCard(
     template: TextTemplate,
     onClick: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val accent = templateCategoryAccent(template.category)
 
     Surface(
@@ -683,7 +683,7 @@ private fun TemplateCard(
                             R.string.panel_text_template_duration_format,
                             template.durationMs / 1000L
                         ),
-                        accent = ClearCutAccents.Sky
+                        accent = DirectorXAccents.Sky
                     )
                 }
             }
@@ -700,7 +700,7 @@ private fun TemplateModeCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         onClick = onClick,
         modifier = modifier,
@@ -737,7 +737,7 @@ private fun TemplateCategoryChip(
     accent: Color,
     onClick: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         onClick = onClick,
         color = if (selected) accent.copy(alpha = 0.14f) else semanticColors.panelHighest,
@@ -761,7 +761,7 @@ private fun AnimatedTemplateCard(
     template: AnimatedTextTemplateDefinition,
     onClick: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         onClick = onClick,
         color = semanticColors.panelHighest,
@@ -825,7 +825,7 @@ private fun AnimatedTemplateCard(
                     )
                     PremiumPanelPill(
                         text = template.animation.displayName,
-                        accent = ClearCutAccents.Pink
+                        accent = DirectorXAccents.Pink
                     )
                 }
             }
@@ -887,7 +887,7 @@ private fun animatedTextTemplates(): List<AnimatedTextTemplateDefinition> = list
         previewText = "HOST NAME",
         previewNote = "New episode",
         description = "A polished host intro with strong lateral movement.",
-        accent = ClearCutAccents.Sapphire,
+        accent = DirectorXAccents.Sapphire,
         animation = TextAnimation.SLIDE_LEFT,
         durationMs = 3500L
     ),
@@ -898,7 +898,7 @@ private fun animatedTextTemplates(): List<AnimatedTextTemplateDefinition> = list
         previewText = "3 2 1",
         previewNote = "Launch",
         description = "Great for cold opens, beats, and punchy scene intros.",
-        accent = ClearCutAccents.Yellow,
+        accent = DirectorXAccents.Yellow,
         animation = TextAnimation.BOUNCE,
         durationMs = 3000L
     ),
@@ -909,7 +909,7 @@ private fun animatedTextTemplates(): List<AnimatedTextTemplateDefinition> = list
         previewText = "NEON",
         previewNote = "Night drive",
         description = "A vivid hero title with glow-led reveal energy.",
-        accent = ClearCutAccents.Pink,
+        accent = DirectorXAccents.Pink,
         animation = TextAnimation.SCALE,
         durationMs = 3200L
     ),
@@ -920,7 +920,7 @@ private fun animatedTextTemplates(): List<AnimatedTextTemplateDefinition> = list
         previewText = "SUBSCRIBE",
         previewNote = "Weekly drops",
         description = "A clean CTA for end cards and creator reminders.",
-        accent = ClearCutAccents.Red,
+        accent = DirectorXAccents.Red,
         animation = TextAnimation.ELASTIC,
         durationMs = 3600L
     ),
@@ -931,7 +931,7 @@ private fun animatedTextTemplates(): List<AnimatedTextTemplateDefinition> = list
         previewText = "@NOVA",
         previewNote = "Follow along",
         description = "Fast social ID tag for reels, shorts, and cutdowns.",
-        accent = ClearCutAccents.Mauve,
+        accent = DirectorXAccents.Mauve,
         animation = TextAnimation.SLIDE_UP,
         durationMs = 2800L
     ),
@@ -942,7 +942,7 @@ private fun animatedTextTemplates(): List<AnimatedTextTemplateDefinition> = list
         previewText = "THANK YOU",
         previewNote = "See you next cut",
         description = "A softer sign-off treatment for polished endings.",
-        accent = ClearCutAccents.Teal,
+        accent = DirectorXAccents.Teal,
         animation = TextAnimation.FADE,
         durationMs = 4000L
     ),
@@ -953,7 +953,7 @@ private fun animatedTextTemplates(): List<AnimatedTextTemplateDefinition> = list
         previewText = "\"BREATHE\"",
         previewNote = "Scene note",
         description = "A restrained pull-quote for narrative or documentary edits.",
-        accent = ClearCutAccents.Lavender,
+        accent = DirectorXAccents.Lavender,
         animation = TextAnimation.SLIDE_RIGHT,
         durationMs = 3600L
     ),
@@ -964,19 +964,19 @@ private fun animatedTextTemplates(): List<AnimatedTextTemplateDefinition> = list
         previewText = "LINK IN BIO",
         previewNote = "Open now",
         description = "A bold conversion card designed for vertical social posts.",
-        accent = ClearCutAccents.Peach,
+        accent = DirectorXAccents.Peach,
         animation = TextAnimation.BOUNCE,
         durationMs = 2800L
     )
 )
 
 private fun templateCategoryAccent(category: TextTemplateCategory): Color = when (category) {
-    TextTemplateCategory.LOWER_THIRD -> ClearCutAccents.Sapphire
-    TextTemplateCategory.TITLE_CARD -> ClearCutAccents.Yellow
-    TextTemplateCategory.END_SCREEN -> ClearCutAccents.Teal
-    TextTemplateCategory.CALL_TO_ACTION -> ClearCutAccents.Red
-    TextTemplateCategory.SOCIAL -> ClearCutAccents.Mauve
-    TextTemplateCategory.MINIMAL -> ClearCutAccents.Lavender
+    TextTemplateCategory.LOWER_THIRD -> DirectorXAccents.Sapphire
+    TextTemplateCategory.TITLE_CARD -> DirectorXAccents.Yellow
+    TextTemplateCategory.END_SCREEN -> DirectorXAccents.Teal
+    TextTemplateCategory.CALL_TO_ACTION -> DirectorXAccents.Red
+    TextTemplateCategory.SOCIAL -> DirectorXAccents.Mauve
+    TextTemplateCategory.MINIMAL -> DirectorXAccents.Lavender
 }
 
 @Composable
