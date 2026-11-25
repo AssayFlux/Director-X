@@ -28,6 +28,25 @@ class EditorPreviewLayoutContractTest {
     val compose = createComposeRule()
 
     @Test
+    fun scrollableEmptyPreviewUsesStableHeightInsteadOfAnUnboundedWeight() {
+        compose.setContent {
+            Column(Modifier.size(360.dp, 800.dp)) {
+                Box(
+                    modifier = editorPreviewModifier(
+                        immersivePreview = false,
+                        previewMinHeight = 180.dp,
+                        scrollable = true,
+                    )
+                        .background(Color.Black)
+                        .testTag("empty-preview")
+                )
+            }
+        }
+
+        compose.onNodeWithTag("empty-preview").assertHeightIsEqualTo(240.dp)
+    }
+
+    @Test
     fun previewOwnsFlexibleHeightWhileTimelineIsBounded() {
         compose.setContent {
             Column(Modifier.size(400.dp)) {
