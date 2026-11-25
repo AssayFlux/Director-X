@@ -22,7 +22,7 @@ object AppModule {
         return Room.databaseBuilder(
             context,
             ProjectDatabase::class.java,
-            "directorx.db"
+            "clearcut.db"
         )
             .setDriver(AndroidSQLiteDriver())
             .addMigrations(*ProjectDatabase.ALL_MIGRATIONS)
