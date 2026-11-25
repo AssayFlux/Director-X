@@ -66,7 +66,7 @@ import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.editor.PremiumSnackbarHost
 import com.directorx.editor.ui.editor.ToastSeverity
 import com.directorx.editor.ui.editor.inferSeverity
-import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.DirectorXAccents
 import com.directorx.editor.ui.theme.DirectorXChromeIconButton
 import com.directorx.editor.ui.theme.DirectorXDialogIcon
 import com.directorx.editor.ui.theme.DirectorXFilterChip
@@ -366,7 +366,7 @@ fun ProjectListScreen(
                     trailing = {
                         DirectorXMetricPill(
                             text = sortLabel,
-                            accent = ClearCutAccents.Sapphire,
+                            accent = DirectorXAccents.Sapphire,
                             icon = Icons.Default.FilterList
                         )
                     }
@@ -444,7 +444,7 @@ fun ProjectListScreen(
                 if (confirmEmptyTrash) {
                     AlertDialog(
                         onDismissRequest = { confirmEmptyTrash = false },
-                        icon = { DirectorXDialogIcon(icon = Icons.Default.DeleteForever, accent = ClearCutAccents.Red) },
+                        icon = { DirectorXDialogIcon(icon = Icons.Default.DeleteForever, accent = DirectorXAccents.Red) },
                         title = {
                             Text(
                                 text = stringResource(R.string.trash_empty_confirm_title),
@@ -471,7 +471,7 @@ fun ProjectListScreen(
                                     confirmEmptyTrash = false
                                 },
                                 icon = Icons.Default.DeleteForever,
-                                contentColor = ClearCutAccents.Red
+                                contentColor = DirectorXAccents.Red
                             )
                         },
                         dismissButton = {
@@ -490,7 +490,7 @@ fun ProjectListScreen(
                 pendingDeleteForever?.let { doomed ->
                     AlertDialog(
                         onDismissRequest = { pendingDeleteForever = null },
-                        icon = { DirectorXDialogIcon(icon = Icons.Default.DeleteForever, accent = ClearCutAccents.Red) },
+                        icon = { DirectorXDialogIcon(icon = Icons.Default.DeleteForever, accent = DirectorXAccents.Red) },
                         title = {
                             Text(
                                 text = stringResource(R.string.trash_delete_forever_title),
@@ -513,7 +513,7 @@ fun ProjectListScreen(
                                     pendingDeleteForever = null
                                 },
                                 icon = Icons.Default.DeleteForever,
-                                contentColor = ClearCutAccents.Red
+                                contentColor = DirectorXAccents.Red
                             )
                         },
                         dismissButton = {
@@ -680,9 +680,9 @@ private fun IncomingDocumentImportDialog(
 ) {
     val accent = when (preview.status) {
         IncomingDocumentImportStatus.READY,
-        IncomingDocumentImportStatus.IMPORTED -> ClearCutAccents.Green
-        IncomingDocumentImportStatus.BLOCKED -> ClearCutAccents.Yellow
-        IncomingDocumentImportStatus.INVALID -> ClearCutAccents.Red
+        IncomingDocumentImportStatus.IMPORTED -> DirectorXAccents.Green
+        IncomingDocumentImportStatus.BLOCKED -> DirectorXAccents.Yellow
+        IncomingDocumentImportStatus.INVALID -> DirectorXAccents.Red
     }
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -715,7 +715,7 @@ private fun IncomingDocumentImportDialog(
                     DocumentReportLine(text = detail, color = LocalDirectorXColors.current.text)
                 }
                 preview.warnings.forEach { warning ->
-                    DocumentReportLine(text = warning, color = ClearCutAccents.Yellow)
+                    DocumentReportLine(text = warning, color = DirectorXAccents.Yellow)
                 }
             }
         },
@@ -873,9 +873,9 @@ private fun ProjectHomeHero(
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = LocalDirectorXColors.current.panelRaised.copy(alpha = 0.92f),
                     unfocusedContainerColor = LocalDirectorXColors.current.panelRaised.copy(alpha = 0.82f),
-                    focusedBorderColor = ClearCutAccents.Mauve.copy(alpha = 0.55f),
+                    focusedBorderColor = DirectorXAccents.Mauve.copy(alpha = 0.55f),
                     unfocusedBorderColor = LocalDirectorXColors.current.cardStroke,
-                    cursorColor = ClearCutAccents.Rosewater,
+                    cursorColor = DirectorXAccents.Rosewater,
                     focusedTextColor = LocalDirectorXColors.current.text,
                     unfocusedTextColor = LocalDirectorXColors.current.text,
                     focusedPlaceholderColor = LocalDirectorXColors.current.overlayStrong,
@@ -892,7 +892,7 @@ private fun ProjectHomeHero(
                         onClick = { onSortModeChanged(mode) },
                         text = mode.localizedLabel(),
                         selected = sortMode == mode,
-                        accent = ClearCutAccents.Rosewater,
+                        accent = DirectorXAccents.Rosewater,
                         icon = if (sortMode == mode) Icons.Default.Check else null
                     )
                 }
@@ -929,7 +929,7 @@ private fun ProjectHomeReadinessRow(
                     value = mediaHealthValue,
                     body = stringResource(R.string.projects_media_health_body),
                     icon = Icons.Default.Verified,
-                    accent = ClearCutAccents.Green,
+                    accent = DirectorXAccents.Green,
                     modifier = Modifier.fillMaxWidth()
                 )
                 ProjectReadinessCard(
@@ -942,7 +942,7 @@ private fun ProjectHomeReadinessRow(
                     ),
                     body = stringResource(R.string.projects_render_ready_body, projectTemplates.size + savedTemplateCount),
                     icon = Icons.Default.Speed,
-                    accent = ClearCutAccents.Mauve,
+                    accent = DirectorXAccents.Mauve,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -953,7 +953,7 @@ private fun ProjectHomeReadinessRow(
                     value = mediaHealthValue,
                     body = stringResource(R.string.projects_media_health_body),
                     icon = Icons.Default.Verified,
-                    accent = ClearCutAccents.Green,
+                    accent = DirectorXAccents.Green,
                     modifier = Modifier.weight(1f)
                 )
                 ProjectReadinessCard(
@@ -966,7 +966,7 @@ private fun ProjectHomeReadinessRow(
                     ),
                     body = stringResource(R.string.projects_render_ready_body, projectTemplates.size + savedTemplateCount),
                     icon = Icons.Default.Speed,
-                    accent = ClearCutAccents.Mauve,
+                    accent = DirectorXAccents.Mauve,
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -1054,7 +1054,7 @@ private fun ProjectOperationCard(
         modifier = modifier.semantics { liveRegion = LiveRegionMode.Polite },
         color = colors.panelHighest,
         shape = RoundedCornerShape(Radius.lg),
-        border = androidx.compose.foundation.BorderStroke(1.dp, ClearCutAccents.Mauve.copy(alpha = 0.26f))
+        border = androidx.compose.foundation.BorderStroke(1.dp, DirectorXAccents.Mauve.copy(alpha = 0.26f))
     ) {
         Column(
             modifier = Modifier.padding(Spacing.md),
@@ -1066,12 +1066,12 @@ private fun ProjectOperationCard(
                 horizontalArrangement = Arrangement.spacedBy(Spacing.md)
             ) {
                 Surface(
-                    color = ClearCutAccents.Mauve.copy(alpha = 0.14f),
+                    color = DirectorXAccents.Mauve.copy(alpha = 0.14f),
                     shape = RoundedCornerShape(Radius.lg),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, ClearCutAccents.Mauve.copy(alpha = 0.22f))
+                    border = androidx.compose.foundation.BorderStroke(1.dp, DirectorXAccents.Mauve.copy(alpha = 0.22f))
                 ) {
                     CircularProgressIndicator(
-                        color = ClearCutAccents.Mauve,
+                        color = DirectorXAccents.Mauve,
                         strokeWidth = 2.dp,
                         modifier = Modifier
                             .padding(10.dp)
@@ -1096,7 +1096,7 @@ private fun ProjectOperationCard(
                     .fillMaxWidth()
                     .height(5.dp)
                     .clip(RoundedCornerShape(Radius.sm)),
-                color = ClearCutAccents.Mauve,
+                color = DirectorXAccents.Mauve,
                 trackColor = LocalDirectorXColors.current.surface
             )
         }
@@ -1119,7 +1119,7 @@ private fun ProjectFilterChipsRow(
                 onClick = { onFilterModeChanged(mode) },
                 text = mode.localizedLabel(),
                 selected = filterMode == mode,
-                accent = ClearCutAccents.Mauve,
+                accent = DirectorXAccents.Mauve,
                 icon = if (filterMode == mode) Icons.Default.Check else null
             )
         }
@@ -1145,7 +1145,7 @@ private fun ProjectEmptyState(
     val hasActiveFilter = filterMode != ProjectFilterMode.ALL
     val isConstrainedEmpty = hasAnyProjects && (hasActiveSearch || hasActiveFilter)
     val colors = LocalDirectorXColors.current
-    val iconTint = if (isConstrainedEmpty) ClearCutAccents.Sapphire else ClearCutAccents.Rosewater
+    val iconTint = if (isConstrainedEmpty) DirectorXAccents.Sapphire else DirectorXAccents.Rosewater
     val title = projectEmptyStateTitle(
         isConstrainedEmpty = isConstrainedEmpty,
         hasActiveSearch = hasActiveSearch,
@@ -1187,7 +1187,7 @@ private fun ProjectEmptyState(
                 )
                 Text(
                     text = projectTemplates.size.toString(),
-                    color = ClearCutAccents.Sapphire,
+                    color = DirectorXAccents.Sapphire,
                     style = MaterialTheme.typography.labelLarge
                 )
             }
@@ -1343,7 +1343,7 @@ private fun ProjectTemplateLibraryRow(
                 modifier = Modifier
                     .size(44.dp)
                     .background(
-                        color = ClearCutAccents.Sapphire.copy(alpha = 0.12f),
+                        color = DirectorXAccents.Sapphire.copy(alpha = 0.12f),
                         shape = RoundedCornerShape(Radius.md),
                     ),
                 contentAlignment = Alignment.Center,
@@ -1351,7 +1351,7 @@ private fun ProjectTemplateLibraryRow(
                 Icon(
                     imageVector = Icons.Default.AutoAwesomeMosaic,
                     contentDescription = null,
-                    tint = ClearCutAccents.Sapphire,
+                    tint = DirectorXAccents.Sapphire,
                     modifier = Modifier.size(22.dp),
                 )
             }
@@ -1476,7 +1476,7 @@ private fun ProjectCard(
         backgroundContent = {
             val color by animateColorAsState(
                 if (dismissState.targetValue == SwipeToDismissBoxValue.EndToStart)
-                    ClearCutAccents.Red.copy(alpha = 0.24f)
+                    DirectorXAccents.Red.copy(alpha = 0.24f)
                 else LocalDirectorXColors.current.panel.copy(alpha = 0.45f),
                 label = "swipeBg"
             )
@@ -1494,13 +1494,13 @@ private fun ProjectCard(
                 ) {
                     Text(
                         text = stringResource(R.string.projects_delete),
-                        color = ClearCutAccents.Red,
+                        color = DirectorXAccents.Red,
                         style = MaterialTheme.typography.labelLarge
                     )
                     Icon(
                         Icons.Default.Delete,
                         contentDescription = stringResource(R.string.projects_delete_cd),
-                        tint = ClearCutAccents.Red
+                        tint = DirectorXAccents.Red
                     )
                 }
             }
@@ -1556,7 +1556,7 @@ private fun ProjectCard(
                             horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(projectDuration, color = ClearCutAccents.Peach, style = MaterialTheme.typography.labelMedium)
+                            Text(projectDuration, color = DirectorXAccents.Peach, style = MaterialTheme.typography.labelMedium)
                             VerticalDivider(
                                 modifier = Modifier.height(14.dp),
                                 color = LocalDirectorXColors.current.cardStrokeStrong
@@ -1619,12 +1619,12 @@ private fun ProjectCard(
                                 }
                             )
                             DropdownMenuItem(
-                                text = { Text(stringResource(R.string.projects_delete), color = ClearCutAccents.Red) },
+                                text = { Text(stringResource(R.string.projects_delete), color = DirectorXAccents.Red) },
                                 leadingIcon = {
                                     Icon(
                                         Icons.Default.Delete,
                                         contentDescription = stringResource(R.string.cd_delete_project),
-                                        tint = ClearCutAccents.Red,
+                                        tint = DirectorXAccents.Red,
                                         modifier = Modifier.size(18.dp)
                                     )
                                 },
@@ -1663,7 +1663,7 @@ private fun ProjectCard(
             icon = {
                 DirectorXDialogIcon(
                     icon = Icons.Default.Edit,
-                    accent = ClearCutAccents.Rosewater
+                    accent = DirectorXAccents.Rosewater
                 )
             },
             title = {
@@ -1719,10 +1719,10 @@ private fun ProjectCard(
                         focusedTextColor = LocalDirectorXColors.current.text,
                         unfocusedTextColor = LocalDirectorXColors.current.text,
                         errorTextColor = LocalDirectorXColors.current.text,
-                        cursorColor = ClearCutAccents.Rosewater,
-                        focusedBorderColor = ClearCutAccents.Mauve,
+                        cursorColor = DirectorXAccents.Rosewater,
+                        focusedBorderColor = DirectorXAccents.Mauve,
                         unfocusedBorderColor = LocalDirectorXColors.current.cardStroke,
-                        errorBorderColor = ClearCutAccents.Red,
+                        errorBorderColor = DirectorXAccents.Red,
                         focusedContainerColor = LocalDirectorXColors.current.panelRaised,
                         unfocusedContainerColor = LocalDirectorXColors.current.panelRaised
                     )
@@ -1781,7 +1781,7 @@ private fun ProjectThumbnail(
             Icon(
                 imageVector = Icons.Default.Movie,
                 contentDescription = stringResource(R.string.cd_movie_placeholder),
-                tint = ClearCutAccents.Mauve,
+                tint = DirectorXAccents.Mauve,
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(28.dp)
@@ -1829,14 +1829,14 @@ private fun TrashSectionHeader(
             horizontalArrangement = Arrangement.spacedBy(Spacing.md)
         ) {
             Surface(
-                color = ClearCutAccents.Red.copy(alpha = 0.12f),
+                color = DirectorXAccents.Red.copy(alpha = 0.12f),
                 shape = RoundedCornerShape(Radius.lg),
-                border = androidx.compose.foundation.BorderStroke(1.dp, ClearCutAccents.Red.copy(alpha = 0.22f))
+                border = androidx.compose.foundation.BorderStroke(1.dp, DirectorXAccents.Red.copy(alpha = 0.22f))
             ) {
                 Icon(
                     imageVector = Icons.Default.DeleteSweep,
                     contentDescription = null,
-                    tint = ClearCutAccents.Red,
+                    tint = DirectorXAccents.Red,
                     modifier = Modifier
                         .padding(Spacing.sm)
                         .size(18.dp)
@@ -1864,8 +1864,8 @@ private fun TrashSectionHeader(
                     onClick = onEmptyTrash,
                     shape = RoundedCornerShape(Radius.md),
                     colors = ButtonDefaults.textButtonColors(
-                        contentColor = ClearCutAccents.Red,
-                        containerColor = ClearCutAccents.Red.copy(alpha = 0.08f)
+                        contentColor = DirectorXAccents.Red,
+                        containerColor = DirectorXAccents.Red.copy(alpha = 0.08f)
                     )
                 ) {
                     Text(stringResource(R.string.trash_empty_button), style = MaterialTheme.typography.labelMedium)
@@ -1948,14 +1948,14 @@ private fun TrashedProjectCard(
             horizontalArrangement = Arrangement.spacedBy(Spacing.md)
         ) {
             Surface(
-                color = ClearCutAccents.Red.copy(alpha = 0.10f),
+                color = DirectorXAccents.Red.copy(alpha = 0.10f),
                 shape = RoundedCornerShape(Radius.md),
-                border = androidx.compose.foundation.BorderStroke(1.dp, ClearCutAccents.Red.copy(alpha = 0.18f))
+                border = androidx.compose.foundation.BorderStroke(1.dp, DirectorXAccents.Red.copy(alpha = 0.18f))
             ) {
                 Icon(
                     imageVector = Icons.Default.DeleteOutline,
                     contentDescription = null,
-                    tint = ClearCutAccents.Red,
+                    tint = DirectorXAccents.Red,
                     modifier = Modifier
                         .padding(Spacing.sm)
                         .size(18.dp)
@@ -1987,17 +1987,17 @@ private fun TrashedProjectCard(
                     icon = Icons.Default.RestoreFromTrash,
                     contentDescription = stringResource(R.string.trash_restore_cd),
                     onClick = onRestore,
-                    tint = ClearCutAccents.Green,
-                    containerColor = ClearCutAccents.Green.copy(alpha = 0.08f),
-                    borderColor = ClearCutAccents.Green.copy(alpha = 0.18f)
+                    tint = DirectorXAccents.Green,
+                    containerColor = DirectorXAccents.Green.copy(alpha = 0.08f),
+                    borderColor = DirectorXAccents.Green.copy(alpha = 0.18f)
                 )
                 DirectorXChromeIconButton(
                     icon = Icons.Default.DeleteForever,
                     contentDescription = stringResource(R.string.trash_delete_forever_cd),
                     onClick = onDeleteForever,
-                    tint = ClearCutAccents.Red,
-                    containerColor = ClearCutAccents.Red.copy(alpha = 0.08f),
-                    borderColor = ClearCutAccents.Red.copy(alpha = 0.18f)
+                    tint = DirectorXAccents.Red,
+                    containerColor = DirectorXAccents.Red.copy(alpha = 0.08f),
+                    borderColor = DirectorXAccents.Red.copy(alpha = 0.18f)
                 )
             }
         }

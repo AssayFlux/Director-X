@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -763,14 +764,54 @@ fun EditorScreen(
             }
         }
         val hasClips = state.tracks.any { it.clips.isNotEmpty() }
-        val scrollEmptyEditor = !hasClips && !hasOpenPanel
+        val scaledToolbarHeight = maxOf(
+            68.dp,
+            with(LocalDensity.current) { 31.sp.toDp() } + 8.dp
+        )
+        // Empty-state title/body/button line heights scale with the user's font
+        // setting. Reserve enough height for the card before deciding whether the
+        // editor needs a scroll container.
+        val emptyPreviewContentHeight = with(LocalDensity.current) {
+            maxOf(
+                220.dp,
+                94.dp + 74.sp.toDp() + maxOf(48.dp, 16.sp.toDp() + 16.dp)
+            )
+        }
+        val requiredPreviewHeight = if (hasClips) {
+            maxOf(240.dp, previewMinHeight)
+        } else {
+            emptyPreviewContentHeight
+        }
+        val scaledTabBarHeight = maxOf(
+            64.dp,
+            with(LocalDensity.current) { 24.sp.toDp() } + 30.dp
+        )
+        val scaledActionRowHeight = with(LocalDensity.current) {
+            maxOf(62.dp, 19.dp + 3.dp + 10.sp.toDp() + 16.dp)
+        }
+        val effectiveBottomToolPanelExpanded =
+            isToolPanelExpanded && !previewFirstLayout.lockBottomToolArea
+        val measuredBottomToolRailHeight = previewFirstLayout.bottomToolRailHeightDp.dp +
+            (scaledTabBarHeight - 64.dp).coerceAtLeast(0.dp) +
+            if (effectiveBottomToolPanelExpanded) {
+                (scaledActionRowHeight - 62.dp).coerceAtLeast(0.dp)
+            } else {
+                0.dp
+            }
+        // Reserve the preview minimum plus the timeline's full allowed height,
+        // scaled toolbar/rail, and system-inset margin. Scroll before the weighted
+        // preview can be squeezed below its intended size by a tall timeline.
+        val minimumEditorContentHeight = scaledToolbarHeight +
+            requiredPreviewHeight + timelineMaxHeight + measuredBottomToolRailHeight + 48.dp
+        val scrollEditorContent = !isImmersivePreview &&
+            screenHeightDp.dp < minimumEditorContentHeight
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                // At large font scales the top bar and bottom tool rail can consume
-                // the remaining height. Keep the empty-project onboarding content
-                // in the scroll range instead of measuring its weighted slot to 0dp.
-                .then(if (scrollEmptyEditor) Modifier.verticalScroll(rememberScrollState()) else Modifier)
+                // At large font scales or short window heights, keep the editor's
+                // preview, timeline, and tool rail reachable without relying on a
+                // weighted child measured under unbounded scroll constraints.
+                .then(if (scrollEditorContent) Modifier.verticalScroll(rememberScrollState()) else Modifier)
                 .padding(
                     start = desktopSidebarWidth,
                     end = if (!isImmersivePreview && useEmbeddedExportPane) {
@@ -826,91 +867,21 @@ fun EditorScreen(
                     onApplyCutList = { viewModel.applyCutList(it) },
                 )
 
-                // Empty project onboarding hint
-                if (!hasClips && !hasOpenPanel) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(min = 240.dp)
-                            .padding(horizontal = Spacing.xl, vertical = Spacing.lg),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = Spacing.lg, vertical = Spacing.md),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center,
-                        ) {
-                            Icon(
-                                Icons.Default.VideoLibrary,
-                                contentDescription = null,
-                                tint = DirectorXAccents.Sky,
-                                modifier = Modifier.size(28.dp)
-                            )
-                            Spacer(Modifier.height(Spacing.sm))
-                            Text(
-                                stringResource(R.string.editor_empty_title),
-                                color = semanticColors.text,
-                                style = MaterialTheme.typography.titleLarge
-                            )
-                            Spacer(Modifier.height(Spacing.xs))
-                            Text(
-                                stringResource(R.string.editor_empty_body),
-                                color = semanticColors.subtext,
-                                style = MaterialTheme.typography.bodySmall,
-                                textAlign = TextAlign.Center,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                            Spacer(Modifier.height(Spacing.lg))
-                            val emptyAddMediaLabel = stringResource(R.string.editor_add_media)
-                            Row(
-                                modifier = Modifier
-                                    .widthIn(min = 180.dp)
-                                    .clip(RoundedCornerShape(Radius.md))
-                                    .background(DirectorXAccents.Sky)
-                                    // Merge the test tag and label with the clickable node.
-                                    // The minimum size remains inside the click target.
-                                    .semantics(mergeDescendants = true) {
-                                        semanticsTestTag = DirectorXTestTags.EDITOR_EMPTY_ADD_MEDIA
-                                        contentDescription = emptyAddMediaLabel
-                                    }
-                                    .clickable(onClick = viewModel::showMediaPicker)
-                                    .requiredHeightIn(min = TouchTarget.minimum)
-                                    .padding(horizontal = Spacing.md, vertical = Spacing.sm),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Add,
-                                    contentDescription = null,
-                                    tint = semanticColors.background,
-                                    modifier = Modifier.size(18.dp)
-                                )
-                                Spacer(Modifier.width(Spacing.sm))
-                                Text(
-                                    text = emptyAddMediaLabel,
-                                    color = semanticColors.background,
-                                    style = MaterialTheme.typography.labelLarge,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                            }
-                        }
-                    }
-                }
+
             }
 
-            // Preview panel with long-press radial menu. The preview is the
-            // ONLY flexible element in this column: it absorbs whatever the
-            // wrap-content timeline and tool rail leave over, so the rail
-            // always hugs the bottom edge with no dead panel space.
-            if (hasClips || hasOpenPanel || isImmersivePreview) Box(
+            // Preview panel with long-press radial menu. When the measured height
+            // budget fits, it is the only flexible slot and absorbs the space left by
+            // the timeline and tool rail. Short/large-text windows use a fixed scroll
+            // slot so none of those controls are compressed or clipped.
+            Box(
                 modifier = editorPreviewModifier(
                     immersivePreview = isImmersivePreview,
                     previewMinHeight = previewMinHeight,
+                    scrollable = scrollEditorContent,
+                    scrollableHeight = requiredPreviewHeight,
                 )
+                    .testTag(DirectorXTestTags.EDITOR_PREVIEW_PANEL)
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onLongPress = { offset ->
@@ -942,6 +913,7 @@ fun EditorScreen(
                     imageOverlays = state.imageOverlays,
                     textOverlays = state.textOverlays,
                     onOpenMediaManager = viewModel::showMediaManager,
+                    onAddMedia = viewModel::showMediaPicker,
                     jumpToContentMs = previewRecoveryTargetMs,
                     onJumpToContent = viewModel::seekTo,
                     onPreviewTransformStarted = { viewModel.beginTransformChange() },
@@ -1578,17 +1550,23 @@ private fun EditorTopBar(
         val toolbarTouchTarget = if (layoutMode == LayoutMode.DESKTOP) 68.dp else {
             TouchTarget.minimum
         }
-        val toolbarHeight = if (layoutMode == LayoutMode.DESKTOP) 68.dp else if (isCompactBar) {
+        val baseToolbarHeight = if (layoutMode == LayoutMode.DESKTOP) 68.dp else if (isCompactBar) {
             64.dp
         } else {
             68.dp
         }
+        // The project title (18sp line height) and save/mode line (13sp) stack
+        // vertically. Scale the bar with the user's font setting instead of
+        // clipping either line inside a fixed 64–68dp container.
+        val scaledTextStackHeight = with(LocalDensity.current) { 31.sp.toDp() }
+        val toolbarHeight = maxOf(baseToolbarHeight, scaledTextStackHeight + 8.dp)
 
         Surface(
             color = semanticColors.background,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(toolbarHeight)
+                .testTag(DirectorXTestTags.EDITOR_TOP_BAR)
         ) {
         Box(
             modifier = Modifier

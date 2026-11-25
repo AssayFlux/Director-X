@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.BrokenImage
 import androidx.compose.material.icons.filled.Compare
 import androidx.compose.material.icons.filled.GridOn
@@ -48,6 +49,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.customActions
@@ -57,6 +59,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.graphics.Shadow
@@ -71,6 +74,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerView
 import coil3.compose.SubcomposeAsyncImage
 import com.directorx.editor.R
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.engine.Android15MediaPolicy
 import com.directorx.editor.engine.VideoEngine
 import com.directorx.editor.model.AspectRatio
@@ -79,6 +83,7 @@ import com.directorx.editor.model.ImageOverlay
 import com.directorx.editor.model.TextAlignment
 import com.directorx.editor.model.TextOverlay
 import com.directorx.editor.ui.theme.DirectorXChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
 import com.directorx.editor.ui.theme.Radius
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -182,6 +187,7 @@ fun PreviewPanel(
     imageOverlays: List<ImageOverlay> = emptyList(),
     textOverlays: List<TextOverlay> = emptyList(),
     onOpenMediaManager: () -> Unit = {},
+    onAddMedia: () -> Unit = {},
     jumpToContentMs: Long? = null,
     onJumpToContent: (Long) -> Unit = {},
     onPreviewTransformStarted: () -> Unit = {},
@@ -252,7 +258,12 @@ fun PreviewPanel(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    val previewRatio = if (canvasWidth != null && canvasHeight != null && canvasHeight > 0) {
+                    // An empty project has no video frame to preserve. Let its
+                    // onboarding surface use the full preview pane, including portrait
+                    // projects, rather than clipping the CTA to the canvas aspect ratio.
+                    val previewRatio = if (totalDurationMs == 0L && maxHeight > 0.dp) {
+                        maxWidth.value / maxHeight.value
+                    } else if (canvasWidth != null && canvasHeight != null && canvasHeight > 0) {
                         canvasWidth.toFloat() / canvasHeight.toFloat()
                     } else {
                         aspectRatio.toFloat()
@@ -343,28 +354,29 @@ fun PreviewPanel(
                             }
                         }
 
-                        // Keep one PlayerView mounted for the lifetime of the preview. Removing
-                        // the AndroidView for a timeline gap, still image, or transient error
-                        // destroys its SurfaceView while the hardware codec is active. On some
-                        // Samsung/Qualcomm devices that detach blocks until Media3 raises
-                        // TIMEOUT_OPERATION_DETACH_SURFACE and the preview becomes unrecoverable.
-                        AndroidView(
-                            factory = { ctx ->
-                                PlayerView(ctx).apply {
-                                    useController = false
-                                    setShowBuffering(PlayerView.SHOW_BUFFERING_NEVER)
-                                    onPlayerViewReady(this)
-                                }
-                            },
-                            update = { playerView ->
-                                if (playerView.player !== previewPlayer) playerView.player = previewPlayer
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-                                    (playerView.videoSurfaceView as? SurfaceView)
-                                        ?.setDesiredHdrHeadroom(desiredPreviewHdrHeadroom)
-                                }
-                            },
-                            modifier = Modifier.fillMaxSize()
-                        )
+                        // Keep one PlayerView mounted for the lifetime of a non-empty preview.
+                        // Removing it for a timeline gap, still image, or transient error destroys
+                        // its SurfaceView while the hardware codec is active. An empty project has
+                        // no decoder/surface to preserve, so do not mount Android controls there.
+                        if (totalDurationMs > 0L) {
+                            AndroidView(
+                                factory = { ctx ->
+                                    PlayerView(ctx).apply {
+                                        useController = false
+                                        setShowBuffering(PlayerView.SHOW_BUFFERING_NEVER)
+                                        onPlayerViewReady(this)
+                                    }
+                                },
+                                update = { playerView ->
+                                    if (playerView.player !== previewPlayer) playerView.player = previewPlayer
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                                        (playerView.videoSurfaceView as? SurfaceView)
+                                            ?.setDesiredHdrHeadroom(desiredPreviewHdrHeadroom)
+                                    }
+                                },
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
 
                         when {
                             hasPlaybackError -> {
@@ -513,12 +525,12 @@ fun PreviewPanel(
 
                         if (!isPlaying && totalDurationMs == 0L) {
                             Card(
-                                colors = CardDefaults.cardColors(containerColor = semanticColors.panel.copy(alpha = 0.86f)),
+                                colors = CardDefaults.cardColors(containerColor = semanticColors.panel.copy(alpha = 0.92f)),
                                 border = androidx.compose.foundation.BorderStroke(1.dp, semanticColors.cardStroke.copy(alpha = 0.9f)),
                                 shape = RoundedCornerShape(Radius.xl)
                             ) {
                                 Column(
-                                    modifier = Modifier.padding(horizontal = 22.dp, vertical = 20.dp),
+                                    modifier = Modifier.padding(horizontal = 18.dp, vertical = 14.dp),
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     verticalArrangement = Arrangement.Center
                                 ) {
@@ -532,15 +544,34 @@ fun PreviewPanel(
                                             contentDescription = stringResource(R.string.cd_preview_empty),
                                             tint = DirectorXAccents.Sky,
                                             modifier = Modifier
-                                                .padding(16.dp)
+                                                .padding(10.dp)
                                                 .size(24.dp)
                                         )
                                     }
-                                    Spacer(modifier = Modifier.height(10.dp))
+                                    Spacer(modifier = Modifier.height(8.dp))
                                     Text(
-                                        stringResource(R.string.preview_add_media),
+                                        stringResource(R.string.editor_empty_title),
                                         color = semanticColors.text,
-                                        style = MaterialTheme.typography.titleSmall
+                                        style = MaterialTheme.typography.titleMedium,
+                                        textAlign = TextAlign.Center,
+                                        maxLines = 2,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Text(
+                                        stringResource(R.string.editor_empty_body),
+                                        color = semanticColors.subtext,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        textAlign = TextAlign.Center,
+                                        maxLines = 2,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                    DirectorXPrimaryButton(
+                                        text = stringResource(R.string.editor_add_media),
+                                        onClick = onAddMedia,
+                                        icon = Icons.Default.Add,
+                                        modifier = Modifier.testTag(DirectorXTestTags.EDITOR_EMPTY_ADD_MEDIA)
                                     )
                                 }
                             }

@@ -33,11 +33,11 @@ import com.directorx.editor.R
 import com.directorx.editor.engine.CrashRecordSummary
 import com.directorx.editor.engine.ProcessExitRecorder
 import com.directorx.editor.engine.ProcessExitSnapshot
-import com.directorx.editor.ui.Director XTestTags
-import com.directorx.editor.ui.theme.Director XAccents
-import com.directorx.editor.ui.theme.Director XChromeIconButton
-import com.directorx.editor.ui.theme.Director XSecondaryButton
-import com.directorx.editor.ui.theme.LocalDirector XColors
+import com.directorx.editor.ui.DirectorXTestTags
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.DirectorXChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 import java.text.SimpleDateFormat
@@ -194,7 +194,7 @@ internal fun CrashReportBanner(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val colors = LocalDirector XColors.current
+    val colors = LocalDirectorXColors.current
     val context = LocalContext.current
     val at = DateUtils.formatDateTime(
         context,
@@ -213,11 +213,11 @@ internal fun CrashReportBanner(
     )
     Surface(
         modifier = modifier
-            .testTag(Director XTestTags.CRASH_REPORT_BANNER)
+            .testTag(DirectorXTestTags.CRASH_REPORT_BANNER)
             .semantics { liveRegion = LiveRegionMode.Polite },
         color = colors.panelHighest,
         shape = RoundedCornerShape(Radius.lg),
-        border = BorderStroke(1.dp, Director XAccents.Peach.copy(alpha = 0.32f))
+        border = BorderStroke(1.dp, DirectorXAccents.Peach.copy(alpha = 0.32f))
     ) {
         Column(
             modifier = Modifier.padding(Spacing.md),
@@ -230,7 +230,7 @@ internal fun CrashReportBanner(
                 Icon(
                     imageVector = Icons.Default.ErrorOutline,
                     contentDescription = null,
-                    tint = Director XAccents.Peach,
+                    tint = DirectorXAccents.Peach,
                     modifier = Modifier
                         .padding(top = 2.dp)
                         .size(22.dp)
@@ -247,33 +247,33 @@ internal fun CrashReportBanner(
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
-                Director XChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = Icons.Default.Close,
                     contentDescription = stringResource(R.string.crash_notice_dismiss),
                     onClick = onDismiss,
-                    buttonModifier = Modifier.testTag(Director XTestTags.CRASH_REPORT_DISMISS)
+                    buttonModifier = Modifier.testTag(DirectorXTestTags.CRASH_REPORT_DISMISS)
                 )
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(Spacing.sm)
             ) {
-                Director XSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.crash_notice_save_report),
                     onClick = onSaveReport,
                     icon = Icons.Default.Download,
                     enabled = !saving,
                     modifier = Modifier
                         .weight(1f)
-                        .testTag(Director XTestTags.CRASH_REPORT_SAVE)
+                        .testTag(DirectorXTestTags.CRASH_REPORT_SAVE)
                 )
-                Director XSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.crash_notice_copy_summary),
                     onClick = onCopySummary,
                     icon = Icons.Default.ContentCopy,
                     modifier = Modifier
                         .weight(1f)
-                        .testTag(Director XTestTags.CRASH_REPORT_COPY)
+                        .testTag(DirectorXTestTags.CRASH_REPORT_COPY)
                 )
             }
         }

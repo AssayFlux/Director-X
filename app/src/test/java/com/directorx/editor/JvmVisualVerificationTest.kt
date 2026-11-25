@@ -7,11 +7,13 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.tryPerformAccessibilityChecks
+import androidx.compose.ui.unit.dp
 import com.google.android.apps.common.testing.accessibility.framework.AccessibilityCheckResult
 import com.google.android.apps.common.testing.accessibility.framework.integrations.espresso.AccessibilityValidator
 import com.github.takahirom.roborazzi.captureRoboImage
@@ -67,6 +69,10 @@ class JvmVisualVerificationTest {
             .performClick()
         waitUntilAtLeastOneExists(DirectorXTestTags.EDITOR_SCREEN)
         dismissTutorialIfPresent()
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_PREVIEW_PANEL)
+            .assertIsDisplayed()
+            .assertHeightIsAtLeast(220.dp)
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_EMPTY_ADD_MEDIA).assertIsDisplayed()
         capture("editor-empty-cream.png")
 
         compose.onNodeWithTag(DirectorXTestTags.EDITOR_EMPTY_ADD_MEDIA).performClick()
