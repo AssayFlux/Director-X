@@ -2,7 +2,7 @@ package com.directorx.editor.ui
 
 import androidx.compose.ui.semantics.SemanticsPropertyKey
 
-object ClearCutTestTags {
+object DirectorXTestTags {
     val OPEN_PANEL_IDS = SemanticsPropertyKey<Set<String>>("OpenPanelIds")
     const val PROJECTS_SCREEN = "projects.screen"
     const val PROJECTS_CREATE_PROJECT = "projects.createProject"
