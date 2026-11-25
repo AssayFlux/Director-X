@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
@@ -32,7 +32,7 @@ fun AiSuggestionBanner(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     AnimatedVisibility(
         visible = suggestion != null,
         enter = slideInVertically(
@@ -49,7 +49,7 @@ fun AiSuggestionBanner(
             Surface(
                 color = semanticColors.panel,
                 shape = RoundedCornerShape(Radius.xl),
-                border = BorderStroke(1.dp, ClearCutAccents.Mauve.copy(alpha = 0.22f)),
+                border = BorderStroke(1.dp, DirectorXAccents.Mauve.copy(alpha = 0.22f)),
                 shadowElevation = 3.dp,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -65,14 +65,14 @@ fun AiSuggestionBanner(
                         .padding(horizontal = Spacing.md, vertical = Spacing.sm)
                 ) {
                     Surface(
-                        color = ClearCutAccents.Mauve.copy(alpha = 0.14f),
+                        color = DirectorXAccents.Mauve.copy(alpha = 0.14f),
                         shape = RoundedCornerShape(Radius.md),
-                        border = BorderStroke(1.dp, ClearCutAccents.Mauve.copy(alpha = 0.2f))
+                        border = BorderStroke(1.dp, DirectorXAccents.Mauve.copy(alpha = 0.2f))
                     ) {
                         Icon(
                             imageVector = Icons.Default.AutoAwesome,
                             contentDescription = stringResource(R.string.cd_ai_suggestion),
-                            tint = ClearCutAccents.Rosewater,
+                            tint = DirectorXAccents.Rosewater,
                             modifier = Modifier
                                 .padding(Spacing.sm)
                                 .size(18.dp)
