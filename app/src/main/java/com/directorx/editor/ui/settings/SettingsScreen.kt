@@ -64,7 +64,7 @@ import com.directorx.editor.engine.ThumbnailCachePolicy
 import com.directorx.editor.engine.segmentation.SegmentationModelState
 import com.directorx.editor.engine.whisper.WhisperModelState
 import com.directorx.editor.model.*
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.theme.DirectorXAccents
 import com.directorx.editor.ui.theme.ClearCutChromeIconButton
 import com.directorx.editor.ui.theme.ClearCutDialogIcon
@@ -207,7 +207,7 @@ fun SettingsScreen(
     ClearCutScreenBackground(
         modifier = modifier
             .fillMaxSize()
-            .testTag(ClearCutTestTags.SETTINGS_SCREEN)
+            .testTag(DirectorXTestTags.SETTINGS_SCREEN)
     ) {
         Column(
             modifier = Modifier
@@ -664,7 +664,7 @@ fun SettingsScreen(
                 label = stringResource(R.string.settings_replay_tutorial),
                 description = stringResource(R.string.settings_replay_tutorial_row_description),
                 onClick = onReplayTutorial,
-                modifier = Modifier.testTag(ClearCutTestTags.SETTINGS_REPLAY_TUTORIAL)
+                modifier = Modifier.testTag(DirectorXTestTags.SETTINGS_REPLAY_TUTORIAL)
             ) {
                 ClearCutMetricPill(
                     text = stringResource(R.string.settings_replay_tutorial_action),
@@ -729,7 +729,7 @@ fun SettingsScreen(
                 description = stringResource(R.string.settings_privacy_open_description),
                 actionLabel = stringResource(R.string.settings_privacy_open_action),
                 onClick = { showPrivacyDashboard = true },
-                modifier = Modifier.testTag(ClearCutTestTags.SETTINGS_PRIVACY_OPEN)
+                modifier = Modifier.testTag(DirectorXTestTags.SETTINGS_PRIVACY_OPEN)
             )
         }
 
@@ -745,7 +745,7 @@ fun SettingsScreen(
                 description = stringResource(R.string.settings_open_source_licenses_description),
                 actionLabel = stringResource(R.string.settings_open_source_licenses_action),
                 onClick = { showOpenSourceLicenses = true },
-                modifier = Modifier.testTag(ClearCutTestTags.SETTINGS_LICENSES_OPEN)
+                modifier = Modifier.testTag(DirectorXTestTags.SETTINGS_LICENSES_OPEN)
             )
         }
 
@@ -895,7 +895,7 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(min = 480.dp, max = 640.dp)
-                        .testTag(ClearCutTestTags.SETTINGS_PRIVACY_DASHBOARD)
+                        .testTag(DirectorXTestTags.SETTINGS_PRIVACY_DASHBOARD)
                 ) {
                     Column {
                         Box(
@@ -941,7 +941,7 @@ fun SettingsScreen(
                             ClearCutSecondaryButton(
                                 text = stringResource(R.string.settings_privacy_close),
                                 onClick = { showPrivacyDashboard = false },
-                                modifier = Modifier.testTag(ClearCutTestTags.SETTINGS_PRIVACY_CLOSE)
+                                modifier = Modifier.testTag(DirectorXTestTags.SETTINGS_PRIVACY_CLOSE)
                             )
                         }
                     }
@@ -959,7 +959,7 @@ fun SettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(560.dp)
-                        .testTag(ClearCutTestTags.SETTINGS_LICENSES_DIALOG)
+                        .testTag(DirectorXTestTags.SETTINGS_LICENSES_DIALOG)
                 ) {
                     Column {
                         Box(
@@ -978,7 +978,7 @@ fun SettingsScreen(
                             ClearCutSecondaryButton(
                                 text = stringResource(R.string.settings_open_source_licenses_close),
                                 onClick = { showOpenSourceLicenses = false },
-                                modifier = Modifier.testTag(ClearCutTestTags.SETTINGS_LICENSES_CLOSE)
+                                modifier = Modifier.testTag(DirectorXTestTags.SETTINGS_LICENSES_CLOSE)
                             )
                         }
                     }
@@ -1032,10 +1032,10 @@ private fun SettingsCategoryOverview(onSelect: (SettingsCategory) -> Unit) {
                     .heightIn(min = 76.dp)
                     .testTag(
                         when (category) {
-                            SettingsCategory.EXPORT -> ClearCutTestTags.SETTINGS_CATEGORY_EXPORT
-                            SettingsCategory.EDITING -> ClearCutTestTags.SETTINGS_CATEGORY_EDITING
-                            SettingsCategory.AI_STORAGE -> ClearCutTestTags.SETTINGS_CATEGORY_AI_STORAGE
-                            SettingsCategory.APP -> ClearCutTestTags.SETTINGS_CATEGORY_APP
+                            SettingsCategory.EXPORT -> DirectorXTestTags.SETTINGS_CATEGORY_EXPORT
+                            SettingsCategory.EDITING -> DirectorXTestTags.SETTINGS_CATEGORY_EDITING
+                            SettingsCategory.AI_STORAGE -> DirectorXTestTags.SETTINGS_CATEGORY_AI_STORAGE
+                            SettingsCategory.APP -> DirectorXTestTags.SETTINGS_CATEGORY_APP
                         }
                     )
                     .clickable(role = Role.Button) { onSelect(category) },
@@ -1197,7 +1197,7 @@ private fun SettingsHero(
                 tint = LocalDirectorXColors.current.text,
                 containerColor = Color.Transparent,
                 borderColor = Color.Transparent,
-                modifier = Modifier.testTag(ClearCutTestTags.SETTINGS_BACK)
+                modifier = Modifier.testTag(DirectorXTestTags.SETTINGS_BACK)
             )
         }
 
