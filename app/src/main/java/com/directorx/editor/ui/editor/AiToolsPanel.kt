@@ -61,9 +61,9 @@ import com.directorx.editor.engine.InpaintingModelState
 import com.directorx.editor.engine.StabilizationProfileValidation
 import com.directorx.editor.engine.segmentation.SegmentationModelState
 import com.directorx.editor.engine.whisper.WhisperModelState
-import com.directorx.editor.ui.theme.ClearCutDialogIcon
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.DirectorXDialogIcon
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
 import com.directorx.editor.ui.theme.Radius
 import kotlin.math.roundToInt
 
@@ -344,13 +344,13 @@ fun AiToolsPanel(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.ai_stabilization_profile_import),
                     onClick = onImportStabilizationProfile,
                     icon = Icons.Default.Download,
                     modifier = Modifier.weight(1f),
                 )
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.ai_stabilization_profile_export),
                     onClick = onExportStabilizationProfile,
                     icon = Icons.Default.Upload,
@@ -544,7 +544,7 @@ fun AiToolsPanel(
                             )
                         }
                     }
-                    ClearCutSecondaryButton(
+                    DirectorXSecondaryButton(
                         text = stringResource(R.string.cancel),
                         onClick = onCancelProcessing,
                         contentColor = DirectorXAccents.Red,
@@ -626,7 +626,7 @@ private fun StabilizationPreviewDialog(
     AlertDialog(
         onDismissRequest = onDismissRequest,
         icon = {
-            ClearCutDialogIcon(
+            DirectorXDialogIcon(
                 icon = Icons.Default.Straighten,
                 accent = DirectorXAccents.Sapphire,
             )
@@ -653,14 +653,14 @@ private fun StabilizationPreviewDialog(
             )
         },
         confirmButton = {
-            ClearCutPrimaryButton(
+            DirectorXPrimaryButton(
                 text = stringResource(R.string.ai_stabilization_preview_apply),
                 onClick = onApply,
                 icon = Icons.Default.Straighten,
             )
         },
         dismissButton = {
-            ClearCutSecondaryButton(
+            DirectorXSecondaryButton(
                 text = stringResource(R.string.ai_stabilization_preview_cancel),
                 onClick = onDismissRequest,
             )
@@ -683,7 +683,7 @@ private fun StabilizationProfileImportDialog(
     AlertDialog(
         onDismissRequest = onDismissRequest,
         icon = {
-            ClearCutDialogIcon(
+            DirectorXDialogIcon(
                 icon = Icons.Default.Straighten,
                 accent = if (profile != null) DirectorXAccents.Sapphire else DirectorXAccents.Red,
             )
@@ -736,13 +736,13 @@ private fun StabilizationProfileImportDialog(
         },
         confirmButton = {
             if (profile != null) {
-                ClearCutPrimaryButton(
+                DirectorXPrimaryButton(
                     text = stringResource(R.string.ai_stabilization_profile_activate),
                     onClick = onApply,
                     icon = Icons.Default.Straighten,
                 )
             } else {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.cancel),
                     onClick = onDismissRequest,
                 )
@@ -750,7 +750,7 @@ private fun StabilizationProfileImportDialog(
         },
         dismissButton = if (profile != null) {
             {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.cancel),
                     onClick = onDismissRequest,
                 )
@@ -834,7 +834,7 @@ private fun AiModelRemovalConfirmDialog(
     AlertDialog(
         onDismissRequest = onDismissRequest,
         icon = {
-            ClearCutDialogIcon(
+            DirectorXDialogIcon(
                 icon = Icons.Default.Delete,
                 accent = DirectorXAccents.Red
             )
@@ -854,7 +854,7 @@ private fun AiModelRemovalConfirmDialog(
             )
         },
         confirmButton = {
-            ClearCutSecondaryButton(
+            DirectorXSecondaryButton(
                 text = stringResource(R.string.ai_model_remove_confirm),
                 onClick = onConfirm,
                 icon = Icons.Default.Delete,
@@ -862,7 +862,7 @@ private fun AiModelRemovalConfirmDialog(
             )
         },
         dismissButton = {
-            ClearCutSecondaryButton(
+            DirectorXSecondaryButton(
                 text = stringResource(R.string.cancel),
                 onClick = onDismissRequest
             )
@@ -977,7 +977,7 @@ private fun ModelStatusCard(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 if (hasPrimaryAction) {
-                    ClearCutPrimaryButton(
+                    DirectorXPrimaryButton(
                         text = primaryActionLabel,
                         onClick = onPrimaryAction,
                         icon = Icons.Default.Download,
@@ -987,7 +987,7 @@ private fun ModelStatusCard(
                 }
 
                 if (hasSecondaryAction) {
-                    ClearCutSecondaryButton(
+                    DirectorXSecondaryButton(
                         text = secondaryActionLabel,
                         onClick = onSecondaryAction,
                         contentColor = DirectorXAccents.Red,
