@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -60,18 +60,18 @@ import com.directorx.editor.model.KeyframeProperty
 import java.util.Locale
 
 private val PROPERTY_COLORS = mapOf(
-    KeyframeProperty.POSITION_X to ClearCutAccents.Red,
-    KeyframeProperty.POSITION_Y to ClearCutAccents.Green,
-    KeyframeProperty.SCALE_X to ClearCutAccents.Blue,
-    KeyframeProperty.SCALE_Y to ClearCutAccents.Teal,
-    KeyframeProperty.ROTATION to ClearCutAccents.Yellow,
-    KeyframeProperty.OPACITY to ClearCutAccents.Mauve,
-    KeyframeProperty.VOLUME to ClearCutAccents.Peach,
-    KeyframeProperty.ANCHOR_X to ClearCutAccents.Red.copy(alpha = 0.5f),
-    KeyframeProperty.ANCHOR_Y to ClearCutAccents.Green.copy(alpha = 0.5f),
-    KeyframeProperty.MASK_FEATHER to ClearCutAccents.Teal.copy(alpha = 0.5f),
-    KeyframeProperty.MASK_EXPANSION to ClearCutAccents.Blue.copy(alpha = 0.5f),
-    KeyframeProperty.MASK_OPACITY to ClearCutAccents.Mauve.copy(alpha = 0.5f)
+    KeyframeProperty.POSITION_X to DirectorXAccents.Red,
+    KeyframeProperty.POSITION_Y to DirectorXAccents.Green,
+    KeyframeProperty.SCALE_X to DirectorXAccents.Blue,
+    KeyframeProperty.SCALE_Y to DirectorXAccents.Teal,
+    KeyframeProperty.ROTATION to DirectorXAccents.Yellow,
+    KeyframeProperty.OPACITY to DirectorXAccents.Mauve,
+    KeyframeProperty.VOLUME to DirectorXAccents.Peach,
+    KeyframeProperty.ANCHOR_X to DirectorXAccents.Red.copy(alpha = 0.5f),
+    KeyframeProperty.ANCHOR_Y to DirectorXAccents.Green.copy(alpha = 0.5f),
+    KeyframeProperty.MASK_FEATHER to DirectorXAccents.Teal.copy(alpha = 0.5f),
+    KeyframeProperty.MASK_EXPANSION to DirectorXAccents.Blue.copy(alpha = 0.5f),
+    KeyframeProperty.MASK_OPACITY to DirectorXAccents.Mauve.copy(alpha = 0.5f)
 )
 
 private val CORE_KEYFRAME_PROPERTIES = listOf(
@@ -104,7 +104,7 @@ fun KeyframeCurveEditor(
     onKeyframesDragged: (List<Keyframe>) -> Unit = onKeyframesChanged,
     onKeyframeDragEnded: () -> Unit = {}
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var selectedKeyframe by remember { mutableStateOf<Keyframe?>(null) }
     var showPresets by remember { mutableStateOf(false) }
 
@@ -115,7 +115,7 @@ fun KeyframeCurveEditor(
     }
 
     val currentSelection = selectedKeyframe
-    val selectionAccent = selectedKeyframe?.let { PROPERTY_COLORS[it.property] } ?: ClearCutAccents.Mauve
+    val selectionAccent = selectedKeyframe?.let { PROPERTY_COLORS[it.property] } ?: DirectorXAccents.Mauve
     val activeKeyframeCount = keyframes.count { it.property in activeProperties }
     val summaryBody = when {
         activeProperties.isEmpty() -> stringResource(R.string.panel_keyframes_summary_empty)
@@ -141,7 +141,7 @@ fun KeyframeCurveEditor(
                     icon = Icons.Default.AutoAwesome,
                     contentDescription = stringResource(R.string.cd_keyframe_presets),
                     onClick = { showPresets = true },
-                    tint = ClearCutAccents.Yellow
+                    tint = DirectorXAccents.Yellow
                 )
                 DropdownMenu(
                     expanded = showPresets,
@@ -241,21 +241,21 @@ fun KeyframeCurveEditor(
                         activeKeyframeCount,
                         activeKeyframeCount
                     ),
-                    accent = ClearCutAccents.Sky
+                    accent = DirectorXAccents.Sky
                 )
                 PremiumPanelPill(
                     text = stringResource(
                         R.string.panel_keyframes_playhead_format,
                         formatEditorTimestamp(playheadMs)
                     ),
-                    accent = ClearCutAccents.Blue
+                    accent = DirectorXAccents.Blue
                 )
             }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Sapphire) {
+        PremiumPanelCard(accent = DirectorXAccents.Sapphire) {
             Text(
                 text = stringResource(R.string.panel_keyframes_properties_title),
                 color = semanticColors.text,
@@ -314,7 +314,7 @@ fun KeyframeCurveEditor(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = DirectorXAccents.Blue) {
             Text(
                 text = stringResource(R.string.panel_keyframes_curve_title),
                 color = semanticColors.text,
@@ -417,7 +417,7 @@ fun KeyframeCurveEditor(
                             onDeleteKeyframe(keyframe)
                             selectedKeyframe = null
                         },
-                        tint = ClearCutAccents.Red
+                        tint = DirectorXAccents.Red
                     )
                 }
 
@@ -437,14 +437,14 @@ fun KeyframeCurveEditor(
                             R.string.panel_keyframes_time_format,
                             formatEditorTimestamp(keyframe.timeOffsetMs)
                         ),
-                        accent = ClearCutAccents.Sky
+                        accent = DirectorXAccents.Sky
                     )
                     PremiumPanelPill(
                         text = stringResource(
                             R.string.panel_keyframes_interpolation_format,
                             keyframe.interpolation.displayLabel()
                         ),
-                        accent = ClearCutAccents.Pink
+                        accent = DirectorXAccents.Pink
                     )
                 }
 
@@ -521,11 +521,11 @@ fun KeyframeCurveEditor(
                         colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
                             focusedTextColor = semanticColors.text,
                             unfocusedTextColor = semanticColors.text,
-                            focusedBorderColor = ClearCutAccents.Sky,
+                            focusedBorderColor = DirectorXAccents.Sky,
                             unfocusedBorderColor = semanticColors.surface,
-                            focusedLabelColor = ClearCutAccents.Sky,
+                            focusedLabelColor = DirectorXAccents.Sky,
                             unfocusedLabelColor = semanticColors.subtext,
-                            cursorColor = ClearCutAccents.Sky
+                            cursorColor = DirectorXAccents.Sky
                         ),
                         textStyle = MaterialTheme.typography.bodyMedium
                     )
@@ -579,7 +579,7 @@ internal fun CurveCanvas(
     onDragStarted: () -> Unit = {},
     onDragEnded: () -> Unit = {}
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     if (clipDurationMs <= 0L) return
 
     // pointerInput must NOT key on the state the gesture mutates: every move
