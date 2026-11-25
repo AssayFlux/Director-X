@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -60,7 +60,7 @@ fun BoxScope.EditorUtilityPanelHost(
     onImportStickerFromGallery: () -> Unit,
     onAction: (String) -> Unit = {}
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val restorableSnapshot by viewModel.restorableSnapshot.collectAsStateWithLifecycle()
 
     restorableSnapshot?.let { snapshot ->
@@ -69,7 +69,7 @@ fun BoxScope.EditorUtilityPanelHost(
             icon = {
                 ClearCutDialogIcon(
                     icon = Icons.Default.Restore,
-                    accent = ClearCutAccents.Green
+                    accent = DirectorXAccents.Green
                 )
             },
             title = {
@@ -161,7 +161,7 @@ fun BoxScope.EditorUtilityPanelHost(
             icon = {
                 ClearCutDialogIcon(
                     icon = Icons.Default.Download,
-                    accent = ClearCutAccents.Mauve
+                    accent = DirectorXAccents.Mauve
                 )
             },
             title = {
@@ -185,13 +185,13 @@ fun BoxScope.EditorUtilityPanelHost(
                         AiRequirementInfoChip(
                             label = stringResource(R.string.ai_requirement_model_label),
                             value = prompt.modelName,
-                            accent = ClearCutAccents.Mauve,
+                            accent = DirectorXAccents.Mauve,
                             modifier = Modifier.weight(1f)
                         )
                         AiRequirementInfoChip(
                             label = stringResource(R.string.ai_requirement_size_label),
                             value = prompt.estimatedSize,
-                            accent = ClearCutAccents.Blue,
+                            accent = DirectorXAccents.Blue,
                             modifier = Modifier.weight(1f)
                         )
                     }
@@ -591,7 +591,7 @@ fun BoxScope.EditorUtilityPanelHost(
                 icon = {
                     ClearCutDialogIcon(
                         icon = Icons.Default.Restore,
-                        accent = ClearCutAccents.Blue
+                        accent = DirectorXAccents.Blue
                     )
                 },
                 title = {
