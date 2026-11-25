@@ -56,7 +56,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
@@ -726,7 +726,7 @@ fun MaskPreviewOverlay(
     Canvas(
         modifier = modifier
             .fillMaxSize()
-            .testTag(ClearCutTestTags.MASK_PREVIEW_OVERLAY)
+            .testTag(DirectorXTestTags.MASK_PREVIEW_OVERLAY)
             .pointerInput(selectedMaskId) {
                 if (selectedMaskId == null) return@pointerInput
                 val maskType = currentMasks.find { it.id == selectedMaskId }?.type
