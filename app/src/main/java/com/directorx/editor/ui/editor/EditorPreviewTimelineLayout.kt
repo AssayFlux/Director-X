@@ -19,11 +19,12 @@ internal fun ColumnScope.editorPreviewModifier(
     immersivePreview: Boolean,
     previewMinHeight: Dp,
     scrollable: Boolean = false,
+    scrollableHeight: Dp = 240.dp,
 ): Modifier = when {
     immersivePreview -> Modifier.fillMaxSize()
     scrollable -> Modifier
         .fillMaxWidth()
-        .height(240.dp)
+        .height(scrollableHeight)
         .heightIn(min = previewMinHeight)
     else -> Modifier
         .fillMaxWidth()
