@@ -39,7 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
@@ -305,7 +305,7 @@ fun KeyframeCurveEditor(
                             null
                         },
                         modifier = Modifier.testTag(
-                            ClearCutTestTags.KEYFRAME_PROPERTY_PREFIX + property.name.lowercase(Locale.ROOT)
+                            DirectorXTestTags.KEYFRAME_PROPERTY_PREFIX + property.name.lowercase(Locale.ROOT)
                         )
                     )
                 }
@@ -701,7 +701,7 @@ internal fun CurveCanvas(
 
     androidx.compose.foundation.Canvas(
         modifier = modifier
-            .testTag(ClearCutTestTags.KEYFRAME_CURVE_CANVAS)
+            .testTag(DirectorXTestTags.KEYFRAME_CURVE_CANVAS)
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = { offset ->
