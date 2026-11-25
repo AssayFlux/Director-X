@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 /**
- * ClearCut design tokens.
+ * Director X design tokens.
  *
  * Centralized spacing / radius / motion / elevation values so the editor surfaces have a
  * single, coherent rhythm instead of every panel inventing its own scale. Use these in place
