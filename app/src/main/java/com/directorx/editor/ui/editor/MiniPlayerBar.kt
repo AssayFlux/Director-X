@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.directorx.editor.R
-import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXChromeIconButton
 import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.TouchTarget
@@ -54,7 +54,7 @@ fun MiniPlayerBar(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            ClearCutChromeIconButton(
+            DirectorXChromeIconButton(
                 icon = if (isPlaying) Icons.Default.Pause else Icons.Default.PlayArrow,
                 contentDescription = stringResource(
                     if (isPlaying) R.string.preview_pause else R.string.preview_play
