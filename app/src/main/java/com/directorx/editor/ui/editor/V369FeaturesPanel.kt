@@ -34,7 +34,7 @@ import com.directorx.editor.R
 import com.directorx.editor.engine.ColorBlindPreviewEngine
 import com.directorx.editor.engine.DirectPublishEngine
 import com.directorx.editor.engine.KaraokeCaptionEngine
-import com.directorx.editor.ui.theme.ClearCutFilterChip
+import com.directorx.editor.ui.theme.DirectorXFilterChip
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 import com.directorx.editor.ui.theme.TouchTarget
@@ -151,7 +151,7 @@ fun V369FeaturesPanel(
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 for (style in KaraokeCaptionEngine.KaraokeStyle.entries) {
-                    ClearCutFilterChip(
+                    DirectorXFilterChip(
                         selected = v.karaokeStyle == style,
                         onClick = { viewModel.v369Delegate.setKaraokeStyle(style) },
                         text = karaokeStyleLabel(style),
@@ -318,7 +318,7 @@ fun V369FeaturesPanel(
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 for (mode in ColorBlindPreviewEngine.Mode.entries) {
-                    ClearCutFilterChip(
+                    DirectorXFilterChip(
                         selected = v.colorBlindMode == mode,
                         onClick = { viewModel.v369Delegate.setColorBlindMode(mode) },
                         text = colorBlindModeLabel(mode),
@@ -445,7 +445,7 @@ fun V369FeaturesPanel(
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 for (opt in com.directorx.editor.engine.DesktopOverride.entries) {
-                    ClearCutFilterChip(
+                    DirectorXFilterChip(
                         selected = override == opt,
                         onClick = { viewModel.setDesktopOverride(opt) },
                         text = when (opt) {
