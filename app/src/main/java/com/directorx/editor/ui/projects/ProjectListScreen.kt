@@ -62,7 +62,7 @@ import com.directorx.editor.model.ExportConfig
 import com.directorx.editor.model.Project
 import com.directorx.editor.model.ProjectFilterMode
 import com.directorx.editor.model.SortMode
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.editor.PremiumSnackbarHost
 import com.directorx.editor.ui.editor.ToastSeverity
 import com.directorx.editor.ui.editor.inferSeverity
@@ -162,7 +162,7 @@ fun ProjectListScreen(
     ClearCutScreenBackground(
         modifier = Modifier
             .fillMaxSize()
-            .testTag(ClearCutTestTags.PROJECTS_SCREEN)
+            .testTag(DirectorXTestTags.PROJECTS_SCREEN)
     ) {
         val importTemplate = { templateImportLauncher.launch(arrayOf("*/*")) }
         val showCollectionControls = projectTotalCount > 1 ||
@@ -806,7 +806,7 @@ private fun ProjectHomeHero(
                 icon = Icons.Default.Settings,
                 contentDescription = stringResource(R.string.projects_settings),
                 onClick = onSettings,
-                modifier = Modifier.testTag(ClearCutTestTags.PROJECTS_SETTINGS)
+                modifier = Modifier.testTag(DirectorXTestTags.PROJECTS_SETTINGS)
             )
         }
 
@@ -835,7 +835,7 @@ private fun ProjectHomeHero(
             secondaryIcon = Icons.Default.FileOpen,
             onSecondary = onImportTemplate,
             enabled = actionsEnabled,
-            primaryTestTag = ClearCutTestTags.PROJECTS_CREATE_PROJECT
+            primaryTestTag = DirectorXTestTags.PROJECTS_CREATE_PROJECT
         )
 
         if (showSearch) {
@@ -1248,7 +1248,7 @@ private fun ProjectEmptyState(
                     secondaryIcon = Icons.Default.Add,
                     onSecondary = onCreateProject,
                     enabled = actionsEnabled,
-                    secondaryTestTag = ClearCutTestTags.PROJECTS_CREATE_PROJECT
+                    secondaryTestTag = DirectorXTestTags.PROJECTS_CREATE_PROJECT
                 )
             }
         }
@@ -1330,7 +1330,7 @@ private fun ProjectTemplateLibraryRow(
             .defaultMinSize(minHeight = 72.dp)
             .clickable(enabled = enabled, role = Role.Button, onClick = onClick)
             .semantics { contentDescription = description }
-            .testTag(ClearCutTestTags.PROJECTS_TEMPLATES),
+            .testTag(DirectorXTestTags.PROJECTS_TEMPLATES),
         color = Color.Transparent,
         shape = RoundedCornerShape(0.dp),
     ) {
@@ -1511,7 +1511,7 @@ private fun ProjectCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = 112.dp)
-                .testTag("${ClearCutTestTags.PROJECT_CARD_PREFIX}${project.id}")
+                .testTag("${DirectorXTestTags.PROJECT_CARD_PREFIX}${project.id}")
                 .clickable(role = Role.Button, onClick = onClick)
                 .semantics {
                     contentDescription = projectCardDescription
