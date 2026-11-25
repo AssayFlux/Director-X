@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
@@ -88,7 +88,7 @@ fun MaskEditorPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val selectedMask = masks.find { it.id == selectedMaskId }
     val trackedMasks = masks.count { it.trackToMotion }
     var showAddMenu by remember { mutableStateOf(false) }
@@ -97,7 +97,7 @@ fun MaskEditorPanel(
         title = stringResource(R.string.mask_title),
         subtitle = stringResource(R.string.panel_mask_subtitle),
         icon = Icons.Default.Gesture,
-        accent = if (selectedMask != null) ClearCutAccents.Mauve else ClearCutAccents.Blue,
+        accent = if (selectedMask != null) DirectorXAccents.Mauve else DirectorXAccents.Blue,
         onClose = onClose,
         closeContentDescription = stringResource(R.string.cd_close_mask_editor),
         modifier = modifier,
@@ -108,7 +108,7 @@ fun MaskEditorPanel(
                     icon = Icons.Default.Add,
                     contentDescription = stringResource(R.string.cd_add_mask),
                     onClick = { showAddMenu = true },
-                    tint = ClearCutAccents.Green
+                    tint = DirectorXAccents.Green
                 )
                 DropdownMenu(
                     expanded = showAddMenu,
@@ -127,7 +127,7 @@ fun MaskEditorPanel(
             }
         }
     ) {
-        PremiumPanelCard(accent = if (selectedMask != null) ClearCutAccents.Mauve else ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = if (selectedMask != null) DirectorXAccents.Mauve else DirectorXAccents.Blue) {
             BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
                 val isCompactLayout = maxWidth < 420.dp
                 if (isCompactLayout) {
@@ -151,11 +151,11 @@ fun MaskEditorPanel(
                         ) {
                             PremiumPanelPill(
                                 text = stringResource(R.string.mask_summary_total, masks.size),
-                                accent = ClearCutAccents.Blue
+                                accent = DirectorXAccents.Blue
                             )
                             PremiumPanelPill(
                                 text = if (selectedMask != null) localizedMaskTypeName(selectedMask.type) else stringResource(R.string.mask_selection_none),
-                                accent = if (selectedMask != null) ClearCutAccents.Mauve else semanticColors.subtext
+                                accent = if (selectedMask != null) DirectorXAccents.Mauve else semanticColors.subtext
                             )
                         }
                     }
@@ -187,11 +187,11 @@ fun MaskEditorPanel(
                         ) {
                             PremiumPanelPill(
                                 text = stringResource(R.string.mask_summary_total, masks.size),
-                                accent = ClearCutAccents.Blue
+                                accent = DirectorXAccents.Blue
                             )
                             PremiumPanelPill(
                                 text = if (selectedMask != null) localizedMaskTypeName(selectedMask.type) else stringResource(R.string.mask_selection_none),
-                                accent = if (selectedMask != null) ClearCutAccents.Mauve else semanticColors.subtext
+                                accent = if (selectedMask != null) DirectorXAccents.Mauve else semanticColors.subtext
                             )
                         }
                     }
@@ -205,13 +205,13 @@ fun MaskEditorPanel(
                 MaskMetric(
                     title = stringResource(R.string.mask_metric_tracked),
                     value = trackedMasks.toString(),
-                    accent = if (trackedMasks > 0) ClearCutAccents.Yellow else ClearCutAccents.Green,
+                    accent = if (trackedMasks > 0) DirectorXAccents.Yellow else DirectorXAccents.Green,
                     modifier = Modifier.width(140.dp)
                 )
                 MaskMetric(
                     title = stringResource(R.string.mask_metric_points),
                     value = selectedMask?.points?.size?.toString() ?: "0",
-                    accent = ClearCutAccents.Mauve,
+                    accent = DirectorXAccents.Mauve,
                     modifier = Modifier.width(140.dp)
                 )
             }
@@ -219,7 +219,7 @@ fun MaskEditorPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = DirectorXAccents.Blue) {
             Text(
                 text = stringResource(R.string.mask_shapes_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -242,8 +242,8 @@ fun MaskEditorPanel(
                     OutlinedButton(
                         onClick = { onMaskAdded(type) },
                         shape = RoundedCornerShape(12.dp),
-                        border = BorderStroke(1.dp, ClearCutAccents.Blue.copy(alpha = 0.25f)),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = ClearCutAccents.Blue)
+                        border = BorderStroke(1.dp, DirectorXAccents.Blue.copy(alpha = 0.25f)),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = DirectorXAccents.Blue)
                     ) {
                         androidx.compose.material3.Icon(
                             imageVector = maskTypeIcon(type),
@@ -273,7 +273,7 @@ fun MaskEditorPanel(
         Spacer(modifier = Modifier.height(12.dp))
 
         if (selectedMask != null) {
-            PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+            PremiumPanelCard(accent = DirectorXAccents.Mauve) {
                 BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
                     val isCompactLayout = maxWidth < 420.dp
                     if (isCompactLayout) {
@@ -294,8 +294,8 @@ fun MaskEditorPanel(
                             OutlinedButton(
                                 onClick = { onMaskDeleted(selectedMask.id) },
                                 shape = RoundedCornerShape(12.dp),
-                                border = BorderStroke(1.dp, ClearCutAccents.Red.copy(alpha = 0.25f)),
-                                colors = ButtonDefaults.outlinedButtonColors(contentColor = ClearCutAccents.Red)
+                                border = BorderStroke(1.dp, DirectorXAccents.Red.copy(alpha = 0.25f)),
+                                colors = ButtonDefaults.outlinedButtonColors(contentColor = DirectorXAccents.Red)
                             ) {
                                 androidx.compose.material3.Icon(
                                     imageVector = Icons.Default.Delete,
@@ -328,8 +328,8 @@ fun MaskEditorPanel(
                             OutlinedButton(
                                 onClick = { onMaskDeleted(selectedMask.id) },
                                 shape = RoundedCornerShape(12.dp),
-                                border = BorderStroke(1.dp, ClearCutAccents.Red.copy(alpha = 0.25f)),
-                                colors = ButtonDefaults.outlinedButtonColors(contentColor = ClearCutAccents.Red)
+                                border = BorderStroke(1.dp, DirectorXAccents.Red.copy(alpha = 0.25f)),
+                                colors = ButtonDefaults.outlinedButtonColors(contentColor = DirectorXAccents.Red)
                             ) {
                                 androidx.compose.material3.Icon(
                                     imageVector = Icons.Default.Delete,
@@ -347,7 +347,7 @@ fun MaskEditorPanel(
                     value = selectedMask.feather,
                     min = 0f,
                     max = 100f,
-                    accent = ClearCutAccents.Mauve,
+                    accent = DirectorXAccents.Mauve,
                     onChanged = { onMaskUpdated(selectedMask.copy(feather = it)) }
                 )
                 MaskSliderRow(
@@ -355,7 +355,7 @@ fun MaskEditorPanel(
                     value = selectedMask.opacity,
                     min = 0f,
                     max = 1f,
-                    accent = ClearCutAccents.Blue,
+                    accent = DirectorXAccents.Blue,
                     onChanged = { onMaskUpdated(selectedMask.copy(opacity = it)) },
                     valueFormatter = { "%.0f%%".format(it * 100f) }
                 )
@@ -364,7 +364,7 @@ fun MaskEditorPanel(
                     value = selectedMask.expansion,
                     min = -50f,
                     max = 50f,
-                    accent = ClearCutAccents.Peach,
+                    accent = DirectorXAccents.Peach,
                     onChanged = { onMaskUpdated(selectedMask.copy(expansion = it)) }
                 )
 
@@ -379,19 +379,19 @@ fun MaskEditorPanel(
                     label = stringResource(R.string.mask_invert),
                     subtitle = stringResource(R.string.mask_invert_description),
                     checked = selectedMask.inverted,
-                    accent = ClearCutAccents.Mauve,
+                    accent = DirectorXAccents.Mauve,
                     onCheckedChange = { onMaskUpdated(selectedMask.copy(inverted = it)) }
                 )
                 MaskToggleRow(
                     label = stringResource(R.string.mask_track_to_motion),
                     subtitle = stringResource(R.string.mask_track_description),
                     checked = selectedMask.trackToMotion,
-                    accent = ClearCutAccents.Yellow,
+                    accent = DirectorXAccents.Yellow,
                     onCheckedChange = { onMaskUpdated(selectedMask.copy(trackToMotion = it)) }
                 )
             }
         } else {
-            PremiumPanelCard(accent = ClearCutAccents.Green) {
+            PremiumPanelCard(accent = DirectorXAccents.Green) {
                 Text(
                     text = stringResource(R.string.mask_none_selected_title),
                     style = MaterialTheme.typography.titleMedium,
@@ -414,7 +414,7 @@ private fun MaskMetric(
     accent: Color,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = modifier,
         color = accent.copy(alpha = 0.12f),
@@ -446,8 +446,8 @@ private fun MaskChip(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
-    val accent = if (isSelected) ClearCutAccents.Mauve else ClearCutAccents.Blue
+    val semanticColors = LocalDirectorXColors.current
+    val accent = if (isSelected) DirectorXAccents.Mauve else DirectorXAccents.Blue
     val invLabel = stringResource(R.string.mask_inv_label)
     val pointsLabel = stringResource(R.string.mask_chip_points_format, mask.points.size)
     val trackedLabel = stringResource(R.string.mask_chip_tracked)
@@ -501,7 +501,7 @@ private fun MaskSliderRow(
     onChanged: (Float) -> Unit,
     valueFormatter: (Float) -> String = { "%.1f".format(it) }
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -536,7 +536,7 @@ private fun MaskToggleRow(
     accent: Color,
     onCheckedChange: (Boolean) -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val switchState = stringResource(if (checked) R.string.settings_on else R.string.settings_off)
     Surface(
         color = semanticColors.panelRaised,
@@ -586,7 +586,7 @@ private fun MaskPointCoordinateEditor(
     mask: Mask,
     onMaskUpdated: (Mask) -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val pointLabels = when (mask.type) {
         MaskType.RECTANGLE -> if (mask.points.size >= 2) {
             listOf(stringResource(R.string.mask_point_top_left), stringResource(R.string.mask_point_bottom_right))
@@ -623,7 +623,7 @@ private fun MaskPointCoordinateEditor(
                 Text(
                     text = label,
                     style = MaterialTheme.typography.labelSmall,
-                    color = ClearCutAccents.Mauve,
+                    color = DirectorXAccents.Mauve,
                     modifier = Modifier.width(72.dp)
                 )
                 OutlinedTextField(
@@ -645,7 +645,7 @@ private fun MaskPointCoordinateEditor(
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedTextColor = semanticColors.text,
                         unfocusedTextColor = semanticColors.subtext,
-                        focusedBorderColor = ClearCutAccents.Mauve,
+                        focusedBorderColor = DirectorXAccents.Mauve,
                         unfocusedBorderColor = semanticColors.surface
                     )
                 )
@@ -668,7 +668,7 @@ private fun MaskPointCoordinateEditor(
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedTextColor = semanticColors.text,
                         unfocusedTextColor = semanticColors.subtext,
-                        focusedBorderColor = ClearCutAccents.Mauve,
+                        focusedBorderColor = DirectorXAccents.Mauve,
                         unfocusedBorderColor = semanticColors.surface
                     )
                 )
@@ -809,7 +809,7 @@ fun MaskPreviewOverlay(
     ) {
         masks.forEach { mask ->
             val isSelected = mask.id == selectedMaskId
-            val color = if (isSelected) ClearCutAccents.Mauve else ClearCutAccents.Mauve.copy(alpha = 0.3f)
+            val color = if (isSelected) DirectorXAccents.Mauve else DirectorXAccents.Mauve.copy(alpha = 0.3f)
 
             when (mask.type) {
                 MaskType.RECTANGLE -> {
@@ -916,7 +916,7 @@ fun MaskPreviewOverlay(
             drawingPoints.forEachIndexed { idx, pt ->
                 if (idx == 0) path.moveTo(pt.x, pt.y) else path.lineTo(pt.x, pt.y)
             }
-            drawPath(path, ClearCutAccents.Mauve, style = Stroke(2f))
+            drawPath(path, DirectorXAccents.Mauve, style = Stroke(2f))
         }
     }
 }
