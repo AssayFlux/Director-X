@@ -39,7 +39,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.annotation.StringRes
 import com.directorx.editor.R
 import com.directorx.editor.model.*
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.theme.LocalClearCutColors
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.TouchTarget
@@ -526,7 +526,7 @@ private fun BottomTabBarItem(
                 onClick = onClick,
                 role = Role.Tab
             )
-            .testTag(ClearCutTestTags.EDITOR_TOOL_TAB_PREFIX + tab.id)
+            .testTag(DirectorXTestTags.EDITOR_TOOL_TAB_PREFIX + tab.id)
             .semantics { contentDescription = itemDescription }
             .defaultMinSize(minWidth = TouchTarget.minimum)
             .heightIn(min = itemHeight)
@@ -595,7 +595,7 @@ private fun SubMenuGrid(
     ) {
         LazyRow(
             modifier = Modifier
-                .testTag(ClearCutTestTags.EDITOR_TOOL_ACTION_LIST)
+                .testTag(DirectorXTestTags.EDITOR_TOOL_ACTION_LIST)
                 .height(actionRowHeight),
             contentPadding = PaddingValues(horizontal = 6.dp, vertical = 5.dp),
             horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -610,7 +610,7 @@ private fun SubMenuGrid(
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(Radius.xs))
                         .clickable(enabled = !isDisabled) { onItemSelected(item.id) }
-                        .testTag(ClearCutTestTags.EDITOR_TOOL_ACTION_PREFIX + item.id)
+                        .testTag(DirectorXTestTags.EDITOR_TOOL_ACTION_PREFIX + item.id)
                         .semantics {
                             contentDescription = itemLabel
                             if (isDisabled) disabled()
