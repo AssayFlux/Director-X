@@ -28,8 +28,8 @@ import com.directorx.editor.R
 import com.directorx.editor.engine.UserTemplate
 import com.directorx.editor.model.*
 import com.directorx.editor.ui.DirectorXTestTags
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.ClearCutChromeIconButton
 import com.directorx.editor.ui.theme.ClearCutDialogIcon
 import com.directorx.editor.ui.theme.ClearCutMetricPill
@@ -53,62 +53,62 @@ data class ProjectTemplateUI(
 val projectTemplates = listOf(
     ProjectTemplateUI(
         id = "blank", nameResId = R.string.template_blank_name, descriptionResId = R.string.template_blank_desc,
-        category = TemplateCategory.BLANK, icon = Icons.Default.Add, accentColor = ClearCutAccents.Neutral,
+        category = TemplateCategory.BLANK, icon = Icons.Default.Add, accentColor = DirectorXAccents.Neutral,
         aspectRatio = AspectRatio.RATIO_16_9, tracks = listOf(TrackType.VIDEO, TrackType.AUDIO),
         suggestedDurationResId = R.string.template_blank_duration
     ),
     ProjectTemplateUI(
         id = "vlog", nameResId = R.string.template_vlog_name, descriptionResId = R.string.template_vlog_desc,
-        category = TemplateCategory.VLOG, icon = Icons.Default.Videocam, accentColor = ClearCutAccents.Mauve,
+        category = TemplateCategory.VLOG, icon = Icons.Default.Videocam, accentColor = DirectorXAccents.Mauve,
         aspectRatio = AspectRatio.RATIO_16_9,
         tracks = listOf(TrackType.VIDEO, TrackType.VIDEO, TrackType.AUDIO, TrackType.TEXT),
         suggestedDurationResId = R.string.template_vlog_duration
     ),
     ProjectTemplateUI(
         id = "tutorial", nameResId = R.string.template_tutorial_name, descriptionResId = R.string.template_tutorial_desc,
-        category = TemplateCategory.TUTORIAL, icon = Icons.Default.School, accentColor = ClearCutAccents.Blue,
+        category = TemplateCategory.TUTORIAL, icon = Icons.Default.School, accentColor = DirectorXAccents.Blue,
         aspectRatio = AspectRatio.RATIO_16_9,
         tracks = listOf(TrackType.VIDEO, TrackType.OVERLAY, TrackType.AUDIO, TrackType.TEXT),
         suggestedDurationResId = R.string.template_tutorial_duration
     ),
     ProjectTemplateUI(
         id = "short_tiktok", nameResId = R.string.template_short_tiktok_name, descriptionResId = R.string.template_short_tiktok_desc,
-        category = TemplateCategory.SHORT_FORM, icon = Icons.Default.PhoneAndroid, accentColor = ClearCutAccents.Red,
+        category = TemplateCategory.SHORT_FORM, icon = Icons.Default.PhoneAndroid, accentColor = DirectorXAccents.Red,
         aspectRatio = AspectRatio.RATIO_9_16,
         tracks = listOf(TrackType.VIDEO, TrackType.AUDIO, TrackType.TEXT),
         suggestedDurationResId = R.string.template_short_tiktok_duration
     ),
     ProjectTemplateUI(
         id = "short_reel", nameResId = R.string.template_reel_name, descriptionResId = R.string.template_reel_desc,
-        category = TemplateCategory.SHORT_FORM, icon = Icons.Default.CameraRoll, accentColor = ClearCutAccents.Peach,
+        category = TemplateCategory.SHORT_FORM, icon = Icons.Default.CameraRoll, accentColor = DirectorXAccents.Peach,
         aspectRatio = AspectRatio.RATIO_9_16,
         tracks = listOf(TrackType.VIDEO, TrackType.AUDIO, TrackType.AUDIO, TrackType.TEXT),
         suggestedDurationResId = R.string.template_reel_duration
     ),
     ProjectTemplateUI(
         id = "cinematic", nameResId = R.string.template_cinematic_name, descriptionResId = R.string.template_cinematic_desc,
-        category = TemplateCategory.CINEMATIC, icon = Icons.Default.Movie, accentColor = ClearCutAccents.Yellow,
+        category = TemplateCategory.CINEMATIC, icon = Icons.Default.Movie, accentColor = DirectorXAccents.Yellow,
         aspectRatio = AspectRatio.RATIO_21_9,
         tracks = listOf(TrackType.VIDEO, TrackType.VIDEO, TrackType.AUDIO, TrackType.AUDIO, TrackType.TEXT),
         suggestedDurationResId = R.string.template_cinematic_duration
     ),
     ProjectTemplateUI(
         id = "slideshow", nameResId = R.string.template_slideshow_name, descriptionResId = R.string.template_slideshow_desc,
-        category = TemplateCategory.SLIDESHOW, icon = Icons.Default.PhotoLibrary, accentColor = ClearCutAccents.Green,
+        category = TemplateCategory.SLIDESHOW, icon = Icons.Default.PhotoLibrary, accentColor = DirectorXAccents.Green,
         aspectRatio = AspectRatio.RATIO_16_9,
         tracks = listOf(TrackType.VIDEO, TrackType.AUDIO, TrackType.TEXT),
         suggestedDurationResId = R.string.template_slideshow_duration
     ),
     ProjectTemplateUI(
         id = "promo", nameResId = R.string.template_promo_name, descriptionResId = R.string.template_promo_desc,
-        category = TemplateCategory.PROMO, icon = Icons.Default.Campaign, accentColor = ClearCutAccents.Teal,
+        category = TemplateCategory.PROMO, icon = Icons.Default.Campaign, accentColor = DirectorXAccents.Teal,
         aspectRatio = AspectRatio.RATIO_16_9,
         tracks = listOf(TrackType.VIDEO, TrackType.OVERLAY, TrackType.AUDIO, TrackType.TEXT),
         suggestedDurationResId = R.string.template_promo_duration
     ),
     ProjectTemplateUI(
         id = "square_social", nameResId = R.string.template_square_name, descriptionResId = R.string.template_square_desc,
-        category = TemplateCategory.PROMO, icon = Icons.Default.CropSquare, accentColor = ClearCutAccents.Blue,
+        category = TemplateCategory.PROMO, icon = Icons.Default.CropSquare, accentColor = DirectorXAccents.Blue,
         aspectRatio = AspectRatio.RATIO_1_1,
         tracks = listOf(TrackType.VIDEO, TrackType.AUDIO, TrackType.TEXT),
         suggestedDurationResId = R.string.template_square_duration
@@ -117,7 +117,7 @@ val projectTemplates = listOf(
         id = "custom_canvas", nameResId = R.string.template_custom_canvas_name,
         descriptionResId = R.string.template_custom_canvas_desc,
         category = TemplateCategory.BLANK, icon = Icons.Default.CropSquare,
-        accentColor = ClearCutAccents.Neutral,
+        accentColor = DirectorXAccents.Neutral,
         aspectRatio = AspectRatio.CUSTOM,
         tracks = listOf(TrackType.VIDEO, TrackType.AUDIO),
         suggestedDurationResId = R.string.template_blank_duration
@@ -145,7 +145,7 @@ fun ProjectTemplateSheet(
             .testTag(DirectorXTestTags.TEMPLATE_SHEET)
             .navigationBarsPadding()
             .verticalScroll(rememberScrollState())
-            .background(LocalClearCutColors.current.panel, RoundedCornerShape(topStart = Radius.xxl, topEnd = Radius.xxl))
+            .background(LocalDirectorXColors.current.panel, RoundedCornerShape(topStart = Radius.xxl, topEnd = Radius.xxl))
             .padding(horizontal = Spacing.lg, vertical = 14.dp)
     ) {
         Box(
@@ -154,7 +154,7 @@ fun ProjectTemplateSheet(
                 .width(36.dp)
                 .height(3.dp)
                 .clip(RoundedCornerShape(Radius.sm))
-                .background(LocalClearCutColors.current.surfaceHigh.copy(alpha = 0.55f))
+                .background(LocalDirectorXColors.current.surfaceHigh.copy(alpha = 0.55f))
         )
 
         Spacer(Modifier.height(14.dp))
@@ -167,7 +167,7 @@ fun ProjectTemplateSheet(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     stringResource(R.string.template_new_project),
-                    color = LocalClearCutColors.current.text,
+                    color = LocalDirectorXColors.current.text,
                     style = MaterialTheme.typography.titleLarge,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -175,7 +175,7 @@ fun ProjectTemplateSheet(
                 Spacer(Modifier.height(4.dp))
                 Text(
                     stringResource(R.string.template_headline),
-                    color = ClearCutAccents.Rosewater,
+                    color = DirectorXAccents.Rosewater,
                     style = MaterialTheme.typography.headlineMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -191,7 +191,7 @@ fun ProjectTemplateSheet(
         Spacer(Modifier.height(6.dp))
         Text(
             stringResource(R.string.template_subtitle),
-            color = LocalClearCutColors.current.subtext,
+            color = LocalDirectorXColors.current.subtext,
             style = MaterialTheme.typography.bodyMedium,
             maxLines = 3,
             overflow = TextOverflow.Ellipsis
@@ -205,13 +205,13 @@ fun ProjectTemplateSheet(
         ) {
             ClearCutMetricPill(
                 text = stringResource(R.string.projects_templates_count, projectTemplates.size),
-                accent = ClearCutAccents.Mauve,
+                accent = DirectorXAccents.Mauve,
                 icon = Icons.Default.DashboardCustomize
             )
             if (userTemplates.isNotEmpty()) {
                 ClearCutMetricPill(
                     text = stringResource(R.string.template_saved_count, userTemplates.size),
-                    accent = ClearCutAccents.Sapphire,
+                    accent = DirectorXAccents.Sapphire,
                     icon = Icons.Default.BookmarkAdded
                 )
             }
@@ -222,9 +222,9 @@ fun ProjectTemplateSheet(
         Surface(
             onClick = onImportTemplate,
             modifier = Modifier.fillMaxWidth(),
-            color = LocalClearCutColors.current.panelHighest,
+            color = LocalDirectorXColors.current.panelHighest,
             shape = RoundedCornerShape(Radius.xl),
-            border = androidx.compose.foundation.BorderStroke(1.dp, LocalClearCutColors.current.cardStrokeStrong)
+            border = androidx.compose.foundation.BorderStroke(1.dp, LocalDirectorXColors.current.cardStrokeStrong)
         ) {
             Row(
                 modifier = Modifier
@@ -236,13 +236,13 @@ fun ProjectTemplateSheet(
                     modifier = Modifier
                         .size(42.dp)
                         .clip(RoundedCornerShape(Radius.md))
-                        .background(ClearCutAccents.Sapphire.copy(alpha = 0.14f)),
+                        .background(DirectorXAccents.Sapphire.copy(alpha = 0.14f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         Icons.Default.FileOpen,
                         contentDescription = null,
-                        tint = ClearCutAccents.Sapphire,
+                        tint = DirectorXAccents.Sapphire,
                         modifier = Modifier.size(20.dp)
                     )
                 }
@@ -252,7 +252,7 @@ fun ProjectTemplateSheet(
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         stringResource(R.string.template_import),
-                        color = LocalClearCutColors.current.text,
+                        color = LocalDirectorXColors.current.text,
                         style = MaterialTheme.typography.titleMedium,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -260,7 +260,7 @@ fun ProjectTemplateSheet(
                     Spacer(Modifier.height(2.dp))
                     Text(
                         stringResource(R.string.template_import_description),
-                        color = LocalClearCutColors.current.subtext,
+                        color = LocalDirectorXColors.current.subtext,
                         style = MaterialTheme.typography.bodySmall,
                         maxLines = 3,
                         overflow = TextOverflow.Ellipsis
@@ -357,8 +357,8 @@ private fun UserTemplateCard(
         modifier = Modifier
             .height(176.dp)
             .clip(RoundedCornerShape(Radius.xl))
-            .background(LocalClearCutColors.current.panelHighest)
-            .border(1.dp, LocalClearCutColors.current.cardStrokeStrong, RoundedCornerShape(Radius.xl))
+            .background(LocalDirectorXColors.current.panelHighest)
+            .border(1.dp, LocalDirectorXColors.current.cardStrokeStrong, RoundedCornerShape(Radius.xl))
             .clickable(role = Role.Button, onClick = onClick)
             .semantics { contentDescription = templateDescription }
     ) {
@@ -374,7 +374,7 @@ private fun UserTemplateCard(
             Icon(
                 Icons.Default.Bookmark,
                 null,
-                tint = ClearCutAccents.Mauve,
+                tint = DirectorXAccents.Mauve,
                 modifier = Modifier.size(24.dp)
             )
         }
@@ -389,7 +389,7 @@ private fun UserTemplateCard(
             ) {
                 Text(
                     template.name,
-                    color = LocalClearCutColors.current.text,
+                    color = LocalDirectorXColors.current.text,
                     style = MaterialTheme.typography.titleSmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -399,13 +399,13 @@ private fun UserTemplateCard(
                     TemplateActionButton(
                         icon = Icons.Default.Share,
                         contentDescription = stringResource(R.string.template_share_cd_format, template.name),
-                        tint = ClearCutAccents.Blue,
+                        tint = DirectorXAccents.Blue,
                         onClick = onShare
                     )
                     TemplateActionButton(
                         icon = Icons.Default.Delete,
                         contentDescription = stringResource(R.string.template_delete_cd_format, template.name),
-                        tint = ClearCutAccents.Red,
+                        tint = DirectorXAccents.Red,
                         onClick = onDelete
                     )
                 }
@@ -413,7 +413,7 @@ private fun UserTemplateCard(
             Text(
                 if (template.textOverlayCount > 0) stringResource(R.string.template_tracks_texts_format, template.trackTypes.size, template.textOverlayCount)
                 else stringResource(R.string.template_tracks_format, template.trackTypes.size),
-                color = LocalClearCutColors.current.subtext,
+                color = LocalDirectorXColors.current.subtext,
                 style = MaterialTheme.typography.bodySmall,
                 maxLines = 1
             )
@@ -421,11 +421,11 @@ private fun UserTemplateCard(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                TemplateBadge(text = template.aspectRatio.label, accent = ClearCutAccents.Mauve)
+                TemplateBadge(text = template.aspectRatio.label, accent = DirectorXAccents.Mauve)
                 if (template.compatibility.slotCount > 0) {
                     TemplateBadge(
                         text = stringResource(R.string.template_slots_format, template.compatibility.slotCount),
-                        accent = ClearCutAccents.Sapphire
+                        accent = DirectorXAccents.Sapphire
                     )
                 }
             }
@@ -452,8 +452,8 @@ private fun ProjectTemplateCard(
         modifier = Modifier
             .height(184.dp)
             .clip(RoundedCornerShape(Radius.xl))
-            .background(LocalClearCutColors.current.panelHighest)
-            .border(1.dp, LocalClearCutColors.current.cardStrokeStrong, RoundedCornerShape(Radius.xl))
+            .background(LocalDirectorXColors.current.panelHighest)
+            .border(1.dp, LocalDirectorXColors.current.cardStrokeStrong, RoundedCornerShape(Radius.xl))
             .then(
                 if (template.id == "blank") Modifier.testTag(DirectorXTestTags.TEMPLATE_BLANK) else Modifier
             )
@@ -480,7 +480,7 @@ private fun ProjectTemplateCard(
                     modifier = Modifier
                         .size(40.dp)
                         .clip(RoundedCornerShape(Radius.md))
-                        .background(LocalClearCutColors.current.canvas.copy(alpha = 0.12f)),
+                        .background(LocalDirectorXColors.current.canvas.copy(alpha = 0.12f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
@@ -495,7 +495,7 @@ private fun ProjectTemplateCard(
                     color = template.accentColor,
                     style = MaterialTheme.typography.labelSmall,
                     modifier = Modifier
-                        .background(LocalClearCutColors.current.canvas.copy(alpha = 0.16f), RoundedCornerShape(10.dp))
+                        .background(LocalDirectorXColors.current.canvas.copy(alpha = 0.16f), RoundedCornerShape(10.dp))
                         .padding(horizontal = 8.dp, vertical = 5.dp)
                 )
             }
@@ -510,13 +510,13 @@ private fun ProjectTemplateCard(
             Column {
                 Text(
                     templateName,
-                    color = LocalClearCutColors.current.text,
+                    color = LocalDirectorXColors.current.text,
                     style = MaterialTheme.typography.titleMedium
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
                     stringResource(template.descriptionResId),
-                    color = LocalClearCutColors.current.subtext,
+                    color = LocalDirectorXColors.current.subtext,
                     style = MaterialTheme.typography.bodySmall,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
@@ -527,8 +527,8 @@ private fun ProjectTemplateCard(
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 TemplateBadge(text = category, accent = template.accentColor)
-                TemplateBadge(text = stringResource(template.suggestedDurationResId), accent = LocalClearCutColors.current.subtext)
-                TemplateBadge(text = stringResource(R.string.template_tracks_format, template.tracks.size), accent = LocalClearCutColors.current.subtext)
+                TemplateBadge(text = stringResource(template.suggestedDurationResId), accent = LocalDirectorXColors.current.subtext)
+                TemplateBadge(text = stringResource(R.string.template_tracks_format, template.tracks.size), accent = LocalDirectorXColors.current.subtext)
             }
         }
     }
@@ -571,9 +571,9 @@ private fun TemplateSectionHeader(
 private fun EmptyTemplateStateCard() {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = LocalClearCutColors.current.panelHighest,
+        color = LocalDirectorXColors.current.panelHighest,
         shape = RoundedCornerShape(Radius.xl),
-        border = androidx.compose.foundation.BorderStroke(1.dp, LocalClearCutColors.current.cardStrokeStrong)
+        border = androidx.compose.foundation.BorderStroke(1.dp, LocalDirectorXColors.current.cardStrokeStrong)
     ) {
         Column(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp),
@@ -581,12 +581,12 @@ private fun EmptyTemplateStateCard() {
         ) {
             Text(
                 text = stringResource(R.string.template_saved_empty_title),
-                color = LocalClearCutColors.current.text,
+                color = LocalDirectorXColors.current.text,
                 style = MaterialTheme.typography.titleSmall
             )
             Text(
                 text = stringResource(R.string.template_saved_empty_body),
-                color = LocalClearCutColors.current.subtext,
+                color = LocalDirectorXColors.current.subtext,
                 style = MaterialTheme.typography.bodySmall
             )
         }
@@ -604,20 +604,20 @@ private fun DeleteUserTemplateDialog(
         icon = {
             ClearCutDialogIcon(
                 icon = Icons.Default.Delete,
-                accent = ClearCutAccents.Red
+                accent = DirectorXAccents.Red
             )
         },
         title = {
             Text(
                 text = stringResource(R.string.template_delete_confirm_title),
-                color = LocalClearCutColors.current.text,
+                color = LocalDirectorXColors.current.text,
                 style = MaterialTheme.typography.titleLarge
             )
         },
         text = {
             Text(
                 text = stringResource(R.string.template_delete_confirm_body, templateName),
-                color = LocalClearCutColors.current.subtext,
+                color = LocalDirectorXColors.current.subtext,
                 style = MaterialTheme.typography.bodyMedium
             )
         },
@@ -626,7 +626,7 @@ private fun DeleteUserTemplateDialog(
                 text = stringResource(R.string.template_delete_confirm_action),
                 onClick = onConfirm,
                 icon = Icons.Default.Delete,
-                contentColor = ClearCutAccents.Red
+                contentColor = DirectorXAccents.Red
             )
         },
         dismissButton = {
@@ -635,9 +635,9 @@ private fun DeleteUserTemplateDialog(
                 onClick = onDismissRequest
             )
         },
-        containerColor = LocalClearCutColors.current.panelHighest,
-        titleContentColor = LocalClearCutColors.current.text,
-        textContentColor = LocalClearCutColors.current.subtext,
+        containerColor = LocalDirectorXColors.current.panelHighest,
+        titleContentColor = LocalDirectorXColors.current.text,
+        textContentColor = LocalDirectorXColors.current.subtext,
         shape = RoundedCornerShape(Radius.xxl)
     )
 }
