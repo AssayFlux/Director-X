@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.dp
 import com.directorx.editor.R
 import com.directorx.editor.engine.OpenSourceLicenseNotice
 import com.directorx.editor.engine.OpenSourceLicenses
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.Radius
 
 @Composable
@@ -56,14 +56,14 @@ private fun Header(count: Int) {
     Column {
         Text(
             text = stringResource(R.string.opensource_licenses_title),
-            color = LocalClearCutColors.current.text,
+            color = LocalDirectorXColors.current.text,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.SemiBold,
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = stringResource(R.string.opensource_licenses_subtitle, count),
-            color = LocalClearCutColors.current.subtext,
+            color = LocalDirectorXColors.current.subtext,
             style = MaterialTheme.typography.bodyMedium,
         )
     }
@@ -74,14 +74,14 @@ private fun NoticeCard(notice: OpenSourceLicenseNotice) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .border(BorderStroke(1.dp, LocalClearCutColors.current.cardStrokeStrong.copy(alpha = 0.55f)), RoundedCornerShape(Radius.lg))
-            .background(LocalClearCutColors.current.panelHighest.copy(alpha = 0.55f), RoundedCornerShape(Radius.lg))
+            .border(BorderStroke(1.dp, LocalDirectorXColors.current.cardStrokeStrong.copy(alpha = 0.55f)), RoundedCornerShape(Radius.lg))
+            .background(LocalDirectorXColors.current.panelHighest.copy(alpha = 0.55f), RoundedCornerShape(Radius.lg))
             .padding(14.dp),
         verticalArrangement = Arrangement.spacedBy(7.dp),
     ) {
         Text(
             text = "${notice.name} ${notice.version}",
-            color = LocalClearCutColors.current.text,
+            color = LocalDirectorXColors.current.text,
             style = MaterialTheme.typography.titleSmall,
             fontWeight = FontWeight.SemiBold,
         )
@@ -89,44 +89,44 @@ private fun NoticeCard(notice: OpenSourceLicenseNotice) {
             icon = Icons.Default.Code,
             label = stringResource(R.string.opensource_licenses_artifact_label),
             value = notice.artifact,
-            accent = ClearCutAccents.Sapphire,
+            accent = DirectorXAccents.Sapphire,
         )
         MetaLine(
             icon = Icons.Default.Description,
             label = stringResource(R.string.opensource_licenses_license_label),
             value = notice.licenseName,
-            accent = ClearCutAccents.Mauve,
+            accent = DirectorXAccents.Mauve,
         )
         Text(
             text = notice.licenseText,
-            color = LocalClearCutColors.current.subtext,
+            color = LocalDirectorXColors.current.subtext,
             style = MaterialTheme.typography.bodySmall,
         )
         notice.complianceNote?.let {
             MetaBlock(
                 label = stringResource(R.string.opensource_licenses_notice_label),
                 value = it,
-                accent = ClearCutAccents.Peach,
+                accent = DirectorXAccents.Peach,
             )
         }
         notice.sourceOfferText?.let {
             MetaBlock(
                 label = stringResource(R.string.opensource_licenses_source_offer_label),
                 value = it,
-                accent = ClearCutAccents.Green,
+                accent = DirectorXAccents.Green,
             )
         }
         MetaLine(
             icon = Icons.Default.Link,
             label = stringResource(R.string.opensource_licenses_project_label),
             value = notice.projectUrl,
-            accent = ClearCutAccents.Teal,
+            accent = DirectorXAccents.Teal,
         )
         MetaLine(
             icon = Icons.Default.Description,
             label = stringResource(R.string.opensource_licenses_full_text_label),
             value = notice.licenseUrl,
-            accent = ClearCutAccents.Sky,
+            accent = DirectorXAccents.Sky,
         )
     }
 }
@@ -156,7 +156,7 @@ private fun MetaLine(
             )
             Text(
                 text = value,
-                color = LocalClearCutColors.current.subtext,
+                color = LocalDirectorXColors.current.subtext,
                 style = MaterialTheme.typography.labelSmall,
             )
         }
@@ -178,7 +178,7 @@ private fun MetaBlock(
         )
         Text(
             text = value,
-            color = LocalClearCutColors.current.subtext,
+            color = LocalDirectorXColors.current.subtext,
             style = MaterialTheme.typography.bodySmall,
         )
     }
