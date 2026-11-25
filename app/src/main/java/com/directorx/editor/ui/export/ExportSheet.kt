@@ -120,9 +120,9 @@ import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.Motion
 import com.directorx.editor.ui.theme.DirectorXChromeIconButton
-import com.directorx.editor.ui.theme.ClearCutDialogIcon
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.DirectorXDialogIcon
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 import com.directorx.editor.ui.theme.TouchTarget
@@ -516,7 +516,7 @@ fun ExportSheet(
         AlertDialog(
             onDismissRequest = { showClearAiLedgerConfirm = false },
             icon = {
-                ClearCutDialogIcon(
+                DirectorXDialogIcon(
                     icon = Icons.Default.AutoAwesome,
                     accent = DirectorXAccents.Mauve
                 )
@@ -845,7 +845,7 @@ fun ExportSheet(
 
         Spacer(modifier = Modifier.height(Spacing.md))
 
-        ClearCutPrimaryButton(
+        DirectorXPrimaryButton(
             text = primaryButtonLabel,
             onClick = {
                 if (config.captureFrameOnly) {
@@ -1718,7 +1718,7 @@ fun ExportSheet(
             description = stringResource(R.string.export_ready_to_export_description),
             accent = DirectorXAccents.Rosewater
         ) {
-            ClearCutPrimaryButton(
+            DirectorXPrimaryButton(
                 text = primaryButtonLabel,
                 onClick = {
                     if (config.captureFrameOnly) {
@@ -1755,13 +1755,13 @@ fun ExportSheet(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(Spacing.sm)
             ) {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.export_otio),
                     onClick = onExportOtio,
                     modifier = Modifier.weight(1f),
                     contentColor = DirectorXAccents.Sapphire
                 )
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.export_fcpxml),
                     onClick = onExportFcpxml,
                     modifier = Modifier.weight(1f),
@@ -1773,13 +1773,13 @@ fun ExportSheet(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(Spacing.sm)
             ) {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.export_edl),
                     onClick = onExportEdl,
                     modifier = Modifier.weight(1f),
                     contentColor = DirectorXAccents.Sapphire
                 )
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.export_edit_decision_json),
                     onClick = onExportEditDecisionJson,
                     modifier = Modifier.weight(1f),
@@ -2679,7 +2679,7 @@ private fun ExportStateCard(
                 Spacer(modifier = Modifier.height(18.dp))
                 when (primaryStyle) {
                     PrimaryStyle.Destructive -> {
-                        ClearCutSecondaryButton(
+                        DirectorXSecondaryButton(
                             text = primaryLabel,
                             onClick = onPrimary,
                             modifier = Modifier
@@ -2689,7 +2689,7 @@ private fun ExportStateCard(
                         )
                     }
                     PrimaryStyle.Quiet -> {
-                        ClearCutSecondaryButton(
+                        DirectorXSecondaryButton(
                             text = primaryLabel,
                             onClick = onPrimary,
                             modifier = Modifier
@@ -2699,7 +2699,7 @@ private fun ExportStateCard(
                         )
                     }
                     PrimaryStyle.Filled -> {
-                        ClearCutPrimaryButton(
+                        DirectorXPrimaryButton(
                             text = primaryLabel,
                             onClick = onPrimary,
                             modifier = Modifier
@@ -2712,7 +2712,7 @@ private fun ExportStateCard(
 
                 if (secondaryLabel != null && onSecondary != null) {
                     Spacer(modifier = Modifier.height(8.dp))
-                    ClearCutSecondaryButton(
+                    DirectorXSecondaryButton(
                         text = secondaryLabel,
                         onClick = onSecondary,
                         modifier = Modifier.fillMaxWidth(),
