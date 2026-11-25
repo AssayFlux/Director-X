@@ -30,7 +30,7 @@ import com.directorx.editor.model.*
 import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.theme.DirectorXAccents
 import com.directorx.editor.ui.theme.LocalDirectorXColors
-import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXChromeIconButton
 import com.directorx.editor.ui.theme.ClearCutDialogIcon
 import com.directorx.editor.ui.theme.ClearCutMetricPill
 import com.directorx.editor.ui.theme.ClearCutSectionHeader
@@ -181,7 +181,7 @@ fun ProjectTemplateSheet(
                     overflow = TextOverflow.Ellipsis
                 )
             }
-            ClearCutChromeIconButton(
+            DirectorXChromeIconButton(
                 icon = Icons.Default.Close,
                 contentDescription = stringResource(R.string.close),
                 onClick = onDismiss
@@ -649,7 +649,7 @@ private fun TemplateActionButton(
     tint: Color,
     onClick: () -> Unit
 ) {
-    ClearCutChromeIconButton(
+    DirectorXChromeIconButton(
         icon = icon,
         contentDescription = contentDescription,
         onClick = onClick,
