@@ -31,10 +31,10 @@ import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.theme.DirectorXAccents
 import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.DirectorXChromeIconButton
-import com.directorx.editor.ui.theme.ClearCutDialogIcon
-import com.directorx.editor.ui.theme.ClearCutMetricPill
-import com.directorx.editor.ui.theme.ClearCutSectionHeader
-import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.DirectorXDialogIcon
+import com.directorx.editor.ui.theme.DirectorXMetricPill
+import com.directorx.editor.ui.theme.DirectorXSectionHeader
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 
@@ -203,13 +203,13 @@ fun ProjectTemplateSheet(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            ClearCutMetricPill(
+            DirectorXMetricPill(
                 text = stringResource(R.string.projects_templates_count, projectTemplates.size),
                 accent = DirectorXAccents.Mauve,
                 icon = Icons.Default.DashboardCustomize
             )
             if (userTemplates.isNotEmpty()) {
-                ClearCutMetricPill(
+                DirectorXMetricPill(
                     text = stringResource(R.string.template_saved_count, userTemplates.size),
                     accent = DirectorXAccents.Sapphire,
                     icon = Icons.Default.BookmarkAdded
@@ -560,7 +560,7 @@ private fun TemplateSectionHeader(
     title: String,
     description: String
 ) {
-    ClearCutSectionHeader(
+    DirectorXSectionHeader(
         title = title,
         description = description
     )
@@ -602,7 +602,7 @@ private fun DeleteUserTemplateDialog(
     AlertDialog(
         onDismissRequest = onDismissRequest,
         icon = {
-            ClearCutDialogIcon(
+            DirectorXDialogIcon(
                 icon = Icons.Default.Delete,
                 accent = DirectorXAccents.Red
             )
@@ -622,7 +622,7 @@ private fun DeleteUserTemplateDialog(
             )
         },
         confirmButton = {
-            ClearCutSecondaryButton(
+            DirectorXSecondaryButton(
                 text = stringResource(R.string.template_delete_confirm_action),
                 onClick = onConfirm,
                 icon = Icons.Default.Delete,
@@ -630,7 +630,7 @@ private fun DeleteUserTemplateDialog(
             )
         },
         dismissButton = {
-            ClearCutSecondaryButton(
+            DirectorXSecondaryButton(
                 text = stringResource(R.string.cancel),
                 onClick = onDismissRequest
             )
