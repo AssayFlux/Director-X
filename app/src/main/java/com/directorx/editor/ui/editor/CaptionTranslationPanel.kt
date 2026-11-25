@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -126,7 +126,7 @@ fun CaptionTranslationPanel(
 
 @Composable
 private fun Header(showSubtitle: Boolean = true) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Column(
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
     ) {
@@ -186,9 +186,9 @@ private fun LanguageChip(
     enabled: Boolean,
     onClick: () -> Unit,
 ) {
-    val semanticColors = LocalClearCutColors.current
-    val container = if (selected) ClearCutAccents.Mauve.copy(alpha = 0.18f) else semanticColors.panelHighest.copy(alpha = 0.5f)
-    val border = if (selected) ClearCutAccents.Mauve.copy(alpha = 0.62f) else semanticColors.cardStrokeStrong.copy(alpha = 0.5f)
+    val semanticColors = LocalDirectorXColors.current
+    val container = if (selected) DirectorXAccents.Mauve.copy(alpha = 0.18f) else semanticColors.panelHighest.copy(alpha = 0.5f)
+    val border = if (selected) DirectorXAccents.Mauve.copy(alpha = 0.62f) else semanticColors.cardStrokeStrong.copy(alpha = 0.5f)
     val textColor = when {
         !enabled -> semanticColors.disabledText
         selected -> semanticColors.text
@@ -225,19 +225,19 @@ private fun QualityChip(quality: LanguagePairQuality) {
 
 @Composable
 private fun qualityColor(quality: LanguagePairQuality): Color {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     return when (quality) {
-        LanguagePairQuality.EXCELLENT -> ClearCutAccents.Green
-        LanguagePairQuality.GOOD -> ClearCutAccents.Sky
-        LanguagePairQuality.FAIR -> ClearCutAccents.Yellow
-        LanguagePairQuality.EXPERIMENTAL -> ClearCutAccents.Peach
+        LanguagePairQuality.EXCELLENT -> DirectorXAccents.Green
+        LanguagePairQuality.GOOD -> DirectorXAccents.Sky
+        LanguagePairQuality.FAIR -> DirectorXAccents.Yellow
+        LanguagePairQuality.EXPERIMENTAL -> DirectorXAccents.Peach
         LanguagePairQuality.UNKNOWN -> semanticColors.subtext
     }
 }
 
 @Composable
 private fun EmptyState() {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -262,7 +262,7 @@ private fun UnavailableState() {
 
 @Composable
 private fun StatusNote(@StringRes message: Int) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -282,7 +282,7 @@ private fun StatusNote(@StringRes message: Int) {
 
 @Composable
 private fun OfflineState() {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -307,7 +307,7 @@ private fun TranslationRow(
     onRegenerate: () -> Unit,
     offline: Boolean,
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val seg = row.segment
     Column(
         modifier = Modifier
@@ -349,7 +349,7 @@ private fun EditableTargetField(
     onChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     BasicTextField(
         value = text,
         onValueChange = onChange,
@@ -358,7 +358,7 @@ private fun EditableTargetField(
             color = if (pending) semanticColors.subtext else semanticColors.text,
             fontSize = MaterialTheme.typography.bodyMedium.fontSize,
         ),
-        cursorBrush = SolidColor(ClearCutAccents.Mauve),
+        cursorBrush = SolidColor(DirectorXAccents.Mauve),
         modifier = modifier
             .clip(RoundedCornerShape(Radius.md))
             .background(semanticColors.backgroundMid.copy(alpha = 0.6f))
@@ -369,9 +369,9 @@ private fun EditableTargetField(
 @Composable
 private fun RowStatusChip(state: EditorRowState) {
     val (label, color) = when (state) {
-        EditorRowState.TRANSLATED -> stringResource(R.string.caption_translation_status_translated) to ClearCutAccents.Green
-        EditorRowState.USER_EDITED -> stringResource(R.string.caption_translation_status_edited) to ClearCutAccents.Sky
-        EditorRowState.REGENERATE_PENDING -> stringResource(R.string.caption_translation_status_pending) to ClearCutAccents.Yellow
+        EditorRowState.TRANSLATED -> stringResource(R.string.caption_translation_status_translated) to DirectorXAccents.Green
+        EditorRowState.USER_EDITED -> stringResource(R.string.caption_translation_status_edited) to DirectorXAccents.Sky
+        EditorRowState.REGENERATE_PENDING -> stringResource(R.string.caption_translation_status_pending) to DirectorXAccents.Yellow
     }
     Text(
         text = label,
@@ -387,8 +387,8 @@ private fun RowStatusChip(state: EditorRowState) {
 
 @Composable
 private fun RegenerateButton(enabled: Boolean, onClick: () -> Unit) {
-    val semanticColors = LocalClearCutColors.current
-    val accent = if (enabled) ClearCutAccents.Mauve else semanticColors.subtext.copy(alpha = 0.4f)
+    val semanticColors = LocalDirectorXColors.current
+    val accent = if (enabled) DirectorXAccents.Mauve else semanticColors.subtext.copy(alpha = 0.4f)
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
