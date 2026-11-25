@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -87,7 +87,7 @@ fun SpeedCurveEditor(
     onCurveDragChanged: (SpeedCurve) -> Unit = { onSpeedCurveChanged(it) },
     onCurveDragEnded: () -> Unit = {}
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var curveMode by remember { mutableStateOf(speedCurve != null) }
     var selectedCurvePointIndex by remember { mutableIntStateOf(-1) }
     val activeCurve = speedCurve ?: SpeedCurve.constant(constantSpeed)
@@ -98,13 +98,13 @@ fun SpeedCurveEditor(
         title = stringResource(R.string.speed_title),
         subtitle = stringResource(R.string.panel_speed_subtitle),
         icon = Icons.Default.FastForward,
-        accent = if (curveMode) ClearCutAccents.Mauve else ClearCutAccents.Peach,
+        accent = if (curveMode) DirectorXAccents.Mauve else DirectorXAccents.Peach,
         onClose = onClose,
         closeContentDescription = stringResource(R.string.cd_close_speed_curve),
         modifier = modifier,
         scrollable = true
     ) {
-        PremiumPanelCard(accent = if (curveMode) ClearCutAccents.Mauve else ClearCutAccents.Peach) {
+        PremiumPanelCard(accent = if (curveMode) DirectorXAccents.Mauve else DirectorXAccents.Peach) {
             BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
                 val isCompactLayout = maxWidth < 420.dp
                 if (isCompactLayout) {
@@ -159,7 +159,7 @@ fun SpeedCurveEditor(
                                 .weight(1f)
                                 .clip(RoundedCornerShape(12.dp))
                                 .background(
-                                    if (curveMode == isCurve) ClearCutAccents.Mauve.copy(alpha = 0.18f) else Color.Transparent
+                                    if (curveMode == isCurve) DirectorXAccents.Mauve.copy(alpha = 0.18f) else Color.Transparent
                                 )
                                 .clickable {
                                     curveMode = isCurve
@@ -178,7 +178,7 @@ fun SpeedCurveEditor(
                             Text(
                                 text = label,
                                 style = MaterialTheme.typography.labelLarge,
-                                color = if (curveMode == isCurve) ClearCutAccents.Mauve else semanticColors.subtext
+                                color = if (curveMode == isCurve) DirectorXAccents.Mauve else semanticColors.subtext
                             )
                         }
                     }
@@ -189,7 +189,7 @@ fun SpeedCurveEditor(
         Spacer(modifier = Modifier.height(12.dp))
 
         if (curveMode) {
-            PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+            PremiumPanelCard(accent = DirectorXAccents.Mauve) {
                 Text(
                     text = stringResource(R.string.speed_presets),
                     style = MaterialTheme.typography.titleMedium,
@@ -260,15 +260,15 @@ fun SpeedCurveEditor(
                 ) {
                     PremiumPanelPill(
                         text = stringResource(R.string.speed_curve_points_label, activeCurve.points.size),
-                        accent = ClearCutAccents.Sapphire
+                        accent = DirectorXAccents.Sapphire
                     )
                     PremiumPanelPill(
                         text = stringResource(R.string.speed_curve_average_label, averageCurveSpeed),
-                        accent = ClearCutAccents.Mauve
+                        accent = DirectorXAccents.Mauve
                     )
                     PremiumPanelPill(
                         text = stringResource(R.string.speed_curve_peak_label, peakCurveSpeed),
-                        accent = ClearCutAccents.Peach
+                        accent = DirectorXAccents.Peach
                     )
                 }
                 SpeedCurveCanvas(
@@ -300,7 +300,7 @@ fun SpeedCurveEditor(
                 )
             }
         } else {
-            PremiumPanelCard(accent = ClearCutAccents.Peach) {
+            PremiumPanelCard(accent = DirectorXAccents.Peach) {
                 Text(
                     text = stringResource(R.string.speed_label, constantSpeed),
                     style = MaterialTheme.typography.titleMedium,
@@ -325,8 +325,8 @@ fun SpeedCurveEditor(
                             },
                             label = { Text(formatSpeedChip(speed)) },
                             colors = FilterChipDefaults.filterChipColors(
-                                selectedContainerColor = ClearCutAccents.Mauve.copy(alpha = 0.2f),
-                                selectedLabelColor = ClearCutAccents.Mauve,
+                                selectedContainerColor = DirectorXAccents.Mauve.copy(alpha = 0.2f),
+                                selectedLabelColor = DirectorXAccents.Mauve,
                                 labelColor = semanticColors.subtext,
                                 containerColor = semanticColors.panelRaised
                             )
@@ -356,8 +356,8 @@ fun SpeedCurveEditor(
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = SliderDefaults.colors(
-                        thumbColor = ClearCutAccents.Mauve,
-                        activeTrackColor = ClearCutAccents.Mauve.copy(alpha = 0.6f),
+                        thumbColor = DirectorXAccents.Mauve,
+                        activeTrackColor = DirectorXAccents.Mauve.copy(alpha = 0.6f),
                         inactiveTrackColor = semanticColors.surface
                     )
                 )
@@ -366,7 +366,7 @@ fun SpeedCurveEditor(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = if (isReversed) ClearCutAccents.Peach else ClearCutAccents.Sapphire) {
+        PremiumPanelCard(accent = if (isReversed) DirectorXAccents.Peach else DirectorXAccents.Sapphire) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -382,7 +382,7 @@ fun SpeedCurveEditor(
                     Icon(
                         imageVector = Icons.Default.SwapHoriz,
                         contentDescription = stringResource(R.string.cd_reverse_speed),
-                        tint = if (isReversed) ClearCutAccents.Peach else ClearCutAccents.Sapphire,
+                        tint = if (isReversed) DirectorXAccents.Peach else DirectorXAccents.Sapphire,
                         modifier = Modifier.size(20.dp)
                     )
                     Column {
@@ -405,7 +405,7 @@ fun SpeedCurveEditor(
                 Switch(
                     checked = isReversed,
                     onCheckedChange = onReversedChanged,
-                    colors = SwitchDefaults.colors(checkedTrackColor = ClearCutAccents.Peach)
+                    colors = SwitchDefaults.colors(checkedTrackColor = DirectorXAccents.Peach)
                 )
             }
         }
@@ -427,7 +427,7 @@ private fun SpeedSummaryPills(
     ) {
         PremiumPanelPill(
             text = if (curveMode) stringResource(R.string.panel_speed_ramp) else stringResource(R.string.panel_speed_constant),
-            accent = if (curveMode) ClearCutAccents.Mauve else ClearCutAccents.Peach
+            accent = if (curveMode) DirectorXAccents.Mauve else DirectorXAccents.Peach
         )
         PremiumPanelPill(
             text = if (curveMode) {
@@ -435,22 +435,22 @@ private fun SpeedSummaryPills(
             } else {
                 stringResource(R.string.speed_current_label, constantSpeed)
             },
-            accent = if (curveMode) ClearCutAccents.Mauve else ClearCutAccents.Peach
+            accent = if (curveMode) DirectorXAccents.Mauve else DirectorXAccents.Peach
         )
         PremiumPanelPill(
             text = if (isReversed) stringResource(R.string.panel_speed_reverse_on) else stringResource(R.string.panel_speed_reverse_off),
-            accent = if (isReversed) ClearCutAccents.Peach else ClearCutAccents.Sapphire
+            accent = if (isReversed) DirectorXAccents.Peach else DirectorXAccents.Sapphire
         )
         PremiumPanelPill(
             text = stringResource(R.string.speed_clip_duration_label, formatTimestamp(clipDurationMs)),
-            accent = ClearCutAccents.Blue
+            accent = DirectorXAccents.Blue
         )
     }
 }
 
 @Composable
 private fun SpeedSummaryText(curveMode: Boolean) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Column {
         Text(
             text = stringResource(R.string.speed_summary_title),
@@ -478,7 +478,7 @@ private fun SpeedPointNumericEditor(
     onDeletePoint: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     if (selectedIndex !in curve.points.indices) return
     val point = curve.points[selectedIndex]
     val positionDescription = stringResource(R.string.speed_point_position_cd)
@@ -495,7 +495,7 @@ private fun SpeedPointNumericEditor(
         Text(
             text = stringResource(R.string.speed_point_number, selectedIndex + 1),
             style = MaterialTheme.typography.labelMedium,
-            color = ClearCutAccents.Peach
+            color = DirectorXAccents.Peach
         )
         OutlinedTextField(
             value = formatEditorDecimal(point.position.toDouble() * 100.0, 1),
@@ -516,7 +516,7 @@ private fun SpeedPointNumericEditor(
             colors = OutlinedTextFieldDefaults.colors(
                 focusedTextColor = semanticColors.text,
                 unfocusedTextColor = semanticColors.subtext,
-                focusedBorderColor = ClearCutAccents.Peach,
+                focusedBorderColor = DirectorXAccents.Peach,
                 unfocusedBorderColor = semanticColors.surface
             )
         )
@@ -538,7 +538,7 @@ private fun SpeedPointNumericEditor(
             colors = OutlinedTextFieldDefaults.colors(
                 focusedTextColor = semanticColors.text,
                 unfocusedTextColor = semanticColors.subtext,
-                focusedBorderColor = ClearCutAccents.Peach,
+                focusedBorderColor = DirectorXAccents.Peach,
                 unfocusedBorderColor = semanticColors.surface
             )
         )
@@ -547,7 +547,7 @@ private fun SpeedPointNumericEditor(
                 onClick = onDeletePoint,
                 modifier = Modifier.semantics { contentDescription = deleteDescription }
             ) {
-                Icon(Icons.Default.Delete, contentDescription = null, tint = ClearCutAccents.Red)
+                Icon(Icons.Default.Delete, contentDescription = null, tint = DirectorXAccents.Red)
             }
         }
     }
@@ -573,7 +573,7 @@ private fun SpeedCurveCanvas(
     val currentOnDragStarted by rememberUpdatedState(onDragStarted)
     val currentOnDragChanged by rememberUpdatedState(onDragChanged)
     val currentOnDragEnded by rememberUpdatedState(onDragEnded)
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
 
     val canvasDescription = stringResource(R.string.speed_curve_canvas_cd)
     androidx.compose.foundation.Canvas(
@@ -676,15 +676,15 @@ private fun SpeedCurveCanvas(
             val y = (1f - (speed - minSpeed) / speedRange) * h
             if (i == 0) path.moveTo(x, y) else path.lineTo(x, y)
         }
-        drawPath(path, ClearCutAccents.Peach, style = Stroke(2.5f))
+        drawPath(path, DirectorXAccents.Peach, style = Stroke(2.5f))
 
         curve.points.forEachIndexed { i, point ->
             val px = point.position * w
             val py = (1f - (point.speed - minSpeed) / speedRange) * h
             if (i == selectedIndex) {
-                drawCircle(ClearCutAccents.Yellow, 14f, Offset(px, py))
+                drawCircle(DirectorXAccents.Yellow, 14f, Offset(px, py))
             }
-            drawCircle(ClearCutAccents.Peach, 8f, Offset(px, py))
+            drawCircle(DirectorXAccents.Peach, 8f, Offset(px, py))
             drawCircle(Color.White, 5f, Offset(px, py))
         }
     }
