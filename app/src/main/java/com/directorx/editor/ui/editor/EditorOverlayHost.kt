@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import android.graphics.Bitmap
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -75,7 +75,7 @@ fun BoxScope.EditorOverlayHost(
     autoSaveTopPadding: Dp,
     isTutorialOpen: Boolean
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     if (state.isDrawingMode || state.drawingPaths.isNotEmpty()) {
         DrawingCanvas(
             paths = state.drawingPaths,
@@ -281,7 +281,7 @@ fun BoxScope.EditorOverlayHost(
                 .zIndex(11f),
             containerColor = semanticColors.panelHighest,
             contentColor = semanticColors.text,
-            actionContentColor = ClearCutAccents.Peach,
+            actionContentColor = DirectorXAccents.Peach,
             action = {
                 TextButton(onClick = {
                     viewModel.undo()
@@ -307,7 +307,7 @@ fun BoxScope.EditorOverlayHost(
                 Icon(
                     imageVector = Icons.Default.Restore,
                     contentDescription = null,
-                    tint = ClearCutAccents.Peach,
+                    tint = DirectorXAccents.Peach,
                     modifier = Modifier.size(18.dp)
                 )
                 Text(
