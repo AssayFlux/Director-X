@@ -71,7 +71,7 @@ class JvmVisualVerificationTest {
         dismissTutorialIfPresent()
         compose.onNodeWithTag(DirectorXTestTags.EDITOR_PREVIEW_PANEL)
             .assertIsDisplayed()
-            .assertHeightIsAtLeast(180.dp)
+            .assertHeightIsAtLeast(220.dp)
         compose.onNodeWithTag(DirectorXTestTags.EDITOR_EMPTY_ADD_MEDIA).assertIsDisplayed()
         capture("editor-empty-cream.png")
 
