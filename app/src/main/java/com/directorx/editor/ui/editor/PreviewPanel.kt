@@ -553,7 +553,9 @@ fun PreviewPanel(
                                         stringResource(R.string.editor_empty_title),
                                         color = semanticColors.text,
                                         style = MaterialTheme.typography.titleMedium,
-                                        textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center,
+                                        maxLines = 2,
+                                        overflow = TextOverflow.Ellipsis
                                     )
                                     Spacer(modifier = Modifier.height(4.dp))
                                     Text(
