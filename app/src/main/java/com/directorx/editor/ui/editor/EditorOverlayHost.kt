@@ -54,7 +54,7 @@ import com.directorx.editor.model.Caption
 import com.directorx.editor.model.Clip
 import com.directorx.editor.model.ClipLabel
 import com.directorx.editor.model.KeyframeProperty
-import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXChromeIconButton
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 import com.directorx.editor.ui.theme.TouchTarget
@@ -197,7 +197,7 @@ fun BoxScope.EditorOverlayHost(
                             overflow = TextOverflow.Ellipsis
                         )
                     }
-                    ClearCutChromeIconButton(
+                    DirectorXChromeIconButton(
                         icon = Icons.Default.Close,
                         contentDescription = stringResource(R.string.cd_close_color_grading),
                         onClick = onClipLabelPickerDismiss,
@@ -291,7 +291,7 @@ fun BoxScope.EditorOverlayHost(
                 }
             },
             dismissAction = {
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = Icons.Default.Close,
                     contentDescription = stringResource(R.string.bulk_undo_dismiss_cd),
                     onClick = { viewModel.dismissBulkUndoPrompt() },
