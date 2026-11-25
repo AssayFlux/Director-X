@@ -257,7 +257,12 @@ fun PreviewPanel(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    val previewRatio = if (canvasWidth != null && canvasHeight != null && canvasHeight > 0) {
+                    // An empty project has no video frame to preserve. Let its
+                    // onboarding surface use the full preview pane, including portrait
+                    // projects, rather than clipping the CTA to the canvas aspect ratio.
+                    val previewRatio = if (totalDurationMs == 0L && maxHeight > 0.dp) {
+                        maxWidth.value / maxHeight.value
+                    } else if (canvasWidth != null && canvasHeight != null && canvasHeight > 0) {
                         canvasWidth.toFloat() / canvasHeight.toFloat()
                     } else {
                         aspectRatio.toFloat()
