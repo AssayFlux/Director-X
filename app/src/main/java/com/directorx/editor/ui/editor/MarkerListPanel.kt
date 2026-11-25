@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -58,7 +58,7 @@ fun MarkerListPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var filterColor by remember { mutableStateOf<MarkerColor?>(null) }
     var searchQuery by remember { mutableStateOf("") }
     val filtered = markers
@@ -74,13 +74,13 @@ fun MarkerListPanel(
         title = stringResource(R.string.panel_markers_title),
         subtitle = stringResource(R.string.panel_markers_subtitle),
         icon = Icons.Default.BookmarkBorder,
-        accent = ClearCutAccents.Blue,
+        accent = DirectorXAccents.Blue,
         onClose = onClose,
         closeContentDescription = stringResource(R.string.cd_close_markers),
         modifier = modifier,
         scrollable = true
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = DirectorXAccents.Blue) {
             BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
                 val isCompactLayout = maxWidth < 420.dp
                 if (isCompactLayout) {
@@ -108,11 +108,11 @@ fun MarkerListPanel(
                         ) {
                             PremiumPanelPill(
                                 text = stringResource(R.string.panel_marker_total, markers.size),
-                                accent = ClearCutAccents.Blue
+                                accent = DirectorXAccents.Blue
                             )
                             PremiumPanelPill(
                                 text = filterColor?.name ?: stringResource(R.string.panel_marker_all),
-                                accent = filterColor?.let(::markerAccent) ?: ClearCutAccents.Green
+                                accent = filterColor?.let(::markerAccent) ?: DirectorXAccents.Green
                             )
                         }
                     }
@@ -147,11 +147,11 @@ fun MarkerListPanel(
                         ) {
                             PremiumPanelPill(
                                 text = stringResource(R.string.panel_marker_total, markers.size),
-                                accent = ClearCutAccents.Blue
+                                accent = DirectorXAccents.Blue
                             )
                             PremiumPanelPill(
                                 text = filterColor?.name ?: stringResource(R.string.panel_marker_all),
-                                accent = filterColor?.let(::markerAccent) ?: ClearCutAccents.Green
+                                accent = filterColor?.let(::markerAccent) ?: DirectorXAccents.Green
                             )
                         }
                     }
@@ -177,11 +177,11 @@ fun MarkerListPanel(
                     )
                 },
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = ClearCutAccents.Blue,
+                    focusedBorderColor = DirectorXAccents.Blue,
                     unfocusedBorderColor = semanticColors.cardStroke,
                     focusedTextColor = semanticColors.text,
                     unfocusedTextColor = semanticColors.text,
-                    cursorColor = ClearCutAccents.Blue
+                    cursorColor = DirectorXAccents.Blue
                 )
             )
 
@@ -191,7 +191,7 @@ fun MarkerListPanel(
             ) {
                 MarkerFilterChip(
                     label = stringResource(R.string.panel_marker_all),
-                    accent = ClearCutAccents.Blue,
+                    accent = DirectorXAccents.Blue,
                     selected = filterColor == null,
                     onClick = { filterColor = null }
                 )
@@ -208,7 +208,7 @@ fun MarkerListPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Green) {
+        PremiumPanelCard(accent = DirectorXAccents.Green) {
             if (filtered.isEmpty()) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -267,7 +267,7 @@ private fun MarkerRow(
     onDelete: () -> Unit,
     onUpdateLabel: (String) -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var editingLabel by remember { mutableStateOf(false) }
     var labelText by remember(marker.label) { mutableStateOf(marker.label) }
     val accent = markerAccent(marker.color)
@@ -362,7 +362,7 @@ private fun MarkerRow(
                     } else {
                         stringResource(R.string.panel_marker_rename)
                     },
-                    accent = if (editingLabel) ClearCutAccents.Green else semanticColors.subtext,
+                    accent = if (editingLabel) DirectorXAccents.Green else semanticColors.subtext,
                     onClick = {
                         if (editingLabel) {
                             val updatedLabel = labelText.trim()
@@ -375,7 +375,7 @@ private fun MarkerRow(
                 MarkerAction(
                     icon = Icons.Default.Delete,
                     label = stringResource(R.string.panel_marker_delete),
-                    accent = ClearCutAccents.Red,
+                    accent = DirectorXAccents.Red,
                     onClick = onDelete
                 )
             }
@@ -390,7 +390,7 @@ private fun MarkerFilterChip(
     selected: Boolean,
     onClick: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         color = if (selected) accent.copy(alpha = 0.16f) else semanticColors.panelRaised,
         shape = RoundedCornerShape(10.dp),
