@@ -20,6 +20,7 @@ object DirectorXTestTags {
     const val TEMPLATE_BLANK = "templates.blank"
 
     const val EDITOR_SCREEN = "editor.screen"
+    const val EDITOR_PREVIEW_PANEL = "editor.previewPanel"
     const val EDITOR_BACK = "editor.back"
     const val EDITOR_EMPTY_ADD_MEDIA = "editor.emptyAddMedia"
     const val EDITOR_EXPORT = "editor.export"
