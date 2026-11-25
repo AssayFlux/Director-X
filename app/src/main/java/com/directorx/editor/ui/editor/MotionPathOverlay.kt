@@ -1,6 +1,6 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.DirectorXAccents
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -49,7 +49,7 @@ fun MotionPathOverlay(
 
             if (i == 0) path.moveTo(screenX, screenY) else path.lineTo(screenX, screenY)
         }
-        drawPath(path, ClearCutAccents.Yellow.copy(alpha = 0.6f), style = Stroke(width = 2f))
+        drawPath(path, DirectorXAccents.Yellow.copy(alpha = 0.6f), style = Stroke(width = 2f))
 
         // Draw keyframe dots on the path
         val allPosKfs = keyframes.filter {
@@ -63,7 +63,7 @@ fun MotionPathOverlay(
             val screenY = h / 2f + py * h / 2f
 
             drawCircle(Color.White, 5f, Offset(screenX, screenY))
-            drawCircle(ClearCutAccents.Mauve, 3.5f, Offset(screenX, screenY))
+            drawCircle(DirectorXAccents.Mauve, 3.5f, Offset(screenX, screenY))
         }
 
         // Draw current position indicator
@@ -73,7 +73,7 @@ fun MotionPathOverlay(
         val currentScreenY = h / 2f + currentPy * h / 2f
 
         drawCircle(Color.White, 8f, Offset(currentScreenX, currentScreenY))
-        drawCircle(ClearCutAccents.Red, 6f, Offset(currentScreenX, currentScreenY))
+        drawCircle(DirectorXAccents.Red, 6f, Offset(currentScreenX, currentScreenY))
 
         // Direction arrow at current position
         if (clipDurationMs > 0) {
@@ -95,7 +95,7 @@ fun MotionPathOverlay(
                     moveTo(currentScreenX + ndx, currentScreenY + ndy)
                     lineTo(currentScreenX + ndx + ndy * 0.4f, currentScreenY + ndy - ndx * 0.4f)
                 }
-                drawPath(arrowPath, ClearCutAccents.Red, style = Stroke(2f))
+                drawPath(arrowPath, DirectorXAccents.Red, style = Stroke(2f))
             }
         }
     }
