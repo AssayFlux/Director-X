@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -74,7 +74,7 @@ fun AudioMixerPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var selectedEffectTrack by remember { mutableStateOf<String?>(null) }
     var selectedEffectId by remember { mutableStateOf<String?>(null) }
     val selectedTrack = tracks.find { it.id == selectedEffectTrack }
@@ -84,13 +84,13 @@ fun AudioMixerPanel(
         title = androidx.compose.ui.res.stringResource(R.string.panel_audio_mixer_title),
         subtitle = androidx.compose.ui.res.stringResource(R.string.panel_audio_mixer_subtitle),
         icon = Icons.Default.Tune,
-        accent = ClearCutAccents.Sapphire,
+        accent = DirectorXAccents.Sapphire,
         onClose = onClose,
         closeContentDescription = androidx.compose.ui.res.stringResource(R.string.cd_close_audio_panel),
         modifier = modifier,
         scrollable = true
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Sapphire) {
+        PremiumPanelCard(accent = DirectorXAccents.Sapphire) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -139,7 +139,7 @@ fun AudioMixerPanel(
                             tracks.size,
                             tracks.size,
                         ),
-                        accent = ClearCutAccents.Sapphire
+                        accent = DirectorXAccents.Sapphire
                     )
                     if (AUDIO_ROUTING_RENDERER_AVAILABLE) {
                         PremiumPanelPill(
@@ -148,7 +148,7 @@ fun AudioMixerPanel(
                                 activeEffects,
                                 activeEffects,
                             ),
-                            accent = if (activeEffects > 0) ClearCutAccents.Mauve else semanticColors.overlayStrong
+                            accent = if (activeEffects > 0) DirectorXAccents.Mauve else semanticColors.overlayStrong
                         )
                     }
                 }
@@ -158,7 +158,7 @@ fun AudioMixerPanel(
         Spacer(modifier = Modifier.height(12.dp))
 
         PremiumPanelCard(
-            accent = ClearCutAccents.Blue
+            accent = DirectorXAccents.Blue
         ) {
             Text(
                 text = androidx.compose.ui.res.stringResource(R.string.mixer_channel_strips),
@@ -301,9 +301,9 @@ private fun AddEffectButton(
 
     Box {
         Surface(
-            color = ClearCutAccents.Green.copy(alpha = 0.14f),
+            color = DirectorXAccents.Green.copy(alpha = 0.14f),
             shape = RoundedCornerShape(12.dp),
-            border = BorderStroke(1.dp, ClearCutAccents.Green.copy(alpha = 0.24f))
+            border = BorderStroke(1.dp, DirectorXAccents.Green.copy(alpha = 0.24f))
         ) {
             Row(
                 modifier = Modifier
@@ -315,13 +315,13 @@ private fun AddEffectButton(
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = androidx.compose.ui.res.stringResource(R.string.cd_mixer_add_effect),
-                    tint = ClearCutAccents.Green,
+                    tint = DirectorXAccents.Green,
                     modifier = Modifier.size(18.dp)
                 )
                 Text(
                     text = androidx.compose.ui.res.stringResource(R.string.mixer_add_fx),
                     style = MaterialTheme.typography.labelLarge,
-                    color = ClearCutAccents.Green
+                    color = DirectorXAccents.Green
                 )
             }
         }
@@ -358,7 +358,7 @@ private fun ChannelStrip(
     onEffectsClicked: () -> Unit,
     isEffectsExpanded: Boolean
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val accent = track.type.mixerAccent()
     val panDesc = androidx.compose.ui.res.stringResource(R.string.cd_mixer_pan)
     val muteDesc = androidx.compose.ui.res.stringResource(
@@ -485,8 +485,8 @@ private fun ChannelStrip(
                                 valueRange = -1f..1f,
                                 modifier = Modifier.semantics { contentDescription = panDesc },
                                 colors = SliderDefaults.colors(
-                                    thumbColor = ClearCutAccents.Mauve,
-                                    activeTrackColor = ClearCutAccents.Mauve.copy(alpha = 0.65f),
+                                    thumbColor = DirectorXAccents.Mauve,
+                                    activeTrackColor = DirectorXAccents.Mauve.copy(alpha = 0.65f),
                                     inactiveTrackColor = semanticColors.surface
                                 )
                             )
@@ -500,7 +500,7 @@ private fun ChannelStrip(
                 ) {
                     MixerToggleButton(
                         label = androidx.compose.ui.res.stringResource(R.string.panel_audio_mixer_mute),
-                        accent = ClearCutAccents.Red,
+                        accent = DirectorXAccents.Red,
                         active = track.isMuted,
                         contentDescription = muteDesc,
                         onClick = onMuteToggled,
@@ -508,7 +508,7 @@ private fun ChannelStrip(
                     )
                     MixerToggleButton(
                         label = androidx.compose.ui.res.stringResource(R.string.panel_audio_mixer_solo),
-                        accent = ClearCutAccents.Yellow,
+                        accent = DirectorXAccents.Yellow,
                         active = track.isSolo,
                         contentDescription = soloDesc,
                         onClick = onSoloToggled,
@@ -537,7 +537,7 @@ private fun MixerControlBlock(
     accent: Color,
     content: @Composable () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         color = semanticColors.panelRaised.copy(alpha = 0.92f),
         shape = RoundedCornerShape(12.dp),
@@ -574,7 +574,7 @@ private fun MixerToggleButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = modifier.semantics { this.contentDescription = contentDescription },
         color = if (active) accent.copy(alpha = 0.18f) else semanticColors.panelRaised,
@@ -598,7 +598,7 @@ private fun VUMeter(
     right: Float,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val smoothedLeft by animateFloatAsState(
         targetValue = left.coerceIn(0f, 1f),
         animationSpec = tween(durationMillis = if (left > 0f) 50 else 150),
@@ -628,9 +628,9 @@ private fun VUMeter(
 
         val leftHeight = h * smoothedLeft
         val leftColor = when {
-            smoothedLeft > 0.9f -> ClearCutAccents.Red
-            smoothedLeft > 0.7f -> ClearCutAccents.Yellow
-            else -> ClearCutAccents.Green
+            smoothedLeft > 0.9f -> DirectorXAccents.Red
+            smoothedLeft > 0.7f -> DirectorXAccents.Yellow
+            else -> DirectorXAccents.Green
         }
         drawRect(
             color = leftColor,
@@ -640,9 +640,9 @@ private fun VUMeter(
 
         val rightHeight = h * smoothedRight
         val rightColor = when {
-            smoothedRight > 0.9f -> ClearCutAccents.Red
-            smoothedRight > 0.7f -> ClearCutAccents.Yellow
-            else -> ClearCutAccents.Green
+            smoothedRight > 0.9f -> DirectorXAccents.Red
+            smoothedRight > 0.7f -> DirectorXAccents.Yellow
+            else -> DirectorXAccents.Green
         }
         drawRect(
             color = rightColor,
@@ -664,14 +664,14 @@ private fun VUMeter(
 
 @Composable
 private fun MasterBusStrip() {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = Modifier
             .width(132.dp)
             .fillMaxHeight(),
         color = semanticColors.panelHighest,
         shape = RoundedCornerShape(12.dp),
-        border = BorderStroke(1.dp, ClearCutAccents.Mauve.copy(alpha = 0.32f))
+        border = BorderStroke(1.dp, DirectorXAccents.Mauve.copy(alpha = 0.32f))
     ) {
         Box(
             modifier = Modifier.background(
@@ -687,13 +687,13 @@ private fun MasterBusStrip() {
             ) {
                 PremiumPanelPill(
                     text = androidx.compose.ui.res.stringResource(R.string.panel_audio_mixer_master),
-                    accent = ClearCutAccents.Mauve
+                    accent = DirectorXAccents.Mauve
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Icon(
                     imageVector = Icons.Default.GraphicEq,
                     contentDescription = androidx.compose.ui.res.stringResource(R.string.cd_mixer_master),
-                    tint = ClearCutAccents.Mauve,
+                    tint = DirectorXAccents.Mauve,
                     modifier = Modifier.size(34.dp)
                 )
                 Spacer(modifier = Modifier.height(12.dp))
@@ -720,14 +720,14 @@ private fun AudioEffectChip(
     onClick: () -> Unit,
     onRemove: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val removeEffectLabel = androidx.compose.ui.res.stringResource(R.string.cd_mixer_remove_effect)
     Surface(
-        color = if (isSelected) ClearCutAccents.Mauve.copy(alpha = 0.16f) else semanticColors.panelRaised,
+        color = if (isSelected) DirectorXAccents.Mauve.copy(alpha = 0.16f) else semanticColors.panelRaised,
         shape = RoundedCornerShape(12.dp),
         border = BorderStroke(
             1.dp,
-            if (isSelected) ClearCutAccents.Mauve.copy(alpha = 0.3f) else semanticColors.cardStroke
+            if (isSelected) DirectorXAccents.Mauve.copy(alpha = 0.3f) else semanticColors.cardStroke
         )
     ) {
         Row(
@@ -741,14 +741,14 @@ private fun AudioEffectChip(
                 modifier = Modifier
                     .size(8.dp)
                     .background(
-                        if (effect.enabled) ClearCutAccents.Green else ClearCutAccents.Red,
+                        if (effect.enabled) DirectorXAccents.Green else DirectorXAccents.Red,
                         RoundedCornerShape(10.dp)
                     )
             )
             Text(
                 text = androidx.compose.ui.res.stringResource(effect.type.displayNameRes()),
                 style = MaterialTheme.typography.labelLarge,
-                color = if (isSelected) ClearCutAccents.Mauve else semanticColors.text,
+                color = if (isSelected) DirectorXAccents.Mauve else semanticColors.text,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -777,7 +777,7 @@ private fun AudioEffectParams(
     effect: AudioEffect,
     onParamChanged: (String, Float) -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         color = semanticColors.panelRaised,
         shape = RoundedCornerShape(12.dp),
@@ -814,7 +814,7 @@ private fun AudioEffectParams(
                         Text(
                             text = formatParamValue(param, value),
                             style = MaterialTheme.typography.labelLarge,
-                            color = ClearCutAccents.Mauve
+                            color = DirectorXAccents.Mauve
                         )
                     }
                     Slider(
@@ -822,8 +822,8 @@ private fun AudioEffectParams(
                         onValueChange = { onParamChanged(param, it) },
                         valueRange = range.first..range.second,
                         colors = SliderDefaults.colors(
-                            thumbColor = ClearCutAccents.Mauve,
-                            activeTrackColor = ClearCutAccents.Mauve.copy(alpha = 0.6f),
+                            thumbColor = DirectorXAccents.Mauve,
+                            activeTrackColor = DirectorXAccents.Mauve.copy(alpha = 0.6f),
                             inactiveTrackColor = semanticColors.surface
                         )
                     )
@@ -974,11 +974,11 @@ private fun AudioEffectType.displayNameRes(): Int = when (this) {
 }
 
 private fun TrackType.mixerAccent(): Color = when (this) {
-    TrackType.VIDEO -> ClearCutAccents.Blue
-    TrackType.AUDIO -> ClearCutAccents.Green
-    TrackType.OVERLAY -> ClearCutAccents.Peach
-    TrackType.TEXT -> ClearCutAccents.Mauve
-    TrackType.ADJUSTMENT -> ClearCutAccents.Yellow
+    TrackType.VIDEO -> DirectorXAccents.Blue
+    TrackType.AUDIO -> DirectorXAccents.Green
+    TrackType.OVERLAY -> DirectorXAccents.Peach
+    TrackType.TEXT -> DirectorXAccents.Mauve
+    TrackType.ADJUSTMENT -> DirectorXAccents.Yellow
 }
 
 private fun formatVolume(value: Float): String = "${(value * 100).toInt()}%"
