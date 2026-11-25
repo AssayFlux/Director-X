@@ -119,7 +119,7 @@ import com.directorx.editor.model.WatermarkPosition
 import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.Motion
-import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXChromeIconButton
 import com.directorx.editor.ui.theme.ClearCutDialogIcon
 import com.directorx.editor.ui.theme.ClearCutPrimaryButton
 import com.directorx.editor.ui.theme.ClearCutSecondaryButton
@@ -576,7 +576,7 @@ fun ExportSheet(
             )
 
             if (exportState != ExportState.EXPORTING) {
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = Icons.Default.Close,
                     contentDescription = stringResource(R.string.close),
                     onClick = onClose,
