@@ -1,6 +1,6 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.DirectorXAccents
 import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -40,7 +40,7 @@ import androidx.annotation.StringRes
 import com.directorx.editor.R
 import com.directorx.editor.model.*
 import com.directorx.editor.ui.DirectorXTestTags
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.TouchTarget
 import java.util.Locale
@@ -375,8 +375,8 @@ private fun BottomTabBar(
     onTabTapped: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
-    val colors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
+    val colors = LocalDirectorXColors.current
     Surface(
         color = colors.background,
         shape = RoundedCornerShape(topStart = Radius.sm, topEnd = Radius.sm),
@@ -476,8 +476,8 @@ private fun BottomTabBarItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
-    val colors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
+    val colors = LocalDirectorXColors.current
     val isBack = tab.id == "back"
     val tabLabel = if (tab.labelRes != 0) stringResource(tab.labelRes) else ""
     val itemDescription = if (isBack) stringResource(R.string.back) else tabLabel
@@ -583,7 +583,7 @@ private fun SubMenuGrid(
     modifier: Modifier = Modifier,
     disabledIds: Set<String> = emptySet()
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val actionRowHeight = with(LocalDensity.current) {
         maxOf(62.dp, 19.dp + 3.dp + 10.sp.toDp() + 16.dp)
     }
@@ -603,7 +603,7 @@ private fun SubMenuGrid(
             items(items, key = { it.id }) { item ->
                 val isDisabled = item.id in disabledIds
                 val itemLabel = stringResource(item.labelRes)
-                val itemAccent = if (isDisabled) semanticColors.overlay else LocalClearCutColors.current.accent
+                val itemAccent = if (isDisabled) semanticColors.overlay else LocalDirectorXColors.current.accent
                 Column(
                     modifier = Modifier
                         .width(72.dp)
@@ -652,7 +652,7 @@ fun EffectsPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var selectedCategory by remember { mutableStateOf(EffectCategory.COLOR) }
     val accent = effectAccent(selectedCategory)
     val effects = remember(selectedCategory) {
@@ -681,7 +681,7 @@ fun EffectsPanel(
             ) {
                 PremiumPanelPill(
                     text = stringResource(R.string.panel_effects_available_count, effects.size),
-                    accent = ClearCutAccents.Sapphire
+                    accent = DirectorXAccents.Sapphire
                 )
                 if (selectedClip != null) {
                     PremiumPanelPill(
@@ -693,7 +693,7 @@ fun EffectsPanel(
 
             Text(
                 text = stringResource(R.string.panel_effects_categories),
-                color = ClearCutAccents.Rosewater,
+                color = DirectorXAccents.Rosewater,
                 style = MaterialTheme.typography.labelLarge
             )
 
@@ -729,7 +729,7 @@ fun EffectsPanel(
         Spacer(modifier = Modifier.height(12.dp))
 
         if (clipTrackedObjects.isNotEmpty()) {
-            PremiumPanelCard(accent = ClearCutAccents.Sky) {
+            PremiumPanelCard(accent = DirectorXAccents.Sky) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -742,7 +742,7 @@ fun EffectsPanel(
                         Icon(
                             imageVector = Icons.Default.GpsFixed,
                             contentDescription = null,
-                            tint = ClearCutAccents.Sky,
+                            tint = DirectorXAccents.Sky,
                             modifier = Modifier.size(18.dp)
                         )
                         Text(
@@ -753,7 +753,7 @@ fun EffectsPanel(
                     }
                     PremiumPanelPill(
                         text = clipTrackedObjects.size.toString(),
-                        accent = ClearCutAccents.Sky
+                        accent = DirectorXAccents.Sky
                     )
                 }
 
@@ -791,9 +791,9 @@ fun EffectsPanel(
                                 containerColor = semanticColors.panel,
                                 labelColor = semanticColors.subtext,
                                 iconColor = semanticColors.subtext,
-                                selectedContainerColor = ClearCutAccents.Sky.copy(alpha = 0.18f),
-                                selectedLabelColor = ClearCutAccents.Sky,
-                                selectedLeadingIconColor = ClearCutAccents.Sky
+                                selectedContainerColor = DirectorXAccents.Sky.copy(alpha = 0.18f),
+                                selectedLabelColor = DirectorXAccents.Sky,
+                                selectedLeadingIconColor = DirectorXAccents.Sky
                             )
                         )
                     }
@@ -863,7 +863,7 @@ fun EffectsPanel(
                         if (isApplied) {
                             PremiumPanelPill(
                                 text = stringResource(R.string.tool_applied),
-                                accent = ClearCutAccents.Green
+                                accent = DirectorXAccents.Green
                             )
                         }
                     }
@@ -884,7 +884,7 @@ fun EffectAdjustmentPanel(
     onRemove: () -> Unit,
     onClose: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val accent = effectAccent(effect.type.category)
 
     PremiumEditorPanel(
@@ -898,13 +898,13 @@ fun EffectAdjustmentPanel(
             PremiumPanelIconButton(
                 icon = if (effect.enabled) Icons.Default.Visibility else Icons.Default.VisibilityOff,
                 contentDescription = if (effect.enabled) stringResource(R.string.tool_disable) else stringResource(R.string.tool_enable),
-                tint = if (effect.enabled) ClearCutAccents.Green else semanticColors.subtext,
+                tint = if (effect.enabled) DirectorXAccents.Green else semanticColors.subtext,
                 onClick = onToggleEnabled
             )
             PremiumPanelIconButton(
                 icon = Icons.Default.Delete,
                 contentDescription = stringResource(R.string.tool_remove),
-                tint = ClearCutAccents.Red,
+                tint = DirectorXAccents.Red,
                 onClick = onRemove
             )
         }
@@ -916,7 +916,7 @@ fun EffectAdjustmentPanel(
                 } else {
                     stringResource(R.string.panel_effect_status_disabled)
                 },
-                accent = if (effect.enabled) ClearCutAccents.Green else semanticColors.subtext
+                accent = if (effect.enabled) DirectorXAccents.Green else semanticColors.subtext
             )
             PremiumPanelPill(
                 text = effect.type.category.displayName,
@@ -949,7 +949,7 @@ fun EffectSlider(
     onDragEnded: () -> Unit = {},
     onValueChange: (Float) -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var isDragging by remember { mutableStateOf(false) }
     val rawMin = if (min.isFinite()) min else 0f
     val rawMax = if (max.isFinite()) max else rawMin + 1f
@@ -974,7 +974,7 @@ fun EffectSlider(
                 )
                 Text(
                     text = formatEffectValue(safeValue, rangeStart, rangeEnd),
-                    color = ClearCutAccents.Rosewater,
+                    color = DirectorXAccents.Rosewater,
                     style = MaterialTheme.typography.labelLarge
                 )
             }
@@ -991,8 +991,8 @@ fun EffectSlider(
                 onValueChangeFinished = { isDragging = false; onDragEnded() },
                 valueRange = rangeStart..rangeEnd,
                 colors = SliderDefaults.colors(
-                    thumbColor = ClearCutAccents.Rosewater,
-                    activeTrackColor = ClearCutAccents.Mauve,
+                    thumbColor = DirectorXAccents.Rosewater,
+                    activeTrackColor = DirectorXAccents.Mauve,
                     inactiveTrackColor = semanticColors.surface
                 )
             )
@@ -1011,25 +1011,25 @@ fun SpeedPanel(
     onReversedChanged: (Boolean) -> Unit,
     onClose: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val presetSpeeds = listOf(0.25f, 0.5f, 0.75f, 1f, 1.5f, 2f, 4f, 8f)
 
     PremiumEditorPanel(
         title = stringResource(R.string.tool_speed),
         subtitle = stringResource(R.string.panel_speed_subtitle),
         icon = Icons.Default.Speed,
-        accent = ClearCutAccents.Peach,
+        accent = DirectorXAccents.Peach,
         onClose = onClose,
         modifier = modifier
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Peach) {
+        PremiumPanelCard(accent = DirectorXAccents.Peach) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 PremiumPanelPill(
                     text = stringResource(
                         R.string.tool_speed_multiplier_format,
                         formatEffectValue(currentSpeed, 0.1f, 100f),
                     ),
-                    accent = ClearCutAccents.Rosewater
+                    accent = DirectorXAccents.Rosewater
                 )
                 PremiumPanelPill(
                     text = if (isReversed) {
@@ -1037,7 +1037,7 @@ fun SpeedPanel(
                     } else {
                         stringResource(R.string.panel_speed_reverse_off)
                     },
-                    accent = if (isReversed) ClearCutAccents.Red else semanticColors.subtext
+                    accent = if (isReversed) DirectorXAccents.Red else semanticColors.subtext
                 )
             }
 
@@ -1066,8 +1066,8 @@ fun SpeedPanel(
                         colors = FilterChipDefaults.filterChipColors(
                             containerColor = semanticColors.panel,
                             labelColor = semanticColors.text,
-                            selectedContainerColor = ClearCutAccents.Peach.copy(alpha = 0.2f),
-                            selectedLabelColor = ClearCutAccents.Peach
+                            selectedContainerColor = DirectorXAccents.Peach.copy(alpha = 0.2f),
+                            selectedLabelColor = DirectorXAccents.Peach
                         )
                     )
                 }
@@ -1076,7 +1076,7 @@ fun SpeedPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             EffectSlider(
                 label = stringResource(R.string.tool_custom_speed),
                 value = currentSpeed,
@@ -1118,8 +1118,8 @@ fun SpeedPanel(
                         checked = isReversed,
                         onCheckedChange = onReversedChanged,
                         colors = SwitchDefaults.colors(
-                            checkedThumbColor = ClearCutAccents.Rosewater,
-                            checkedTrackColor = ClearCutAccents.Mauve.copy(alpha = 0.4f)
+                            checkedThumbColor = DirectorXAccents.Rosewater,
+                            checkedTrackColor = DirectorXAccents.Mauve.copy(alpha = 0.4f)
                         )
                     )
                 }
@@ -1144,12 +1144,12 @@ fun TransformPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     PremiumEditorPanel(
         title = stringResource(R.string.tool_transform),
         subtitle = stringResource(R.string.panel_transform_subtitle),
         icon = Icons.Default.Transform,
-        accent = ClearCutAccents.Sapphire,
+        accent = DirectorXAccents.Sapphire,
         onClose = onClose,
         modifier = modifier,
         scrollable = true,
@@ -1159,11 +1159,11 @@ fun TransformPanel(
                 icon = Icons.Default.Refresh,
                 contentDescription = stringResource(R.string.cd_reset),
                 onClick = onReset,
-                tint = ClearCutAccents.Peach
+                tint = DirectorXAccents.Peach
             )
         }
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Sapphire) {
+        PremiumPanelCard(accent = DirectorXAccents.Sapphire) {
             Text(
                 text = stringResource(R.string.panel_transform_summary_title),
                 color = semanticColors.text,
@@ -1188,25 +1188,25 @@ fun TransformPanel(
                     TransformMetricCard(
                         label = stringResource(R.string.text_editor_position),
                         value = "${formatSigned(clip.positionX)} / ${formatSigned(clip.positionY)}",
-                        accent = ClearCutAccents.Sapphire,
+                        accent = DirectorXAccents.Sapphire,
                         modifier = Modifier.width(metricWidth)
                     )
                     TransformMetricCard(
                         label = stringResource(R.string.panel_transform_scale),
                         value = "${formatEffectValue(clip.scaleX, 0.1f, 5f)}x / ${formatEffectValue(clip.scaleY, 0.1f, 5f)}x",
-                        accent = ClearCutAccents.Peach,
+                        accent = DirectorXAccents.Peach,
                         modifier = Modifier.width(metricWidth)
                     )
                     TransformMetricCard(
                         label = stringResource(R.string.tool_rotation),
                         value = "${formatSigned(clip.rotation)} deg",
-                        accent = ClearCutAccents.Mauve,
+                        accent = DirectorXAccents.Mauve,
                         modifier = Modifier.width(metricWidth)
                     )
                     TransformMetricCard(
                         label = stringResource(R.string.tool_opacity),
                         value = "${(clip.opacity.coerceIn(0f, 1f) * 100).toInt()}%",
-                        accent = ClearCutAccents.Green,
+                        accent = DirectorXAccents.Green,
                         modifier = Modifier.width(metricWidth)
                     )
                 }
@@ -1215,7 +1215,7 @@ fun TransformPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             Text(
                 text = stringResource(R.string.panel_transform_framing_title),
                 color = semanticColors.text,
@@ -1243,7 +1243,7 @@ fun TransformPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Sapphire) {
+        PremiumPanelCard(accent = DirectorXAccents.Sapphire) {
             Text(
                 text = stringResource(R.string.panel_transform_flip_title),
                 color = semanticColors.text,
@@ -1276,9 +1276,9 @@ fun TransformPanel(
                         containerColor = semanticColors.panelHighest,
                         labelColor = semanticColors.subtext,
                         iconColor = semanticColors.subtext,
-                        selectedContainerColor = ClearCutAccents.Sapphire.copy(alpha = 0.18f),
-                        selectedLabelColor = ClearCutAccents.Sapphire,
-                        selectedLeadingIconColor = ClearCutAccents.Sapphire
+                        selectedContainerColor = DirectorXAccents.Sapphire.copy(alpha = 0.18f),
+                        selectedLabelColor = DirectorXAccents.Sapphire,
+                        selectedLeadingIconColor = DirectorXAccents.Sapphire
                     )
                 )
                 FilterChip(
@@ -1296,9 +1296,9 @@ fun TransformPanel(
                         containerColor = semanticColors.panelHighest,
                         labelColor = semanticColors.subtext,
                         iconColor = semanticColors.subtext,
-                        selectedContainerColor = ClearCutAccents.Sapphire.copy(alpha = 0.18f),
-                        selectedLabelColor = ClearCutAccents.Sapphire,
-                        selectedLeadingIconColor = ClearCutAccents.Sapphire
+                        selectedContainerColor = DirectorXAccents.Sapphire.copy(alpha = 0.18f),
+                        selectedLabelColor = DirectorXAccents.Sapphire,
+                        selectedLeadingIconColor = DirectorXAccents.Sapphire
                     )
                 )
             }
@@ -1306,7 +1306,7 @@ fun TransformPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Green) {
+        PremiumPanelCard(accent = DirectorXAccents.Green) {
             Text(
                 text = stringResource(R.string.panel_transform_presence_title),
                 color = semanticColors.text,
@@ -1351,18 +1351,18 @@ fun CropPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     PremiumEditorPanel(
         title = stringResource(R.string.tool_crop_aspect_ratio),
         subtitle = stringResource(R.string.panel_crop_subtitle),
         icon = Icons.Default.Crop,
-        accent = ClearCutAccents.Sapphire,
+        accent = DirectorXAccents.Sapphire,
         onClose = onClose,
         modifier = modifier,
         scrollable = true,
         closeContentDescription = stringResource(R.string.cd_close_crop_panel)
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Sapphire) {
+        PremiumPanelCard(accent = DirectorXAccents.Sapphire) {
             Text(
                 text = currentAspect.label,
                 color = semanticColors.text,
@@ -1375,18 +1375,18 @@ fun CropPanel(
             ) {
                 PremiumPanelPill(
                     text = stringResource(aspectUseCaseRes(currentAspect)),
-                    accent = ClearCutAccents.Sapphire
+                    accent = DirectorXAccents.Sapphire
                 )
                 PremiumPanelPill(
                     text = stringResource(R.string.panel_crop_live_canvas),
-                    accent = ClearCutAccents.Rosewater
+                    accent = DirectorXAccents.Rosewater
                 )
             }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Rosewater) {
+        PremiumPanelCard(accent = DirectorXAccents.Rosewater) {
             Text(
                 text = stringResource(R.string.panel_crop_presets_title),
                 color = semanticColors.text,
@@ -1429,7 +1429,7 @@ private fun CropPresetCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = modifier,
         onClick = onClick,
@@ -1437,13 +1437,13 @@ private fun CropPresetCard(
         shape = RoundedCornerShape(Radius.lg),
         border = BorderStroke(
             width = 1.dp,
-            color = if (isActive) ClearCutAccents.Sapphire.copy(alpha = 0.32f) else semanticColors.cardStroke
+            color = if (isActive) DirectorXAccents.Sapphire.copy(alpha = 0.32f) else semanticColors.cardStroke
         )
     ) {
         Column(
             modifier = Modifier
                 .background(
-                    if (isActive) ClearCutAccents.Sapphire.copy(alpha = 0.08f) else Color.Transparent
+                    if (isActive) DirectorXAccents.Sapphire.copy(alpha = 0.08f) else Color.Transparent
                 )
                 .padding(horizontal = 14.dp, vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -1471,7 +1471,7 @@ private fun CropPresetCard(
                         .size(width = previewW.dp, height = previewH.dp)
                         .border(
                             width = 2.dp,
-                            color = if (isActive) ClearCutAccents.Sapphire else semanticColors.subtext,
+                            color = if (isActive) DirectorXAccents.Sapphire else semanticColors.subtext,
                             shape = RoundedCornerShape(4.dp)
                         )
                 )
@@ -1480,7 +1480,7 @@ private fun CropPresetCard(
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     text = preset.ratio.label,
-                    color = if (isActive) ClearCutAccents.Sapphire else semanticColors.text,
+                    color = if (isActive) DirectorXAccents.Sapphire else semanticColors.text,
                     style = MaterialTheme.typography.titleSmall,
                     textAlign = TextAlign.Center
                 )
@@ -1510,12 +1510,12 @@ fun TransitionPicker(
     onClose: () -> Unit,
     currentTransition: Transition?
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     PremiumEditorPanel(
         title = stringResource(R.string.tool_transitions),
         subtitle = stringResource(R.string.panel_transition_subtitle),
         icon = Icons.Default.SwapHoriz,
-        accent = ClearCutAccents.Mauve,
+        accent = DirectorXAccents.Mauve,
         onClose = onClose,
         modifier = modifier,
         scrollable = true,
@@ -1526,12 +1526,12 @@ fun TransitionPicker(
                     icon = Icons.Default.Delete,
                     contentDescription = stringResource(R.string.tool_remove),
                     onClick = onRemoveTransition,
-                    tint = ClearCutAccents.Red
+                    tint = DirectorXAccents.Red
                 )
             }
         }
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             Text(
                 text = stringResource(R.string.panel_transition_summary_title),
                 color = semanticColors.text,
@@ -1563,7 +1563,7 @@ fun TransitionPicker(
                     } else {
                         stringResource(R.string.panel_transition_pick_one)
                     },
-                    accent = ClearCutAccents.Rosewater
+                    accent = DirectorXAccents.Rosewater
                 )
                 if (currentTransition != null) {
                     PremiumPanelPill(
@@ -1571,7 +1571,7 @@ fun TransitionPicker(
                             R.string.panel_transition_duration_value,
                             currentTransition.durationMs
                         ),
-                        accent = ClearCutAccents.Peach
+                        accent = DirectorXAccents.Peach
                     )
                 }
             }
@@ -1579,7 +1579,7 @@ fun TransitionPicker(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Rosewater) {
+        PremiumPanelCard(accent = DirectorXAccents.Rosewater) {
             Text(
                 text = stringResource(R.string.panel_transition_presets_title),
                 color = semanticColors.text,
@@ -1620,7 +1620,7 @@ fun TransitionPicker(
 
         if (currentTransition != null) {
             Spacer(modifier = Modifier.height(12.dp))
-            PremiumPanelCard(accent = ClearCutAccents.Peach) {
+            PremiumPanelCard(accent = DirectorXAccents.Peach) {
                 Text(
                     text = stringResource(R.string.panel_transition_duration_title),
                     color = semanticColors.text,
@@ -1643,7 +1643,7 @@ fun TransitionPicker(
             }
 
             Spacer(modifier = Modifier.height(12.dp))
-            PremiumPanelCard(accent = ClearCutAccents.Lavender) {
+            PremiumPanelCard(accent = DirectorXAccents.Lavender) {
                 Text(
                     text = stringResource(R.string.tool_transition_easing_title),
                     color = semanticColors.text,
@@ -1667,13 +1667,13 @@ fun TransitionPicker(
                             label = { Text(easing.displayName) },
                             colors = FilterChipDefaults.filterChipColors(
                                 containerColor = semanticColors.surfaceLow,
-                                selectedContainerColor = ClearCutAccents.Lavender.copy(alpha = 0.3f),
+                                selectedContainerColor = DirectorXAccents.Lavender.copy(alpha = 0.3f),
                                 labelColor = semanticColors.text,
-                                selectedLabelColor = ClearCutAccents.Lavender
+                                selectedLabelColor = DirectorXAccents.Lavender
                             ),
                             border = FilterChipDefaults.filterChipBorder(
-                                borderColor = if (isSelected) ClearCutAccents.Lavender else semanticColors.surface,
-                                selectedBorderColor = ClearCutAccents.Lavender,
+                                borderColor = if (isSelected) DirectorXAccents.Lavender else semanticColors.surface,
+                                selectedBorderColor = DirectorXAccents.Lavender,
                                 enabled = true,
                                 selected = isSelected
                             )
@@ -1692,7 +1692,7 @@ private fun TransitionOptionCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val icon = transitionIcon(type)
 
     Surface(
@@ -1702,14 +1702,14 @@ private fun TransitionOptionCard(
         shape = RoundedCornerShape(Radius.xl),
         border = BorderStroke(
             width = 1.dp,
-            color = if (isActive) ClearCutAccents.Mauve.copy(alpha = 0.32f) else semanticColors.cardStroke
+            color = if (isActive) DirectorXAccents.Mauve.copy(alpha = 0.32f) else semanticColors.cardStroke
         )
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(
-                    if (isActive) ClearCutAccents.Mauve.copy(alpha = 0.08f) else Color.Transparent
+                    if (isActive) DirectorXAccents.Mauve.copy(alpha = 0.08f) else Color.Transparent
                 )
                 .padding(horizontal = 14.dp, vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -1719,19 +1719,19 @@ private fun TransitionOptionCard(
                 modifier = Modifier
                     .size(42.dp)
                     .clip(RoundedCornerShape(Radius.xl))
-                    .background(if (isActive) ClearCutAccents.Mauve.copy(alpha = 0.16f) else semanticColors.panel),
+                    .background(if (isActive) DirectorXAccents.Mauve.copy(alpha = 0.16f) else semanticColors.panel),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     icon,
                     contentDescription = type.displayName,
-                    tint = if (isActive) ClearCutAccents.Mauve else semanticColors.subtext,
+                    tint = if (isActive) DirectorXAccents.Mauve else semanticColors.subtext,
                     modifier = Modifier.size(20.dp)
                 )
             }
             Text(
                 text = type.displayName,
-                color = if (isActive) ClearCutAccents.Mauve else semanticColors.text,
+                color = if (isActive) DirectorXAccents.Mauve else semanticColors.text,
                 style = MaterialTheme.typography.titleSmall,
                 textAlign = TextAlign.Center,
                 maxLines = 2
@@ -1747,7 +1747,7 @@ private fun TransformMetricCard(
     accent: Color,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = modifier,
         color = semanticColors.panel,
@@ -1773,12 +1773,12 @@ private fun TransformMetricCard(
 }
 
 private fun effectAccent(category: EffectCategory): Color = when (category) {
-    EffectCategory.COLOR -> ClearCutAccents.Sapphire
-    EffectCategory.FILTER -> ClearCutAccents.Mauve
-    EffectCategory.BLUR -> ClearCutAccents.Sky
-    EffectCategory.DISTORTION -> ClearCutAccents.Peach
-    EffectCategory.KEYING -> ClearCutAccents.Green
-    EffectCategory.SPEED -> ClearCutAccents.Yellow
+    EffectCategory.COLOR -> DirectorXAccents.Sapphire
+    EffectCategory.FILTER -> DirectorXAccents.Mauve
+    EffectCategory.BLUR -> DirectorXAccents.Sky
+    EffectCategory.DISTORTION -> DirectorXAccents.Peach
+    EffectCategory.KEYING -> DirectorXAccents.Green
+    EffectCategory.SPEED -> DirectorXAccents.Yellow
 }
 
 private fun effectIcon(category: EffectCategory): ImageVector = when (category) {
@@ -1846,7 +1846,7 @@ private fun TextOverlayList(
     onEdit: (String) -> Unit,
     onDelete: (String) -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = Modifier.fillMaxWidth(),
         color = semanticColors.panel,
@@ -1882,7 +1882,7 @@ private fun TextOverlayList(
                 Spacer(modifier = Modifier.width(12.dp))
                 PremiumPanelPill(
                     text = stringResource(R.string.tool_text_overlays_count, overlays.size),
-                    accent = ClearCutAccents.Mauve
+                    accent = DirectorXAccents.Mauve
                 )
             }
 
@@ -1940,7 +1940,7 @@ private fun TextOverlayList(
                                 )
                                 PremiumPanelPill(
                                     text = formatTextOverlayRange(overlay),
-                                    accent = ClearCutAccents.Lavender
+                                    accent = DirectorXAccents.Lavender
                                 )
                             }
 
@@ -1950,13 +1950,13 @@ private fun TextOverlayList(
                                     icon = Icons.Default.Edit,
                                     contentDescription = stringResource(R.string.tool_edit),
                                     onClick = { onEdit(overlay.id) },
-                                    tint = ClearCutAccents.Mauve
+                                    tint = DirectorXAccents.Mauve
                                 )
                                 PremiumPanelIconButton(
                                     icon = Icons.Default.Delete,
                                     contentDescription = stringResource(R.string.tool_delete),
                                     onClick = { onDelete(overlay.id) },
-                                    tint = ClearCutAccents.Red
+                                    tint = DirectorXAccents.Red
                                 )
                             }
                         }
