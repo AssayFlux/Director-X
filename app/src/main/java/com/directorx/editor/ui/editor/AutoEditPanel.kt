@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -51,7 +51,7 @@ fun AutoEditPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var intent by remember { mutableStateOf(AutoEditIntent.HIGHLIGHT_REEL) }
     var targetDurationMs by remember { mutableStateOf(60_000L) }
 
@@ -59,12 +59,12 @@ fun AutoEditPanel(
         title = stringResource(R.string.auto_edit_title),
         subtitle = stringResource(R.string.auto_edit_subtitle),
         icon = Icons.Default.AutoFixHigh,
-        accent = ClearCutAccents.Mauve,
+        accent = DirectorXAccents.Mauve,
         onClose = onClose,
         modifier = modifier,
         scrollable = true
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             Text(
                 text = stringResource(R.string.auto_edit_source_overview_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -84,21 +84,21 @@ fun AutoEditPanel(
                     label = stringResource(R.string.auto_edit_info_clips),
                     value = clipCount.toString(),
                     icon = Icons.Default.Videocam,
-                    accent = ClearCutAccents.Blue,
+                    accent = DirectorXAccents.Blue,
                     modifier = Modifier.weight(1f)
                 )
                 AutoEditInfoCard(
                     label = stringResource(R.string.auto_edit_info_music),
                     value = if (hasAudio) stringResource(R.string.auto_edit_info_yes) else stringResource(R.string.auto_edit_info_no),
                     icon = Icons.Default.MusicNote,
-                    accent = if (hasAudio) ClearCutAccents.Green else semanticColors.overlayStrong,
+                    accent = if (hasAudio) DirectorXAccents.Green else semanticColors.overlayStrong,
                     modifier = Modifier.weight(1f)
                 )
                 AutoEditInfoCard(
                     label = stringResource(R.string.auto_edit_info_target),
                     value = stringResource(R.string.auto_edit_duration_seconds, targetDurationMs / 1_000L),
                     icon = Icons.Default.Timer,
-                    accent = ClearCutAccents.Peach,
+                    accent = DirectorXAccents.Peach,
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -106,7 +106,7 @@ fun AutoEditPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = DirectorXAccents.Blue) {
             Text(
                 text = stringResource(R.string.auto_edit_intent_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -140,7 +140,7 @@ fun AutoEditPanel(
         Spacer(modifier = Modifier.height(12.dp))
 
         if (proposal != null) {
-            PremiumPanelCard(accent = ClearCutAccents.Green) {
+            PremiumPanelCard(accent = DirectorXAccents.Green) {
                 Text(
                     text = stringResource(R.string.auto_edit_review_title),
                     style = MaterialTheme.typography.titleMedium,
@@ -191,7 +191,7 @@ fun AutoEditPanel(
                     Text(
                         text = stringResource(R.string.auto_edit_review_warning),
                         style = MaterialTheme.typography.bodySmall,
-                        color = ClearCutAccents.Peach
+                        color = DirectorXAccents.Peach
                     )
                 }
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -204,7 +204,7 @@ fun AutoEditPanel(
                 }
             }
         } else {
-        PremiumPanelCard(accent = if (intent == AutoEditIntent.BEAT_SYNC && hasAudio) ClearCutAccents.Green else ClearCutAccents.Peach) {
+        PremiumPanelCard(accent = if (intent == AutoEditIntent.BEAT_SYNC && hasAudio) DirectorXAccents.Green else DirectorXAccents.Peach) {
             Text(
                 text = stringResource(R.string.auto_edit_generate_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -228,11 +228,11 @@ fun AutoEditPanel(
             ) {
                 PremiumPanelPill(
                     text = stringResource(R.string.auto_edit_clip_count, clipCount),
-                    accent = ClearCutAccents.Blue
+                    accent = DirectorXAccents.Blue
                 )
                 PremiumPanelPill(
                     text = if (hasAudio) stringResource(R.string.auto_edit_audio_ready) else stringResource(R.string.auto_edit_no_soundtrack),
-                    accent = if (hasAudio) ClearCutAccents.Green else ClearCutAccents.Peach
+                    accent = if (hasAudio) DirectorXAccents.Green else DirectorXAccents.Peach
                 )
             }
 
@@ -241,7 +241,7 @@ fun AutoEditPanel(
                 enabled = clipCount > 0 && !isProcessing,
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = ClearCutAccents.Mauve,
+                    containerColor = DirectorXAccents.Mauve,
                     contentColor = semanticColors.surfaceBase,
                     disabledContainerColor = semanticColors.surface,
                     disabledContentColor = semanticColors.subtext
@@ -300,7 +300,7 @@ private fun AutoEditInfoCard(
     accent: Color,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     PremiumPanelCard(accent = accent, modifier = modifier) {
         Column(
             modifier = Modifier.fillMaxWidth(),
