@@ -764,7 +764,7 @@ fun EditorScreen(
             }
         }
         val hasClips = state.tracks.any { it.clips.isNotEmpty() }
-        val scrollEmptyEditor = !hasClips && !hasOpenPanel &&
+        val scrollEditorContent = !isImmersivePreview &&
             (configuration.fontScale > 1.15f || screenHeightDp < 640)
         Column(
             modifier = Modifier
@@ -772,7 +772,7 @@ fun EditorScreen(
                 // At large font scales or short window heights, keep the empty-state
                 // preview and its add-media action reachable without relying on a
                 // weighted child measured under unbounded scroll constraints.
-                .then(if (scrollEmptyEditor) Modifier.verticalScroll(rememberScrollState()) else Modifier)
+                .then(if (scrollEditorContent) Modifier.verticalScroll(rememberScrollState()) else Modifier)
                 .padding(
                     start = desktopSidebarWidth,
                     end = if (!isImmersivePreview && useEmbeddedExportPane) {
@@ -839,7 +839,7 @@ fun EditorScreen(
                 modifier = editorPreviewModifier(
                     immersivePreview = isImmersivePreview,
                     previewMinHeight = previewMinHeight,
-                    scrollable = scrollEmptyEditor,
+                    scrollable = scrollEditorContent,
                 )
                     .testTag(DirectorXTestTags.EDITOR_PREVIEW_PANEL)
                     .pointerInput(Unit) {
