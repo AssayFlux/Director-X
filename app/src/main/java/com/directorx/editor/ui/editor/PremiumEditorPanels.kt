@@ -38,7 +38,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.directorx.editor.R
 import com.directorx.editor.ui.theme.ClearCutChromeIconButton
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 
@@ -56,7 +56,7 @@ fun PremiumEditorPanel(
     headerActions: @Composable RowScope.() -> Unit = {},
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     val scrollModifier = if (scrollable) {
         Modifier.verticalScroll(rememberScrollState())
     } else {
@@ -158,7 +158,7 @@ fun PremiumPanelCard(
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
 
     Surface(
         modifier = modifier
@@ -190,7 +190,7 @@ fun PremiumHairlineDivider(
     modifier: Modifier = Modifier,
     color: Color = Color.Unspecified
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     val resolvedColor = if (color == Color.Unspecified) colors.cardStroke else color
 
     Box(
@@ -207,7 +207,7 @@ fun PremiumPanelPill(
     accent: Color,
     modifier: Modifier = Modifier
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
 
     Surface(
         modifier = modifier.defaultMinSize(minHeight = 30.dp),
@@ -236,7 +236,7 @@ fun PremiumPanelIconButton(
     containerColor: Color = Color.Unspecified,
     enabled: Boolean = true
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     val resolvedContainer = if (containerColor == Color.Unspecified) colors.panelHighest else containerColor
     val resolvedTint = if (tint == Color.Unspecified) colors.subtext else tint
 
