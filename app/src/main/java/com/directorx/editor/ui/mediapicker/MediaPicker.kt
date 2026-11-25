@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.mediapicker
 
 import android.app.Activity
-import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.DirectorXAccents
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -54,7 +54,7 @@ import com.directorx.editor.ui.editor.PremiumPanelCard
 import com.directorx.editor.ui.editor.PremiumPanelPill
 import com.directorx.editor.ui.editor.PremiumSnackbarHost
 import com.directorx.editor.ui.editor.ToastSeverity
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.ClearCutSecondaryButton
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
@@ -111,7 +111,7 @@ fun MediaPickerSheet(
     modifier: Modifier = Modifier,
     onMediaBatchSelected: ((List<MediaPickerSelection>) -> Unit)? = null,
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val context = LocalContext.current
     val resources = LocalResources.current
     val importingBatchTitle = stringResource(R.string.media_picker_importing_batch_title)
@@ -588,7 +588,7 @@ fun MediaPickerSheet(
         title = stringResource(R.string.media_picker_title),
         subtitle = stringResource(R.string.media_picker_subtitle),
         icon = Icons.Default.PermMedia,
-        accent = ClearCutAccents.Blue,
+        accent = DirectorXAccents.Blue,
         onClose = {
             cancelSequenceReview()
             cancelActiveOperation()
@@ -619,7 +619,7 @@ fun MediaPickerSheet(
             Spacer(modifier = Modifier.height(12.dp))
         }
 
-        PremiumPanelCard(accent = ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = DirectorXAccents.Blue) {
             Text(
                 text = stringResource(R.string.media_picker_library_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -634,11 +634,11 @@ fun MediaPickerSheet(
                 horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
                 verticalArrangement = Arrangement.spacedBy(Spacing.sm)
             ) {
-                PremiumPanelPill(text = librarySourceLabel, accent = ClearCutAccents.Blue)
-                PremiumPanelPill(text = stringResource(R.string.media_picker_source_audio), accent = ClearCutAccents.Peach)
+                PremiumPanelPill(text = librarySourceLabel, accent = DirectorXAccents.Blue)
+                PremiumPanelPill(text = stringResource(R.string.media_picker_source_audio), accent = DirectorXAccents.Peach)
                 PremiumPanelPill(
                     text = stringResource(R.string.media_picker_source_kept_local),
-                    accent = ClearCutAccents.Teal
+                    accent = DirectorXAccents.Teal
                 )
             }
 
@@ -646,7 +646,7 @@ fun MediaPickerSheet(
                 icon = Icons.Default.Videocam,
                 label = stringResource(R.string.media_picker_video),
                 description = stringResource(R.string.media_picker_video_description),
-                color = ClearCutAccents.Blue,
+                color = DirectorXAccents.Blue,
                 enabled = actionsEnabled,
                 onClick = {
                     if (usePhotoPicker) {
@@ -664,7 +664,7 @@ fun MediaPickerSheet(
                 icon = Icons.Default.Image,
                 label = stringResource(R.string.media_picker_image),
                 description = stringResource(R.string.media_picker_image_description),
-                color = ClearCutAccents.Green,
+                color = DirectorXAccents.Green,
                 enabled = actionsEnabled,
                 onClick = {
                     if (usePhotoPicker) {
@@ -682,7 +682,7 @@ fun MediaPickerSheet(
                 icon = Icons.Default.MusicNote,
                 label = stringResource(R.string.media_picker_audio),
                 description = stringResource(R.string.media_picker_audio_description),
-                color = ClearCutAccents.Peach,
+                color = DirectorXAccents.Peach,
                 enabled = actionsEnabled,
                 onClick = {
                     pendingMediaType = "audio"
@@ -711,7 +711,7 @@ fun MediaPickerSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(min = TouchTarget.minimum),
-                contentColor = ClearCutAccents.Mauve,
+                contentColor = DirectorXAccents.Mauve,
                 enabled = actionsEnabled
             )
             Text(
@@ -723,7 +723,7 @@ fun MediaPickerSheet(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Red) {
+        PremiumPanelCard(accent = DirectorXAccents.Red) {
             Text(
                 text = stringResource(R.string.media_picker_capture_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -743,7 +743,7 @@ fun MediaPickerSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(min = TouchTarget.minimum),
-                contentColor = ClearCutAccents.Red,
+                contentColor = DirectorXAccents.Red,
                 enabled = actionsEnabled
             )
         }
@@ -766,7 +766,7 @@ private fun MediaImportStatusCard(
     operation: MediaPickerOperationState,
     onCancel: () -> Unit,
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val total = operation.total
     val completed = operation.completed
     val batchProgress = if (total != null && completed != null && total > 1) {
@@ -775,7 +775,7 @@ private fun MediaImportStatusCard(
         null
     }
     PremiumPanelCard(
-        accent = ClearCutAccents.Mauve,
+        accent = DirectorXAccents.Mauve,
         modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }
     ) {
         Row(
@@ -787,13 +787,13 @@ private fun MediaImportStatusCard(
                 CircularProgressIndicator(
                     progress = { batchProgress },
                     modifier = Modifier.size(24.dp),
-                    color = ClearCutAccents.Mauve,
+                    color = DirectorXAccents.Mauve,
                     strokeWidth = 2.dp,
                 )
             } else {
                 CircularProgressIndicator(
                     modifier = Modifier.size(24.dp),
-                    color = ClearCutAccents.Mauve,
+                    color = DirectorXAccents.Mauve,
                     strokeWidth = 2.dp,
                 )
             }
@@ -828,7 +828,7 @@ private fun MediaImportStatusCard(
                     .fillMaxWidth()
                     .height(5.dp)
                     .clip(RoundedCornerShape(Radius.sm)),
-                color = ClearCutAccents.Mauve,
+                color = DirectorXAccents.Mauve,
                 trackColor = semanticColors.surface,
             )
         } else {
@@ -837,7 +837,7 @@ private fun MediaImportStatusCard(
                     .fillMaxWidth()
                     .height(5.dp)
                     .clip(RoundedCornerShape(Radius.sm)),
-                color = ClearCutAccents.Mauve,
+                color = DirectorXAccents.Mauve,
                 trackColor = semanticColors.surface,
             )
         }
@@ -1040,7 +1040,7 @@ private fun MediaSourceActionCard(
     enabled: Boolean,
     onClick: () -> Unit
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     val semanticDescription = "$label. $description"
     Card(
         onClick = onClick,
