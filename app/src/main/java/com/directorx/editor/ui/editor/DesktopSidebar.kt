@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.directorx.editor.R
 import com.directorx.editor.model.TrackType
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 import com.directorx.editor.ui.theme.TouchTarget
@@ -64,7 +64,7 @@ fun DesktopSidebar(
         modifier = modifier
             .fillMaxHeight()
             .width(if (compact) 84.dp else 260.dp)
-            .testTag(ClearCutTestTags.EDITOR_DESKTOP_SIDEBAR)
+            .testTag(DirectorXTestTags.EDITOR_DESKTOP_SIDEBAR)
             .background(semanticColors.backgroundMid)
             .padding(horizontal = if (compact) 8.dp else Spacing.md, vertical = 14.dp),
         verticalArrangement = Arrangement.spacedBy(Spacing.md)
