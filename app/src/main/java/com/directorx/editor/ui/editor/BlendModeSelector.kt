@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -39,7 +39,7 @@ fun BlendModeSelector(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val sections = blendModeSections()
     val currentSection = sections.firstOrNull { currentMode in it.modes }
 
@@ -47,13 +47,13 @@ fun BlendModeSelector(
         title = stringResource(R.string.blend_mode_title),
         subtitle = stringResource(R.string.blend_mode_subtitle),
         icon = Icons.Default.AutoFixHigh,
-        accent = currentSection?.accent ?: ClearCutAccents.Peach,
+        accent = currentSection?.accent ?: DirectorXAccents.Peach,
         onClose = onClose,
         modifier = modifier,
         scrollable = true,
         closeContentDescription = stringResource(R.string.blend_mode_close_cd)
     ) {
-        PremiumPanelCard(accent = currentSection?.accent ?: ClearCutAccents.Peach) {
+        PremiumPanelCard(accent = currentSection?.accent ?: DirectorXAccents.Peach) {
             Text(
                 text = stringResource(R.string.blend_mode_current_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -71,7 +71,7 @@ fun BlendModeSelector(
             ) {
                 PremiumPanelPill(
                     text = currentMode.displayName,
-                    accent = currentSection?.accent ?: ClearCutAccents.Peach
+                    accent = currentSection?.accent ?: DirectorXAccents.Peach
                 )
                 PremiumPanelPill(
                     text = pluralStringResource(
@@ -79,7 +79,7 @@ fun BlendModeSelector(
                         sections.sumOf { it.modes.size },
                         sections.sumOf { it.modes.size }
                     ),
-                    accent = ClearCutAccents.Sky
+                    accent = DirectorXAccents.Sky
                 )
                 currentSection?.let { section ->
                     PremiumPanelPill(
@@ -150,7 +150,7 @@ private fun BlendModeOptionCard(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         onClick = onClick,
         modifier = modifier,
@@ -212,7 +212,7 @@ private fun blendModeSections(): List<BlendModeSection> = listOf(
     BlendModeSection(
         title = "Foundation",
         subtitle = "The most-used blend modes for everyday compositing, contrast, and soft overlays.",
-        accent = ClearCutAccents.Peach,
+        accent = DirectorXAccents.Peach,
         modes = listOf(
             BlendMode.NORMAL,
             BlendMode.MULTIPLY,
@@ -223,7 +223,7 @@ private fun blendModeSections(): List<BlendModeSection> = listOf(
     BlendModeSection(
         title = "Light and Shadow",
         subtitle = "Push exposure up or down, then lean into harsher additive or subtractive blends.",
-        accent = ClearCutAccents.Yellow,
+        accent = DirectorXAccents.Yellow,
         modes = listOf(
             BlendMode.DARKEN,
             BlendMode.LIGHTEN,
@@ -236,7 +236,7 @@ private fun blendModeSections(): List<BlendModeSection> = listOf(
     BlendModeSection(
         title = "Contrast",
         subtitle = "Use these when you want the layer interaction to feel punchier, more graphic, or more unpredictable.",
-        accent = ClearCutAccents.Mauve,
+        accent = DirectorXAccents.Mauve,
         modes = listOf(
             BlendMode.HARD_LIGHT,
             BlendMode.SOFT_LIGHT,
@@ -247,7 +247,7 @@ private fun blendModeSections(): List<BlendModeSection> = listOf(
     BlendModeSection(
         title = "Color Channels",
         subtitle = "Borrow hue, saturation, or luminance from one layer while keeping the rest from another.",
-        accent = ClearCutAccents.Blue,
+        accent = DirectorXAccents.Blue,
         modes = listOf(
             BlendMode.HUE,
             BlendMode.SATURATION_BLEND,
