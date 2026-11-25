@@ -2,6 +2,7 @@ package com.directorx.editor.ui.editor
 
 import androidx.media3.common.Player
 import com.directorx.editor.engine.PreviewRenderPolicy
+import com.directorx.editor.engine.canSeekPreviewPlayer
 import com.directorx.editor.engine.buildTimelineSequenceSteps
 import com.directorx.editor.engine.playbackSessionNeedsReset
 import com.directorx.editor.model.Clip
@@ -64,6 +65,12 @@ class EditorPlaybackBehaviorTest {
 
         assertTrue(trimExtendsPreparedRange(prepared, clip))
         assertFalse(trimExtendsPreparedRange(prepared, clip.copy(trimStartMs = 200L)))
+    }
+
+    @Test
+    fun previewSeekRequiresCompositionPlayerPreparation() {
+        assertFalse(canSeekPreviewPlayer(compositionPrepared = false))
+        assertTrue(canSeekPreviewPlayer(compositionPrepared = true))
     }
 
     @Test
