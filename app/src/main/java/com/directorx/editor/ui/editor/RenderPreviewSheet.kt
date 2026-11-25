@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -37,7 +37,7 @@ fun RenderPreviewSheet(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val hasSegments = segments.isNotEmpty()
     val reEncodeRatio = if (summary.totalDurationMs > 0L) {
         summary.reEncodeDurationMs.toFloat() / summary.totalDurationMs.toFloat()
@@ -54,25 +54,25 @@ fun RenderPreviewSheet(
         !hasSegments -> RenderOutlookState(
             title = stringResource(R.string.render_preview_outlook_empty_title),
             body = stringResource(R.string.render_preview_outlook_empty_body),
-            accent = ClearCutAccents.Blue,
+            accent = DirectorXAccents.Blue,
             icon = Icons.Default.Preview
         )
         summary.reEncodeSegments == 0 -> RenderOutlookState(
             title = stringResource(R.string.render_preview_outlook_instant_title),
             body = stringResource(R.string.render_preview_outlook_instant_body),
-            accent = ClearCutAccents.Green,
+            accent = DirectorXAccents.Green,
             icon = Icons.Default.Preview
         )
         summary.passThroughSegments == 0 -> RenderOutlookState(
             title = stringResource(R.string.render_preview_outlook_full_title),
             body = stringResource(R.string.render_preview_outlook_full_body),
-            accent = ClearCutAccents.Yellow,
+            accent = DirectorXAccents.Yellow,
             icon = Icons.Default.RocketLaunch
         )
         else -> RenderOutlookState(
             title = stringResource(R.string.render_preview_outlook_mixed_title),
             body = stringResource(R.string.render_preview_outlook_mixed_body),
-            accent = ClearCutAccents.Peach,
+            accent = DirectorXAccents.Peach,
             icon = Icons.Default.Preview
         )
     }
@@ -81,7 +81,7 @@ fun RenderPreviewSheet(
         title = stringResource(R.string.render_preview_title),
         subtitle = stringResource(R.string.render_preview_subtitle),
         icon = Icons.Default.Preview,
-        accent = ClearCutAccents.Peach,
+        accent = DirectorXAccents.Peach,
         onClose = onClose,
         closeContentDescription = stringResource(R.string.render_preview_close_cd),
         modifier = modifier,
@@ -134,7 +134,7 @@ fun RenderPreviewSheet(
                 ) {
                     PremiumPanelPill(
                         text = formatDuration(summary.totalDurationMs),
-                        accent = ClearCutAccents.Blue
+                        accent = DirectorXAccents.Blue
                     )
                     PremiumPanelPill(
                         text = speedupLabel,
@@ -150,13 +150,13 @@ fun RenderPreviewSheet(
                 RenderMetric(
                     label = stringResource(R.string.panel_render_pass_through),
                     value = summary.passThroughSegments.toString(),
-                    accent = ClearCutAccents.Green,
+                    accent = DirectorXAccents.Green,
                     modifier = Modifier.widthIn(min = 110.dp)
                 )
                 RenderMetric(
                     label = stringResource(R.string.panel_render_re_encode),
                     value = summary.reEncodeSegments.toString(),
-                    accent = if (summary.reEncodeSegments > 0) ClearCutAccents.Yellow else ClearCutAccents.Green,
+                    accent = if (summary.reEncodeSegments > 0) DirectorXAccents.Yellow else DirectorXAccents.Green,
                     modifier = Modifier.widthIn(min = 110.dp)
                 )
                 RenderMetric(
@@ -171,13 +171,13 @@ fun RenderPreviewSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(10.dp)
-                    .background(ClearCutAccents.Green.copy(alpha = 0.22f), RoundedCornerShape(10.dp))
+                    .background(DirectorXAccents.Green.copy(alpha = 0.22f), RoundedCornerShape(10.dp))
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth(reEncodeRatio.coerceIn(0f, 1f))
                         .height(10.dp)
-                        .background(ClearCutAccents.Yellow.copy(alpha = 0.72f), RoundedCornerShape(10.dp))
+                        .background(DirectorXAccents.Yellow.copy(alpha = 0.72f), RoundedCornerShape(10.dp))
                 )
             }
 
@@ -191,7 +191,7 @@ fun RenderPreviewSheet(
                         formatDuration(summary.passThroughDurationMs)
                     ),
                     style = MaterialTheme.typography.labelMedium,
-                    color = ClearCutAccents.Green
+                    color = DirectorXAccents.Green
                 )
                 Text(
                     text = stringResource(
@@ -199,14 +199,14 @@ fun RenderPreviewSheet(
                         formatDuration(summary.reEncodeDurationMs)
                     ),
                     style = MaterialTheme.typography.labelMedium,
-                    color = if (summary.reEncodeSegments > 0) ClearCutAccents.Yellow else semanticColors.subtext
+                    color = if (summary.reEncodeSegments > 0) DirectorXAccents.Yellow else semanticColors.subtext
                 )
             }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = DirectorXAccents.Blue) {
             Text(
                 text = stringResource(R.string.panel_render_segments),
                 style = MaterialTheme.typography.titleMedium,
@@ -222,7 +222,7 @@ fun RenderPreviewSheet(
                 RenderMessageCard(
                     title = stringResource(R.string.render_preview_empty_title),
                     body = stringResource(R.string.render_preview_empty_body),
-                    accent = ClearCutAccents.Blue,
+                    accent = DirectorXAccents.Blue,
                     icon = Icons.Default.Preview
                 )
             } else {
@@ -239,7 +239,7 @@ fun RenderPreviewSheet(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             Text(
                 text = stringResource(R.string.render_preview_actions_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -261,8 +261,8 @@ fun RenderPreviewSheet(
                         enabled = hasSegments,
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
-                        border = BorderStroke(1.dp, ClearCutAccents.Peach.copy(alpha = 0.4f)),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = ClearCutAccents.Peach)
+                        border = BorderStroke(1.dp, DirectorXAccents.Peach.copy(alpha = 0.4f)),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = DirectorXAccents.Peach)
                     ) {
                         androidx.compose.material3.Icon(
                             imageVector = Icons.Default.Preview,
@@ -277,7 +277,7 @@ fun RenderPreviewSheet(
                         enabled = hasSegments,
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = ClearCutAccents.Mauve)
+                        colors = ButtonDefaults.buttonColors(containerColor = DirectorXAccents.Mauve)
                     ) {
                         androidx.compose.material3.Icon(
                             imageVector = Icons.Default.RocketLaunch,
@@ -297,8 +297,8 @@ fun RenderPreviewSheet(
                         enabled = hasSegments,
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(12.dp),
-                        border = BorderStroke(1.dp, ClearCutAccents.Peach.copy(alpha = 0.4f)),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = ClearCutAccents.Peach)
+                        border = BorderStroke(1.dp, DirectorXAccents.Peach.copy(alpha = 0.4f)),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = DirectorXAccents.Peach)
                     ) {
                         androidx.compose.material3.Icon(
                             imageVector = Icons.Default.Preview,
@@ -313,7 +313,7 @@ fun RenderPreviewSheet(
                         enabled = hasSegments,
                         modifier = Modifier.weight(1f),
                         shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = ClearCutAccents.Mauve)
+                        colors = ButtonDefaults.buttonColors(containerColor = DirectorXAccents.Mauve)
                     ) {
                         androidx.compose.material3.Icon(
                             imageVector = Icons.Default.RocketLaunch,
@@ -350,7 +350,7 @@ private fun RenderMetric(
     accent: Color,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = modifier,
         color = accent.copy(alpha = 0.12f),
@@ -384,7 +384,7 @@ private fun RenderMessageCard(
     icon: ImageVector,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = modifier.fillMaxWidth(),
         color = accent.copy(alpha = 0.08f),
@@ -433,8 +433,8 @@ private fun RenderMessageCard(
 
 @Composable
 private fun RenderSegmentRow(segment: SmartRenderEngine.RenderSegment) {
-    val semanticColors = LocalClearCutColors.current
-    val accent = if (segment.needsReEncode) ClearCutAccents.Yellow else ClearCutAccents.Green
+    val semanticColors = LocalDirectorXColors.current
+    val accent = if (segment.needsReEncode) DirectorXAccents.Yellow else DirectorXAccents.Green
     val statusLabel = stringResource(
         if (segment.needsReEncode) R.string.panel_render_re_encode else R.string.panel_render_pass_through
     )
@@ -514,7 +514,7 @@ private fun RenderSegmentRow(segment: SmartRenderEngine.RenderSegment) {
                 )
                 PremiumPanelPill(
                     text = durationLabel,
-                    accent = if (segment.needsReEncode) semanticColors.overlayStrong else ClearCutAccents.Blue
+                    accent = if (segment.needsReEncode) semanticColors.overlayStrong else DirectorXAccents.Blue
                 )
             }
         }
