@@ -840,6 +840,7 @@ fun EditorScreen(
                     previewMinHeight = previewMinHeight,
                     scrollable = scrollEmptyEditor,
                 )
+                    .testTag(DirectorXTestTags.EDITOR_PREVIEW_PANEL)
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onLongPress = { offset ->
