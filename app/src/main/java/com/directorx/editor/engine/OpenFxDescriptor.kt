@@ -54,7 +54,7 @@ data class OpenFxDescriptor(
      * Maps a single Director X effect parameter to its OpenFX equivalent.
      *
      * @param scale linear gain applied to the Director X value before passing
-     *   to OpenFX: `openfx = novaCut * scale + offset`.
+     *   to OpenFX: `openfx = directorX * scale + offset`.
      * @param type OpenFX parameter type: "double", "integer", "boolean",
      *   "rgba", "string", "choice". Mirrors OpenFX kOfxParamTypeXxx constants.
      */
@@ -79,7 +79,7 @@ data class OpenFxDescriptor(
     fun toJson(): String {
         val root = JSONObject()
             .put("schemaVersion", schemaVersion)
-            .put("novaCutEffectId", novaCutEffectId)
+            .put("novaCutEffectId", directorXEffectId)
             .put("openfxId", openfxId)
             .put("displayName", displayName)
         val params = JSONArray()
