@@ -22,9 +22,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.directorx.editor.R
 import com.directorx.editor.ui.theme.DirectorXAccents
-import com.directorx.editor.ui.theme.ClearCutDialogIcon
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.DirectorXDialogIcon
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
 import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
@@ -47,7 +47,7 @@ internal fun ExportConfirmationDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        icon = { ClearCutDialogIcon(icon = Icons.Default.ReportProblem, accent = accent) },
+        icon = { DirectorXDialogIcon(icon = Icons.Default.ReportProblem, accent = accent) },
         title = {
             Text(
                 text = stringResource(R.string.export_confirm_title),
@@ -91,14 +91,14 @@ internal fun ExportConfirmationDialog(
             }
         },
         confirmButton = {
-            ClearCutPrimaryButton(
+            DirectorXPrimaryButton(
                 text = stringResource(R.string.export_confirm_accept),
                 onClick = onConfirm,
                 icon = Icons.Default.ReportProblem
             )
         },
         dismissButton = {
-            ClearCutSecondaryButton(
+            DirectorXSecondaryButton(
                 text = stringResource(R.string.export_confirm_cancel),
                 onClick = onDismiss,
                 icon = Icons.Default.Close
