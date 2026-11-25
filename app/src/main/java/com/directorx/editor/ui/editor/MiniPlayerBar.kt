@@ -1,6 +1,6 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.DirectorXAccents
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,7 +15,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.directorx.editor.R
 import com.directorx.editor.ui.theme.ClearCutChromeIconButton
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.TouchTarget
 
@@ -28,8 +28,8 @@ fun MiniPlayerBar(
     onSeek: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
-    val colors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
+    val colors = LocalDirectorXColors.current
     val progress = if (totalDurationMs > 0L) {
         (playheadMs.toFloat() / totalDurationMs.toFloat()).coerceIn(0f, 1f)
     } else {
@@ -60,9 +60,9 @@ fun MiniPlayerBar(
                     if (isPlaying) R.string.preview_pause else R.string.preview_play
                 ),
                 onClick = onTogglePlayback,
-                tint = ClearCutAccents.Rosewater,
-                containerColor = ClearCutAccents.Rosewater.copy(alpha = 0.14f),
-                borderColor = ClearCutAccents.Rosewater.copy(alpha = 0.22f),
+                tint = DirectorXAccents.Rosewater,
+                containerColor = DirectorXAccents.Rosewater.copy(alpha = 0.14f),
+                borderColor = DirectorXAccents.Rosewater.copy(alpha = 0.22f),
                 shape = RoundedCornerShape(Radius.md)
             )
 
@@ -86,10 +86,10 @@ fun MiniPlayerBar(
                     .weight(1f)
                     .height(TouchTarget.minimum),
                 colors = SliderDefaults.colors(
-                    thumbColor = ClearCutAccents.Sky,
-                    activeTrackColor = ClearCutAccents.Sky,
+                    thumbColor = DirectorXAccents.Sky,
+                    activeTrackColor = DirectorXAccents.Sky,
                     inactiveTrackColor = semanticColors.surface,
-                    activeTickColor = ClearCutAccents.Sky,
+                    activeTickColor = DirectorXAccents.Sky,
                     inactiveTickColor = semanticColors.surface
                 )
             )
