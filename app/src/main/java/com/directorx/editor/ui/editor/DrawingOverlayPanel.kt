@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.stringResource
 import com.directorx.editor.R
 import com.directorx.editor.model.DrawingPath
-import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXChromeIconButton
 import com.directorx.editor.ui.theme.ClearCutPrimaryButton
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
@@ -74,13 +74,13 @@ fun DrawingOverlayPanel(
             Text(stringResource(R.string.panel_drawing_title), color = semanticColors.text, fontSize = 16.sp)
             Row(horizontalArrangement = Arrangement.spacedBy(Spacing.xs)) {
                 @Suppress("DEPRECATION")
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = Icons.Default.Undo,
                     contentDescription = stringResource(R.string.cd_drawing_undo),
                     onClick = onUndo,
                     iconSize = 20.dp
                 )
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = Icons.Default.DeleteSweep,
                     contentDescription = stringResource(R.string.cd_drawing_clear),
                     onClick = onClear,
@@ -136,7 +136,7 @@ fun DrawingOverlayPanel(
 
             Spacer(modifier = Modifier.width(Spacing.xs))
 
-            ClearCutChromeIconButton(
+            DirectorXChromeIconButton(
                 icon = Icons.Default.SquareFoot,
                 contentDescription = stringResource(R.string.cd_drawing_eraser),
                 onClick = { isEraser = !isEraser },
