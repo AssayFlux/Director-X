@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
 import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.ClearCutContentColors
+import com.directorx.editor.ui.theme.DirectorXContentColors
 import com.directorx.editor.ui.theme.LocalClearCutColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -267,19 +267,19 @@ fun ChromaKeyPanel(
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 KeyColorSwatch(
                     label = stringResource(R.string.chroma_green),
-                    color = ClearCutContentColors.ChromaGreen,
+                    color = DirectorXContentColors.ChromaGreen,
                     selected = keyColorG > 0.8f && keyColorR < 0.3f && keyColorB < 0.3f,
                     onClick = { onKeyColorChanged(0f, 1f, 0f) }
                 )
                 KeyColorSwatch(
                     label = stringResource(R.string.chroma_blue),
-                    color = ClearCutContentColors.ChromaBlue,
+                    color = DirectorXContentColors.ChromaBlue,
                     selected = keyColorB > 0.8f && keyColorR < 0.3f && keyColorG < 0.3f,
                     onClick = { onKeyColorChanged(0f, 0f, 1f) }
                 )
                 KeyColorSwatch(
                     label = stringResource(R.string.chroma_red),
-                    color = ClearCutContentColors.ChromaRed,
+                    color = DirectorXContentColors.ChromaRed,
                     selected = keyColorR > 0.8f && keyColorG < 0.3f && keyColorB < 0.3f,
                     onClick = { onKeyColorChanged(1f, 0f, 0f) }
                 )
