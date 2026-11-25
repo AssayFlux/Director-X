@@ -32,7 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import com.directorx.editor.R
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.theme.Motion
 import com.directorx.editor.ui.theme.ClearCutPrimaryButton
 import com.directorx.editor.ui.theme.ClearCutSecondaryButton
@@ -85,7 +85,7 @@ fun FirstRunTutorial(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .testTag(ClearCutTestTags.TUTORIAL_SCREEN)
+            .testTag(DirectorXTestTags.TUTORIAL_SCREEN)
     ) {
         // Scrim as a SIBLING behind the interactive content, not a pointer
         // handler on the shared parent (issue #49: Next/Skip reported dead on
@@ -117,7 +117,7 @@ fun FirstRunTutorial(
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(Spacing.lg)
-                .testTag(ClearCutTestTags.TUTORIAL_SKIP)
+                .testTag(DirectorXTestTags.TUTORIAL_SKIP)
                 .defaultMinSize(minHeight = TouchTarget.minimum)
                 .clickable(role = Role.Button, onClick = onComplete)
         ) {
