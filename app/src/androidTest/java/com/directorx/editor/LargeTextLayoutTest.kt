@@ -4,6 +4,7 @@ import android.os.ParcelFileDescriptor
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
@@ -22,6 +23,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import androidx.compose.ui.unit.dp
 
 @SdkSuppress(minSdkVersion = 37)
 class LargeTextLayoutTest {
@@ -74,6 +76,8 @@ class LargeTextLayoutTest {
                     DirectorXTestTags.EDITOR_EMPTY_ADD_MEDIA,
                 ),
             )
+            compose.onNodeWithTag(DirectorXTestTags.EDITOR_PREVIEW_PANEL)
+                .assertHeightIsAtLeast(180.dp)
 
             compose.onNodeWithTag(DirectorXTestTags.EDITOR_EXPORT).performClick()
             compose.waitUntilAtLeastOneExists(DirectorXTestTags.EXPORT_SHEET)
