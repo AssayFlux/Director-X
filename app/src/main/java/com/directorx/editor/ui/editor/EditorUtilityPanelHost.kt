@@ -36,7 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.directorx.editor.R
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.model.BatchExportSourceRange
 import com.directorx.editor.model.Clip
 import com.directorx.editor.model.ImageOverlayType
@@ -282,7 +282,7 @@ fun BoxScope.EditorUtilityPanelHost(
             },
             onDismissMetadataSidecarExport = viewModel::dismissMetadataSidecarExport,
             onClose = viewModel::hideMediaManager,
-            modifier = Modifier.testTag(ClearCutTestTags.MEDIA_MANAGER_PANEL),
+            modifier = Modifier.testTag(DirectorXTestTags.MEDIA_MANAGER_PANEL),
         )
     }
 
@@ -342,7 +342,7 @@ fun BoxScope.EditorUtilityPanelHost(
             onCancelBatch = viewModel::cancelBatchExport,
             onStartBatch = viewModel::startBatchExport,
             onClose = viewModel::hideBatchExport,
-            modifier = Modifier.testTag(ClearCutTestTags.BATCH_EXPORT_PANEL),
+            modifier = Modifier.testTag(DirectorXTestTags.BATCH_EXPORT_PANEL),
         )
     }
 
