@@ -856,10 +856,10 @@ fun EditorScreen(
 
             }
 
-            // Preview panel with long-press radial menu. The preview is the
-            // ONLY flexible element in this column: it absorbs whatever the
-            // wrap-content timeline and tool rail leave over, so the rail
-            // always hugs the bottom edge with no dead panel space.
+            // Preview panel with long-press radial menu. When the measured height
+            // budget fits, it is the only flexible slot and absorbs the space left by
+            // the timeline and tool rail. Short/large-text windows use a fixed scroll
+            // slot so none of those controls are compressed or clipped.
             Box(
                 modifier = editorPreviewModifier(
                     immersivePreview = isImmersivePreview,
