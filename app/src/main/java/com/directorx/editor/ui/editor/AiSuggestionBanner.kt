@@ -19,8 +19,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import com.directorx.editor.R
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
 import com.directorx.editor.ui.theme.Motion
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
@@ -88,12 +88,12 @@ fun AiSuggestionBanner(
                         modifier = Modifier.weight(1f)
                     )
                     Spacer(modifier = Modifier.width(Spacing.sm))
-                    ClearCutPrimaryButton(
+                    DirectorXPrimaryButton(
                         text = stringResource(R.string.ai_apply),
                         onClick = { onApply(s.actionId) }
                     )
                     Spacer(modifier = Modifier.width(Spacing.xs))
-                    ClearCutSecondaryButton(
+                    DirectorXSecondaryButton(
                         text = stringResource(R.string.ai_suggestion_not_now),
                         onClick = onDismiss
                     )
