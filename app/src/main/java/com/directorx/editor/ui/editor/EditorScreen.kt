@@ -764,8 +764,33 @@ fun EditorScreen(
             }
         }
         val hasClips = state.tracks.any { it.clips.isNotEmpty() }
+        val scaledToolbarHeight = maxOf(
+            68.dp,
+            with(LocalDensity.current) { 31.sp.toDp() } + 8.dp
+        )
+        val scaledTabBarHeight = maxOf(
+            64.dp,
+            with(LocalDensity.current) { 24.sp.toDp() } + 30.dp
+        )
+        val scaledActionRowHeight = with(LocalDensity.current) {
+            maxOf(62.dp, 19.dp + 3.dp + 10.sp.toDp() + 16.dp)
+        }
+        val effectiveBottomToolPanelExpanded =
+            isToolPanelExpanded && !previewFirstLayout.lockBottomToolArea
+        val measuredBottomToolRailHeight = previewFirstLayout.bottomToolRailHeightDp.dp +
+            (scaledTabBarHeight - 64.dp).coerceAtLeast(0.dp) +
+            if (effectiveBottomToolPanelExpanded) {
+                (scaledActionRowHeight - 62.dp).coerceAtLeast(0.dp)
+            } else {
+                0.dp
+            }
+        // Scroll only when the measured minimum stack cannot fit. This keeps the
+        // preview flexible on normal/large phones, while protecting short windows
+        // and large-font layouts from clipping the timeline or bottom tool rail.
+        val minimumEditorContentHeight = scaledToolbarHeight +
+            previewMinHeight + timelineMinHeight + measuredBottomToolRailHeight + 24.dp
         val scrollEditorContent = !isImmersivePreview &&
-            (configuration.fontScale > 1.15f || screenHeightDp < 640)
+            screenHeightDp.dp < minimumEditorContentHeight
         Column(
             modifier = Modifier
                 .fillMaxSize()
