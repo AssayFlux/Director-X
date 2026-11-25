@@ -30,7 +30,7 @@ class SettingsRepositoryTest {
         val reportStore = SettingsResetReportStore.forFile(temp.newFile("settings-reset-report.jsonl"))
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
         try {
-            val dataStore = createClearCutSettingsDataStore(
+            val dataStore = createDirectorXSettingsDataStore(
                 produceFile = { settingsFile },
                 resetReportStore = reportStore,
                 scope = scope,
@@ -91,7 +91,7 @@ class SettingsRepositoryTest {
         val reportStore = SettingsResetReportStore.forFile(temp.newFile("settings-reset-valid.jsonl"))
         val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
         try {
-            val dataStore = createClearCutSettingsDataStore(
+            val dataStore = createDirectorXSettingsDataStore(
                 produceFile = { settingsFile },
                 resetReportStore = reportStore,
                 scope = scope,
