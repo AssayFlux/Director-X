@@ -6,15 +6,15 @@ import org.json.JSONObject
 /**
  * R5.7b — Read-only OpenFX effect descriptor.
  *
- * ClearCut does **not** host the full OpenFX runtime on Android (that would
+ * Director X does **not** host the full OpenFX runtime on Android (that would
  * mean embedding C++ plugin loading, which is out of scope for mobile). The
- * goal is narrower: define a small JSON descriptor that maps a ClearCut effect's
+ * goal is narrower: define a small JSON descriptor that maps a Director X effect's
  * parameters to OpenFX-named parameters so a future NLE round-trip pass
  * (C.14 — FCPXML / OTIO import) can preserve effect intent across imports
  * into DaVinci Resolve / Premiere / Final Cut.
  *
  * The descriptor is *one file per effect*. It is referenced by name from a
- * ClearCut effect chain (`.ncfx`, see [PluginRegistry.Kind.EFFECT_PACK]) and
+ * Director X effect chain (`.ncfx`, see [PluginRegistry.Kind.EFFECT_PACK]) and
  * carried alongside it in the same share container.
  *
  * ## File shape (`.ncfxd`)
@@ -35,44 +35,44 @@ import org.json.JSONObject
  *
  * ## What this class is not
  *
- *  - Not a runtime loader. The actual effect runs through ClearCut's existing
+ *  - Not a runtime loader. The actual effect runs through Director X's existing
  *    GLSL shader pipeline; the descriptor is metadata only.
  *  - Not a way to install third-party effects. We control the effect set;
- *    descriptors map an existing ClearCut effect to its OpenFX equivalent.
+ *    descriptors map an existing Director X effect to its OpenFX equivalent.
  *  - Not a substitute for full FCPXML compatibility. It complements C.14 by
  *    carrying effect-intent metadata across the round trip.
  */
 data class OpenFxDescriptor(
     val schemaVersion: Int,
-    val novaCutEffectId: String,
+    val directorXEffectId: String,
     val openfxId: String,
     val displayName: String,
     val parameters: List<ParameterMapping>,
 ) {
 
     /**
-     * Maps a single ClearCut effect parameter to its OpenFX equivalent.
+     * Maps a single Director X effect parameter to its OpenFX equivalent.
      *
-     * @param scale linear gain applied to the ClearCut value before passing
+     * @param scale linear gain applied to the Director X value before passing
      *   to OpenFX: `openfx = novaCut * scale + offset`.
      * @param type OpenFX parameter type: "double", "integer", "boolean",
      *   "rgba", "string", "choice". Mirrors OpenFX kOfxParamTypeXxx constants.
      */
     data class ParameterMapping(
-        val novaCutName: String,
+        val directorXName: String,
         val openfxName: String,
-        val novaCutRange: ClosedFloatingPointRange<Double>,
+        val directorXRange: ClosedFloatingPointRange<Double>,
         val openfxRange: ClosedFloatingPointRange<Double>,
         val scale: Double = 1.0,
         val offset: Double = 0.0,
         val type: String = "double",
     ) {
-        /** Convert a ClearCut parameter value into the OpenFX equivalent. */
-        fun toOpenFx(novaCutValue: Double): Double = novaCutValue * scale + offset
+        /** Convert a Director X parameter value into the OpenFX equivalent. */
+        fun toOpenFx(directorXValue: Double): Double = directorXValue * scale + offset
 
-        /** Convert an OpenFX value back into the ClearCut equivalent. */
+        /** Convert an OpenFX value back into the Director X equivalent. */
         fun fromOpenFx(openFxValue: Double): Double =
-            if (scale == 0.0) novaCutRange.start else (openFxValue - offset) / scale
+            if (scale == 0.0) directorXRange.start else (openFxValue - offset) / scale
     }
 
     /** Serialize to canonical JSON. */
@@ -86,13 +86,13 @@ data class OpenFxDescriptor(
         for (p in parameters) {
             params.put(
                 JSONObject()
-                    .put("novaCutName", p.novaCutName)
+                    .put("novaCutName", p.directorXName)
                     .put("openfxName", p.openfxName)
                     .put(
                         "novaCutRange",
                         JSONArray().apply {
-                            put(p.novaCutRange.start)
-                            put(p.novaCutRange.endInclusive)
+                            put(p.directorXRange.start)
+                            put(p.directorXRange.endInclusive)
                         }
                     )
                     .put(
@@ -125,13 +125,13 @@ data class OpenFxDescriptor(
                 val root = JSONObject(json)
                 val schema = root.optInt("schemaVersion", -1)
                 if (schema < 1 || schema > CURRENT_SCHEMA_VERSION) return null
-                val novaCutEffectId = root.optString("novaCutEffectId", "").ifBlank { return null }
+                val directorXEffectId = root.optString("novaCutEffectId", "").ifBlank { return null }
                 val openfxId = root.optString("openfxId", "").ifBlank { return null }
                 val displayName = root.optString("displayName", "")
                 val paramsArr = root.optJSONArray("parameters") ?: JSONArray()
                 val parameters = (0 until paramsArr.length()).mapNotNull { i ->
                     val p = paramsArr.optJSONObject(i) ?: return@mapNotNull null
-                    val novaCutName = p.optString("novaCutName").ifBlank { return@mapNotNull null }
+                    val directorXName = p.optString("novaCutName").ifBlank { return@mapNotNull null }
                     val openfxName = p.optString("openfxName").ifBlank { return@mapNotNull null }
                     val ncRange = p.optJSONArray("novaCutRange")
                     val ofxRange = p.optJSONArray("openfxRange")
@@ -146,9 +146,9 @@ data class OpenFxDescriptor(
                     }
                     if (ncStart > ncEnd || ofxStart > ofxEnd) return@mapNotNull null
                     ParameterMapping(
-                        novaCutName = novaCutName,
+                        directorXName = directorXName,
                         openfxName = openfxName,
-                        novaCutRange = ncStart..ncEnd,
+                        directorXRange = ncStart..ncEnd,
                         openfxRange = ofxStart..ofxEnd,
                         scale = p.optDouble("scale", 1.0),
                         offset = p.optDouble("offset", 0.0),
@@ -157,7 +157,7 @@ data class OpenFxDescriptor(
                 }
                 OpenFxDescriptor(
                     schemaVersion = schema,
-                    novaCutEffectId = novaCutEffectId,
+                    directorXEffectId = directorXEffectId,
                     openfxId = openfxId,
                     displayName = displayName,
                     parameters = parameters,
