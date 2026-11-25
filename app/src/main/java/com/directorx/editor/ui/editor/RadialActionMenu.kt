@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.TouchTarget
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -67,7 +67,7 @@ fun RadialActionMenu(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val actions = if (hasClipSelected) {
         clipActions(includeOpenCompound = hasOpenableCompoundClipSelected)
     } else {
@@ -105,7 +105,7 @@ fun RadialActionMenu(
                 .size(20.dp)
                 .scale(scale)
                 .clip(CircleShape)
-                .background(ClearCutAccents.Mauve)
+                .background(DirectorXAccents.Mauve)
         )
 
         actions.forEachIndexed { index, action ->
