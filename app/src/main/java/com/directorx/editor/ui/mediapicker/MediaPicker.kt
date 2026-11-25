@@ -48,7 +48,7 @@ import com.directorx.editor.engine.insufficientSpaceFor
 import com.directorx.editor.engine.pendingCameraCaptureDir
 import com.directorx.editor.engine.querySourceSize
 import com.directorx.editor.engine.resolveManagedMediaExtension
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.editor.PremiumEditorPanel
 import com.directorx.editor.ui.editor.PremiumPanelCard
 import com.directorx.editor.ui.editor.PremiumPanelPill
@@ -594,7 +594,7 @@ fun MediaPickerSheet(
             cancelActiveOperation()
             onClose()
         },
-        closeButtonTestTag = ClearCutTestTags.MEDIA_PICKER_CLOSE,
+        closeButtonTestTag = DirectorXTestTags.MEDIA_PICKER_CLOSE,
         modifier = modifier
             .heightIn(min = 240.dp, max = 560.dp)
             .dragAndDropTarget(
