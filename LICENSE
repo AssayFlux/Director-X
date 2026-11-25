@@ -1,0 +1,146 @@
+# AssayFlux Licencing Terms
+
+**Version v0.1.0**
+
+Copyright (c) 2026 [LEGAL NAME OR "AssayFlux"]. All rights reserved except as expressly granted below.
+
+By accessing, copying, building, modifying or using the Original Work, you accept these terms. If you do not accept them, do not access, copy, build, modify or use it.
+
+This file has two parts:
+
+- **Part 1** governs the Original Work of Director X.
+- **Part 2** lists third-party components that keep their own licenses. Part 1 does not apply to them and does not reduce your rights under them.
+
+---
+
+## Part 1: AssayFlux Licencing Terms for Director X
+
+### 1. Definitions
+
+- **"AssayFlux"** means [LEGAL NAME / COMPANY NAME], the licensor.
+- **"Original Work"** means all source code, scripts, build configuration, user-interface designs, graphics, icons, branding assets and documentation authored by or for AssayFlux for Director X, including AssayFlux's modifications to third-party code, but excluding the Third-Party Components in Part 2. Schedule A lists the main Original Work. That list is illustrative and AssayFlux may update it.
+- **"You"** means the person or organization using the Original Work.
+- **"Non-Commercial Use"** means personal, educational or research use that is not intended for, and does not produce, commercial advantage or monetary compensation. Use by or inside a for-profit organization, or for any business purpose, is commercial.
+- **"Competing Product"** means any app, tool or service that offers video-editing functionality substantially similar to Director X.
+- **"Derivative Work"** means any work that includes, is based on, or is built from the Original Work, in whole or in part.
+
+### 2. License grant
+
+Subject to these terms, AssayFlux grants You a limited, non-exclusive, non-transferable, non-sublicensable, worldwide license to view, build, run and modify the Original Work for Non-Commercial Use.
+
+A for-profit organization may also evaluate the Original Work internally for up to 30 days to decide whether to request a commercial license.
+
+### 3. Restrictions
+
+Without AssayFlux's prior written permission, You may not:
+
+1. Use the Original Work or any Derivative Work for any commercial purpose, including selling it, offering it as a paid, subscription or ad-supported app or service, or bundling it into a paid product.
+2. Copy, distribute, publish, host or otherwise make available the Original Work or any Derivative Work, in source or compiled form, including APK or AAB files, app-store listings, mirrors and package registries.
+3. Build, operate or contribute to a Competing Product using the Original Work.
+4. Remove or alter copyright, license, attribution or trademark notices.
+5. Remove, disable, bypass or tamper with subscription, billing, entitlement, licensing, signing or watermark features, or help others do so.
+6. Sublicense, rent, lease, transfer or grant any rights in the Original Work to anyone else.
+7. Use the Original Work as training data, fine-tuning data or evaluation data for any machine-learning model, or include it in any dataset.
+8. Decompile or reverse-engineer compiled Director X builds to extract the Original Work, except to the extent applicable law allows despite this restriction.
+9. Use the Original Work in a way that breaks any law or the rights of others.
+
+### 4. Ownership and Derivative Works
+
+AssayFlux keeps all right, title and interest in the Original Work. You keep ownership of code that You write yourself and that does not include any Original Work. Any Derivative Work stays subject to these terms and may not be distributed or used commercially.
+
+### 5. Contributions
+
+If You submit a contribution (such as a pull request, patch or issue attachment), then:
+
+1. You grant AssayFlux a perpetual, worldwide, irrevocable, royalty-free, transferable and sublicensable license to use, copy, modify, distribute and commercialize it, in any form and under any terms AssayFlux chooses.
+2. To the extent allowed by law, You waive any moral rights in it.
+3. You confirm that it is Your own original work, or that You have the right to submit it, and that it does not include code under a license that would conflict with these terms (for example GPL or AGPL code).
+4. AssayFlux has no duty to accept, credit or pay for any contribution.
+
+### 6. Reservation of rights
+
+All rights not expressly granted are reserved. No license is granted by implication, estoppel or otherwise. This includes any patent rights in the Original Work.
+
+### 7. Names and logos
+
+"Director X", "AssayFlux" and their logos and branding are not licensed to You. Do not use them as, or in, the name of Your own product, service, account or domain, or to suggest endorsement or affiliation.
+
+### 8. GitHub
+
+Nothing in these terms limits the rights that GitHub's Terms of Service give users to view and fork this repository on GitHub. Those rights do not allow any use beyond what Section 2 permits.
+
+### 9. Third-party components
+
+Part 2 and the licenses it names govern the Third-Party Components. Nothing in Part 1 restricts Your rights under those licenses.
+
+### 10. Termination
+
+Your rights under Part 1 end automatically if You break any of its terms. You must then stop using the Original Work and delete all copies, including Derivative Works.
+
+If this is Your first violation and You fully cure it within 30 days after AssayFlux gives You notice, Your rights are reinstated. AssayFlux may refuse reinstatement for repeated or willful violations. Sections 4, 6, 7, 10, 11, 12, 13, 14 and 15 survive termination.
+
+### 11. Remedies
+
+Use of the Original Work outside these terms is unauthorized and may infringe AssayFlux's copyright. You agree that a breach of Section 3 would cause AssayFlux irreparable harm that money alone cannot repair, and that AssayFlux may seek an injunction or other equitable relief without posting a bond, in addition to damages and any other remedy. To the extent the law allows, the party that wins a legal action about these terms may recover its reasonable legal costs.
+
+### 12. No warranty
+
+THE ORIGINAL WORK IS PROVIDED "AS IS" AND "AS AVAILABLE", WITHOUT WARRANTY OF ANY KIND, EXPRESS, IMPLIED OR STATUTORY, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NON-INFRINGEMENT.
+
+### 13. Limitation of liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, ASSAYFLUX WILL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL OR PUNITIVE DAMAGES, OR FOR LOSS OF DATA, PROFITS OR REVENUE, ARISING FROM THE ORIGINAL WORK OR ITS USE, EVEN IF ADVISED OF THE POSSIBILITY. ASSAYFLUX'S TOTAL LIABILITY FOR ALL CLAIMS WILL NOT EXCEED THE AMOUNT YOU PAID FOR THE ORIGINAL WORK, OR ZERO IF YOU PAID NOTHING.
+
+### 14. Indemnity
+
+You will defend and indemnify AssayFlux against any claim, loss or expense (including reasonable legal fees) arising from Your breach of these terms or from Your Derivative Works or their use.
+
+### 15. Governing law and disputes
+
+These terms are governed by the laws of [STATE / COUNTRY], without regard to conflict-of-law rules. The courts located in [CITY, STATE / COUNTRY] have exclusive jurisdiction over any dispute about these terms, and You consent to that jurisdiction. AssayFlux may seek injunctive relief in any court with jurisdiction.
+
+### 16. General
+
+1. If any provision is held unenforceable, it will be enforced to the maximum extent allowed and the rest of these terms stay in effect.
+2. A failure to enforce any provision is not a waiver of it.
+3. These terms are the entire agreement about the Original Work and replace any earlier terms for it, including any MIT or other license previously shown in this repository for the Original Work.
+4. You may not assign these terms. AssayFlux may assign them freely.
+5. AssayFlux may publish new versions of these terms. A new version applies to Original Work released after it is published. Copies You already received stay under the version they came with.
+
+### 17. Commercial licensing and reporting
+
+For a commercial license, any other permission, or to report a violation, contact: [YOUR EMAIL]
+
+---
+
+## Schedule A: Main Original Work
+
+AssayFlux's Original Work includes the following (illustrative, not exhaustive):
+
+- [LIST THE FOLDERS AND FILES YOU WROTE, for example: new feature modules, Pro/billing and entitlement code, new AI tool integrations, UI and branding assets such as `Assets/` and `branding/`, build and release scripts you added, documentation you wrote]
+
+---
+
+## Part 2: Third-party notices
+
+### ClearCut (MIT License)
+
+Portions of Director X are derived from ClearCut (formerly NovaCut) by SysAdminDoc: https://github.com/SysAdminDoc/ClearCut
+
+ClearCut is licensed under the MIT License. That code remains available under the MIT License to the extent it is ClearCut's. Part 1 applies only to the Original Work.
+
+Copyright (c) [PASTE THE EXACT COPYRIGHT LINE FROM CLEARCUT'S LICENSE FILE]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+### FFmpegKitNext / FFmpeg (LGPL-3.0-or-later)
+
+Director X uses FFmpegKitNext and FFmpeg as a separate library under the GNU Lesser General Public License, version 3 or later. Its license text and source-offer files are packaged with it (see `third_party/ffmpeg-kit-next`). Nothing in Part 1 restricts Your rights under the LGPL for that library, including Your right to replace it.
+
+### Other dependencies and models
+
+Media3, ONNX Runtime, MediaPipe, Lottie, OkHttp, Coil, Hilt and the other libraries and AI models used by Director X keep their own licenses. See `ACKNOWLEDGMENTS.md` and `NOTICE`.

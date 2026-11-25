@@ -1,0 +1,106 @@
+Director X — FFmpegKitNext / FFmpeg corresponding-source offer
+====================================================================
+
+Binary covered
+--------------
+Director X distributes FFmpegKitNext 9.0.2 with FFmpeg 9.0.2 as an Android
+native library under LGPL-3.0-or-later. This notice identifies the source
+needed to modify, rebuild, and relink that library. It does not replace the
+licence texts or notices of FFmpegKitNext and its bundled dependencies.
+
+Complete, version-pinned source set
+-----------------------------------
+1. FFmpegKitNext upstream source, exact wrapper commit:
+   https://github.com/arthenica/ffmpeg-kit-next/tree/9f04bf1e3c97def70b98e198cb80a57b43ef5b45
+
+2. Director X build modifications, helper scripts, security patch, native
+   lock, and third-party notices, at the immutable repository revision:
+   https://github.com/AssayFlux/Director-X/tree/b68e23d9c72384e005b546cd4b2bed3ece0cd48d
+
+3. FFmpeg source:
+   upstream signed tag n9.0.2, commit
+   946fcce07b6dcd0331c8cc609192aeff5e1924f8.
+   Release archive: https://ffmpeg.org/releases/ffmpeg-9.0.2.tar.xz
+   The native build workflow verifies the FFmpeg release signature and the
+   signed n9.0.2 tag before building.
+
+4. The exact downstream patch is
+   third_party/ffmpeg-kit-next/directorx-security.patch
+   SHA-256:
+   9bef0a69f02c26bc7fa2620009ca15da962221dbd39342fb2466cbf9b4c6d4bc
+
+5. The post-checkout source-preparation script is
+   scripts/prepare_ffmpeg_kit_next_9_source.sh. It applies the recorded
+   FriBidi and FreeType host-build corrections and the FFmpeg security
+   backport preparation. The native lock records the component source
+   revisions, licence expressions, patch checksum, build parameters,
+   artifact hashes, and advisory decisions:
+   third_party/ffmpeg-kit-next/native-lock.json
+
+Reproduce the native library
+----------------------------
+Use a Linux environment supported by the pinned FFmpegKitNext Nix
+configuration. Install Git, Bash, Python 3, GnuPG, xz-utils, and the Nix
+package manager with flakes enabled. Then run:
+
+  git clone https://github.com/arthenica/ffmpeg-kit-next.git
+  cd ffmpeg-kit-next
+  git checkout 9f04bf1e3c97def70b98e198cb80a57b43ef5b45
+  cd ..
+
+  git clone https://github.com/AssayFlux/Director-X.git director-x
+  cd director-x
+  git checkout b68e23d9c72384e005b546cd4b2bed3ece0cd48d
+
+  git -C ../ffmpeg-kit-next config core.autocrlf false
+  git -C ../ffmpeg-kit-next apply --check \
+    "$PWD/third_party/ffmpeg-kit-next/directorx-security.patch"
+  git -C ../ffmpeg-kit-next apply \
+    "$PWD/third_party/ffmpeg-kit-next/directorx-security.patch"
+  bash scripts/prepare_ffmpeg_kit_next_9_source.sh \
+    ../ffmpeg-kit-next/scripts/source.sh
+
+  cd ../ffmpeg-kit-next
+  export version_ffmpeg=n9.0.2
+  export RECONF_fribidi=1
+
+Build each ABI separately using the same command and options as the
+published build. Substitute one --arch value per build:
+
+  ./nix-android.sh -p android-r27d --arch=arm-v7a \
+    --enable-lib-libass --enable-lib-libjxl \
+    --enable-lib-android-media-codec --enable-lib-android-zlib \
+    --enable-lib-openh264 --jobs=8
+
+The five published ABI targets map as follows:
+  armeabi-v7a       -> arm-v7a
+  armeabi-v7a-neon  -> arm-v7a-neon
+  arm64-v8a         -> arm64-v8a
+  x86               -> x86
+  x86_64            -> x86-64
+
+Pinned build environment: Android NDK 27.3.13750724 (Nix profile
+android-r27d), Android API 24. The wrapper's pinned Nix expressions and
+source scripts select the supporting library revisions; do not replace
+them with floating dependency versions.
+
+For verification, compare the resulting AAR and POM with the SHA-256 values
+in third_party/ffmpeg-kit-next/native-lock.json. The published AAR checksum
+is 44e96b4cb4a1b35e7a38d8cdc1a9707aaae17fffd83cee7f1da56663bd87b2f6 and
+the POM checksum is
+5155f70d1f51723aed0ebe3d7fcedfed0ab7e12e7f72fa3497df9f016ef60839.
+
+Source access and written-offer contact
+---------------------------------------
+The source locations above are publicly accessible without payment and are
+provided for recipients of the corresponding binary. If a recipient cannot
+access them or needs the corresponding source in another reasonable form,
+they may request it through the Director X repository:
+https://github.com/AssayFlux/Director-X/issues
+
+Identify the Director X version/build received and request the
+"FFmpegKitNext 9.0.2 corresponding source". Preserve this notice with the
+binary and make the corresponding source available to recipients for the
+period required by the applicable LGPL version. This source offer concerns
+the FFmpegKitNext/FFmpeg library; other bundled components retain their
+separate licence and source obligations.

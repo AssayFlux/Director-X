@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "publicProductName": "Director X",
+  "retiredPublicProductName": "NovaCut",
+  "applicationId": "com.directorx.editor",
+  "namespace": "com.directorx.editor",
+  "sourcePackage": "com.directorx.editor",
+  "migrationPolicy": {
+    "applicationId": "new-install-with-explicit-export-import",
+    "namespace": "migrate-source-namespace-to-directorx",
+    "signingCertificate": "retain-pinned-release-identity",
+    "identityChange": "new-install-with-explicit-export-import"
+  },
+  "nonReleaseVariants": {
+    "streaming": {
+      "applicationIdSuffix": ".streaming",
+      "purpose": "local-debug-network-streaming"
+    }
+  },
+  "providerAuthorities": [
+    "${applicationId}.androidx-startup",
+    "${applicationId}.fileprovider"
+  ],
+  "shortcutTarget": {
+    "package": "com.directorx.editor",
+    "class": "com.directorx.editor.MainActivity",
+    "actions": [
+      "com.directorx.editor.action.NEW_PROJECT",
+      "com.directorx.editor.action.OPEN_RECENT"
+    ]
+  },
+  "archiveAssociations": {
+    "extensions": [
+      ".clearcut",
+      ".clearcut-template"
+    ],
+    "mimeTypes": [
+      "application/octet-stream",
+      "application/json",
+      "application/zip",
+      "application/xml",
+      "text/xml",
+      "text/plain"
+    ]
+  },
+  "publicSurfacePaths": [
+    "README.md",
+    "docs/privacy-policy.md",
+    "docs/play-data-safety.md",
+    "fastlane/metadata/android/en-US/title.txt",
+    "fastlane/metadata/android/en-US/short_description.txt",
+    "fastlane/metadata/android/en-US/full_description.txt",
+    "fastlane/metadata/android/es-ES/title.txt",
+    "fastlane/metadata/android/es-ES/short_description.txt",
+    "fastlane/metadata/android/es-ES/full_description.txt"
+  ],
+  "readmePolicyPhrases": [
+    "### Package identity and upgrade policy",
+    "`com.directorx.editor`",
+    "new install with an explicit export/import path"
+  ],
+  "previousApplicationId": "com.novacut.editor",
+  "previousNamespace": "com.novacut.editor"
+}

@@ -1,0 +1,114 @@
+{
+  "assets": [
+    {
+      "altText": "Director X app icon",
+      "caption": "High-resolution Play Store icon.",
+      "height": 512,
+      "path": "icon.png",
+      "source": "_source/icon.svg",
+      "sourceSha256": "a90d636bcba3723f22e267f6978f180acd0538f6845f39068d8f12d7a8bcb1c3",
+      "sourceType": "generated-svg",
+      "width": 512
+    },
+    {
+      "altText": "Director X feature graphic",
+      "caption": "Feature graphic for the main store listing.",
+      "height": 500,
+      "path": "featureGraphic.png",
+      "source": "_source/featureGraphic.svg",
+      "sourceSha256": "4a5ea8a3f870576691fe1edc43ada2ae822f176d8a436f6143dd62f542eb92a0",
+      "sourceType": "generated-svg",
+      "width": 1024
+    },
+    {
+      "path": "phoneScreenshots/01-home.jpg",
+      "width": 1540,
+      "height": 3264,
+      "altText": "Director X home screen with project creation, import, and built-in templates.",
+      "caption": "Home screen and built-in project templates.",
+      "sourceType": "device-capture",
+      "source": "../../../../../Assets/Play Console Publishing Screenshots/20261124_075536.jpg",
+      "sourceSha256": "48dfe21823ac4f5c2a8e3df1a2a84912167e47eca88205c091643aa6a8758ec2",
+      "transform": "none"
+    },
+    {
+      "path": "phoneScreenshots/02-new-project.jpg",
+      "width": 1540,
+      "height": 3264,
+      "altText": "New Project screen showing built-in video project templates.",
+      "caption": "Start a project from a built-in template.",
+      "sourceType": "device-capture",
+      "source": "../../../../../Assets/Play Console Publishing Screenshots/20261124_075817.jpg",
+      "sourceSha256": "f7fa68baae95a0de7f17291219cac6d1d733fff4ffbca3c54b1cde7f84950590",
+      "transform": "none"
+    },
+    {
+      "path": "phoneScreenshots/03-editor.jpg",
+      "width": 1540,
+      "height": 3264,
+      "altText": "Director X editor workspace with preview, timeline tracks, and editing tools.",
+      "caption": "Multi-track editor workspace.",
+      "sourceType": "device-capture",
+      "source": "../../../../../Assets/Play Console Publishing Screenshots/20261124_075845.jpg",
+      "sourceSha256": "6a6de045e126bf09da061f3f08e65d8797a28c9e362cd7d2e63a7443928089e3",
+      "transform": "none"
+    },
+    {
+      "path": "phoneScreenshots/04-export.jpg",
+      "width": 1540,
+      "height": 3264,
+      "altText": "Export screen with output format, resolution, codec, and delivery options.",
+      "caption": "Export settings and delivery options.",
+      "sourceType": "device-capture",
+      "source": "../../../../../Assets/Play Console Publishing Screenshots/20261124_075909.jpg",
+      "sourceSha256": "d4d05bcbed80abc9ac5df9c0830f02ff4fee646c043eeafb23a5f68c38177692",
+      "transform": "none"
+    },
+    {
+      "path": "phoneScreenshots/05-ai-models.jpg",
+      "width": 1540,
+      "height": 3264,
+      "altText": "AI Models settings for optional on-device model downloads and storage.",
+      "caption": "Optional on-device AI models.",
+      "sourceType": "device-capture",
+      "source": "../../../../../Assets/Play Console Publishing Screenshots/20261124_075724.jpg",
+      "sourceSha256": "4ce4550fbeb0f5e88c5495710480c2c48344d7482e5542c75260b365946c7d60",
+      "transform": "none"
+    },
+    {
+      "path": "phoneScreenshots/06-timeline-settings.jpg",
+      "width": 1540,
+      "height": 3264,
+      "altText": "Timeline settings for autosave, proxy editing, waveforms, snapping, and track height.",
+      "caption": "Timeline and editing preferences.",
+      "sourceType": "device-capture",
+      "source": "../../../../../Assets/Play Console Publishing Screenshots/20261124_075637.jpg",
+      "sourceSha256": "922b46b65d585fd86226b649a845201135266fee646fa1c37e9f25ee86f3d136",
+      "transform": "none"
+    },
+    {
+      "path": "phoneScreenshots/07-appearance.jpg",
+      "width": 1540,
+      "height": 3264,
+      "altText": "Appearance and editor preferences in Director X settings.",
+      "caption": "Appearance and editor preferences.",
+      "sourceType": "device-capture",
+      "source": "../../../../../Assets/Play Console Publishing Screenshots/20261124_075742.jpg",
+      "sourceSha256": "cafc46035c97fdd29d6adea2831e3ed6943fe6c3aa38d708f8d9f2796c109522",
+      "transform": "none"
+    },
+    {
+      "path": "phoneScreenshots/08-export-defaults.jpg",
+      "width": 1540,
+      "height": 3264,
+      "altText": "Export defaults for resolution, frame rate, aspect ratio, codec, and notifications.",
+      "caption": "Export defaults and notification controls.",
+      "sourceType": "device-capture",
+      "source": "../../../../../Assets/Play Console Publishing Screenshots/20261124_075616.jpg",
+      "sourceSha256": "c5fb2de57b8477388773215cfd871f8d148192705b6aea51a05b83769c083634",
+      "transform": "none"
+    }
+  ],
+  "schema": "org.assayflux.directorx.play-listing-assets.v1",
+  "updated": "2026-11-24"
+}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="crust">#FFEAE3D2</color>
+    <color name="mantle">#FFF0E9DB</color>
+    <color name="base">#FFF5F0E6</color>
+    <color name="surface0">#FFEAE3D2</color>
+    <color name="surface1">#FFE2D8C5</color>
+    <color name="surface2">#FFD9CDB7</color>
+    <color name="overlay0">#FFB9AF9F</color>
+    <color name="overlay1">#FF8C8275</color>
+    <color name="overlay2">#FF71675B</color>
+    <color name="subtext0">#FF71675B</color>
+    <color name="subtext1">#FF5B5147</color>
+    <color name="text">#FF2C2621</color>
+    <color name="lavender">#FF9A8A9C</color>
+    <color name="blue">#FF7B9295</color>
+    <color name="sapphire">#FF66868A</color>
+    <color name="sky">#FFC29B38</color>
+    <color name="teal">#FF5A6B57</color>
+    <color name="green">#FF5A6B57</color>
+    <color name="yellow">#FFC29B38</color>
+    <color name="peach">#FFA98432</color>
+    <color name="maroon">#FF8A5B4D</color>
+    <color name="red">#FFA7473A</color>
+    <color name="mauve">#FF96775C</color>
+    <color name="pink">#FFA77C75</color>
+    <color name="flamingo">#FFA77C75</color>
+    <color name="rosewater">#FFD8C9B5</color>
+</resources>

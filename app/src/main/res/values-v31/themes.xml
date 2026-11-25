@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Keep the system splash neutral; the complete uncropped wordmark is rendered by Compose. -->
+    <style name="Theme.DirectorX" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:colorBackground">@color/base</item>
+        <item name="android:statusBarColor">@color/base</item>
+        <item name="android:navigationBarColor">@color/base</item>
+        <item name="android:windowBackground">@color/base</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowSplashScreenBackground">@color/base</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@android:color/transparent</item>
+    </style>
+</resources>

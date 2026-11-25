@@ -1,0 +1,40 @@
+{
+  "$schema": "./branding.schema.json",
+  "brand": {
+    "appName": "Director X",
+    "developer": "AssayFlux"
+  },
+  "launcher": {
+    "asset": "Director-X Logo.svg",
+    "sourceDirectory": "Assets"
+  },
+  "splash": {
+    "background": "#FFFFFF",
+    "sequence": [
+      {
+        "asset": "Director-X Logo.svg",
+        "durationMs": 700
+      }
+    ],
+    "transitionDurationMs": 200
+  },
+  "about": {
+    "authorName": "Md Safarujjaman",
+    "signatureAsset": "Author's Signature.svg",
+    "assayFluxLine": "AssayFlux — building thoughtful tools where creativity meets engineering."
+  },
+  "placements": {
+    "dashboard": {
+      "logo": "none",
+      "texture": "none"
+    },
+    "settings": {
+      "logo": "none",
+      "texture": "none"
+    },
+    "editor": {
+      "logo": "none",
+      "texture": "none"
+    }
+  }
+}

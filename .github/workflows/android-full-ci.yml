@@ -1,0 +1,306 @@
+name: Android full verification
+
+on:
+  push:
+    branches: [Alpha]
+  pull_request:
+    branches: [Alpha]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-full-ci-${{ github.ref }}
+  # Do not terminate active managed-device/emulator acceptance runs when a
+  # follow-up commit is pushed to this PR branch. Superseding a run mid-boot
+  # produces misleading runner-shutdown failures instead of a test result.
+  cancel-in-progress: false
+
+env:
+  ANDROID_HOME: /usr/local/lib/android/sdk
+  ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+
+jobs:
+  static-and-supply-chain:
+    name: Static Analysis & supply chain check
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install Android compile SDK
+        run: |
+          set -euo pipefail
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
+          test -x "$SDKMANAGER"
+          "$SDKMANAGER" --channel=3 "platforms;android-37.0" "build-tools;37.0.0"
+      - name: Install Python asset renderers
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/directorx-renderers"
+          "$RUNNER_TEMP/directorx-renderers/bin/python" -m pip install --disable-pip-version-check CairoSVG Pillow
+          "$RUNNER_TEMP/directorx-renderers/bin/python" -m pip install --disable-pip-version-check -r scripts/requirements.txt
+          echo "$RUNNER_TEMP/directorx-renderers/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/directorx-renderers/bin/python" -c "import cairosvg; from PIL import Image; import opentimelineio"
+      - uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c
+      - name: Verify native supply-chain policy and negative tests
+        run: |
+          set -euo pipefail
+          python3 scripts/verify_native_supply_chain.py --self-test
+          python3 scripts/verify_native_supply_chain.py
+      - name: Validate branding and prohibit runtime WebView artwork
+        run: python3 scripts/validate_branding.py
+      - name: Run repository, Python, and release metadata regression checks
+        run: |
+          set -euo pipefail
+          python3 -m unittest discover -s scripts -p 'test_*.py' -v
+          python3 scripts/release_identity.py --self-test
+          python3 scripts/verify_release_artifacts.py --self-test
+          python3 scripts/write_release_checksums.py --self-test
+          python3 scripts/write_apk_signing_fingerprints.py --self-test
+          python3 scripts/check_repository_duplicates.py
+          python3 scripts/validate_readme_links.py
+          python3 scripts/validate_public_claims.py
+          python3 scripts/validate_package_identity.py
+          python3 scripts/validate_version_consistency.py
+          python3 scripts/validate_android_audio_api_policy.py
+          python3 scripts/validate_distribution_readiness.py --self-test
+          python3 scripts/validate_distribution_readiness.py
+          python3 scripts/verify_otio_exports.py --self-test
+      - name: Verify native SBOM and provenance
+        run: bash ./gradlew --no-daemon :app:generateNativeSbom
+      - name: Verify resolved dependency advisory floors
+        run: bash ./gradlew --no-daemon :app:verifyResolvedAdvisoryFloors
+      - name: Exercise native promotion provenance guard
+        env:
+          SOURCE_REVISION: ${{ github.sha }}
+          NATIVE_RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          manifest="$RUNNER_TEMP/native-build-provenance.json"
+          python3 scripts/verify_ffmpeg_promotion_provenance.py --create --revision "$SOURCE_REVISION" --run-id "$NATIVE_RUN_ID" --built-at "CI self-test" --manifest "$manifest" --aar third_party/ffmpeg-kit-next/ffmpeg-kit-next-9.0.2.aar --pom third_party/ffmpeg-kit-next/ffmpeg-kit-next-9.0.2.pom
+          python3 scripts/verify_ffmpeg_promotion_provenance.py --verify --revision "$SOURCE_REVISION" --run-id "$NATIVE_RUN_ID" --manifest "$manifest" --aar third_party/ffmpeg-kit-next/ffmpeg-kit-next-9.0.2.aar --pom third_party/ffmpeg-kit-next/ffmpeg-kit-next-9.0.2.pom
+      - name: Verify published release APK trust sidecars
+        env:
+          DIRECTOR_X_GITHUB_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/verify_published_release_sidecars.py --limit 20
+      - name: Compile Stage 4 macrobenchmark instrumentation
+        run: bash ./gradlew --no-daemon :baselineprofile:assembleBenchmark
+      - name: Run Android lint (retry Maven Central rate limits)
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3; do
+            log_file="$RUNNER_TEMP/android-lint-attempt-$attempt.log"
+            if bash ./gradlew --no-daemon :app:lintQa 2>&1 | tee "$log_file"; then
+              exit 0
+            fi
+            if ! grep -Eq 'status code 429|Too Many Requests' "$log_file"; then
+              exit 1
+            fi
+            if [ "$attempt" -lt 3 ]; then
+              sleep "$((attempt * 30))"
+            fi
+          done
+          echo "Android lint could not resolve dependencies after three Maven Central 429 retries." >&2
+          exit 1
+
+  unit-tests:
+    name: JVM unit tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install Android compile SDK
+        run: |
+          set -euo pipefail
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
+          test -x "$SDKMANAGER"
+          "$SDKMANAGER" --channel=3 "platforms;android-37.0" "build-tools;37.0.0"
+      - name: Install Python asset renderers
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/directorx-renderers"
+          "$RUNNER_TEMP/directorx-renderers/bin/python" -m pip install --disable-pip-version-check CairoSVG Pillow
+          echo "$RUNNER_TEMP/directorx-renderers/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/directorx-renderers/bin/python" -c "import cairosvg; from PIL import Image"
+      - uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c
+      - name: Run complete QA JVM test suite
+        run: bash ./gradlew --no-daemon :app:testQaUnitTest
+      - name: Upload JVM test reports
+        if: always()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4
+        with:
+          name: android-jvm-test-reports-${{ github.sha }}
+          path: |
+            app/build/reports/tests/testQaUnitTest/**
+            app/build/test-results/testQaUnitTest/**
+          retention-days: 7
+          if-no-files-found: ignore
+
+  managed-device-instrumentation:
+    # Deferred until engineering PRs are integrated into Alpha.
+    # Exercise device and artifact lanes on pull requests as well as Alpha pushes.
+    name: Android instrumentation & room migration tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 85
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - name: Enable KVM access for the API 35 emulator
+        run: |
+          set -euo pipefail
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          sudo chmod 0666 /dev/kvm
+          test -r /dev/kvm
+          test -w /dev/kvm
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install Android compile SDK
+        run: |
+          set -euo pipefail
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
+          test -x "$SDKMANAGER"
+          "$SDKMANAGER" --channel=3 "platforms;android-37.0" "build-tools;37.0.0"
+      - name: Install Python asset renderers
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/directorx-renderers"
+          "$RUNNER_TEMP/directorx-renderers/bin/python" -m pip install --disable-pip-version-check CairoSVG Pillow
+          echo "$RUNNER_TEMP/directorx-renderers/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/directorx-renderers/bin/python" -c "import cairosvg; from PIL import Image"
+      - uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c
+      - name: Run QA instrumentation suite on API 35 emulator
+        uses: ReactiveCircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
+        with:
+          api-level: 35
+          target: google_apis
+          arch: x86_64
+          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -accel on
+          disable-animations: true
+          script: bash ./gradlew --no-daemon :app:connectedQaAndroidTest
+      - name: Upload Android instrumentation reports
+        if: always()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4
+        with:
+          name: android-instrumentation-reports-${{ github.sha }}
+          path: |
+            app/build/reports/androidTests/connected/qa/**
+            app/build/outputs/androidTest-results/connected/qa/**
+          if-no-files-found: ignore
+          retention-days: 7
+
+  api37-managed-device:
+    # Deferred until engineering PRs are integrated into Alpha.
+    # Exercise device and artifact lanes on pull requests as well as Alpha pushes.
+    name: Android API 37 managed device acceptance
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      ANDROID_I_WANT_MY_TCG: "yes"
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - name: Install Python asset renderers
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/directorx-renderers"
+          "$RUNNER_TEMP/directorx-renderers/bin/python" -m pip install --disable-pip-version-check CairoSVG Pillow
+          echo "$RUNNER_TEMP/directorx-renderers/bin" >> "$GITHUB_PATH"
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880
+        with:
+          distribution: temurin
+          java-version: "21"
+      - name: Install Android API 37 compile SDK
+        run: |
+          set -euo pipefail
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
+          test -x "$SDKMANAGER"
+          "$SDKMANAGER" --channel=3 "platforms;android-37.0" "build-tools;37.0.0"
+      - name: Enable KVM access for the API 37 emulator
+        run: |
+          set -euo pipefail
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          sudo chmod 0666 /dev/kvm
+          test -r /dev/kvm
+          test -w /dev/kvm
+      - uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c
+      - name: Run and classify API 37 managed-device baseline
+        timeout-minutes: 60
+        run: python3 scripts/run_api37_qa.py --timeout-seconds 3300 --report-dir app/build/reports/connected-qa
+      - name: Run Stage 4 startup and editor macrobenchmarks
+        timeout-minutes: 45
+        run: bash ./gradlew --no-daemon :baselineprofile:pixel6Api37BenchmarkAndroidTest
+      - name: Upload API 37 managed-device reports
+        if: always()
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4
+        with:
+          name: android-api37-qa-reports-${{ github.sha }}
+          path: |
+            app/build/reports/connected-qa/**
+            build/reports/dependency-verification/**
+            app/build/outputs/androidTest-results/managedDevice/qa/directorXApi37/**
+            baselineprofile/build/reports/**
+            baselineprofile/build/outputs/**
+          if-no-files-found: ignore
+          retention-days: 14
+
+  qa-package:
+    # Deferred until engineering PRs are integrated into Alpha.
+    # Exercise device and artifact lanes on pull requests as well as Alpha pushes.
+    name: QA apk assembly & native allignment
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install Android compile SDK
+        run: |
+          set -euo pipefail
+          SDKMANAGER="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager | sort -V | tail -n 1)"
+          test -x "$SDKMANAGER"
+          "$SDKMANAGER" --channel=3 "platforms;android-37.0" "build-tools;37.0.0"
+      - name: Install Python asset renderers
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/directorx-renderers"
+          "$RUNNER_TEMP/directorx-renderers/bin/python" -m pip install --disable-pip-version-check CairoSVG Pillow
+          echo "$RUNNER_TEMP/directorx-renderers/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/directorx-renderers/bin/python" -c "import cairosvg; from PIL import Image"
+      - uses: gradle/actions/setup-gradle@0723195856401067f7a2779048b490ace7a47d7c
+      - name: Verify FFmpegKitNext and assemble QA APKs
+        run: bash ./gradlew --no-daemon :app:verifyFfmpegKitAar :app:assembleQa
+      - name: Verify packaged native libraries and create checksums
+        run: |
+          set -euo pipefail
+          mapfile -t apks < <(find app/build/outputs/apk/qa -type f -name '*.apk' | sort)
+          test "${#apks[@]}" -gt 0
+          for apk in "${apks[@]}"; do
+            python3 scripts/check_16kb_alignment.py "$apk"
+          done
+          (cd app/build/outputs/apk/qa && find . -type f -name '*.apk' -print0 | sort -z | xargs -0 sha256sum) > app/build/outputs/apk/qa/SHA256SUMS
+      - name: Upload QA APKs
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4
+        with:
+          name: directorx-qa-apks-${{ github.sha }}
+          path: |
+            app/build/outputs/apk/qa/**/*.apk
+            app/build/outputs/apk/qa/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 14

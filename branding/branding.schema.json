@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://assayflux.xyz/schemas/director-x-branding.schema.json",
+  "title": "Director X branding configuration",
+  "type": "object",
+  "required": [
+    "brand",
+    "launcher",
+    "splash",
+    "about",
+    "placements"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "brand": {
+      "type": "object",
+      "required": [
+        "appName",
+        "developer"
+      ],
+      "properties": {
+        "appName": {
+          "const": "Director X"
+        },
+        "developer": {
+          "const": "AssayFlux"
+        }
+      },
+      "additionalProperties": false
+    },
+    "launcher": {
+      "type": "object",
+      "required": [
+        "asset",
+        "sourceDirectory"
+      ],
+      "properties": {
+        "asset": {
+          "type": "string",
+          "pattern": "^[^/\\\\]+\\.(svg|png)$"
+        },
+        "sourceDirectory": {
+          "const": "Assets"
+        }
+      },
+      "additionalProperties": false
+    },
+    "splash": {
+      "type": "object",
+      "required": [
+        "background",
+        "sequence",
+        "transitionDurationMs"
+      ],
+      "properties": {
+        "background": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "sequence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "asset",
+              "durationMs"
+            ],
+            "properties": {
+              "asset": {
+                "type": "string",
+                "pattern": "^[^/\\\\]+\\.(svg|png|gif)$"
+              },
+              "durationMs": {
+                "type": "integer",
+                "minimum": 250,
+                "maximum": 15000
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "transitionDurationMs": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        }
+      },
+      "additionalProperties": false
+    },
+    "about": {
+      "type": "object",
+      "required": [
+        "authorName",
+        "signatureAsset",
+        "assayFluxLine"
+      ],
+      "properties": {
+        "authorName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "signatureAsset": {
+          "type": "string",
+          "pattern": "^[^/\\\\]+\\.svg$"
+        },
+        "assayFluxLine": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        }
+      },
+      "additionalProperties": false
+    },
+    "placements": {
+      "type": "object",
+      "required": [
+        "dashboard",
+        "settings",
+        "editor"
+      ],
+      "properties": {
+        "dashboard": {
+          "$ref": "#/$defs/placement"
+        },
+        "settings": {
+          "$ref": "#/$defs/placement"
+        },
+        "editor": {
+          "$ref": "#/$defs/placement"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "placement": {
+      "type": "object",
+      "required": [
+        "logo",
+        "texture"
+      ],
+      "properties": {
+        "logo": {
+          "enum": [
+            "none",
+            "header",
+            "toolbar",
+            "workspace"
+          ]
+        },
+        "texture": {
+          "enum": [
+            "none",
+            "UI Design Texture.svg",
+            "UI Design Texture.png"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

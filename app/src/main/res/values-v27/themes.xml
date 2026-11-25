@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Light navigation-bar icons are supported from API 27 onward. -->
+    <style name="Theme.DirectorX" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:colorBackground">@color/base</item>
+        <item name="android:statusBarColor">@color/base</item>
+        <item name="android:navigationBarColor">@color/base</item>
+        <item name="android:windowBackground">@color/base</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+</resources>

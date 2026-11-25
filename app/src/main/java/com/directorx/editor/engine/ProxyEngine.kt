@@ -1,0 +1,502 @@
+package com.directorx.editor.engine
+
+import android.content.Context
+import android.media.MediaMetadataRetriever
+import android.net.Uri
+import android.os.Handler
+import android.os.Looper
+import com.directorx.editor.engine.AppLog
+import androidx.media3.common.C
+import androidx.media3.common.MediaItem
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.effect.Presentation
+import androidx.media3.transformer.Composition
+import androidx.media3.transformer.EditedMediaItem
+import androidx.media3.transformer.EditedMediaItemSequence
+import androidx.media3.transformer.Effects
+import androidx.media3.transformer.Transformer
+import com.directorx.editor.model.ProxyResolution
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.util.concurrent.ConcurrentHashMap
+import javax.inject.Inject
+import javax.inject.Singleton
+import kotlin.coroutines.resume
+
+/**
+ * What a proxy-cache clear actually did.
+ *
+ * Clearing is legitimately partial: proxies belonging to an open project are kept
+ * on purpose, and a delete can still fail. Settings used to report "Proxy cache
+ * cleared" unconditionally, so both cases read as a full success.
+ */
+data class ProxyClearResult(
+    val deleted: Int,
+    val failed: Int,
+    val keptInUse: Int,
+) {
+    /** True when every proxy that was eligible for deletion is gone. */
+    val isComplete: Boolean get() = failed == 0
+}
+
+/**
+ * Explicit outcome for deleting a managed proxy. A missing cache file is not a
+ * deletion failure: the workflow can safely clear its stale URI reference.
+ */
+internal enum class ProxyFileDeleteOutcome { DELETED, MISSING, FAILED, INVALID }
+
+/** A non-empty temporary Transformer output is never a completed cache artifact. */
+internal fun isCompletedProxyArtifact(file: File): Boolean =
+    file.isFile && file.length() > 0L &&
+        file.name.startsWith("proxy_") && !file.name.startsWith("proxy_tmp_") &&
+        file.name.endsWith(".mp4")
+
+/** A temporary artifact is eligible for atomic promotion only after a successful encode. */
+internal fun isUsableProxyTemporaryArtifact(file: File): Boolean =
+    file.isFile && file.length() > 0L &&
+        file.name.startsWith("proxy_tmp_") && file.name.endsWith(".mp4")
+
+/**
+ * Temporary proxy outputs are never valid cache entries. After a process death they can
+ * remain indefinitely, so discard only managed temporary artifacts older than the grace
+ * period. Fresh files are left alone because an encoder may still be writing them.
+ */
+internal fun isAbandonedProxyTemporaryArtifact(
+    file: File,
+    nowMillis: Long,
+    maxAgeMillis: Long,
+): Boolean {
+    if (!file.isFile || !file.name.startsWith("proxy_tmp_") || !file.name.endsWith(".mp4")) {
+        return false
+    }
+    if (maxAgeMillis < 0L) return false
+    val modifiedAt = file.lastModified()
+    return modifiedAt > 0L && nowMillis >= modifiedAt && nowMillis - modifiedAt >= maxAgeMillis
+}
+
+/** Sweep only stale, direct-child proxy_tmp artifacts; never touch originals or committed proxies. */
+internal fun sweepAbandonedProxyTemporaryArtifacts(
+    proxyRoot: File,
+    nowMillis: Long = System.currentTimeMillis(),
+    maxAgeMillis: Long = 24L * 60L * 60L * 1000L,
+): Int {
+    val canonicalRoot = runCatching { proxyRoot.canonicalFile }.getOrNull() ?: return 0
+    return (proxyRoot.listFiles() ?: return 0).count { candidate ->
+        val canonicalFile = runCatching { candidate.canonicalFile }.getOrNull() ?: return@count false
+        canonicalFile.parentFile == canonicalRoot &&
+            isAbandonedProxyTemporaryArtifact(canonicalFile, nowMillis, maxAgeMillis) &&
+            canonicalFile.delete()
+    }
+}
+
+/**
+ * Deletes only files directly inside the proxy cache with the managed filename
+ * shape. Canonical-path checks reject traversal and symlinks escaping the cache.
+ */
+internal fun deleteManagedProxyFile(proxyRoot: File, candidate: File): ProxyFileDeleteOutcome {
+    val canonicalRoot = runCatching { proxyRoot.canonicalFile }.getOrNull()
+        ?: return ProxyFileDeleteOutcome.INVALID
+    val canonicalFile = runCatching { candidate.canonicalFile }.getOrNull()
+        ?: return ProxyFileDeleteOutcome.INVALID
+    if (
+        canonicalFile.parentFile != canonicalRoot ||
+        !canonicalFile.name.startsWith("proxy_") ||
+        !canonicalFile.name.endsWith(".mp4")
+    ) {
+        return ProxyFileDeleteOutcome.INVALID
+    }
+    if (!canonicalFile.exists()) return ProxyFileDeleteOutcome.MISSING
+    if (!canonicalFile.isFile) return ProxyFileDeleteOutcome.INVALID
+    return if (canonicalFile.delete()) {
+        ProxyFileDeleteOutcome.DELETED
+    } else {
+        ProxyFileDeleteOutcome.FAILED
+    }
+}
+
+/**
+ * Stable cache identity for a proxy render. A source can have several valid
+ * proxy resolutions at once, so resolution is part of the key as well as URI.
+ */
+internal fun proxyCacheKey(
+    sourceIdentity: String,
+    resolution: ProxyResolution,
+    mediaVersion: String = sourceIdentity,
+): String {
+    // Bump this whenever cache artifact semantics change. Version 2 separates
+    // atomic-commit artifacts from legacy files written directly to the final path.
+    val identity = "artifact=v2|$sourceIdentity|version=$mediaVersion|resolution=${resolution.name}"
+    val digest = java.security.MessageDigest.getInstance("SHA-256")
+        .digest(identity.toByteArray(Charsets.UTF_8))
+    return digest.joinToString("") { "%02x".format(it) }.take(32)
+}
+
+/** Keeps mappings for active proxies, failed deletions, or files still on disk. */
+internal fun shouldRetainProxyMapping(
+    key: String,
+    activeKeys: Set<String>,
+    failedKeys: Set<String>,
+    backingFileExists: Boolean,
+): Boolean = key in activeKeys || key in failedKeys || backingFileExists
+
+/**
+ * Generates low-resolution proxy files for smooth timeline editing.
+ * Proxies are stored in app cache and swapped with originals during export.
+ */
+@Singleton
+class ProxyEngine @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val ffmpegEngine: FFmpegEngine,
+    memoryTrimRegistry: MemoryTrimRegistry,
+) {
+    private val proxyDir = File(context.cacheDir, "proxies").also { it.mkdirs() }
+    private val proxyMap = ConcurrentHashMap<String, Uri>()
+    private val activeProxyKeys = ConcurrentHashMap.newKeySet<String>()
+
+    // Per-source-key mutexes serialise concurrent `generateProxy(sameUri)`
+    // calls. Without this, two near-simultaneous invocations both pass the
+    // `outFile.exists()` check (line 61), both start a Transformer writing
+    // to the same `proxy_<hash>.mp4`, and the second write corrupts or
+    // truncates the first. computeIfAbsent guarantees only one Mutex
+    // instance per key without a coarse-grained lock on the whole map.
+    private val perKeyMutex = ConcurrentHashMap<String, kotlinx.coroutines.sync.Mutex>()
+    private fun mutexFor(key: String): kotlinx.coroutines.sync.Mutex =
+        perKeyMutex.computeIfAbsent(key) { kotlinx.coroutines.sync.Mutex() }
+
+    init {
+        val sweptPartials = sweepAbandonedProxyTemporaryArtifacts(proxyDir)
+        if (sweptPartials > 0) {
+            AppLog.i("ProxyEngine", "Removed $sweptPartials abandoned temporary proxy artifact(s)")
+        }
+        memoryTrimRegistry.register(
+            MemoryTrimAction.CLEAR_PROXY_SCRATCH,
+            "proxy.generatedMediaCache",
+        ) {
+            clearProxies()
+        }
+    }
+
+    private fun keyFor(
+        sourceUri: Uri,
+        resolution: ProxyResolution,
+        mediaVersion: String = sourceUri.toString(),
+    ): String = proxyCacheKey(sourceUri.toString(), resolution, mediaVersion)
+
+    private fun proxyFileForKey(key: String): File = File(proxyDir, "proxy_$key.mp4")
+
+    /** Work-in-progress output is deliberately distinct from the committed cache filename. */
+    private fun proxyPartialFileForKey(key: String): File = File(proxyDir, "proxy_tmp_$key.mp4")
+
+    private fun canonicalManagedProxyFile(file: File): File? {
+        val proxyRoot = runCatching { proxyDir.canonicalFile }.getOrNull() ?: return null
+        val canonicalFile = runCatching { file.canonicalFile }.getOrNull() ?: return null
+        return canonicalFile.takeIf {
+            it.parentFile == proxyRoot &&
+                it.name.startsWith("proxy_") &&
+                it.name.endsWith(".mp4")
+        }
+    }
+
+    internal fun deleteProxyUri(uri: Uri): ProxyFileDeleteOutcome {
+        if (uri.scheme != "file") return ProxyFileDeleteOutcome.INVALID
+        val file = uri.path?.let(::File) ?: return ProxyFileDeleteOutcome.INVALID
+        val managedFile = canonicalManagedProxyFile(file) ?: return ProxyFileDeleteOutcome.INVALID
+        val outcome = deleteManagedProxyFile(proxyDir, managedFile)
+        if (outcome == ProxyFileDeleteOutcome.DELETED || outcome == ProxyFileDeleteOutcome.MISSING) {
+            proxyMap.entries.removeIf { it.value == uri }
+        }
+        return outcome
+    }
+
+    fun proxyFileLength(uri: Uri): Long {
+        if (uri.scheme != "file") return 0L
+        val file = uri.path?.let(::File) ?: return 0L
+        val managedFile = canonicalManagedProxyFile(file) ?: return 0L
+        return managedFile.takeIf { it.isFile }?.length() ?: 0L
+    }
+
+    fun getProxyUri(
+        sourceUri: Uri,
+        resolution: ProxyResolution = ProxyResolution.QUARTER,
+        mediaVersion: String = sourceUri.toString(),
+    ): Uri? = proxyMap[keyFor(sourceUri, resolution, mediaVersion)]
+
+    fun hasProxy(
+        sourceUri: Uri,
+        resolution: ProxyResolution = ProxyResolution.QUARTER,
+        mediaVersion: String = sourceUri.toString(),
+    ): Boolean {
+        val key = keyFor(sourceUri, resolution, mediaVersion)
+        val file = proxyFileForKey(key)
+        return isCompletedProxyArtifact(file).also { if (it) proxyMap[key] = Uri.fromFile(file) }
+    }
+
+    /**
+     * How tall [sourceUri]'s proxy would be at [resolution], or why it needs none, from the
+     * source's displayed height.
+     */
+    suspend fun planProxy(sourceUri: Uri, resolution: ProxyResolution): ProxyResolutionPolicy.Plan =
+        ProxyResolutionPolicy.plan(sourceDisplayHeight(sourceUri), resolution)
+
+    /** The height [uri] is shown at, rotation included, or 0 when it can't be read. */
+    private suspend fun sourceDisplayHeight(uri: Uri): Int = withContext(Dispatchers.IO) {
+        val retrieverLease = CodecInstanceBudget.acquireRetriever(context.contentResolver.getType(uri))
+        val retriever = retrieverLease.resource
+        try {
+            retriever.setDataSource(context, uri)
+            fun read(key: Int) = retriever.extractMetadata(key)?.toIntOrNull() ?: 0
+            ProxyResolutionPolicy.displayHeight(
+                codedWidth = read(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH),
+                codedHeight = read(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT),
+                rotationDegrees = read(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION),
+            )
+        } catch (e: Exception) {
+            AppLog.w("ProxyEngine", "Couldn't read source dimensions for a proxy: ${e.javaClass.simpleName}")
+            0
+        } finally {
+            retrieverLease.close()
+        }
+    }
+
+    /**
+     * Renders a proxy at [resolution] of the source's displayed height. Returns null when the
+     * render fails, and also when [plan] (worked out here when not passed) says the source is
+     * already small enough to edit directly; the reason is logged.
+     */
+    @androidx.annotation.OptIn(UnstableApi::class)
+    suspend fun generateProxy(
+        sourceUri: Uri,
+        resolution: ProxyResolution,
+        plan: ProxyResolutionPolicy.Plan? = null,
+        onProgress: (Float) -> Unit = {},
+        mediaVersion: String = sourceUri.toString(),
+    ): Uri? = withContext(Dispatchers.Main) {
+        val key = keyFor(sourceUri, resolution, mediaVersion)
+        val outFile = proxyFileForKey(key)
+        val partialFile = proxyPartialFileForKey(key)
+
+        // Hold the per-key mutex across the existence check + transformer
+        // start so concurrent callers for the same source serialise: the
+        // second caller sees the completed file on re-entry instead of
+        // kicking off a duplicate render. withLock releases it on every
+        // return, the cached-file one included.
+        mutexFor(key).withLock {
+            // A previous export attempt may have left a zero-byte file on disk
+            // (e.g. the transformer crashed before writing any data).  Treat
+            // zero-length files as absent so we re-render rather than returning
+            // a broken URI — mirrors the check inside the onCompleted callback.
+            if (isCompletedProxyArtifact(outFile)) {
+                proxyMap[key] = Uri.fromFile(outFile)
+                return@withContext Uri.fromFile(outFile)
+            }
+            // A process can be killed before invokeOnCancellation runs. Discard its
+            // orphaned temporary output before starting a fresh Transformer; never
+            // interpret a non-empty partial MP4 as a completed proxy after restart.
+            if (partialFile.exists() && !partialFile.delete()) {
+                AppLog.w("ProxyEngine", "Could not remove interrupted proxy output for key $key")
+                return@withContext null
+            }
+
+            val targetHeight = when (val resolved = plan ?: planProxy(sourceUri, resolution)) {
+                is ProxyResolutionPolicy.Plan.Generate -> resolved.targetHeight
+                is ProxyResolutionPolicy.Plan.UseSource -> {
+                    AppLog.i("ProxyEngine", "No proxy generated: ${resolved.reason}")
+                    return@withContext null
+                }
+            }
+
+            activeProxyKeys.add(key)
+            var pipelineLease: CodecLease<Unit>? = null
+            try {
+                // Transformer owns the source decoder and output encoder. Hold a
+                // shared video-family permit for the complete proxy lifecycle so
+                // proxy generation queues behind preview/retriever work instead
+                // of turning a codec-ceiling collision into a failed render.
+                pipelineLease = CodecInstanceBudget.acquirePipeline()
+                val transformerResult = suspendCancellableCoroutine<Uri?> { cont ->
+                    val mediaItem = MediaItem.fromUri(sourceUri)
+
+                    // Presentation sizes the displayed (rotated) frame, so the proxy keeps the
+                    // source's orientation at the planned height.
+                    val presentation = Presentation.createForHeight(targetHeight)
+                        .copyWithUnsetSideRoundedTo(Media3ExportRobustnessPolicy.ENCODER_DIMENSION_DIVISOR)
+
+                    val editedItem = EditedMediaItem.Builder(mediaItem)
+                        .setEffects(Effects(emptyList(), listOf(presentation)))
+                        .build()
+
+                    val transformer = Transformer.Builder(context)
+                        .setAssetLoaderFactory(
+                            Media3DecoderFallback.assetLoaderFactory(context) { note -> AppLog.w("ProxyEngine", note) }
+                        )
+                        .addListener(object : Transformer.Listener {
+                            override fun onCompleted(composition: Composition, exportResult: androidx.media3.transformer.ExportResult) {
+                                if (!cont.isActive) {
+                                    partialFile.delete()
+                                    proxyMap.remove(key)
+                                    return
+                                }
+                                // Commit the artifact only after Media3 reports success.
+                                // Same-directory rename is atomic on Android filesystems.
+                                if (isUsableProxyTemporaryArtifact(partialFile) && partialFile.renameTo(outFile)) {
+                                    val proxyUri = Uri.fromFile(outFile)
+                                    proxyMap[key] = proxyUri
+                                    cont.resume(proxyUri)
+                                } else {
+                                    partialFile.delete()
+                                    proxyMap.remove(key)
+                                    cont.resume(null)
+                                }
+                            }
+                            override fun onError(composition: Composition, exportResult: androidx.media3.transformer.ExportResult, exportException: androidx.media3.transformer.ExportException) {
+                                AppLog.e("ProxyEngine", "Proxy generation failed", exportException)
+                                partialFile.delete()
+                                proxyMap.remove(key)
+                                if (cont.isActive) cont.resume(null)
+                            }
+                        })
+                        .build()
+
+                    val sequence = EditedMediaItemSequence.Builder(setOf(C.TRACK_TYPE_VIDEO))
+                        .addItem(editedItem)
+                        .build()
+                    transformer.start(
+                        Composition.Builder(sequence).build(),
+                        partialFile.absolutePath
+                    )
+
+                    cont.invokeOnCancellation {
+                        // The codec lease is released by the coroutine's finally block.
+                        // Do not let cancellation return (and release that lease) until
+                        // Transformer.cancel() has run on its application thread. Posting
+                        // asynchronously here creates a race with the next codec user.
+                        val mainLooper = Looper.getMainLooper()
+                        if (Looper.myLooper() == mainLooper) {
+                            runCatching { transformer.cancel() }
+                            partialFile.delete()
+                        } else {
+                            val finished = java.util.concurrent.CountDownLatch(1)
+                            val posted = Handler(mainLooper).post {
+                                try {
+                                    runCatching { transformer.cancel() }
+                                    partialFile.delete()
+                                } finally {
+                                    finished.countDown()
+                                }
+                            }
+                            if (posted) {
+                                var wasInterrupted = false
+                                while (true) {
+                                    try {
+                                        finished.await()
+                                        break
+                                    } catch (_: InterruptedException) {
+                                        // Keep the codec lease until cancel has actually run.
+                                        wasInterrupted = true
+                                    }
+                                }
+                                if (wasInterrupted) Thread.currentThread().interrupt()
+                            } else {
+                                AppLog.e("ProxyEngine", "Main looper rejected Transformer cancellation")
+                            }
+                        }
+                        proxyMap.remove(key)
+                    }
+                }
+                if (transformerResult != null) {
+                    transformerResult
+                } else {
+                    // Media3's alternate hardware-decoder attempts can still fail when
+                    // the source raster/profile exceeds every device decoder. Fall back
+                    // to FFmpeg's software-capable source decode and a bounded proxy.
+                    partialFile.delete()
+                    AppLog.i("ProxyEngine", "Media3 proxy decode failed; trying FFmpeg software-decoded proxy")
+                    val encoded = ffmpegEngine.createEditingProxy(
+                        inputUri = sourceUri,
+                        outputFile = partialFile,
+                        targetHeight = targetHeight,
+                        onProgress = onProgress,
+                    )
+                    if (encoded && isUsableProxyTemporaryArtifact(partialFile) && partialFile.renameTo(outFile)) {
+                        val proxyUri = Uri.fromFile(outFile)
+                        proxyMap[key] = proxyUri
+                        proxyUri
+                    } else {
+                        partialFile.delete()
+                        proxyMap.remove(key)
+                        null
+                    }
+                }
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                // Preserve structured cancellation — don't mask it as a null result.
+                // Transformer/FFmpeg cancellation callbacks own process fencing. Leave
+                // any temporary file for the proxy-cache sweep after this key is inactive.
+                proxyMap.remove(key)
+                throw e
+            } catch (e: Exception) {
+                AppLog.e("ProxyEngine", "Proxy generation error", e)
+                partialFile.delete()
+                proxyMap.remove(key)
+                null
+            } finally {
+                pipelineLease?.close()
+                activeProxyKeys.remove(key)
+            }
+        }
+    }
+
+    fun clearProxies(): ProxyClearResult {
+        val activeKeys = activeProxyKeys.toSet()
+        val files = proxyDir.listFiles() ?: return ProxyClearResult(
+            deleted = 0,
+            failed = 1,
+            keptInUse = activeKeys.size,
+        )
+        var deleted = 0
+        var failed = 0
+        var keptInUse = 0
+        val failedKeys = mutableSetOf<String>()
+        files.forEach { file ->
+            val managedFile = canonicalManagedProxyFile(file)?.takeIf { it.isFile } ?: return@forEach
+            val isPartial = managedFile.name.startsWith("proxy_tmp_")
+            val key = if (isPartial) {
+                managedFile.name.removePrefix("proxy_tmp_").removeSuffix(".mp4")
+            } else {
+                managedFile.name.removePrefix("proxy_").removeSuffix(".mp4")
+            }
+            if (key in activeKeys) {
+                keptInUse++
+                return@forEach
+            }
+            // A proxy an open project is not using can still refuse to delete: another
+            // process may hold the handle. Preserve its mapping so preview/cache lookup
+            // does not forget a file that is still present.
+            if (managedFile.delete()) {
+                deleted++
+                if (!isPartial) proxyMap.remove(key)
+            } else {
+                failed++
+                failedKeys += key
+            }
+        }
+        proxyMap.keys.removeIf { key ->
+            !shouldRetainProxyMapping(
+                key = key,
+                activeKeys = activeKeys,
+                failedKeys = failedKeys,
+                backingFileExists = proxyFileForKey(key).isFile,
+            )
+        }
+        return ProxyClearResult(deleted = deleted, failed = failed, keptInUse = keptInUse)
+    }
+
+    suspend fun getCacheSize(): Long = withContext(Dispatchers.IO) {
+        proxyDir.listFiles()?.sumOf { file ->
+            canonicalManagedProxyFile(file)?.takeIf { it.isFile }?.length() ?: 0L
+        } ?: 0L
+    }
+}

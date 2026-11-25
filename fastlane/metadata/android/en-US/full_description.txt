@@ -1,0 +1,18 @@
+Director X is an Android-first, multi-track video editor for building and exporting video projects.
+
+EDIT YOUR PROJECT
+• Arrange video, audio and image clips on a multi-track timeline.
+• Preview your edit, manage source media and work with project files.
+• Use effects, titles, audio tools, proxy media and custom canvas dimensions.
+• Save projects locally and move them between devices with an explicit project archive export/import.
+
+AI-ASSISTED MEDIA TOOLS
+Depending on the build, device and installed models, Director X includes tools such as scene detection and auto-split, smart reframe, stabilization, denoise, auto color, background removal, English auto captions and object removal. Some tools require optional model downloads; large models can use significant storage and processing resources. Model availability and performance vary by device. Features marked as planned in project documentation are not advertised here as available.
+
+EXPORT WITH DEVICE-AWARE SETTINGS
+Choose from export options supported by your Android device. Available codecs, resolutions, frame rates, HDR handling and export performance depend on the device hardware, Android version and current build.
+
+LOCAL-FIRST WORKFLOW
+Core editing and project processing are designed to run on your device. Optional model downloads, update checks, consent-enabled metrics and any configured cloud feature may use a network connection. Review the in-app Privacy dashboard and the privacy policy to understand each data flow before enabling optional services.
+
+Director X is designed by AssayFlux.

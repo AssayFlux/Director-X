@@ -1,0 +1,124 @@
+#!/usr/bin/env python3
+"""Render Director X SVG branding into safe Android launcher and splash resources."""
+from __future__ import annotations
+import argparse
+import json
+from io import BytesIO
+from pathlib import Path
+
+try:
+    import cairosvg
+    from PIL import Image, ImageOps
+except ImportError as exc:
+    raise SystemExit("Install build renderers with: python3 -m pip install CairoSVG Pillow") from exc
+
+ROOT = Path(__file__).resolve().parents[1]
+CONFIG = ROOT / "branding" / "branding.json"
+ASSETS = ROOT / "Assets"
+DENSITIES = {"mdpi": (108, 48), "hdpi": (162, 72), "xhdpi": (216, 96),
+             "xxhdpi": (324, 144), "xxxhdpi": (432, 192)}
+_SVG_CACHE: dict[Path, Image.Image] = {}
+
+def render_png(source: Path, width: int, height: int | None = None,
+               fit_fraction: float = 0.82) -> bytes:
+    """Contain artwork on a transparent canvas without stretching or cropping."""
+    height = height or width
+    if not 0 < fit_fraction <= 1:
+        raise ValueError("fit_fraction must be in (0, 1]")
+    fit_width = max(1, round(width * fit_fraction))
+    fit_height = max(1, round(height * fit_fraction))
+    if source.suffix.lower() == ".svg":
+        # Each large source SVG is parsed only once; all density variants are
+        # downsampled from this full-size raster with the SVG aspect ratio kept.
+        key = source.resolve()
+        cached = _SVG_CACHE.get(key)
+        if cached is None:
+            rendered = cairosvg.svg2png(url=str(source), output_width=720)
+            cached = Image.open(BytesIO(rendered)).convert("RGBA")
+            _SVG_CACHE[key] = cached
+        image = cached.copy()
+    else:
+        image = Image.open(source).convert("RGBA")
+    image.thumbnail((fit_width, fit_height), Image.Resampling.LANCZOS)
+    canvas = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    canvas.alpha_composite(image, ((width - image.width) // 2, (height - image.height) // 2))
+    buffer = BytesIO()
+    canvas.save(buffer, format="PNG")
+    return buffer.getvalue()
+
+def render_cover_png(source: Path, width: int, height: int) -> bytes:
+    """Render artwork as a center-cropped cover image without runtime browser code."""
+    if source.suffix.lower() == ".svg":
+        rendered = cairosvg.svg2png(url=str(source), output_width=max(width, height) * 2)
+        image = Image.open(BytesIO(rendered)).convert("RGBA")
+    else:
+        image = Image.open(source).convert("RGBA")
+    image = ImageOps.fit(image, (width, height), method=Image.Resampling.LANCZOS, centering=(0.5, 0.5))
+    buffer = BytesIO()
+    image.save(buffer, format="PNG", optimize=True)
+    return buffer.getvalue()
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", required=True, type=Path)
+    output = parser.parse_args().output
+    data = json.loads(CONFIG.read_text(encoding="utf-8"))
+    launcher = ASSETS / data["launcher"]["asset"]
+    signature = ASSETS / data["about"]["signatureAsset"]
+    for source in (launcher, signature):
+        if not source.is_file() or source.stat().st_size == 0:
+            raise SystemExit(f"Selected branding asset is missing or empty: {source}")
+    if launcher.suffix.lower() not in {".svg", ".png"}:
+        raise SystemExit("The launcher asset must be an SVG or PNG.")
+
+    texture_source = ASSETS / "UI Design Texture.svg"
+    if not texture_source.is_file() or texture_source.stat().st_size == 0:
+        raise SystemExit(f"UI texture asset is missing or empty: {texture_source}")
+    texture_output = output / "drawable-nodpi" / "assayflux_ui_texture.png"
+    texture_output.parent.mkdir(parents=True, exist_ok=True)
+    texture_output.write_bytes(render_cover_png(texture_source, 720, 720))
+
+    signature_output = output / "drawable-nodpi" / "assayflux_signature.png"
+    signature_output.parent.mkdir(parents=True, exist_ok=True)
+    signature_output.write_bytes(render_png(signature, 720, 360, fit_fraction=0.90))
+
+    # Android adaptive icons use a 108dp foreground canvas but only the
+    # centered 66dp-diameter circle is guaranteed visible across masks.
+    # The supplied 1.624:1 wordmark at 54dp wide is about 33dp tall;
+    # its corner radius stays within the 33dp safe-circle radius.
+    for density, (foreground_size, legacy_size) in DENSITIES.items():
+        folder = output / f"mipmap-{density}"
+        folder.mkdir(parents=True, exist_ok=True)
+        (folder / "ic_launcher_foreground.png").write_bytes(
+            render_png(launcher, foreground_size, fit_fraction=0.50))
+        (folder / "ic_launcher.png").write_bytes(
+            render_png(launcher, legacy_size, fit_fraction=0.82))
+
+    splash_folder = output / "drawable-nodpi"
+    splash_folder.mkdir(parents=True, exist_ok=True)
+    (splash_folder / "directorx_splash_logo.png").write_bytes(
+        render_png(launcher, 432, fit_fraction=0.82))
+    compose_height = round(720 / 1.624)
+    (splash_folder / "directorx_compose_logo.png").write_bytes(
+        render_png(launcher, 720, compose_height, fit_fraction=0.98))
+
+    values = output / "values"
+    values.mkdir(parents=True, exist_ok=True)
+    background = data["splash"]["background"]
+    (values / "ic_launcher_colors.xml").write_text(
+        '<?xml version="1.0" encoding="utf-8"?>\n'
+        f'<resources><color name="ic_launcher_background">{background}</color></resources>\n',
+        encoding="utf-8")
+    adaptive = ('<?xml version="1.0" encoding="utf-8"?>\n'
+        '<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">\n'
+        '    <background android:drawable="@color/ic_launcher_background" />\n'
+        '    <foreground android:drawable="@mipmap/ic_launcher_foreground" />\n'
+        '</adaptive-icon>\n')
+    folder = output / "mipmap-anydpi-v26"
+    folder.mkdir(parents=True, exist_ok=True)
+    for name in ("ic_launcher.xml", "ic_launcher_round.xml"):
+        (folder / name).write_text(adaptive, encoding="utf-8")
+
+if __name__ == "__main__":
+    main()

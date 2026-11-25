@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Legacy (Android 11 and below) cloud backup scope.
+
+  Android Auto Backup is capped at 25 MB per app and can fail the whole backup
+  when that limit is exceeded. The cloud scope therefore contains only the Room
+  database, autosave documents, and stabilization profiles. It deliberately
+  excludes both user-imported managed source media (file/media/imports) and
+  generated timeline media (freeze frames, voiceovers, TTS, noise-reduced audio,
+  and stabilized clips), as well as app-owned fonts and LUTs. A cloud restore
+  can restore edit state but may require source-media relinking and
+  regeneration/reimport of omitted dependencies.
+
+  The app-managed media and dependency set is carried by device-to-device
+  transfer (data_extraction_rules.xml <device-transfer>) or a user-initiated
+  project archive export.
+-->
+<full-backup-content>
+    <include domain="database" path="." />
+    <include domain="file" path="autosave" />
+    <include domain="file" path="stabilization_profiles" />
+    <exclude domain="file" path="autosave/*.tmp" />
+</full-backup-content>
