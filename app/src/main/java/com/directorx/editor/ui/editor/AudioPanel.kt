@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -42,19 +42,19 @@ fun AudioPanel(
     onStartVoiceover: () -> Unit,
     onClose: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     PremiumEditorPanel(
         title = stringResource(R.string.audio_title),
         subtitle = stringResource(R.string.panel_audio_subtitle),
         icon = Icons.Default.GraphicEq,
-        accent = ClearCutAccents.Green,
+        accent = DirectorXAccents.Green,
         onClose = onClose,
         closeContentDescription = stringResource(R.string.cd_close_audio_panel),
         modifier = modifier,
         scrollable = true
     ) {
         if (clip == null) {
-            PremiumPanelCard(accent = ClearCutAccents.Sapphire) {
+            PremiumPanelCard(accent = DirectorXAccents.Sapphire) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -69,7 +69,7 @@ fun AudioPanel(
                         Icon(
                             Icons.Default.LibraryMusic,
                             contentDescription = stringResource(R.string.audio_select_clip),
-                            tint = ClearCutAccents.Sapphire,
+                            tint = DirectorXAccents.Sapphire,
                             modifier = Modifier.size(22.dp)
                         )
                     }
@@ -95,18 +95,18 @@ fun AudioPanel(
         val fadeInMax = (clipDuration - fadeOutMs).coerceAtLeast(0f)
         val fadeOutMax = (clipDuration - fadeInMs).coerceAtLeast(0f)
 
-        PremiumPanelCard(accent = ClearCutAccents.Green) {
+        PremiumPanelCard(accent = DirectorXAccents.Green) {
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 PremiumPanelPill(
                     text = stringResource(R.string.audio_clip_duration, formatTimestamp(clip.durationMs)),
-                    accent = ClearCutAccents.Sapphire
+                    accent = DirectorXAccents.Sapphire
                 )
                 PremiumPanelPill(
                     text = "${(clip.volume * 100).toInt()}%",
-                    accent = ClearCutAccents.Rosewater
+                    accent = DirectorXAccents.Rosewater
                 )
                 PremiumPanelPill(
                     text = if (!waveform.isNullOrEmpty()) {
@@ -114,14 +114,14 @@ fun AudioPanel(
                     } else {
                         stringResource(R.string.audio_waveform_pending)
                     },
-                    accent = if (!waveform.isNullOrEmpty()) ClearCutAccents.Green else semanticColors.overlayStrong
+                    accent = if (!waveform.isNullOrEmpty()) DirectorXAccents.Green else semanticColors.overlayStrong
                 )
             }
 
             if (waveform != null && waveform.isNotEmpty()) {
                 Text(
                     text = stringResource(R.string.audio_waveform_label),
-                    color = ClearCutAccents.Rosewater,
+                    color = DirectorXAccents.Rosewater,
                     style = MaterialTheme.typography.labelLarge
                 )
                 Canvas(
@@ -132,9 +132,9 @@ fun AudioPanel(
                         .background(semanticColors.panel)
                         .padding(horizontal = 8.dp, vertical = 10.dp)
                 ) {
-                    drawWaveform(waveform, ClearCutAccents.Green)
+                    drawWaveform(waveform, DirectorXAccents.Green)
                     if (clip.fadeInMs > 0 || clip.fadeOutMs > 0) {
-                        drawFadeEnvelope(clip.fadeInMs, clip.fadeOutMs, clip.durationMs.coerceAtLeast(1L), ClearCutAccents.Mauve)
+                        drawFadeEnvelope(clip.fadeInMs, clip.fadeOutMs, clip.durationMs.coerceAtLeast(1L), DirectorXAccents.Mauve)
                     }
                 }
             } else {
@@ -156,7 +156,7 @@ fun AudioPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             EffectSlider(
                 label = stringResource(R.string.audio_volume),
                 value = clip.volume,
@@ -188,7 +188,7 @@ fun AudioPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Rosewater) {
+        PremiumPanelCard(accent = DirectorXAccents.Rosewater) {
             Text(
                 text = stringResource(R.string.audio_voiceover),
                 style = MaterialTheme.typography.titleMedium,
@@ -204,7 +204,7 @@ fun AudioPanel(
                 onClick = onStartVoiceover,
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = ClearCutAccents.Rosewater,
+                    containerColor = DirectorXAccents.Rosewater,
                     contentColor = semanticColors.background
                 ),
                 shape = RoundedCornerShape(12.dp)
@@ -307,7 +307,7 @@ fun VoiceoverRecorder(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val recordingControlDescription = if (isRecording) {
         stringResource(R.string.audio_tap_to_stop)
     } else {
@@ -317,13 +317,13 @@ fun VoiceoverRecorder(
         title = stringResource(R.string.audio_voiceover),
         subtitle = stringResource(R.string.panel_voiceover_subtitle),
         icon = Icons.Default.Mic,
-        accent = if (isRecording) ClearCutAccents.Red else ClearCutAccents.Sapphire,
+        accent = if (isRecording) DirectorXAccents.Red else DirectorXAccents.Sapphire,
         onClose = onClose,
         closeContentDescription = stringResource(R.string.audio_voiceover_close_cd),
         modifier = modifier,
         scrollable = true
     ) {
-        PremiumPanelCard(accent = if (isRecording) ClearCutAccents.Red else ClearCutAccents.Sapphire) {
+        PremiumPanelCard(accent = if (isRecording) DirectorXAccents.Red else DirectorXAccents.Sapphire) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -334,12 +334,12 @@ fun VoiceoverRecorder(
                     } else {
                         stringResource(R.string.audio_status_ready)
                     },
-                    accent = if (isRecording) ClearCutAccents.Red else ClearCutAccents.Sapphire
+                    accent = if (isRecording) DirectorXAccents.Red else DirectorXAccents.Sapphire
                 )
 
                 Text(
                     text = formatTimestamp(recordingDurationMs),
-                    color = if (isRecording) ClearCutAccents.Rosewater else semanticColors.text,
+                    color = if (isRecording) DirectorXAccents.Rosewater else semanticColors.text,
                     style = MaterialTheme.typography.displayMedium
                 )
 
@@ -348,12 +348,12 @@ fun VoiceoverRecorder(
                         .size(112.dp)
                         .clip(CircleShape)
                         .background(
-                            if (isRecording) ClearCutAccents.Red.copy(alpha = 0.14f)
+                            if (isRecording) DirectorXAccents.Red.copy(alpha = 0.14f)
                             else semanticColors.panel
                         )
                         .border(
                             width = 2.dp,
-                            color = if (isRecording) ClearCutAccents.Red.copy(alpha = 0.7f) else semanticColors.cardStrokeStrong,
+                            color = if (isRecording) DirectorXAccents.Red.copy(alpha = 0.7f) else semanticColors.cardStrokeStrong,
                             shape = CircleShape
                         )
                         .semantics {
@@ -369,14 +369,14 @@ fun VoiceoverRecorder(
                             modifier = Modifier
                                 .size(34.dp)
                                 .clip(RoundedCornerShape(10.dp))
-                                .background(ClearCutAccents.Red)
+                                .background(DirectorXAccents.Red)
                         )
                     } else {
                         Box(
                             modifier = Modifier
                                 .size(42.dp)
                                 .clip(CircleShape)
-                                .background(ClearCutAccents.Red)
+                                .background(DirectorXAccents.Red)
                         )
                     }
                 }
