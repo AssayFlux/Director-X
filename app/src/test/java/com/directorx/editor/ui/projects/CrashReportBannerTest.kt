@@ -6,7 +6,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import com.directorx.editor.DirectorXApp
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.theme.DirectorXTheme
 import java.util.concurrent.atomic.AtomicBoolean
 import org.junit.Assert.assertTrue
@@ -40,7 +40,7 @@ class CrashReportBannerTest {
         val tapped = AtomicBoolean(false)
         showBanner(onSave = { tapped.set(true) })
 
-        compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_SAVE)
+        compose.onNodeWithTag(DirectorXTestTags.CRASH_REPORT_SAVE)
             .assertHasClickAction()
             .performClick()
         compose.waitUntil(5_000L) { tapped.get() }
@@ -53,7 +53,7 @@ class CrashReportBannerTest {
         val tapped = AtomicBoolean(false)
         showBanner(onCopy = { tapped.set(true) })
 
-        compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_COPY)
+        compose.onNodeWithTag(DirectorXTestTags.CRASH_REPORT_COPY)
             .assertHasClickAction()
             .performClick()
         compose.waitUntil(5_000L) { tapped.get() }
@@ -66,7 +66,7 @@ class CrashReportBannerTest {
         val tapped = AtomicBoolean(false)
         showBanner(onDismiss = { tapped.set(true) })
 
-        compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_DISMISS)
+        compose.onNodeWithTag(DirectorXTestTags.CRASH_REPORT_DISMISS)
             .assertHasClickAction()
             .performClick()
         compose.waitUntil(5_000L) { tapped.get() }
@@ -78,7 +78,7 @@ class CrashReportBannerTest {
     fun saveActionIsDisabledWhileTheReportIsBeingWritten() {
         showBanner(saving = true)
 
-        compose.onNodeWithTag(ClearCutTestTags.CRASH_REPORT_SAVE)
+        compose.onNodeWithTag(DirectorXTestTags.CRASH_REPORT_SAVE)
             .assertIsNotEnabled()
     }
 
