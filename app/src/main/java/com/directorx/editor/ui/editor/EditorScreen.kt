@@ -774,7 +774,7 @@ fun EditorScreen(
         val emptyPreviewContentHeight = with(LocalDensity.current) {
             maxOf(
                 220.dp,
-                94.dp + 54.sp.toDp() + maxOf(48.dp, 16.sp.toDp() + 16.dp)
+                94.dp + 74.sp.toDp() + maxOf(48.dp, 16.sp.toDp() + 16.dp)
             )
         }
         val requiredPreviewHeight = if (hasClips) {
