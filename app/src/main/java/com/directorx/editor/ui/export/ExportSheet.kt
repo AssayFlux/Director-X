@@ -116,7 +116,7 @@ import com.directorx.editor.model.Track
 import com.directorx.editor.model.VideoCodec
 import com.directorx.editor.model.Watermark
 import com.directorx.editor.model.WatermarkPosition
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.theme.LocalClearCutColors
 import com.directorx.editor.ui.theme.Motion
 import com.directorx.editor.ui.theme.ClearCutChromeIconButton
@@ -546,7 +546,7 @@ fun ExportSheet(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .testTag(ClearCutTestTags.EXPORT_SHEET)
+            .testTag(DirectorXTestTags.EXPORT_SHEET)
             .background(semanticColors.background, containerShape)
             .verticalScroll(rememberScrollState())
             .padding(horizontal = Spacing.lg, vertical = 14.dp)
@@ -583,7 +583,7 @@ fun ExportSheet(
                     tint = semanticColors.text,
                     containerColor = Color.Transparent,
                     borderColor = Color.Transparent,
-                    modifier = Modifier.testTag(ClearCutTestTags.EXPORT_CLOSE),
+                    modifier = Modifier.testTag(DirectorXTestTags.EXPORT_CLOSE),
                     size = 40.dp
                 )
             }
@@ -859,7 +859,7 @@ fun ExportSheet(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp)
-                .testTag(ClearCutTestTags.EXPORT_PRIMARY_ACTION)
+                .testTag(DirectorXTestTags.EXPORT_PRIMARY_ACTION)
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -1740,7 +1740,7 @@ fun ExportSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(54.dp)
-                    .testTag(ClearCutTestTags.EXPORT_PRIMARY_ACTION)
+                    .testTag(DirectorXTestTags.EXPORT_PRIMARY_ACTION)
             )
         }
 
