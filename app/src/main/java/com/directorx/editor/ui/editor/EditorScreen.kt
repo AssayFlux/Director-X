@@ -763,10 +763,25 @@ fun EditorScreen(
                 else -> AppLog.w("EditorScreen", "Unknown action: $actionId")
             }
         }
+        val hasClips = state.tracks.any { it.clips.isNotEmpty() }
         val scaledToolbarHeight = maxOf(
             68.dp,
             with(LocalDensity.current) { 31.sp.toDp() } + 8.dp
         )
+        // Empty-state title/body/button line heights scale with the user's font
+        // setting. Reserve enough height for the card before deciding whether the
+        // editor needs a scroll container.
+        val emptyPreviewContentHeight = with(LocalDensity.current) {
+            maxOf(
+                220.dp,
+                94.dp + 54.sp.toDp() + maxOf(48.dp, 16.sp.toDp() + 16.dp)
+            )
+        }
+        val requiredPreviewHeight = if (hasClips) {
+            maxOf(240.dp, previewMinHeight)
+        } else {
+            emptyPreviewContentHeight
+        }
         val scaledTabBarHeight = maxOf(
             64.dp,
             with(LocalDensity.current) { 24.sp.toDp() } + 30.dp
@@ -787,7 +802,7 @@ fun EditorScreen(
         // scaled toolbar/rail, and system-inset margin. Scroll before the weighted
         // preview can be squeezed below its intended size by a tall timeline.
         val minimumEditorContentHeight = scaledToolbarHeight +
-            previewMinHeight + timelineMaxHeight + measuredBottomToolRailHeight + 48.dp
+            requiredPreviewHeight + timelineMaxHeight + measuredBottomToolRailHeight + 48.dp
         val scrollEditorContent = !isImmersivePreview &&
             screenHeightDp.dp < minimumEditorContentHeight
         Column(
@@ -864,6 +879,7 @@ fun EditorScreen(
                     immersivePreview = isImmersivePreview,
                     previewMinHeight = previewMinHeight,
                     scrollable = scrollEditorContent,
+                    scrollableHeight = requiredPreviewHeight,
                 )
                     .testTag(DirectorXTestTags.EDITOR_PREVIEW_PANEL)
                     .pointerInput(Unit) {
