@@ -763,7 +763,8 @@ fun EditorScreen(
             }
         }
         val hasClips = state.tracks.any { it.clips.isNotEmpty() }
-        val scrollEmptyEditor = !hasClips && !hasOpenPanel
+        val scrollEmptyEditor = !hasClips && !hasOpenPanel &&
+            (configuration.fontScale > 1.15f || screenHeightDp < 640)
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -826,90 +827,18 @@ fun EditorScreen(
                     onApplyCutList = { viewModel.applyCutList(it) },
                 )
 
-                // Empty project onboarding hint
-                if (!hasClips && !hasOpenPanel) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(min = 240.dp)
-                            .padding(horizontal = Spacing.xl, vertical = Spacing.lg),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = Spacing.lg, vertical = Spacing.md),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center,
-                        ) {
-                            Icon(
-                                Icons.Default.VideoLibrary,
-                                contentDescription = null,
-                                tint = DirectorXAccents.Sky,
-                                modifier = Modifier.size(28.dp)
-                            )
-                            Spacer(Modifier.height(Spacing.sm))
-                            Text(
-                                stringResource(R.string.editor_empty_title),
-                                color = semanticColors.text,
-                                style = MaterialTheme.typography.titleLarge
-                            )
-                            Spacer(Modifier.height(Spacing.xs))
-                            Text(
-                                stringResource(R.string.editor_empty_body),
-                                color = semanticColors.subtext,
-                                style = MaterialTheme.typography.bodySmall,
-                                textAlign = TextAlign.Center,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                            Spacer(Modifier.height(Spacing.lg))
-                            val emptyAddMediaLabel = stringResource(R.string.editor_add_media)
-                            Row(
-                                modifier = Modifier
-                                    .widthIn(min = 180.dp)
-                                    .clip(RoundedCornerShape(Radius.md))
-                                    .background(DirectorXAccents.Sky)
-                                    // Merge the test tag and label with the clickable node.
-                                    // The minimum size remains inside the click target.
-                                    .semantics(mergeDescendants = true) {
-                                        semanticsTestTag = DirectorXTestTags.EDITOR_EMPTY_ADD_MEDIA
-                                        contentDescription = emptyAddMediaLabel
-                                    }
-                                    .clickable(onClick = viewModel::showMediaPicker)
-                                    .requiredHeightIn(min = TouchTarget.minimum)
-                                    .padding(horizontal = Spacing.md, vertical = Spacing.sm),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Add,
-                                    contentDescription = null,
-                                    tint = semanticColors.background,
-                                    modifier = Modifier.size(18.dp)
-                                )
-                                Spacer(Modifier.width(Spacing.sm))
-                                Text(
-                                    text = emptyAddMediaLabel,
-                                    color = semanticColors.background,
-                                    style = MaterialTheme.typography.labelLarge,
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                            }
-                        }
-                    }
-                }
+
             }
 
             // Preview panel with long-press radial menu. The preview is the
             // ONLY flexible element in this column: it absorbs whatever the
             // wrap-content timeline and tool rail leave over, so the rail
             // always hugs the bottom edge with no dead panel space.
-            if (hasClips || hasOpenPanel || isImmersivePreview) Box(
+            Box(
                 modifier = editorPreviewModifier(
                     immersivePreview = isImmersivePreview,
                     previewMinHeight = previewMinHeight,
+                    scrollable = scrollEmptyEditor,
                 )
                     .pointerInput(Unit) {
                         detectTapGestures(
@@ -942,6 +871,7 @@ fun EditorScreen(
                     imageOverlays = state.imageOverlays,
                     textOverlays = state.textOverlays,
                     onOpenMediaManager = viewModel::showMediaManager,
+                    onAddMedia = viewModel::showMediaPicker,
                     jumpToContentMs = previewRecoveryTargetMs,
                     onJumpToContent = viewModel::seekTo,
                     onPreviewTransformStarted = { viewModel.beginTransformChange() },
