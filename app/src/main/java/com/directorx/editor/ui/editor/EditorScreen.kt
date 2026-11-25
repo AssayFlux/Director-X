@@ -32,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -1509,17 +1510,23 @@ private fun EditorTopBar(
         val toolbarTouchTarget = if (layoutMode == LayoutMode.DESKTOP) 68.dp else {
             TouchTarget.minimum
         }
-        val toolbarHeight = if (layoutMode == LayoutMode.DESKTOP) 68.dp else if (isCompactBar) {
+        val baseToolbarHeight = if (layoutMode == LayoutMode.DESKTOP) 68.dp else if (isCompactBar) {
             64.dp
         } else {
             68.dp
         }
+        // The project title (18sp line height) and save/mode line (13sp) stack
+        // vertically. Scale the bar with the user's font setting instead of
+        // clipping either line inside a fixed 64–68dp container.
+        val scaledTextStackHeight = with(LocalDensity.current) { 31.sp.toDp() }
+        val toolbarHeight = maxOf(baseToolbarHeight, scaledTextStackHeight + 8.dp)
 
         Surface(
             color = semanticColors.background,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(toolbarHeight)
+                .testTag(DirectorXTestTags.EDITOR_TOP_BAR)
         ) {
         Box(
             modifier = Modifier
