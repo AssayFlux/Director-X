@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -49,7 +49,7 @@ fun CompoundNavBreadcrumb(
     onExit: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val text = breadcrumbText.takeIf { it.isNotBlank() } ?: return
 
     Row(
@@ -58,8 +58,8 @@ fun CompoundNavBreadcrumb(
             .padding(horizontal = 16.dp, vertical = 6.dp)
             .testTag(DirectorXTestTags.EDITOR_COMPOUND_BREADCRUMB)
             .clip(RoundedCornerShape(12.dp))
-            .border(BorderStroke(1.dp, ClearCutAccents.Mauve.copy(alpha = 0.55f)), RoundedCornerShape(12.dp))
-            .background(ClearCutAccents.Mauve.copy(alpha = 0.14f))
+            .border(BorderStroke(1.dp, DirectorXAccents.Mauve.copy(alpha = 0.55f)), RoundedCornerShape(12.dp))
+            .background(DirectorXAccents.Mauve.copy(alpha = 0.14f))
             .clickable(onClick = onExit)
             .padding(horizontal = 12.dp, vertical = 7.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -68,7 +68,7 @@ fun CompoundNavBreadcrumb(
         Icon(
             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = stringResource(R.string.compound_breadcrumb_exit_cd),
-            tint = ClearCutAccents.Mauve,
+            tint = DirectorXAccents.Mauve,
             modifier = Modifier.size(18.dp),
         )
         Text(
