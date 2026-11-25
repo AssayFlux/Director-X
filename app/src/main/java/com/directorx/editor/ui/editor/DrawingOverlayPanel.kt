@@ -33,7 +33,7 @@ import androidx.compose.ui.res.stringResource
 import com.directorx.editor.R
 import com.directorx.editor.model.DrawingPath
 import com.directorx.editor.ui.theme.DirectorXChromeIconButton
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 import com.directorx.editor.ui.theme.TouchTarget
@@ -89,7 +89,7 @@ fun DrawingOverlayPanel(
                     borderColor = DirectorXAccents.Red.copy(alpha = 0.20f),
                     iconSize = 20.dp
                 )
-                ClearCutPrimaryButton(
+                DirectorXPrimaryButton(
                     text = stringResource(R.string.panel_drawing_done),
                     onClick = onDone
                 )
