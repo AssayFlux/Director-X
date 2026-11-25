@@ -31,7 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.directorx.editor.R
 import com.directorx.editor.model.TimelineRange
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 
 internal const val TIMELINE_TOOLBAR_MIN_ZOOM = 0.01f
 internal const val TIMELINE_TOOLBAR_MAX_ZOOM = 10f
@@ -127,7 +127,7 @@ internal fun TimelineToolbarControls(
             compact = compact,
             highlight = true,
             enabled = canSplitAtPlayhead,
-            testTag = ClearCutTestTags.TIMELINE_SPLIT,
+            testTag = DirectorXTestTags.TIMELINE_SPLIT,
             onClick = onSplitAtPlayhead,
         )
         if (selectedClipId != null) {
@@ -137,7 +137,7 @@ internal fun TimelineToolbarControls(
                 compact = compact,
                 highlight = true,
                 destructive = true,
-                testTag = ClearCutTestTags.TIMELINE_DELETE,
+                testTag = DirectorXTestTags.TIMELINE_DELETE,
                 onClick = onDeleteSelectedClip,
             )
         }
