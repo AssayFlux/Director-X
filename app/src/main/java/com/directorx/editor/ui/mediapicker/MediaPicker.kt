@@ -55,7 +55,7 @@ import com.directorx.editor.ui.editor.PremiumPanelPill
 import com.directorx.editor.ui.editor.PremiumSnackbarHost
 import com.directorx.editor.ui.editor.ToastSeverity
 import com.directorx.editor.ui.theme.LocalDirectorXColors
-import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 import com.directorx.editor.ui.theme.TouchTarget
@@ -696,7 +696,7 @@ fun MediaPickerSheet(
                 }
             )
 
-            ClearCutSecondaryButton(
+            DirectorXSecondaryButton(
                 text = stringResource(R.string.media_picker_select_multiple),
                 icon = Icons.Default.LibraryAdd,
                 onClick = {
@@ -734,7 +734,7 @@ fun MediaPickerSheet(
                 style = MaterialTheme.typography.bodyMedium,
                 color = semanticColors.subtext
             )
-            ClearCutSecondaryButton(
+            DirectorXSecondaryButton(
                 text = stringResource(R.string.media_picker_record_video),
                 icon = Icons.Default.CameraAlt,
                 onClick = {
