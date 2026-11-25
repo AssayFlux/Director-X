@@ -331,7 +331,7 @@ class IncomingDocumentImportRouter @Inject constructor(
             title = "OpenFX descriptor validated",
             body = "Director X can carry this metadata alongside effect packs for future timeline interchange.",
             details = baseDetails(item) + listOf(
-                "Director X effect: ${descriptor.novaCutEffectId}",
+                "Director X effect: ${descriptor.directorXEffectId}",
                 "OpenFX effect: ${descriptor.openfxId}",
                 "Parameters: ${descriptor.parameters.size}",
             ),
