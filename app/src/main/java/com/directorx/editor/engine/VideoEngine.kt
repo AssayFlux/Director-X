@@ -564,13 +564,14 @@ class VideoEngine @Inject constructor(
     fun seekTo(positionMs: Long) {
         val clampedPositionMs = positionMs.coerceIn(0L, previewCompositionPlan.durationMs)
         if (!canSeekPreviewPlayer(previewCompositionPrepared)) {
-            // The preview surface can create a CompositionPlayer before a project
-            // composition is assigned/prepared. Preserve the final scrub position
-            // and replay it immediately after prepare() instead of calling into
-            // Media3's not-yet-created CompositionPlayerInternal (which NPEs).
-            // The current plan may still be the empty placeholder, so retain the
-            // requested non-negative position and clamp against the new plan later.
-            pendingPreviewSeekPositionMs = positionMs.coerceAtLeast(0L)
+            // A surface can create a CompositionPlayer before a project composition
+            // is assigned. If that player exists, preserve the final scrub position
+            // and replay it after prepare(); if no player exists, EditorViewModel's
+            // playhead state is the source of truth used by the later prepareTimeline().
+            if (player != null) {
+                // The current plan may still be empty; clamp against the new plan later.
+                pendingPreviewSeekPositionMs = positionMs.coerceAtLeast(0L)
+            }
             AppLog.d(TAG, "Deferring preview seek until the composition is prepared")
             return
         }
