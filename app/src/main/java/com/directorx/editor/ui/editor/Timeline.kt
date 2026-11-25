@@ -60,7 +60,7 @@ import com.directorx.editor.R
 import com.directorx.editor.engine.ThumbnailStripPolicy
 import com.directorx.editor.engine.VideoEngine
 import com.directorx.editor.model.*
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.theme.Radius
 import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
@@ -313,7 +313,7 @@ fun Timeline(
                         label = { Text(stringResource(R.string.timeline_track_offset_ms_label)) },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .testTag(ClearCutTestTags.TRACK_OFFSET_INPUT),
+                            .testTag(DirectorXTestTags.TRACK_OFFSET_INPUT),
                     )
                 }
             },
@@ -355,7 +355,7 @@ fun Timeline(
                         label = { Text(stringResource(R.string.timeline_clip_audio_sync_offset_ms_label)) },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .testTag(ClearCutTestTags.CLIP_AUDIO_SYNC_OFFSET_INPUT),
+                            .testTag(DirectorXTestTags.CLIP_AUDIO_SYNC_OFFSET_INPUT),
                     )
                 }
             },
@@ -1722,7 +1722,7 @@ fun Timeline(
                                                     RoundedCornerShape(Radius.xs)
                                                 )
                                             )
-                                            .testTag(ClearCutTestTags.TIMELINE_CLIP_PREFIX + clip.id)
+                                            .testTag(DirectorXTestTags.TIMELINE_CLIP_PREFIX + clip.id)
                                             .semantics {
                                                 contentDescription = clipContentDescription
                                                 role = Role.Button
