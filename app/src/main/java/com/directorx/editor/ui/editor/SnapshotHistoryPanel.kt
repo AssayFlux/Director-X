@@ -46,9 +46,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.directorx.editor.R
 import com.directorx.editor.model.ProjectSnapshot
-import com.directorx.editor.ui.theme.ClearCutDialogIcon
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.DirectorXDialogIcon
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 import com.directorx.editor.ui.theme.TouchTarget
@@ -149,7 +149,7 @@ fun SnapshotHistoryPanel(
         AlertDialog(
             onDismissRequest = { pendingRestoreSnapshot = null },
             icon = {
-                ClearCutDialogIcon(
+                DirectorXDialogIcon(
                     icon = Icons.Default.Restore,
                     accent = DirectorXAccents.Green
                 )
@@ -172,7 +172,7 @@ fun SnapshotHistoryPanel(
                 )
             },
             confirmButton = {
-                ClearCutPrimaryButton(
+                DirectorXPrimaryButton(
                     text = stringResource(R.string.snapshot_restore_confirm),
                     onClick = {
                         onRestoreSnapshot(snapshot.id)
@@ -182,7 +182,7 @@ fun SnapshotHistoryPanel(
                 )
             },
             dismissButton = {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.panel_snapshot_cancel),
                     onClick = { pendingRestoreSnapshot = null }
                 )
