@@ -66,14 +66,14 @@ import com.directorx.editor.engine.whisper.WhisperModelState
 import com.directorx.editor.model.*
 import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.theme.DirectorXAccents
-import com.directorx.editor.ui.theme.ClearCutChromeIconButton
-import com.directorx.editor.ui.theme.ClearCutDialogIcon
-import com.directorx.editor.ui.theme.ClearCutFilterChip
+import com.directorx.editor.ui.theme.DirectorXChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXDialogIcon
+import com.directorx.editor.ui.theme.DirectorXFilterChip
 import com.directorx.editor.ui.theme.LocalDirectorXColors
-import com.directorx.editor.ui.theme.ClearCutMetricPill
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.ClearCutScreenBackground
-import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.DirectorXMetricPill
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXScreenBackground
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
 import com.directorx.editor.ui.theme.Motion
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
@@ -204,7 +204,7 @@ fun SettingsScreen(
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
-    ClearCutScreenBackground(
+    DirectorXScreenBackground(
         modifier = modifier
             .fillMaxSize()
             .testTag(DirectorXTestTags.SETTINGS_SCREEN)
@@ -409,7 +409,7 @@ fun SettingsScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 listOf(48, 64, 80, 96).forEach { height ->
-                    ClearCutFilterChip(
+                    DirectorXFilterChip(
                         selected = settings.defaultTrackHeight == height,
                         onClick = { viewModel.setDefaultTrackHeight(height) },
                         text = "${height}dp",
@@ -611,7 +611,7 @@ fun SettingsScreen(
                 val choices: List<Pair<Int?, String>> = listOf(null to stringResource(R.string.settings_thumbnail_cache_automatic)) +
                     thumbnailCacheSizes.map { size -> size to "$size MB" }
                 choices.forEach { (size, label) ->
-                    ClearCutFilterChip(
+                    DirectorXFilterChip(
                         selected = settings.thumbnailCacheSizeMb == size,
                         onClick = {
                             if (size == null) viewModel.setThumbnailCacheAutomatic()
@@ -642,7 +642,7 @@ fun SettingsScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 qualityLabels.forEach { (key, label) ->
-                    ClearCutFilterChip(
+                    DirectorXFilterChip(
                         selected = settings.defaultExportQuality == key,
                         onClick = { viewModel.setDefaultExportQuality(key) },
                         text = label,
@@ -666,7 +666,7 @@ fun SettingsScreen(
                 onClick = onReplayTutorial,
                 modifier = Modifier.testTag(DirectorXTestTags.SETTINGS_REPLAY_TUTORIAL)
             ) {
-                ClearCutMetricPill(
+                DirectorXMetricPill(
                     text = stringResource(R.string.settings_replay_tutorial_action),
                     accent = DirectorXAccents.Sapphire
                 )
@@ -938,7 +938,7 @@ fun SettingsScreen(
                                 .padding(horizontal = 16.dp, vertical = 12.dp),
                             horizontalArrangement = Arrangement.End
                         ) {
-                            ClearCutSecondaryButton(
+                            DirectorXSecondaryButton(
                                 text = stringResource(R.string.settings_privacy_close),
                                 onClick = { showPrivacyDashboard = false },
                                 modifier = Modifier.testTag(DirectorXTestTags.SETTINGS_PRIVACY_CLOSE)
@@ -975,7 +975,7 @@ fun SettingsScreen(
                                 .padding(horizontal = 16.dp, vertical = 12.dp),
                             horizontalArrangement = Arrangement.End
                         ) {
-                            ClearCutSecondaryButton(
+                            DirectorXSecondaryButton(
                                 text = stringResource(R.string.settings_open_source_licenses_close),
                                 onClick = { showOpenSourceLicenses = false },
                                 modifier = Modifier.testTag(DirectorXTestTags.SETTINGS_LICENSES_CLOSE)
@@ -1111,7 +1111,7 @@ private fun SettingsAiModelRemovalConfirmDialog(
     AlertDialog(
         onDismissRequest = onDismissRequest,
         icon = {
-            ClearCutDialogIcon(
+            DirectorXDialogIcon(
                 icon = Icons.Default.Delete,
                 accent = DirectorXAccents.Red
             )
@@ -1131,7 +1131,7 @@ private fun SettingsAiModelRemovalConfirmDialog(
             )
         },
         confirmButton = {
-            ClearCutSecondaryButton(
+            DirectorXSecondaryButton(
                 text = stringResource(R.string.ai_model_remove_confirm),
                 onClick = onConfirm,
                 icon = Icons.Default.Delete,
@@ -1139,7 +1139,7 @@ private fun SettingsAiModelRemovalConfirmDialog(
             )
         },
         dismissButton = {
-            ClearCutSecondaryButton(
+            DirectorXSecondaryButton(
                 text = stringResource(R.string.cancel),
                 onClick = onDismissRequest
             )
@@ -1190,7 +1190,7 @@ private fun SettingsHero(
                     style = MaterialTheme.typography.labelSmall,
                 )
             }
-            ClearCutChromeIconButton(
+            DirectorXChromeIconButton(
                 icon = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = stringResource(R.string.back),
                 onClick = onBack,
@@ -1317,7 +1317,7 @@ private fun SettingsFeedbackBanner(
                 overflow = TextOverflow.Ellipsis
             )
             onDismiss?.let { dismiss ->
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = Icons.Default.Close,
                     contentDescription = stringResource(R.string.close),
                     onClick = dismiss
@@ -1381,13 +1381,13 @@ private fun SettingsDiagnosticExportRow(
                         horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
                         verticalArrangement = Arrangement.spacedBy(Spacing.xs)
                     ) {
-                        ClearCutSecondaryButton(
+                        DirectorXSecondaryButton(
                             text = stringResource(R.string.settings_diagnostic_share),
                             onClick = { onShare(state.bundle) },
                             icon = Icons.Default.Share,
                             contentColor = DirectorXAccents.Green
                         )
-                        ClearCutSecondaryButton(
+                        DirectorXSecondaryButton(
                             text = stringResource(R.string.settings_diagnostic_rebuild),
                             onClick = onExport,
                             icon = Icons.Default.Refresh,
@@ -1397,7 +1397,7 @@ private fun SettingsDiagnosticExportRow(
                     }
                 }
                 else -> {
-                    ClearCutSecondaryButton(
+                    DirectorXSecondaryButton(
                         text = stringResource(R.string.settings_diagnostic_export_action),
                         onClick = onExport,
                         icon = Icons.Default.Save,
@@ -1601,7 +1601,7 @@ private fun SettingsAiModelRow(
                     }
                 )
             }
-            ClearCutSecondaryButton(
+            DirectorXSecondaryButton(
                 text = actionLabel,
                 onClick = onAction,
                 enabled = !isBusy && (canRemove || networkAvailable),
