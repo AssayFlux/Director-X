@@ -36,9 +36,9 @@ import com.directorx.editor.engine.AiToolRequirements
 import com.directorx.editor.engine.AiToolRequirements.Availability
 import com.directorx.editor.engine.AiToolRequirements.Runtime
 import com.directorx.editor.engine.AiToolRequirements.ToolRequirement
-import com.directorx.editor.ui.theme.ClearCutDialogIcon
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.DirectorXDialogIcon
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
 import com.directorx.editor.ui.theme.Radius
 
 /**
@@ -85,7 +85,7 @@ fun AiModelRequirementSheet(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        icon = { ClearCutDialogIcon(icon = icon, accent = accent) },
+        icon = { DirectorXDialogIcon(icon = icon, accent = accent) },
         title = {
             Text(
                 text = title,
@@ -149,7 +149,7 @@ fun AiModelRequirementSheet(
         },
         confirmButton = {
             if (requirement.availability == Availability.DEPENDENCY_MISSING) {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.ai_requirement_review_models),
                     onClick = onReviewModels,
                 )
@@ -163,7 +163,7 @@ fun AiModelRequirementSheet(
                         stringResource(R.string.ai_requirement_cloud_action) to { onRun(requirement) }
                     Availability.DEPENDENCY_MISSING -> "" to {} // handled above
                 }
-                ClearCutPrimaryButton(
+                DirectorXPrimaryButton(
                     text = label,
                     onClick = action,
                     enabled = primaryEnabled,
@@ -171,7 +171,7 @@ fun AiModelRequirementSheet(
             }
         },
         dismissButton = {
-            ClearCutSecondaryButton(
+            DirectorXSecondaryButton(
                 text = stringResource(R.string.ai_requirement_not_now),
                 onClick = onDismiss,
             )
