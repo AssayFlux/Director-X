@@ -48,6 +48,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.customActions
@@ -71,6 +72,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerView
 import coil3.compose.SubcomposeAsyncImage
 import com.directorx.editor.R
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.engine.Android15MediaPolicy
 import com.directorx.editor.engine.VideoEngine
 import com.directorx.editor.model.AspectRatio
@@ -79,6 +81,7 @@ import com.directorx.editor.model.ImageOverlay
 import com.directorx.editor.model.TextAlignment
 import com.directorx.editor.model.TextOverlay
 import com.directorx.editor.ui.theme.DirectorXChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
 import com.directorx.editor.ui.theme.Radius
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -182,6 +185,7 @@ fun PreviewPanel(
     imageOverlays: List<ImageOverlay> = emptyList(),
     textOverlays: List<TextOverlay> = emptyList(),
     onOpenMediaManager: () -> Unit = {},
+    onAddMedia: () -> Unit = {},
     jumpToContentMs: Long? = null,
     onJumpToContent: (Long) -> Unit = {},
     onPreviewTransformStarted: () -> Unit = {},
@@ -513,12 +517,12 @@ fun PreviewPanel(
 
                         if (!isPlaying && totalDurationMs == 0L) {
                             Card(
-                                colors = CardDefaults.cardColors(containerColor = semanticColors.panel.copy(alpha = 0.86f)),
+                                colors = CardDefaults.cardColors(containerColor = semanticColors.panel.copy(alpha = 0.92f)),
                                 border = androidx.compose.foundation.BorderStroke(1.dp, semanticColors.cardStroke.copy(alpha = 0.9f)),
                                 shape = RoundedCornerShape(Radius.xl)
                             ) {
                                 Column(
-                                    modifier = Modifier.padding(horizontal = 22.dp, vertical = 20.dp),
+                                    modifier = Modifier.padding(horizontal = 18.dp, vertical = 14.dp),
                                     horizontalAlignment = Alignment.CenterHorizontally,
                                     verticalArrangement = Arrangement.Center
                                 ) {
@@ -532,15 +536,32 @@ fun PreviewPanel(
                                             contentDescription = stringResource(R.string.cd_preview_empty),
                                             tint = DirectorXAccents.Sky,
                                             modifier = Modifier
-                                                .padding(16.dp)
+                                                .padding(10.dp)
                                                 .size(24.dp)
                                         )
                                     }
-                                    Spacer(modifier = Modifier.height(10.dp))
+                                    Spacer(modifier = Modifier.height(8.dp))
                                     Text(
-                                        stringResource(R.string.preview_add_media),
+                                        stringResource(R.string.editor_empty_title),
                                         color = semanticColors.text,
-                                        style = MaterialTheme.typography.titleSmall
+                                        style = MaterialTheme.typography.titleMedium,
+                                        textAlign = TextAlign.Center
+                                    )
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Text(
+                                        stringResource(R.string.editor_empty_body),
+                                        color = semanticColors.subtext,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        textAlign = TextAlign.Center,
+                                        maxLines = 2,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                    Spacer(modifier = Modifier.height(10.dp))
+                                    DirectorXPrimaryButton(
+                                        text = stringResource(R.string.editor_add_media),
+                                        onClick = onAddMedia,
+                                        icon = Icons.Default.Add,
+                                        modifier = Modifier.testTag(DirectorXTestTags.EDITOR_EMPTY_ADD_MEDIA)
                                     )
                                 }
                             }
