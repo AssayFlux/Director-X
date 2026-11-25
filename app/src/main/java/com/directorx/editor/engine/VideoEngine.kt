@@ -266,6 +266,7 @@ class VideoEngine @Inject constructor(
     // loaded. CompositionPlayer.seekTo() dereferences its internal player, which
     // does not exist until prepare() has run for a composition.
     private var previewCompositionPrepared = false
+    private var pendingPreviewSeekPositionMs: Long? = null
     private var playerLease: CodecLease<Unit>? = null
     private var playerListener: Player.Listener? = null
 
@@ -550,16 +551,27 @@ class VideoEngine @Inject constructor(
         setPreviewSpeed(1f)
         p.prepare()
         previewCompositionPrepared = true
+        val pendingSeek = pendingPreviewSeekPositionMs
+        pendingPreviewSeekPositionMs = null
+        if (pendingSeek != null) {
+            p.seekTo(pendingSeek.coerceIn(0L, previewCompositionPlan.durationMs))
+        }
         if (resumePlayback) p.play()
     }
 
     fun seekTo(positionMs: Long) {
+        val clampedPositionMs = positionMs.coerceIn(0L, previewCompositionPlan.durationMs)
         if (!canSeekPreviewPlayer(previewCompositionPrepared)) {
-            AppLog.d(TAG, "Ignoring preview seek before a composition has been prepared")
+            // The preview surface can create a CompositionPlayer before a project
+            // composition is assigned/prepared. Preserve the final scrub position
+            // and replay it immediately after prepare() instead of calling into
+            // Media3's not-yet-created CompositionPlayerInternal (which NPEs).
+            pendingPreviewSeekPositionMs = clampedPositionMs
+            AppLog.d(TAG, "Deferring preview seek until the composition is prepared")
             return
         }
-        if (renewSpentPreviewPlayer(positionMs)) return
-        player?.seekTo(positionMs.coerceIn(0L, previewCompositionPlan.durationMs))
+        if (renewSpentPreviewPlayer(clampedPositionMs)) return
+        player?.seekTo(clampedPositionMs)
     }
 
     /** Swaps a spent preview player for a fresh one prepared at [positionMs]. */
