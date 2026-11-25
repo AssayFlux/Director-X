@@ -769,8 +769,8 @@ fun EditorScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                // At large font scales or short window heights, keep the empty-state
-                // preview and its add-media action reachable without relying on a
+                // At large font scales or short window heights, keep the editor's
+                // preview, timeline, and tool rail reachable without relying on a
                 // weighted child measured under unbounded scroll constraints.
                 .then(if (scrollEditorContent) Modifier.verticalScroll(rememberScrollState()) else Modifier)
                 .padding(
