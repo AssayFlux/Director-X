@@ -16,8 +16,8 @@ import com.directorx.editor.engine.ExportObservation
 import com.directorx.editor.model.AudioCodec
 import com.directorx.editor.model.VideoCodec
 import com.directorx.editor.ui.DirectorXTestTags
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import java.util.Locale
 
 /**
@@ -27,7 +27,7 @@ import java.util.Locale
 @Composable
 internal fun ExportContractLines(entry: ExportHistoryEntry) {
     if (entry.status != ExportHistoryStatus.COMPLETE) return
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val contract = entry.contract
     val disposition = contract?.disposition ?: ExportContractDisposition.UNVERIFIED
     val observed = contract?.observed
@@ -48,10 +48,10 @@ internal fun ExportContractLines(entry: ExportHistoryEntry) {
     Text(
         text = verdict,
         color = when (disposition) {
-            ExportContractDisposition.EXACT -> ClearCutAccents.Green
-            ExportContractDisposition.ACCEPTED_FALLBACK -> ClearCutAccents.Teal
-            ExportContractDisposition.DEGRADED -> ClearCutAccents.Yellow
-            ExportContractDisposition.REJECTED -> ClearCutAccents.Red
+            ExportContractDisposition.EXACT -> DirectorXAccents.Green
+            ExportContractDisposition.ACCEPTED_FALLBACK -> DirectorXAccents.Teal
+            ExportContractDisposition.DEGRADED -> DirectorXAccents.Yellow
+            ExportContractDisposition.REJECTED -> DirectorXAccents.Red
             ExportContractDisposition.UNVERIFIED -> semanticColors.subtext
         },
         style = MaterialTheme.typography.bodySmall,
@@ -70,14 +70,14 @@ internal fun ExportContractLines(entry: ExportHistoryEntry) {
                 requestedValue(contract, field),
                 observedValue(observed, field),
             ),
-            color = ClearCutAccents.Yellow,
+            color = DirectorXAccents.Yellow,
             style = MaterialTheme.typography.bodySmall,
         )
     }
     if (disposition == ExportContractDisposition.DEGRADED && contract.fallbackSummary != null) {
         Text(
             text = stringResource(R.string.export_contract_fallback_also),
-            color = ClearCutAccents.Teal,
+            color = DirectorXAccents.Teal,
             style = MaterialTheme.typography.bodySmall,
         )
     }
