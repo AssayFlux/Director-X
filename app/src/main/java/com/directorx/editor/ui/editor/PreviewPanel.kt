@@ -331,11 +331,16 @@ fun PreviewPanel(
                         // The engine replaces a player whose compositor has ended (issue #54),
                         // so the listener and the PlayerView follow the current instance.
                         val playerGeneration by engine.previewPlayerGeneration.collectAsState()
-                        val previewPlayer = remember(engine, playerGeneration) { engine.getPlayer() }
+                        // A blank project has no preview composition or PlayerView. Do not
+                        // allocate a CompositionPlayer (and its playback thread/codec lease)
+                        // just to register a listener; the first non-empty timeline creates it.
+                        val previewPlayer = remember(engine, playerGeneration, totalDurationMs > 0L) {
+                            if (totalDurationMs > 0L) engine.getPlayer() else null
+                        }
                         DisposableEffect(previewPlayer) {
                             // Capture the player reference once; reuse on dispose to avoid
                             // attaching/removing on different player instances if engine state changes.
-                            val capturedPlayer = previewPlayer
+                            val capturedPlayer = previewPlayer ?: return@DisposableEffect onDispose {}
                             hasPlaybackError = false
                             val listener = object : Player.Listener {
                                 override fun onPlaybackStateChanged(state: Int) {
@@ -358,7 +363,7 @@ fun PreviewPanel(
                         // Removing it for a timeline gap, still image, or transient error destroys
                         // its SurfaceView while the hardware codec is active. An empty project has
                         // no decoder/surface to preserve, so do not mount Android controls there.
-                        if (totalDurationMs > 0L) {
+                        if (totalDurationMs > 0L && previewPlayer != null) {
                             AndroidView(
                                 factory = { ctx ->
                                     PlayerView(ctx).apply {
