@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -66,7 +66,7 @@ fun SnapshotHistoryPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var showNameDialog by remember { mutableStateOf(false) }
     var snapshotName by remember { mutableStateOf("") }
     var pendingRestoreSnapshot by remember { mutableStateOf<ProjectSnapshot?>(null) }
@@ -107,11 +107,11 @@ fun SnapshotHistoryPanel(
                             )
                         },
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = ClearCutAccents.Mauve,
+                            focusedBorderColor = DirectorXAccents.Mauve,
                             unfocusedBorderColor = semanticColors.cardStroke,
                             focusedTextColor = semanticColors.text,
                             unfocusedTextColor = semanticColors.text,
-                            cursorColor = ClearCutAccents.Mauve,
+                            cursorColor = DirectorXAccents.Mauve,
                             focusedContainerColor = semanticColors.panelRaised,
                             unfocusedContainerColor = semanticColors.panelRaised
                         ),
@@ -130,7 +130,7 @@ fun SnapshotHistoryPanel(
                 ) {
                     Text(
                         text = stringResource(R.string.panel_snapshot_save_button),
-                        color = ClearCutAccents.Mauve
+                        color = DirectorXAccents.Mauve
                     )
                 }
             },
@@ -151,7 +151,7 @@ fun SnapshotHistoryPanel(
             icon = {
                 ClearCutDialogIcon(
                     icon = Icons.Default.Restore,
-                    accent = ClearCutAccents.Green
+                    accent = DirectorXAccents.Green
                 )
             },
             title = {
@@ -225,7 +225,7 @@ fun SnapshotHistoryPanel(
                 ) {
                     Text(
                         text = stringResource(R.string.snapshot_delete_confirm),
-                        color = ClearCutAccents.Red
+                        color = DirectorXAccents.Red
                     )
                 }
             },
@@ -244,7 +244,7 @@ fun SnapshotHistoryPanel(
         title = stringResource(R.string.snapshot_title),
         subtitle = stringResource(R.string.panel_snapshot_subtitle),
         icon = Icons.Default.History,
-        accent = ClearCutAccents.Mauve,
+        accent = DirectorXAccents.Mauve,
         onClose = onClose,
         modifier = modifier,
         scrollable = true,
@@ -254,11 +254,11 @@ fun SnapshotHistoryPanel(
                 icon = Icons.Default.Add,
                 contentDescription = stringResource(R.string.snapshot_take_cd),
                 onClick = { showNameDialog = true },
-                tint = ClearCutAccents.Green
+                tint = DirectorXAccents.Green
             )
         }
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             Text(
                 text = stringResource(R.string.panel_snapshot_overview_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -287,7 +287,7 @@ fun SnapshotHistoryPanel(
                     } else {
                         stringResource(R.string.snapshot_status_ready)
                     },
-                    accent = if (latestSnapshot == null) semanticColors.overlay else ClearCutAccents.Green
+                    accent = if (latestSnapshot == null) semanticColors.overlay else DirectorXAccents.Green
                 )
                 PremiumPanelPill(
                     text = pluralStringResource(
@@ -295,16 +295,16 @@ fun SnapshotHistoryPanel(
                         sortedSnapshots.size,
                         sortedSnapshots.size
                     ),
-                    accent = ClearCutAccents.Mauve
+                    accent = DirectorXAccents.Mauve
                 )
                 latestSnapshot?.let {
                     PremiumPanelPill(
                         text = stringResource(R.string.panel_snapshot_latest_badge),
-                        accent = ClearCutAccents.Blue
+                        accent = DirectorXAccents.Blue
                     )
                     PremiumPanelPill(
                         text = dateFormat.format(Date(it.timestamp)),
-                        accent = ClearCutAccents.Sky
+                        accent = DirectorXAccents.Sky
                     )
                 }
             }
@@ -312,7 +312,7 @@ fun SnapshotHistoryPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = DirectorXAccents.Blue) {
             if (sortedSnapshots.isEmpty()) {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     SnapshotMessageCard(
@@ -322,7 +322,7 @@ fun SnapshotHistoryPanel(
                     SnapshotAction(
                         icon = Icons.Default.Add,
                         label = stringResource(R.string.snapshot_create_cta),
-                        accent = ClearCutAccents.Green,
+                        accent = DirectorXAccents.Green,
                         onClick = { showNameDialog = true }
                     )
                 }
@@ -360,7 +360,7 @@ private fun SnapshotMessageCard(
     title: String,
     body: String
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = Modifier.fillMaxWidth(),
         color = semanticColors.panelRaised,
@@ -375,14 +375,14 @@ private fun SnapshotMessageCard(
             verticalAlignment = Alignment.Top
         ) {
             Surface(
-                color = ClearCutAccents.Mauve.copy(alpha = 0.12f),
+                color = DirectorXAccents.Mauve.copy(alpha = 0.12f),
                 shape = RoundedCornerShape(12.dp),
-                border = BorderStroke(1.dp, ClearCutAccents.Mauve.copy(alpha = 0.18f))
+                border = BorderStroke(1.dp, DirectorXAccents.Mauve.copy(alpha = 0.18f))
             ) {
                 Icon(
                     imageVector = Icons.Default.History,
                     contentDescription = null,
-                    tint = ClearCutAccents.Mauve,
+                    tint = DirectorXAccents.Mauve,
                     modifier = Modifier.padding(10.dp)
                 )
             }
@@ -416,7 +416,7 @@ private fun SnapshotRow(
     onRestore: () -> Unit,
     onDelete: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = Modifier.fillMaxWidth(),
         color = semanticColors.panelRaised,
@@ -440,14 +440,14 @@ private fun SnapshotRow(
                     horizontalArrangement = Arrangement.spacedBy(Spacing.md)
                 ) {
                     Surface(
-                        color = ClearCutAccents.Mauve.copy(alpha = 0.14f),
+                        color = DirectorXAccents.Mauve.copy(alpha = 0.14f),
                         shape = RoundedCornerShape(12.dp),
-                        border = BorderStroke(1.dp, ClearCutAccents.Mauve.copy(alpha = 0.22f))
+                        border = BorderStroke(1.dp, DirectorXAccents.Mauve.copy(alpha = 0.22f))
                     ) {
                         Icon(
                             imageVector = Icons.Default.SaveAlt,
                             contentDescription = stringResource(R.string.cd_save_snapshot),
-                            tint = ClearCutAccents.Mauve,
+                            tint = DirectorXAccents.Mauve,
                             modifier = Modifier.padding(10.dp)
                         )
                     }
@@ -473,7 +473,7 @@ private fun SnapshotRow(
                 if (isLatest) {
                     PremiumPanelPill(
                         text = stringResource(R.string.panel_snapshot_latest_badge),
-                        accent = ClearCutAccents.Blue
+                        accent = DirectorXAccents.Blue
                     )
                 }
             }
@@ -486,13 +486,13 @@ private fun SnapshotRow(
                 SnapshotAction(
                     icon = Icons.Default.Restore,
                     label = stringResource(R.string.snapshot_restore),
-                    accent = ClearCutAccents.Green,
+                    accent = DirectorXAccents.Green,
                     onClick = onRestore
                 )
                 SnapshotAction(
                     icon = Icons.Default.Delete,
                     label = stringResource(R.string.snapshot_delete),
-                    accent = ClearCutAccents.Red,
+                    accent = DirectorXAccents.Red,
                     onClick = onDelete
                 )
             }
