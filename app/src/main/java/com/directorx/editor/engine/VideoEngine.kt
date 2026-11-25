@@ -262,9 +262,11 @@ class VideoEngine @Inject constructor(
     )
 
     private var player: CompositionPlayer? = null
-    // getPlayer() is also used to attach the preview surface before a project is
-    // loaded. CompositionPlayer.seekTo() dereferences its internal player, which
-    // does not exist until prepare() has run for a composition.
+    // getPlayer() is also used to attach the preview surface before a project
+    // composition is assigned. CompositionPlayer.seekTo() dereferences its
+    // CompositionPlayerInternal, which is created by setComposition(); seeking
+    // before that point throws a NullPointerException inside Media3. We wait
+    // until prepare() completes before allowing any seek into the new session.
     private var previewCompositionPrepared = false
     private var pendingPreviewSeekPositionMs: Long? = null
     private var playerLease: CodecLease<Unit>? = null
