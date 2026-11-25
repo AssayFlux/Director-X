@@ -58,7 +58,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import com.directorx.editor.engine.ExportState
 import com.directorx.editor.model.*
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.theme.ClearCutDialogIcon
 import com.directorx.editor.ui.theme.ClearCutChromeIconButton
 import com.directorx.editor.ui.theme.ClearCutPrimaryButton
@@ -527,8 +527,8 @@ fun EditorScreen(
     Box(modifier = Modifier
         .fillMaxSize()
         .semantics {
-            semanticsTestTag = ClearCutTestTags.EDITOR_SCREEN
-            this[ClearCutTestTags.OPEN_PANEL_IDS] = state.panels.openPanels.map { it.name }.toSet()
+            semanticsTestTag = DirectorXTestTags.EDITOR_SCREEN
+            this[DirectorXTestTags.OPEN_PANEL_IDS] = state.panels.openPanels.map { it.name }.toSet()
         }
         .background(semanticColors.surfaceBase)
         .graphicsLayer {
@@ -873,7 +873,7 @@ fun EditorScreen(
                                     // Merge the test tag and label with the clickable node.
                                     // The minimum size remains inside the click target.
                                     .semantics(mergeDescendants = true) {
-                                        semanticsTestTag = ClearCutTestTags.EDITOR_EMPTY_ADD_MEDIA
+                                        semanticsTestTag = DirectorXTestTags.EDITOR_EMPTY_ADD_MEDIA
                                         contentDescription = emptyAddMediaLabel
                                     }
                                     .clickable(onClick = viewModel::showMediaPicker)
@@ -1609,7 +1609,7 @@ private fun EditorTopBar(
                         onClick = onBack,
                         modifier = Modifier
                             .size(if (layoutMode == LayoutMode.DESKTOP) 68.dp else if (isCompactBar) 60.dp else 68.dp)
-                            .testTag(ClearCutTestTags.EDITOR_BACK)
+                            .testTag(DirectorXTestTags.EDITOR_BACK)
                     ) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
@@ -1702,7 +1702,7 @@ private fun EditorTopBar(
                                 enabled = canUndo,
                                 modifier = Modifier
                                     .size(toolbarTouchTarget)
-                                    .testTag(ClearCutTestTags.EDITOR_UNDO)
+                                    .testTag(DirectorXTestTags.EDITOR_UNDO)
                             ) {
                                 Icon(
                                     Icons.AutoMirrored.Filled.Undo,
@@ -1716,7 +1716,7 @@ private fun EditorTopBar(
                                 enabled = canRedo,
                                 modifier = Modifier
                                     .size(toolbarTouchTarget)
-                                    .testTag(ClearCutTestTags.EDITOR_REDO)
+                                    .testTag(DirectorXTestTags.EDITOR_REDO)
                             ) {
                                 Icon(
                                     Icons.AutoMirrored.Filled.Redo,
@@ -1740,7 +1740,7 @@ private fun EditorTopBar(
                             onClick = { showOverflow = true },
                             modifier = Modifier
                                 .size(toolbarTouchTarget)
-                                .testTag(ClearCutTestTags.EDITOR_OVERFLOW)
+                                .testTag(DirectorXTestTags.EDITOR_OVERFLOW)
                         ) {
                             Icon(
                                 Icons.Default.MoreVert,
@@ -1772,7 +1772,7 @@ private fun EditorTopBar(
                                     showOverflow = false
                                     onUndo()
                                 },
-                                modifier = Modifier.testTag(ClearCutTestTags.EDITOR_OVERFLOW_UNDO),
+                                modifier = Modifier.testTag(DirectorXTestTags.EDITOR_OVERFLOW_UNDO),
                                 enabled = canUndo,
                                 leadingIcon = {
                                     Icon(
@@ -1787,7 +1787,7 @@ private fun EditorTopBar(
                                     showOverflow = false
                                     onRedo()
                                 },
-                                modifier = Modifier.testTag(ClearCutTestTags.EDITOR_OVERFLOW_REDO),
+                                modifier = Modifier.testTag(DirectorXTestTags.EDITOR_OVERFLOW_REDO),
                                 enabled = canRedo,
                                 leadingIcon = {
                                     Icon(
@@ -1929,7 +1929,7 @@ private fun EditorTopBar(
                                     showOverflow = false
                                     onOpenHistory()
                                 },
-                                modifier = Modifier.testTag(ClearCutTestTags.EDITOR_VERSION_HISTORY),
+                                modifier = Modifier.testTag(DirectorXTestTags.EDITOR_VERSION_HISTORY),
                                 leadingIcon = {
                                     Icon(Icons.Default.History, contentDescription = null, tint = ClearCutAccents.Mauve)
                                 },
@@ -2002,7 +2002,7 @@ private fun EditorTopBar(
                     contentPadding = PaddingValues(horizontal = if (isCompactBar) 12.dp else 14.dp, vertical = 0.dp),
                     modifier = Modifier
                         .height(if (layoutMode == LayoutMode.DESKTOP) 68.dp else if (isCompactBar) 60.dp else TouchTarget.minimum)
-                        .testTag(ClearCutTestTags.EDITOR_EXPORT)
+                        .testTag(DirectorXTestTags.EDITOR_EXPORT)
                 ) {
                     Icon(
                         Icons.Default.Upload,
