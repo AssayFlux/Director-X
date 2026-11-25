@@ -768,9 +768,9 @@ fun EditorScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                // At large font scales the top bar and bottom tool rail can consume
-                // the remaining height. Keep the empty-project onboarding content
-                // in the scroll range instead of measuring its weighted slot to 0dp.
+                // At large font scales or short window heights, keep the empty-state
+                // preview and its add-media action reachable without relying on a
+                // weighted child measured under unbounded scroll constraints.
                 .then(if (scrollEmptyEditor) Modifier.verticalScroll(rememberScrollState()) else Modifier)
                 .padding(
                     start = desktopSidebarWidth,
