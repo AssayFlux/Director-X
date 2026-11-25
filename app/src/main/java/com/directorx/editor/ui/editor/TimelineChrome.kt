@@ -28,7 +28,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.directorx.editor.model.TrackType
 import com.directorx.editor.ui.theme.ClearCutChromeIconButton
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.TouchTarget
 import java.util.Locale
@@ -46,7 +46,7 @@ internal fun TimelineToolbarButton(
     testTag: String? = null,
     onClick: () -> Unit
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     val actionAccent = if (destructive) colors.danger else colors.accent
     val backgroundColor = when {
         !enabled -> colors.panelHighest.copy(alpha = 0.35f)
@@ -84,7 +84,7 @@ internal fun TimelineInfoChip(
     accent: Color,
     compact: Boolean = false
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     Surface(
         color = accent.copy(alpha = 0.13f),
         shape = RoundedCornerShape(Radius.sm),
@@ -108,7 +108,7 @@ internal fun TimelineTextActionChip(
     compact: Boolean = false,
     onClick: () -> Unit
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     Surface(
         modifier = Modifier
             .clickable(role = Role.Button, onClick = onClick)
@@ -146,7 +146,7 @@ internal fun TimelineMiniIconButton(
     compact: Boolean = false,
     onClick: () -> Unit
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     ClearCutChromeIconButton(
         icon = icon,
         contentDescription = contentDescription,
@@ -166,7 +166,7 @@ internal fun TimelineClipBadge(
     accent: Color,
     compact: Boolean = false
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         color = accent.copy(alpha = 0.18f),
         shape = RoundedCornerShape(Radius.sm),
