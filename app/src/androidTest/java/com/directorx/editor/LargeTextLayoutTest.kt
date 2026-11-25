@@ -78,6 +78,8 @@ class LargeTextLayoutTest {
             )
             compose.onNodeWithTag(DirectorXTestTags.EDITOR_PREVIEW_PANEL)
                 .assertHeightIsAtLeast(180.dp)
+            compose.onNodeWithTag(DirectorXTestTags.EDITOR_TOP_BAR)
+                .assertHeightIsAtLeast(if (fontScale >= 2.5f) 100.dp else 70.dp)
 
             compose.onNodeWithTag(DirectorXTestTags.EDITOR_EXPORT).performClick()
             compose.waitUntilAtLeastOneExists(DirectorXTestTags.EXPORT_SHEET)
