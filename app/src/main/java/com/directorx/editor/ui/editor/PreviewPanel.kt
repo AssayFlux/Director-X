@@ -85,6 +85,7 @@ import com.directorx.editor.model.TextOverlay
 import com.directorx.editor.ui.theme.DirectorXChromeIconButton
 import com.directorx.editor.ui.theme.DirectorXPrimaryButton
 import com.directorx.editor.ui.theme.Radius
+import com.directorx.editor.ui.theme.TouchTarget
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
