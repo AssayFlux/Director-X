@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import com.directorx.editor.R
 import com.directorx.editor.engine.ExportState
-import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXChromeIconButton
 import com.directorx.editor.ui.theme.Elevation
 import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.Motion
@@ -172,7 +172,7 @@ fun ExportProgressOverlay(
                     }
                 }
 
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = Icons.Default.Close,
                     contentDescription = stringResource(R.string.cd_export_cancel),
                     onClick = onCancel,
