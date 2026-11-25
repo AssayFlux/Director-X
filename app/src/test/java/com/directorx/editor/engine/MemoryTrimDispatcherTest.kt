@@ -6,11 +6,36 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import java.util.concurrent.Executor
 
 class MemoryTrimDispatcherTest {
 
     @get:Rule
     val temp = TemporaryFolder()
+
+    @Test
+    fun breadcrumbPersistenceCanBeDeferredUntilAfterTheTrimCallback() {
+        val registry = MemoryTrimRegistry()
+        registry.register(MemoryTrimAction.CLEAR_THUMBNAILS, "video.thumbnailCache") {}
+        val store = MemoryTrimBreadcrumbStore.forDiagnosticsDir(temp.newFolder("deferred"))
+        val queued = mutableListOf<Runnable>()
+        val dispatcher = MemoryTrimDispatcher(
+            MemoryTrimPolicy(),
+            registry,
+            store,
+            Executor { task -> queued += task },
+        )
+
+        val dispatch = dispatcher.onTrimMemory(ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN)
+
+        assertTrue(dispatch.results.all { it.succeeded })
+        assertEquals(null, store.buildDiagnosticText())
+        assertEquals(1, queued.size)
+
+        queued.single().run()
+
+        assertTrue(store.buildDiagnosticText()!!.contains("TRIM_MEMORY_UI_HIDDEN"))
+    }
 
     @Test
     fun onTrimMemory_dispatchesPolicyActionsAndRecordsBreadcrumb() {
@@ -23,7 +48,7 @@ class MemoryTrimDispatcherTest {
             calls += MemoryTrimAction.CLEAR_WAVEFORMS
         }
         val store = MemoryTrimBreadcrumbStore.forDiagnosticsDir(temp.newFolder("diagnostics"))
-        val dispatcher = MemoryTrimDispatcher(MemoryTrimPolicy(), registry, store)
+        val dispatcher = MemoryTrimDispatcher(MemoryTrimPolicy(), registry, store, Executor { it.run() })
 
         val dispatch = dispatcher.onTrimMemory(ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN)
 
