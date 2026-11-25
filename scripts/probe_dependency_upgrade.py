@@ -23,7 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "gradle" / "libs.versions.toml"
 SNAPSHOT = ROOT / "scripts" / "dependency_freshness_snapshot.json"
 TASKS = [":app:testQaUnitTest", ":app:lintQa", ":app:assembleQa"]
-DEFAULT_GRADLE_JVMARGS = os.environ.get("CLEARCUT_GRADLE_JVMARGS", "-Xmx2048m")
+DEFAULT_GRADLE_JVMARGS = os.environ.get("DIRECTORX_GRADLE_JVMARGS", "-Xmx2048m")
 
 
 def parse_catalog() -> dict[str, str]:
@@ -86,7 +86,7 @@ def preflight(dependency: str, candidate: str, catalog: dict[str, str]) -> None:
             )
 
 
-PROBE_ENV = "CLEARCUT_DEPENDENCY_PROBE"
+PROBE_ENV = "DIRECTORX_DEPENDENCY_PROBE"
 
 
 def write_snapshot(snapshot: dict) -> None:
