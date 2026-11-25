@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -48,7 +48,7 @@ fun ScratchpadSheet(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     // Key the remember to the project id via initialNotes so opening a different
     // project reloads its notes instead of sticking to the previous project's state.
     var text by remember(initialNotes) { mutableStateOf(initialNotes) }
@@ -68,13 +68,13 @@ fun ScratchpadSheet(
         title = stringResource(R.string.scratchpad_title),
         subtitle = projectName.ifBlank { stringResource(R.string.scratchpad_subtitle_default) },
         icon = Icons.AutoMirrored.Filled.Notes,
-        accent = ClearCutAccents.Yellow,
+        accent = DirectorXAccents.Yellow,
         onClose = onClose,
         modifier = modifier,
         closeContentDescription = stringResource(R.string.scratchpad_close_content_description)
     ) {
         val isSaved = text == committed.value
-        PremiumPanelCard(accent = ClearCutAccents.Yellow) {
+        PremiumPanelCard(accent = DirectorXAccents.Yellow) {
             Text(
                 text = stringResource(R.string.scratchpad_hint),
                 color = semanticColors.subtext,
@@ -108,11 +108,11 @@ fun ScratchpadSheet(
             colors = OutlinedTextFieldDefaults.colors(
                 focusedTextColor = semanticColors.text,
                 unfocusedTextColor = semanticColors.text,
-                focusedBorderColor = ClearCutAccents.Yellow.copy(alpha = 0.88f),
+                focusedBorderColor = DirectorXAccents.Yellow.copy(alpha = 0.88f),
                 unfocusedBorderColor = semanticColors.cardStroke,
                 focusedContainerColor = semanticColors.panelHighest,
                 unfocusedContainerColor = semanticColors.panelRaised,
-                cursorColor = ClearCutAccents.Yellow,
+                cursorColor = DirectorXAccents.Yellow,
                 focusedPlaceholderColor = semanticColors.subtext,
                 unfocusedPlaceholderColor = semanticColors.overlayStrong
             ),
@@ -127,8 +127,8 @@ private fun ScratchpadStatusPill(
     text: String,
     saved: Boolean
 ) {
-    val semanticColors = LocalClearCutColors.current
-    val accent = if (saved) ClearCutAccents.Green else ClearCutAccents.Sapphire
+    val semanticColors = LocalDirectorXColors.current
+    val accent = if (saved) DirectorXAccents.Green else DirectorXAccents.Sapphire
     Surface(
         color = accent.copy(alpha = 0.1f),
         shape = RoundedCornerShape(Radius.sm),
