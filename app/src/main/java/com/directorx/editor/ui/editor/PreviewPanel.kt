@@ -609,7 +609,7 @@ fun PreviewPanel(
                     containerColor = if (isLooping) DirectorXAccents.Sky.copy(alpha = 0.14f) else Color.Transparent,
                     borderColor = Color.Transparent,
                     shape = RoundedCornerShape(Radius.sm),
-                    size = 40.dp,
+                    size = TouchTarget.minimum,
                     iconSize = 19.dp,
                 )
                 Spacer(modifier = Modifier.weight(1f))
@@ -621,7 +621,7 @@ fun PreviewPanel(
                     containerColor = Color.Transparent,
                     borderColor = Color.Transparent,
                     shape = RoundedCornerShape(Radius.sm),
-                    size = 40.dp,
+                    size = TouchTarget.minimum,
                     iconSize = 20.dp,
                 )
                 DirectorXChromeIconButton(
@@ -636,7 +636,7 @@ fun PreviewPanel(
                     containerColor = DirectorXAccents.Sky,
                     borderColor = DirectorXAccents.Sky.copy(alpha = 0.72f),
                     shape = RoundedCornerShape(Radius.sm),
-                    size = 44.dp,
+                    size = TouchTarget.minimum,
                     iconSize = 22.dp,
                 )
                 DirectorXChromeIconButton(
@@ -647,7 +647,7 @@ fun PreviewPanel(
                     containerColor = Color.Transparent,
                     borderColor = Color.Transparent,
                     shape = RoundedCornerShape(Radius.sm),
-                    size = 40.dp,
+                    size = TouchTarget.minimum,
                     iconSize = 20.dp,
                 )
                 Spacer(modifier = Modifier.weight(1f))
