@@ -32,8 +32,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.directorx.editor.R
 import com.directorx.editor.engine.TimelineExchangeValidator
-import com.directorx.editor.ui.theme.ClearCutDialogIcon
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXDialogIcon
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 
@@ -81,7 +81,7 @@ internal fun BackupImportReportDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         icon = {
-            ClearCutDialogIcon(
+            DirectorXDialogIcon(
                 icon = if (feedback.succeeded) Icons.Default.TaskAlt else Icons.Default.Error,
                 accent = accent
             )
@@ -97,7 +97,7 @@ internal fun BackupImportReportDialog(
             BackupImportReportBody(feedback = feedback, accent = accent)
         },
         confirmButton = {
-            ClearCutPrimaryButton(
+            DirectorXPrimaryButton(
                 text = stringResource(R.string.done),
                 onClick = onDismiss,
                 icon = Icons.Default.Check
@@ -193,7 +193,7 @@ internal fun TimelineExchangeReportDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         icon = {
-            ClearCutDialogIcon(
+            DirectorXDialogIcon(
                 icon = if (feedback.succeeded) Icons.Default.IosShare else Icons.Default.ReportProblem,
                 accent = accent
             )
@@ -209,7 +209,7 @@ internal fun TimelineExchangeReportDialog(
             TimelineExchangeReportBody(feedback = feedback, accent = accent)
         },
         confirmButton = {
-            ClearCutPrimaryButton(
+            DirectorXPrimaryButton(
                 text = stringResource(R.string.done),
                 onClick = onDismiss,
                 icon = Icons.Default.Check
