@@ -2,8 +2,8 @@
 
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
@@ -44,7 +44,7 @@ internal fun AiRequirementInfoChip(
     accent: Color,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = modifier,
         color = accent.copy(alpha = 0.1f),
@@ -76,8 +76,8 @@ internal fun BackupImportReportDialog(
     feedback: BackupImportFeedback,
     onDismiss: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
-    val accent = if (feedback.succeeded) ClearCutAccents.Green else ClearCutAccents.Red
+    val semanticColors = LocalDirectorXColors.current
+    val accent = if (feedback.succeeded) DirectorXAccents.Green else DirectorXAccents.Red
     AlertDialog(
         onDismissRequest = onDismiss,
         icon = {
@@ -115,7 +115,7 @@ private fun BackupImportReportBody(
     feedback: BackupImportFeedback,
     accent: Color
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val report = feedback.report
     Column(
         modifier = Modifier
@@ -132,7 +132,7 @@ private fun BackupImportReportBody(
             ReportCallout(
                 title = "Reason",
                 body = it,
-                accent = ClearCutAccents.Red
+                accent = DirectorXAccents.Red
             )
         }
         FlowRow(
@@ -140,15 +140,15 @@ private fun BackupImportReportBody(
             verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(Spacing.sm)
         ) {
             ReportMetric("Schema", "v${report.schemaVersion}", accent)
-            ReportMetric("Media", "${report.mediaResolved}/${report.mediaTotal}", if (report.mediaMissing > 0) ClearCutAccents.Peach else ClearCutAccents.Green)
-            ReportMetric("Warnings", report.warnings.size.toString(), if (report.warnings.isEmpty()) ClearCutAccents.Green else ClearCutAccents.Yellow)
-            ReportMetric("Project ID", if (report.projectIdCollided) "Regenerated" else "Clean", if (report.projectIdCollided) ClearCutAccents.Sapphire else ClearCutAccents.Green)
+            ReportMetric("Media", "${report.mediaResolved}/${report.mediaTotal}", if (report.mediaMissing > 0) DirectorXAccents.Peach else DirectorXAccents.Green)
+            ReportMetric("Warnings", report.warnings.size.toString(), if (report.warnings.isEmpty()) DirectorXAccents.Green else DirectorXAccents.Yellow)
+            ReportMetric("Project ID", if (report.projectIdCollided) "Regenerated" else "Clean", if (report.projectIdCollided) DirectorXAccents.Sapphire else DirectorXAccents.Green)
         }
         if (report.mediaMissing > 0) {
             ReportCallout(
                 title = "Missing media",
                 body = "${report.mediaMissing} linked file(s) were not bundled or could not be restored. Relink them before export.",
-                accent = ClearCutAccents.Peach
+                accent = DirectorXAccents.Peach
             )
             report.unresolvedMediaUris.take(4).forEach { uri ->
                 ReportIssueRow(
@@ -156,7 +156,7 @@ private fun BackupImportReportBody(
                     path = uri,
                     message = "Still points to the original location.",
                     suggestedFix = "Open Media Manager and relink this asset.",
-                    accent = ClearCutAccents.Peach
+                    accent = DirectorXAccents.Peach
                 )
             }
             if (report.unresolvedMediaUris.size > 4) {
@@ -173,7 +173,7 @@ private fun BackupImportReportBody(
                 path = "Archive",
                 message = warning,
                 suggestedFix = null,
-                accent = ClearCutAccents.Yellow
+                accent = DirectorXAccents.Yellow
             )
         }
     }
@@ -184,11 +184,11 @@ internal fun TimelineExchangeReportDialog(
     feedback: TimelineExchangeFeedback,
     onDismiss: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val accent = when {
-        !feedback.succeeded -> ClearCutAccents.Red
-        feedback.report.warnings.isNotEmpty() -> ClearCutAccents.Yellow
-        else -> ClearCutAccents.Green
+        !feedback.succeeded -> DirectorXAccents.Red
+        feedback.report.warnings.isNotEmpty() -> DirectorXAccents.Yellow
+        else -> DirectorXAccents.Green
     }
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -227,7 +227,7 @@ private fun TimelineExchangeReportBody(
     feedback: TimelineExchangeFeedback,
     accent: Color
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val report = feedback.report
     Column(
         modifier = Modifier
@@ -244,7 +244,7 @@ private fun TimelineExchangeReportBody(
             ReportCallout(
                 title = "Saved file",
                 body = it,
-                accent = ClearCutAccents.Green
+                accent = DirectorXAccents.Green
             )
         }
         FlowRow(
@@ -252,15 +252,15 @@ private fun TimelineExchangeReportBody(
             verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(Spacing.sm)
         ) {
             ReportMetric("Format", report.format.displayName, accent)
-            ReportMetric("Blocking", report.errors.size.toString(), if (report.errors.isEmpty()) ClearCutAccents.Green else ClearCutAccents.Red)
-            ReportMetric("Lossy", report.warnings.size.toString(), if (report.warnings.isEmpty()) ClearCutAccents.Green else ClearCutAccents.Yellow)
-            ReportMetric("Notes", report.infos.size.toString(), ClearCutAccents.Sapphire)
+            ReportMetric("Blocking", report.errors.size.toString(), if (report.errors.isEmpty()) DirectorXAccents.Green else DirectorXAccents.Red)
+            ReportMetric("Lossy", report.warnings.size.toString(), if (report.warnings.isEmpty()) DirectorXAccents.Green else DirectorXAccents.Yellow)
+            ReportMetric("Notes", report.infos.size.toString(), DirectorXAccents.Sapphire)
         }
         report.issues.take(8).forEach { issue ->
             val issueAccent = when (issue.severity) {
-                TimelineExchangeValidator.Severity.ERROR -> ClearCutAccents.Red
-                TimelineExchangeValidator.Severity.WARNING -> ClearCutAccents.Yellow
-                TimelineExchangeValidator.Severity.INFO -> ClearCutAccents.Sapphire
+                TimelineExchangeValidator.Severity.ERROR -> DirectorXAccents.Red
+                TimelineExchangeValidator.Severity.WARNING -> DirectorXAccents.Yellow
+                TimelineExchangeValidator.Severity.INFO -> DirectorXAccents.Sapphire
             }
             ReportIssueRow(
                 severity = issue.severity.name.lowercase().replaceFirstChar { it.uppercase() },
@@ -286,7 +286,7 @@ private fun ReportMetric(
     value: String,
     accent: Color
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         color = accent.copy(alpha = 0.11f),
         shape = RoundedCornerShape(Radius.sm),
@@ -320,7 +320,7 @@ private fun ReportCallout(
     body: String,
     accent: Color
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = Modifier.fillMaxWidth(),
         color = accent.copy(alpha = 0.09f),
@@ -353,7 +353,7 @@ private fun ReportIssueRow(
     suggestedFix: String?,
     accent: Color
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = Modifier.fillMaxWidth(),
         color = semanticColors.panel.copy(alpha = 0.74f),
