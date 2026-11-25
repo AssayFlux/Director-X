@@ -34,8 +34,8 @@ import androidx.compose.ui.res.stringResource
 import com.directorx.editor.R
 import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.theme.Motion
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 import com.directorx.editor.ui.theme.TouchTarget
@@ -276,7 +276,7 @@ fun FirstRunTutorial(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         if (!isFirstStep) {
-                            ClearCutSecondaryButton(
+                            DirectorXSecondaryButton(
                                 text = stringResource(R.string.tutorial_back),
                                 onClick = { currentStep-- },
                                 modifier = Modifier
@@ -286,7 +286,7 @@ fun FirstRunTutorial(
                             )
                         }
 
-                        ClearCutPrimaryButton(
+                        DirectorXPrimaryButton(
                             text = stringResource(if (isLastStep) R.string.tutorial_get_started else R.string.tutorial_next),
                             onClick = {
                                 if (isLastStep) {
