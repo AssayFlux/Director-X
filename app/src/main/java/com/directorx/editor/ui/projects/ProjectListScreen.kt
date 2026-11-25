@@ -68,14 +68,14 @@ import com.directorx.editor.ui.editor.ToastSeverity
 import com.directorx.editor.ui.editor.inferSeverity
 import com.directorx.editor.ui.theme.ClearCutAccents
 import com.directorx.editor.ui.theme.DirectorXChromeIconButton
-import com.directorx.editor.ui.theme.ClearCutDialogIcon
-import com.directorx.editor.ui.theme.ClearCutFilterChip
-import com.directorx.editor.ui.theme.ClearCutMetricPill
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.ClearCutScreenBackground
-import com.directorx.editor.ui.theme.ClearCutSectionHeader
-import com.directorx.editor.ui.theme.ClearCutSecondaryButton
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXDialogIcon
+import com.directorx.editor.ui.theme.DirectorXFilterChip
+import com.directorx.editor.ui.theme.DirectorXMetricPill
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXScreenBackground
+import com.directorx.editor.ui.theme.DirectorXSectionHeader
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 import java.util.Locale
@@ -159,7 +159,7 @@ fun ProjectListScreen(
         }
     }
 
-    ClearCutScreenBackground(
+    DirectorXScreenBackground(
         modifier = Modifier
             .fillMaxSize()
             .testTag(DirectorXTestTags.PROJECTS_SCREEN)
@@ -331,7 +331,7 @@ fun ProjectListScreen(
                 val hasActiveFilter = filterMode != ProjectFilterMode.ALL
                 val sortLabel = sortMode.localizedLabel()
                 val filterLabel = filterMode.localizedLabel()
-                if (projects.isNotEmpty()) ClearCutSectionHeader(
+                if (projects.isNotEmpty()) DirectorXSectionHeader(
                     title = if (hasActiveSearch) {
                         if (projects.size == 1) {
                             stringResource(R.string.projects_results_count_one)
@@ -364,7 +364,7 @@ fun ProjectListScreen(
                     } else null,
                     modifier = Modifier.padding(start = Spacing.xl, end = Spacing.xl, top = 14.dp, bottom = Spacing.sm),
                     trailing = {
-                        ClearCutMetricPill(
+                        DirectorXMetricPill(
                             text = sortLabel,
                             accent = ClearCutAccents.Sapphire,
                             icon = Icons.Default.FilterList
@@ -444,11 +444,11 @@ fun ProjectListScreen(
                 if (confirmEmptyTrash) {
                     AlertDialog(
                         onDismissRequest = { confirmEmptyTrash = false },
-                        icon = { ClearCutDialogIcon(icon = Icons.Default.DeleteForever, accent = ClearCutAccents.Red) },
+                        icon = { DirectorXDialogIcon(icon = Icons.Default.DeleteForever, accent = ClearCutAccents.Red) },
                         title = {
                             Text(
                                 text = stringResource(R.string.trash_empty_confirm_title),
-                                color = LocalClearCutColors.current.text,
+                                color = LocalDirectorXColors.current.text,
                                 style = MaterialTheme.typography.titleLarge
                             )
                         },
@@ -459,12 +459,12 @@ fun ProjectListScreen(
                                     trashed.size,
                                     trashed.size
                                 ),
-                                color = LocalClearCutColors.current.subtext,
+                                color = LocalDirectorXColors.current.subtext,
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         },
                         confirmButton = {
-                            ClearCutSecondaryButton(
+                            DirectorXSecondaryButton(
                                 text = stringResource(R.string.trash_empty_confirm_action),
                                 onClick = {
                                     viewModel.emptyTrash()
@@ -475,14 +475,14 @@ fun ProjectListScreen(
                             )
                         },
                         dismissButton = {
-                            ClearCutSecondaryButton(
+                            DirectorXSecondaryButton(
                                 text = stringResource(R.string.cancel),
                                 onClick = { confirmEmptyTrash = false }
                             )
                         },
-                        containerColor = LocalClearCutColors.current.panelHighest,
-                        titleContentColor = LocalClearCutColors.current.text,
-                        textContentColor = LocalClearCutColors.current.subtext,
+                        containerColor = LocalDirectorXColors.current.panelHighest,
+                        titleContentColor = LocalDirectorXColors.current.text,
+                        textContentColor = LocalDirectorXColors.current.subtext,
                         shape = RoundedCornerShape(Radius.xxl)
                     )
                 }
@@ -490,23 +490,23 @@ fun ProjectListScreen(
                 pendingDeleteForever?.let { doomed ->
                     AlertDialog(
                         onDismissRequest = { pendingDeleteForever = null },
-                        icon = { ClearCutDialogIcon(icon = Icons.Default.DeleteForever, accent = ClearCutAccents.Red) },
+                        icon = { DirectorXDialogIcon(icon = Icons.Default.DeleteForever, accent = ClearCutAccents.Red) },
                         title = {
                             Text(
                                 text = stringResource(R.string.trash_delete_forever_title),
-                                color = LocalClearCutColors.current.text,
+                                color = LocalDirectorXColors.current.text,
                                 style = MaterialTheme.typography.titleLarge
                             )
                         },
                         text = {
                             Text(
                                 text = stringResource(R.string.trash_delete_forever_message, doomed.name),
-                                color = LocalClearCutColors.current.subtext,
+                                color = LocalDirectorXColors.current.subtext,
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         },
                         confirmButton = {
-                            ClearCutSecondaryButton(
+                            DirectorXSecondaryButton(
                                 text = stringResource(R.string.trash_delete_forever_action),
                                 onClick = {
                                     viewModel.deleteProjectForever(doomed)
@@ -517,14 +517,14 @@ fun ProjectListScreen(
                             )
                         },
                         dismissButton = {
-                            ClearCutSecondaryButton(
+                            DirectorXSecondaryButton(
                                 text = stringResource(R.string.cancel),
                                 onClick = { pendingDeleteForever = null }
                             )
                         },
-                        containerColor = LocalClearCutColors.current.panelHighest,
-                        titleContentColor = LocalClearCutColors.current.text,
-                        textContentColor = LocalClearCutColors.current.subtext,
+                        containerColor = LocalDirectorXColors.current.panelHighest,
+                        titleContentColor = LocalDirectorXColors.current.text,
+                        textContentColor = LocalDirectorXColors.current.subtext,
                         shape = RoundedCornerShape(Radius.xxl)
                     )
                 }
@@ -575,7 +575,7 @@ fun ProjectListScreen(
                 title = {
                     Text(
                         text = stringResource(R.string.project_custom_canvas_title),
-                        color = LocalClearCutColors.current.text,
+                        color = LocalDirectorXColors.current.text,
                     )
                 },
                 text = {
@@ -637,9 +637,9 @@ fun ProjectListScreen(
                         Text(stringResource(R.string.cancel))
                     }
                 },
-                containerColor = LocalClearCutColors.current.panelHighest,
-                titleContentColor = LocalClearCutColors.current.text,
-                textContentColor = LocalClearCutColors.current.subtext,
+                containerColor = LocalDirectorXColors.current.panelHighest,
+                titleContentColor = LocalDirectorXColors.current.text,
+                textContentColor = LocalDirectorXColors.current.subtext,
                 shape = RoundedCornerShape(Radius.xxl),
             )
         }
@@ -687,7 +687,7 @@ private fun IncomingDocumentImportDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         icon = {
-            ClearCutDialogIcon(
+            DirectorXDialogIcon(
                 icon = when (preview.status) {
                     IncomingDocumentImportStatus.READY -> Icons.Default.Description
                     IncomingDocumentImportStatus.IMPORTED -> Icons.Default.TaskAlt
@@ -700,7 +700,7 @@ private fun IncomingDocumentImportDialog(
         title = {
             Text(
                 text = preview.title,
-                color = LocalClearCutColors.current.text,
+                color = LocalDirectorXColors.current.text,
                 style = MaterialTheme.typography.titleLarge
             )
         },
@@ -708,11 +708,11 @@ private fun IncomingDocumentImportDialog(
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(
                     text = preview.body,
-                    color = LocalClearCutColors.current.subtext,
+                    color = LocalDirectorXColors.current.subtext,
                     style = MaterialTheme.typography.bodyMedium
                 )
                 preview.details.forEach { detail ->
-                    DocumentReportLine(text = detail, color = LocalClearCutColors.current.text)
+                    DocumentReportLine(text = detail, color = LocalDirectorXColors.current.text)
                 }
                 preview.warnings.forEach { warning ->
                     DocumentReportLine(text = warning, color = ClearCutAccents.Yellow)
@@ -731,9 +731,9 @@ private fun IncomingDocumentImportDialog(
                 Text(stringResource(R.string.close))
             }
         },
-        containerColor = LocalClearCutColors.current.panelHighest,
-        titleContentColor = LocalClearCutColors.current.text,
-        textContentColor = LocalClearCutColors.current.subtext
+        containerColor = LocalDirectorXColors.current.panelHighest,
+        titleContentColor = LocalDirectorXColors.current.text,
+        textContentColor = LocalDirectorXColors.current.subtext
     )
 }
 
@@ -787,7 +787,7 @@ private fun ProjectHomeHero(
             .fillMaxWidth()
             .heightIn(max = maximumHeight)
             .verticalScroll(rememberScrollState())
-            .background(LocalClearCutColors.current.background)
+            .background(LocalDirectorXColors.current.background)
             .padding(horizontal = 20.dp, vertical = Spacing.lg),
         verticalArrangement = Arrangement.spacedBy(Spacing.md)
     ) {
@@ -797,7 +797,7 @@ private fun ProjectHomeHero(
         ) {
             Text(
                 text = stringResource(R.string.projects_app_title),
-                color = LocalClearCutColors.current.text,
+                color = LocalDirectorXColors.current.text,
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -810,18 +810,18 @@ private fun ProjectHomeHero(
             )
         }
 
-        HorizontalDivider(color = LocalClearCutColors.current.cardStroke)
+        HorizontalDivider(color = LocalDirectorXColors.current.cardStroke)
 
         Column(verticalArrangement = Arrangement.spacedBy(Spacing.sm)) {
             Text(
                 text = stringResource(R.string.projects_ready_title),
-                color = LocalClearCutColors.current.text,
+                color = LocalDirectorXColors.current.text,
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold
             )
             Text(
                 text = stringResource(R.string.projects_ready_body),
-                color = LocalClearCutColors.current.subtext,
+                color = LocalDirectorXColors.current.subtext,
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.widthIn(max = 520.dp)
             )
@@ -852,7 +852,7 @@ private fun ProjectHomeHero(
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = stringResource(R.string.projects_search),
-                        tint = LocalClearCutColors.current.subtext,
+                        tint = LocalDirectorXColors.current.subtext,
                         modifier = Modifier.size(20.dp)
                     )
                 },
@@ -871,24 +871,24 @@ private fun ProjectHomeHero(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(Radius.lg),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = LocalClearCutColors.current.panelRaised.copy(alpha = 0.92f),
-                    unfocusedContainerColor = LocalClearCutColors.current.panelRaised.copy(alpha = 0.82f),
+                    focusedContainerColor = LocalDirectorXColors.current.panelRaised.copy(alpha = 0.92f),
+                    unfocusedContainerColor = LocalDirectorXColors.current.panelRaised.copy(alpha = 0.82f),
                     focusedBorderColor = ClearCutAccents.Mauve.copy(alpha = 0.55f),
-                    unfocusedBorderColor = LocalClearCutColors.current.cardStroke,
+                    unfocusedBorderColor = LocalDirectorXColors.current.cardStroke,
                     cursorColor = ClearCutAccents.Rosewater,
-                    focusedTextColor = LocalClearCutColors.current.text,
-                    unfocusedTextColor = LocalClearCutColors.current.text,
-                    focusedPlaceholderColor = LocalClearCutColors.current.overlayStrong,
-                    unfocusedPlaceholderColor = LocalClearCutColors.current.overlayStrong
+                    focusedTextColor = LocalDirectorXColors.current.text,
+                    unfocusedTextColor = LocalDirectorXColors.current.text,
+                    focusedPlaceholderColor = LocalDirectorXColors.current.overlayStrong,
+                    unfocusedPlaceholderColor = LocalDirectorXColors.current.overlayStrong
                 ),
-                textStyle = MaterialTheme.typography.bodyLarge.copy(color = LocalClearCutColors.current.text)
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = LocalDirectorXColors.current.text)
             )
         }
 
         if (showSortControls) {
             LazyRow(horizontalArrangement = Arrangement.spacedBy(Spacing.sm)) {
                 items(SortMode.entries.toList()) { mode ->
-                    ClearCutFilterChip(
+                    DirectorXFilterChip(
                         onClick = { onSortModeChanged(mode) },
                         text = mode.localizedLabel(),
                         selected = sortMode == mode,
@@ -899,7 +899,7 @@ private fun ProjectHomeHero(
             }
         }
 
-        HorizontalDivider(color = LocalClearCutColors.current.cardStroke.copy(alpha = 0.82f))
+        HorizontalDivider(color = LocalDirectorXColors.current.cardStroke.copy(alpha = 0.82f))
     }
 }
 
@@ -983,7 +983,7 @@ private fun ProjectReadinessCard(
     accent: androidx.compose.ui.graphics.Color,
     modifier: Modifier = Modifier
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     Surface(
         modifier = modifier.semantics {
             contentDescription = "$title. $value. $body"
@@ -1049,7 +1049,7 @@ private fun ProjectOperationCard(
     operation: ProjectListOperationState,
     modifier: Modifier = Modifier
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     Surface(
         modifier = modifier.semantics { liveRegion = LiveRegionMode.Polite },
         color = colors.panelHighest,
@@ -1097,7 +1097,7 @@ private fun ProjectOperationCard(
                     .height(5.dp)
                     .clip(RoundedCornerShape(Radius.sm)),
                 color = ClearCutAccents.Mauve,
-                trackColor = LocalClearCutColors.current.surface
+                trackColor = LocalDirectorXColors.current.surface
             )
         }
     }
@@ -1115,7 +1115,7 @@ private fun ProjectFilterChipsRow(
         contentPadding = PaddingValues(horizontal = 0.dp)
     ) {
         items(ProjectFilterMode.entries.toList()) { mode ->
-            ClearCutFilterChip(
+            DirectorXFilterChip(
                 onClick = { onFilterModeChanged(mode) },
                 text = mode.localizedLabel(),
                 selected = filterMode == mode,
@@ -1144,7 +1144,7 @@ private fun ProjectEmptyState(
     val hasActiveSearch = searchQuery.isNotBlank()
     val hasActiveFilter = filterMode != ProjectFilterMode.ALL
     val isConstrainedEmpty = hasAnyProjects && (hasActiveSearch || hasActiveFilter)
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     val iconTint = if (isConstrainedEmpty) ClearCutAccents.Sapphire else ClearCutAccents.Rosewater
     val title = projectEmptyStateTitle(
         isConstrainedEmpty = isConstrainedEmpty,
@@ -1308,7 +1308,7 @@ private fun ProjectTemplateShortcut(
         )
         Text(
             text = name,
-            color = LocalClearCutColors.current.text,
+            color = LocalDirectorXColors.current.text,
             style = MaterialTheme.typography.labelMedium,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
@@ -1322,7 +1322,7 @@ private fun ProjectTemplateLibraryRow(
     enabled: Boolean,
     onClick: () -> Unit,
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     val description = stringResource(R.string.projects_templates_count, templateCount)
     Surface(
         modifier = Modifier
@@ -1396,7 +1396,7 @@ private fun ProjectActionRow(
         val stackActions = maxWidth < 400.dp
         if (stackActions) {
             Column(verticalArrangement = Arrangement.spacedBy(Spacing.sm)) {
-                ClearCutPrimaryButton(
+                DirectorXPrimaryButton(
                     text = primaryLabel,
                     icon = primaryIcon,
                     onClick = onPrimary,
@@ -1405,20 +1405,20 @@ private fun ProjectActionRow(
                         .fillMaxWidth()
                         .then(primaryTestTag?.let { Modifier.testTag(it) } ?: Modifier)
                 )
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = secondaryLabel,
                     icon = secondaryIcon,
                     onClick = onSecondary,
                     modifier = Modifier
                         .fillMaxWidth()
                         .then(secondaryTestTag?.let { Modifier.testTag(it) } ?: Modifier),
-                    contentColor = LocalClearCutColors.current.text,
+                    contentColor = LocalDirectorXColors.current.text,
                     enabled = enabled
                 )
             }
         } else {
             Row(horizontalArrangement = Arrangement.spacedBy(Spacing.sm)) {
-                ClearCutPrimaryButton(
+                DirectorXPrimaryButton(
                     text = primaryLabel,
                     icon = primaryIcon,
                     onClick = onPrimary,
@@ -1427,14 +1427,14 @@ private fun ProjectActionRow(
                         .weight(1.15f)
                         .then(primaryTestTag?.let { Modifier.testTag(it) } ?: Modifier)
                 )
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = secondaryLabel,
                     icon = secondaryIcon,
                     onClick = onSecondary,
                     modifier = Modifier
                         .weight(1f)
                         .then(secondaryTestTag?.let { Modifier.testTag(it) } ?: Modifier),
-                    contentColor = LocalClearCutColors.current.text,
+                    contentColor = LocalDirectorXColors.current.text,
                     enabled = enabled
                 )
             }
@@ -1477,7 +1477,7 @@ private fun ProjectCard(
             val color by animateColorAsState(
                 if (dismissState.targetValue == SwipeToDismissBoxValue.EndToStart)
                     ClearCutAccents.Red.copy(alpha = 0.24f)
-                else LocalClearCutColors.current.panel.copy(alpha = 0.45f),
+                else LocalDirectorXColors.current.panel.copy(alpha = 0.45f),
                 label = "swipeBg"
             )
             Box(
@@ -1516,7 +1516,7 @@ private fun ProjectCard(
                 .semantics {
                     contentDescription = projectCardDescription
                 },
-            colors = CardDefaults.cardColors(containerColor = LocalClearCutColors.current.background),
+            colors = CardDefaults.cardColors(containerColor = LocalDirectorXColors.current.background),
             shape = RoundedCornerShape(0.dp)
         ) {
             BoxWithConstraints(
@@ -1546,7 +1546,7 @@ private fun ProjectCard(
                     ) {
                         Text(
                             project.name,
-                            color = LocalClearCutColors.current.text,
+                            color = LocalDirectorXColors.current.text,
                             style = if (compactCard) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleLarge,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
@@ -1559,19 +1559,19 @@ private fun ProjectCard(
                             Text(projectDuration, color = ClearCutAccents.Peach, style = MaterialTheme.typography.labelMedium)
                             VerticalDivider(
                                 modifier = Modifier.height(14.dp),
-                                color = LocalClearCutColors.current.cardStrokeStrong
+                                color = LocalDirectorXColors.current.cardStrokeStrong
                             )
-                            Text(project.resolution.label, color = LocalClearCutColors.current.subtext, style = MaterialTheme.typography.labelMedium)
+                            Text(project.resolution.label, color = LocalDirectorXColors.current.subtext, style = MaterialTheme.typography.labelMedium)
                             VerticalDivider(
                                 modifier = Modifier.height(14.dp),
-                                color = LocalClearCutColors.current.cardStrokeStrong
+                                color = LocalDirectorXColors.current.cardStrokeStrong
                             )
-                            Text(project.timelineTimebase.frameRateLabel, color = LocalClearCutColors.current.subtext, style = MaterialTheme.typography.labelMedium)
+                            Text(project.timelineTimebase.frameRateLabel, color = LocalDirectorXColors.current.subtext, style = MaterialTheme.typography.labelMedium)
                         }
 
                         Text(
                             text = stringResource(R.string.projects_updated, updatedLabel),
-                            color = LocalClearCutColors.current.subtext,
+                            color = LocalDirectorXColors.current.subtext,
                             style = MaterialTheme.typography.bodySmall
                         )
                     }
@@ -1586,15 +1586,15 @@ private fun ProjectCard(
                         DropdownMenu(
                             expanded = showOverflowMenu,
                             onDismissRequest = { showOverflowMenu = false },
-                            containerColor = LocalClearCutColors.current.panelHighest
+                            containerColor = LocalDirectorXColors.current.panelHighest
                         ) {
                             DropdownMenuItem(
-                                text = { Text(stringResource(R.string.projects_rename), color = LocalClearCutColors.current.text) },
+                                text = { Text(stringResource(R.string.projects_rename), color = LocalDirectorXColors.current.text) },
                                 leadingIcon = {
                                     Icon(
                                         Icons.Default.Edit,
                                         contentDescription = stringResource(R.string.projects_rename),
-                                        tint = LocalClearCutColors.current.subtext,
+                                        tint = LocalDirectorXColors.current.subtext,
                                         modifier = Modifier.size(18.dp)
                                     )
                                 },
@@ -1604,12 +1604,12 @@ private fun ProjectCard(
                                 }
                             )
                             DropdownMenuItem(
-                                text = { Text(stringResource(R.string.projects_duplicate), color = LocalClearCutColors.current.text) },
+                                text = { Text(stringResource(R.string.projects_duplicate), color = LocalDirectorXColors.current.text) },
                                 leadingIcon = {
                                     Icon(
                                         Icons.Default.ContentCopy,
                                         contentDescription = stringResource(R.string.cd_duplicate_project),
-                                        tint = LocalClearCutColors.current.subtext,
+                                        tint = LocalDirectorXColors.current.subtext,
                                         modifier = Modifier.size(18.dp)
                                     )
                                 },
@@ -1640,7 +1640,7 @@ private fun ProjectCard(
                         Icon(
                             imageVector = Icons.Default.ChevronRight,
                             contentDescription = null,
-                            tint = LocalClearCutColors.current.overlayStrong,
+                            tint = LocalDirectorXColors.current.overlayStrong,
                             modifier = Modifier.size(18.dp)
                         )
                     }
@@ -1661,7 +1661,7 @@ private fun ProjectCard(
         AlertDialog(
             onDismissRequest = { showRenameDialog = false },
             icon = {
-                ClearCutDialogIcon(
+                DirectorXDialogIcon(
                     icon = Icons.Default.Edit,
                     accent = ClearCutAccents.Rosewater
                 )
@@ -1669,7 +1669,7 @@ private fun ProjectCard(
             title = {
                 Text(
                     text = stringResource(R.string.projects_rename_title),
-                    color = LocalClearCutColors.current.text,
+                    color = LocalDirectorXColors.current.text,
                     style = MaterialTheme.typography.titleLarge
                 )
             },
@@ -1693,7 +1693,7 @@ private fun ProjectCard(
                     placeholder = {
                         Text(
                             text = stringResource(R.string.projects_rename_hint),
-                            color = LocalClearCutColors.current.overlayStrong
+                            color = LocalDirectorXColors.current.overlayStrong
                         )
                     },
                     supportingText = {
@@ -1716,20 +1716,20 @@ private fun ProjectCard(
                         }
                     },
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = LocalClearCutColors.current.text,
-                        unfocusedTextColor = LocalClearCutColors.current.text,
-                        errorTextColor = LocalClearCutColors.current.text,
+                        focusedTextColor = LocalDirectorXColors.current.text,
+                        unfocusedTextColor = LocalDirectorXColors.current.text,
+                        errorTextColor = LocalDirectorXColors.current.text,
                         cursorColor = ClearCutAccents.Rosewater,
                         focusedBorderColor = ClearCutAccents.Mauve,
-                        unfocusedBorderColor = LocalClearCutColors.current.cardStroke,
+                        unfocusedBorderColor = LocalDirectorXColors.current.cardStroke,
                         errorBorderColor = ClearCutAccents.Red,
-                        focusedContainerColor = LocalClearCutColors.current.panelRaised,
-                        unfocusedContainerColor = LocalClearCutColors.current.panelRaised
+                        focusedContainerColor = LocalDirectorXColors.current.panelRaised,
+                        unfocusedContainerColor = LocalDirectorXColors.current.panelRaised
                     )
                 )
             },
             confirmButton = {
-                ClearCutPrimaryButton(
+                DirectorXPrimaryButton(
                     text = stringResource(R.string.done),
                     onClick = {
                         onRename(trimmedProjectName)
@@ -1740,14 +1740,14 @@ private fun ProjectCard(
                 )
             },
             dismissButton = {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.cancel),
                     onClick = { showRenameDialog = false }
                 )
             },
-            containerColor = LocalClearCutColors.current.panelHighest,
-            titleContentColor = LocalClearCutColors.current.text,
-            textContentColor = LocalClearCutColors.current.subtext,
+            containerColor = LocalDirectorXColors.current.panelHighest,
+            titleContentColor = LocalDirectorXColors.current.text,
+            textContentColor = LocalDirectorXColors.current.subtext,
             shape = RoundedCornerShape(Radius.xl)
         )
     }
@@ -1765,7 +1765,7 @@ private fun ProjectThumbnail(
         modifier = Modifier
             .size(width, height)
             .clip(RoundedCornerShape(Radius.lg))
-            .background(LocalClearCutColors.current.panelHighest)
+            .background(LocalDirectorXColors.current.panelHighest)
     ) {
         if (project.thumbnailUri != null) {
             AsyncImage(
@@ -1789,7 +1789,7 @@ private fun ProjectThumbnail(
         }
 
         Surface(
-            color = LocalClearCutColors.current.background.copy(alpha = 0.78f),
+            color = LocalDirectorXColors.current.background.copy(alpha = 0.78f),
             shape = RoundedCornerShape(Radius.sm),
             modifier = Modifier
                 .align(Alignment.BottomStart)
@@ -1797,7 +1797,7 @@ private fun ProjectThumbnail(
         ) {
             Text(
                 text = project.aspectRatio.label,
-                color = LocalClearCutColors.current.text,
+                color = LocalDirectorXColors.current.text,
                 style = MaterialTheme.typography.labelSmall,
                 modifier = Modifier.padding(
                     horizontal = 8.dp,
@@ -1819,9 +1819,9 @@ private fun TrashSectionHeader(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(role = Role.Button, onClick = onToggle),
-        color = LocalClearCutColors.current.panel,
+        color = LocalDirectorXColors.current.panel,
         shape = RoundedCornerShape(Radius.lg),
-        border = androidx.compose.foundation.BorderStroke(1.dp, LocalClearCutColors.current.cardStroke.copy(alpha = 0.9f))
+        border = androidx.compose.foundation.BorderStroke(1.dp, LocalDirectorXColors.current.cardStroke.copy(alpha = 0.9f))
     ) {
         Row(
             modifier = Modifier.padding(horizontal = Spacing.md, vertical = Spacing.sm),
@@ -1848,12 +1848,12 @@ private fun TrashSectionHeader(
             ) {
                 Text(
                     text = stringResource(R.string.trash_title),
-                    color = LocalClearCutColors.current.text,
+                    color = LocalDirectorXColors.current.text,
                     style = MaterialTheme.typography.titleSmall
                 )
                 Text(
                     text = pluralStringResource(R.plurals.trash_kept_summary, count, count),
-                    color = LocalClearCutColors.current.subtext,
+                    color = LocalDirectorXColors.current.subtext,
                     style = MaterialTheme.typography.bodySmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -1878,7 +1878,7 @@ private fun TrashSectionHeader(
                 } else {
                     stringResource(R.string.trash_expand_cd)
                 },
-                tint = LocalClearCutColors.current.subtext,
+                tint = LocalDirectorXColors.current.subtext,
                 modifier = Modifier.size(22.dp)
             )
         }
@@ -1936,9 +1936,9 @@ private fun TrashedProjectCard(
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = LocalClearCutColors.current.panel.copy(alpha = 0.72f),
+        color = LocalDirectorXColors.current.panel.copy(alpha = 0.72f),
         shape = RoundedCornerShape(Radius.lg),
-        border = androidx.compose.foundation.BorderStroke(1.dp, LocalClearCutColors.current.cardStroke.copy(alpha = 0.72f))
+        border = androidx.compose.foundation.BorderStroke(1.dp, LocalDirectorXColors.current.cardStroke.copy(alpha = 0.72f))
     ) {
         Row(
             modifier = Modifier
@@ -1967,7 +1967,7 @@ private fun TrashedProjectCard(
             ) {
                 Text(
                     text = project.name,
-                    color = LocalClearCutColors.current.text,
+                    color = LocalDirectorXColors.current.text,
                     style = MaterialTheme.typography.titleSmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -1977,7 +1977,7 @@ private fun TrashedProjectCard(
                     val daysLeft = (30 - daysAgo).coerceAtLeast(0)
                     Text(
                         text = pluralStringResource(R.plurals.trash_auto_delete_in, daysLeft, daysLeft),
-                        color = LocalClearCutColors.current.overlayStrong,
+                        color = LocalDirectorXColors.current.overlayStrong,
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
