@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
@@ -107,7 +107,7 @@ fun MediaManagerPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val context = LocalContext.current
     val diagnostics = mediaHealthReport?.diagnostics.orEmpty()
     val scanScope = androidx.compose.runtime.rememberCoroutineScope()
@@ -201,15 +201,15 @@ fun MediaManagerPanel(
         else -> stringResource(R.string.media_manager_status_healthy)
     }
     val statusAccent = when {
-        scanStatus == MediaScanStatus.FAILED -> ClearCutAccents.Red
-        scanStatus == MediaScanStatus.CANCELLED -> ClearCutAccents.Peach
-        scanStatus == MediaScanStatus.READY_WITH_PARTIAL_RESULTS -> ClearCutAccents.Peach
-        isAnalyzing -> ClearCutAccents.Blue
-        healthBlockingCount > 0 -> ClearCutAccents.Red
-        missingCount > 0 -> ClearCutAccents.Red
-        healthWarningCount > 0 -> ClearCutAccents.Peach
-        emptyTrackCount > 0 -> ClearCutAccents.Yellow
-        else -> ClearCutAccents.Green
+        scanStatus == MediaScanStatus.FAILED -> DirectorXAccents.Red
+        scanStatus == MediaScanStatus.CANCELLED -> DirectorXAccents.Peach
+        scanStatus == MediaScanStatus.READY_WITH_PARTIAL_RESULTS -> DirectorXAccents.Peach
+        isAnalyzing -> DirectorXAccents.Blue
+        healthBlockingCount > 0 -> DirectorXAccents.Red
+        missingCount > 0 -> DirectorXAccents.Red
+        healthWarningCount > 0 -> DirectorXAccents.Peach
+        emptyTrackCount > 0 -> DirectorXAccents.Yellow
+        else -> DirectorXAccents.Green
     }
     val projectHealthLabel = when {
         mediaHealthReport == null -> stringResource(R.string.media_health_unavailable)
@@ -243,14 +243,14 @@ fun MediaManagerPanel(
         title = stringResource(R.string.media_manager_title),
         subtitle = stringResource(R.string.media_manager_subtitle),
         icon = Icons.Default.PermMedia,
-        accent = if (missingCount > 0) ClearCutAccents.Red else ClearCutAccents.Blue,
+        accent = if (missingCount > 0) DirectorXAccents.Red else DirectorXAccents.Blue,
         onClose = onClose,
         closeContentDescription = stringResource(R.string.media_manager_close_cd),
         closeButtonTestTag = DirectorXTestTags.MEDIA_MANAGER_CLOSE,
         modifier = modifier,
         scrollable = true
     ) {
-        PremiumPanelCard(accent = if (missingCount > 0) ClearCutAccents.Red else ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = if (missingCount > 0) DirectorXAccents.Red else DirectorXAccents.Blue) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -278,7 +278,7 @@ fun MediaManagerPanel(
                 ) {
                     PremiumPanelPill(
                         text = if (isAnalyzing) "Analyzing..." else formatFileSize(totalSize),
-                        accent = ClearCutAccents.Peach
+                        accent = DirectorXAccents.Peach
                     )
                     PremiumPanelPill(
                         text = statusLabel,
@@ -294,36 +294,36 @@ fun MediaManagerPanel(
                 MediaHealthMetric(
                     title = stringResource(R.string.media_stat_assets),
                     value = if (isAnalyzing) "..." else assets.size.toString(),
-                    accent = ClearCutAccents.Blue,
+                    accent = DirectorXAccents.Blue,
                     modifier = Modifier.widthIn(min = 132.dp)
                 )
                 MediaHealthMetric(
                     title = stringResource(R.string.media_stat_size),
                     value = if (isAnalyzing) "..." else formatFileSize(totalSize),
-                    accent = ClearCutAccents.Peach,
+                    accent = DirectorXAccents.Peach,
                     modifier = Modifier.widthIn(min = 132.dp)
                 )
                 MediaHealthMetric(
                     title = stringResource(R.string.media_stat_missing),
                     value = if (isAnalyzing) "..." else missingCount.toString(),
-                    accent = if (missingCount > 0) ClearCutAccents.Red else ClearCutAccents.Green,
+                    accent = if (missingCount > 0) DirectorXAccents.Red else DirectorXAccents.Green,
                     modifier = Modifier.widthIn(min = 132.dp)
                 )
                 MediaHealthMetric(
                     title = stringResource(R.string.media_stat_project_health),
                     value = projectHealthLabel,
                     accent = when {
-                        healthBlockingCount > 0 -> ClearCutAccents.Red
-                        healthWarningCount > 0 -> ClearCutAccents.Peach
+                        healthBlockingCount > 0 -> DirectorXAccents.Red
+                        healthWarningCount > 0 -> DirectorXAccents.Peach
                         mediaHealthReport == null -> semanticColors.overlayStrong
-                        else -> ClearCutAccents.Green
+                        else -> DirectorXAccents.Green
                     },
                     modifier = Modifier.widthIn(min = 132.dp)
                 )
                 MediaHealthMetric(
                     title = stringResource(R.string.media_stat_empty_tracks),
                     value = emptyTrackCount.toString(),
-                    accent = if (emptyTrackCount > 0) ClearCutAccents.Yellow else ClearCutAccents.Green,
+                    accent = if (emptyTrackCount > 0) DirectorXAccents.Yellow else DirectorXAccents.Green,
                     modifier = Modifier.widthIn(min = 132.dp)
                 )
             }
@@ -346,7 +346,7 @@ fun MediaManagerPanel(
                             modifier = Modifier
                                 .height(18.dp)
                                 .width(18.dp),
-                            color = ClearCutAccents.Blue,
+                            color = DirectorXAccents.Blue,
                             strokeWidth = 2.dp
                         )
                         Column(
@@ -408,12 +408,12 @@ fun MediaManagerPanel(
                         else -> stringResource(R.string.media_manager_ready_body)
                     },
                     accent = when {
-                        scanStatus == MediaScanStatus.FAILED -> ClearCutAccents.Red
-                        scanStatus == MediaScanStatus.CANCELLED -> ClearCutAccents.Peach
-                        scanStatus == MediaScanStatus.READY_WITH_PARTIAL_RESULTS -> ClearCutAccents.Peach
-                        missingCount > 0 -> ClearCutAccents.Red
-                        assets.isEmpty() -> ClearCutAccents.Blue
-                        else -> ClearCutAccents.Green
+                        scanStatus == MediaScanStatus.FAILED -> DirectorXAccents.Red
+                        scanStatus == MediaScanStatus.CANCELLED -> DirectorXAccents.Peach
+                        scanStatus == MediaScanStatus.READY_WITH_PARTIAL_RESULTS -> DirectorXAccents.Peach
+                        missingCount > 0 -> DirectorXAccents.Red
+                        assets.isEmpty() -> DirectorXAccents.Blue
+                        else -> DirectorXAccents.Green
                     },
                     icon = when {
                         scanStatus == MediaScanStatus.FAILED -> Icons.Default.BrokenImage
@@ -451,7 +451,7 @@ fun MediaManagerPanel(
                 onClick = onBulkRelinkMissing,
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = ClearCutAccents.Red,
+                    containerColor = DirectorXAccents.Red,
                     contentColor = semanticColors.surfaceBase
                 ),
                 shape = RoundedCornerShape(12.dp)
@@ -485,7 +485,7 @@ fun MediaManagerPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = DirectorXAccents.Blue) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -510,9 +510,9 @@ fun MediaManagerPanel(
                 PremiumPanelPill(
                     text = assetCountLabel,
                     accent = when {
-                        missingCount > 0 -> ClearCutAccents.Peach
+                        missingCount > 0 -> DirectorXAccents.Peach
                         assets.isEmpty() -> semanticColors.overlay
-                        else -> ClearCutAccents.Blue
+                        else -> DirectorXAccents.Blue
                     }
                 )
             }
@@ -559,9 +559,9 @@ fun MediaManagerPanel(
                             }
                         } else null,
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = ClearCutAccents.Blue.copy(alpha = 0.16f),
-                            selectedLabelColor = ClearCutAccents.Blue,
-                            selectedLeadingIconColor = ClearCutAccents.Blue,
+                            selectedContainerColor = DirectorXAccents.Blue.copy(alpha = 0.16f),
+                            selectedLabelColor = DirectorXAccents.Blue,
+                            selectedLeadingIconColor = DirectorXAccents.Blue,
                         ),
                     )
                 }
@@ -576,8 +576,8 @@ fun MediaManagerPanel(
                         onClick = { query = query.copy(sort = sort) },
                         label = { Text(text = sort.localizedLabel()) },
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = ClearCutAccents.Teal.copy(alpha = 0.16f),
-                            selectedLabelColor = ClearCutAccents.Teal,
+                            selectedContainerColor = DirectorXAccents.Teal.copy(alpha = 0.16f),
+                            selectedLabelColor = DirectorXAccents.Teal,
                         ),
                     )
                 }
@@ -589,7 +589,7 @@ fun MediaManagerPanel(
                     MediaManagerMessageCard(
                         title = stringResource(R.string.media_manager_empty_title),
                         body = stringResource(R.string.media_manager_empty_body),
-                        accent = ClearCutAccents.Blue,
+                        accent = DirectorXAccents.Blue,
                         icon = Icons.Default.PermMedia
                     )
                 }
@@ -598,7 +598,7 @@ fun MediaManagerPanel(
                     MediaManagerMessageCard(
                         title = stringResource(R.string.media_bin_no_matches_title),
                         body = stringResource(R.string.media_bin_no_matches_body),
-                        accent = ClearCutAccents.Peach,
+                        accent = DirectorXAccents.Peach,
                         icon = Icons.Default.Search,
                     )
                 }
@@ -625,7 +625,7 @@ fun MediaManagerPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = if (emptyTrackCount > 0) ClearCutAccents.Yellow else ClearCutAccents.Green) {
+        PremiumPanelCard(accent = if (emptyTrackCount > 0) DirectorXAccents.Yellow else DirectorXAccents.Green) {
             Text(
                 text = stringResource(R.string.media_manager_cleanup_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -643,7 +643,7 @@ fun MediaManagerPanel(
 
             PremiumPanelPill(
                 text = emptyTrackLabel,
-                accent = if (emptyTrackCount > 0) ClearCutAccents.Yellow else ClearCutAccents.Green
+                accent = if (emptyTrackCount > 0) DirectorXAccents.Yellow else DirectorXAccents.Green
             )
 
             Button(
@@ -651,7 +651,7 @@ fun MediaManagerPanel(
                 enabled = emptyTrackCount > 0,
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = ClearCutAccents.Yellow,
+                    containerColor = DirectorXAccents.Yellow,
                     contentColor = semanticColors.surfaceBase,
                     disabledContainerColor = semanticColors.surface,
                     disabledContentColor = semanticColors.subtext
@@ -676,7 +676,7 @@ private fun MediaHealthMetric(
     accent: Color,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = modifier,
         color = accent.copy(alpha = 0.12f),
@@ -710,7 +710,7 @@ private fun MediaManagerMessageCard(
     icon: ImageVector,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = modifier.fillMaxWidth(),
         color = accent.copy(alpha = 0.08f),
@@ -762,10 +762,10 @@ private fun MediaScanIssueCard(
     issues: List<MediaScanIssue>,
     onRetry: () -> Unit,
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val providerFailureCount = issues.count { it.kind == MediaScanIssueKind.PROVIDER_FAILURE }
     val skippedCount = issues.count { it.kind == MediaScanIssueKind.SKIPPED }
-    val accent = ClearCutAccents.Peach
+    val accent = DirectorXAccents.Peach
     Surface(
         modifier = Modifier.fillMaxWidth(),
         color = accent.copy(alpha = 0.08f),
@@ -851,12 +851,12 @@ private fun MetadataSidecarExportCard(
     onShare: (MetadataSidecarExportFile) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val file = state.file
     val accent = when {
-        state.errorMessage != null -> ClearCutAccents.Peach
-        file != null -> ClearCutAccents.Green
-        else -> ClearCutAccents.Blue
+        state.errorMessage != null -> DirectorXAccents.Peach
+        file != null -> DirectorXAccents.Green
+        else -> DirectorXAccents.Blue
     }
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -966,16 +966,16 @@ private fun MediaAssetCard(
     onExportMetadataSidecar: (Uri, MetadataSidecarTrack, MetadataSidecarFormat) -> Unit,
     onUpdateAssetMetadata: (Uri, String, List<String>) -> Unit,
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var isEditingMetadata by remember(asset.assetId, asset.notes, asset.tags) { mutableStateOf(false) }
     var notesDraft by remember(asset.assetId, asset.notes) { mutableStateOf(asset.notes) }
     var tagsDraft by remember(asset.assetId, asset.tags) {
         mutableStateOf(asset.tags.joinToString(", "))
     }
     val accent = when (asset.relinkState) {
-        MediaRelinkProbe.RelinkState.OK -> ClearCutAccents.Blue
-        MediaRelinkProbe.RelinkState.MISSING -> ClearCutAccents.Red
-        MediaRelinkProbe.RelinkState.UNKNOWN -> ClearCutAccents.Peach
+        MediaRelinkProbe.RelinkState.OK -> DirectorXAccents.Blue
+        MediaRelinkProbe.RelinkState.MISSING -> DirectorXAccents.Red
+        MediaRelinkProbe.RelinkState.UNKNOWN -> DirectorXAccents.Peach
     }
     val statusLabel = stringResource(
         when (asset.relinkState) {
@@ -992,11 +992,11 @@ private fun MediaAssetCard(
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = if (asset.isAccessible) semanticColors.panelRaised else ClearCutAccents.Red.copy(alpha = 0.08f),
+        color = if (asset.isAccessible) semanticColors.panelRaised else DirectorXAccents.Red.copy(alpha = 0.08f),
         shape = RoundedCornerShape(12.dp),
         border = BorderStroke(
             1.dp,
-            if (asset.isAccessible) semanticColors.cardStroke else ClearCutAccents.Red.copy(alpha = 0.2f)
+            if (asset.isAccessible) semanticColors.cardStroke else DirectorXAccents.Red.copy(alpha = 0.2f)
         )
     ) {
         Column(
@@ -1032,7 +1032,7 @@ private fun MediaAssetCard(
                         Text(
                             text = asset.fileName,
                             style = MaterialTheme.typography.titleSmall,
-                            color = if (asset.isAccessible) semanticColors.text else ClearCutAccents.Red,
+                            color = if (asset.isAccessible) semanticColors.text else DirectorXAccents.Red,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                             fontWeight = FontWeight.Medium
@@ -1112,8 +1112,8 @@ private fun MediaAssetCard(
                             isEditingMetadata = false
                         },
                         shape = RoundedCornerShape(12.dp),
-                        border = BorderStroke(1.dp, ClearCutAccents.Teal.copy(alpha = 0.25f)),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = ClearCutAccents.Teal),
+                        border = BorderStroke(1.dp, DirectorXAccents.Teal.copy(alpha = 0.25f)),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = DirectorXAccents.Teal),
                     ) {
                         Text(text = stringResource(R.string.media_bin_save))
                     }
@@ -1158,7 +1158,7 @@ private fun MediaAssetCard(
                                         Text(
                                             text = "#$tag",
                                             style = MaterialTheme.typography.labelMedium,
-                                            color = ClearCutAccents.Teal,
+                                            color = DirectorXAccents.Teal,
                                         )
                                     }
                                 }
@@ -1169,8 +1169,8 @@ private fun MediaAssetCard(
                 OutlinedButton(
                     onClick = { isEditingMetadata = true },
                     shape = RoundedCornerShape(12.dp),
-                    border = BorderStroke(1.dp, ClearCutAccents.Teal.copy(alpha = 0.25f)),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = ClearCutAccents.Teal),
+                    border = BorderStroke(1.dp, DirectorXAccents.Teal.copy(alpha = 0.25f)),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = DirectorXAccents.Teal),
                 ) {
                     androidx.compose.material3.Icon(
                         imageVector = Icons.Default.Edit,
@@ -1198,7 +1198,7 @@ private fun MediaAssetCard(
             ) {
                 PremiumPanelPill(
                     text = usageLabel,
-                    accent = if (asset.isAccessible) ClearCutAccents.Green else ClearCutAccents.Peach
+                    accent = if (asset.isAccessible) DirectorXAccents.Green else DirectorXAccents.Peach
                 )
 
                 FlowRow(
@@ -1225,8 +1225,8 @@ private fun MediaAssetCard(
                         OutlinedButton(
                             onClick = { onJumpToClip(asset.usedInClipIds.first()) },
                             shape = RoundedCornerShape(12.dp),
-                            border = BorderStroke(1.dp, ClearCutAccents.Blue.copy(alpha = 0.25f)),
-                            colors = ButtonDefaults.outlinedButtonColors(contentColor = ClearCutAccents.Blue)
+                            border = BorderStroke(1.dp, DirectorXAccents.Blue.copy(alpha = 0.25f)),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = DirectorXAccents.Blue)
                         ) {
                             androidx.compose.material3.Icon(
                                 imageVector = Icons.Default.MyLocation,
@@ -1250,7 +1250,7 @@ private fun MediaDiagnosticCard(
     onJumpToSyncFrame: (String, SyncFrameDirection) -> Unit,
     onExportMetadataSidecar: (MetadataSidecarTrack, MetadataSidecarFormat) -> Unit,
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val colorLabel = when (diagnostic.colorConfidence) {
         MediaColorConfidence.HDR -> diagnostic.hdrFormats.sorted().joinToString().ifBlank { "HDR" }
         MediaColorConfidence.SDR -> listOfNotNull(diagnostic.colorStandard, diagnostic.colorTransfer)
@@ -1278,7 +1278,7 @@ private fun MediaDiagnosticCard(
                 Text(
                     text = stringResource(R.string.media_diagnostics_unavailable, error),
                     style = MaterialTheme.typography.bodySmall,
-                    color = ClearCutAccents.Peach,
+                    color = DirectorXAccents.Peach,
                 )
             } ?: run {
                 FlowRow(
@@ -1313,8 +1313,8 @@ private fun MediaDiagnosticCard(
                         text = stringResource(R.string.media_diagnostics_color, colorLabel),
                         style = MaterialTheme.typography.bodySmall,
                         color = when (diagnostic.colorConfidence) {
-                            MediaColorConfidence.HDR -> ClearCutAccents.Peach
-                            MediaColorConfidence.SDR -> ClearCutAccents.Green
+                            MediaColorConfidence.HDR -> DirectorXAccents.Peach
+                            MediaColorConfidence.SDR -> DirectorXAccents.Green
                             MediaColorConfidence.UNKNOWN -> semanticColors.subtext
                         },
                     )
@@ -1387,7 +1387,7 @@ private fun MediaDiagnosticCard(
                                 track.bitDepth?.toString() ?: stringResource(R.string.media_diagnostics_unknown),
                             ),
                             style = MaterialTheme.typography.bodySmall,
-                            color = if (track.decoderSupported == false) ClearCutAccents.Peach else semanticColors.subtext,
+                            color = if (track.decoderSupported == false) DirectorXAccents.Peach else semanticColors.subtext,
                         )
                         Text(
                             text = stringResource(
@@ -1437,10 +1437,10 @@ private fun MediaDiagnosticCard(
                                             shape = RoundedCornerShape(12.dp),
                                             border = BorderStroke(
                                                 1.dp,
-                                                ClearCutAccents.Teal.copy(alpha = 0.25f),
+                                                DirectorXAccents.Teal.copy(alpha = 0.25f),
                                             ),
                                             colors = ButtonDefaults.outlinedButtonColors(
-                                                contentColor = ClearCutAccents.Teal,
+                                                contentColor = DirectorXAccents.Teal,
                                             ),
                                         ) {
                                             Text(text = format.name)
@@ -1452,7 +1452,7 @@ private fun MediaDiagnosticCard(
                                 text = sidecar.unsupportedReason
                                     ?: stringResource(R.string.media_sidecar_unsupported),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = ClearCutAccents.Peach,
+                                color = DirectorXAccents.Peach,
                             )
                         }
                     }
@@ -1462,14 +1462,14 @@ private fun MediaDiagnosticCard(
                     Text(
                         text = stringResource(R.string.media_diagnostics_timestamp_risk, risk),
                         style = MaterialTheme.typography.bodySmall,
-                        color = ClearCutAccents.Peach,
+                        color = DirectorXAccents.Peach,
                     )
                 }
                 diagnostic.colorRisk?.let { risk ->
                     Text(
                         text = stringResource(R.string.media_diagnostics_color_risk, risk),
                         style = MaterialTheme.typography.bodySmall,
-                        color = ClearCutAccents.Peach,
+                        color = DirectorXAccents.Peach,
                     )
                 }
                 if (clipId != null && diagnostic.keyframeCount > 0) {
@@ -1480,16 +1480,16 @@ private fun MediaDiagnosticCard(
                         OutlinedButton(
                             onClick = { onJumpToSyncFrame(clipId, SyncFrameDirection.PREVIOUS) },
                             shape = RoundedCornerShape(12.dp),
-                            border = BorderStroke(1.dp, ClearCutAccents.Blue.copy(alpha = 0.25f)),
-                            colors = ButtonDefaults.outlinedButtonColors(contentColor = ClearCutAccents.Blue),
+                            border = BorderStroke(1.dp, DirectorXAccents.Blue.copy(alpha = 0.25f)),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = DirectorXAccents.Blue),
                         ) {
                             Text(text = stringResource(R.string.media_diagnostics_previous_sync))
                         }
                         OutlinedButton(
                             onClick = { onJumpToSyncFrame(clipId, SyncFrameDirection.NEXT) },
                             shape = RoundedCornerShape(12.dp),
-                            border = BorderStroke(1.dp, ClearCutAccents.Blue.copy(alpha = 0.25f)),
-                            colors = ButtonDefaults.outlinedButtonColors(contentColor = ClearCutAccents.Blue),
+                            border = BorderStroke(1.dp, DirectorXAccents.Blue.copy(alpha = 0.25f)),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = DirectorXAccents.Blue),
                         ) {
                             Text(text = stringResource(R.string.media_diagnostics_next_sync))
                         }
