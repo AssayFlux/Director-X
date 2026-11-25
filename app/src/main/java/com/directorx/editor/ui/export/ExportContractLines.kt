@@ -15,7 +15,7 @@ import com.directorx.editor.engine.ExportHistoryStatus
 import com.directorx.editor.engine.ExportObservation
 import com.directorx.editor.model.AudioCodec
 import com.directorx.editor.model.VideoCodec
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.theme.ClearCutAccents
 import com.directorx.editor.ui.theme.LocalClearCutColors
 import java.util.Locale
@@ -55,7 +55,7 @@ internal fun ExportContractLines(entry: ExportHistoryEntry) {
             ExportContractDisposition.UNVERIFIED -> semanticColors.subtext
         },
         style = MaterialTheme.typography.bodySmall,
-        modifier = Modifier.testTag(ClearCutTestTags.EXPORT_HISTORY_CONTRACT),
+        modifier = Modifier.testTag(DirectorXTestTags.EXPORT_HISTORY_CONTRACT),
     )
     if (contract == null || observed == null || !observed.valid) return
     val held = observedSummary(observed)
