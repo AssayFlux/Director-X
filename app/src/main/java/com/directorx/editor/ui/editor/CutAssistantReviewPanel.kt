@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -73,7 +73,7 @@ fun CutAssistantReviewPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val clipLookup = remember(tracks) {
         tracks.flatMap { it.clips }.associateBy { it.id }
     }
@@ -87,13 +87,13 @@ fun CutAssistantReviewPanel(
         title = stringResource(R.string.cut_assistant_title),
         subtitle = stringResource(R.string.cut_assistant_subtitle),
         icon = Icons.Default.ContentCut,
-        accent = ClearCutAccents.Peach,
+        accent = DirectorXAccents.Peach,
         onClose = onClose,
         closeContentDescription = stringResource(R.string.cut_assistant_close_cd),
         modifier = modifier,
         scrollable = false
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Peach) {
+        PremiumPanelCard(accent = DirectorXAccents.Peach) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -125,11 +125,11 @@ fun CutAssistantReviewPanel(
                             acceptedCount,
                             acceptedCount
                         ),
-                        accent = if (acceptedCount > 0) ClearCutAccents.Green else semanticColors.overlayStrong
+                        accent = if (acceptedCount > 0) DirectorXAccents.Green else semanticColors.overlayStrong
                     )
                     PremiumPanelPill(
                         text = stringResource(R.string.cut_assistant_reclaim_pill, reclaimLabel),
-                        accent = ClearCutAccents.Peach
+                        accent = DirectorXAccents.Peach
                     )
                 }
             }
@@ -145,15 +145,15 @@ fun CutAssistantReviewPanel(
                         proposalCount,
                         proposalCount
                     ),
-                    accent = ClearCutAccents.Blue
+                    accent = DirectorXAccents.Blue
                 )
                 PremiumPanelPill(
                     text = stringResource(R.string.cut_assistant_silence_count, silenceCount),
-                    accent = ClearCutAccents.Mauve
+                    accent = DirectorXAccents.Mauve
                 )
                 PremiumPanelPill(
                     text = stringResource(R.string.cut_assistant_filler_count, fillerCount),
-                    accent = ClearCutAccents.Teal
+                    accent = DirectorXAccents.Teal
                 )
             }
         }
@@ -184,7 +184,7 @@ fun CutAssistantReviewPanel(
                 }
             }
 
-            PremiumPanelCard(accent = ClearCutAccents.Blue) {
+            PremiumPanelCard(accent = DirectorXAccents.Blue) {
                 Text(
                     text = stringResource(R.string.cut_assistant_review_title),
                     style = MaterialTheme.typography.titleMedium,
@@ -279,7 +279,7 @@ private fun CutAssistantTuningCard(
     config: com.directorx.editor.engine.SilenceDetectionEngine.AutoCutConfig,
     onReanalyze: (com.directorx.editor.engine.SilenceDetectionEngine.AutoCutConfig) -> Unit,
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var threshold by remember(config) { mutableFloatStateOf(config.silenceThreshold) }
     var minSilenceMs by remember(config) { mutableFloatStateOf(config.minSilenceMs.toFloat()) }
     var mergeGapMs by remember(config) { mutableFloatStateOf(config.mergeGapMs.toFloat()) }
@@ -290,7 +290,7 @@ private fun CutAssistantTuningCard(
     )
     val isDirty = adjustedConfig != config
 
-    PremiumPanelCard(accent = ClearCutAccents.Sapphire) {
+    PremiumPanelCard(accent = DirectorXAccents.Sapphire) {
         Text(
             text = stringResource(R.string.cut_assistant_tuning_title),
             style = MaterialTheme.typography.titleMedium,
@@ -363,22 +363,22 @@ private fun CutAssistantEmptyState(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
-    PremiumPanelCard(accent = ClearCutAccents.Green, modifier = modifier) {
+    val semanticColors = LocalDirectorXColors.current
+    PremiumPanelCard(accent = DirectorXAccents.Green, modifier = modifier) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.Top
         ) {
             Surface(
-                color = ClearCutAccents.Green.copy(alpha = 0.12f),
+                color = DirectorXAccents.Green.copy(alpha = 0.12f),
                 shape = RoundedCornerShape(12.dp),
-                border = BorderStroke(1.dp, ClearCutAccents.Green.copy(alpha = 0.2f))
+                border = BorderStroke(1.dp, DirectorXAccents.Green.copy(alpha = 0.2f))
             ) {
                 Icon(
                     imageVector = Icons.Default.Check,
                     contentDescription = null,
-                    tint = ClearCutAccents.Green,
+                    tint = DirectorXAccents.Green,
                     modifier = Modifier.padding(12.dp)
                 )
             }
@@ -415,10 +415,10 @@ private fun CutProposalReviewCard(
     onToggle: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val accent = when (proposal.reason) {
-        CutProposal.Reason.SILENCE -> ClearCutAccents.Mauve
-        CutProposal.Reason.FILLER_WORD -> ClearCutAccents.Teal
+        CutProposal.Reason.SILENCE -> DirectorXAccents.Mauve
+        CutProposal.Reason.FILLER_WORD -> DirectorXAccents.Teal
     }
     val reasonLabel = when (proposal.reason) {
         CutProposal.Reason.SILENCE -> stringResource(R.string.cut_assistant_reason_silence)
@@ -519,7 +519,7 @@ private fun CutProposalReviewCard(
                     ) {
                         PremiumPanelPill(
                             text = stringResource(R.string.cut_assistant_clip_pill, clipName),
-                            accent = ClearCutAccents.Blue
+                            accent = DirectorXAccents.Blue
                         )
                         PremiumPanelPill(
                             text = stringResource(
