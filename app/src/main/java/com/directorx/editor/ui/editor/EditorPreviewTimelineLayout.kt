@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 
@@ -16,10 +17,14 @@ import androidx.compose.ui.unit.Dp
 internal fun ColumnScope.editorPreviewModifier(
     immersivePreview: Boolean,
     previewMinHeight: Dp,
-): Modifier = if (immersivePreview) {
-    Modifier.fillMaxSize()
-} else {
-    Modifier
+    scrollable: Boolean = false,
+): Modifier = when {
+    immersivePreview -> Modifier.fillMaxSize()
+    scrollable -> Modifier
+        .fillMaxWidth()
+        .height(240.dp)
+        .heightIn(min = previewMinHeight)
+    else -> Modifier
         .fillMaxWidth()
         .weight(1f)
         .heightIn(min = previewMinHeight)
