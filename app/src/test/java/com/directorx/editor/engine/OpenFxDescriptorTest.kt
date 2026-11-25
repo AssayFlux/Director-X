@@ -11,14 +11,14 @@ class OpenFxDescriptorTest {
 
     private val sample = OpenFxDescriptor(
         schemaVersion = 1,
-        novaCutEffectId = "gaussian_blur",
+        directorXEffectId = "gaussian_blur",
         openfxId = "uk.co.thefoundry.OfxImageEffectGaussianBlur",
         displayName = "Gaussian Blur",
         parameters = listOf(
             OpenFxDescriptor.ParameterMapping(
-                novaCutName = "radius",
+                directorXName = "radius",
                 openfxName = "size",
-                novaCutRange = 0.0..50.0,
+                directorXRange = 0.0..50.0,
                 openfxRange = 0.0..100.0,
                 scale = 2.0,
                 offset = 0.0,
@@ -50,11 +50,11 @@ class OpenFxDescriptorTest {
     }
 
     @Test
-    fun fromOpenFx_zeroScaleFallsBackToClearCutStart() {
+    fun fromOpenFx_zeroScaleFallsBackToDirectorXStart() {
         val p = OpenFxDescriptor.ParameterMapping(
-            novaCutName = "x",
+            directorXName = "x",
             openfxName = "x",
-            novaCutRange = 1.0..5.0,
+            directorXRange = 1.0..5.0,
             openfxRange = 0.0..1.0,
             scale = 0.0,
             offset = 0.0,
@@ -70,19 +70,19 @@ class OpenFxDescriptorTest {
         val parsed = OpenFxDescriptor.fromJson(json)
         assertNotNull(parsed)
         assertEquals(sample.schemaVersion, parsed!!.schemaVersion)
-        assertEquals(sample.novaCutEffectId, parsed.novaCutEffectId)
+        assertEquals(sample.directorXEffectId, parsed.directorXEffectId)
         assertEquals(sample.openfxId, parsed.openfxId)
         assertEquals(sample.displayName, parsed.displayName)
         assertEquals(sample.parameters.size, parsed.parameters.size)
         val pa = sample.parameters.first()
         val pb = parsed.parameters.first()
-        assertEquals(pa.novaCutName, pb.novaCutName)
+        assertEquals(pa.directorXName, pb.directorXName)
         assertEquals(pa.openfxName, pb.openfxName)
         assertEquals(pa.scale, pb.scale, 1e-9)
         assertEquals(pa.offset, pb.offset, 1e-9)
         assertEquals(pa.type, pb.type)
-        assertEquals(pa.novaCutRange.start, pb.novaCutRange.start, 1e-9)
-        assertEquals(pa.novaCutRange.endInclusive, pb.novaCutRange.endInclusive, 1e-9)
+        assertEquals(pa.directorXRange.start, pb.directorXRange.start, 1e-9)
+        assertEquals(pa.directorXRange.endInclusive, pb.directorXRange.endInclusive, 1e-9)
     }
 
     @Test
@@ -130,7 +130,7 @@ class OpenFxDescriptorTest {
         val parsed = OpenFxDescriptor.fromJson(mixed)
         assertNotNull(parsed)
         assertEquals(1, parsed!!.parameters.size)
-        assertEquals("a", parsed.parameters.first().novaCutName)
+        assertEquals("a", parsed.parameters.first().directorXName)
     }
 
     @Test
