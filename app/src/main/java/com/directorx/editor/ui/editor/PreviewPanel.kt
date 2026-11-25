@@ -78,7 +78,7 @@ import com.directorx.editor.model.Clip
 import com.directorx.editor.model.ImageOverlay
 import com.directorx.editor.model.TextAlignment
 import com.directorx.editor.model.TextOverlay
-import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXChromeIconButton
 import com.directorx.editor.ui.theme.Radius
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -428,7 +428,7 @@ fun PreviewPanel(
                                     .padding(10.dp),
                                 verticalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
-                                ClearCutChromeIconButton(
+                                DirectorXChromeIconButton(
                                     icon = if (isFullscreenPreview) {
                                         Icons.Default.FullscreenExit
                                     } else {
@@ -448,7 +448,7 @@ fun PreviewPanel(
                                     shape = RoundedCornerShape(Radius.md),
                                 )
                                 if (showScopesButton) {
-                                    ClearCutChromeIconButton(
+                                    DirectorXChromeIconButton(
                                         icon = Icons.Default.Insights,
                                         contentDescription = stringResource(R.string.preview_scopes),
                                         onClick = onToggleScopes,
@@ -458,7 +458,7 @@ fun PreviewPanel(
                                         shape = RoundedCornerShape(Radius.md)
                                     )
                                 }
-                                ClearCutChromeIconButton(
+                                DirectorXChromeIconButton(
                                     icon = Icons.Default.GridOn,
                                     contentDescription = stringResource(R.string.preview_composition_guides),
                                     onClick = onToggleCompositionGuides,
@@ -468,7 +468,7 @@ fun PreviewPanel(
                                     shape = RoundedCornerShape(Radius.md),
                                 )
                                 if (hasActiveEffects) {
-                                    ClearCutChromeIconButton(
+                                    DirectorXChromeIconButton(
                                         icon = Icons.Default.Compare,
                                         contentDescription = stringResource(R.string.preview_compare),
                                         onClick = onToggleSplitPreview,
@@ -563,7 +563,7 @@ fun PreviewPanel(
                     .padding(horizontal = 8.dp, vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = Icons.Default.Repeat,
                     contentDescription = stringResource(
                         if (isLooping) R.string.preview_disable_loop else R.string.preview_enable_loop
@@ -577,7 +577,7 @@ fun PreviewPanel(
                     iconSize = 19.dp,
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = Icons.Default.SkipPrevious,
                     contentDescription = stringResource(R.string.preview_previous_frame),
                     onClick = { onSeek((playheadMs - frameDurationMs).coerceAtLeast(0L)) },
@@ -588,7 +588,7 @@ fun PreviewPanel(
                     size = 40.dp,
                     iconSize = 20.dp,
                 )
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = if (isPlaybackRequested) Icons.Default.Pause else Icons.Default.PlayArrow,
                     contentDescription = if (isPlaybackRequested) {
                         stringResource(R.string.preview_pause)
@@ -603,7 +603,7 @@ fun PreviewPanel(
                     size = 44.dp,
                     iconSize = 22.dp,
                 )
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = Icons.Default.SkipNext,
                     contentDescription = stringResource(R.string.preview_next_frame),
                     onClick = { onSeek((playheadMs + frameDurationMs).coerceAtMost(totalDurationMs)) },
