@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -57,7 +57,7 @@ fun DesktopSidebar(
     compact: Boolean = false,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     Column(
@@ -87,7 +87,7 @@ fun DesktopSidebar(
 
 @Composable
 private fun CompactSidebarHeader(projectName: String) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Box(
         modifier = Modifier
             .size(TouchTarget.minimum)
@@ -99,7 +99,7 @@ private fun CompactSidebarHeader(projectName: String) {
         Icon(
             imageVector = Icons.Default.VideoLibrary,
             contentDescription = null,
-            tint = ClearCutAccents.Sky,
+            tint = DirectorXAccents.Sky,
             modifier = Modifier.size(22.dp)
         )
     }
@@ -112,7 +112,7 @@ private fun ProjectHeaderBlock(
     fps: Int,
     totalDurationMs: Long
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Column {
         Text(
             text = stringResource(R.string.desktop_sidebar_project),
@@ -138,7 +138,7 @@ private fun ProjectHeaderBlock(
 
 @Composable
 private fun QuickActionsBlock(viewModel: EditorViewModel, compact: Boolean = false) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         if (!compact) {
             Text(
@@ -148,16 +148,16 @@ private fun QuickActionsBlock(viewModel: EditorViewModel, compact: Boolean = fal
                 fontWeight = FontWeight.Bold
             )
         }
-        SidebarAction(icon = Icons.Default.Add, label = stringResource(R.string.editor_add_media), tint = ClearCutAccents.Blue, compact = compact) {
+        SidebarAction(icon = Icons.Default.Add, label = stringResource(R.string.editor_add_media), tint = DirectorXAccents.Blue, compact = compact) {
             viewModel.showMediaPicker()
         }
-        SidebarAction(icon = Icons.Default.Videocam, label = stringResource(R.string.desktop_sidebar_record), tint = ClearCutAccents.Green, compact = compact) {
+        SidebarAction(icon = Icons.Default.Videocam, label = stringResource(R.string.desktop_sidebar_record), tint = DirectorXAccents.Green, compact = compact) {
             viewModel.showMediaPicker()
         }
-        SidebarAction(icon = Icons.Default.FileDownload, label = stringResource(R.string.editor_export), tint = ClearCutAccents.Rosewater, compact = compact) {
+        SidebarAction(icon = Icons.Default.FileDownload, label = stringResource(R.string.editor_export), tint = DirectorXAccents.Rosewater, compact = compact) {
             viewModel.showExportSheet()
         }
-        SidebarAction(icon = Icons.Default.AutoAwesome, label = stringResource(R.string.v369_features_label), tint = ClearCutAccents.Mauve, compact = compact) {
+        SidebarAction(icon = Icons.Default.AutoAwesome, label = stringResource(R.string.v369_features_label), tint = DirectorXAccents.Mauve, compact = compact) {
             viewModel.showV369Features()
         }
     }
@@ -171,7 +171,7 @@ private fun SidebarAction(
     compact: Boolean = false,
     onClick: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Row(
         modifier = Modifier
             .then(
@@ -199,7 +199,7 @@ private fun ColumnScope.MediaLibraryBlock(
     viewModel: EditorViewModel,
     state: EditorState
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val entries = remember(state.tracks) {
         state.tracks
             .flatMap { track -> track.clips.map { it to track.type } }
