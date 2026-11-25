@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -56,7 +56,7 @@ fun CaptionStyleGallery(
     modifier: Modifier = Modifier,
     installedStyles: List<CaptionStyleTemplate> = emptyList(),
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val templates = remember(installedStyles) { defaultTemplates() + installedStyles }
     val accessibilityTemplates = remember(templates) {
         templates.filter { it.isAccessibilityPreset }
@@ -72,13 +72,13 @@ fun CaptionStyleGallery(
         title = stringResource(R.string.caption_styles_title),
         subtitle = stringResource(R.string.caption_styles_subtitle),
         icon = Icons.Default.Subtitles,
-        accent = ClearCutAccents.Mauve,
+        accent = DirectorXAccents.Mauve,
         onClose = onClose,
         closeContentDescription = stringResource(R.string.caption_styles_close_cd),
         modifier = modifier,
         scrollable = true
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
                 val isCompactLayout = maxWidth < 420.dp
                 if (isCompactLayout) {
@@ -102,15 +102,15 @@ fun CaptionStyleGallery(
                         ) {
                             PremiumPanelPill(
                                 text = stringResource(R.string.caption_styles_looks_format, templates.size),
-                                accent = ClearCutAccents.Blue
+                                accent = DirectorXAccents.Blue
                             )
                             PremiumPanelPill(
                                 text = stringResource(R.string.caption_styles_motion_format, karaokeTemplates.size),
-                                accent = ClearCutAccents.Yellow
+                                accent = DirectorXAccents.Yellow
                             )
                             PremiumPanelPill(
                                 text = stringResource(R.string.caption_styles_accessible_format, accessibilityTemplates.size),
-                                accent = ClearCutAccents.Green
+                                accent = DirectorXAccents.Green
                             )
                         }
                     }
@@ -142,15 +142,15 @@ fun CaptionStyleGallery(
                         ) {
                             PremiumPanelPill(
                                 text = stringResource(R.string.caption_styles_looks_format, templates.size),
-                                accent = ClearCutAccents.Blue
+                                accent = DirectorXAccents.Blue
                             )
                             PremiumPanelPill(
                                 text = stringResource(R.string.caption_styles_motion_format, karaokeTemplates.size),
-                                accent = ClearCutAccents.Yellow
+                                accent = DirectorXAccents.Yellow
                             )
                             PremiumPanelPill(
                                 text = stringResource(R.string.caption_styles_accessible_format, accessibilityTemplates.size),
-                                accent = ClearCutAccents.Green
+                                accent = DirectorXAccents.Green
                             )
                         }
                     }
@@ -173,19 +173,19 @@ fun CaptionStyleGallery(
                     StyleMetric(
                         title = "Karaoke",
                         value = karaokeTemplates.size.toString(),
-                        accent = ClearCutAccents.Yellow,
+                        accent = DirectorXAccents.Yellow,
                         modifier = Modifier.width(metricWidth.coerceAtLeast(0.dp))
                     )
                     StyleMetric(
                         title = "Editorial",
                         value = editorialTemplates.size.toString(),
-                        accent = ClearCutAccents.Mauve,
+                        accent = DirectorXAccents.Mauve,
                         modifier = Modifier.width(metricWidth.coerceAtLeast(0.dp))
                     )
                     StyleMetric(
                         title = "Accessible",
                         value = accessibilityTemplates.size.toString(),
-                        accent = ClearCutAccents.Green,
+                        accent = DirectorXAccents.Green,
                         modifier = Modifier.width(metricWidth.coerceAtLeast(0.dp))
                     )
                 }
@@ -197,7 +197,7 @@ fun CaptionStyleGallery(
         CaptionStyleSection(
             title = stringResource(R.string.caption_accessibility_title),
             subtitle = stringResource(R.string.caption_accessibility_subtitle),
-            accent = ClearCutAccents.Green,
+            accent = DirectorXAccents.Green,
             sectionContentDescription = stringResource(R.string.cd_caption_accessibility_section),
             templates = accessibilityTemplates,
             onStyleSelected = onStyleSelected
@@ -208,7 +208,7 @@ fun CaptionStyleGallery(
         CaptionStyleSection(
             title = stringResource(R.string.caption_karaoke_title),
             subtitle = stringResource(R.string.caption_styles_karaoke_subtitle),
-            accent = ClearCutAccents.Yellow,
+            accent = DirectorXAccents.Yellow,
             sectionContentDescription = stringResource(R.string.cd_karaoke_section),
             templates = karaokeTemplates,
             onStyleSelected = onStyleSelected
@@ -219,7 +219,7 @@ fun CaptionStyleGallery(
         CaptionStyleSection(
             title = stringResource(R.string.caption_editorial_title),
             subtitle = stringResource(R.string.caption_editorial_subtitle),
-            accent = ClearCutAccents.Blue,
+            accent = DirectorXAccents.Blue,
             sectionContentDescription = stringResource(R.string.cd_caption_styles_section),
             templates = editorialTemplates,
             onStyleSelected = onStyleSelected
@@ -234,7 +234,7 @@ private fun StyleMetric(
     accent: Color,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = modifier,
         color = accent.copy(alpha = 0.12f),
@@ -270,7 +270,7 @@ private fun CaptionStyleSection(
     templates: List<CaptionStyleTemplate>,
     onStyleSelected: (CaptionStyleTemplate) -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     PremiumPanelCard(accent = accent) {
         Column(
             modifier = Modifier.semantics { contentDescription = sectionContentDescription },
@@ -281,7 +281,7 @@ private fun CaptionStyleSection(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 androidx.compose.material3.Icon(
-                    imageVector = if (accent == ClearCutAccents.Yellow) Icons.Default.MusicNote else Icons.Default.Subtitles,
+                    imageVector = if (accent == DirectorXAccents.Yellow) Icons.Default.MusicNote else Icons.Default.Subtitles,
                     contentDescription = title,
                     tint = accent
                 )
@@ -333,7 +333,7 @@ private fun CaptionStyleCard(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val accessibilityLabel = if (template.isAccessibilityPreset) {
         stringResource(R.string.caption_style_accessibility_label, template.accessibilityPreset.displayName)
     } else {
@@ -404,7 +404,7 @@ private fun CaptionStyleCard(
                         Text(
                             text = accessibilityLabel,
                             style = MaterialTheme.typography.labelMedium,
-                            color = ClearCutAccents.Green
+                            color = DirectorXAccents.Green
                         )
                     }
                 }
