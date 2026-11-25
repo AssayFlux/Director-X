@@ -47,7 +47,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import com.directorx.editor.R
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.engine.MediaDiagnostic
 import com.directorx.editor.engine.MediaHealthReport
 import com.directorx.editor.engine.MediaRelinkProbe
@@ -246,7 +246,7 @@ fun MediaManagerPanel(
         accent = if (missingCount > 0) ClearCutAccents.Red else ClearCutAccents.Blue,
         onClose = onClose,
         closeContentDescription = stringResource(R.string.media_manager_close_cd),
-        closeButtonTestTag = ClearCutTestTags.MEDIA_MANAGER_CLOSE,
+        closeButtonTestTag = DirectorXTestTags.MEDIA_MANAGER_CLOSE,
         modifier = modifier,
         scrollable = true
     ) {
