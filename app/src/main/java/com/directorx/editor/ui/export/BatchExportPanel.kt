@@ -41,7 +41,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.directorx.editor.R
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.model.BatchExportItem
 import com.directorx.editor.model.BatchExportSourceRange
 import com.directorx.editor.model.BatchExportStatus
@@ -103,7 +103,7 @@ fun BatchExportPanel(
         onClose = onClose,
         modifier = modifier,
         scrollable = true,
-        closeButtonTestTag = ClearCutTestTags.BATCH_EXPORT_CLOSE,
+        closeButtonTestTag = DirectorXTestTags.BATCH_EXPORT_CLOSE,
         headerActions = {
             PremiumPanelIconButton(
                 icon = if (showPresetPicker) Icons.Default.Close else Icons.Default.Add,
