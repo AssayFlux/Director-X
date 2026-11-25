@@ -175,17 +175,17 @@ internal fun mapPreferencesToAppSettings(prefs: Preferences): AppSettings = AppS
     mediaPipeConsentVersion = prefs[SettingsPreferenceKeys.MEDIA_PIPE_CONSENT_VERSION]?.takeIf { it >= 0 } ?: 0,
 )
 
-internal fun createClearCutSettingsDataStore(
+internal fun createDirectorXSettingsDataStore(
     context: Context,
     resetReportStore: SettingsResetReportStore,
     scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
-): DataStore<Preferences> = createClearCutSettingsDataStore(
+): DataStore<Preferences> = createDirectorXSettingsDataStore(
     produceFile = { context.preferencesDataStoreFile(SETTINGS_DATASTORE_NAME) },
     resetReportStore = resetReportStore,
     scope = scope,
 )
 
-internal fun createClearCutSettingsDataStore(
+internal fun createDirectorXSettingsDataStore(
     produceFile: () -> java.io.File,
     resetReportStore: SettingsResetReportStore,
     scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
@@ -215,7 +215,7 @@ class SettingsRepository internal constructor(
         @ApplicationContext context: Context,
         resetReportStore: SettingsResetReportStore,
     ) : this(
-        dataStore = createClearCutSettingsDataStore(context, resetReportStore),
+        dataStore = createDirectorXSettingsDataStore(context, resetReportStore),
         resetReportStore = resetReportStore,
     )
 
