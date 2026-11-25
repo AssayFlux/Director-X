@@ -23,7 +23,7 @@ import com.directorx.editor.model.Effect
 import com.directorx.editor.model.EffectType
 import com.directorx.editor.model.TrackType
 import com.directorx.editor.model.Transition
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.export.ExportSheet
 import com.directorx.editor.ui.export.ExportSheetPresentation
 import com.directorx.editor.ui.mediapicker.MediaPickerSheet
@@ -68,7 +68,7 @@ fun BoxScope.EditorPrimaryPanelHost(
                 )
             },
             onClose = viewModel::hideMediaPicker,
-            modifier = Modifier.testTag(ClearCutTestTags.MEDIA_PICKER_SHEET)
+            modifier = Modifier.testTag(DirectorXTestTags.MEDIA_PICKER_SHEET)
         )
     }
 

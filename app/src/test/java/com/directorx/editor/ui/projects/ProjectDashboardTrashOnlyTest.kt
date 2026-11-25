@@ -9,7 +9,7 @@ import androidx.compose.ui.test.performScrollToNode
 import com.directorx.editor.DirectorXApp
 import com.directorx.editor.MainActivity
 import com.directorx.editor.model.Project
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
 import org.junit.Test
@@ -39,7 +39,7 @@ class ProjectDashboardTrashOnlyTest {
 
     @Test
     fun aDashboardWhoseOnlyProjectIsInTheTrashStillRenders() {
-        waitUntil { compose.onAllNodesWithTag(ClearCutTestTags.PROJECTS_SCREEN).fetchSemanticsNodes().isNotEmpty() }
+        waitUntil { compose.onAllNodesWithTag(DirectorXTestTags.PROJECTS_SCREEN).fetchSemanticsNodes().isNotEmpty() }
 
         runBlocking {
             compose.activity.projectDao.insertProject(

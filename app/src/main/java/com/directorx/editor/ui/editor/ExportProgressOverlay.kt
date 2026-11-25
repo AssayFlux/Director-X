@@ -1,6 +1,6 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.DirectorXAccents
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
@@ -27,9 +27,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import com.directorx.editor.R
 import com.directorx.editor.engine.ExportState
-import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXChromeIconButton
 import com.directorx.editor.ui.theme.Elevation
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.Motion
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
@@ -47,7 +47,7 @@ fun ExportProgressOverlay(
     onCancel: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     val isExporting = exportState == ExportState.EXPORTING
     val progressValue = exportProgress.coerceIn(0f, 1f)
     var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
@@ -123,19 +123,19 @@ fun ExportProgressOverlay(
                     modifier = Modifier
                         .size(44.dp)
                         .clip(CircleShape)
-                        .background(ClearCutAccents.Mauve.copy(alpha = 0.12f)),
+                        .background(DirectorXAccents.Mauve.copy(alpha = 0.12f)),
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator(
                         progress = { progressValue },
                         modifier = Modifier.size(34.dp),
-                        color = ClearCutAccents.Mauve,
+                        color = DirectorXAccents.Mauve,
                         strokeWidth = 3.dp,
-                        trackColor = ClearCutAccents.Mauve.copy(alpha = 0.12f)
+                        trackColor = DirectorXAccents.Mauve.copy(alpha = 0.12f)
                     )
                     Text(
                         text = "$percent%",
-                        color = ClearCutAccents.Mauve,
+                        color = DirectorXAccents.Mauve,
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.SemiBold
                     )
@@ -172,13 +172,13 @@ fun ExportProgressOverlay(
                     }
                 }
 
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = Icons.Default.Close,
                     contentDescription = stringResource(R.string.cd_export_cancel),
                     onClick = onCancel,
-                    tint = ClearCutAccents.Red,
-                    containerColor = ClearCutAccents.Red.copy(alpha = 0.12f),
-                    borderColor = ClearCutAccents.Red.copy(alpha = 0.24f),
+                    tint = DirectorXAccents.Red,
+                    containerColor = DirectorXAccents.Red.copy(alpha = 0.12f),
+                    borderColor = DirectorXAccents.Red.copy(alpha = 0.24f),
                     shape = RoundedCornerShape(Radius.lg),
                 )
             }

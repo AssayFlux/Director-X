@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -57,7 +57,7 @@ fun TtsPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var text by remember { mutableStateOf("") }
     var selectedStyle by remember { mutableStateOf(TtsEngine.VoiceStyle.NARRATOR) }
     val preparedText = text.trim()
@@ -67,7 +67,7 @@ fun TtsPanel(
         title = stringResource(R.string.tts_title),
         subtitle = stringResource(R.string.panel_tts_subtitle),
         icon = Icons.Default.RecordVoiceOver,
-        accent = ClearCutAccents.Mauve,
+        accent = DirectorXAccents.Mauve,
         onClose = {
             onStopPreview()
             onClose()
@@ -81,13 +81,13 @@ fun TtsPanel(
                     icon = Icons.Default.Clear,
                     contentDescription = stringResource(R.string.tts_clear_cd),
                     onClick = { text = "" },
-                    tint = ClearCutAccents.Red
+                    tint = DirectorXAccents.Red
                 )
             }
         }
     ) {
         if (!isAvailable) {
-            PremiumPanelCard(accent = ClearCutAccents.Red) {
+            PremiumPanelCard(accent = DirectorXAccents.Red) {
                 Text(
                     text = stringResource(R.string.panel_tts_unavailable_title),
                     color = semanticColors.text,
@@ -103,7 +103,7 @@ fun TtsPanel(
             return@PremiumEditorPanel
         }
 
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -115,22 +115,22 @@ fun TtsPanel(
                     } else {
                         stringResource(R.string.panel_tts_status_ready)
                     },
-                    accent = if (isSynthesizing) ClearCutAccents.Peach else ClearCutAccents.Green
+                    accent = if (isSynthesizing) DirectorXAccents.Peach else DirectorXAccents.Green
                 )
                 PremiumPanelPill(
                     text = selectedStyle.displayName,
-                    accent = ClearCutAccents.Sapphire
+                    accent = DirectorXAccents.Sapphire
                 )
                 PremiumPanelPill(
                     text = stringResource(R.string.panel_tts_chars_format, preparedText.length),
-                    accent = ClearCutAccents.Yellow
+                    accent = DirectorXAccents.Yellow
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
                 text = stringResource(R.string.panel_tts_script_title),
-                color = ClearCutAccents.Rosewater,
+                color = DirectorXAccents.Rosewater,
                 style = MaterialTheme.typography.labelLarge
             )
             Text(
@@ -153,7 +153,7 @@ fun TtsPanel(
                 supportingText = {
                     Text(
                         text = "${text.length} / $TTS_MAX_CHARS",
-                        color = if (text.length >= TTS_MAX_CHARS) ClearCutAccents.Peach else semanticColors.subtext,
+                        color = if (text.length >= TTS_MAX_CHARS) DirectorXAccents.Peach else semanticColors.subtext,
                         style = MaterialTheme.typography.labelSmall
                     )
                 },
@@ -163,11 +163,11 @@ fun TtsPanel(
                 maxLines = 6,
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = ClearCutAccents.Mauve,
+                    focusedBorderColor = DirectorXAccents.Mauve,
                     unfocusedBorderColor = semanticColors.cardStroke,
                     focusedTextColor = semanticColors.text,
                     unfocusedTextColor = semanticColors.text,
-                    cursorColor = ClearCutAccents.Mauve,
+                    cursorColor = DirectorXAccents.Mauve,
                     focusedContainerColor = semanticColors.panel,
                     unfocusedContainerColor = semanticColors.panel
                 )
@@ -176,10 +176,10 @@ fun TtsPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Sapphire) {
+        PremiumPanelCard(accent = DirectorXAccents.Sapphire) {
             Text(
                 text = stringResource(R.string.panel_tts_voice_direction_title),
-                color = ClearCutAccents.Rosewater,
+                color = DirectorXAccents.Rosewater,
                 style = MaterialTheme.typography.labelLarge
             )
             Text(
@@ -212,7 +212,7 @@ fun TtsPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = DirectorXAccents.Blue) {
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -220,18 +220,18 @@ fun TtsPanel(
             ) {
                 PremiumPanelPill(
                     text = stringResource(R.string.tts_speed_format, selectedStyle.rate),
-                    accent = ClearCutAccents.Sky
+                    accent = DirectorXAccents.Sky
                 )
                 PremiumPanelPill(
                     text = stringResource(R.string.tts_pitch_format, selectedStyle.pitch),
-                    accent = ClearCutAccents.Pink
+                    accent = DirectorXAccents.Pink
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
                 text = stringResource(R.string.panel_tts_delivery_title),
-                color = ClearCutAccents.Rosewater,
+                color = DirectorXAccents.Rosewater,
                 style = MaterialTheme.typography.labelLarge
             )
             Text(
@@ -298,8 +298,8 @@ private fun VoiceStyleCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
-    val accent = if (selected) ClearCutAccents.Mauve else ClearCutAccents.Sapphire
+    val semanticColors = LocalDirectorXColors.current
+    val accent = if (selected) DirectorXAccents.Mauve else DirectorXAccents.Sapphire
 
     Surface(
         onClick = onClick,
@@ -334,11 +334,11 @@ private fun VoiceStyleCard(
             ) {
                 PremiumPanelPill(
                     text = stringResource(R.string.tts_speed_format, style.rate),
-                    accent = ClearCutAccents.Sky
+                    accent = DirectorXAccents.Sky
                 )
                 PremiumPanelPill(
                     text = stringResource(R.string.tts_pitch_format, style.pitch),
-                    accent = ClearCutAccents.Pink
+                    accent = DirectorXAccents.Pink
                 )
             }
         }
@@ -351,17 +351,17 @@ private fun TtsPreviewButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     OutlinedButton(
         onClick = onClick,
         enabled = enabled,
         modifier = modifier.fillMaxWidth(),
         colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = ClearCutAccents.Mauve
+            contentColor = DirectorXAccents.Mauve
         ),
         border = BorderStroke(
             1.dp,
-            if (enabled) ClearCutAccents.Mauve else semanticColors.cardStroke
+            if (enabled) DirectorXAccents.Mauve else semanticColors.cardStroke
         ),
         shape = RoundedCornerShape(12.dp)
     ) {
@@ -386,13 +386,13 @@ private fun TtsGenerateButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Button(
         onClick = onClick,
         enabled = enabled,
         modifier = modifier.fillMaxWidth(),
         colors = ButtonDefaults.buttonColors(
-            containerColor = ClearCutAccents.Mauve,
+            containerColor = DirectorXAccents.Mauve,
             contentColor = semanticColors.surfaceBase
         ),
         shape = RoundedCornerShape(12.dp)

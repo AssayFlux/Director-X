@@ -15,7 +15,7 @@ import com.directorx.editor.engine.ExportObservation
 import com.directorx.editor.engine.buildExportHistoryEntry
 import com.directorx.editor.model.ExportConfig
 import com.directorx.editor.model.VideoCodec
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import androidx.compose.ui.test.assertTextEquals
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -126,7 +126,7 @@ class ExportHistoryRowTest {
             )
         fun verdict(entry: ExportHistoryEntry): String {
             show(entry, mutableListOf(), IntArray(1))
-            return compose.onNodeWithTag(ClearCutTestTags.EXPORT_HISTORY_CONTRACT)
+            return compose.onNodeWithTag(DirectorXTestTags.EXPORT_HISTORY_CONTRACT)
                 .fetchSemanticsNode().config[androidx.compose.ui.semantics.SemanticsProperties.Text].joinToString()
         }
         fun checked(entry: ExportHistoryEntry, observation: ExportObservation) =
@@ -158,7 +158,7 @@ class ExportHistoryRowTest {
         )
         show(swapped, mutableListOf(), IntArray(1))
 
-        compose.onNodeWithTag(ClearCutTestTags.EXPORT_HISTORY_CONTRACT).assertTextEquals(string(R.string.export_contract_degraded))
+        compose.onNodeWithTag(DirectorXTestTags.EXPORT_HISTORY_CONTRACT).assertTextEquals(string(R.string.export_contract_degraded))
         compose.onNodeWithText(
             context().getString(
                 R.string.export_contract_mismatch,
@@ -201,7 +201,7 @@ class ExportHistoryRowTest {
         for ((entry, expected) in cases) {
             shown.value = entry
             compose.waitForIdle()
-            compose.onNodeWithTag(ClearCutTestTags.EXPORT_HISTORY_CONTRACT).assertTextEquals(expected)
+            compose.onNodeWithTag(DirectorXTestTags.EXPORT_HISTORY_CONTRACT).assertTextEquals(expected)
         }
     }
 
@@ -223,7 +223,7 @@ class ExportHistoryRowTest {
         compose.setContent {
             ExportHistoryRow(entry = entry.copy(contract = entry.contract!!.evaluate(silent)), dateFormat = dateFormat, onResumeExport = {})
         }
-        compose.onNodeWithTag(ClearCutTestTags.EXPORT_HISTORY_CONTRACT).assertTextEquals(string(R.string.export_contract_degraded))
+        compose.onNodeWithTag(DirectorXTestTags.EXPORT_HISTORY_CONTRACT).assertTextEquals(string(R.string.export_contract_degraded))
         compose.onNodeWithText(
             context().getString(
                 R.string.export_contract_mismatch,
@@ -238,7 +238,7 @@ class ExportHistoryRowTest {
     @Test
     fun runsThatMadeNoFileShowNoVerdict() {
         show(entry(ExportHistoryStatus.FAILED), mutableListOf(), IntArray(1))
-        assertEquals(0, compose.onAllNodesWithTag(ClearCutTestTags.EXPORT_HISTORY_CONTRACT).fetchSemanticsNodes().size)
+        assertEquals(0, compose.onAllNodesWithTag(DirectorXTestTags.EXPORT_HISTORY_CONTRACT).fetchSemanticsNodes().size)
     }
 
     private fun context(): android.content.Context = ApplicationProvider.getApplicationContext()

@@ -435,7 +435,7 @@ class VideoEngine @Inject constructor(
                     )
                     .setPrioritizeTimeOverSizeThresholds(true)
                     .build()
-                val previewAudioAttributes = ClearCutAudioFocusPolicy.buildPreviewAttributes()
+                val previewAudioAttributes = DirectorXAudioFocusPolicy.buildPreviewAttributes()
                 logAndroid15LoudnessIntegration("Preview")
                 val graphWatch = EndOfInputWatchingVideoGraphFactory(MultipleInputVideoGraph.Factory())
                 player = CompositionPlayer.Builder(context)

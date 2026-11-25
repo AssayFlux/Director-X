@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -126,9 +126,9 @@ private fun FilterChip(
     selected: Boolean,
     onClick: () -> Unit,
 ) {
-    val semanticColors = LocalClearCutColors.current
-    val container = if (selected) ClearCutAccents.Mauve.copy(alpha = 0.18f) else semanticColors.panelHighest.copy(alpha = 0.5f)
-    val border = if (selected) ClearCutAccents.Mauve.copy(alpha = 0.62f) else semanticColors.cardStrokeStrong.copy(alpha = 0.5f)
+    val semanticColors = LocalDirectorXColors.current
+    val container = if (selected) DirectorXAccents.Mauve.copy(alpha = 0.18f) else semanticColors.panelHighest.copy(alpha = 0.5f)
+    val border = if (selected) DirectorXAccents.Mauve.copy(alpha = 0.62f) else semanticColors.cardStrokeStrong.copy(alpha = 0.5f)
     val textColor = if (selected) semanticColors.text else semanticColors.subtext
     Text(
         text = label,

@@ -14,7 +14,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.editor.PanelId
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -67,56 +67,56 @@ class LargeTextLayoutTest {
             openBlankEditor()
             assertSurface(
                 label = "$label-editor",
-                rootTag = ClearCutTestTags.EDITOR_SCREEN,
+                rootTag = DirectorXTestTags.EDITOR_SCREEN,
                 requiredActionTags = listOf(
-                    ClearCutTestTags.EDITOR_BACK,
-                    ClearCutTestTags.EDITOR_EXPORT,
-                    ClearCutTestTags.EDITOR_EMPTY_ADD_MEDIA,
+                    DirectorXTestTags.EDITOR_BACK,
+                    DirectorXTestTags.EDITOR_EXPORT,
+                    DirectorXTestTags.EDITOR_EMPTY_ADD_MEDIA,
                 ),
             )
 
-            compose.onNodeWithTag(ClearCutTestTags.EDITOR_EXPORT).performClick()
-            compose.waitUntilAtLeastOneExists(ClearCutTestTags.EXPORT_SHEET)
+            compose.onNodeWithTag(DirectorXTestTags.EDITOR_EXPORT).performClick()
+            compose.waitUntilAtLeastOneExists(DirectorXTestTags.EXPORT_SHEET)
             assertSurface(
                 label = "$label-export",
-                rootTag = ClearCutTestTags.EXPORT_SHEET,
+                rootTag = DirectorXTestTags.EXPORT_SHEET,
                 requiredActionTags = listOf(
-                    ClearCutTestTags.EXPORT_CLOSE,
-                    ClearCutTestTags.EXPORT_PRIMARY_ACTION,
+                    DirectorXTestTags.EXPORT_CLOSE,
+                    DirectorXTestTags.EXPORT_PRIMARY_ACTION,
                 ),
             )
-            compose.onNodeWithTag(ClearCutTestTags.EXPORT_CLOSE).performClick()
+            compose.onNodeWithTag(DirectorXTestTags.EXPORT_CLOSE).performClick()
             waitForPanelClosed(PanelId.EXPORT_SHEET)
 
-            openProjectTool("media_manager", ClearCutTestTags.MEDIA_MANAGER_PANEL)
+            openProjectTool("media_manager", DirectorXTestTags.MEDIA_MANAGER_PANEL)
             assertSurface(
                 label = "$label-media-manager",
-                rootTag = ClearCutTestTags.MEDIA_MANAGER_PANEL,
-                requiredActionTags = listOf(ClearCutTestTags.MEDIA_MANAGER_CLOSE),
+                rootTag = DirectorXTestTags.MEDIA_MANAGER_PANEL,
+                requiredActionTags = listOf(DirectorXTestTags.MEDIA_MANAGER_CLOSE),
             )
-            compose.onNodeWithTag(ClearCutTestTags.MEDIA_MANAGER_CLOSE).performClick()
+            compose.onNodeWithTag(DirectorXTestTags.MEDIA_MANAGER_CLOSE).performClick()
             waitForPanelClosed(PanelId.MEDIA_MANAGER)
 
-            openProjectTool("batch_export", ClearCutTestTags.BATCH_EXPORT_PANEL)
+            openProjectTool("batch_export", DirectorXTestTags.BATCH_EXPORT_PANEL)
             assertSurface(
                 label = "$label-batch-export",
-                rootTag = ClearCutTestTags.BATCH_EXPORT_PANEL,
-                requiredActionTags = listOf(ClearCutTestTags.BATCH_EXPORT_CLOSE),
+                rootTag = DirectorXTestTags.BATCH_EXPORT_PANEL,
+                requiredActionTags = listOf(DirectorXTestTags.BATCH_EXPORT_CLOSE),
             )
-            compose.onNodeWithTag(ClearCutTestTags.BATCH_EXPORT_CLOSE).performClick()
+            compose.onNodeWithTag(DirectorXTestTags.BATCH_EXPORT_CLOSE).performClick()
             waitForPanelClosed(PanelId.BATCH_EXPORT)
 
-            compose.onNodeWithTag(ClearCutTestTags.EDITOR_BACK).performClick()
-            compose.waitUntilAtLeastOneExists(ClearCutTestTags.PROJECTS_SCREEN)
-            compose.onNodeWithTag(ClearCutTestTags.PROJECTS_SETTINGS)
+            compose.onNodeWithTag(DirectorXTestTags.EDITOR_BACK).performClick()
+            compose.waitUntilAtLeastOneExists(DirectorXTestTags.PROJECTS_SCREEN)
+            compose.onNodeWithTag(DirectorXTestTags.PROJECTS_SETTINGS)
                 .performScrollTo()
                 .assertIsDisplayed()
                 .performClick()
-            compose.waitUntilAtLeastOneExists(ClearCutTestTags.SETTINGS_SCREEN)
+            compose.waitUntilAtLeastOneExists(DirectorXTestTags.SETTINGS_SCREEN)
             assertSurface(
                 label = "$label-settings",
-                rootTag = ClearCutTestTags.SETTINGS_SCREEN,
-                requiredActionTags = listOf(ClearCutTestTags.SETTINGS_BACK),
+                rootTag = DirectorXTestTags.SETTINGS_SCREEN,
+                requiredActionTags = listOf(DirectorXTestTags.SETTINGS_BACK),
             )
         } catch (error: Throwable) {
             throw compose.failureWithQaDiagnostics(label, error)
@@ -124,34 +124,34 @@ class LargeTextLayoutTest {
     }
 
     private fun openBlankEditor() {
-        compose.waitUntilAtLeastOneExists(ClearCutTestTags.PROJECTS_SCREEN)
-        compose.onNodeWithTag(ClearCutTestTags.PROJECTS_CREATE_PROJECT)
+        compose.waitUntilAtLeastOneExists(DirectorXTestTags.PROJECTS_SCREEN)
+        compose.onNodeWithTag(DirectorXTestTags.PROJECTS_CREATE_PROJECT)
             .performScrollTo()
             .assertIsDisplayed()
             .performClick()
-        compose.waitUntilAtLeastOneExists(ClearCutTestTags.TEMPLATE_SHEET)
-        compose.onNodeWithTag(ClearCutTestTags.TEMPLATE_GRID)
+        compose.waitUntilAtLeastOneExists(DirectorXTestTags.TEMPLATE_SHEET)
+        compose.onNodeWithTag(DirectorXTestTags.TEMPLATE_GRID)
             .performScrollTo()
-            .performScrollToNode(hasTestTag(ClearCutTestTags.TEMPLATE_BLANK))
-        compose.onNodeWithTag(ClearCutTestTags.TEMPLATE_BLANK)
+            .performScrollToNode(hasTestTag(DirectorXTestTags.TEMPLATE_BLANK))
+        compose.onNodeWithTag(DirectorXTestTags.TEMPLATE_BLANK)
             .assertIsDisplayed()
             .performClick()
-        compose.waitUntilAtLeastOneExists(ClearCutTestTags.EDITOR_SCREEN)
+        compose.waitUntilAtLeastOneExists(DirectorXTestTags.EDITOR_SCREEN)
         val tutorialNodes = runCatching {
-            compose.onAllNodesWithTag(ClearCutTestTags.TUTORIAL_SKIP).fetchSemanticsNodes()
+            compose.onAllNodesWithTag(DirectorXTestTags.TUTORIAL_SKIP).fetchSemanticsNodes()
         }.getOrDefault(emptyList())
         if (tutorialNodes.isNotEmpty()) {
-            compose.onNodeWithTag(ClearCutTestTags.TUTORIAL_SKIP).performClick()
+            compose.onNodeWithTag(DirectorXTestTags.TUTORIAL_SKIP).performClick()
         }
     }
 
     private fun openProjectTool(actionId: String, panelTag: String) {
         compose.onNodeWithTag(
-            ClearCutTestTags.EDITOR_TOOL_TAB_PREFIX + "project_tools",
+            DirectorXTestTags.EDITOR_TOOL_TAB_PREFIX + "project_tools",
         ).performClick()
-        compose.waitUntilAtLeastOneExists(ClearCutTestTags.EDITOR_TOOL_ACTION_LIST)
-        val actionTag = ClearCutTestTags.EDITOR_TOOL_ACTION_PREFIX + actionId
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_TOOL_ACTION_LIST)
+        compose.waitUntilAtLeastOneExists(DirectorXTestTags.EDITOR_TOOL_ACTION_LIST)
+        val actionTag = DirectorXTestTags.EDITOR_TOOL_ACTION_PREFIX + actionId
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_TOOL_ACTION_LIST)
             .performScrollToNode(hasTestTag(actionTag))
         compose.waitUntilAtLeastOneExists(actionTag)
         compose.onNodeWithTag(actionTag)
@@ -162,10 +162,10 @@ class LargeTextLayoutTest {
 
     private fun waitForPanelClosed(panel: PanelId) {
         compose.waitUntil(timeoutMillis = 5_000L) {
-            compose.onNodeWithTag(ClearCutTestTags.EDITOR_SCREEN)
+            compose.onNodeWithTag(DirectorXTestTags.EDITOR_SCREEN)
                 .fetchSemanticsNode()
                 .config
-                .getOrNull(ClearCutTestTags.OPEN_PANEL_IDS)
+                .getOrNull(DirectorXTestTags.OPEN_PANEL_IDS)
                 ?.contains(panel.name) == false
         }
         compose.waitForIdle()

@@ -2165,7 +2165,7 @@ class ExportDelegate(
         val generatedAt = System.currentTimeMillis()
         val manifest = engine.buildManifest(
             projectTitle = state.project.name,
-            novaCutVersionName = BuildConfig.VERSION_NAME,
+            directorXVersionName = BuildConfig.VERSION_NAME,
             signingMode = C2paExportEngine.SigningMode.ANDROID_KEYSTORE,
             ledger = entries,
             exporterCreationTimeMs = generatedAt

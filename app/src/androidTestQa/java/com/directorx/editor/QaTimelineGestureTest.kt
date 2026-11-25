@@ -24,7 +24,7 @@ import com.directorx.editor.engine.billing.SubscriptionState
 import com.directorx.editor.engine.billing.SubscriptionTier
 import dagger.hilt.android.EntryPointAccessors
 import java.time.Instant
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.editor.PanelId
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -178,7 +178,7 @@ class QaTimelineGestureTest {
         val clip = editor.importFixture()
         openKeyframePanel(clip)
 
-        val canvas = compose.onNodeWithTag(ClearCutTestTags.KEYFRAME_CURVE_CANVAS)
+        val canvas = compose.onNodeWithTag(DirectorXTestTags.KEYFRAME_CURVE_CANVAS)
         val size = canvas.fetchSemanticsNode().size
         val grab = Offset(size.width * 0.25f, size.height * 0.5f)
         canvas.performTouchInput { doubleClick(grab) }
@@ -195,7 +195,7 @@ class QaTimelineGestureTest {
         // the canvas back into the viewport and measure its current bounds before
         // injecting the drag; reusing the first composition's coordinates can
         // target a clipped/off-screen location after the panel is reopened.
-        val dragCanvas = compose.onNodeWithTag(ClearCutTestTags.KEYFRAME_CURVE_CANVAS)
+        val dragCanvas = compose.onNodeWithTag(DirectorXTestTags.KEYFRAME_CURVE_CANVAS)
         dragCanvas.performScrollTo()
         val dragSize = dragCanvas.fetchSemanticsNode().size
         val dragStart = Offset(dragSize.width * 0.25f, dragSize.height * 0.5f)
@@ -217,20 +217,20 @@ class QaTimelineGestureTest {
     }
 
     private fun openKeyframePanel(clip: Clip) {
-        compose.onNodeWithTag(ClearCutTestTags.TIMELINE_CLIP_PREFIX + clip.id).performClick()
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_TOOL_TAB_PREFIX + "more").performClick()
-        editor.waitForTag(ClearCutTestTags.EDITOR_TOOL_ACTION_LIST)
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_TOOL_ACTION_LIST)
-            .performScrollToNode(hasTestTag(ClearCutTestTags.EDITOR_TOOL_ACTION_PREFIX + "keyframes"))
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_TOOL_ACTION_PREFIX + "keyframes").performClick()
-        editor.waitForTag(ClearCutTestTags.KEYFRAME_CURVE_CANVAS)
+        compose.onNodeWithTag(DirectorXTestTags.TIMELINE_CLIP_PREFIX + clip.id).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_TOOL_TAB_PREFIX + "more").performClick()
+        editor.waitForTag(DirectorXTestTags.EDITOR_TOOL_ACTION_LIST)
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_TOOL_ACTION_LIST)
+            .performScrollToNode(hasTestTag(DirectorXTestTags.EDITOR_TOOL_ACTION_PREFIX + "keyframes"))
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_TOOL_ACTION_PREFIX + "keyframes").performClick()
+        editor.waitForTag(DirectorXTestTags.KEYFRAME_CURVE_CANVAS)
         compose.onNodeWithTag(
-            ClearCutTestTags.KEYFRAME_PROPERTY_PREFIX + "position_x"
+            DirectorXTestTags.KEYFRAME_PROPERTY_PREFIX + "position_x"
         ).performScrollTo().performClick()
         // The property selector and curve share a vertically scrolling sheet.
         // On shorter API 35 devices the selector can leave the curve clipped,
         // making a correctly injected double-tap land outside the visible canvas.
-        compose.onNodeWithTag(ClearCutTestTags.KEYFRAME_CURVE_CANVAS).performScrollTo()
+        compose.onNodeWithTag(DirectorXTestTags.KEYFRAME_CURVE_CANVAS).performScrollTo()
     }
 
     private fun closeKeyframePanel() {
@@ -240,10 +240,10 @@ class QaTimelineGestureTest {
         compose.onNodeWithContentDescription(editor.targetContext.getString(R.string.panel_keyframes_close_cd))
             .performClick()
         compose.waitUntil(timeoutMillis = 5_000L) {
-            val openPanels = compose.onNodeWithTag(ClearCutTestTags.EDITOR_SCREEN)
+            val openPanels = compose.onNodeWithTag(DirectorXTestTags.EDITOR_SCREEN)
                 .fetchSemanticsNode()
                 .config
-                .getOrNull(ClearCutTestTags.OPEN_PANEL_IDS)
+                .getOrNull(DirectorXTestTags.OPEN_PANEL_IDS)
                 .orEmpty()
             PanelId.KEYFRAME_EDITOR.name !in openPanels
         }

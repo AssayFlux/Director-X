@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import android.graphics.Bitmap
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
@@ -49,7 +49,7 @@ import com.directorx.editor.R
 import kotlin.math.min
 
 // RGB trace colors are signal semantics, not UI theme colors, so they stay fixed
-// while structural surfaces and grids resolve from LocalClearCutColors below.
+// while structural surfaces and grids resolve from LocalDirectorXColors below.
 private val ScopeRed = Color(0xFFFF4444)
 private val ScopeGreen = Color(0xFF44FF44)
 private val ScopeBlue = Color(0xFF4488FF)
@@ -69,7 +69,7 @@ fun VideoScopesOverlay(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var scopeData by remember(frameBitmap, activeScope) { mutableStateOf<ScopeData?>(null) }
     val hasFrame = frameBitmap?.isRecycled == false
     val isAnalyzing = hasFrame && scopeData == null
@@ -153,8 +153,8 @@ fun VideoScopesOverlay(
                     ),
                     accent = when {
                         !hasFrame -> semanticColors.overlayStrong
-                        isAnalyzing -> ClearCutAccents.Yellow
-                        else -> ClearCutAccents.Green
+                        isAnalyzing -> DirectorXAccents.Yellow
+                        else -> DirectorXAccents.Green
                     }
                 )
             }
@@ -228,7 +228,7 @@ private fun ScopeStateMessage(
     title: String,
     body: String
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Column(
         modifier = Modifier.padding(horizontal = 18.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -256,7 +256,7 @@ private fun ScopeLoadingState() {
     ) {
         CircularProgressIndicator(
             modifier = Modifier.size(24.dp),
-            color = ClearCutAccents.Yellow,
+            color = DirectorXAccents.Yellow,
             strokeWidth = 2.dp
         )
         ScopeStateMessage(
@@ -267,9 +267,9 @@ private fun ScopeLoadingState() {
 }
 
 private fun ScopeType.accent(): Color = when (this) {
-    ScopeType.HISTOGRAM -> ClearCutAccents.Peach
-    ScopeType.WAVEFORM -> ClearCutAccents.Blue
-    ScopeType.VECTORSCOPE -> ClearCutAccents.Mauve
+    ScopeType.HISTOGRAM -> DirectorXAccents.Peach
+    ScopeType.WAVEFORM -> DirectorXAccents.Blue
+    ScopeType.VECTORSCOPE -> DirectorXAccents.Mauve
 }
 
 private fun ScopeType.descriptionRes(): Int = when (this) {

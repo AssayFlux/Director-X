@@ -1,6 +1,6 @@
 package com.directorx.editor.ui.export
 
-import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.DirectorXAccents
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -116,13 +116,13 @@ import com.directorx.editor.model.Track
 import com.directorx.editor.model.VideoCodec
 import com.directorx.editor.model.Watermark
 import com.directorx.editor.model.WatermarkPosition
-import com.directorx.editor.ui.ClearCutTestTags
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.DirectorXTestTags
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.Motion
-import com.directorx.editor.ui.theme.ClearCutChromeIconButton
-import com.directorx.editor.ui.theme.ClearCutDialogIcon
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.DirectorXChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXDialogIcon
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 import com.directorx.editor.ui.theme.TouchTarget
@@ -267,7 +267,7 @@ fun ExportSheet(
         }
     }
 
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val availableCodecs = remember { ExportConfig.getAvailableCodecs() }
     val outputAspectRatio = config.outputAspectRatio(aspectRatio)
     // Offer high-end modes only when the selected encoder advertises the exact
@@ -516,9 +516,9 @@ fun ExportSheet(
         AlertDialog(
             onDismissRequest = { showClearAiLedgerConfirm = false },
             icon = {
-                ClearCutDialogIcon(
+                DirectorXDialogIcon(
                     icon = Icons.Default.AutoAwesome,
-                    accent = ClearCutAccents.Mauve
+                    accent = DirectorXAccents.Mauve
                 )
             },
             title = { Text(stringResource(R.string.export_ai_ledger_clear_title)) },
@@ -546,7 +546,7 @@ fun ExportSheet(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .testTag(ClearCutTestTags.EXPORT_SHEET)
+            .testTag(DirectorXTestTags.EXPORT_SHEET)
             .background(semanticColors.background, containerShape)
             .verticalScroll(rememberScrollState())
             .padding(horizontal = Spacing.lg, vertical = 14.dp)
@@ -576,14 +576,14 @@ fun ExportSheet(
             )
 
             if (exportState != ExportState.EXPORTING) {
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = Icons.Default.Close,
                     contentDescription = stringResource(R.string.close),
                     onClick = onClose,
                     tint = semanticColors.text,
                     containerColor = Color.Transparent,
                     borderColor = Color.Transparent,
-                    modifier = Modifier.testTag(ClearCutTestTags.EXPORT_CLOSE),
+                    modifier = Modifier.testTag(DirectorXTestTags.EXPORT_CLOSE),
                     size = 40.dp
                 )
             }
@@ -614,7 +614,7 @@ fun ExportSheet(
 
             ExportStateCard(
                 icon = if (attentionNeeded) Icons.Default.Warning else Icons.Default.FileUpload,
-                tint = if (attentionNeeded) ClearCutAccents.Yellow else ClearCutAccents.Mauve,
+                tint = if (attentionNeeded) DirectorXAccents.Yellow else DirectorXAccents.Mauve,
                 title = stringResource(R.string.export_exporting),
                 body = bodyParts,
                 progress = exportProgress,
@@ -639,7 +639,7 @@ fun ExportSheet(
             ).joinToString("\n")
             ExportStateCard(
                 icon = Icons.Default.CheckCircle,
-                tint = ClearCutAccents.Green,
+                tint = DirectorXAccents.Green,
                 title = stringResource(R.string.export_complete),
                 body = completionBody,
                 primaryLabel = stringResource(R.string.share),
@@ -656,7 +656,7 @@ fun ExportSheet(
         if (exportState == ExportState.CANCELLED) {
             ExportStateCard(
                 icon = Icons.Default.Cancel,
-                tint = ClearCutAccents.Peach,
+                tint = DirectorXAccents.Peach,
                 title = stringResource(R.string.export_cancelled),
                 body = stringResource(R.string.export_subtitle),
                 primaryLabel = stringResource(R.string.done),
@@ -678,7 +678,7 @@ fun ExportSheet(
             }?.diagnosticSummary
             ExportStateCard(
                 icon = Icons.Default.Error,
-                tint = ClearCutAccents.Red,
+                tint = DirectorXAccents.Red,
                 title = stringResource(R.string.export_failed),
                 body = errorMessage?.takeIf { it.isNotBlank() } ?: stringResource(R.string.export_error_unknown),
                 secondaryBody = latestFailureDiagnostic,
@@ -734,7 +734,7 @@ fun ExportSheet(
             ) {
                 Text(
                     text = outputDetailsPrimary,
-                    color = ClearCutAccents.Sky,
+                    color = DirectorXAccents.Sky,
                     style = MaterialTheme.typography.labelLarge
                 )
                 Box(
@@ -762,7 +762,7 @@ fun ExportSheet(
         ExportSectionCard(
             title = stringResource(R.string.export_quick_presets),
             description = null,
-            accent = ClearCutAccents.Green
+            accent = DirectorXAccents.Green
         ) {
             ExportQuickPresetSelector(
                 config = config,
@@ -777,14 +777,14 @@ fun ExportSheet(
         ExportSectionCard(
             title = stringResource(R.string.export_output_details),
             description = null,
-            accent = ClearCutAccents.Sky
+            accent = DirectorXAccents.Sky
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(0.dp)) {
                 ExportSummarySettingRow(
                 icon = Icons.Default.ViewModule,
                 label = stringResource(R.string.export_resolution),
                 value = config.resolution.label,
-                accent = ClearCutAccents.Sky,
+                accent = DirectorXAccents.Sky,
                 onClick = {
                     val options = visibleResolutions
                     val next = options[(options.indexOf(config.resolution).coerceAtLeast(0) + 1) % options.size]
@@ -801,7 +801,7 @@ fun ExportSheet(
                 icon = Icons.Default.Speed,
                 label = stringResource(R.string.export_frame_rate),
                 value = stringResource(R.string.export_fps_value, config.frameRate),
-                accent = ClearCutAccents.Mauve,
+                accent = DirectorXAccents.Mauve,
                 onClick = {
                     val options = visibleFrameRates
                     val next = options[(options.indexOf(config.frameRate).coerceAtLeast(0) + 1) % options.size]
@@ -812,7 +812,7 @@ fun ExportSheet(
                 icon = Icons.Default.FileUpload,
                 label = stringResource(R.string.export_codec),
                 value = "MP4 · ${config.codec.label}",
-                accent = ClearCutAccents.Teal,
+                accent = DirectorXAccents.Teal,
                 onClick = {
                     val options = VideoCodec.entries.filter { it in availableCodecs }
                     if (options.isNotEmpty()) {
@@ -825,7 +825,7 @@ fun ExportSheet(
                 icon = Icons.Default.GraphicEq,
                 label = stringResource(R.string.export_quality),
                 value = localizedExportQuality(config.quality),
-                accent = ClearCutAccents.Green,
+                accent = DirectorXAccents.Green,
                 onClick = {
                     val options = ExportQuality.entries
                     val next = options[(options.indexOf(config.quality) + 1) % options.size]
@@ -835,7 +835,7 @@ fun ExportSheet(
                 if (estimatedSize != null && videoModeEnabled) {
                     Text(
                         text = stringResource(R.string.export_estimated_size_format, estimatedSize),
-                        color = ClearCutAccents.Peach,
+                        color = DirectorXAccents.Peach,
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.padding(top = Spacing.sm)
                     )
@@ -845,7 +845,7 @@ fun ExportSheet(
 
         Spacer(modifier = Modifier.height(Spacing.md))
 
-        ClearCutPrimaryButton(
+        DirectorXPrimaryButton(
             text = primaryButtonLabel,
             onClick = {
                 if (config.captureFrameOnly) {
@@ -859,7 +859,7 @@ fun ExportSheet(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp)
-                .testTag(ClearCutTestTags.EXPORT_PRIMARY_ACTION)
+                .testTag(DirectorXTestTags.EXPORT_PRIMARY_ACTION)
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -868,11 +868,11 @@ fun ExportSheet(
             ExportSectionCard(
                 title = stringResource(R.string.export_timeline_range),
                 description = stringResource(R.string.export_timeline_range_description),
-                accent = ClearCutAccents.Teal
+                accent = DirectorXAccents.Teal
             ) {
                 Text(
                     text = rangeDescription,
-                    color = if (rangeReady) semanticColors.subtext else ClearCutAccents.Yellow,
+                    color = if (rangeReady) semanticColors.subtext else DirectorXAccents.Yellow,
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Text(
@@ -900,7 +900,7 @@ fun ExportSheet(
                         },
                         label = { Text(stringResource(R.string.export_range_set_start), style = MaterialTheme.typography.labelMedium) },
                         selected = config.timelineRange?.startFrame == playheadFrame,
-                        colors = exportChipColors(ClearCutAccents.Teal),
+                        colors = exportChipColors(DirectorXAccents.Teal),
                     )
                     ExportFilterChip(
                         onClick = {
@@ -915,14 +915,14 @@ fun ExportSheet(
                         },
                         label = { Text(stringResource(R.string.export_range_set_end), style = MaterialTheme.typography.labelMedium) },
                         selected = config.timelineRange?.endFrameExclusive == playheadFrame,
-                        colors = exportChipColors(ClearCutAccents.Teal),
+                        colors = exportChipColors(DirectorXAccents.Teal),
                     )
                     if (config.timelineRange != null) {
                         ExportFilterChip(
                             onClick = { onConfigChanged(config.copy(timelineRange = null)) },
                             label = { Text(stringResource(R.string.export_range_clear), style = MaterialTheme.typography.labelMedium) },
                             selected = false,
-                            colors = exportChipColors(ClearCutAccents.Peach),
+                            colors = exportChipColors(DirectorXAccents.Peach),
                         )
                     }
                 }
@@ -939,7 +939,7 @@ fun ExportSheet(
         ExportSectionCard(
             title = stringResource(R.string.export_special_outputs),
             description = stringResource(R.string.export_special_outputs_description),
-            accent = ClearCutAccents.Mauve
+            accent = DirectorXAccents.Mauve
         ) {
             ExportToggleRow(
                 icon = Icons.Default.GraphicEq,
@@ -957,7 +957,7 @@ fun ExportSheet(
                         )
                     )
                 },
-                accent = ClearCutAccents.Peach
+                accent = DirectorXAccents.Peach
             )
 
             HorizontalDivider(color = semanticColors.cardStroke.copy(alpha = 0.6f))
@@ -970,13 +970,13 @@ fun ExportSheet(
                 onCheckedChange = {
                     onConfigChanged(config.copy(subtitleFormat = if (it) SubtitleFormat.SRT else null))
                 },
-                accent = ClearCutAccents.Blue
+                accent = DirectorXAccents.Blue
             )
 
             if (config.subtitleFormat != null) {
                 ExportChoiceGroup(
                     title = stringResource(R.string.export_subtitles),
-                    accent = ClearCutAccents.Blue
+                    accent = DirectorXAccents.Blue
                 ) {
                     FlowRow(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -987,7 +987,7 @@ fun ExportSheet(
                                 onClick = { onConfigChanged(config.copy(subtitleFormat = format)) },
                                 label = { Text(format.displayName, style = MaterialTheme.typography.labelMedium) },
                                 selected = config.subtitleFormat == format,
-                                colors = exportChipColors(ClearCutAccents.Blue)
+                                colors = exportChipColors(DirectorXAccents.Blue)
                             )
                         }
                     }
@@ -1012,7 +1012,7 @@ fun ExportSheet(
                         )
                     )
                 },
-                accent = ClearCutAccents.Yellow
+                accent = DirectorXAccents.Yellow
             )
 
             HorizontalDivider(color = semanticColors.cardStroke.copy(alpha = 0.6f))
@@ -1023,7 +1023,7 @@ fun ExportSheet(
                 description = stringResource(R.string.export_chapter_markers_description),
                 checked = config.includeChapterMarkers,
                 onCheckedChange = { onConfigChanged(config.copy(includeChapterMarkers = it)) },
-                accent = ClearCutAccents.Sapphire
+                accent = DirectorXAccents.Sapphire
             )
 
             if (videoModeEnabled) {
@@ -1047,7 +1047,7 @@ fun ExportSheet(
                             )
                         )
                     },
-                    accent = if (hasDisclosureBearingAiUsage) ClearCutAccents.Mauve else ClearCutAccents.Teal
+                    accent = if (hasDisclosureBearingAiUsage) DirectorXAccents.Mauve else DirectorXAccents.Teal
                 )
 
                 if (config.discloseAiUse && hasAiUsage) {
@@ -1059,7 +1059,7 @@ fun ExportSheet(
                         onCheckedChange = {
                             onConfigChanged(config.copy(writeAiUseSidecar = it))
                         },
-                        accent = ClearCutAccents.Blue
+                        accent = DirectorXAccents.Blue
                     )
                 }
 
@@ -1070,7 +1070,7 @@ fun ExportSheet(
                     ) {
                         Text(
                             text = stringResource(R.string.export_ai_ledger_clear_button),
-                            color = ClearCutAccents.Red
+                            color = DirectorXAccents.Red
                         )
                     }
                 }
@@ -1084,7 +1084,7 @@ fun ExportSheet(
                 description = stringResource(R.string.export_transparent_bg_description),
                 checked = config.transparentBackground,
                 onCheckedChange = { onConfigChanged(config.copy(transparentBackground = it)) },
-                accent = ClearCutAccents.Teal
+                accent = DirectorXAccents.Teal
             )
 
             HorizontalDivider(color = semanticColors.cardStroke.copy(alpha = 0.6f))
@@ -1105,13 +1105,13 @@ fun ExportSheet(
                         )
                     )
                 },
-                accent = ClearCutAccents.Mauve
+                accent = DirectorXAccents.Mauve
             )
 
             if (config.exportAsGif) {
                 ExportChoiceGroup(
                     title = stringResource(R.string.export_gif_frame_rate),
-                    accent = ClearCutAccents.Mauve
+                    accent = DirectorXAccents.Mauve
                 ) {
                     FlowRow(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -1122,7 +1122,7 @@ fun ExportSheet(
                                 onClick = { onConfigChanged(config.copy(gifFrameRate = frameRate)) },
                                 label = { Text(stringResource(R.string.export_fps_value, frameRate), style = MaterialTheme.typography.labelMedium) },
                                 selected = config.gifFrameRate == frameRate,
-                                colors = exportChipColors(ClearCutAccents.Mauve)
+                                colors = exportChipColors(DirectorXAccents.Mauve)
                             )
                         }
                     }
@@ -1130,7 +1130,7 @@ fun ExportSheet(
 
                 ExportChoiceGroup(
                     title = stringResource(R.string.export_gif_max_width),
-                    accent = ClearCutAccents.Mauve
+                    accent = DirectorXAccents.Mauve
                 ) {
                     FlowRow(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -1141,7 +1141,7 @@ fun ExportSheet(
                                 onClick = { onConfigChanged(config.copy(gifMaxWidth = maxWidth)) },
                                 label = { Text(stringResource(R.string.export_pixels_value, maxWidth), style = MaterialTheme.typography.labelMedium) },
                                 selected = config.gifMaxWidth == maxWidth,
-                                colors = exportChipColors(ClearCutAccents.Mauve)
+                                colors = exportChipColors(DirectorXAccents.Mauve)
                             )
                         }
                     }
@@ -1166,13 +1166,13 @@ fun ExportSheet(
                         )
                     )
                 },
-                accent = ClearCutAccents.Green
+                accent = DirectorXAccents.Green
             )
 
             if (config.captureFrameOnly) {
                 ExportChoiceGroup(
                     title = stringResource(R.string.export_capture_format),
-                    accent = ClearCutAccents.Green
+                    accent = DirectorXAccents.Green
                 ) {
                     FlowRow(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -1183,7 +1183,7 @@ fun ExportSheet(
                                 onClick = { onConfigChanged(config.copy(captureFormat = format)) },
                                 label = { Text(format.displayName, style = MaterialTheme.typography.labelMedium) },
                                 selected = config.captureFormat == format,
-                                colors = exportChipColors(ClearCutAccents.Green)
+                                colors = exportChipColors(DirectorXAccents.Green)
                             )
                         }
                     }
@@ -1208,13 +1208,13 @@ fun ExportSheet(
                         )
                     )
                 },
-                accent = ClearCutAccents.Flamingo
+                accent = DirectorXAccents.Flamingo
             )
 
             if (config.exportAsContactSheet) {
                 ExportChoiceGroup(
                     title = stringResource(R.string.export_contact_sheet_columns),
-                    accent = ClearCutAccents.Flamingo
+                    accent = DirectorXAccents.Flamingo
                 ) {
                     FlowRow(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -1225,7 +1225,7 @@ fun ExportSheet(
                                 onClick = { onConfigChanged(config.copy(contactSheetColumns = cols)) },
                                 label = { Text(pluralStringResource(R.plurals.export_columns_count, cols, cols), style = MaterialTheme.typography.labelMedium) },
                                 selected = config.contactSheetColumns == cols,
-                                colors = exportChipColors(ClearCutAccents.Flamingo)
+                                colors = exportChipColors(DirectorXAccents.Flamingo)
                             )
                         }
                     }
@@ -1250,7 +1250,7 @@ fun ExportSheet(
         ExportSectionCard(
             title = stringResource(R.string.export_delivery_options),
             description = stringResource(R.string.export_delivery_options_description),
-            accent = ClearCutAccents.Sapphire
+            accent = DirectorXAccents.Sapphire
         ) {
             if (videoModeEnabled && suggestedResolution != null &&
                 (suggestedResolution != config.resolution || (suggestedFps != null && suggestedFps != config.frameRate))
@@ -1263,10 +1263,10 @@ fun ExportSheet(
                 val upscaleWarning = config.resolution.height > suggestedResolution.height
                 Surface(
                     shape = RoundedCornerShape(Radius.md),
-                    color = if (upscaleWarning) ClearCutAccents.Yellow.copy(alpha = 0.12f) else ClearCutAccents.Green.copy(alpha = 0.12f),
+                    color = if (upscaleWarning) DirectorXAccents.Yellow.copy(alpha = 0.12f) else DirectorXAccents.Green.copy(alpha = 0.12f),
                     border = BorderStroke(
                         1.dp,
-                        if (upscaleWarning) ClearCutAccents.Yellow.copy(alpha = 0.3f) else ClearCutAccents.Green.copy(alpha = 0.3f)
+                        if (upscaleWarning) DirectorXAccents.Yellow.copy(alpha = 0.3f) else DirectorXAccents.Green.copy(alpha = 0.3f)
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -1285,14 +1285,14 @@ fun ExportSheet(
                         Icon(
                             if (upscaleWarning) Icons.Default.Warning else Icons.Default.AutoAwesome,
                             contentDescription = null,
-                            tint = if (upscaleWarning) ClearCutAccents.Yellow else ClearCutAccents.Green,
+                            tint = if (upscaleWarning) DirectorXAccents.Yellow else DirectorXAccents.Green,
                             modifier = Modifier.size(18.dp)
                         )
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 label,
                                 style = MaterialTheme.typography.labelMedium,
-                                color = if (upscaleWarning) ClearCutAccents.Yellow else ClearCutAccents.Green
+                                color = if (upscaleWarning) DirectorXAccents.Yellow else DirectorXAccents.Green
                             )
                             if (upscaleWarning) {
                                 Text(
@@ -1305,7 +1305,7 @@ fun ExportSheet(
                         Text(
                             stringResource(R.string.ai_apply),
                             style = MaterialTheme.typography.labelMedium,
-                            color = ClearCutAccents.Mauve
+                            color = DirectorXAccents.Mauve
                         )
                     }
                 }
@@ -1314,7 +1314,7 @@ fun ExportSheet(
             if (videoModeEnabled) {
                 ExportChoiceGroup(
                     title = stringResource(R.string.export_resolution),
-                    accent = ClearCutAccents.Rosewater
+                    accent = DirectorXAccents.Rosewater
                 ) {
                     FlowRow(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -1326,7 +1326,7 @@ fun ExportSheet(
                                 enabled = resolutionSupport[resolution] == true,
                                 label = { Text(resolution.label, style = MaterialTheme.typography.labelMedium) },
                                 selected = config.resolution == resolution,
-                                colors = exportChipColors(ClearCutAccents.Rosewater)
+                                colors = exportChipColors(DirectorXAccents.Rosewater)
                             )
                         }
                     }
@@ -1334,7 +1334,7 @@ fun ExportSheet(
 
                 ExportChoiceGroup(
                     title = stringResource(R.string.export_frame_rate),
-                    accent = ClearCutAccents.Mauve
+                    accent = DirectorXAccents.Mauve
                 ) {
                     FlowRow(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -1346,7 +1346,7 @@ fun ExportSheet(
                                 enabled = frameRateSupport[frameRate] == true,
                                 label = { Text(stringResource(R.string.export_fps_value, frameRate), style = MaterialTheme.typography.labelMedium) },
                                 selected = config.frameRate == frameRate,
-                                colors = exportChipColors(ClearCutAccents.Mauve)
+                                colors = exportChipColors(DirectorXAccents.Mauve)
                             )
                         }
                     }
@@ -1354,7 +1354,7 @@ fun ExportSheet(
 
                 ExportChoiceGroup(
                     title = stringResource(R.string.export_codec),
-                    accent = ClearCutAccents.Blue
+                    accent = DirectorXAccents.Blue
                 ) {
                     FlowRow(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -1370,8 +1370,8 @@ fun ExportSheet(
                                 colors = FilterChipDefaults.filterChipColors(
                                     containerColor = semanticColors.panelRaised,
                                     labelColor = semanticColors.subtext,
-                                    selectedContainerColor = ClearCutAccents.Blue.copy(alpha = 0.16f),
-                                    selectedLabelColor = ClearCutAccents.Blue,
+                                    selectedContainerColor = DirectorXAccents.Blue.copy(alpha = 0.16f),
+                                    selectedLabelColor = DirectorXAccents.Blue,
                                     disabledContainerColor = semanticColors.panelRaised.copy(alpha = 0.45f),
                                     disabledLabelColor = semanticColors.subtext.copy(alpha = 0.4f)
                                 )
@@ -1388,7 +1388,7 @@ fun ExportSheet(
                     onCheckedChange = { enabled ->
                         onConfigChanged(config.copy(forceConstantFrameRate = enabled))
                     },
-                    accent = ClearCutAccents.Mauve
+                    accent = DirectorXAccents.Mauve
                 )
 
                 ExportToggleRow(
@@ -1413,7 +1413,7 @@ fun ExportSheet(
                     onCheckedChange = { keep ->
                         onConfigChanged(config.copy(colorPolicy = config.colorPolicy.withKeepHdr(keep)))
                     },
-                    accent = ClearCutAccents.Yellow
+                    accent = DirectorXAccents.Yellow
                 )
 
                 HorizontalDivider(color = semanticColors.cardStroke.copy(alpha = 0.6f))
@@ -1425,7 +1425,7 @@ fun ExportSheet(
                     checked = config.allowStreamCopy && !config.forceConstantFrameRate,
                     enabled = !config.forceConstantFrameRate,
                     onCheckedChange = { onConfigChanged(config.copy(allowStreamCopy = it)) },
-                    accent = ClearCutAccents.Green
+                    accent = DirectorXAccents.Green
                 )
 
                 ExportToggleRow(
@@ -1442,7 +1442,7 @@ fun ExportSheet(
                             )
                         )
                     },
-                    accent = ClearCutAccents.Red
+                    accent = DirectorXAccents.Red
                 )
 
                 if (!config.scrubMetadata) {
@@ -1454,7 +1454,7 @@ fun ExportSheet(
                         onCheckedChange = { enabled ->
                             onConfigChanged(config.copy(preserveSourceLocationMetadata = enabled))
                         },
-                        accent = ClearCutAccents.Yellow
+                        accent = DirectorXAccents.Yellow
                     )
                     ExportToggleRow(
                         icon = Icons.Default.Info,
@@ -1464,13 +1464,13 @@ fun ExportSheet(
                         onCheckedChange = { enabled ->
                             onConfigChanged(config.copy(preserveSourceStreamMetadata = enabled))
                         },
-                        accent = ClearCutAccents.Blue
+                        accent = DirectorXAccents.Blue
                     )
                 }
 
                 ExportChoiceGroup(
                     title = stringResource(R.string.export_quality),
-                    accent = ClearCutAccents.Teal
+                    accent = DirectorXAccents.Teal
                 ) {
                     FlowRow(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -1481,7 +1481,7 @@ fun ExportSheet(
                                 onClick = { onConfigChanged(config.copy(quality = quality)) },
                                 label = { Text(localizedExportQuality(quality), style = MaterialTheme.typography.labelMedium) },
                                 selected = config.quality == quality,
-                                colors = exportChipColors(ClearCutAccents.Teal)
+                                colors = exportChipColors(DirectorXAccents.Teal)
                             )
                         }
                     }
@@ -1491,7 +1491,7 @@ fun ExportSheet(
             if (audioCodecVisible) {
                 ExportChoiceGroup(
                     title = stringResource(R.string.export_audio_codec),
-                    accent = ClearCutAccents.Peach
+                    accent = DirectorXAccents.Peach
                 ) {
                     FlowRow(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -1502,7 +1502,7 @@ fun ExportSheet(
                                 onClick = { onConfigChanged(config.copy(audioCodec = audioCodec)) },
                                 label = { Text(audioCodec.label, style = MaterialTheme.typography.labelMedium) },
                                 selected = config.audioCodec == audioCodec,
-                                colors = exportChipColors(ClearCutAccents.Peach)
+                                colors = exportChipColors(DirectorXAccents.Peach)
                             )
                         }
                     }
@@ -1515,7 +1515,7 @@ fun ExportSheet(
         ExportSectionCard(
             title = stringResource(R.string.export_output_details),
             description = summaryDetail,
-            accent = ClearCutAccents.Rosewater
+            accent = DirectorXAccents.Rosewater
         ) {
             Text(
                 text = outputDetailsPrimary,
@@ -1543,7 +1543,7 @@ fun ExportSheet(
             if (estimatedSize != null && videoModeEnabled) {
                 Text(
                     text = stringResource(R.string.export_estimated_size_format, estimatedSize),
-                    color = ClearCutAccents.Peach,
+                    color = DirectorXAccents.Peach,
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -1551,7 +1551,7 @@ fun ExportSheet(
                 val etaSec = estimateExportEtaSeconds(exportDurationMs, effectiveConfig)
                 Text(
                     text = stringResource(R.string.export_estimated_time_format, formatEtaSeconds(etaSec)),
-                    color = ClearCutAccents.Blue,
+                    color = DirectorXAccents.Blue,
                     style = MaterialTheme.typography.bodySmall
                 )
                 if (smartRenderSummary != null) {
@@ -1618,7 +1618,7 @@ fun ExportSheet(
                 preflightWarnings.forEach { warning ->
                     Text(
                         text = warning,
-                        color = ClearCutAccents.Yellow,
+                        color = DirectorXAccents.Yellow,
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -1640,7 +1640,7 @@ fun ExportSheet(
             ExportSectionCard(
                 title = stringResource(R.string.export_target_size),
                 description = stringResource(R.string.export_target_size_description),
-                accent = ClearCutAccents.Pink
+                accent = DirectorXAccents.Pink
             ) {
                 FlowRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -1652,7 +1652,7 @@ fun ExportSheet(
                         },
                         label = { Text(stringResource(R.string.settings_off), style = MaterialTheme.typography.labelMedium) },
                         selected = config.targetSizeBytes == null,
-                        colors = exportChipColors(ClearCutAccents.Pink)
+                        colors = exportChipColors(DirectorXAccents.Pink)
                     )
                     TargetSizePreset.entries.forEach { preset ->
                         ExportFilterChip(
@@ -1661,7 +1661,7 @@ fun ExportSheet(
                             },
                             label = { Text(preset.displayName, style = MaterialTheme.typography.labelMedium) },
                             selected = config.targetSizeBytes == preset.sizeBytes,
-                            colors = exportChipColors(ClearCutAccents.Pink)
+                            colors = exportChipColors(DirectorXAccents.Pink)
                         )
                     }
                 }
@@ -1680,7 +1680,7 @@ fun ExportSheet(
             ExportSectionCard(
                 title = stringResource(R.string.export_filename_template),
                 description = stringResource(R.string.export_filename_template_description),
-                accent = ClearCutAccents.Lavender
+                accent = DirectorXAccents.Lavender
             ) {
                 FlowRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -1699,7 +1699,7 @@ fun ExportSheet(
                             onClick = { onConfigChanged(config.copy(filenameTemplate = tmpl)) },
                             label = { Text(stringResource(labelRes), style = MaterialTheme.typography.labelMedium) },
                             selected = config.filenameTemplate == tmpl,
-                            colors = exportChipColors(ClearCutAccents.Lavender)
+                            colors = exportChipColors(DirectorXAccents.Lavender)
                         )
                     }
                 }
@@ -1716,9 +1716,9 @@ fun ExportSheet(
         ExportSectionCard(
             title = stringResource(R.string.export_ready_to_export),
             description = stringResource(R.string.export_ready_to_export_description),
-            accent = ClearCutAccents.Rosewater
+            accent = DirectorXAccents.Rosewater
         ) {
-            ClearCutPrimaryButton(
+            DirectorXPrimaryButton(
                 text = primaryButtonLabel,
                 onClick = {
                     if (config.captureFrameOnly) {
@@ -1740,7 +1740,7 @@ fun ExportSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(54.dp)
-                    .testTag(ClearCutTestTags.EXPORT_PRIMARY_ACTION)
+                    .testTag(DirectorXTestTags.EXPORT_PRIMARY_ACTION)
             )
         }
 
@@ -1749,23 +1749,23 @@ fun ExportSheet(
         ExportSectionCard(
             title = stringResource(R.string.export_timeline_exchange),
             description = stringResource(R.string.export_timeline_exchange_description),
-            accent = ClearCutAccents.Sapphire
+            accent = DirectorXAccents.Sapphire
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(Spacing.sm)
             ) {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.export_otio),
                     onClick = onExportOtio,
                     modifier = Modifier.weight(1f),
-                    contentColor = ClearCutAccents.Sapphire
+                    contentColor = DirectorXAccents.Sapphire
                 )
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.export_fcpxml),
                     onClick = onExportFcpxml,
                     modifier = Modifier.weight(1f),
-                    contentColor = ClearCutAccents.Sapphire
+                    contentColor = DirectorXAccents.Sapphire
                 )
             }
             Spacer(modifier = Modifier.height(Spacing.sm))
@@ -1773,17 +1773,17 @@ fun ExportSheet(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(Spacing.sm)
             ) {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.export_edl),
                     onClick = onExportEdl,
                     modifier = Modifier.weight(1f),
-                    contentColor = ClearCutAccents.Sapphire
+                    contentColor = DirectorXAccents.Sapphire
                 )
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.export_edit_decision_json),
                     onClick = onExportEditDecisionJson,
                     modifier = Modifier.weight(1f),
-                    contentColor = ClearCutAccents.Sapphire
+                    contentColor = DirectorXAccents.Sapphire
                 )
             }
         }
@@ -1797,7 +1797,7 @@ private fun ExportSectionCard(
     accent: Color,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -1831,7 +1831,7 @@ private fun ExportSummarySettingRow(
     accent: Color,
     onClick: () -> Unit
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -1875,14 +1875,14 @@ private fun ExportHistorySection(
     onResumeExport: (ExportHistoryEntry) -> Unit,
     onStartAgain: () -> Unit = {},
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val dateFormat = remember {
         DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
     }
     ExportSectionCard(
         title = stringResource(R.string.export_history_title),
         description = stringResource(R.string.export_history_description),
-        accent = ClearCutAccents.Teal
+        accent = DirectorXAccents.Teal
     ) {
         entries.forEachIndexed { index, entry ->
             ExportHistoryRow(
@@ -1905,13 +1905,13 @@ internal fun ExportHistoryRow(
     onResumeExport: (ExportHistoryEntry) -> Unit,
     onStartAgain: () -> Unit = {},
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val statusColor = when (entry.status) {
-        ExportHistoryStatus.COMPLETE -> ClearCutAccents.Green
-        ExportHistoryStatus.FAILED -> ClearCutAccents.Red
-        ExportHistoryStatus.CANCELLED -> ClearCutAccents.Peach
-        ExportHistoryStatus.BLOCKED -> ClearCutAccents.Yellow
-        ExportHistoryStatus.INTERRUPTED -> ClearCutAccents.Peach
+        ExportHistoryStatus.COMPLETE -> DirectorXAccents.Green
+        ExportHistoryStatus.FAILED -> DirectorXAccents.Red
+        ExportHistoryStatus.CANCELLED -> DirectorXAccents.Peach
+        ExportHistoryStatus.BLOCKED -> DirectorXAccents.Yellow
+        ExportHistoryStatus.INTERRUPTED -> DirectorXAccents.Peach
     }
     val statusLabel = when (entry.status) {
         ExportHistoryStatus.COMPLETE -> stringResource(R.string.export_history_status_complete)
@@ -1967,7 +1967,7 @@ internal fun ExportHistoryRow(
                             formatEtaSeconds((entry.rangeEndMs / 1000L).coerceAtLeast(0L)),
                             formatEtaSeconds(((entry.rangeEndMs - entry.rangeStartMs) / 1000L).coerceAtLeast(0L)),
                         ),
-                        color = ClearCutAccents.Teal,
+                        color = DirectorXAccents.Teal,
                         style = MaterialTheme.typography.bodySmall,
                     )
                 }
@@ -1980,14 +1980,14 @@ internal fun ExportHistoryRow(
                         } else {
                             stringResource(R.string.export_history_color_mismatch, requested.name, observed.name)
                         },
-                        color = if (observed == null || observed == requested) semanticColors.subtext else ClearCutAccents.Yellow,
+                        color = if (observed == null || observed == requested) semanticColors.subtext else DirectorXAccents.Yellow,
                         style = MaterialTheme.typography.bodySmall,
                     )
                 }
                 entry.diagnosticSummary?.let { diagnostic ->
                     Text(
                         text = diagnostic,
-                        color = if (entry.status == ExportHistoryStatus.COMPLETE) semanticColors.subtext else ClearCutAccents.Yellow,
+                        color = if (entry.status == ExportHistoryStatus.COMPLETE) semanticColors.subtext else DirectorXAccents.Yellow,
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -1998,7 +1998,7 @@ internal fun ExportHistoryRow(
                             entry.mediaBlockingCount,
                             entry.mediaWarningCount
                         ),
-                        color = ClearCutAccents.Peach,
+                        color = DirectorXAccents.Peach,
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -2009,7 +2009,7 @@ internal fun ExportHistoryRow(
                     ) {
                         Text(
                             text = stringResource(R.string.export_resume),
-                            color = ClearCutAccents.Teal,
+                            color = DirectorXAccents.Teal,
                         )
                     }
                 } else if (entry.status == ExportHistoryStatus.INTERRUPTED) {
@@ -2020,7 +2020,7 @@ internal fun ExportHistoryRow(
                     ) {
                         Text(
                             text = stringResource(R.string.export_start_again),
-                            color = ClearCutAccents.Teal,
+                            color = DirectorXAccents.Teal,
                         )
                     }
                 }
@@ -2048,13 +2048,13 @@ private fun ExportChoiceGroup(
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
 private fun ColorConfidenceOutlook(report: ExportColorConfidenceEngine.Report) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = if (report.hasWarnings) ClearCutAccents.Yellow.copy(alpha = 0.08f) else ClearCutAccents.Green.copy(alpha = 0.08f),
+        color = if (report.hasWarnings) DirectorXAccents.Yellow.copy(alpha = 0.08f) else DirectorXAccents.Green.copy(alpha = 0.08f),
         border = BorderStroke(
             1.dp,
-            if (report.hasWarnings) ClearCutAccents.Yellow.copy(alpha = 0.24f) else ClearCutAccents.Green.copy(alpha = 0.22f)
+            if (report.hasWarnings) DirectorXAccents.Yellow.copy(alpha = 0.24f) else DirectorXAccents.Green.copy(alpha = 0.22f)
         ),
         shape = RoundedCornerShape(Radius.lg)
     ) {
@@ -2085,7 +2085,7 @@ private fun ColorConfidenceOutlook(report: ExportColorConfidenceEngine.Report) {
             report.warnings.forEach { warning ->
                 Text(
                     text = warning,
-                    color = ClearCutAccents.Yellow,
+                    color = DirectorXAccents.Yellow,
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -2096,10 +2096,10 @@ private fun ColorConfidenceOutlook(report: ExportColorConfidenceEngine.Report) {
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
 private fun DeviceTierOutlook(hint: EncoderCapabilityProbe.DeviceEncodingTierHint) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val accent = when (hint.tier) {
-        EncoderCapabilityProbe.DeviceEncodingTier.PREMIUM -> ClearCutAccents.Mauve
-        EncoderCapabilityProbe.DeviceEncodingTier.ADVANCED -> ClearCutAccents.Blue
+        EncoderCapabilityProbe.DeviceEncodingTier.PREMIUM -> DirectorXAccents.Mauve
+        EncoderCapabilityProbe.DeviceEncodingTier.ADVANCED -> DirectorXAccents.Blue
         EncoderCapabilityProbe.DeviceEncodingTier.STANDARD -> semanticColors.subtext
     }
     Surface(
@@ -2141,18 +2141,18 @@ private fun DeviceTierOutlook(hint: EncoderCapabilityProbe.DeviceEncodingTierHin
                 verticalArrangement = Arrangement.spacedBy(Spacing.xs)
             ) {
                 if (hint.hasHardwareHevc) {
-                    DeviceCapabilityPill(stringResource(R.string.export_hardware_hevc), ClearCutAccents.Blue)
+                    DeviceCapabilityPill(stringResource(R.string.export_hardware_hevc), DirectorXAccents.Blue)
                 }
                 if (hint.hasHardwareAv1) {
-                    DeviceCapabilityPill(stringResource(R.string.export_hardware_av1), ClearCutAccents.Green)
+                    DeviceCapabilityPill(stringResource(R.string.export_hardware_av1), DirectorXAccents.Green)
                 }
                 if (hint.hasHardwareVp9) {
-                    DeviceCapabilityPill(stringResource(R.string.export_hardware_vp9), ClearCutAccents.Teal)
+                    DeviceCapabilityPill(stringResource(R.string.export_hardware_vp9), DirectorXAccents.Teal)
                 }
                 hint.hdrFormats
                     .sortedBy { it.displayName }
                     .forEach { format ->
-                        DeviceCapabilityPill(format.displayName, ClearCutAccents.Yellow)
+                        DeviceCapabilityPill(format.displayName, DirectorXAccents.Yellow)
                     }
             }
         }
@@ -2183,11 +2183,11 @@ private fun ColorConfidencePill(
     chip: ExportColorConfidenceEngine.Chip,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val accent = when (chip.tone) {
-        ExportColorConfidenceEngine.Tone.GOOD -> ClearCutAccents.Green
-        ExportColorConfidenceEngine.Tone.INFO -> ClearCutAccents.Blue
-        ExportColorConfidenceEngine.Tone.WARNING -> ClearCutAccents.Yellow
+        ExportColorConfidenceEngine.Tone.GOOD -> DirectorXAccents.Green
+        ExportColorConfidenceEngine.Tone.INFO -> DirectorXAccents.Blue
+        ExportColorConfidenceEngine.Tone.WARNING -> DirectorXAccents.Yellow
     }
     Surface(
         modifier = modifier,
@@ -2217,7 +2217,7 @@ private fun ColorConfidencePill(
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
 private fun SmartRenderExportOutlook(summary: SmartRenderEngine.SmartRenderSummary) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val passThroughPercent = if (summary.totalDurationMs > 0L) {
         ((summary.passThroughDurationMs * 100L) / summary.totalDurationMs).toInt().coerceIn(0, 100)
     } else {
@@ -2232,8 +2232,8 @@ private fun SmartRenderExportOutlook(summary: SmartRenderEngine.SmartRenderSumma
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = ClearCutAccents.Blue.copy(alpha = 0.10f),
-        border = BorderStroke(1.dp, ClearCutAccents.Blue.copy(alpha = 0.24f)),
+        color = DirectorXAccents.Blue.copy(alpha = 0.10f),
+        border = BorderStroke(1.dp, DirectorXAccents.Blue.copy(alpha = 0.24f)),
         shape = RoundedCornerShape(Radius.lg)
     ) {
         Column(
@@ -2248,7 +2248,7 @@ private fun SmartRenderExportOutlook(summary: SmartRenderEngine.SmartRenderSumma
                 Icon(
                     imageVector = Icons.Default.Layers,
                     contentDescription = null,
-                    tint = ClearCutAccents.Blue,
+                    tint = DirectorXAccents.Blue,
                     modifier = Modifier.size(18.dp)
                 )
                 Text(
@@ -2259,12 +2259,12 @@ private fun SmartRenderExportOutlook(summary: SmartRenderEngine.SmartRenderSumma
                     modifier = Modifier.weight(1f)
                 )
                 Surface(
-                    color = ClearCutAccents.Blue.copy(alpha = 0.16f),
+                    color = DirectorXAccents.Blue.copy(alpha = 0.16f),
                     shape = RoundedCornerShape(Radius.sm)
                 ) {
                     Text(
                         text = speedupText,
-                        color = ClearCutAccents.Blue,
+                        color = DirectorXAccents.Blue,
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
@@ -2291,14 +2291,14 @@ private fun SmartRenderExportOutlook(summary: SmartRenderEngine.SmartRenderSumma
                         R.string.render_pass_through_duration,
                         formatEtaSeconds((summary.passThroughDurationMs / 1000L).coerceAtLeast(0L))
                     ),
-                    accent = ClearCutAccents.Green
+                    accent = DirectorXAccents.Green
                 )
                 SmartRenderMetricPill(
                     text = stringResource(
                         R.string.render_re_encode_duration,
                         formatEtaSeconds((summary.reEncodeDurationMs / 1000L).coerceAtLeast(0L))
                     ),
-                    accent = ClearCutAccents.Peach
+                    accent = DirectorXAccents.Peach
                 )
             }
         }
@@ -2341,7 +2341,7 @@ private fun WatermarkSection(
     watermark: Watermark?,
     onWatermarkChanged: (Watermark?) -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val context = LocalContext.current
     val pickerLauncher = androidx.activity.compose.rememberLauncherForActivityResult(
         contract = androidx.activity.result.contract.ActivityResultContracts.OpenDocument()
@@ -2374,13 +2374,13 @@ private fun WatermarkSection(
                 onWatermarkChanged(null)
             }
         },
-        accent = ClearCutAccents.Rosewater
+        accent = DirectorXAccents.Rosewater
     )
 
     if (watermark != null) {
         ExportChoiceGroup(
             title = stringResource(R.string.export_watermark_position),
-            accent = ClearCutAccents.Rosewater
+            accent = DirectorXAccents.Rosewater
         ) {
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -2391,7 +2391,7 @@ private fun WatermarkSection(
                         onClick = { onWatermarkChanged(watermark.copy(position = pos)) },
                         label = { Text(localizedWatermarkPosition(pos), style = MaterialTheme.typography.labelMedium) },
                         selected = watermark.position == pos,
-                        colors = exportChipColors(ClearCutAccents.Rosewater)
+                        colors = exportChipColors(DirectorXAccents.Rosewater)
                     )
                 }
             }
@@ -2409,8 +2409,8 @@ private fun WatermarkSection(
                 valueRange = 0f..1f,
                 steps = 19,  // 5% step increments
                 colors = androidx.compose.material3.SliderDefaults.colors(
-                    thumbColor = ClearCutAccents.Rosewater,
-                    activeTrackColor = ClearCutAccents.Rosewater,
+                    thumbColor = DirectorXAccents.Rosewater,
+                    activeTrackColor = DirectorXAccents.Rosewater,
                     inactiveTrackColor = semanticColors.surfaceHigh
                 )
             )
@@ -2428,8 +2428,8 @@ private fun WatermarkSection(
                 valueRange = 5f..50f,
                 steps = 44,  // 1% step
                 colors = androidx.compose.material3.SliderDefaults.colors(
-                    thumbColor = ClearCutAccents.Rosewater,
-                    activeTrackColor = ClearCutAccents.Rosewater,
+                    thumbColor = DirectorXAccents.Rosewater,
+                    activeTrackColor = DirectorXAccents.Rosewater,
                     inactiveTrackColor = semanticColors.surfaceHigh
                 )
             )
@@ -2443,7 +2443,7 @@ private fun WatermarkSection(
             ) {
                 Text(
                     text = stringResource(R.string.export_watermark_replace),
-                    color = ClearCutAccents.Blue
+                    color = DirectorXAccents.Blue
                 )
             }
         }
@@ -2460,8 +2460,8 @@ private fun ExportToggleRow(
     onCheckedChange: (Boolean) -> Unit,
     accent: Color
 ) {
-    val semanticColors = LocalClearCutColors.current
-    val colors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
+    val colors = LocalDirectorXColors.current
     val contentAlpha = if (enabled) 1f else 0.52f
     val semanticState = stringResource(if (checked && enabled) R.string.state_on else R.string.state_off)
     Surface(
@@ -2576,7 +2576,7 @@ private fun ExportStateCard(
     onTertiary: (() -> Unit)? = null,
     primaryStyle: PrimaryStyle = PrimaryStyle.Filled
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     val statusDescription = listOfNotNull(title, progressLabel, secondaryBody).joinToString(". ")
     Card(
         modifier = Modifier
@@ -2679,7 +2679,7 @@ private fun ExportStateCard(
                 Spacer(modifier = Modifier.height(18.dp))
                 when (primaryStyle) {
                     PrimaryStyle.Destructive -> {
-                        ClearCutSecondaryButton(
+                        DirectorXSecondaryButton(
                             text = primaryLabel,
                             onClick = onPrimary,
                             modifier = Modifier
@@ -2689,7 +2689,7 @@ private fun ExportStateCard(
                         )
                     }
                     PrimaryStyle.Quiet -> {
-                        ClearCutSecondaryButton(
+                        DirectorXSecondaryButton(
                             text = primaryLabel,
                             onClick = onPrimary,
                             modifier = Modifier
@@ -2699,20 +2699,20 @@ private fun ExportStateCard(
                         )
                     }
                     PrimaryStyle.Filled -> {
-                        ClearCutPrimaryButton(
+                        DirectorXPrimaryButton(
                             text = primaryLabel,
                             onClick = onPrimary,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(48.dp),
-                            icon = if (tint == ClearCutAccents.Red) Icons.Default.Error else null
+                            icon = if (tint == DirectorXAccents.Red) Icons.Default.Error else null
                         )
                     }
                 }
 
                 if (secondaryLabel != null && onSecondary != null) {
                     Spacer(modifier = Modifier.height(8.dp))
-                    ClearCutSecondaryButton(
+                    DirectorXSecondaryButton(
                         text = secondaryLabel,
                         onClick = onSecondary,
                         modifier = Modifier.fillMaxWidth(),
@@ -2733,7 +2733,7 @@ private fun ExportStateCard(
 
 @Composable
 private fun exportChipColors(accent: Color): androidx.compose.material3.SelectableChipColors {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     return FilterChipDefaults.filterChipColors(
         containerColor = semanticColors.panelRaised,
         labelColor = semanticColors.subtext,
@@ -2845,7 +2845,7 @@ private fun formatHistoryBytes(bytes: Long): String = when {
 @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
 @Composable
 private fun ExportPreviewPlayer(filePath: String) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val context = LocalContext.current
     var player by remember(filePath, context) { mutableStateOf<ExoPlayer?>(null) }
 

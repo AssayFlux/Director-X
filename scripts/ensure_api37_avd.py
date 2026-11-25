@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Provision and optionally launch ClearCut's API 37 test AVD."""
+"""Provision and optionally launch Director X's API 37 test AVD."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ import tempfile
 import time
 from pathlib import Path
 
-AVD_NAME = "clearcut-api37-ps16k"
+AVD_NAME = "directorx-api37-ps16k"
 SYSTEM_IMAGE = "system-images;android-37.0;google_apis_ps16k;x86_64"
 DEVICE_NAME = "pixel_6"
 BOOT_TIMEOUT_SECONDS = 300

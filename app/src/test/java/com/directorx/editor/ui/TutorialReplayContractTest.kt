@@ -24,7 +24,7 @@ class TutorialReplayContractTest {
         assertTrue(mainActivity.contains("editor/tutorial?replayTutorial=true"))
         assertTrue(mainActivity.contains("replayTutorial=true"))
         assertTrue(settings.contains("onClick = onReplayTutorial"))
-        assertTrue(settings.contains("ClearCutTestTags.SETTINGS_REPLAY_TUTORIAL"))
+        assertTrue(settings.contains("DirectorXTestTags.SETTINGS_REPLAY_TUTORIAL"))
         assertFalse(settings.contains("resetTutorial"))
         assertFalse(settings.contains("ResetTutorialConfirmDialog"))
 

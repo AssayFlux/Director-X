@@ -1,6 +1,6 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
+import com.directorx.editor.ui.theme.DirectorXAccents
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TextButton
 import com.directorx.editor.ui.theme.Elevation
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.Motion
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
@@ -58,12 +58,12 @@ fun PremiumSnackbar(
     actionLabel: String? = null,
     onAction: (() -> Unit)? = null
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     val accent = when (severity) {
-        ToastSeverity.Info -> ClearCutAccents.Lavender
-        ToastSeverity.Success -> ClearCutAccents.Green
-        ToastSeverity.Warning -> ClearCutAccents.Peach
-        ToastSeverity.Error -> ClearCutAccents.Red
+        ToastSeverity.Info -> DirectorXAccents.Lavender
+        ToastSeverity.Success -> DirectorXAccents.Green
+        ToastSeverity.Warning -> DirectorXAccents.Peach
+        ToastSeverity.Error -> DirectorXAccents.Red
     }
     val icon: ImageVector = when (severity) {
         ToastSeverity.Info -> Icons.Outlined.Info

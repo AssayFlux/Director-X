@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -33,7 +33,7 @@ fun SpeedPresetsPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val sections = remember {
         speedPresetSections()
     }
@@ -42,12 +42,12 @@ fun SpeedPresetsPanel(
         title = stringResource(R.string.panel_speed_presets_title),
         subtitle = stringResource(R.string.panel_speed_presets_subtitle),
         icon = Icons.Default.Speed,
-        accent = ClearCutAccents.Peach,
+        accent = DirectorXAccents.Peach,
         onClose = onClose,
         modifier = modifier.heightIn(max = 560.dp),
         scrollable = true
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Peach) {
+        PremiumPanelCard(accent = DirectorXAccents.Peach) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -58,21 +58,21 @@ fun SpeedPresetsPanel(
                         SpeedPresetType.entries.size,
                         SpeedPresetType.entries.size,
                     ),
-                    accent = ClearCutAccents.Peach
+                    accent = DirectorXAccents.Peach
                 )
                 PremiumPanelPill(
                     text = stringResource(R.string.panel_speed_presets_reusable_curves),
-                    accent = ClearCutAccents.Sapphire
+                    accent = DirectorXAccents.Sapphire
                 )
                 PremiumPanelPill(
                     text = stringResource(R.string.panel_speed_presets_clip_mode),
-                    accent = ClearCutAccents.Green
+                    accent = DirectorXAccents.Green
                 )
             }
 
             Text(
                 text = stringResource(R.string.panel_speed_presets_language_title),
-                color = ClearCutAccents.Rosewater,
+                color = DirectorXAccents.Rosewater,
                 style = MaterialTheme.typography.labelLarge
             )
             Text(
@@ -120,7 +120,7 @@ private fun SpeedPresetCard(
     accent: Color,
     onClick: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val curve = remember(presetType) { generatePresetCurve(presetType) }
     val minMax = remember(curve) {
         curve.points.map { it.speed }.let { speeds ->
@@ -212,7 +212,7 @@ private fun SpeedPresetCard(
                 )
                 PremiumPanelPill(
                     text = stringResource(presetType.feelRes()),
-                    accent = ClearCutAccents.Sky
+                    accent = DirectorXAccents.Sky
                 )
             }
         }
@@ -230,7 +230,7 @@ private fun speedPresetSections(): List<SpeedPresetSection> = listOf(
     SpeedPresetSection(
         titleRes = R.string.panel_speed_presets_cinematic_title,
         subtitleRes = R.string.panel_speed_presets_cinematic_description,
-        accent = ClearCutAccents.Peach,
+        accent = DirectorXAccents.Peach,
         presets = listOf(
             SpeedPresetType.BULLET_TIME,
             SpeedPresetType.HERO_TIME,
@@ -243,7 +243,7 @@ private fun speedPresetSections(): List<SpeedPresetSection> = listOf(
     SpeedPresetSection(
         titleRes = R.string.panel_speed_presets_rhythm_title,
         subtitleRes = R.string.panel_speed_presets_rhythm_description,
-        accent = ClearCutAccents.Mauve,
+        accent = DirectorXAccents.Mauve,
         presets = listOf(
             SpeedPresetType.MONTAGE,
             SpeedPresetType.PULSE,
@@ -254,7 +254,7 @@ private fun speedPresetSections(): List<SpeedPresetSection> = listOf(
     SpeedPresetSection(
         titleRes = R.string.panel_speed_presets_punch_title,
         subtitleRes = R.string.panel_speed_presets_punch_description,
-        accent = ClearCutAccents.Sapphire,
+        accent = DirectorXAccents.Sapphire,
         presets = listOf(
             SpeedPresetType.JUMP_CUT,
             SpeedPresetType.FLASH,

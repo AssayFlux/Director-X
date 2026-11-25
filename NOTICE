@@ -18,7 +18,7 @@ The project may include `io.github.kaleyravideo:android-deepfilternet:0.0.8` for
 
 ## Upstream project and attribution
 
-Director X is a derivative project based on the ClearCut codebase. The applicable upstream MIT notice is retained in `UPSTREAM-LICENSE-MIT.txt`. Do not remove that notice or other original notices from inherited portions of the project.
+Director X incorporates portions of an upstream video-editing project authored by SysAdminDoc. Those portions remain available under the upstream MIT License, whose applicable copyright and permission notice is retained in `UPSTREAM-LICENSE-MIT.txt`. Do not remove that notice or other original notices from inherited portions of the project.
 
 ## Release checklist
 

@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.export
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -61,7 +61,7 @@ fun AiUseConfidenceRow(
     modifier: Modifier = Modifier,
     onChipClick: (Chip) -> Unit = {},
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
             text = stringResource(R.string.export_ai_use_title),
@@ -93,7 +93,7 @@ fun AiUseConfidenceRow(
 
 @Composable
 private fun EmptyAiUseRow() {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Text(
         text = stringResource(R.string.export_ai_use_empty),
         color = semanticColors.subtextStrong,
@@ -108,7 +108,7 @@ private fun EmptyAiUseRow() {
 
 @Composable
 private fun AiUseChip(chip: Chip, onClick: () -> Unit) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val accent = severityColor(chip.severity)
     val severityLabel = severityLabel(chip.severity)
     val container = accent.copy(alpha = 0.16f)
@@ -150,10 +150,10 @@ private fun severityColor(s: Severity): Color = when (s) {
     // Severity rank: REQUIRED is the strongest disclosure ask. Use Peach so
     // it reads as "attention" without escalating to error-red, which would
     // wrongly imply the export will fail.
-    Severity.DISCLOSURE_REQUIRED -> ClearCutAccents.Peach
+    Severity.DISCLOSURE_REQUIRED -> DirectorXAccents.Peach
     // Recommended is informational; Sky reads as a friendly heads-up.
-    Severity.DISCLOSURE_RECOMMENDED -> ClearCutAccents.Sky
+    Severity.DISCLOSURE_RECOMMENDED -> DirectorXAccents.Sky
     // Internal-only is the lowest signal; muted Green matches "everything
     // here ran locally and needs no disclosure."
-    Severity.INTERNAL_ONLY -> ClearCutAccents.Green
+    Severity.INTERNAL_ONLY -> DirectorXAccents.Green
 }

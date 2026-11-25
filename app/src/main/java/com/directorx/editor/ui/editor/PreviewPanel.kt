@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import android.graphics.Bitmap
 import android.os.Build
 import android.view.SurfaceView
@@ -78,7 +78,7 @@ import com.directorx.editor.model.Clip
 import com.directorx.editor.model.ImageOverlay
 import com.directorx.editor.model.TextAlignment
 import com.directorx.editor.model.TextOverlay
-import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXChromeIconButton
 import com.directorx.editor.ui.theme.Radius
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -197,7 +197,7 @@ fun PreviewPanel(
     onToggleSplitPreview: () -> Unit = {},
     hasActiveEffects: Boolean = false
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val canTransformPreview = selectedClipId != null && currentTimelineClip?.id == selectedClipId
     val showGapState = totalDurationMs > 0L && currentTimelineClip == null && !isPlaying
     val showGapPlaybackFrame = totalDurationMs > 0L && currentTimelineClip == null && isPlaying
@@ -428,7 +428,7 @@ fun PreviewPanel(
                                     .padding(10.dp),
                                 verticalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
-                                ClearCutChromeIconButton(
+                                DirectorXChromeIconButton(
                                     icon = if (isFullscreenPreview) {
                                         Icons.Default.FullscreenExit
                                     } else {
@@ -448,7 +448,7 @@ fun PreviewPanel(
                                     shape = RoundedCornerShape(Radius.md),
                                 )
                                 if (showScopesButton) {
-                                    ClearCutChromeIconButton(
+                                    DirectorXChromeIconButton(
                                         icon = Icons.Default.Insights,
                                         contentDescription = stringResource(R.string.preview_scopes),
                                         onClick = onToggleScopes,
@@ -458,23 +458,23 @@ fun PreviewPanel(
                                         shape = RoundedCornerShape(Radius.md)
                                     )
                                 }
-                                ClearCutChromeIconButton(
+                                DirectorXChromeIconButton(
                                     icon = Icons.Default.GridOn,
                                     contentDescription = stringResource(R.string.preview_composition_guides),
                                     onClick = onToggleCompositionGuides,
-                                    tint = if (showCompositionGuides) ClearCutAccents.Sky else semanticColors.subtext.copy(alpha = 0.9f),
-                                    containerColor = if (showCompositionGuides) ClearCutAccents.Sky.copy(alpha = 0.22f) else semanticColors.background.copy(alpha = 0.72f),
-                                    borderColor = if (showCompositionGuides) ClearCutAccents.Sky.copy(alpha = 0.6f) else semanticColors.cardStroke,
+                                    tint = if (showCompositionGuides) DirectorXAccents.Sky else semanticColors.subtext.copy(alpha = 0.9f),
+                                    containerColor = if (showCompositionGuides) DirectorXAccents.Sky.copy(alpha = 0.22f) else semanticColors.background.copy(alpha = 0.72f),
+                                    borderColor = if (showCompositionGuides) DirectorXAccents.Sky.copy(alpha = 0.6f) else semanticColors.cardStroke,
                                     shape = RoundedCornerShape(Radius.md),
                                 )
                                 if (hasActiveEffects) {
-                                    ClearCutChromeIconButton(
+                                    DirectorXChromeIconButton(
                                         icon = Icons.Default.Compare,
                                         contentDescription = stringResource(R.string.preview_compare),
                                         onClick = onToggleSplitPreview,
-                                        tint = if (isSplitPreviewEnabled) ClearCutAccents.Teal else semanticColors.subtext.copy(alpha = 0.9f),
-                                        containerColor = if (isSplitPreviewEnabled) ClearCutAccents.Teal.copy(alpha = 0.3f) else semanticColors.background.copy(alpha = 0.72f),
-                                        borderColor = if (isSplitPreviewEnabled) ClearCutAccents.Teal.copy(alpha = 0.6f) else semanticColors.cardStroke,
+                                        tint = if (isSplitPreviewEnabled) DirectorXAccents.Teal else semanticColors.subtext.copy(alpha = 0.9f),
+                                        containerColor = if (isSplitPreviewEnabled) DirectorXAccents.Teal.copy(alpha = 0.3f) else semanticColors.background.copy(alpha = 0.72f),
+                                        borderColor = if (isSplitPreviewEnabled) DirectorXAccents.Teal.copy(alpha = 0.6f) else semanticColors.cardStroke,
                                         shape = RoundedCornerShape(Radius.md),
                                     )
                                 }
@@ -484,7 +484,7 @@ fun PreviewPanel(
                         if (isBuffering && isPlaybackRequested && totalDurationMs > 0 && !showGapState) {
                             CircularProgressIndicator(
                                 modifier = Modifier.size(36.dp),
-                                color = ClearCutAccents.Sky,
+                                color = DirectorXAccents.Sky,
                                 strokeWidth = 3.dp
                             )
                         }
@@ -523,14 +523,14 @@ fun PreviewPanel(
                                     verticalArrangement = Arrangement.Center
                                 ) {
                                     Surface(
-                                        color = ClearCutAccents.Sky.copy(alpha = 0.12f),
+                                        color = DirectorXAccents.Sky.copy(alpha = 0.12f),
                                         shape = RoundedCornerShape(Radius.md),
-                                        border = androidx.compose.foundation.BorderStroke(1.dp, ClearCutAccents.Sky.copy(alpha = 0.22f))
+                                        border = androidx.compose.foundation.BorderStroke(1.dp, DirectorXAccents.Sky.copy(alpha = 0.22f))
                                     ) {
                                         Icon(
                                             Icons.Default.VideoLibrary,
                                             contentDescription = stringResource(R.string.cd_preview_empty),
-                                            tint = ClearCutAccents.Sky,
+                                            tint = DirectorXAccents.Sky,
                                             modifier = Modifier
                                                 .padding(16.dp)
                                                 .size(24.dp)
@@ -563,21 +563,21 @@ fun PreviewPanel(
                     .padding(horizontal = 8.dp, vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = Icons.Default.Repeat,
                     contentDescription = stringResource(
                         if (isLooping) R.string.preview_disable_loop else R.string.preview_enable_loop
                     ),
                     onClick = onToggleLoop,
-                    tint = if (isLooping) ClearCutAccents.Sky else semanticColors.subtext,
-                    containerColor = if (isLooping) ClearCutAccents.Sky.copy(alpha = 0.14f) else Color.Transparent,
+                    tint = if (isLooping) DirectorXAccents.Sky else semanticColors.subtext,
+                    containerColor = if (isLooping) DirectorXAccents.Sky.copy(alpha = 0.14f) else Color.Transparent,
                     borderColor = Color.Transparent,
                     shape = RoundedCornerShape(Radius.sm),
                     size = 40.dp,
                     iconSize = 19.dp,
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = Icons.Default.SkipPrevious,
                     contentDescription = stringResource(R.string.preview_previous_frame),
                     onClick = { onSeek((playheadMs - frameDurationMs).coerceAtLeast(0L)) },
@@ -588,7 +588,7 @@ fun PreviewPanel(
                     size = 40.dp,
                     iconSize = 20.dp,
                 )
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = if (isPlaybackRequested) Icons.Default.Pause else Icons.Default.PlayArrow,
                     contentDescription = if (isPlaybackRequested) {
                         stringResource(R.string.preview_pause)
@@ -597,13 +597,13 @@ fun PreviewPanel(
                     },
                     onClick = onTogglePlayback,
                     tint = semanticColors.background,
-                    containerColor = ClearCutAccents.Sky,
-                    borderColor = ClearCutAccents.Sky.copy(alpha = 0.72f),
+                    containerColor = DirectorXAccents.Sky,
+                    borderColor = DirectorXAccents.Sky.copy(alpha = 0.72f),
                     shape = RoundedCornerShape(Radius.sm),
                     size = 44.dp,
                     iconSize = 22.dp,
                 )
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = Icons.Default.SkipNext,
                     contentDescription = stringResource(R.string.preview_next_frame),
                     onClick = { onSeek((playheadMs + frameDurationMs).coerceAtMost(totalDurationMs)) },
@@ -632,7 +632,7 @@ private fun BoxScope.PreviewImageOverlay(
     frameWidth: androidx.compose.ui.unit.Dp,
     frameHeight: androidx.compose.ui.unit.Dp,
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val safeScale = overlay.scale.takeIf { it.isFinite() }?.coerceIn(0.01f, 2f) ?: 0.3f
     val width = frameWidth * safeScale
     val density = LocalDensity.current
@@ -658,7 +658,7 @@ private fun BoxScope.PreviewImageOverlay(
             Box(Modifier.size(32.dp), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(22.dp),
-                    color = ClearCutAccents.Mauve,
+                    color = DirectorXAccents.Mauve,
                     strokeWidth = 2.dp,
                 )
             }
@@ -672,7 +672,7 @@ private fun BoxScope.PreviewImageOverlay(
                 Icon(
                     Icons.Default.BrokenImage,
                     contentDescription = stringResource(R.string.cd_preview_image_overlay_missing),
-                    tint = ClearCutAccents.Rosewater,
+                    tint = DirectorXAccents.Rosewater,
                     modifier = Modifier
                         .padding(10.dp)
                         .size(22.dp),
@@ -688,7 +688,7 @@ private fun PreviewGapState(
     jumpToContentMs: Long?,
     onJumpToContent: (Long) -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Card(
         colors = CardDefaults.cardColors(containerColor = semanticColors.panel.copy(alpha = 0.9f)),
         border = androidx.compose.foundation.BorderStroke(1.dp, semanticColors.cardStroke.copy(alpha = 0.9f)),
@@ -700,14 +700,14 @@ private fun PreviewGapState(
             verticalArrangement = Arrangement.Center
         ) {
             Surface(
-                color = ClearCutAccents.Mauve.copy(alpha = 0.14f),
+                color = DirectorXAccents.Mauve.copy(alpha = 0.14f),
                 shape = CircleShape,
-                border = androidx.compose.foundation.BorderStroke(1.dp, ClearCutAccents.Mauve.copy(alpha = 0.22f))
+                border = androidx.compose.foundation.BorderStroke(1.dp, DirectorXAccents.Mauve.copy(alpha = 0.22f))
             ) {
                 Icon(
                     Icons.Default.Timeline,
                     contentDescription = stringResource(R.string.preview_gap_title),
-                    tint = ClearCutAccents.Rosewater,
+                    tint = DirectorXAccents.Rosewater,
                     modifier = Modifier
                         .padding(16.dp)
                         .size(24.dp)
@@ -736,7 +736,7 @@ private fun PreviewGapState(
                 Button(
                     onClick = { onJumpToContent(jumpToContentMs) },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = ClearCutAccents.Rosewater,
+                        containerColor = DirectorXAccents.Rosewater,
                         contentColor = semanticColors.background
                     ),
                     shape = RoundedCornerShape(Radius.xl)
@@ -756,7 +756,7 @@ private fun PreviewGapState(
 
 @Composable
 private fun PreviewUnavailableState() {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Card(
         colors = CardDefaults.cardColors(containerColor = semanticColors.panel.copy(alpha = 0.9f)),
         border = androidx.compose.foundation.BorderStroke(1.dp, semanticColors.cardStroke.copy(alpha = 0.9f)),
@@ -768,14 +768,14 @@ private fun PreviewUnavailableState() {
             verticalArrangement = Arrangement.Center
         ) {
             Surface(
-                color = ClearCutAccents.Mauve.copy(alpha = 0.14f),
+                color = DirectorXAccents.Mauve.copy(alpha = 0.14f),
                 shape = CircleShape,
-                border = androidx.compose.foundation.BorderStroke(1.dp, ClearCutAccents.Mauve.copy(alpha = 0.22f))
+                border = androidx.compose.foundation.BorderStroke(1.dp, DirectorXAccents.Mauve.copy(alpha = 0.22f))
             ) {
                 Icon(
                     Icons.Default.BrokenImage,
                     contentDescription = stringResource(R.string.preview_unavailable_title),
-                    tint = ClearCutAccents.Rosewater,
+                    tint = DirectorXAccents.Rosewater,
                     modifier = Modifier
                         .padding(16.dp)
                         .size(24.dp)
@@ -801,11 +801,11 @@ private fun PreviewUnavailableState() {
 
 @Composable
 private fun PreviewPlaybackErrorState(onOpenMediaManager: () -> Unit) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Card(
         modifier = Modifier.padding(16.dp),
         colors = CardDefaults.cardColors(containerColor = semanticColors.panel.copy(alpha = 0.96f)),
-        border = androidx.compose.foundation.BorderStroke(1.dp, ClearCutAccents.Red.copy(alpha = 0.7f)),
+        border = androidx.compose.foundation.BorderStroke(1.dp, DirectorXAccents.Red.copy(alpha = 0.7f)),
         shape = RoundedCornerShape(Radius.xl),
     ) {
         Column(
@@ -816,7 +816,7 @@ private fun PreviewPlaybackErrorState(onOpenMediaManager: () -> Unit) {
             Icon(
                 Icons.Default.BrokenImage,
                 contentDescription = null,
-                tint = ClearCutAccents.Red,
+                tint = DirectorXAccents.Red,
                 modifier = Modifier.size(26.dp),
             )
             Text(
@@ -834,7 +834,7 @@ private fun PreviewPlaybackErrorState(onOpenMediaManager: () -> Unit) {
             Button(
                 onClick = onOpenMediaManager,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = ClearCutAccents.Sky,
+                    containerColor = DirectorXAccents.Sky,
                     contentColor = semanticColors.background,
                 ),
                 shape = RoundedCornerShape(Radius.xl),
@@ -934,7 +934,7 @@ fun formatTimestamp(ms: Long): String {
 @Composable
 private fun CompositionGuidesOverlay() {
     val guideColor = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.3f)
-    val safeZoneColor = ClearCutAccents.Yellow.copy(alpha = 0.25f)
+    val safeZoneColor = DirectorXAccents.Yellow.copy(alpha = 0.25f)
     androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
         val w = size.width
         val h = size.height
@@ -984,7 +984,7 @@ private fun BoxScope.SplitPreviewOverlay(
     frameWidthDp: androidx.compose.ui.unit.Dp,
     frameHeightDp: androidx.compose.ui.unit.Dp,
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val density = LocalDensity.current
     val frameWidthPx = with(density) { frameWidthDp.toPx() }
     val frameHeightPx = with(density) { frameHeightDp.toPx() }
@@ -1063,7 +1063,7 @@ private fun BoxScope.SplitPreviewOverlay(
             ) {
                 Text(
                     stringResource(R.string.preview_compare_original),
-                    color = ClearCutAccents.Teal,
+                    color = DirectorXAccents.Teal,
                     style = MaterialTheme.typography.labelSmall,
                     modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                 )
@@ -1074,7 +1074,7 @@ private fun BoxScope.SplitPreviewOverlay(
             ) {
                 Text(
                     stringResource(R.string.preview_compare_edited),
-                    color = ClearCutAccents.Rosewater,
+                    color = DirectorXAccents.Rosewater,
                     style = MaterialTheme.typography.labelSmall,
                     modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                 )
@@ -1092,8 +1092,8 @@ private fun BoxScope.SplitPreviewOverlay(
                 .height(24.dp),
             colors = SliderDefaults.colors(
                 thumbColor = semanticColors.text,
-                activeTrackColor = ClearCutAccents.Teal.copy(alpha = 0.5f),
-                inactiveTrackColor = ClearCutAccents.Rosewater.copy(alpha = 0.5f)
+                activeTrackColor = DirectorXAccents.Teal.copy(alpha = 0.5f),
+                inactiveTrackColor = DirectorXAccents.Rosewater.copy(alpha = 0.5f)
             )
         )
     }

@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -58,14 +58,14 @@ fun ColorGradingPanel(
     onLutImport: () -> Unit,
     onClose: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var activeTab by remember { mutableStateOf(ColorGradingTab.WHEELS) }
 
     PremiumEditorPanel(
         title = stringResource(R.string.color_grading_title),
         subtitle = stringResource(R.string.panel_color_grading_subtitle),
         icon = Icons.Default.Palette,
-        accent = ClearCutAccents.Peach,
+        accent = DirectorXAccents.Peach,
         onClose = onClose,
         closeContentDescription = stringResource(R.string.cd_close_color_grading),
         modifier = modifier,
@@ -80,11 +80,11 @@ fun ColorGradingPanel(
                     onColorGradeChanged(ColorGrade())
                     onDragEnded()
                 },
-                tint = ClearCutAccents.Peach
+                tint = DirectorXAccents.Peach
             )
         }
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Peach) {
+        PremiumPanelCard(accent = DirectorXAccents.Peach) {
             BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
                 val isCompactLayout = maxWidth < 420.dp
                 if (isCompactLayout) {
@@ -106,14 +106,14 @@ fun ColorGradingPanel(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            PremiumPanelPill(text = activeTab.displayLabel(), accent = ClearCutAccents.Peach)
+                            PremiumPanelPill(text = activeTab.displayLabel(), accent = DirectorXAccents.Peach)
                             PremiumPanelPill(
                                 text = if (colorGrade.hslQualifier != null) {
                                     stringResource(R.string.color_grading_qualifier_on)
                                 } else {
                                     stringResource(R.string.color_grading_qualifier_off)
                                 },
-                                accent = if (colorGrade.hslQualifier != null) ClearCutAccents.Mauve else semanticColors.overlayStrong
+                                accent = if (colorGrade.hslQualifier != null) DirectorXAccents.Mauve else semanticColors.overlayStrong
                             )
                         }
                     }
@@ -143,14 +143,14 @@ fun ColorGradingPanel(
                             horizontalAlignment = Alignment.End,
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            PremiumPanelPill(text = activeTab.displayLabel(), accent = ClearCutAccents.Peach)
+                            PremiumPanelPill(text = activeTab.displayLabel(), accent = DirectorXAccents.Peach)
                             PremiumPanelPill(
                                 text = if (colorGrade.hslQualifier != null) {
                                     stringResource(R.string.color_grading_qualifier_on)
                                 } else {
                                     stringResource(R.string.color_grading_qualifier_off)
                                 },
-                                accent = if (colorGrade.hslQualifier != null) ClearCutAccents.Mauve else semanticColors.overlayStrong
+                                accent = if (colorGrade.hslQualifier != null) DirectorXAccents.Mauve else semanticColors.overlayStrong
                             )
                         }
                     }
@@ -192,12 +192,12 @@ private fun ColorWheelsContent(
     onDragStarted: () -> Unit = {},
     onDragEnded: () -> Unit = {}
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Rosewater) {
+        PremiumPanelCard(accent = DirectorXAccents.Rosewater) {
             Text(
                 text = stringResource(R.string.color_grading_tone_wheels_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -247,7 +247,7 @@ private fun ColorWheelsContent(
             }
         }
 
-        PremiumPanelCard(accent = ClearCutAccents.Sapphire) {
+        PremiumPanelCard(accent = DirectorXAccents.Sapphire) {
             Text(
                 text = stringResource(R.string.color_grading_offset),
                 style = MaterialTheme.typography.titleMedium,
@@ -258,9 +258,9 @@ private fun ColorWheelsContent(
                 style = MaterialTheme.typography.bodyMedium,
                 color = semanticColors.subtext
             )
-            GradingSlider("R", grade.offsetR, -0.5f, 0.5f, ClearCutAccents.Red, onDragStarted, onDragEnded) { onChange(grade.copy(offsetR = it)) }
-            GradingSlider("G", grade.offsetG, -0.5f, 0.5f, ClearCutAccents.Green, onDragStarted, onDragEnded) { onChange(grade.copy(offsetG = it)) }
-            GradingSlider("B", grade.offsetB, -0.5f, 0.5f, ClearCutAccents.Blue, onDragStarted, onDragEnded) { onChange(grade.copy(offsetB = it)) }
+            GradingSlider("R", grade.offsetR, -0.5f, 0.5f, DirectorXAccents.Red, onDragStarted, onDragEnded) { onChange(grade.copy(offsetR = it)) }
+            GradingSlider("G", grade.offsetG, -0.5f, 0.5f, DirectorXAccents.Green, onDragStarted, onDragEnded) { onChange(grade.copy(offsetG = it)) }
+            GradingSlider("B", grade.offsetB, -0.5f, 0.5f, DirectorXAccents.Blue, onDragStarted, onDragEnded) { onChange(grade.copy(offsetB = it)) }
         }
     }
 }
@@ -274,12 +274,12 @@ private fun ColorWheel(
     onDragStarted: () -> Unit = {},
     onDragEnded: () -> Unit = {}
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Column(
         modifier = modifier.padding(4.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        PremiumPanelPill(text = label, accent = ClearCutAccents.Peach)
+        PremiumPanelPill(text = label, accent = DirectorXAccents.Peach)
         Spacer(Modifier.height(8.dp))
 
         Box(
@@ -331,7 +331,7 @@ private fun ColorWheel(
 
         Text(
             text = stringResource(R.string.cd_reset),
-            color = ClearCutAccents.Peach,
+            color = DirectorXAccents.Peach,
             style = MaterialTheme.typography.labelMedium,
             modifier = Modifier
                 .clickable {
@@ -355,7 +355,7 @@ private fun GradingSlider(
     onDragEnded: () -> Unit = {},
     onChanged: (Float) -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     // Slider has no explicit press callback; capture the undo boundary on the
     // first value change of an interaction, and persist on change-finished.
     var interacting by remember { mutableStateOf(false) }
@@ -407,7 +407,7 @@ private fun CurvesContent(
     onDragStarted: () -> Unit = {},
     onDragEnded: () -> Unit = {}
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var activeCurve by remember { mutableStateOf("master") }
     val curves = grade.curves
 
@@ -422,9 +422,9 @@ private fun CurvesContent(
             else -> curves.master
         }
         val curveColor = when (activeCurve) {
-            "red" -> ClearCutAccents.Red
-            "green" -> ClearCutAccents.Green
-            "blue" -> ClearCutAccents.Blue
+            "red" -> DirectorXAccents.Red
+            "green" -> DirectorXAccents.Green
+            "blue" -> DirectorXAccents.Blue
             else -> semanticColors.text
         }
         val activeCurveLabel = when (activeCurve) {
@@ -451,9 +451,9 @@ private fun CurvesContent(
             ) {
                 listOf(
                     Triple("master", semanticColors.text, stringResource(R.string.color_curve_master)),
-                    Triple("red", ClearCutAccents.Red, stringResource(R.string.color_curve_red)),
-                    Triple("green", ClearCutAccents.Green, stringResource(R.string.color_curve_green)),
-                    Triple("blue", ClearCutAccents.Blue, stringResource(R.string.color_curve_blue))
+                    Triple("red", DirectorXAccents.Red, stringResource(R.string.color_curve_red)),
+                    Triple("green", DirectorXAccents.Green, stringResource(R.string.color_curve_green)),
+                    Triple("blue", DirectorXAccents.Blue, stringResource(R.string.color_curve_blue))
                 ).forEach { (id, color, channelLabel) ->
                     val selected = activeCurve == id
                     Surface(
@@ -506,7 +506,7 @@ internal fun CurveEditor(
     onDragStarted: () -> Unit = {},
     onDragEnded: () -> Unit = {},
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var dragIndex by remember { mutableIntStateOf(-1) }
     var accessibilityPointIndex by remember { mutableIntStateOf(0) }
     // pointerInput must NOT key on `points`: every onPointsChanged emit
@@ -725,14 +725,14 @@ private fun HslContent(
     onDragStarted: () -> Unit = {},
     onDragEnded: () -> Unit = {}
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val hsl = grade.hslQualifier ?: HslQualifier()
 
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -758,28 +758,28 @@ private fun HslContent(
                         onChange(grade.copy(hslQualifier = if (enabled) HslQualifier() else null))
                         onDragEnded()
                     },
-                    colors = SwitchDefaults.colors(checkedTrackColor = ClearCutAccents.Mauve)
+                    colors = SwitchDefaults.colors(checkedTrackColor = DirectorXAccents.Mauve)
                 )
             }
         }
 
         if (grade.hslQualifier != null) {
-            PremiumPanelCard(accent = ClearCutAccents.Yellow) {
+            PremiumPanelCard(accent = DirectorXAccents.Yellow) {
                 Text(
                     text = stringResource(R.string.color_grading_selection),
                     style = MaterialTheme.typography.titleMedium,
                     color = semanticColors.text
                 )
-                GradingSlider(stringResource(R.string.color_hsl_hue), hsl.hueCenter, 0f, 360f, ClearCutAccents.Yellow, onDragStarted, onDragEnded) {
+                GradingSlider(stringResource(R.string.color_hsl_hue), hsl.hueCenter, 0f, 360f, DirectorXAccents.Yellow, onDragStarted, onDragEnded) {
                     onChange(grade.copy(hslQualifier = hsl.copy(hueCenter = it)))
                 }
-                GradingSlider(stringResource(R.string.color_hsl_width), hsl.hueWidth, 1f, 180f, ClearCutAccents.Yellow, onDragStarted, onDragEnded) {
+                GradingSlider(stringResource(R.string.color_hsl_width), hsl.hueWidth, 1f, 180f, DirectorXAccents.Yellow, onDragStarted, onDragEnded) {
                     onChange(grade.copy(hslQualifier = hsl.copy(hueWidth = it)))
                 }
-                GradingSlider(stringResource(R.string.color_hsl_sat_min), hsl.satMin, 0f, 1f, ClearCutAccents.Mauve, onDragStarted, onDragEnded) {
+                GradingSlider(stringResource(R.string.color_hsl_sat_min), hsl.satMin, 0f, 1f, DirectorXAccents.Mauve, onDragStarted, onDragEnded) {
                     onChange(grade.copy(hslQualifier = hsl.copy(satMin = it)))
                 }
-                GradingSlider(stringResource(R.string.color_hsl_sat_max), hsl.satMax, 0f, 1f, ClearCutAccents.Mauve, onDragStarted, onDragEnded) {
+                GradingSlider(stringResource(R.string.color_hsl_sat_max), hsl.satMax, 0f, 1f, DirectorXAccents.Mauve, onDragStarted, onDragEnded) {
                     onChange(grade.copy(hslQualifier = hsl.copy(satMax = it)))
                 }
                 GradingSlider(stringResource(R.string.color_hsl_lum_min), hsl.lumMin, 0f, 1f, semanticColors.text, onDragStarted, onDragEnded) {
@@ -788,21 +788,21 @@ private fun HslContent(
                 GradingSlider(stringResource(R.string.color_hsl_lum_max), hsl.lumMax, 0f, 1f, semanticColors.text, onDragStarted, onDragEnded) {
                     onChange(grade.copy(hslQualifier = hsl.copy(lumMax = it)))
                 }
-                GradingSlider(stringResource(R.string.color_hsl_soft), hsl.softness, 0f, 0.5f, ClearCutAccents.Peach, onDragStarted, onDragEnded) {
+                GradingSlider(stringResource(R.string.color_hsl_soft), hsl.softness, 0f, 0.5f, DirectorXAccents.Peach, onDragStarted, onDragEnded) {
                     onChange(grade.copy(hslQualifier = hsl.copy(softness = it)))
                 }
             }
 
-            PremiumPanelCard(accent = ClearCutAccents.Sapphire) {
+            PremiumPanelCard(accent = DirectorXAccents.Sapphire) {
                 Text(
                     text = stringResource(R.string.color_grading_adjustment),
                     style = MaterialTheme.typography.titleMedium,
                     color = semanticColors.text
                 )
-                GradingSlider(stringResource(R.string.color_hsl_hue), hsl.adjustHue, -180f, 180f, ClearCutAccents.Yellow, onDragStarted, onDragEnded) {
+                GradingSlider(stringResource(R.string.color_hsl_hue), hsl.adjustHue, -180f, 180f, DirectorXAccents.Yellow, onDragStarted, onDragEnded) {
                     onChange(grade.copy(hslQualifier = hsl.copy(adjustHue = it)))
                 }
-                GradingSlider(stringResource(R.string.color_hsl_sat), hsl.adjustSat, -1f, 1f, ClearCutAccents.Mauve, onDragStarted, onDragEnded) {
+                GradingSlider(stringResource(R.string.color_hsl_sat), hsl.adjustSat, -1f, 1f, DirectorXAccents.Mauve, onDragStarted, onDragEnded) {
                     onChange(grade.copy(hslQualifier = hsl.copy(adjustSat = it)))
                 }
                 GradingSlider(stringResource(R.string.color_hsl_lum), hsl.adjustLum, -1f, 1f, semanticColors.text, onDragStarted, onDragEnded) {
@@ -821,12 +821,12 @@ private fun LutContent(
     onDragStarted: () -> Unit = {},
     onDragEnded: () -> Unit = {}
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             if (grade.lutPath != null) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -854,11 +854,11 @@ private fun LutContent(
                             onChange(grade.copy(lutPath = null, lutIntensity = 1f))
                             onDragEnded()
                         },
-                        tint = ClearCutAccents.Red
+                        tint = DirectorXAccents.Red
                     )
                 }
 
-                GradingSlider(stringResource(R.string.color_lut_intensity), grade.lutIntensity, 0f, 1f, ClearCutAccents.Mauve, onDragStarted, onDragEnded) {
+                GradingSlider(stringResource(R.string.color_lut_intensity), grade.lutIntensity, 0f, 1f, DirectorXAccents.Mauve, onDragStarted, onDragEnded) {
                     onChange(grade.copy(lutIntensity = it))
                 }
             } else {
@@ -874,8 +874,8 @@ private fun LutContent(
             onClick = onLutImport,
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
-                containerColor = ClearCutAccents.Mauve.copy(alpha = 0.18f),
-                contentColor = ClearCutAccents.Mauve
+                containerColor = DirectorXAccents.Mauve.copy(alpha = 0.18f),
+                contentColor = DirectorXAccents.Mauve
             ),
             shape = RoundedCornerShape(12.dp)
         ) {
@@ -892,12 +892,12 @@ private fun ColorGradingTabChip(
     selected: Boolean,
     onClick: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val accent = when (tab) {
-        ColorGradingTab.WHEELS -> ClearCutAccents.Peach
-        ColorGradingTab.CURVES -> ClearCutAccents.Sapphire
-        ColorGradingTab.HSL -> ClearCutAccents.Mauve
-        ColorGradingTab.LUT -> ClearCutAccents.Lavender
+        ColorGradingTab.WHEELS -> DirectorXAccents.Peach
+        ColorGradingTab.CURVES -> DirectorXAccents.Sapphire
+        ColorGradingTab.HSL -> DirectorXAccents.Mauve
+        ColorGradingTab.LUT -> DirectorXAccents.Lavender
     }
 
     Surface(

@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.export
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -41,7 +41,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.directorx.editor.R
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.model.BatchExportItem
 import com.directorx.editor.model.BatchExportSourceRange
 import com.directorx.editor.model.BatchExportStatus
@@ -69,7 +69,7 @@ fun BatchExportPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var showPresetPicker by remember { mutableStateOf(queue.isEmpty()) }
     val audioOnlyLabel = stringResource(R.string.batch_export_audio_only)
     val audioStemsLabel = stringResource(R.string.batch_export_audio_stems)
@@ -99,11 +99,11 @@ fun BatchExportPanel(
         title = stringResource(R.string.batch_export_title),
         subtitle = stringResource(R.string.batch_export_subtitle),
         icon = Icons.Default.FileUpload,
-        accent = ClearCutAccents.Mauve,
+        accent = DirectorXAccents.Mauve,
         onClose = onClose,
         modifier = modifier,
         scrollable = true,
-        closeButtonTestTag = ClearCutTestTags.BATCH_EXPORT_CLOSE,
+        closeButtonTestTag = DirectorXTestTags.BATCH_EXPORT_CLOSE,
         headerActions = {
             PremiumPanelIconButton(
                 icon = if (showPresetPicker) Icons.Default.Close else Icons.Default.Add,
@@ -113,11 +113,11 @@ fun BatchExportPanel(
                     stringResource(R.string.batch_export_add_cd)
                 },
                 onClick = { showPresetPicker = !showPresetPicker },
-                tint = if (showPresetPicker) ClearCutAccents.Peach else ClearCutAccents.Green
+                tint = if (showPresetPicker) DirectorXAccents.Peach else DirectorXAccents.Green
             )
         }
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -145,11 +145,11 @@ fun BatchExportPanel(
                 ) {
                     PremiumPanelPill(
                         text = pluralStringResource(R.plurals.batch_export_total, queue.size, queue.size),
-                        accent = ClearCutAccents.Blue
+                        accent = DirectorXAccents.Blue
                     )
                     PremiumPanelPill(
                         text = activeLabel,
-                        accent = if (failedCount > 0) ClearCutAccents.Red else ClearCutAccents.Mauve
+                        accent = if (failedCount > 0) DirectorXAccents.Red else DirectorXAccents.Mauve
                     )
                 }
             }
@@ -160,48 +160,48 @@ fun BatchExportPanel(
             ) {
                 PremiumPanelPill(
                     text = pluralStringResource(R.plurals.batch_export_queued, queuedCount, queuedCount),
-                    accent = ClearCutAccents.Blue
+                    accent = DirectorXAccents.Blue
                 )
                 if (inProgressCount > 0) {
                     PremiumPanelPill(
                         text = pluralStringResource(R.plurals.batch_export_exporting, inProgressCount, inProgressCount),
-                        accent = ClearCutAccents.Mauve
+                        accent = DirectorXAccents.Mauve
                     )
                 }
                 if (completedCount > 0) {
                     PremiumPanelPill(
                         text = pluralStringResource(R.plurals.batch_export_done, completedCount, completedCount),
-                        accent = ClearCutAccents.Green
+                        accent = DirectorXAccents.Green
                     )
                 }
                 if (failedCount > 0) {
                     PremiumPanelPill(
                         text = pluralStringResource(R.plurals.batch_export_failed, failedCount, failedCount),
-                        accent = ClearCutAccents.Red
+                        accent = DirectorXAccents.Red
                     )
                 }
                 if (cancelledCount > 0) {
                     PremiumPanelPill(
                         text = pluralStringResource(R.plurals.batch_export_cancelled, cancelledCount, cancelledCount),
-                        accent = ClearCutAccents.Yellow
+                        accent = DirectorXAccents.Yellow
                     )
                 }
                 if (pausedCount > 0) {
                     PremiumPanelPill(
                         text = stringResource(R.string.batch_export_status_paused),
-                        accent = ClearCutAccents.Yellow
+                        accent = DirectorXAccents.Yellow
                     )
                 }
                 if (interruptedCount > 0) {
                     PremiumPanelPill(
                         text = pluralStringResource(R.plurals.batch_export_interrupted, interruptedCount, interruptedCount),
-                        accent = ClearCutAccents.Yellow
+                        accent = DirectorXAccents.Yellow
                     )
                 }
                 if (reviewCount > 0) {
                     PremiumPanelPill(
                         text = pluralStringResource(R.plurals.batch_export_review, reviewCount, reviewCount),
-                        accent = ClearCutAccents.Red
+                        accent = DirectorXAccents.Red
                     )
                 }
             }
@@ -216,13 +216,13 @@ fun BatchExportPanel(
                         icon = Icons.Default.Pause,
                         contentDescription = stringResource(R.string.batch_export_pause_cd),
                         onClick = onPauseBatch,
-                        tint = ClearCutAccents.Yellow,
+                        tint = DirectorXAccents.Yellow,
                     )
                     PremiumPanelIconButton(
                         icon = Icons.Default.Stop,
                         contentDescription = stringResource(R.string.batch_export_cancel_cd),
                         onClick = onCancelBatch,
-                        tint = ClearCutAccents.Red,
+                        tint = DirectorXAccents.Red,
                     )
                 }
             }
@@ -232,7 +232,7 @@ fun BatchExportPanel(
             Spacer(modifier = Modifier.height(12.dp))
 
             if (sourceCuts.isNotEmpty()) {
-                PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+                PremiumPanelCard(accent = DirectorXAccents.Mauve) {
                     Text(
                         text = stringResource(R.string.batch_export_source_cuts_title),
                         style = MaterialTheme.typography.titleMedium,
@@ -256,7 +256,7 @@ fun BatchExportPanel(
                                     formatBatchCutTime(source.startMs),
                                     formatBatchCutTime(source.endMs),
                                 ),
-                                accent = ClearCutAccents.Mauve,
+                                accent = DirectorXAccents.Mauve,
                                 onClick = { onAddSourceCut(defaultConfig, source) },
                             )
                         }
@@ -266,7 +266,7 @@ fun BatchExportPanel(
                 Spacer(modifier = Modifier.height(12.dp))
             }
 
-            PremiumPanelCard(accent = ClearCutAccents.Blue) {
+            PremiumPanelCard(accent = DirectorXAccents.Blue) {
                 Text(
                     text = stringResource(R.string.batch_export_add_platform_preset),
                     style = MaterialTheme.typography.titleMedium,
@@ -299,8 +299,8 @@ fun BatchExportPanel(
                             colors = FilterChipDefaults.filterChipColors(
                                 containerColor = semanticColors.panelRaised,
                                 labelColor = semanticColors.subtext,
-                                selectedContainerColor = ClearCutAccents.Blue.copy(alpha = 0.16f),
-                                selectedLabelColor = ClearCutAccents.Blue
+                                selectedContainerColor = DirectorXAccents.Blue.copy(alpha = 0.16f),
+                                selectedLabelColor = DirectorXAccents.Blue
                             )
                         )
                     }
@@ -312,7 +312,7 @@ fun BatchExportPanel(
                 ) {
                     UtilityExportChip(
                         label = audioOnlyLabel,
-                        accent = ClearCutAccents.Peach,
+                        accent = DirectorXAccents.Peach,
                         onClick = {
                             onAddItem(
                                 ExportConfig(exportAudioOnly = true),
@@ -323,7 +323,7 @@ fun BatchExportPanel(
                     )
                     UtilityExportChip(
                         label = audioStemsLabel,
-                        accent = ClearCutAccents.Yellow,
+                        accent = DirectorXAccents.Yellow,
                         onClick = {
                             onAddItem(
                                 ExportConfig(exportStemsOnly = true),
@@ -338,7 +338,7 @@ fun BatchExportPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Green) {
+        PremiumPanelCard(accent = DirectorXAccents.Green) {
             Text(
                 text = stringResource(R.string.batch_export_queued_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -406,7 +406,7 @@ fun BatchExportPanel(
         if (runnableCount > 0) {
             Spacer(modifier = Modifier.height(12.dp))
 
-            PremiumPanelCard(accent = ClearCutAccents.Green) {
+            PremiumPanelCard(accent = DirectorXAccents.Green) {
                 Text(
                     text = stringResource(R.string.batch_export_run_title),
                     style = MaterialTheme.typography.titleMedium,
@@ -421,7 +421,7 @@ fun BatchExportPanel(
                 Button(
                     onClick = onStartBatch,
                     modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = ClearCutAccents.Mauve),
+                    colors = ButtonDefaults.buttonColors(containerColor = DirectorXAccents.Mauve),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     androidx.compose.material3.Icon(
@@ -470,16 +470,16 @@ private fun BatchExportItemRow(
     onMoveUp: () -> Unit,
     onMoveDown: () -> Unit,
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val accent = when (item.status) {
-        BatchExportStatus.QUEUED -> ClearCutAccents.Blue
-        BatchExportStatus.IN_PROGRESS -> ClearCutAccents.Mauve
-        BatchExportStatus.COMPLETED -> ClearCutAccents.Green
-        BatchExportStatus.FAILED -> ClearCutAccents.Red
-        BatchExportStatus.CANCELLED -> ClearCutAccents.Yellow
-        BatchExportStatus.PAUSED -> ClearCutAccents.Yellow
-        BatchExportStatus.INTERRUPTED -> ClearCutAccents.Yellow
-        BatchExportStatus.REVIEW_REQUIRED -> ClearCutAccents.Red
+        BatchExportStatus.QUEUED -> DirectorXAccents.Blue
+        BatchExportStatus.IN_PROGRESS -> DirectorXAccents.Mauve
+        BatchExportStatus.COMPLETED -> DirectorXAccents.Green
+        BatchExportStatus.FAILED -> DirectorXAccents.Red
+        BatchExportStatus.CANCELLED -> DirectorXAccents.Yellow
+        BatchExportStatus.PAUSED -> DirectorXAccents.Yellow
+        BatchExportStatus.INTERRUPTED -> DirectorXAccents.Yellow
+        BatchExportStatus.REVIEW_REQUIRED -> DirectorXAccents.Red
     }
     val statusLabel = when (item.status) {
         BatchExportStatus.QUEUED -> stringResource(R.string.batch_export_status_queued)
@@ -542,7 +542,7 @@ private fun BatchExportItemRow(
                                 formatBatchCutTime(source.endMs),
                             ),
                             style = MaterialTheme.typography.labelSmall,
-                            color = ClearCutAccents.Mauve,
+                            color = DirectorXAccents.Mauve,
                         )
                     }
                 }
@@ -563,7 +563,7 @@ private fun BatchExportItemRow(
                             icon = Icons.Default.Refresh,
                             contentDescription = stringResource(R.string.batch_export_retry_cd),
                             onClick = onRetry,
-                            tint = ClearCutAccents.Green,
+                            tint = DirectorXAccents.Green,
                         )
                     }
 
@@ -575,7 +575,7 @@ private fun BatchExportItemRow(
                                 item.outputName,
                             ),
                             onClick = onMoveUp,
-                            tint = ClearCutAccents.Blue,
+                            tint = DirectorXAccents.Blue,
                         )
                     }
                     if (canMoveDown) {
@@ -586,7 +586,7 @@ private fun BatchExportItemRow(
                                 item.outputName,
                             ),
                             onClick = onMoveDown,
-                            tint = ClearCutAccents.Blue,
+                            tint = DirectorXAccents.Blue,
                         )
                     }
 
@@ -603,7 +603,7 @@ private fun BatchExportItemRow(
                             modifier = Modifier
                                 .width(24.dp)
                                 .height(24.dp),
-                            color = ClearCutAccents.Mauve,
+                            color = DirectorXAccents.Mauve,
                             strokeWidth = 2.5.dp
                         )
                     }
@@ -618,7 +618,7 @@ private fun BatchExportItemRow(
                             .fillMaxWidth()
                             .height(8.dp)
                             .background(semanticColors.surface, RoundedCornerShape(10.dp)),
-                        color = ClearCutAccents.Mauve,
+                        color = DirectorXAccents.Mauve,
                         trackColor = semanticColors.surface
                     )
                     Text(
@@ -634,7 +634,7 @@ private fun BatchExportItemRow(
                     text = message,
                     style = MaterialTheme.typography.bodySmall,
                     color = if (item.status == BatchExportStatus.REVIEW_REQUIRED) {
-                        ClearCutAccents.Red
+                        DirectorXAccents.Red
                     } else {
                         semanticColors.subtext
                     },

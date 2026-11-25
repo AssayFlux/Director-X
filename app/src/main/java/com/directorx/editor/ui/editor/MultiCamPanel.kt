@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -38,7 +38,7 @@ fun MultiCamPanel(
     onSyncClips: () -> Unit,
     onClose: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val isCompactGrid = LocalConfiguration.current.screenWidthDp < 430
     val allVideoClips = tracks
         .filter { it.type == TrackType.VIDEO }
@@ -56,12 +56,12 @@ fun MultiCamPanel(
         title = stringResource(R.string.panel_multi_cam_title),
         subtitle = stringResource(R.string.panel_multi_cam_subtitle),
         icon = Icons.Default.Videocam,
-        accent = ClearCutAccents.Blue,
+        accent = DirectorXAccents.Blue,
         onClose = onClose,
         closeContentDescription = stringResource(R.string.cd_multicam_close),
         scrollable = true
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = DirectorXAccents.Blue) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -97,7 +97,7 @@ fun MultiCamPanel(
                             videoClips.size,
                             videoClips.size,
                         ),
-                        accent = ClearCutAccents.Blue
+                        accent = DirectorXAccents.Blue
                     )
                     PremiumPanelPill(
                         text = when {
@@ -105,12 +105,12 @@ fun MultiCamPanel(
                             selectedClipId != null -> stringResource(R.string.panel_multi_cam_selection_off_grid)
                             else -> stringResource(R.string.panel_multi_cam_no_angle_selected)
                         },
-                        accent = if (activeAngleLabel != null) ClearCutAccents.Green else semanticColors.overlayStrong
+                        accent = if (activeAngleLabel != null) DirectorXAccents.Green else semanticColors.overlayStrong
                     )
                     if (hiddenAngleCount > 0) {
                         PremiumPanelPill(
                             text = stringResource(R.string.panel_multi_cam_more_angles, hiddenAngleCount),
-                            accent = ClearCutAccents.Mauve
+                            accent = DirectorXAccents.Mauve
                         )
                     }
                 }
@@ -119,7 +119,7 @@ fun MultiCamPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             Text(
                 text = stringResource(R.string.panel_multi_cam_sync_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -135,7 +135,7 @@ fun MultiCamPanel(
                 onClick = onSyncClips,
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = ClearCutAccents.Mauve,
+                    containerColor = DirectorXAccents.Mauve,
                     contentColor = semanticColors.surfaceBase
                 ),
                 shape = RoundedCornerShape(12.dp)
@@ -151,7 +151,7 @@ fun MultiCamPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = if (videoClips.isEmpty()) semanticColors.overlayStrong else ClearCutAccents.Green) {
+        PremiumPanelCard(accent = if (videoClips.isEmpty()) semanticColors.overlayStrong else DirectorXAccents.Green) {
             Text(
                 text = stringResource(R.string.panel_multi_cam_available_angles),
                 style = MaterialTheme.typography.titleMedium,
@@ -218,8 +218,8 @@ private fun MultiCamAngleCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
-    val accent = if (isActive) ClearCutAccents.Mauve else ClearCutAccents.Blue
+    val semanticColors = LocalDirectorXColors.current
+    val accent = if (isActive) DirectorXAccents.Mauve else DirectorXAccents.Blue
 
     Surface(
         modifier = modifier,
@@ -259,7 +259,7 @@ private fun MultiCamAngleCard(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
                             .padding(8.dp),
-                        color = ClearCutAccents.Mauve,
+                        color = DirectorXAccents.Mauve,
                         shape = CircleShape
                     ) {
                         Box(

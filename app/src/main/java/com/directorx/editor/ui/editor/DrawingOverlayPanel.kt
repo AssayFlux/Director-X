@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -32,8 +32,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.stringResource
 import com.directorx.editor.R
 import com.directorx.editor.model.DrawingPath
-import com.directorx.editor.ui.theme.ClearCutChromeIconButton
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 import com.directorx.editor.ui.theme.TouchTarget
@@ -57,7 +57,7 @@ fun DrawingOverlayPanel(
     onClear: () -> Unit,
     onDone: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var isEraser by remember { mutableStateOf(false) }
 
     Column(
@@ -74,22 +74,22 @@ fun DrawingOverlayPanel(
             Text(stringResource(R.string.panel_drawing_title), color = semanticColors.text, fontSize = 16.sp)
             Row(horizontalArrangement = Arrangement.spacedBy(Spacing.xs)) {
                 @Suppress("DEPRECATION")
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = Icons.Default.Undo,
                     contentDescription = stringResource(R.string.cd_drawing_undo),
                     onClick = onUndo,
                     iconSize = 20.dp
                 )
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = Icons.Default.DeleteSweep,
                     contentDescription = stringResource(R.string.cd_drawing_clear),
                     onClick = onClear,
-                    tint = ClearCutAccents.Red,
-                    containerColor = ClearCutAccents.Red.copy(alpha = 0.10f),
-                    borderColor = ClearCutAccents.Red.copy(alpha = 0.20f),
+                    tint = DirectorXAccents.Red,
+                    containerColor = DirectorXAccents.Red.copy(alpha = 0.10f),
+                    borderColor = DirectorXAccents.Red.copy(alpha = 0.20f),
                     iconSize = 20.dp
                 )
-                ClearCutPrimaryButton(
+                DirectorXPrimaryButton(
                     text = stringResource(R.string.panel_drawing_done),
                     onClick = onDone
                 )
@@ -136,13 +136,13 @@ fun DrawingOverlayPanel(
 
             Spacer(modifier = Modifier.width(Spacing.xs))
 
-            ClearCutChromeIconButton(
+            DirectorXChromeIconButton(
                 icon = Icons.Default.SquareFoot,
                 contentDescription = stringResource(R.string.cd_drawing_eraser),
                 onClick = { isEraser = !isEraser },
                 tint = if (isEraser) semanticColors.text else semanticColors.subtext,
                 containerColor = if (isEraser) semanticColors.surface else semanticColors.panelHighest,
-                borderColor = if (isEraser) ClearCutAccents.Mauve.copy(alpha = 0.55f) else semanticColors.cardStroke,
+                borderColor = if (isEraser) DirectorXAccents.Mauve.copy(alpha = 0.55f) else semanticColors.cardStroke,
                 iconSize = 20.dp
             )
         }
@@ -160,8 +160,8 @@ fun DrawingOverlayPanel(
                 valueRange = 2f..20f,
                 modifier = Modifier.weight(1f),
                 colors = SliderDefaults.colors(
-                    thumbColor = ClearCutAccents.Mauve,
-                    activeTrackColor = ClearCutAccents.Mauve,
+                    thumbColor = DirectorXAccents.Mauve,
+                    activeTrackColor = DirectorXAccents.Mauve,
                     inactiveTrackColor = semanticColors.surface
                 )
             )

@@ -21,11 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.directorx.editor.R
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.ClearCutDialogIcon
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.ClearCutSecondaryButton
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.DirectorXDialogIcon
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 
@@ -40,14 +40,14 @@ internal fun ExportConfirmationDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {
-    val semanticColors = LocalClearCutColors.current
-    val accent = if (request.intentFallbacks.isNotEmpty()) ClearCutAccents.Red else ClearCutAccents.Yellow
+    val semanticColors = LocalDirectorXColors.current
+    val accent = if (request.intentFallbacks.isNotEmpty()) DirectorXAccents.Red else DirectorXAccents.Yellow
     val intentMessages = request.intentFallbacks.map { it.message }.toSet()
     val otherWarnings = request.warnings.filterNot { it in intentMessages }
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        icon = { ClearCutDialogIcon(icon = Icons.Default.ReportProblem, accent = accent) },
+        icon = { DirectorXDialogIcon(icon = Icons.Default.ReportProblem, accent = accent) },
         title = {
             Text(
                 text = stringResource(R.string.export_confirm_title),
@@ -71,34 +71,34 @@ internal fun ExportConfirmationDialog(
                 if (request.intentFallbacks.isNotEmpty()) {
                     Text(
                         text = stringResource(R.string.export_confirm_intent_heading),
-                        color = ClearCutAccents.Red,
+                        color = DirectorXAccents.Red,
                         style = MaterialTheme.typography.labelLarge
                     )
                     request.intentFallbacks.forEach { fallback ->
-                        ExportConfirmationRow(text = fallback.message, accent = ClearCutAccents.Red)
+                        ExportConfirmationRow(text = fallback.message, accent = DirectorXAccents.Red)
                     }
                 }
                 if (otherWarnings.isNotEmpty()) {
                     Text(
                         text = stringResource(R.string.export_confirm_warnings_heading),
-                        color = ClearCutAccents.Yellow,
+                        color = DirectorXAccents.Yellow,
                         style = MaterialTheme.typography.labelLarge
                     )
                     otherWarnings.forEach { warning ->
-                        ExportConfirmationRow(text = warning, accent = ClearCutAccents.Yellow)
+                        ExportConfirmationRow(text = warning, accent = DirectorXAccents.Yellow)
                     }
                 }
             }
         },
         confirmButton = {
-            ClearCutPrimaryButton(
+            DirectorXPrimaryButton(
                 text = stringResource(R.string.export_confirm_accept),
                 onClick = onConfirm,
                 icon = Icons.Default.ReportProblem
             )
         },
         dismissButton = {
-            ClearCutSecondaryButton(
+            DirectorXSecondaryButton(
                 text = stringResource(R.string.export_confirm_cancel),
                 onClick = onDismiss,
                 icon = Icons.Default.Close
@@ -113,7 +113,7 @@ internal fun ExportConfirmationDialog(
 
 @Composable
 private fun ExportConfirmationRow(text: String, accent: androidx.compose.ui.graphics.Color) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = Modifier.fillMaxWidth(),
         color = accent.copy(alpha = 0.09f),

@@ -1,6 +1,6 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -20,7 +20,7 @@ fun AdaptiveEditorLayout(
     toolPanel: @Composable (Modifier) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     if (isWideScreen) {
         // Tablet/foldable: horizontal layout
         Row(

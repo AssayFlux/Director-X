@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -65,7 +65,7 @@ fun ProjectInspectorPanel(
     data: ProjectInspectorData,
     onClose: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = Modifier.fillMaxWidth(),
         color = semanticColors.surfaceBase,
@@ -87,7 +87,7 @@ fun ProjectInspectorPanel(
                     Icon(
                         imageVector = Icons.Default.Info,
                         contentDescription = null,
-                        tint = ClearCutAccents.Blue,
+                        tint = DirectorXAccents.Blue,
                         modifier = Modifier.size(20.dp)
                     )
                     Spacer(Modifier.width(8.dp))
@@ -163,20 +163,20 @@ fun ProjectInspectorPanel(
                 Spacer(Modifier.height(8.dp))
                 InspectorSection(
                     stringResource(R.string.inspector_section_issues),
-                    accentColor = ClearCutAccents.Red
+                    accentColor = DirectorXAccents.Red
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             imageVector = Icons.Default.Warning,
                             contentDescription = null,
-                            tint = ClearCutAccents.Red,
+                            tint = DirectorXAccents.Red,
                             modifier = Modifier.size(16.dp)
                         )
                         Spacer(Modifier.width(6.dp))
                         Text(
                             text = stringResource(R.string.inspector_missing_media, data.missingMediaCount),
                             style = MaterialTheme.typography.bodySmall,
-                            color = ClearCutAccents.Red
+                            color = DirectorXAccents.Red
                         )
                     }
                 }
@@ -228,10 +228,10 @@ fun ProjectInspectorPanel(
 @Composable
 private fun InspectorSection(
     title: String,
-    accentColor: androidx.compose.ui.graphics.Color = ClearCutAccents.Blue,
+    accentColor: androidx.compose.ui.graphics.Color = DirectorXAccents.Blue,
     content: @Composable () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
@@ -259,7 +259,7 @@ private fun InspectorSection(
 
 @Composable
 private fun InspectorRow(label: String, value: String) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Row(
         modifier = Modifier
             .fillMaxWidth()

@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -36,15 +36,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.directorx.editor.R
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.model.BatchExportSourceRange
 import com.directorx.editor.model.Clip
 import com.directorx.editor.model.ImageOverlayType
 import com.directorx.editor.model.TrackType
 import com.directorx.editor.ui.export.BatchExportPanel
-import com.directorx.editor.ui.theme.ClearCutDialogIcon
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.DirectorXDialogIcon
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
 import com.directorx.editor.ui.theme.Radius
 import java.io.File
 
@@ -60,16 +60,16 @@ fun BoxScope.EditorUtilityPanelHost(
     onImportStickerFromGallery: () -> Unit,
     onAction: (String) -> Unit = {}
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val restorableSnapshot by viewModel.restorableSnapshot.collectAsStateWithLifecycle()
 
     restorableSnapshot?.let { snapshot ->
         AlertDialog(
             onDismissRequest = viewModel::dismissSnapshotRestore,
             icon = {
-                ClearCutDialogIcon(
+                DirectorXDialogIcon(
                     icon = Icons.Default.Restore,
-                    accent = ClearCutAccents.Green
+                    accent = DirectorXAccents.Green
                 )
             },
             title = {
@@ -90,14 +90,14 @@ fun BoxScope.EditorUtilityPanelHost(
                 )
             },
             confirmButton = {
-                ClearCutPrimaryButton(
+                DirectorXPrimaryButton(
                     text = stringResource(R.string.snapshot_restore_confirm),
                     onClick = viewModel::restoreDeletedSnapshot,
                     icon = Icons.Default.Restore
                 )
             },
             dismissButton = {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.panel_snapshot_cancel),
                     onClick = viewModel::dismissSnapshotRestore
                 )
@@ -159,9 +159,9 @@ fun BoxScope.EditorUtilityPanelHost(
         AlertDialog(
             onDismissRequest = viewModel::dismissAiRequirementPrompt,
             icon = {
-                ClearCutDialogIcon(
+                DirectorXDialogIcon(
                     icon = Icons.Default.Download,
-                    accent = ClearCutAccents.Mauve
+                    accent = DirectorXAccents.Mauve
                 )
             },
             title = {
@@ -185,20 +185,20 @@ fun BoxScope.EditorUtilityPanelHost(
                         AiRequirementInfoChip(
                             label = stringResource(R.string.ai_requirement_model_label),
                             value = prompt.modelName,
-                            accent = ClearCutAccents.Mauve,
+                            accent = DirectorXAccents.Mauve,
                             modifier = Modifier.weight(1f)
                         )
                         AiRequirementInfoChip(
                             label = stringResource(R.string.ai_requirement_size_label),
                             value = prompt.estimatedSize,
-                            accent = ClearCutAccents.Blue,
+                            accent = DirectorXAccents.Blue,
                             modifier = Modifier.weight(1f)
                         )
                     }
                 }
             },
             confirmButton = {
-                ClearCutPrimaryButton(
+                DirectorXPrimaryButton(
                     text = prompt.actionLabel,
                     onClick = {
                         viewModel.dismissAiRequirementPrompt()
@@ -208,7 +208,7 @@ fun BoxScope.EditorUtilityPanelHost(
                 )
             },
             dismissButton = {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.ai_requirement_not_now),
                     onClick = viewModel::dismissAiRequirementPrompt,
                     icon = Icons.Default.Close
@@ -282,7 +282,7 @@ fun BoxScope.EditorUtilityPanelHost(
             },
             onDismissMetadataSidecarExport = viewModel::dismissMetadataSidecarExport,
             onClose = viewModel::hideMediaManager,
-            modifier = Modifier.testTag(ClearCutTestTags.MEDIA_MANAGER_PANEL),
+            modifier = Modifier.testTag(DirectorXTestTags.MEDIA_MANAGER_PANEL),
         )
     }
 
@@ -342,7 +342,7 @@ fun BoxScope.EditorUtilityPanelHost(
             onCancelBatch = viewModel::cancelBatchExport,
             onStartBatch = viewModel::startBatchExport,
             onClose = viewModel::hideBatchExport,
-            modifier = Modifier.testTag(ClearCutTestTags.BATCH_EXPORT_PANEL),
+            modifier = Modifier.testTag(DirectorXTestTags.BATCH_EXPORT_PANEL),
         )
     }
 
@@ -589,9 +589,9 @@ fun BoxScope.EditorUtilityPanelHost(
             AlertDialog(
                 onDismissRequest = { pendingBackupImportUri = null },
                 icon = {
-                    ClearCutDialogIcon(
+                    DirectorXDialogIcon(
                         icon = Icons.Default.Restore,
-                        accent = ClearCutAccents.Blue
+                        accent = DirectorXAccents.Blue
                     )
                 },
                 title = {
@@ -609,7 +609,7 @@ fun BoxScope.EditorUtilityPanelHost(
                     )
                 },
                 confirmButton = {
-                    ClearCutPrimaryButton(
+                    DirectorXPrimaryButton(
                         text = stringResource(R.string.panel_cloud_backup_import_confirm_action),
                         onClick = {
                             pendingBackupImportUri = null
@@ -619,7 +619,7 @@ fun BoxScope.EditorUtilityPanelHost(
                     )
                 },
                 dismissButton = {
-                    ClearCutSecondaryButton(
+                    DirectorXSecondaryButton(
                         text = stringResource(R.string.editor_cancel),
                         onClick = { pendingBackupImportUri = null },
                         icon = Icons.Default.Close

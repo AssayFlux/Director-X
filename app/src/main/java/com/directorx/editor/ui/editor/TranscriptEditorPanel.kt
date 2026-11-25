@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -53,19 +53,19 @@ fun TranscriptEditorPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     PremiumEditorPanel(
         title = stringResource(R.string.v369_text_edit_title),
         subtitle = stringResource(R.string.v369_text_edit_subtitle),
         icon = Icons.AutoMirrored.Filled.Subject,
-        accent = ClearCutAccents.Blue,
+        accent = DirectorXAccents.Blue,
         onClose = onClose,
         closeContentDescription = stringResource(R.string.cd_close_speed_curve),
         modifier = modifier,
         scrollable = false
     ) {
         if (transcript == null || transcript.words.isEmpty()) {
-            PremiumPanelCard(accent = ClearCutAccents.Sapphire) {
+            PremiumPanelCard(accent = DirectorXAccents.Sapphire) {
                 Text(
                     text = stringResource(R.string.v369_text_edit_need_transcript),
                     style = MaterialTheme.typography.bodyMedium,
@@ -75,19 +75,19 @@ fun TranscriptEditorPanel(
             return@PremiumEditorPanel
         }
 
-        PremiumPanelCard(accent = ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = DirectorXAccents.Blue) {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 PremiumPanelPill(
                     text = "${transcript.words.size} words",
-                    accent = ClearCutAccents.Blue
+                    accent = DirectorXAccents.Blue
                 )
                 if (selectedWordIndices.isNotEmpty()) {
                     PremiumPanelPill(
                         text = "${selectedWordIndices.size} selected",
-                        accent = ClearCutAccents.Peach
+                        accent = DirectorXAccents.Peach
                     )
                 }
             }
@@ -98,8 +98,8 @@ fun TranscriptEditorPanel(
                 FilledTonalButton(
                     onClick = onSelectFillers,
                     colors = ButtonDefaults.filledTonalButtonColors(
-                        containerColor = ClearCutAccents.Mauve.copy(alpha = 0.15f),
-                        contentColor = ClearCutAccents.Mauve
+                        containerColor = DirectorXAccents.Mauve.copy(alpha = 0.15f),
+                        contentColor = DirectorXAccents.Mauve
                     )
                 ) {
                     Icon(Icons.Default.SelectAll, contentDescription = null, modifier = Modifier.padding(end = 4.dp))
@@ -121,7 +121,7 @@ fun TranscriptEditorPanel(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        PremiumPanelCard(accent = if (selectedWordIndices.isNotEmpty()) ClearCutAccents.Peach else ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = if (selectedWordIndices.isNotEmpty()) DirectorXAccents.Peach else DirectorXAccents.Blue) {
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(2.dp),
                 verticalArrangement = Arrangement.spacedBy(2.dp),
@@ -149,8 +149,8 @@ fun TranscriptEditorPanel(
                 onClick = onApplyDeletions,
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.filledTonalButtonColors(
-                    containerColor = ClearCutAccents.Red.copy(alpha = 0.15f),
-                    contentColor = ClearCutAccents.Red
+                    containerColor = DirectorXAccents.Red.copy(alpha = 0.15f),
+                    contentColor = DirectorXAccents.Red
                 )
             ) {
                 Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.padding(end = 4.dp))
@@ -168,13 +168,13 @@ private fun TranscriptWord(
     onLongPress: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val bg = when {
-        isSelected -> ClearCutAccents.Red.copy(alpha = 0.25f)
+        isSelected -> DirectorXAccents.Red.copy(alpha = 0.25f)
         else -> semanticColors.surfaceLow
     }
     val textColor = when {
-        isSelected -> ClearCutAccents.Red
+        isSelected -> DirectorXAccents.Red
         else -> semanticColors.text
     }
 

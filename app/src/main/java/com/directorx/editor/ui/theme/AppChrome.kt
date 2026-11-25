@@ -52,23 +52,23 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ClearCutScreenBackground(
+fun DirectorXScreenBackground(
     modifier: Modifier = Modifier,
     content: @Composable BoxScope.() -> Unit
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     Box(modifier = modifier.background(colors.background), content = content)
 }
 
 @Composable
-fun ClearCutHeroCard(
+fun DirectorXHeroCard(
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(Radius.xxl),
     accent: Color = Color.Unspecified,
     contentPadding: PaddingValues = PaddingValues(horizontal = Spacing.xl, vertical = Spacing.xl),
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     val resolvedAccent = if (accent == Color.Unspecified) colors.accent else accent
     Surface(
         modifier = modifier.fillMaxWidth(),
@@ -88,14 +88,14 @@ fun ClearCutHeroCard(
 }
 
 @Composable
-fun ClearCutPrimaryButton(
+fun DirectorXPrimaryButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
     enabled: Boolean = true
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     val interactionSource = remember { MutableInteractionSource() }
     val pressed by interactionSource.collectIsPressedAsState()
     val containerColor by animateColorAsState(
@@ -153,7 +153,7 @@ fun ClearCutPrimaryButton(
 }
 
 @Composable
-fun ClearCutSecondaryButton(
+fun DirectorXSecondaryButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -161,7 +161,7 @@ fun ClearCutSecondaryButton(
     contentColor: Color = Color.Unspecified,
     enabled: Boolean = true
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     val resolvedContentColor = if (contentColor == Color.Unspecified) colors.text else contentColor
     val interactionSource = remember { MutableInteractionSource() }
     val pressed by interactionSource.collectIsPressedAsState()
@@ -229,13 +229,13 @@ fun ClearCutSecondaryButton(
 }
 
 @Composable
-fun ClearCutStatusTag(
+fun DirectorXStatusTag(
     text: String,
     accent: Color,
     modifier: Modifier = Modifier,
     icon: ImageVector? = null
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     Surface(
         modifier = modifier,
         color = accent.copy(alpha = if (colors.highContrast) 0.26f else 0.12f),
@@ -267,15 +267,15 @@ fun ClearCutStatusTag(
 }
 
 @Composable
-fun ClearCutMetricPill(
+fun DirectorXMetricPill(
     text: String,
     accent: Color,
     modifier: Modifier = Modifier,
     icon: ImageVector? = null
-) = ClearCutStatusTag(text = text, accent = accent, modifier = modifier, icon = icon)
+) = DirectorXStatusTag(text = text, accent = accent, modifier = modifier, icon = icon)
 
 @Composable
-fun ClearCutFilterChip(
+fun DirectorXFilterChip(
     text: String,
     selected: Boolean,
     onClick: () -> Unit,
@@ -284,7 +284,7 @@ fun ClearCutFilterChip(
     enabled: Boolean = true,
     icon: ImageVector? = null
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     val resolvedAccent = if (accent == Color.Unspecified) colors.accent else accent
     FilterChip(
         selected = selected,
@@ -339,7 +339,7 @@ fun ClearCutFilterChip(
 }
 
 @Composable
-fun ClearCutChromeIconButton(
+fun DirectorXChromeIconButton(
     icon: ImageVector,
     contentDescription: String,
     onClick: () -> Unit,
@@ -353,7 +353,7 @@ fun ClearCutChromeIconButton(
     enabled: Boolean = true,
     buttonModifier: Modifier = Modifier
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     val interactionSource = remember { MutableInteractionSource() }
     val pressed by interactionSource.collectIsPressedAsState()
     val resolvedContainer = if (containerColor == Color.Unspecified) colors.panelHighest else containerColor
@@ -433,12 +433,12 @@ fun ClearCutChromeIconButton(
 }
 
 @Composable
-fun ClearCutDialogIcon(
+fun DirectorXDialogIcon(
     icon: ImageVector,
     accent: Color,
     modifier: Modifier = Modifier
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     Surface(
         modifier = modifier,
         color = accent.copy(alpha = if (colors.highContrast) 0.26f else 0.14f),
@@ -457,13 +457,13 @@ fun ClearCutDialogIcon(
 }
 
 @Composable
-fun ClearCutSectionHeader(
+fun DirectorXSectionHeader(
     title: String,
     modifier: Modifier = Modifier,
     description: String? = null,
     trailing: @Composable RowScope.() -> Unit = {}
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(Spacing.md),

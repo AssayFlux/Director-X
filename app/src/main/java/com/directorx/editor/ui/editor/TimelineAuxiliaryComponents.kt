@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.directorx.editor.R
 import com.directorx.editor.model.Clip
 import com.directorx.editor.model.Track
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -90,7 +90,7 @@ internal fun TimelineHeaderSummary(
     compact: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Column(modifier = modifier) {
         Text(
             text = stringResource(R.string.timeline_title),

@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -46,7 +46,7 @@ fun UndoHistoryPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
     val selectedUndoIndex = (currentIndex - 1).coerceAtLeast(-1)
     val futureCount = remember(entries, selectedUndoIndex) {
@@ -69,14 +69,14 @@ fun UndoHistoryPanel(
         title = stringResource(R.string.undo_history_title),
         subtitle = stringResource(R.string.undo_history_subtitle),
         icon = Icons.Default.History,
-        accent = ClearCutAccents.Mauve,
+        accent = DirectorXAccents.Mauve,
         onClose = onClose,
         closeContentDescription = stringResource(R.string.undo_history_close),
-        closeButtonTestTag = ClearCutTestTags.UNDO_HISTORY_CLOSE,
+        closeButtonTestTag = DirectorXTestTags.UNDO_HISTORY_CLOSE,
         modifier = modifier,
         scrollable = true
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -108,7 +108,7 @@ fun UndoHistoryPanel(
                 ) {
                     PremiumPanelPill(
                         text = actionCountLabel,
-                        accent = ClearCutAccents.Mauve
+                        accent = DirectorXAccents.Mauve
                     )
                     if (futureCount > 0) {
                         PremiumPanelPill(
@@ -122,7 +122,7 @@ fun UndoHistoryPanel(
                         } else {
                             stringResource(R.string.undo_history_live_state)
                         },
-                        accent = ClearCutAccents.Green
+                        accent = DirectorXAccents.Green
                     )
                 }
             }
@@ -130,12 +130,12 @@ fun UndoHistoryPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = DirectorXAccents.Blue) {
             if (entries.isEmpty()) {
                 UndoHistoryMessageCard(
                     title = stringResource(R.string.undo_history_empty_title),
                     body = stringResource(R.string.undo_history_empty_body),
-                    accent = ClearCutAccents.Blue,
+                    accent = DirectorXAccents.Blue,
                     icon = Icons.Default.History
                 )
             } else {
@@ -189,7 +189,7 @@ private fun UndoHistoryMessageCard(
     icon: ImageVector,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = modifier.fillMaxWidth(),
         color = accent.copy(alpha = 0.08f),
@@ -244,12 +244,12 @@ private fun UndoHistoryRow(
     relativeTime: String,
     onClick: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val canRestore = !isCurrent && !isFuture
     val accent = when {
-        isCurrent -> ClearCutAccents.Mauve
+        isCurrent -> DirectorXAccents.Mauve
         isFuture -> semanticColors.overlayStrong
-        else -> ClearCutAccents.Blue
+        else -> DirectorXAccents.Blue
     }
 
     Surface(
@@ -303,7 +303,7 @@ private fun UndoHistoryRow(
                         style = MaterialTheme.typography.titleSmall,
                         color = if (isFuture) semanticColors.subtext else semanticColors.text,
                         fontWeight = if (isCurrent) FontWeight.SemiBold else FontWeight.Medium,
-                        modifier = Modifier.testTag(ClearCutTestTags.UNDO_HISTORY_ENTRY_DESCRIPTION)
+                        modifier = Modifier.testTag(DirectorXTestTags.UNDO_HISTORY_ENTRY_DESCRIPTION)
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(

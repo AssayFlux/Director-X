@@ -17,7 +17,7 @@ import com.directorx.editor.model.KeyframeProperty
 import com.directorx.editor.model.Mask
 import com.directorx.editor.model.MaskPoint
 import com.directorx.editor.model.MaskType
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -131,7 +131,7 @@ class GestureCancelledMidDragTest {
             }
         }
         val onHandle: (Float, Float) -> Offset = { w, h -> Offset(w * 0.75f, h * 0.75f) }
-        val overlay = ClearCutTestTags.MASK_PREVIEW_OVERLAY
+        val overlay = DirectorXTestTags.MASK_PREVIEW_OVERLAY
 
         pressAndMove(overlay, onHandle)
         assertEquals(1, starts)

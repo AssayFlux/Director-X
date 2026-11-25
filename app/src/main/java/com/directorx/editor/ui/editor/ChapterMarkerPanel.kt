@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -50,7 +50,7 @@ fun ChapterMarkerPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var editingIndex by remember { mutableIntStateOf(-1) }
     var editingTitle by remember { mutableStateOf("") }
     val sortedChapters = remember(chapters) {
@@ -64,7 +64,7 @@ fun ChapterMarkerPanel(
         title = stringResource(R.string.chapter_title),
         subtitle = "Drop navigation points at the playhead so long edits feel structured and easy to skim.",
         icon = Icons.Default.Bookmarks,
-        accent = ClearCutAccents.Yellow,
+        accent = DirectorXAccents.Yellow,
         onClose = onClose,
         closeContentDescription = stringResource(R.string.chapter_close_cd),
         modifier = modifier,
@@ -74,12 +74,12 @@ fun ChapterMarkerPanel(
                 icon = Icons.Default.Add,
                 contentDescription = stringResource(R.string.chapter_add_cd),
                 onClick = { onAddChapter(ChapterMarker(playheadMs, nextChapterLabel)) },
-                tint = ClearCutAccents.Green,
+                tint = DirectorXAccents.Green,
                 containerColor = semanticColors.panelHighest
             )
         }
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Yellow) {
+        PremiumPanelCard(accent = DirectorXAccents.Yellow) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -107,11 +107,11 @@ fun ChapterMarkerPanel(
                 ) {
                     PremiumPanelPill(
                         text = "${chapters.size} chapters",
-                        accent = ClearCutAccents.Yellow
+                        accent = DirectorXAccents.Yellow
                     )
                     PremiumPanelPill(
                         text = "Playhead ${formatChapterTimestamp(playheadMs)}",
-                        accent = ClearCutAccents.Blue
+                        accent = DirectorXAccents.Blue
                     )
                 }
             }
@@ -119,7 +119,7 @@ fun ChapterMarkerPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = DirectorXAccents.Blue) {
             if (sortedChapters.isEmpty()) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -200,14 +200,14 @@ private fun ChapterRow(
     onSave: () -> Unit,
     onDelete: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        color = if (isEditing) ClearCutAccents.Yellow.copy(alpha = 0.14f) else semanticColors.panelRaised,
+        color = if (isEditing) DirectorXAccents.Yellow.copy(alpha = 0.14f) else semanticColors.panelRaised,
         shape = RoundedCornerShape(12.dp),
         border = BorderStroke(
             1.dp,
-            if (isEditing) ClearCutAccents.Yellow.copy(alpha = 0.28f) else semanticColors.cardStroke
+            if (isEditing) DirectorXAccents.Yellow.copy(alpha = 0.28f) else semanticColors.cardStroke
         )
     ) {
         Column(
@@ -230,13 +230,13 @@ private fun ChapterRow(
                     Box(
                         modifier = Modifier
                             .size(34.dp)
-                            .background(ClearCutAccents.Yellow.copy(alpha = 0.18f), RoundedCornerShape(12.dp)),
+                            .background(DirectorXAccents.Yellow.copy(alpha = 0.18f), RoundedCornerShape(12.dp)),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = "${index + 1}",
                             style = MaterialTheme.typography.labelLarge,
-                            color = ClearCutAccents.Yellow
+                            color = DirectorXAccents.Yellow
                         )
                     }
 
@@ -244,7 +244,7 @@ private fun ChapterRow(
                         Text(
                             text = formatChapterTimestamp(chapter.timeMs),
                             style = MaterialTheme.typography.labelLarge,
-                            color = ClearCutAccents.Blue
+                            color = DirectorXAccents.Blue
                         )
                         Spacer(modifier = Modifier.height(2.dp))
                         if (isEditing) {
@@ -261,11 +261,11 @@ private fun ChapterRow(
                                     )
                                 },
                                 colors = OutlinedTextFieldDefaults.colors(
-                                    focusedBorderColor = ClearCutAccents.Yellow,
+                                    focusedBorderColor = DirectorXAccents.Yellow,
                                     unfocusedBorderColor = semanticColors.cardStroke,
                                     focusedTextColor = semanticColors.text,
                                     unfocusedTextColor = semanticColors.text,
-                                    cursorColor = ClearCutAccents.Yellow
+                                    cursorColor = DirectorXAccents.Yellow
                                 )
                             )
                         } else {
@@ -282,7 +282,7 @@ private fun ChapterRow(
 
                 PremiumPanelPill(
                     text = if (isEditing) "Editing" else "Jump",
-                    accent = if (isEditing) ClearCutAccents.Yellow else ClearCutAccents.Green
+                    accent = if (isEditing) DirectorXAccents.Yellow else DirectorXAccents.Green
                 )
             }
 
@@ -294,7 +294,7 @@ private fun ChapterRow(
                 ChapterAction(
                     icon = if (isEditing) Icons.Default.Check else Icons.Default.Edit,
                     label = if (isEditing) "Save" else "Edit",
-                    accent = if (isEditing) ClearCutAccents.Green else semanticColors.subtext,
+                    accent = if (isEditing) DirectorXAccents.Green else semanticColors.subtext,
                     contentDescription = stringResource(
                         if (isEditing) R.string.cd_chapter_save else R.string.cd_chapter_edit
                     ),
@@ -304,7 +304,7 @@ private fun ChapterRow(
                 ChapterAction(
                     icon = Icons.Default.Delete,
                     label = "Delete",
-                    accent = ClearCutAccents.Red,
+                    accent = DirectorXAccents.Red,
                     contentDescription = stringResource(R.string.cd_chapter_delete),
                     onClick = onDelete
                 )

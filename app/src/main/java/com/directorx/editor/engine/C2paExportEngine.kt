@@ -16,12 +16,12 @@ import javax.inject.Singleton
  * hardware-backed signing at C2PA Assurance Level 2.
  *
  * This engine owns the pure manifest construction and availability layer:
- * given the project name, export config, ClearCut version, and per-project
+ * given the project name, export config, Director X version, and per-project
  * [AiUsageLedger], it builds a structured [C2paManifest] that can be passed
  * to c2pa-android's `Builder.fromJson(...)` once a signing library and
  * certificate enrollment path are configured.
  *
- * ClearCut deliberately separates draft manifest generation from verifiable
+ * Director X deliberately separates draft manifest generation from verifiable
  * Content Credentials. A `.c2pa-draft-manifest.json` sidecar is useful audit
  * data, but it is not a signed C2PA manifest store and does not create a BMFF
  * hard binding to the exported MP4. [signingAvailability] is the gate the UI
@@ -192,7 +192,7 @@ class C2paExportEngine @Inject constructor() {
      * the result to a future signer bridge when the c2pa AAR is wired.
      *
      * @param projectTitle Optional human title (`null` when redacted).
-     * @param novaCutVersionName Pulled from `BuildConfig.VERSION_NAME`.
+     * @param directorXVersionName Pulled from `BuildConfig.VERSION_NAME`.
      * @param signingMode Preferred signer; falls back to ANDROID_KEYSTORE
      *        if STRONGBOX is unavailable on the runtime device.
      * @param ledger Per-project AI usage records.
@@ -201,13 +201,13 @@ class C2paExportEngine @Inject constructor() {
      */
     fun buildManifest(
         projectTitle: String?,
-        novaCutVersionName: String,
+        directorXVersionName: String,
         signingMode: SigningMode,
         ledger: List<AiUsageLedger.Entry>,
         exporterCreationTimeMs: Long
     ): C2paManifest {
-        require(novaCutVersionName.isNotBlank()) {
-            "novaCutVersionName must not be blank"
+        require(directorXVersionName.isNotBlank()) {
+            "directorXVersionName must not be blank"
         }
         require(exporterCreationTimeMs >= 0L) {
             "exporterCreationTimeMs must be >= 0"
@@ -220,7 +220,7 @@ class C2paExportEngine @Inject constructor() {
                     "action" to "c2pa.created",
                     "softwareAgent" to mapOf(
                         "name" to "Director X",
-                        "version" to novaCutVersionName,
+                        "version" to directorXVersionName,
                         "operating_system" to "Android"
                     ),
                     "when" to c2paTimestamp(exporterCreationTimeMs),
@@ -239,7 +239,7 @@ class C2paExportEngine @Inject constructor() {
                     data = mapOf(
                         "claimGeneratorInfo" to mapOf(
                             "name" to "Director X",
-                            "version" to novaCutVersionName,
+                            "version" to directorXVersionName,
                             "operating_system" to "Android",
                             "specVersion" to C2PA_SPEC_VERSION
                         )
@@ -254,8 +254,8 @@ class C2paExportEngine @Inject constructor() {
             )
         }
         return C2paManifest(
-            claimGenerator = "Director X/$novaCutVersionName",
-            claimGeneratorInfoVersion = novaCutVersionName,
+            claimGenerator = "Director X/$directorXVersionName",
+            claimGeneratorInfoVersion = directorXVersionName,
             title = projectTitle?.takeIf { it.isNotBlank() },
             signingMode = signingMode,
             assertions = assertions

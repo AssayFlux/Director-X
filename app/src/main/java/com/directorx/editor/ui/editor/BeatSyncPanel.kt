@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -44,7 +44,7 @@ fun BeatSyncPanel(
     onApplyBeatSync: () -> Unit,
     onClose: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val hasBeats = beatMarkers.isNotEmpty()
     val isCompactActions = LocalConfiguration.current.screenWidthDp < 430
     val avgBpm = remember(beatMarkers) {
@@ -61,13 +61,13 @@ fun BeatSyncPanel(
         title = stringResource(R.string.beat_sync_title),
         subtitle = stringResource(R.string.beat_sync_subtitle),
         icon = Icons.Default.MusicNote,
-        accent = ClearCutAccents.Peach,
+        accent = DirectorXAccents.Peach,
         onClose = onClose,
         closeContentDescription = stringResource(R.string.beat_sync_close_cd),
         modifier = modifier,
         scrollable = true
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Peach) {
+        PremiumPanelCard(accent = DirectorXAccents.Peach) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -103,15 +103,15 @@ fun BeatSyncPanel(
                         } else {
                             stringResource(R.string.beat_sync_no_beat_map)
                         },
-                        accent = ClearCutAccents.Peach
+                        accent = DirectorXAccents.Peach
                     )
                     PremiumPanelPill(
                         text = if (avgBpm > 0.0) stringResource(R.string.beat_sync_bpm_value, avgBpm.roundToInt()) else stringResource(R.string.beat_sync_bpm_pending),
-                        accent = ClearCutAccents.Blue
+                        accent = DirectorXAccents.Blue
                     )
                     PremiumPanelPill(
                         text = if (isPlaying) stringResource(R.string.beat_sync_tap_ready) else stringResource(R.string.beat_sync_play_to_tap),
-                        accent = if (isPlaying) ClearCutAccents.Green else semanticColors.overlayStrong
+                        accent = if (isPlaying) DirectorXAccents.Green else semanticColors.overlayStrong
                     )
                 }
             }
@@ -119,7 +119,7 @@ fun BeatSyncPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = DirectorXAccents.Blue) {
             Text(
                 text = stringResource(R.string.beat_sync_capture_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -156,9 +156,9 @@ fun BeatSyncPanel(
                         enabled = !isAnalyzing,
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = ClearCutAccents.Peach,
+                            containerColor = DirectorXAccents.Peach,
                             contentColor = semanticColors.onAccent,
-                            disabledContainerColor = ClearCutAccents.Peach.copy(alpha = 0.45f),
+                            disabledContainerColor = DirectorXAccents.Peach.copy(alpha = 0.45f),
                             disabledContentColor = semanticColors.onAccent.copy(alpha = 0.8f)
                         ),
                         shape = RoundedCornerShape(12.dp)
@@ -208,9 +208,9 @@ fun BeatSyncPanel(
                         enabled = !isAnalyzing,
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = ClearCutAccents.Peach,
+                            containerColor = DirectorXAccents.Peach,
                             contentColor = semanticColors.onAccent,
-                            disabledContainerColor = ClearCutAccents.Peach.copy(alpha = 0.45f),
+                            disabledContainerColor = DirectorXAccents.Peach.copy(alpha = 0.45f),
                             disabledContentColor = semanticColors.onAccent.copy(alpha = 0.8f)
                         ),
                         shape = RoundedCornerShape(12.dp)
@@ -255,7 +255,7 @@ fun BeatSyncPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             Text(
                 text = stringResource(R.string.beat_sync_timeline_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -287,7 +287,7 @@ fun BeatSyncPanel(
                             beatMarkers.forEach { beatMs ->
                                 val x = (beatMs.toFloat() / totalDurationMs) * size.width
                                 drawLine(
-                                    color = ClearCutAccents.Peach,
+                                    color = DirectorXAccents.Peach,
                                     start = Offset(x, 8f),
                                     end = Offset(x, size.height - 8f),
                                     strokeWidth = 4f
@@ -320,17 +320,17 @@ fun BeatSyncPanel(
                     BeatSyncMetric(
                         label = stringResource(R.string.beat_sync_label_beats),
                         value = beatMarkers.size.toString(),
-                        accent = ClearCutAccents.Peach
+                        accent = DirectorXAccents.Peach
                     )
                     BeatSyncMetric(
                         label = stringResource(R.string.beat_sync_label_bpm),
                         value = if (avgBpm > 0.0) avgBpm.roundToInt().toString() else stringResource(R.string.beat_sync_bpm_placeholder),
-                        accent = ClearCutAccents.Blue
+                        accent = DirectorXAccents.Blue
                     )
                     BeatSyncMetric(
                         label = stringResource(R.string.beat_sync_label_scan),
                         value = stringResource(R.string.panel_text_template_duration_format, (totalDurationMs / 1000f).roundToInt()),
-                        accent = ClearCutAccents.Mauve
+                        accent = DirectorXAccents.Mauve
                     )
                 }
 
@@ -338,7 +338,7 @@ fun BeatSyncPanel(
                     onClick = onClearBeats,
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = ClearCutAccents.Red)
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = DirectorXAccents.Red)
                 ) {
                     Text(text = stringResource(R.string.panel_beat_sync_clear))
                 }
@@ -347,7 +347,7 @@ fun BeatSyncPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Green) {
+        PremiumPanelCard(accent = DirectorXAccents.Green) {
             Text(
                 text = stringResource(R.string.beat_sync_apply_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -364,7 +364,7 @@ fun BeatSyncPanel(
                 enabled = hasBeats,
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = ClearCutAccents.Mauve,
+                    containerColor = DirectorXAccents.Mauve,
                     contentColor = semanticColors.onAccent,
                     disabledContainerColor = semanticColors.surface,
                     disabledContentColor = semanticColors.subtext
@@ -384,7 +384,7 @@ private fun BeatSyncMetric(
     accent: androidx.compose.ui.graphics.Color,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = modifier,
         color = accent.copy(alpha = 0.12f),

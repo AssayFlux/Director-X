@@ -33,7 +33,7 @@ class C2paExportEngineTest {
     fun buildManifest_emitsC2pa24ActionsAndThumbnail() {
         val m = engine.buildManifest(
             projectTitle = "My Project",
-            novaCutVersionName = "3.74.9",
+            directorXVersionName = "3.74.9",
             signingMode = C2paExportEngine.SigningMode.ANDROID_KEYSTORE,
             ledger = emptyList(),
             exporterCreationTimeMs = 1_700_000_000_000L
@@ -57,7 +57,7 @@ class C2paExportEngineTest {
     fun buildManifest_doesNotEmitRemovedTrainingMiningAssertion() {
         val m = engine.buildManifest(
             projectTitle = "My Project",
-            novaCutVersionName = "3.74.9",
+            directorXVersionName = "3.74.9",
             signingMode = C2paExportEngine.SigningMode.ANDROID_KEYSTORE,
             ledger = emptyList(),
             exporterCreationTimeMs = 1_700_000_000_000L
@@ -70,7 +70,7 @@ class C2paExportEngineTest {
     fun buildManifest_carriesClaimGeneratorVersion() {
         val m = engine.buildManifest(
             projectTitle = null,
-            novaCutVersionName = "3.74.9",
+            directorXVersionName = "3.74.9",
             signingMode = C2paExportEngine.SigningMode.ANDROID_KEYSTORE,
             ledger = emptyList(),
             exporterCreationTimeMs = 0L
@@ -85,7 +85,7 @@ class C2paExportEngineTest {
     fun buildManifest_blankTitleNormalizesToNull() {
         val m = engine.buildManifest(
             projectTitle = "   ",
-            novaCutVersionName = "3.74.9",
+            directorXVersionName = "3.74.9",
             signingMode = C2paExportEngine.SigningMode.STRONGBOX,
             ledger = emptyList(),
             exporterCreationTimeMs = 0L
@@ -98,7 +98,7 @@ class C2paExportEngineTest {
         assertThrows(IllegalArgumentException::class.java) {
             engine.buildManifest(
                 projectTitle = null,
-                novaCutVersionName = "",
+                directorXVersionName = "",
                 signingMode = C2paExportEngine.SigningMode.ANDROID_KEYSTORE,
                 ledger = emptyList(),
                 exporterCreationTimeMs = 0L
@@ -107,7 +107,7 @@ class C2paExportEngineTest {
         assertThrows(IllegalArgumentException::class.java) {
             engine.buildManifest(
                 projectTitle = null,
-                novaCutVersionName = "3.74.9",
+                directorXVersionName = "3.74.9",
                 signingMode = C2paExportEngine.SigningMode.ANDROID_KEYSTORE,
                 ledger = emptyList(),
                 exporterCreationTimeMs = -1L
@@ -217,7 +217,7 @@ class C2paExportEngineTest {
     fun buildManifest_emitsAiActionsAssertionWhenLedgerNonEmpty() {
         val m = engine.buildManifest(
             projectTitle = "Project",
-            novaCutVersionName = "3.74.9",
+            directorXVersionName = "3.74.9",
             signingMode = C2paExportEngine.SigningMode.ANDROID_KEYSTORE,
             ledger = listOf(
                 ledgerEntry(kind = AiUsageLedger.EffectKind.LIP_SYNC_CLOUD, model = "MuseTalk")
@@ -238,10 +238,10 @@ class C2paExportEngineTest {
     fun manifestDefinitionToJson_serializesC2paBuilderDefinition() {
         val manifest = engine.buildManifest(
             projectTitle = "Project",
-            novaCutVersionName = "3.74.9",
+            directorXVersionName = "3.74.9",
             signingMode = C2paExportEngine.SigningMode.ANDROID_KEYSTORE,
             ledger = listOf(
-                ledgerEntry(kind = AiUsageLedger.EffectKind.AUTO_EDIT_LOCAL, model = "ClearCut Auto Edit")
+                ledgerEntry(kind = AiUsageLedger.EffectKind.AUTO_EDIT_LOCAL, model = "Director X Auto Edit")
             ),
             exporterCreationTimeMs = 1_700_000_000_000L
         )
@@ -273,7 +273,7 @@ class C2paExportEngineTest {
     fun manifestDefinitionToJson_omitsRedactedTitle() {
         val manifest = engine.buildManifest(
             projectTitle = null,
-            novaCutVersionName = "3.74.9",
+            directorXVersionName = "3.74.9",
             signingMode = C2paExportEngine.SigningMode.ANDROID_KEYSTORE,
             ledger = emptyList(),
             exporterCreationTimeMs = 1_700_000_000_000L
@@ -286,7 +286,7 @@ class C2paExportEngineTest {
     fun draftSidecarToJson_marksUnsignedDraftNotVerifiable() {
         val manifest = engine.buildManifest(
             projectTitle = "Project",
-            novaCutVersionName = "3.74.9",
+            directorXVersionName = "3.74.9",
             signingMode = C2paExportEngine.SigningMode.ANDROID_KEYSTORE,
             ledger = emptyList(),
             exporterCreationTimeMs = 1_700_000_000_000L
@@ -321,7 +321,7 @@ class C2paExportEngineTest {
     fun draftSidecarToJson_forcesUnsignedWhenCallerClaimsReadySigner() {
         val manifest = engine.buildManifest(
             projectTitle = "Project",
-            novaCutVersionName = "3.74.9",
+            directorXVersionName = "3.74.9",
             signingMode = C2paExportEngine.SigningMode.USER_PEM,
             ledger = emptyList(),
             exporterCreationTimeMs = 1_700_000_000_000L

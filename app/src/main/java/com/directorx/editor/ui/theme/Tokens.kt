@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 /**
- * ClearCut design tokens.
+ * Director X design tokens.
  *
  * Centralized spacing / radius / motion / elevation values so the editor surfaces have a
  * single, coherent rhythm instead of every panel inventing its own scale. Use these in place
@@ -94,7 +94,7 @@ object Elevation {
  * These values intentionally remain stable across appearance modes so a saved chroma-key
  * preset keeps the same meaning when it is reopened.
  */
-object ClearCutContentColors {
+object DirectorXContentColors {
     val ChromaGreen = Color(0xFF00FF00)
     val ChromaBlue = Color(0xFF0044FF)
     val ChromaRed = Color(0xFFFF0000)

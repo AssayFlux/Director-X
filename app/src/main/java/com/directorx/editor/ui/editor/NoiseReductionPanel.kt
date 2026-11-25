@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,17 +35,17 @@ fun NoiseReductionPanel(
     onAnalyze: () -> Unit,
     onClose: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     PremiumEditorPanel(
         title = stringResource(R.string.noise_reduction_title),
         subtitle = stringResource(R.string.noise_reduction_subtitle),
         icon = Icons.Default.GraphicEq,
-        accent = ClearCutAccents.Mauve,
+        accent = DirectorXAccents.Mauve,
         onClose = onClose,
         modifier = modifier,
         scrollable = true
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -73,11 +73,11 @@ fun NoiseReductionPanel(
                 ) {
                     PremiumPanelPill(
                         text = if (analysisResult != null) stringResource(R.string.noise_reduction_profile_ready) else stringResource(R.string.noise_reduction_awaiting_scan),
-                        accent = ClearCutAccents.Mauve
+                        accent = DirectorXAccents.Mauve
                     )
                     PremiumPanelPill(
                         text = if (isAnalyzing) stringResource(R.string.noise_reduction_cleaning_now) else stringResource(R.string.noise_reduction_ai_assist),
-                        accent = if (isAnalyzing) ClearCutAccents.Peach else ClearCutAccents.Blue
+                        accent = if (isAnalyzing) DirectorXAccents.Peach else DirectorXAccents.Blue
                     )
                 }
             }
@@ -85,7 +85,7 @@ fun NoiseReductionPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = DirectorXAccents.Blue) {
             Text(
                 text = stringResource(R.string.noise_reduction_analyze_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -101,9 +101,9 @@ fun NoiseReductionPanel(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                PremiumPanelPill(text = stringResource(R.string.noise_reduction_type_hiss), accent = ClearCutAccents.Blue)
-                PremiumPanelPill(text = stringResource(R.string.noise_reduction_type_hum), accent = ClearCutAccents.Mauve)
-                PremiumPanelPill(text = stringResource(R.string.noise_reduction_type_broadband), accent = ClearCutAccents.Peach)
+                PremiumPanelPill(text = stringResource(R.string.noise_reduction_type_hiss), accent = DirectorXAccents.Blue)
+                PremiumPanelPill(text = stringResource(R.string.noise_reduction_type_hum), accent = DirectorXAccents.Mauve)
+                PremiumPanelPill(text = stringResource(R.string.noise_reduction_type_broadband), accent = DirectorXAccents.Peach)
             }
 
             Button(
@@ -111,9 +111,9 @@ fun NoiseReductionPanel(
                 enabled = !isAnalyzing,
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = ClearCutAccents.Mauve,
+                    containerColor = DirectorXAccents.Mauve,
                     contentColor = semanticColors.surfaceBase,
-                    disabledContainerColor = ClearCutAccents.Mauve.copy(alpha = 0.45f),
+                    disabledContainerColor = DirectorXAccents.Mauve.copy(alpha = 0.45f),
                     disabledContentColor = semanticColors.surfaceBase.copy(alpha = 0.85f)
                 ),
                 shape = RoundedCornerShape(12.dp)
@@ -139,7 +139,7 @@ fun NoiseReductionPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = if (analysisResult != null) ClearCutAccents.Green else semanticColors.overlayStrong) {
+        PremiumPanelCard(accent = if (analysisResult != null) DirectorXAccents.Green else semanticColors.overlayStrong) {
             if (analysisResult != null) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -149,7 +149,7 @@ fun NoiseReductionPanel(
                     Icon(
                         imageVector = Icons.Default.CheckCircle,
                         contentDescription = stringResource(R.string.done),
-                        tint = ClearCutAccents.Green
+                        tint = DirectorXAccents.Green
                     )
                     Column(modifier = Modifier.weight(1f)) {
                         Text(

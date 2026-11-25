@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -32,10 +32,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
 import com.directorx.editor.R
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.theme.Motion
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 import com.directorx.editor.ui.theme.TouchTarget
@@ -79,13 +79,13 @@ fun FirstRunTutorial(
     onComplete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var currentStep by remember { mutableIntStateOf(0) }
 
     Box(
         modifier = modifier
             .fillMaxSize()
-            .testTag(ClearCutTestTags.TUTORIAL_SCREEN)
+            .testTag(DirectorXTestTags.TUTORIAL_SCREEN)
     ) {
         // Scrim as a SIBLING behind the interactive content, not a pointer
         // handler on the shared parent (issue #49: Next/Skip reported dead on
@@ -117,7 +117,7 @@ fun FirstRunTutorial(
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(Spacing.lg)
-                .testTag(ClearCutTestTags.TUTORIAL_SKIP)
+                .testTag(DirectorXTestTags.TUTORIAL_SKIP)
                 .defaultMinSize(minHeight = TouchTarget.minimum)
                 .clickable(role = Role.Button, onClick = onComplete)
         ) {
@@ -174,7 +174,7 @@ fun FirstRunTutorial(
                     Icon(
                         imageVector = tutorialStep.arrowIcon,
                         contentDescription = null,
-                        tint = ClearCutAccents.Mauve.copy(alpha = 0.85f),
+                        tint = DirectorXAccents.Mauve.copy(alpha = 0.85f),
                         modifier = Modifier.size(24.dp)
                     )
 
@@ -186,16 +186,16 @@ fun FirstRunTutorial(
                         modifier = Modifier
                             .size(64.dp)
                             .clip(CircleShape)
-                            .background(ClearCutAccents.Mauve.copy(alpha = 0.14f))
+                            .background(DirectorXAccents.Mauve.copy(alpha = 0.14f))
                             .border(
-                                BorderStroke(1.dp, ClearCutAccents.Mauve.copy(alpha = 0.24f)),
+                                BorderStroke(1.dp, DirectorXAccents.Mauve.copy(alpha = 0.24f)),
                                 CircleShape
                             )
                     ) {
                         Icon(
                             imageVector = tutorialStep.icon,
                             contentDescription = null,
-                            tint = ClearCutAccents.Mauve,
+                            tint = DirectorXAccents.Mauve,
                             modifier = Modifier.size(30.dp)
                         )
                     }
@@ -261,7 +261,7 @@ fun FirstRunTutorial(
                                     .height(8.dp)
                                     .clip(RoundedCornerShape(Radius.sm))
                                     .background(
-                                        if (index == step) ClearCutAccents.Mauve
+                                        if (index == step) DirectorXAccents.Mauve
                                         else semanticColors.surface.copy(alpha = 0.7f)
                                     )
                             )
@@ -276,7 +276,7 @@ fun FirstRunTutorial(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         if (!isFirstStep) {
-                            ClearCutSecondaryButton(
+                            DirectorXSecondaryButton(
                                 text = stringResource(R.string.tutorial_back),
                                 onClick = { currentStep-- },
                                 modifier = Modifier
@@ -286,7 +286,7 @@ fun FirstRunTutorial(
                             )
                         }
 
-                        ClearCutPrimaryButton(
+                        DirectorXPrimaryButton(
                             text = stringResource(if (isLastStep) R.string.tutorial_get_started else R.string.tutorial_next),
                             onClick = {
                                 if (isLastStep) {

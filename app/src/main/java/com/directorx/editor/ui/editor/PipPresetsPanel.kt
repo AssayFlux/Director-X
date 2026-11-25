@@ -1,8 +1,8 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.ClearCutContentColors
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.DirectorXContentColors
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -89,19 +89,19 @@ fun PipPresetsPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val sections = rememberPipSections()
 
     PremiumEditorPanel(
         title = stringResource(R.string.pip_title),
         subtitle = stringResource(R.string.pip_panel_subtitle),
         icon = Icons.Default.PictureInPicture,
-        accent = ClearCutAccents.Sapphire,
+        accent = DirectorXAccents.Sapphire,
         onClose = onClose,
         modifier = modifier.heightIn(max = 520.dp),
         scrollable = true
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Sapphire) {
+        PremiumPanelCard(accent = DirectorXAccents.Sapphire) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -112,17 +112,17 @@ fun PipPresetsPanel(
                         pipPresets.size,
                         pipPresets.size,
                     ),
-                    accent = ClearCutAccents.Sapphire
+                    accent = DirectorXAccents.Sapphire
                 )
                 PremiumPanelPill(
                     text = stringResource(R.string.pip_layout_categories),
-                    accent = ClearCutAccents.Teal
+                    accent = DirectorXAccents.Teal
                 )
             }
 
             Text(
                 text = stringResource(R.string.pip_layout_presets),
-                color = ClearCutAccents.Rosewater,
+                color = DirectorXAccents.Rosewater,
                 style = MaterialTheme.typography.labelLarge
             )
             Text(
@@ -183,7 +183,7 @@ fun ChromaKeyPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val keyColor = Color(
         red = keyColorR.coerceIn(0f, 1f),
         green = keyColorG.coerceIn(0f, 1f),
@@ -194,7 +194,7 @@ fun ChromaKeyPanel(
         title = stringResource(R.string.panel_chroma_key_title),
         subtitle = stringResource(R.string.panel_chroma_key_subtitle),
         icon = Icons.Default.Visibility,
-        accent = ClearCutAccents.Green,
+        accent = DirectorXAccents.Green,
         onClose = onClose,
         modifier = modifier.heightIn(max = 560.dp),
         scrollable = true,
@@ -203,32 +203,32 @@ fun ChromaKeyPanel(
                 icon = Icons.Default.Visibility,
                 contentDescription = stringResource(R.string.panel_chroma_key_alpha_matte),
                 onClick = onShowAlphaMatte,
-                tint = ClearCutAccents.Peach
+                tint = DirectorXAccents.Peach
             )
         }
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Green) {
+        PremiumPanelCard(accent = DirectorXAccents.Green) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 PremiumPanelPill(
                     text = stringResource(R.string.chroma_similarity_format, formatUnit(similarity)),
-                    accent = ClearCutAccents.Green
+                    accent = DirectorXAccents.Green
                 )
                 PremiumPanelPill(
                     text = stringResource(R.string.chroma_smoothness_format, formatUnit(smoothness)),
-                    accent = ClearCutAccents.Sapphire
+                    accent = DirectorXAccents.Sapphire
                 )
                 PremiumPanelPill(
                     text = stringResource(R.string.chroma_spill_format, formatUnit(spillSuppression)),
-                    accent = ClearCutAccents.Yellow
+                    accent = DirectorXAccents.Yellow
                 )
             }
 
             Text(
                 text = stringResource(R.string.chroma_key_source_title),
-                color = ClearCutAccents.Rosewater,
+                color = DirectorXAccents.Rosewater,
                 style = MaterialTheme.typography.labelLarge
             )
 
@@ -257,29 +257,29 @@ fun ChromaKeyPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Peach) {
+        PremiumPanelCard(accent = DirectorXAccents.Peach) {
             Text(
                 text = stringResource(R.string.panel_chroma_key_color),
-                color = ClearCutAccents.Rosewater,
+                color = DirectorXAccents.Rosewater,
                 style = MaterialTheme.typography.labelLarge
             )
 
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 KeyColorSwatch(
                     label = stringResource(R.string.chroma_green),
-                    color = ClearCutContentColors.ChromaGreen,
+                    color = DirectorXContentColors.ChromaGreen,
                     selected = keyColorG > 0.8f && keyColorR < 0.3f && keyColorB < 0.3f,
                     onClick = { onKeyColorChanged(0f, 1f, 0f) }
                 )
                 KeyColorSwatch(
                     label = stringResource(R.string.chroma_blue),
-                    color = ClearCutContentColors.ChromaBlue,
+                    color = DirectorXContentColors.ChromaBlue,
                     selected = keyColorB > 0.8f && keyColorR < 0.3f && keyColorG < 0.3f,
                     onClick = { onKeyColorChanged(0f, 0f, 1f) }
                 )
                 KeyColorSwatch(
                     label = stringResource(R.string.chroma_red),
-                    color = ClearCutContentColors.ChromaRed,
+                    color = DirectorXContentColors.ChromaRed,
                     selected = keyColorR > 0.8f && keyColorG < 0.3f && keyColorB < 0.3f,
                     onClick = { onKeyColorChanged(1f, 0f, 0f) }
                 )
@@ -288,29 +288,29 @@ fun ChromaKeyPanel(
             ChromaSlider(
                 label = stringResource(R.string.chroma_red),
                 value = keyColorR,
-                color = ClearCutAccents.Red,
+                color = DirectorXAccents.Red,
                 onChanged = { onKeyColorChanged(it, keyColorG, keyColorB) }
             )
             ChromaSlider(
                 label = stringResource(R.string.chroma_green),
                 value = keyColorG,
-                color = ClearCutAccents.Green,
+                color = DirectorXAccents.Green,
                 onChanged = { onKeyColorChanged(keyColorR, it, keyColorB) }
             )
             ChromaSlider(
                 label = stringResource(R.string.chroma_blue),
                 value = keyColorB,
-                color = ClearCutAccents.Blue,
+                color = DirectorXAccents.Blue,
                 onChanged = { onKeyColorChanged(keyColorR, keyColorG, it) }
             )
         }
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Sapphire) {
+        PremiumPanelCard(accent = DirectorXAccents.Sapphire) {
             Text(
                 text = stringResource(R.string.panel_chroma_key_refinement),
-                color = ClearCutAccents.Rosewater,
+                color = DirectorXAccents.Rosewater,
                 style = MaterialTheme.typography.labelLarge
             )
             Text(
@@ -322,19 +322,19 @@ fun ChromaKeyPanel(
             ChromaSlider(
                 label = stringResource(R.string.chroma_similarity),
                 value = similarity,
-                color = ClearCutAccents.Green,
+                color = DirectorXAccents.Green,
                 onChanged = onSimilarityChanged
             )
             ChromaSlider(
                 label = stringResource(R.string.chroma_smoothness),
                 value = smoothness,
-                color = ClearCutAccents.Sapphire,
+                color = DirectorXAccents.Sapphire,
                 onChanged = onSmoothnessChanged
             )
             ChromaSlider(
                 label = stringResource(R.string.chroma_spill_suppress),
                 value = spillSuppression,
-                color = ClearCutAccents.Yellow,
+                color = DirectorXAccents.Yellow,
                 onChanged = onSpillChanged
             )
         }
@@ -347,7 +347,7 @@ private fun PipPresetCard(
     accent: Color,
     onClick: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = Modifier.width(148.dp),
         onClick = onClick,
@@ -421,14 +421,14 @@ private fun KeyColorSwatch(
     selected: Boolean,
     onClick: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         onClick = onClick,
         color = color.copy(alpha = 0.14f),
         shape = RoundedCornerShape(12.dp),
         border = BorderStroke(
             1.dp,
-            if (selected) ClearCutAccents.Mauve else color.copy(alpha = 0.28f)
+            if (selected) DirectorXAccents.Mauve else color.copy(alpha = 0.28f)
         )
     ) {
         Column(
@@ -443,7 +443,7 @@ private fun KeyColorSwatch(
             )
             Text(
                 text = label,
-                color = if (selected) ClearCutAccents.Mauve else semanticColors.text,
+                color = if (selected) DirectorXAccents.Mauve else semanticColors.text,
                 style = MaterialTheme.typography.labelMedium
             )
         }
@@ -457,7 +457,7 @@ private fun ChromaSlider(
     color: Color,
     onChanged: (Float) -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -501,7 +501,7 @@ private fun rememberPipSections(): List<PipPresetSection> = listOf(
     PipPresetSection(
         titleRes = R.string.pip_section_corners_title,
         subtitleRes = R.string.pip_section_corners_description,
-        accent = ClearCutAccents.Sapphire,
+        accent = DirectorXAccents.Sapphire,
         presets = pipPresets.filter {
             it.id in setOf(
                 PipPresetId.TOP_LEFT,
@@ -516,7 +516,7 @@ private fun rememberPipSections(): List<PipPresetSection> = listOf(
     PipPresetSection(
         titleRes = R.string.pip_section_split_title,
         subtitleRes = R.string.pip_section_split_description,
-        accent = ClearCutAccents.Green,
+        accent = DirectorXAccents.Green,
         presets = pipPresets.filter {
             it.id in setOf(
                 PipPresetId.LEFT_HALF,
@@ -529,7 +529,7 @@ private fun rememberPipSections(): List<PipPresetSection> = listOf(
     PipPresetSection(
         titleRes = R.string.pip_section_hero_title,
         subtitleRes = R.string.pip_section_hero_description,
-        accent = ClearCutAccents.Peach,
+        accent = DirectorXAccents.Peach,
         presets = pipPresets.filter { it.id in setOf(PipPresetId.LOWER_THIRD, PipPresetId.FULL_SCREEN) }
     )
 )

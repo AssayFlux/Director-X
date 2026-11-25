@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -50,7 +50,7 @@ internal fun TimelineOverviewBar(
     contentPadding: Dp,
     onScrollTo: (Long) -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val overviewHeight = 22.dp
     var widthPx by remember { mutableFloatStateOf(0f) }
     val overviewContentDescription = stringResource(R.string.cd_timeline_overview)
@@ -114,12 +114,12 @@ internal fun TimelineOverviewBar(
             val vStartF = (scrollOffsetMs.toFloat() / totalF).coerceIn(0f, 1f)
             val vWidthF = (currentVisibleDurationMs.toFloat() / totalF).coerceIn(0.01f, 1f)
             drawRect(
-                color = ClearCutAccents.Sky.copy(alpha = 0.25f),
+                color = DirectorXAccents.Sky.copy(alpha = 0.25f),
                 topLeft = Offset(vStartF * size.width, 0f),
                 size = Size(vWidthF * size.width, size.height)
             )
             drawRect(
-                color = ClearCutAccents.Sky,
+                color = DirectorXAccents.Sky,
                 topLeft = Offset(vStartF * size.width, 0f),
                 size = Size(vWidthF * size.width, size.height),
                 style = Stroke(width = 1.6f)
@@ -127,7 +127,7 @@ internal fun TimelineOverviewBar(
 
             val playheadF = (playheadMs.toFloat() / totalF).coerceIn(0f, 1f)
             drawLine(
-                color = ClearCutAccents.Rosewater,
+                color = DirectorXAccents.Rosewater,
                 start = Offset(playheadF * size.width, 0f),
                 end = Offset(playheadF * size.width, size.height),
                 strokeWidth = 1.4f

@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -142,7 +142,7 @@ fun StickerPickerPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var selectedCategory by remember { mutableStateOf(StickerCategory.EMOJI) }
     val accent = stickerAccent(selectedCategory)
     val stickers = remember(selectedCategory) {
@@ -176,13 +176,13 @@ fun StickerPickerPanel(
                 )
                 PremiumPanelPill(
                     text = stringResource(selectedCategory.labelRes()),
-                    accent = ClearCutAccents.Sapphire
+                    accent = DirectorXAccents.Sapphire
                 )
             }
 
             Text(
                 text = stringResource(R.string.sticker_shelf),
-                color = ClearCutAccents.Rosewater,
+                color = DirectorXAccents.Rosewater,
                 style = MaterialTheme.typography.labelLarge
             )
             Text(
@@ -273,7 +273,7 @@ fun StickerPickerPanel(
             PremiumPanelCard(accent = accent) {
                 Text(
                     text = stringResource(R.string.sticker_bundled_collection),
-                    color = ClearCutAccents.Rosewater,
+                    color = DirectorXAccents.Rosewater,
                     style = MaterialTheme.typography.labelLarge
                 )
                 Text(
@@ -312,7 +312,7 @@ private fun StickerCategoryChip(
     accent: androidx.compose.ui.graphics.Color,
     onClick: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         onClick = onClick,
         color = if (selected) accent.copy(alpha = 0.14f) else semanticColors.panelHighest,
@@ -337,7 +337,7 @@ private fun StickerTile(
     accent: androidx.compose.ui.graphics.Color,
     onClick: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val selectLabel = stringResource(R.string.cd_select_sticker, sticker.display)
 
     Surface(
@@ -379,11 +379,11 @@ private fun StickerTile(
 }
 
 private fun stickerAccent(category: StickerCategory): androidx.compose.ui.graphics.Color = when (category) {
-    StickerCategory.EMOJI -> ClearCutAccents.Yellow
-    StickerCategory.SHAPES -> ClearCutAccents.Sapphire
-    StickerCategory.ARROWS -> ClearCutAccents.Green
-    StickerCategory.SOCIAL -> ClearCutAccents.Pink
-    StickerCategory.CUSTOM -> ClearCutAccents.Peach
+    StickerCategory.EMOJI -> DirectorXAccents.Yellow
+    StickerCategory.SHAPES -> DirectorXAccents.Sapphire
+    StickerCategory.ARROWS -> DirectorXAccents.Green
+    StickerCategory.SOCIAL -> DirectorXAccents.Pink
+    StickerCategory.CUSTOM -> DirectorXAccents.Peach
 }
 
 private fun StickerCategory.labelRes(): Int = when (this) {

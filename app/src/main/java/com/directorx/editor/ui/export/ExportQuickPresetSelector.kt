@@ -37,8 +37,8 @@ import com.directorx.editor.R
 import com.directorx.editor.model.AspectRatio
 import com.directorx.editor.model.ExportConfig
 import com.directorx.editor.model.PlatformPreset
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.TouchTarget
 
@@ -56,7 +56,7 @@ internal fun ExportQuickPresetSelector(
     outputAspectRatio: AspectRatio,
     onConfigChanged: (ExportConfig) -> Unit,
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val overflowSelection = config.platformPreset?.takeIf(overflowPresets::contains)
     var showOverflowPresets by remember { mutableStateOf(false) }
 
@@ -82,8 +82,8 @@ internal fun ExportQuickPresetSelector(
                 colors = FilterChipDefaults.filterChipColors(
                     containerColor = semanticColors.panelRaised,
                     labelColor = semanticColors.subtext,
-                    selectedContainerColor = ClearCutAccents.Green.copy(alpha = 0.16f),
-                    selectedLabelColor = ClearCutAccents.Green,
+                    selectedContainerColor = DirectorXAccents.Green.copy(alpha = 0.16f),
+                    selectedLabelColor = DirectorXAccents.Green,
                 ),
             )
         }
@@ -115,9 +115,9 @@ internal fun ExportQuickPresetSelector(
                     containerColor = semanticColors.panelRaised,
                     labelColor = semanticColors.subtext,
                     iconColor = semanticColors.subtext,
-                    selectedContainerColor = ClearCutAccents.Green.copy(alpha = 0.16f),
-                    selectedLabelColor = ClearCutAccents.Green,
-                    selectedTrailingIconColor = ClearCutAccents.Green,
+                    selectedContainerColor = DirectorXAccents.Green.copy(alpha = 0.16f),
+                    selectedLabelColor = DirectorXAccents.Green,
+                    selectedTrailingIconColor = DirectorXAccents.Green,
                 ),
             )
             DropdownMenu(
@@ -135,7 +135,7 @@ internal fun ExportQuickPresetSelector(
                                 Icon(
                                     imageVector = Icons.Default.CheckCircle,
                                     contentDescription = null,
-                                    tint = ClearCutAccents.Green,
+                                    tint = DirectorXAccents.Green,
                                     modifier = Modifier.size(18.dp),
                                 )
                             }
@@ -156,9 +156,9 @@ internal fun ExportQuickPresetSelector(
         Spacer(modifier = Modifier.height(10.dp))
         Surface(
             modifier = Modifier.fillMaxWidth(),
-            color = ClearCutAccents.Yellow.copy(alpha = 0.12f),
+            color = DirectorXAccents.Yellow.copy(alpha = 0.12f),
             shape = RoundedCornerShape(Radius.md),
-            border = BorderStroke(1.dp, ClearCutAccents.Yellow.copy(alpha = 0.28f)),
+            border = BorderStroke(1.dp, DirectorXAccents.Yellow.copy(alpha = 0.28f)),
         ) {
             Row(
                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
@@ -168,7 +168,7 @@ internal fun ExportQuickPresetSelector(
                 Icon(
                     imageVector = Icons.Default.Info,
                     contentDescription = null,
-                    tint = ClearCutAccents.Yellow,
+                    tint = DirectorXAccents.Yellow,
                     modifier = Modifier.size(18.dp),
                 )
                 Text(

@@ -23,7 +23,7 @@ import com.directorx.editor.model.Clip
 import com.directorx.editor.model.TextOverlay
 import com.directorx.editor.model.Track
 import com.directorx.editor.model.TrackType
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -59,119 +59,119 @@ class JvmVisualVerificationTest {
     fun primary_workflow_and_supporting_surfaces_render_in_both_cream_modes() {
         capture("project-dashboard-empty-cream.png")
 
-        compose.onNodeWithTag(ClearCutTestTags.PROJECTS_CREATE_PROJECT).performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.TEMPLATE_SHEET)
+        compose.onNodeWithTag(DirectorXTestTags.PROJECTS_CREATE_PROJECT).performClick()
+        waitUntilAtLeastOneExists(DirectorXTestTags.TEMPLATE_SHEET)
         capture("project-template-sheet-cream.png")
-        compose.onNodeWithTag(ClearCutTestTags.TEMPLATE_BLANK)
+        compose.onNodeWithTag(DirectorXTestTags.TEMPLATE_BLANK)
             .performScrollTo()
             .performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.EDITOR_SCREEN)
+        waitUntilAtLeastOneExists(DirectorXTestTags.EDITOR_SCREEN)
         dismissTutorialIfPresent()
         capture("editor-empty-cream.png")
 
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_EMPTY_ADD_MEDIA).performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.MEDIA_PICKER_SHEET)
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_EMPTY_ADD_MEDIA).performClick()
+        waitUntilAtLeastOneExists(DirectorXTestTags.MEDIA_PICKER_SHEET)
         capture("media-picker-cream.png")
-        compose.onNodeWithTag(ClearCutTestTags.MEDIA_PICKER_CLOSE).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.MEDIA_PICKER_CLOSE).performClick()
 
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_BACK).performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.PROJECTS_SCREEN)
-        waitUntilNoExists(ClearCutTestTags.EDITOR_SCREEN)
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_BACK).performClick()
+        waitUntilAtLeastOneExists(DirectorXTestTags.PROJECTS_SCREEN)
+        waitUntilNoExists(DirectorXTestTags.EDITOR_SCREEN)
         val visualProjectId = seedVisualProject()
         waitUntilTextExists(VISUAL_PROJECT_NAME)
         capture("project-dashboard-cream.png")
 
-        compose.onNodeWithTag(ClearCutTestTags.PROJECTS_SETTINGS).performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.SETTINGS_SCREEN)
+        compose.onNodeWithTag(DirectorXTestTags.PROJECTS_SETTINGS).performClick()
+        waitUntilAtLeastOneExists(DirectorXTestTags.SETTINGS_SCREEN)
         capture("settings-cream.png")
         compose.onNodeWithText("App & Preferences").performClick()
 
-        waitUntilAtLeastOneExists(ClearCutTestTags.SETTINGS_PRIVACY_OPEN)
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_PRIVACY_OPEN)
+        waitUntilAtLeastOneExists(DirectorXTestTags.SETTINGS_PRIVACY_OPEN)
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_PRIVACY_OPEN)
             .performScrollTo()
             .performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.SETTINGS_PRIVACY_DASHBOARD)
+        waitUntilAtLeastOneExists(DirectorXTestTags.SETTINGS_PRIVACY_DASHBOARD)
         capture("privacy-dashboard-cream.png")
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_PRIVACY_CLOSE).performClick()
-        waitUntilNoExists(ClearCutTestTags.SETTINGS_PRIVACY_DASHBOARD)
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_PRIVACY_CLOSE).performClick()
+        waitUntilNoExists(DirectorXTestTags.SETTINGS_PRIVACY_DASHBOARD)
 
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_LICENSES_OPEN)
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_LICENSES_OPEN)
             .performScrollTo()
             .performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.SETTINGS_LICENSES_DIALOG)
+        waitUntilAtLeastOneExists(DirectorXTestTags.SETTINGS_LICENSES_DIALOG)
         capture("open-source-licenses-cream.png")
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_LICENSES_CLOSE).performClick()
-        waitUntilNoExists(ClearCutTestTags.SETTINGS_LICENSES_DIALOG)
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_LICENSES_CLOSE).performClick()
+        waitUntilNoExists(DirectorXTestTags.SETTINGS_LICENSES_DIALOG)
 
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_BACK).performClick()
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_BACK).performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.PROJECTS_SCREEN)
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_BACK).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_BACK).performClick()
+        waitUntilAtLeastOneExists(DirectorXTestTags.PROJECTS_SCREEN)
 
-        compose.onNodeWithTag("${ClearCutTestTags.PROJECT_CARD_PREFIX}$visualProjectId").performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.EDITOR_SCREEN)
+        compose.onNodeWithTag("${DirectorXTestTags.PROJECT_CARD_PREFIX}$visualProjectId").performClick()
+        waitUntilAtLeastOneExists(DirectorXTestTags.EDITOR_SCREEN)
         dismissFixtureMediaWarningIfPresent()
         capture("editor-cream.png")
 
         updateAppearance(AppearanceMode.HIGH_CONTRAST_DARK)
         capture("editor-high-contrast-cream.png")
 
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_EXPORT).performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.EXPORT_SHEET)
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_EXPORT).performClick()
+        waitUntilAtLeastOneExists(DirectorXTestTags.EXPORT_SHEET)
         capture("export-sheet-high-contrast-cream.png")
-        compose.onNodeWithTag(ClearCutTestTags.EXPORT_CLOSE).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.EXPORT_CLOSE).performClick()
 
         updateAppearance(AppearanceMode.DARK)
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_EXPORT).performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.EXPORT_SHEET)
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_EXPORT).performClick()
+        waitUntilAtLeastOneExists(DirectorXTestTags.EXPORT_SHEET)
         capture("export-sheet-cream.png")
-        compose.onNodeWithTag(ClearCutTestTags.EXPORT_CLOSE).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.EXPORT_CLOSE).performClick()
 
         updateAppearance(AppearanceMode.HIGH_CONTRAST_DARK)
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_BACK).performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.PROJECTS_SCREEN)
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_BACK).performClick()
+        waitUntilAtLeastOneExists(DirectorXTestTags.PROJECTS_SCREEN)
         capture("project-dashboard-high-contrast-cream.png")
 
-        compose.onNodeWithTag(ClearCutTestTags.PROJECTS_SETTINGS).performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.SETTINGS_SCREEN)
+        compose.onNodeWithTag(DirectorXTestTags.PROJECTS_SETTINGS).performClick()
+        waitUntilAtLeastOneExists(DirectorXTestTags.SETTINGS_SCREEN)
         capture("settings-high-contrast-cream.png")
         compose.onNodeWithText("App & Preferences").performClick()
 
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_PRIVACY_OPEN)
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_PRIVACY_OPEN)
             .performScrollTo()
             .performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.SETTINGS_PRIVACY_DASHBOARD)
+        waitUntilAtLeastOneExists(DirectorXTestTags.SETTINGS_PRIVACY_DASHBOARD)
         capture("privacy-dashboard-high-contrast-cream.png")
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_PRIVACY_CLOSE).performClick()
-        waitUntilNoExists(ClearCutTestTags.SETTINGS_PRIVACY_DASHBOARD)
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_PRIVACY_CLOSE).performClick()
+        waitUntilNoExists(DirectorXTestTags.SETTINGS_PRIVACY_DASHBOARD)
 
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_BACK).performClick()
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_BACK).performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.PROJECTS_SCREEN)
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_BACK).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_BACK).performClick()
+        waitUntilAtLeastOneExists(DirectorXTestTags.PROJECTS_SCREEN)
 
-        compose.onNodeWithTag(ClearCutTestTags.PROJECTS_CREATE_PROJECT).performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.TEMPLATE_SHEET)
+        compose.onNodeWithTag(DirectorXTestTags.PROJECTS_CREATE_PROJECT).performClick()
+        waitUntilAtLeastOneExists(DirectorXTestTags.TEMPLATE_SHEET)
         capture("project-template-sheet-high-contrast-cream.png")
-        compose.onNodeWithTag(ClearCutTestTags.TEMPLATE_BLANK)
+        compose.onNodeWithTag(DirectorXTestTags.TEMPLATE_BLANK)
             .performScrollTo()
             .performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.EDITOR_SCREEN)
+        waitUntilAtLeastOneExists(DirectorXTestTags.EDITOR_SCREEN)
         dismissTutorialIfPresent()
         capture("editor-empty-high-contrast-cream.png")
 
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_EMPTY_ADD_MEDIA).performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.MEDIA_PICKER_SHEET)
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_EMPTY_ADD_MEDIA).performClick()
+        waitUntilAtLeastOneExists(DirectorXTestTags.MEDIA_PICKER_SHEET)
         capture("media-picker-high-contrast-cream.png")
-        compose.onNodeWithTag(ClearCutTestTags.MEDIA_PICKER_CLOSE).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.MEDIA_PICKER_CLOSE).performClick()
 
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_BACK).performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.PROJECTS_SCREEN)
-        compose.onNodeWithTag(ClearCutTestTags.PROJECTS_SETTINGS).performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.SETTINGS_SCREEN)
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_BACK).performClick()
+        waitUntilAtLeastOneExists(DirectorXTestTags.PROJECTS_SCREEN)
+        compose.onNodeWithTag(DirectorXTestTags.PROJECTS_SETTINGS).performClick()
+        waitUntilAtLeastOneExists(DirectorXTestTags.SETTINGS_SCREEN)
         compose.onNodeWithText("App & Preferences").performClick()
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_REPLAY_TUTORIAL)
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_REPLAY_TUTORIAL)
             .performScrollTo()
             .performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.TUTORIAL_SCREEN)
+        waitUntilAtLeastOneExists(DirectorXTestTags.TUTORIAL_SCREEN)
         capture("tutorial-high-contrast-cream.png")
         updateAppearance(AppearanceMode.DARK)
         capture("tutorial-cream.png")
@@ -179,28 +179,28 @@ class JvmVisualVerificationTest {
 
     @Test(timeout = 120_000L)
     fun settings_overview_exposes_four_categories_and_navigation_round_trips() {
-        compose.onNodeWithTag(ClearCutTestTags.PROJECTS_SETTINGS).performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.SETTINGS_SCREEN)
+        compose.onNodeWithTag(DirectorXTestTags.PROJECTS_SETTINGS).performClick()
+        waitUntilAtLeastOneExists(DirectorXTestTags.SETTINGS_SCREEN)
 
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_CATEGORY_EXPORT).assertIsDisplayed().performClick()
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_CATEGORY_EXPORT).assertIsDisplayed().performClick()
         compose.onNodeWithText("Export Defaults").assertIsDisplayed()
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_BACK).performClick()
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_CATEGORY_EXPORT).assertIsDisplayed()
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_BACK).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_CATEGORY_EXPORT).assertIsDisplayed()
 
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_CATEGORY_EDITING).assertIsDisplayed().performClick()
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_CATEGORY_EDITING).assertIsDisplayed().performClick()
         compose.onNodeWithText("Timeline").assertIsDisplayed()
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_BACK).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_BACK).performClick()
 
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_CATEGORY_AI_STORAGE).assertIsDisplayed().performClick()
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_CATEGORY_AI_STORAGE).assertIsDisplayed().performClick()
         compose.onNodeWithText("AI Models").assertIsDisplayed()
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_BACK).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_BACK).performClick()
 
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_CATEGORY_APP).assertIsDisplayed().performClick()
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_CATEGORY_APP).assertIsDisplayed().performClick()
         compose.onNodeWithText("Appearance").assertIsDisplayed()
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_BACK).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_BACK).performClick()
 
-        compose.onNodeWithTag(ClearCutTestTags.SETTINGS_BACK).performClick()
-        waitUntilAtLeastOneExists(ClearCutTestTags.PROJECTS_SCREEN)
+        compose.onNodeWithTag(DirectorXTestTags.SETTINGS_BACK).performClick()
+        waitUntilAtLeastOneExists(DirectorXTestTags.PROJECTS_SCREEN)
     }
 
     private fun capture(name: String) {
@@ -331,7 +331,7 @@ class JvmVisualVerificationTest {
     private fun dismissFixtureMediaWarningIfPresent() {
         val managerAppeared = runCatching {
             compose.waitUntil(2_500L) {
-                compose.onAllNodesWithTag(ClearCutTestTags.MEDIA_MANAGER_PANEL)
+                compose.onAllNodesWithTag(DirectorXTestTags.MEDIA_MANAGER_PANEL)
                     .fetchSemanticsNodes()
                     .isNotEmpty()
             }
@@ -339,8 +339,8 @@ class JvmVisualVerificationTest {
         }.getOrDefault(false)
 
         if (managerAppeared) {
-            compose.onNodeWithTag(ClearCutTestTags.MEDIA_MANAGER_CLOSE).performClick()
-            waitUntilNoExists(ClearCutTestTags.MEDIA_MANAGER_PANEL)
+            compose.onNodeWithTag(DirectorXTestTags.MEDIA_MANAGER_CLOSE).performClick()
+            waitUntilNoExists(DirectorXTestTags.MEDIA_MANAGER_PANEL)
         }
 
         compose.waitUntil(6_000L) {
@@ -353,16 +353,16 @@ class JvmVisualVerificationTest {
     private fun dismissTutorialIfPresent() {
         runCatching {
             compose.waitUntil(1_200L) {
-                compose.onAllNodesWithTag(ClearCutTestTags.TUTORIAL_SKIP)
+                compose.onAllNodesWithTag(DirectorXTestTags.TUTORIAL_SKIP)
                     .fetchSemanticsNodes()
                     .isNotEmpty()
             }
         }
-        if (compose.onAllNodesWithTag(ClearCutTestTags.TUTORIAL_SKIP)
+        if (compose.onAllNodesWithTag(DirectorXTestTags.TUTORIAL_SKIP)
                 .fetchSemanticsNodes()
                 .isNotEmpty()
         ) {
-            compose.onNodeWithTag(ClearCutTestTags.TUTORIAL_SKIP).performClick()
+            compose.onNodeWithTag(DirectorXTestTags.TUTORIAL_SKIP).performClick()
         }
     }
 

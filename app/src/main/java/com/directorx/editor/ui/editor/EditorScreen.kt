@@ -2,8 +2,8 @@
 
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 
 import android.Manifest
 import android.content.Context
@@ -58,11 +58,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import com.directorx.editor.engine.ExportState
 import com.directorx.editor.model.*
-import com.directorx.editor.ui.ClearCutTestTags
-import com.directorx.editor.ui.theme.ClearCutDialogIcon
-import com.directorx.editor.ui.theme.ClearCutChromeIconButton
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.DirectorXTestTags
+import com.directorx.editor.ui.theme.DirectorXDialogIcon
+import com.directorx.editor.ui.theme.DirectorXChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 import com.directorx.editor.ui.theme.TouchTarget
@@ -101,7 +101,7 @@ fun EditorScreen(
     onBack: () -> Unit = {},
     viewModel: EditorViewModel = hiltViewModel()
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val state by viewModel.state.collectAsStateWithLifecycle()
     val playheadState = viewModel.playheadMs.collectAsStateWithLifecycle()
     val playheadMs by playheadState
@@ -527,8 +527,8 @@ fun EditorScreen(
     Box(modifier = Modifier
         .fillMaxSize()
         .semantics {
-            semanticsTestTag = ClearCutTestTags.EDITOR_SCREEN
-            this[ClearCutTestTags.OPEN_PANEL_IDS] = state.panels.openPanels.map { it.name }.toSet()
+            semanticsTestTag = DirectorXTestTags.EDITOR_SCREEN
+            this[DirectorXTestTags.OPEN_PANEL_IDS] = state.panels.openPanels.map { it.name }.toSet()
         }
         .background(semanticColors.surfaceBase)
         .graphicsLayer {
@@ -845,7 +845,7 @@ fun EditorScreen(
                             Icon(
                                 Icons.Default.VideoLibrary,
                                 contentDescription = null,
-                                tint = ClearCutAccents.Sky,
+                                tint = DirectorXAccents.Sky,
                                 modifier = Modifier.size(28.dp)
                             )
                             Spacer(Modifier.height(Spacing.sm))
@@ -869,11 +869,11 @@ fun EditorScreen(
                                 modifier = Modifier
                                     .widthIn(min = 180.dp)
                                     .clip(RoundedCornerShape(Radius.md))
-                                    .background(ClearCutAccents.Sky)
+                                    .background(DirectorXAccents.Sky)
                                     // Merge the test tag and label with the clickable node.
                                     // The minimum size remains inside the click target.
                                     .semantics(mergeDescendants = true) {
-                                        semanticsTestTag = ClearCutTestTags.EDITOR_EMPTY_ADD_MEDIA
+                                        semanticsTestTag = DirectorXTestTags.EDITOR_EMPTY_ADD_MEDIA
                                         contentDescription = emptyAddMediaLabel
                                     }
                                     .clickable(onClick = viewModel::showMediaPicker)
@@ -1010,7 +1010,7 @@ fun EditorScreen(
                         .padding(horizontal = 12.dp, vertical = 8.dp),
                     color = Color.Transparent,
                     shape = RoundedCornerShape(Radius.xl),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, ClearCutAccents.Peach.copy(alpha = 0.2f))
+                    border = androidx.compose.foundation.BorderStroke(1.dp, DirectorXAccents.Peach.copy(alpha = 0.2f))
                 ) {
                     Row(
                         modifier = Modifier
@@ -1026,7 +1026,7 @@ fun EditorScreen(
                         ) {
                             Text(
                                 text = stringResource(R.string.editor_selection),
-                                color = ClearCutAccents.Peach,
+                                color = DirectorXAccents.Peach,
                                 style = MaterialTheme.typography.labelSmall
                             )
                             Text(
@@ -1037,8 +1037,8 @@ fun EditorScreen(
                         }
                         Surface(
                             shape = RoundedCornerShape(10.dp),
-                            color = ClearCutAccents.Red.copy(alpha = 0.14f),
-                            border = androidx.compose.foundation.BorderStroke(1.dp, ClearCutAccents.Red.copy(alpha = 0.2f))
+                            color = DirectorXAccents.Red.copy(alpha = 0.14f),
+                            border = androidx.compose.foundation.BorderStroke(1.dp, DirectorXAccents.Red.copy(alpha = 0.2f))
                         ) {
                             Row(
                                 modifier = Modifier
@@ -1050,13 +1050,13 @@ fun EditorScreen(
                                 Icon(
                                     Icons.Default.Delete,
                                     contentDescription = stringResource(R.string.editor_delete_selected),
-                                    tint = ClearCutAccents.Red,
+                                    tint = DirectorXAccents.Red,
                                     modifier = Modifier.size(16.dp)
                                 )
                                 Spacer(Modifier.width(6.dp))
                                 Text(
                                     text = stringResource(R.string.editor_delete),
-                                    color = ClearCutAccents.Red,
+                                    color = DirectorXAccents.Red,
                                     style = MaterialTheme.typography.labelLarge
                                 )
                             }
@@ -1065,8 +1065,8 @@ fun EditorScreen(
                             Spacer(Modifier.width(6.dp))
                             Surface(
                                 shape = RoundedCornerShape(10.dp),
-                                color = ClearCutAccents.Mauve.copy(alpha = 0.14f),
-                                border = androidx.compose.foundation.BorderStroke(1.dp, ClearCutAccents.Mauve.copy(alpha = 0.2f))
+                                color = DirectorXAccents.Mauve.copy(alpha = 0.14f),
+                                border = androidx.compose.foundation.BorderStroke(1.dp, DirectorXAccents.Mauve.copy(alpha = 0.2f))
                             ) {
                                 Row(
                                     modifier = Modifier
@@ -1078,13 +1078,13 @@ fun EditorScreen(
                                     Icon(
                                         Icons.Default.ContentPaste,
                                         contentDescription = stringResource(R.string.tool_paste_effects),
-                                        tint = ClearCutAccents.Mauve,
+                                        tint = DirectorXAccents.Mauve,
                                         modifier = Modifier.size(16.dp)
                                     )
                                     Spacer(Modifier.width(6.dp))
                                     Text(
                                         text = stringResource(R.string.editor_paste_fx),
-                                        color = ClearCutAccents.Mauve,
+                                        color = DirectorXAccents.Mauve,
                                         style = MaterialTheme.typography.labelLarge
                                     )
                                 }
@@ -1368,7 +1368,7 @@ private fun EditorTopBar(
     onOpenSnapshots: () -> Unit,
     onApplyCutList: (String) -> Unit = {},
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var showOverflow by remember { mutableStateOf(false) }
     var showRenameDialog by remember { mutableStateOf(false) }
     var showCutListDialog by remember { mutableStateOf(false) }
@@ -1381,9 +1381,9 @@ private fun EditorTopBar(
         AlertDialog(
             onDismissRequest = { showSaveTemplateDialog = false },
             icon = {
-                ClearCutDialogIcon(
+                DirectorXDialogIcon(
                     icon = Icons.Default.Save,
-                    accent = ClearCutAccents.Mauve
+                    accent = DirectorXAccents.Mauve
                 )
             },
             title = {
@@ -1404,10 +1404,10 @@ private fun EditorTopBar(
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedTextColor = semanticColors.text,
                         unfocusedTextColor = semanticColors.text,
-                        cursorColor = ClearCutAccents.Mauve,
-                        focusedBorderColor = ClearCutAccents.Mauve,
+                        cursorColor = DirectorXAccents.Mauve,
+                        focusedBorderColor = DirectorXAccents.Mauve,
                         unfocusedBorderColor = semanticColors.cardStroke,
-                        focusedLabelColor = ClearCutAccents.Mauve,
+                        focusedLabelColor = DirectorXAccents.Mauve,
                         unfocusedLabelColor = semanticColors.subtext,
                         focusedContainerColor = semanticColors.panelRaised,
                         unfocusedContainerColor = semanticColors.panelRaised
@@ -1415,7 +1415,7 @@ private fun EditorTopBar(
                 )
             },
             confirmButton = {
-                ClearCutPrimaryButton(
+                DirectorXPrimaryButton(
                     text = stringResource(R.string.editor_save),
                     onClick = {
                         onSaveTemplate(trimmedTemplateName)
@@ -1426,7 +1426,7 @@ private fun EditorTopBar(
                 )
             },
             dismissButton = {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.editor_cancel),
                     onClick = { showSaveTemplateDialog = false }
                 )
@@ -1445,9 +1445,9 @@ private fun EditorTopBar(
         AlertDialog(
             onDismissRequest = { showRenameDialog = false },
             icon = {
-                ClearCutDialogIcon(
+                DirectorXDialogIcon(
                     icon = Icons.Default.Edit,
-                    accent = ClearCutAccents.Rosewater
+                    accent = DirectorXAccents.Rosewater
                 )
             },
             title = {
@@ -1468,12 +1468,12 @@ private fun EditorTopBar(
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedTextColor = semanticColors.text,
                         unfocusedTextColor = semanticColors.text,
-                        cursorColor = ClearCutAccents.Mauve,
-                        focusedBorderColor = ClearCutAccents.Mauve,
+                        cursorColor = DirectorXAccents.Mauve,
+                        focusedBorderColor = DirectorXAccents.Mauve,
                         // Normalized to match the editor's other input borders so the rename
                         // dialog feels like part of the same surface system rather than a fork.
                         unfocusedBorderColor = semanticColors.cardStroke,
-                        focusedLabelColor = ClearCutAccents.Mauve,
+                        focusedLabelColor = DirectorXAccents.Mauve,
                         unfocusedLabelColor = semanticColors.subtext,
                         focusedContainerColor = semanticColors.panelRaised,
                         unfocusedContainerColor = semanticColors.panelRaised
@@ -1481,7 +1481,7 @@ private fun EditorTopBar(
                 )
             },
             confirmButton = {
-                ClearCutPrimaryButton(
+                DirectorXPrimaryButton(
                     text = stringResource(R.string.editor_save),
                     onClick = {
                         onRename(trimmedNameText)
@@ -1492,7 +1492,7 @@ private fun EditorTopBar(
                 )
             },
             dismissButton = {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.editor_cancel),
                     onClick = { showRenameDialog = false }
                 )
@@ -1510,9 +1510,9 @@ private fun EditorTopBar(
         AlertDialog(
             onDismissRequest = { showCutListDialog = false },
             icon = {
-                ClearCutDialogIcon(
+                DirectorXDialogIcon(
                     icon = Icons.Default.ContentPaste,
-                    accent = ClearCutAccents.Peach
+                    accent = DirectorXAccents.Peach
                 )
             },
             title = {
@@ -1534,10 +1534,10 @@ private fun EditorTopBar(
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedTextColor = semanticColors.text,
                         unfocusedTextColor = semanticColors.text,
-                        cursorColor = ClearCutAccents.Peach,
-                        focusedBorderColor = ClearCutAccents.Peach,
+                        cursorColor = DirectorXAccents.Peach,
+                        focusedBorderColor = DirectorXAccents.Peach,
                         unfocusedBorderColor = semanticColors.cardStroke,
-                        focusedLabelColor = ClearCutAccents.Peach,
+                        focusedLabelColor = DirectorXAccents.Peach,
                         unfocusedLabelColor = semanticColors.subtext,
                         focusedContainerColor = semanticColors.panelRaised,
                         unfocusedContainerColor = semanticColors.panelRaised
@@ -1545,7 +1545,7 @@ private fun EditorTopBar(
                 )
             },
             confirmButton = {
-                ClearCutPrimaryButton(
+                DirectorXPrimaryButton(
                     text = stringResource(R.string.cut_list_paste_apply),
                     onClick = {
                         onApplyCutList(cutListText)
@@ -1556,7 +1556,7 @@ private fun EditorTopBar(
                 )
             },
             dismissButton = {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.editor_cancel),
                     onClick = { showCutListDialog = false }
                 )
@@ -1609,7 +1609,7 @@ private fun EditorTopBar(
                         onClick = onBack,
                         modifier = Modifier
                             .size(if (layoutMode == LayoutMode.DESKTOP) 68.dp else if (isCompactBar) 60.dp else 68.dp)
-                            .testTag(ClearCutTestTags.EDITOR_BACK)
+                            .testTag(DirectorXTestTags.EDITOR_BACK)
                     ) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
@@ -1639,10 +1639,10 @@ private fun EditorTopBar(
                     else -> stringResource(R.string.edit_confidence_autosave_ready)
                 }
                 val saveAccent = when {
-                    editConfidenceStatus.saveIndicator == SaveIndicatorState.ERROR -> ClearCutAccents.Red
-                    editConfidenceStatus.saveIndicator == SaveIndicatorState.SAVING -> ClearCutAccents.Sapphire
-                    editConfidenceStatus.isDirty -> ClearCutAccents.Peach
-                    else -> ClearCutAccents.Green
+                    editConfidenceStatus.saveIndicator == SaveIndicatorState.ERROR -> DirectorXAccents.Red
+                    editConfidenceStatus.saveIndicator == SaveIndicatorState.SAVING -> DirectorXAccents.Sapphire
+                    editConfidenceStatus.isDirty -> DirectorXAccents.Peach
+                    else -> DirectorXAccents.Green
                 }
                 Column(
                     modifier = Modifier
@@ -1702,7 +1702,7 @@ private fun EditorTopBar(
                                 enabled = canUndo,
                                 modifier = Modifier
                                     .size(toolbarTouchTarget)
-                                    .testTag(ClearCutTestTags.EDITOR_UNDO)
+                                    .testTag(DirectorXTestTags.EDITOR_UNDO)
                             ) {
                                 Icon(
                                     Icons.AutoMirrored.Filled.Undo,
@@ -1716,7 +1716,7 @@ private fun EditorTopBar(
                                 enabled = canRedo,
                                 modifier = Modifier
                                     .size(toolbarTouchTarget)
-                                    .testTag(ClearCutTestTags.EDITOR_REDO)
+                                    .testTag(DirectorXTestTags.EDITOR_REDO)
                             ) {
                                 Icon(
                                     Icons.AutoMirrored.Filled.Redo,
@@ -1740,7 +1740,7 @@ private fun EditorTopBar(
                             onClick = { showOverflow = true },
                             modifier = Modifier
                                 .size(toolbarTouchTarget)
-                                .testTag(ClearCutTestTags.EDITOR_OVERFLOW)
+                                .testTag(DirectorXTestTags.EDITOR_OVERFLOW)
                         ) {
                             Icon(
                                 Icons.Default.MoreVert,
@@ -1772,7 +1772,7 @@ private fun EditorTopBar(
                                     showOverflow = false
                                     onUndo()
                                 },
-                                modifier = Modifier.testTag(ClearCutTestTags.EDITOR_OVERFLOW_UNDO),
+                                modifier = Modifier.testTag(DirectorXTestTags.EDITOR_OVERFLOW_UNDO),
                                 enabled = canUndo,
                                 leadingIcon = {
                                     Icon(
@@ -1787,7 +1787,7 @@ private fun EditorTopBar(
                                     showOverflow = false
                                     onRedo()
                                 },
-                                modifier = Modifier.testTag(ClearCutTestTags.EDITOR_OVERFLOW_REDO),
+                                modifier = Modifier.testTag(DirectorXTestTags.EDITOR_OVERFLOW_REDO),
                                 enabled = canRedo,
                                 leadingIcon = {
                                     Icon(
@@ -1799,13 +1799,13 @@ private fun EditorTopBar(
                         }
                         if (selectedClipId != null) {
                             DropdownMenuItem(
-                                text = { Text(stringResource(R.string.editor_delete), color = ClearCutAccents.Red) },
+                                text = { Text(stringResource(R.string.editor_delete), color = DirectorXAccents.Red) },
                                 onClick = {
                                     showOverflow = false
                                     onDelete()
                                 },
                                 leadingIcon = {
-                                    Icon(Icons.Default.Delete, contentDescription = null, tint = ClearCutAccents.Red)
+                                    Icon(Icons.Default.Delete, contentDescription = null, tint = DirectorXAccents.Red)
                                 }
                             )
                             DropdownMenuItem(
@@ -1904,7 +1904,7 @@ private fun EditorTopBar(
                                     Icon(
                                         Icons.Default.AutoAwesome,
                                         contentDescription = stringResource(R.string.v369_features_label),
-                                        tint = ClearCutAccents.Mauve
+                                        tint = DirectorXAccents.Mauve
                                     )
                                 }
                             )
@@ -1929,9 +1929,9 @@ private fun EditorTopBar(
                                     showOverflow = false
                                     onOpenHistory()
                                 },
-                                modifier = Modifier.testTag(ClearCutTestTags.EDITOR_VERSION_HISTORY),
+                                modifier = Modifier.testTag(DirectorXTestTags.EDITOR_VERSION_HISTORY),
                                 leadingIcon = {
-                                    Icon(Icons.Default.History, contentDescription = null, tint = ClearCutAccents.Mauve)
+                                    Icon(Icons.Default.History, contentDescription = null, tint = DirectorXAccents.Mauve)
                                 },
                             )
                         }
@@ -1943,7 +1943,7 @@ private fun EditorTopBar(
                                     onOpenSnapshots()
                                 },
                                 leadingIcon = {
-                                    Icon(Icons.Default.Restore, contentDescription = null, tint = ClearCutAccents.Green)
+                                    Icon(Icons.Default.Restore, contentDescription = null, tint = DirectorXAccents.Green)
                                 },
                             )
                         }
@@ -1995,14 +1995,14 @@ private fun EditorTopBar(
                 Button(
                     onClick = onExport,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = ClearCutAccents.Sky,
+                        containerColor = DirectorXAccents.Sky,
                         contentColor = semanticColors.background
                     ),
                     shape = RoundedCornerShape(Radius.md),
                     contentPadding = PaddingValues(horizontal = if (isCompactBar) 12.dp else 14.dp, vertical = 0.dp),
                     modifier = Modifier
                         .height(if (layoutMode == LayoutMode.DESKTOP) 68.dp else if (isCompactBar) 60.dp else TouchTarget.minimum)
-                        .testTag(ClearCutTestTags.EDITOR_EXPORT)
+                        .testTag(DirectorXTestTags.EDITOR_EXPORT)
                 ) {
                     Icon(
                         Icons.Default.Upload,

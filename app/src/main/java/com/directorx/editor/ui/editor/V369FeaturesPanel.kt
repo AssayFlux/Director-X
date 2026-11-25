@@ -1,8 +1,8 @@
 package com.directorx.editor.ui.editor
 
 import com.directorx.editor.engine.ContentIdEngine
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -34,7 +34,7 @@ import com.directorx.editor.R
 import com.directorx.editor.engine.ColorBlindPreviewEngine
 import com.directorx.editor.engine.DirectPublishEngine
 import com.directorx.editor.engine.KaraokeCaptionEngine
-import com.directorx.editor.ui.theme.ClearCutFilterChip
+import com.directorx.editor.ui.theme.DirectorXFilterChip
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 import com.directorx.editor.ui.theme.TouchTarget
@@ -58,7 +58,7 @@ fun V369FeaturesPanel(
     viewModel: EditorViewModel,
     onDismiss: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val state by viewModel.state.collectAsStateWithLifecycle()
     val v = state.v369
     val hasClip = state.selectedClipId != null
@@ -67,7 +67,7 @@ fun V369FeaturesPanel(
         title = stringResource(R.string.v369_features_label),
         subtitle = stringResource(R.string.v369_subtitle),
         icon = Icons.Default.AutoAwesome,
-        accent = ClearCutAccents.Mauve,
+        accent = DirectorXAccents.Mauve,
         onClose = onDismiss,
         scrollable = true
     ) {
@@ -82,7 +82,7 @@ fun V369FeaturesPanel(
         FeatureCard(
             title = stringResource(R.string.v369_text_edit_title),
             subtitle = stringResource(R.string.v369_text_edit_subtitle),
-            accent = ClearCutAccents.Blue,
+            accent = DirectorXAccents.Blue,
             icon = Icons.AutoMirrored.Filled.Subject
         ) {
             val transcript = v.transcript
@@ -106,7 +106,7 @@ fun V369FeaturesPanel(
         FeatureCard(
             title = stringResource(R.string.v369_chapters_title),
             subtitle = stringResource(R.string.v369_chapters_subtitle),
-            accent = ClearCutAccents.Green,
+            accent = DirectorXAccents.Green,
             icon = Icons.AutoMirrored.Filled.ViewList
         ) {
             Text(
@@ -128,10 +128,10 @@ fun V369FeaturesPanel(
         FeatureCard(
             title = stringResource(R.string.v369_talking_head_title),
             subtitle = stringResource(R.string.v369_talking_head_subtitle),
-            accent = ClearCutAccents.Sapphire,
+            accent = DirectorXAccents.Sapphire,
             icon = Icons.Default.Face
         ) {
-            if (v.isTrackingFaces) LinearProgressIndicator(Modifier.fillMaxWidth(), color = ClearCutAccents.Sapphire)
+            if (v.isTrackingFaces) LinearProgressIndicator(Modifier.fillMaxWidth(), color = DirectorXAccents.Sapphire)
             TinyButton(stringResource(R.string.v369_track_selected_clip), enabled = hasClip && !v.isTrackingFaces) {
                 state.selectedClipId?.let { viewModel.v369Delegate.trackTalkingHead(it) }
             }
@@ -141,7 +141,7 @@ fun V369FeaturesPanel(
         FeatureCard(
             title = stringResource(R.string.v369_karaoke_title),
             subtitle = stringResource(R.string.v369_karaoke_subtitle),
-            accent = ClearCutAccents.Yellow,
+            accent = DirectorXAccents.Yellow,
             icon = Icons.Default.Mic
         ) {
             Row(
@@ -151,11 +151,11 @@ fun V369FeaturesPanel(
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 for (style in KaraokeCaptionEngine.KaraokeStyle.entries) {
-                    ClearCutFilterChip(
+                    DirectorXFilterChip(
                         selected = v.karaokeStyle == style,
                         onClick = { viewModel.v369Delegate.setKaraokeStyle(style) },
                         text = karaokeStyleLabel(style),
-                        accent = ClearCutAccents.Yellow
+                        accent = DirectorXAccents.Yellow
                     )
                 }
             }
@@ -168,7 +168,7 @@ fun V369FeaturesPanel(
         FeatureCard(
             title = stringResource(R.string.v369_stream_copy_title),
             subtitle = stringResource(R.string.v369_stream_copy_subtitle),
-            accent = ClearCutAccents.Teal,
+            accent = DirectorXAccents.Teal,
             icon = Icons.Default.Speed
         ) {
             val elig = v.streamCopyEligibility
@@ -179,8 +179,8 @@ fun V369FeaturesPanel(
             }
             val color = when {
                 elig == null -> semanticColors.subtextStrong
-                elig.eligible -> ClearCutAccents.Green
-                else -> ClearCutAccents.Peach
+                elig.eligible -> DirectorXAccents.Green
+                else -> DirectorXAccents.Peach
             }
             Text(label, color = color, style = MaterialTheme.typography.bodySmall)
             Text(
@@ -197,7 +197,7 @@ fun V369FeaturesPanel(
         FeatureCard(
             title = stringResource(R.string.v369_content_id_title),
             subtitle = stringResource(R.string.v369_content_id_subtitle),
-            accent = ClearCutAccents.Red,
+            accent = DirectorXAccents.Red,
             icon = Icons.Default.Copyright
         ) {
             val result = v.contentIdResult
@@ -232,7 +232,7 @@ fun V369FeaturesPanel(
         FeatureCard(
             title = stringResource(R.string.v369_direct_publish_title),
             subtitle = stringResource(R.string.v369_direct_publish_subtitle),
-            accent = ClearCutAccents.Pink,
+            accent = DirectorXAccents.Pink,
             icon = Icons.Default.Share
         ) {
             var title by rememberSaveable(state.project.id) { mutableStateOf(state.project.name) }
@@ -245,12 +245,12 @@ fun V369FeaturesPanel(
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedContainerColor = semanticColors.panelHighest,
                     unfocusedContainerColor = semanticColors.panelHighest.copy(alpha = 0.72f),
-                    focusedBorderColor = ClearCutAccents.Pink.copy(alpha = 0.64f),
+                    focusedBorderColor = DirectorXAccents.Pink.copy(alpha = 0.64f),
                     unfocusedBorderColor = semanticColors.cardStroke,
-                    cursorColor = ClearCutAccents.Pink,
+                    cursorColor = DirectorXAccents.Pink,
                     focusedTextColor = semanticColors.text,
                     unfocusedTextColor = semanticColors.text,
-                    focusedLabelColor = ClearCutAccents.Pink,
+                    focusedLabelColor = DirectorXAccents.Pink,
                     unfocusedLabelColor = semanticColors.subtext
                 ),
                 textStyle = MaterialTheme.typography.bodyMedium
@@ -288,14 +288,14 @@ fun V369FeaturesPanel(
         FeatureCard(
             title = stringResource(R.string.v369_flash_safety_title),
             subtitle = stringResource(R.string.v369_flash_safety_subtitle),
-            accent = ClearCutAccents.Peach,
+            accent = DirectorXAccents.Peach,
             icon = Icons.Default.FlashOn
         ) {
-            if (v.isAnalyzingFlashes) LinearProgressIndicator(Modifier.fillMaxWidth(), color = ClearCutAccents.Peach)
+            if (v.isAnalyzingFlashes) LinearProgressIndicator(Modifier.fillMaxWidth(), color = DirectorXAccents.Peach)
             if (v.flashWarnings.isNotEmpty()) {
                 Text(
                     pluralStringResource(R.plurals.v369_flash_risky_segments, v.flashWarnings.size, v.flashWarnings.size),
-                    color = ClearCutAccents.Peach,
+                    color = DirectorXAccents.Peach,
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -308,7 +308,7 @@ fun V369FeaturesPanel(
         FeatureCard(
             title = stringResource(R.string.v369_color_blind_title),
             subtitle = stringResource(R.string.v369_color_blind_subtitle),
-            accent = ClearCutAccents.Mauve,
+            accent = DirectorXAccents.Mauve,
             icon = Icons.Default.Palette
         ) {
             Row(
@@ -318,11 +318,11 @@ fun V369FeaturesPanel(
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 for (mode in ColorBlindPreviewEngine.Mode.entries) {
-                    ClearCutFilterChip(
+                    DirectorXFilterChip(
                         selected = v.colorBlindMode == mode,
                         onClick = { viewModel.v369Delegate.setColorBlindMode(mode) },
                         text = colorBlindModeLabel(mode),
-                        accent = ClearCutAccents.Mauve
+                        accent = DirectorXAccents.Mauve
                     )
                 }
             }
@@ -337,10 +337,10 @@ fun V369FeaturesPanel(
         FeatureCard(
             title = stringResource(R.string.v369_thumbnail_title),
             subtitle = stringResource(R.string.v369_thumbnail_subtitle),
-            accent = ClearCutAccents.Sky,
+            accent = DirectorXAccents.Sky,
             icon = Icons.Default.Image
         ) {
-            if (v.isScoringThumbnails) LinearProgressIndicator(Modifier.fillMaxWidth(), color = ClearCutAccents.Sky)
+            if (v.isScoringThumbnails) LinearProgressIndicator(Modifier.fillMaxWidth(), color = DirectorXAccents.Sky)
             if (v.thumbnailCandidates.isNotEmpty()) {
                 Row(
                     modifier = Modifier
@@ -359,7 +359,7 @@ fun V369FeaturesPanel(
                                     modifier = Modifier
                                         .size(width = 96.dp, height = 54.dp)
                                         .clip(RoundedCornerShape(8.dp))
-                                        .border(1.dp, ClearCutAccents.Sky.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
+                                        .border(1.dp, DirectorXAccents.Sky.copy(alpha = 0.5f), RoundedCornerShape(8.dp))
                                 )
                                 Text(
                                     stringResource(R.string.v369_thumbnail_score_format, cand.score),
@@ -380,7 +380,7 @@ fun V369FeaturesPanel(
         FeatureCard(
             title = stringResource(R.string.v369_hdr_title),
             subtitle = stringResource(R.string.v369_hdr_subtitle),
-            accent = ClearCutAccents.Rosewater,
+            accent = DirectorXAccents.Rosewater,
             icon = Icons.Default.Hd
         ) {
             val hdr = state.exportConfig.colorPolicy.keepsHdr
@@ -414,7 +414,7 @@ fun V369FeaturesPanel(
         FeatureCard(
             title = stringResource(R.string.v369_sdh_title),
             subtitle = stringResource(R.string.v369_sdh_subtitle),
-            accent = ClearCutAccents.Maroon,
+            accent = DirectorXAccents.Maroon,
             icon = Icons.Default.Hearing
         ) {
             Text(
@@ -428,14 +428,14 @@ fun V369FeaturesPanel(
         FeatureCard(
             title = stringResource(R.string.v369_dex_title),
             subtitle = stringResource(R.string.v369_dex_subtitle),
-            accent = ClearCutAccents.Lavender,
+            accent = DirectorXAccents.Lavender,
             icon = Icons.Default.DesktopWindows
         ) {
             val override by viewModel.desktopOverride.collectAsStateWithLifecycle()
             val active = LocalLayoutMode.current == LayoutMode.DESKTOP
             Text(
                 if (active) stringResource(R.string.v369_dex_active) else stringResource(R.string.v369_dex_phone),
-                color = if (active) ClearCutAccents.Green else semanticColors.subtextStrong,
+                color = if (active) DirectorXAccents.Green else semanticColors.subtextStrong,
                 style = MaterialTheme.typography.bodySmall
             )
             Row(
@@ -445,7 +445,7 @@ fun V369FeaturesPanel(
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 for (opt in com.directorx.editor.engine.DesktopOverride.entries) {
-                    ClearCutFilterChip(
+                    DirectorXFilterChip(
                         selected = override == opt,
                         onClick = { viewModel.setDesktopOverride(opt) },
                         text = when (opt) {
@@ -453,7 +453,7 @@ fun V369FeaturesPanel(
                             com.directorx.editor.engine.DesktopOverride.FORCE_ON -> stringResource(R.string.v369_dex_desktop)
                             com.directorx.editor.engine.DesktopOverride.FORCE_OFF -> stringResource(R.string.v369_dex_phone_chip)
                         },
-                        accent = ClearCutAccents.Lavender
+                        accent = DirectorXAccents.Lavender
                     )
                 }
             }
@@ -463,7 +463,7 @@ fun V369FeaturesPanel(
         FeatureCard(
             title = stringResource(R.string.v369_one_handed_title),
             subtitle = stringResource(R.string.v369_one_handed_subtitle),
-            accent = ClearCutAccents.Flamingo,
+            accent = DirectorXAccents.Flamingo,
             icon = Icons.Default.TouchApp
         ) {
             val one by viewModel.oneHandedMode.collectAsStateWithLifecycle()
@@ -482,7 +482,7 @@ fun V369FeaturesPanel(
         FeatureCard(
             title = stringResource(R.string.v369_midi_title),
             subtitle = stringResource(R.string.v369_midi_subtitle),
-            accent = ClearCutAccents.Flamingo,
+            accent = DirectorXAccents.Flamingo,
             icon = Icons.Default.Tune
         ) {
             val midiScanningToast = stringResource(R.string.v369_midi_scanning)
@@ -513,19 +513,19 @@ private fun CreatorReadinessStrip(
         ReadinessCard(
             label = stringResource(R.string.v369_readiness_clip),
             value = if (hasClip) stringResource(R.string.v369_readiness_clip_selected) else stringResource(R.string.v369_readiness_choose_one),
-            accent = if (hasClip) ClearCutAccents.Green else ClearCutAccents.Peach,
+            accent = if (hasClip) DirectorXAccents.Green else DirectorXAccents.Peach,
             icon = Icons.Default.Movie
         )
         ReadinessCard(
             label = stringResource(R.string.v369_readiness_transcript),
             value = if (hasTranscript) stringResource(R.string.ai_tool_status_ready) else stringResource(R.string.v369_readiness_run_captions),
-            accent = if (hasTranscript) ClearCutAccents.Green else ClearCutAccents.Sapphire,
+            accent = if (hasTranscript) DirectorXAccents.Green else DirectorXAccents.Sapphire,
             icon = Icons.Default.ClosedCaption
         )
         ReadinessCard(
             label = stringResource(R.string.export_title),
             value = if (hasExport) stringResource(R.string.v369_readiness_available) else stringResource(R.string.v369_readiness_render_first),
-            accent = if (hasExport) ClearCutAccents.Green else ClearCutAccents.Mauve,
+            accent = if (hasExport) DirectorXAccents.Green else DirectorXAccents.Mauve,
             icon = Icons.Default.FileUpload
         )
     }
@@ -538,7 +538,7 @@ private fun ReadinessCard(
     accent: Color,
     icon: ImageVector
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         color = semanticColors.panelHighest,
         shape = RoundedCornerShape(Radius.lg),
@@ -574,7 +574,7 @@ private fun FeatureCard(
     icon: ImageVector,
     body: @Composable ColumnScope.() -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var expanded by remember { mutableStateOf(false) }
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -637,14 +637,14 @@ private fun FeatureCard(
 
 @Composable
 private fun TinyButton(label: String, enabled: Boolean = true, onClick: () -> Unit) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     TextButton(
         onClick = onClick,
         enabled = enabled,
         shape = RoundedCornerShape(Radius.md),
         colors = ButtonDefaults.textButtonColors(
-            containerColor = if (enabled) ClearCutAccents.Mauve.copy(alpha = 0.10f) else Color.Transparent,
-            contentColor = ClearCutAccents.Mauve,
+            containerColor = if (enabled) DirectorXAccents.Mauve.copy(alpha = 0.10f) else Color.Transparent,
+            contentColor = DirectorXAccents.Mauve,
             disabledContentColor = semanticColors.overlay
         ),
         modifier = Modifier.defaultMinSize(minHeight = 40.dp)

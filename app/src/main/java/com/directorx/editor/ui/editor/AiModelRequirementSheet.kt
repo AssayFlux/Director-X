@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,9 +36,9 @@ import com.directorx.editor.engine.AiToolRequirements
 import com.directorx.editor.engine.AiToolRequirements.Availability
 import com.directorx.editor.engine.AiToolRequirements.Runtime
 import com.directorx.editor.engine.AiToolRequirements.ToolRequirement
-import com.directorx.editor.ui.theme.ClearCutDialogIcon
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.DirectorXDialogIcon
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
 import com.directorx.editor.ui.theme.Radius
 
 /**
@@ -65,7 +65,7 @@ fun AiModelRequirementSheet(
     onRun: (ToolRequirement) -> Unit,
     onReviewModels: () -> Unit = {},
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val title = when (requirement.availability) {
         Availability.READY -> stringResource(R.string.ai_requirement_title_ready)
         Availability.MODEL_DOWNLOAD_REQUIRED -> stringResource(R.string.ai_requirement_title_download)
@@ -73,10 +73,10 @@ fun AiModelRequirementSheet(
         Availability.CLOUD_OPT_IN -> stringResource(R.string.ai_requirement_title_cloud)
     }
     val (icon, accent) = when (requirement.availability) {
-        Availability.READY -> Icons.Default.Verified to ClearCutAccents.Green
-        Availability.MODEL_DOWNLOAD_REQUIRED -> Icons.Default.Download to ClearCutAccents.Sky
-        Availability.DEPENDENCY_MISSING -> Icons.Default.CloudOff to ClearCutAccents.Peach
-        Availability.CLOUD_OPT_IN -> Icons.Default.Cloud to ClearCutAccents.Yellow
+        Availability.READY -> Icons.Default.Verified to DirectorXAccents.Green
+        Availability.MODEL_DOWNLOAD_REQUIRED -> Icons.Default.Download to DirectorXAccents.Sky
+        Availability.DEPENDENCY_MISSING -> Icons.Default.CloudOff to DirectorXAccents.Peach
+        Availability.CLOUD_OPT_IN -> Icons.Default.Cloud to DirectorXAccents.Yellow
     }
 
     var consentChecked by remember(requirement) { mutableStateOf(false) }
@@ -85,7 +85,7 @@ fun AiModelRequirementSheet(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        icon = { ClearCutDialogIcon(icon = icon, accent = accent) },
+        icon = { DirectorXDialogIcon(icon = icon, accent = accent) },
         title = {
             Text(
                 text = title,
@@ -132,7 +132,7 @@ fun AiModelRequirementSheet(
                             checked = consentChecked,
                             onCheckedChange = { consentChecked = it },
                             colors = CheckboxDefaults.colors(
-                                checkedColor = ClearCutAccents.Mauve,
+                                checkedColor = DirectorXAccents.Mauve,
                                 uncheckedColor = semanticColors.subtext,
                                 checkmarkColor = semanticColors.text,
                             ),
@@ -149,7 +149,7 @@ fun AiModelRequirementSheet(
         },
         confirmButton = {
             if (requirement.availability == Availability.DEPENDENCY_MISSING) {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.ai_requirement_review_models),
                     onClick = onReviewModels,
                 )
@@ -163,7 +163,7 @@ fun AiModelRequirementSheet(
                         stringResource(R.string.ai_requirement_cloud_action) to { onRun(requirement) }
                     Availability.DEPENDENCY_MISSING -> "" to {} // handled above
                 }
-                ClearCutPrimaryButton(
+                DirectorXPrimaryButton(
                     text = label,
                     onClick = action,
                     enabled = primaryEnabled,
@@ -171,7 +171,7 @@ fun AiModelRequirementSheet(
             }
         },
         dismissButton = {
-            ClearCutSecondaryButton(
+            DirectorXSecondaryButton(
                 text = stringResource(R.string.ai_requirement_not_now),
                 onClick = onDismiss,
             )
@@ -185,7 +185,7 @@ fun AiModelRequirementSheet(
 
 @Composable
 private fun MetaRow(icon: ImageVector, label: String) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Row(verticalAlignment = Alignment.CenterVertically) {
         androidx.compose.material3.Icon(
             imageVector = icon,

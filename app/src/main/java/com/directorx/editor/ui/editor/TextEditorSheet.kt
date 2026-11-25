@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -68,7 +68,7 @@ fun TextEditorSheet(
     importedFonts: List<Pair<String, String>> = emptyList(),
     onImportFont: () -> Unit = {}
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val defaultText = stringResource(R.string.text_editor_your_text)
     // Key all state to the overlay id (or "new" sentinel) so editing a different
     // overlay without disposing the sheet resets all fields to that overlay's values
@@ -122,7 +122,7 @@ fun TextEditorSheet(
         title = stringResource(R.string.text_editor_title),
         subtitle = stringResource(R.string.panel_text_editor_subtitle),
         icon = Icons.Default.Title,
-        accent = ClearCutAccents.Sapphire,
+        accent = DirectorXAccents.Sapphire,
         onClose = onClose,
         modifier = modifier,
         scrollable = true,
@@ -162,7 +162,7 @@ fun TextEditorSheet(
                 },
                 enabled = text.isNotBlank(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = ClearCutAccents.Rosewater,
+                    containerColor = DirectorXAccents.Rosewater,
                     contentColor = semanticColors.background,
                     disabledContainerColor = semanticColors.panelHighest,
                     disabledContentColor = semanticColors.subtext
@@ -176,10 +176,10 @@ fun TextEditorSheet(
             }
         }
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Sapphire) {
+        PremiumPanelCard(accent = DirectorXAccents.Sapphire) {
             Text(
                 text = stringResource(R.string.panel_text_editor_preview),
-                color = ClearCutAccents.Rosewater,
+                color = DirectorXAccents.Rosewater,
                 style = MaterialTheme.typography.labelLarge
             )
             Box(
@@ -209,21 +209,21 @@ fun TextEditorSheet(
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 PremiumPanelPill(
                     text = "${fontSize.toInt()}pt",
-                    accent = ClearCutAccents.Sapphire
+                    accent = DirectorXAccents.Sapphire
                 )
                 PremiumPanelPill(
                     text = "${"%.1f".format(duration / 1000f)}s",
-                    accent = ClearCutAccents.Peach
+                    accent = DirectorXAccents.Peach
                 )
             }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             Text(
                 text = stringResource(R.string.panel_text_editor_style),
-                color = ClearCutAccents.Rosewater,
+                color = DirectorXAccents.Rosewater,
                 style = MaterialTheme.typography.labelLarge
             )
             OutlinedTextField(
@@ -233,13 +233,13 @@ fun TextEditorSheet(
                 label = { Text(stringResource(R.string.panel_text_editor_text_label)) },
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = ClearCutAccents.Mauve,
+                    focusedBorderColor = DirectorXAccents.Mauve,
                     unfocusedBorderColor = semanticColors.cardStroke,
                     focusedTextColor = semanticColors.text,
                     unfocusedTextColor = semanticColors.text,
-                    focusedLabelColor = ClearCutAccents.Mauve,
+                    focusedLabelColor = DirectorXAccents.Mauve,
                     unfocusedLabelColor = semanticColors.subtext,
-                    cursorColor = ClearCutAccents.Mauve,
+                    cursorColor = DirectorXAccents.Mauve,
                     focusedContainerColor = semanticColors.panel,
                     unfocusedContainerColor = semanticColors.panel
                 ),
@@ -256,7 +256,7 @@ fun TextEditorSheet(
                 Text(stringResource(R.string.text_editor_font), color = semanticColors.subtextStrong, style = MaterialTheme.typography.labelLarge)
                 Text(
                     text = "Import",
-                    color = ClearCutAccents.Mauve,
+                    color = DirectorXAccents.Mauve,
                     style = MaterialTheme.typography.labelMedium,
                     modifier = Modifier
                         .clickable { onImportFont() }
@@ -272,8 +272,8 @@ fun TextEditorSheet(
                         colors = FilterChipDefaults.filterChipColors(
                             containerColor = semanticColors.panel,
                             labelColor = semanticColors.text,
-                            selectedContainerColor = ClearCutAccents.Mauve.copy(alpha = 0.18f),
-                            selectedLabelColor = ClearCutAccents.Mauve
+                            selectedContainerColor = DirectorXAccents.Mauve.copy(alpha = 0.18f),
+                            selectedLabelColor = DirectorXAccents.Mauve
                         )
                     )
                 }
@@ -286,8 +286,8 @@ fun TextEditorSheet(
                     selected = bold,
                     colors = FilterChipDefaults.filterChipColors(
                         containerColor = semanticColors.panel,
-                        selectedContainerColor = ClearCutAccents.Mauve.copy(alpha = 0.18f),
-                        selectedLabelColor = ClearCutAccents.Mauve
+                        selectedContainerColor = DirectorXAccents.Mauve.copy(alpha = 0.18f),
+                        selectedLabelColor = DirectorXAccents.Mauve
                     )
                 )
                 FilterChip(
@@ -296,8 +296,8 @@ fun TextEditorSheet(
                     selected = italic,
                     colors = FilterChipDefaults.filterChipColors(
                         containerColor = semanticColors.panel,
-                        selectedContainerColor = ClearCutAccents.Mauve.copy(alpha = 0.18f),
-                        selectedLabelColor = ClearCutAccents.Mauve
+                        selectedContainerColor = DirectorXAccents.Mauve.copy(alpha = 0.18f),
+                        selectedLabelColor = DirectorXAccents.Mauve
                     )
                 )
                 FilterChip(
@@ -306,8 +306,8 @@ fun TextEditorSheet(
                     selected = alignment == TextAlignment.LEFT,
                     colors = FilterChipDefaults.filterChipColors(
                         containerColor = semanticColors.panel,
-                        selectedContainerColor = ClearCutAccents.Mauve.copy(alpha = 0.18f),
-                        selectedLabelColor = ClearCutAccents.Mauve
+                        selectedContainerColor = DirectorXAccents.Mauve.copy(alpha = 0.18f),
+                        selectedLabelColor = DirectorXAccents.Mauve
                     )
                 )
                 FilterChip(
@@ -316,8 +316,8 @@ fun TextEditorSheet(
                     selected = alignment == TextAlignment.CENTER,
                     colors = FilterChipDefaults.filterChipColors(
                         containerColor = semanticColors.panel,
-                        selectedContainerColor = ClearCutAccents.Mauve.copy(alpha = 0.18f),
-                        selectedLabelColor = ClearCutAccents.Mauve
+                        selectedContainerColor = DirectorXAccents.Mauve.copy(alpha = 0.18f),
+                        selectedLabelColor = DirectorXAccents.Mauve
                     )
                 )
                 FilterChip(
@@ -326,8 +326,8 @@ fun TextEditorSheet(
                     selected = alignment == TextAlignment.RIGHT,
                     colors = FilterChipDefaults.filterChipColors(
                         containerColor = semanticColors.panel,
-                        selectedContainerColor = ClearCutAccents.Mauve.copy(alpha = 0.18f),
-                        selectedLabelColor = ClearCutAccents.Mauve
+                        selectedContainerColor = DirectorXAccents.Mauve.copy(alpha = 0.18f),
+                        selectedLabelColor = DirectorXAccents.Mauve
                     )
                 )
             }
@@ -353,7 +353,7 @@ fun TextEditorSheet(
                                 .clip(CircleShape)
                                 .background(Color(option.value))
                                 .then(
-                                    if (selectedColor == option.value) Modifier.border(2.dp, ClearCutAccents.Mauve, CircleShape)
+                                    if (selectedColor == option.value) Modifier.border(2.dp, DirectorXAccents.Mauve, CircleShape)
                                     else Modifier.border(1.dp, semanticColors.cardStroke, CircleShape)
                                 )
                         )
@@ -364,10 +364,10 @@ fun TextEditorSheet(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Peach) {
+        PremiumPanelCard(accent = DirectorXAccents.Peach) {
             Text(
                 text = stringResource(R.string.panel_text_editor_timing),
-                color = ClearCutAccents.Rosewater,
+                color = DirectorXAccents.Rosewater,
                 style = MaterialTheme.typography.labelLarge
             )
             EffectSlider(stringResource(R.string.panel_text_editor_horizontal), positionX, 0f, 1f) { positionX = it }
@@ -384,8 +384,8 @@ fun TextEditorSheet(
                         colors = FilterChipDefaults.filterChipColors(
                             containerColor = semanticColors.panel,
                             labelColor = semanticColors.text,
-                            selectedContainerColor = ClearCutAccents.Peach.copy(alpha = 0.18f),
-                            selectedLabelColor = ClearCutAccents.Peach
+                            selectedContainerColor = DirectorXAccents.Peach.copy(alpha = 0.18f),
+                            selectedLabelColor = DirectorXAccents.Peach
                         )
                     )
                 }
@@ -401,8 +401,8 @@ fun TextEditorSheet(
                         colors = FilterChipDefaults.filterChipColors(
                             containerColor = semanticColors.panel,
                             labelColor = semanticColors.text,
-                            selectedContainerColor = ClearCutAccents.Peach.copy(alpha = 0.18f),
-                            selectedLabelColor = ClearCutAccents.Peach
+                            selectedContainerColor = DirectorXAccents.Peach.copy(alpha = 0.18f),
+                            selectedLabelColor = DirectorXAccents.Peach
                         )
                     )
                 }
@@ -411,10 +411,10 @@ fun TextEditorSheet(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Green) {
+        PremiumPanelCard(accent = DirectorXAccents.Green) {
             Text(
                 text = stringResource(R.string.panel_text_editor_appearance),
-                color = ClearCutAccents.Rosewater,
+                color = DirectorXAccents.Rosewater,
                 style = MaterialTheme.typography.labelLarge
             )
             EffectSlider(stringResource(R.string.panel_text_editor_shadow_x), shadowOffsetX, -10f, 10f) { shadowOffsetX = it }
@@ -444,7 +444,7 @@ fun TextEditorSheet(
                                 .clip(CircleShape)
                                 .background(if (isOff) semanticColors.panel else Color(option.value))
                                 .then(
-                                    if (glowColor == option.value) Modifier.border(2.dp, ClearCutAccents.Green, CircleShape)
+                                    if (glowColor == option.value) Modifier.border(2.dp, DirectorXAccents.Green, CircleShape)
                                     else Modifier.border(1.dp, semanticColors.cardStroke, CircleShape)
                                 )
                         ) {

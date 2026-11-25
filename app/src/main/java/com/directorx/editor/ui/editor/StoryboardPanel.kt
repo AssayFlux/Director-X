@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -55,7 +55,7 @@ fun StoryboardPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var newShotText by remember { mutableStateOf("") }
     var editingCardId by remember { mutableStateOf<String?>(null) }
     var editText by remember(editingCardId) { mutableStateOf("") }
@@ -64,12 +64,12 @@ fun StoryboardPanel(
         title = stringResource(R.string.storyboard_title),
         subtitle = stringResource(R.string.storyboard_subtitle),
         icon = Icons.AutoMirrored.Filled.ViewList,
-        accent = ClearCutAccents.Teal,
+        accent = DirectorXAccents.Teal,
         onClose = onClose,
         modifier = modifier,
         scrollable = true
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Teal) {
+        PremiumPanelCard(accent = DirectorXAccents.Teal) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
@@ -80,7 +80,7 @@ fun StoryboardPanel(
                     placeholder = { Text(stringResource(R.string.storyboard_new_shot_hint), color = semanticColors.overlay) },
                     singleLine = true,
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = ClearCutAccents.Teal,
+                        focusedBorderColor = DirectorXAccents.Teal,
                         unfocusedBorderColor = semanticColors.surface,
                         focusedTextColor = semanticColors.text,
                         unfocusedTextColor = semanticColors.text
@@ -101,7 +101,7 @@ fun StoryboardPanel(
                     Icon(
                         Icons.Default.Add,
                         contentDescription = stringResource(R.string.storyboard_add_shot_cd),
-                        tint = if (newShotText.isNotBlank()) ClearCutAccents.Teal else semanticColors.overlay
+                        tint = if (newShotText.isNotBlank()) DirectorXAccents.Teal else semanticColors.overlay
                     )
                 }
             }
@@ -122,7 +122,7 @@ fun StoryboardPanel(
                                 onValueChange = { editText = it },
                                 singleLine = true,
                                 colors = OutlinedTextFieldDefaults.colors(
-                                    focusedBorderColor = ClearCutAccents.Teal,
+                                    focusedBorderColor = DirectorXAccents.Teal,
                                     unfocusedBorderColor = semanticColors.surface,
                                     focusedTextColor = semanticColors.text,
                                     unfocusedTextColor = semanticColors.text
@@ -141,7 +141,7 @@ fun StoryboardPanel(
                                     },
                                     label = { Text(stringResource(R.string.storyboard_save)) },
                                     colors = FilterChipDefaults.filterChipColors(
-                                        selectedContainerColor = ClearCutAccents.Teal
+                                        selectedContainerColor = DirectorXAccents.Teal
                                     )
                                 )
                                 Spacer(Modifier.width(8.dp))
@@ -205,7 +205,7 @@ fun StoryboardPanel(
                                     Icon(
                                         Icons.Default.Delete,
                                         contentDescription = stringResource(R.string.storyboard_delete_shot_cd),
-                                        tint = ClearCutAccents.Red,
+                                        tint = DirectorXAccents.Red,
                                         modifier = Modifier.size(18.dp)
                                     )
                                 }
@@ -228,7 +228,7 @@ fun StoryboardPanel(
 }
 
 private fun statusColor(status: StoryboardCardStatus) = when (status) {
-    StoryboardCardStatus.PLANNED -> ClearCutAccents.Yellow
-    StoryboardCardStatus.FILMED -> ClearCutAccents.Blue
-    StoryboardCardStatus.EDITED -> ClearCutAccents.Green
+    StoryboardCardStatus.PLANNED -> DirectorXAccents.Yellow
+    StoryboardCardStatus.FILMED -> DirectorXAccents.Blue
+    StoryboardCardStatus.EDITED -> DirectorXAccents.Green
 }

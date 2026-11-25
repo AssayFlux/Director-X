@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
@@ -36,12 +36,12 @@ fun AutoSaveIndicator(
     state: SaveIndicatorState,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var visible by remember { mutableStateOf(false) }
     val accent = when (state) {
-        SaveIndicatorState.SAVING -> ClearCutAccents.Sapphire
-        SaveIndicatorState.SAVED -> ClearCutAccents.Green
-        SaveIndicatorState.ERROR -> ClearCutAccents.Red
+        SaveIndicatorState.SAVING -> DirectorXAccents.Sapphire
+        SaveIndicatorState.SAVED -> DirectorXAccents.Green
+        SaveIndicatorState.ERROR -> DirectorXAccents.Red
         SaveIndicatorState.HIDDEN -> semanticColors.subtext
     }
     val label = when (state) {

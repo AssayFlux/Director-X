@@ -14,7 +14,7 @@ package com.directorx.editor.engine
  */
 object MediaDurationPolicy {
 
-    /** Longest duration ClearCut treats as plausible for proportional analysis. */
+    /** Longest duration Director X treats as plausible for proportional analysis. */
     const val MAX_PLAUSIBLE_DURATION_MS: Long = 24L * 60L * 60L * 1000L // 24 hours
 
     /** True for a positive, non-overflowed, <= 24h duration. */

@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import android.graphics.Bitmap
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -54,7 +54,7 @@ import com.directorx.editor.model.Caption
 import com.directorx.editor.model.Clip
 import com.directorx.editor.model.ClipLabel
 import com.directorx.editor.model.KeyframeProperty
-import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXChromeIconButton
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 import com.directorx.editor.ui.theme.TouchTarget
@@ -75,7 +75,7 @@ fun BoxScope.EditorOverlayHost(
     autoSaveTopPadding: Dp,
     isTutorialOpen: Boolean
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     if (state.isDrawingMode || state.drawingPaths.isNotEmpty()) {
         DrawingCanvas(
             paths = state.drawingPaths,
@@ -197,7 +197,7 @@ fun BoxScope.EditorOverlayHost(
                             overflow = TextOverflow.Ellipsis
                         )
                     }
-                    ClearCutChromeIconButton(
+                    DirectorXChromeIconButton(
                         icon = Icons.Default.Close,
                         contentDescription = stringResource(R.string.cd_close_color_grading),
                         onClick = onClipLabelPickerDismiss,
@@ -281,7 +281,7 @@ fun BoxScope.EditorOverlayHost(
                 .zIndex(11f),
             containerColor = semanticColors.panelHighest,
             contentColor = semanticColors.text,
-            actionContentColor = ClearCutAccents.Peach,
+            actionContentColor = DirectorXAccents.Peach,
             action = {
                 TextButton(onClick = {
                     viewModel.undo()
@@ -291,7 +291,7 @@ fun BoxScope.EditorOverlayHost(
                 }
             },
             dismissAction = {
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = Icons.Default.Close,
                     contentDescription = stringResource(R.string.bulk_undo_dismiss_cd),
                     onClick = { viewModel.dismissBulkUndoPrompt() },
@@ -307,7 +307,7 @@ fun BoxScope.EditorOverlayHost(
                 Icon(
                     imageVector = Icons.Default.Restore,
                     contentDescription = null,
-                    tint = ClearCutAccents.Peach,
+                    tint = DirectorXAccents.Peach,
                     modifier = Modifier.size(18.dp)
                 )
                 Text(

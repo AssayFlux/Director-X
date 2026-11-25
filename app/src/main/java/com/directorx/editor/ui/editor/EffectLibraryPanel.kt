@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -48,18 +48,18 @@ fun EffectLibraryPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     PremiumEditorPanel(
         title = stringResource(R.string.effect_library_title),
         subtitle = stringResource(R.string.panel_effect_library_subtitle),
         icon = Icons.Default.ContentCopy,
-        accent = ClearCutAccents.Mauve,
+        accent = DirectorXAccents.Mauve,
         onClose = onClose,
         modifier = modifier.heightIn(max = 560.dp),
         scrollable = true,
         closeContentDescription = stringResource(R.string.effect_library_close_cd)
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             Text(
                 text = stringResource(R.string.panel_effect_library_workflow_title),
                 color = semanticColors.text,
@@ -83,7 +83,7 @@ fun EffectLibraryPanel(
                     } else {
                         stringResource(R.string.panel_effect_library_status_clip_needed)
                     },
-                    accent = if (hasClipSelected) ClearCutAccents.Green else ClearCutAccents.Red
+                    accent = if (hasClipSelected) DirectorXAccents.Green else DirectorXAccents.Red
                 )
                 PremiumPanelPill(
                     text = if (hasCopiedEffects) {
@@ -91,7 +91,7 @@ fun EffectLibraryPanel(
                     } else {
                         stringResource(R.string.panel_effect_library_status_buffer_empty)
                     },
-                    accent = if (hasCopiedEffects) ClearCutAccents.Sapphire else semanticColors.subtext
+                    accent = if (hasCopiedEffects) DirectorXAccents.Sapphire else semanticColors.subtext
                 )
             }
         }
@@ -115,7 +115,7 @@ fun EffectLibraryPanel(
                         stringResource(R.string.panel_effect_library_copy_disabled)
                     },
                     icon = Icons.Default.ContentCopy,
-                    accent = ClearCutAccents.Mauve,
+                    accent = DirectorXAccents.Mauve,
                     enabled = hasClipSelected,
                     buttonLabel = stringResource(R.string.panel_effect_library_copy),
                     buttonStyle = ActionButtonStyle.Outlined,
@@ -130,7 +130,7 @@ fun EffectLibraryPanel(
                         else -> stringResource(R.string.panel_effect_library_paste_description)
                     },
                     icon = Icons.Default.ContentPaste,
-                    accent = ClearCutAccents.Green,
+                    accent = DirectorXAccents.Green,
                     enabled = hasClipSelected && hasCopiedEffects,
                     buttonLabel = stringResource(R.string.panel_effect_library_paste),
                     buttonStyle = ActionButtonStyle.Outlined,
@@ -145,7 +145,7 @@ fun EffectLibraryPanel(
                         stringResource(R.string.panel_effect_library_export_disabled)
                     },
                     icon = Icons.Default.Upload,
-                    accent = ClearCutAccents.Peach,
+                    accent = DirectorXAccents.Peach,
                     enabled = hasClipSelected,
                     buttonLabel = stringResource(R.string.panel_effect_library_export),
                     buttonStyle = ActionButtonStyle.Filled,
@@ -156,7 +156,7 @@ fun EffectLibraryPanel(
                     title = stringResource(R.string.panel_effect_library_import),
                     subtitle = stringResource(R.string.panel_effect_library_import_description),
                     icon = Icons.Default.Download,
-                    accent = ClearCutAccents.Blue,
+                    accent = DirectorXAccents.Blue,
                     enabled = true,
                     buttonLabel = stringResource(R.string.panel_effect_library_import),
                     buttonStyle = ActionButtonStyle.Filled,
@@ -168,7 +168,7 @@ fun EffectLibraryPanel(
 
         if (!hasClipSelected) {
             Spacer(modifier = Modifier.height(12.dp))
-            PremiumPanelCard(accent = ClearCutAccents.Red) {
+            PremiumPanelCard(accent = DirectorXAccents.Red) {
                 Text(
                     text = stringResource(R.string.panel_effect_library_clip_required_title),
                     color = semanticColors.text,
@@ -202,7 +202,7 @@ private fun EffectLibraryActionCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = modifier,
         color = semanticColors.panelHighest,

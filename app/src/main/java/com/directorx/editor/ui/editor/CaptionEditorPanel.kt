@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -84,7 +84,7 @@ fun CaptionEditorPanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var editingCaption by remember { mutableStateOf<Caption?>(null) }
     var selectedStyleType by remember { mutableStateOf(CaptionStyleType.SUBTITLE_BAR) }
     // This panel survives clip switches (it lives in a keyless BottomSheetSlot), so the
@@ -114,7 +114,7 @@ fun CaptionEditorPanel(
         title = stringResource(R.string.caption_title),
         subtitle = stringResource(R.string.caption_panel_subtitle),
         icon = Icons.Default.ClosedCaption,
-        accent = ClearCutAccents.Yellow,
+        accent = DirectorXAccents.Yellow,
         onClose = onClose,
         closeContentDescription = stringResource(R.string.caption_close_cd),
         modifier = modifier,
@@ -124,23 +124,23 @@ fun CaptionEditorPanel(
                 icon = Icons.Default.FileOpen,
                 contentDescription = stringResource(R.string.caption_import_cd),
                 onClick = onImportCaptions,
-                tint = ClearCutAccents.Blue
+                tint = DirectorXAccents.Blue
             )
             PremiumPanelIconButton(
                 icon = Icons.Default.AutoAwesome,
                 contentDescription = stringResource(R.string.cd_caption_auto),
                 onClick = onGenerateAutoCaption,
-                tint = ClearCutAccents.Yellow
+                tint = DirectorXAccents.Yellow
             )
             PremiumPanelIconButton(
                 icon = Icons.Default.Add,
                 contentDescription = stringResource(R.string.caption_add_cd),
                 onClick = ::createCaption,
-                tint = ClearCutAccents.Green
+                tint = DirectorXAccents.Green
             )
         }
     ) {
-        PremiumPanelCard(accent = if (activeCaptionCount > 0) ClearCutAccents.Green else ClearCutAccents.Yellow) {
+        PremiumPanelCard(accent = if (activeCaptionCount > 0) DirectorXAccents.Green else DirectorXAccents.Yellow) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -172,7 +172,7 @@ fun CaptionEditorPanel(
                             captions.size,
                             captions.size,
                         ),
-                        accent = ClearCutAccents.Blue
+                        accent = DirectorXAccents.Blue
                     )
                     PremiumPanelPill(
                         text = if (activeCaptionCount > 0) {
@@ -180,7 +180,7 @@ fun CaptionEditorPanel(
                         } else {
                             stringResource(R.string.caption_ready)
                         },
-                        accent = if (activeCaptionCount > 0) ClearCutAccents.Green else ClearCutAccents.Yellow
+                        accent = if (activeCaptionCount > 0) DirectorXAccents.Green else DirectorXAccents.Yellow
                     )
                 }
             }
@@ -193,13 +193,13 @@ fun CaptionEditorPanel(
                 CaptionMetric(
                     title = stringResource(R.string.caption_playhead),
                     value = formatSeconds(playheadMs),
-                    accent = ClearCutAccents.Peach,
+                    accent = DirectorXAccents.Peach,
                     modifier = Modifier.widthIn(min = 132.dp)
                 )
                 CaptionMetric(
                     title = stringResource(R.string.caption_default_style),
                     value = stringResource(selectedStyleType.displayNameRes()),
-                    accent = ClearCutAccents.Mauve,
+                    accent = DirectorXAccents.Mauve,
                     modifier = Modifier.widthIn(min = 132.dp)
                 )
             }
@@ -207,7 +207,7 @@ fun CaptionEditorPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             Text(
                 text = stringResource(R.string.caption_default_style_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -237,8 +237,8 @@ fun CaptionEditorPanel(
                             )
                         },
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = ClearCutAccents.Mauve.copy(alpha = 0.18f),
-                            selectedLabelColor = ClearCutAccents.Mauve,
+                            selectedContainerColor = DirectorXAccents.Mauve.copy(alpha = 0.18f),
+                            selectedLabelColor = DirectorXAccents.Mauve,
                             containerColor = semanticColors.panelRaised,
                             labelColor = semanticColors.subtext
                         )
@@ -249,7 +249,7 @@ fun CaptionEditorPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Green) {
+        PremiumPanelCard(accent = DirectorXAccents.Green) {
             CaptionTranslationPanel(
                 rows = translationRows,
                 sourceLang = translationSourceLang,
@@ -267,7 +267,7 @@ fun CaptionEditorPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = DirectorXAccents.Blue) {
             Text(
                 text = stringResource(R.string.caption_list_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -314,8 +314,8 @@ fun CaptionEditorPanel(
                                     onClick = onGenerateAutoCaption,
                                     modifier = Modifier.fillMaxWidth(),
                                     shape = RoundedCornerShape(12.dp),
-                                    border = BorderStroke(1.dp, ClearCutAccents.Yellow.copy(alpha = 0.35f)),
-                                    colors = ButtonDefaults.outlinedButtonColors(contentColor = ClearCutAccents.Yellow)
+                                    border = BorderStroke(1.dp, DirectorXAccents.Yellow.copy(alpha = 0.35f)),
+                                    colors = ButtonDefaults.outlinedButtonColors(contentColor = DirectorXAccents.Yellow)
                                 ) {
                                     androidx.compose.material3.Icon(
                                         imageVector = Icons.Default.AutoAwesome,
@@ -329,7 +329,7 @@ fun CaptionEditorPanel(
                                     onClick = ::createCaption,
                                     modifier = Modifier.fillMaxWidth(),
                                     shape = RoundedCornerShape(12.dp),
-                                    colors = ButtonDefaults.buttonColors(containerColor = ClearCutAccents.Mauve)
+                                    colors = ButtonDefaults.buttonColors(containerColor = DirectorXAccents.Mauve)
                                 ) {
                                     androidx.compose.material3.Icon(
                                         imageVector = Icons.Default.Add,
@@ -348,8 +348,8 @@ fun CaptionEditorPanel(
                                     onClick = onGenerateAutoCaption,
                                     modifier = Modifier.weight(1f),
                                     shape = RoundedCornerShape(12.dp),
-                                    border = BorderStroke(1.dp, ClearCutAccents.Yellow.copy(alpha = 0.35f)),
-                                    colors = ButtonDefaults.outlinedButtonColors(contentColor = ClearCutAccents.Yellow)
+                                    border = BorderStroke(1.dp, DirectorXAccents.Yellow.copy(alpha = 0.35f)),
+                                    colors = ButtonDefaults.outlinedButtonColors(contentColor = DirectorXAccents.Yellow)
                                 ) {
                                     androidx.compose.material3.Icon(
                                         imageVector = Icons.Default.AutoAwesome,
@@ -363,7 +363,7 @@ fun CaptionEditorPanel(
                                     onClick = ::createCaption,
                                     modifier = Modifier.weight(1f),
                                     shape = RoundedCornerShape(12.dp),
-                                    colors = ButtonDefaults.buttonColors(containerColor = ClearCutAccents.Mauve)
+                                    colors = ButtonDefaults.buttonColors(containerColor = DirectorXAccents.Mauve)
                                 ) {
                                     androidx.compose.material3.Icon(
                                         imageVector = Icons.Default.Add,
@@ -397,7 +397,7 @@ fun CaptionEditorPanel(
         editingCaption?.let { caption ->
             Spacer(modifier = Modifier.height(12.dp))
 
-            PremiumPanelCard(accent = ClearCutAccents.Yellow) {
+            PremiumPanelCard(accent = DirectorXAccents.Yellow) {
                 Text(
                     text = stringResource(R.string.caption_edit_title),
                     style = MaterialTheme.typography.titleMedium,
@@ -437,7 +437,7 @@ private fun CaptionImportPreviewDialog(
     onApply: () -> Unit,
     onDismiss: () -> Unit,
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val confidence = (preview.languageConfidence * 100f).roundToInt()
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -468,14 +468,14 @@ private fun CaptionImportPreviewDialog(
                 preview.failure?.let { failure ->
                     Text(
                         text = failure.displayName,
-                        color = ClearCutAccents.Red,
+                        color = DirectorXAccents.Red,
                         style = MaterialTheme.typography.bodySmall,
                     )
                 }
                 preview.warnings.forEach { warning ->
                     Text(
                         text = warning,
-                        color = ClearCutAccents.Yellow,
+                        color = DirectorXAccents.Yellow,
                         style = MaterialTheme.typography.bodySmall,
                     )
                 }
@@ -518,7 +518,7 @@ private fun CaptionMetric(
     accent: androidx.compose.ui.graphics.Color,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Surface(
         modifier = modifier,
         color = accent.copy(alpha = 0.12f),
@@ -552,12 +552,12 @@ private fun CaptionListCard(
     onEdit: () -> Unit,
     onDelete: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val isActive = playheadMs in caption.startTimeMs..caption.endTimeMs
     val accent = when {
-        isEditing -> ClearCutAccents.Mauve
-        isActive -> ClearCutAccents.Green
-        else -> ClearCutAccents.Blue
+        isEditing -> DirectorXAccents.Mauve
+        isActive -> DirectorXAccents.Green
+        else -> DirectorXAccents.Blue
     }
 
     Surface(
@@ -627,7 +627,7 @@ private fun CaptionListCard(
                         stringResource(R.string.caption_manual)
                     },
                     style = MaterialTheme.typography.labelMedium,
-                    color = if (caption.words.isNotEmpty()) ClearCutAccents.Peach else semanticColors.subtext
+                    color = if (caption.words.isNotEmpty()) DirectorXAccents.Peach else semanticColors.subtext
                 )
 
                 Row(
@@ -638,13 +638,13 @@ private fun CaptionListCard(
                         icon = Icons.Default.Edit,
                         contentDescription = stringResource(R.string.cd_caption_edit),
                         onClick = onEdit,
-                        tint = ClearCutAccents.Blue
+                        tint = DirectorXAccents.Blue
                     )
                     PremiumPanelIconButton(
                         icon = Icons.Default.Delete,
                         contentDescription = stringResource(R.string.caption_delete_cd),
                         onClick = onDelete,
-                        tint = ClearCutAccents.Red
+                        tint = DirectorXAccents.Red
                     )
                 }
             }
@@ -660,7 +660,7 @@ private fun CaptionEditForm(
     onUpdate: (Caption) -> Unit,
     onDone: () -> Unit
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val isCompactLayout = LocalConfiguration.current.screenWidthDp < 430
     val captionStylesSectionDescription = stringResource(R.string.cd_caption_styles_section)
     var text by remember(caption.id) { mutableStateOf(caption.text) }
@@ -677,12 +677,12 @@ private fun CaptionEditForm(
             modifier = Modifier.fillMaxWidth(),
             label = { Text(stringResource(R.string.caption_text_hint)) },
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = ClearCutAccents.Mauve,
+                focusedBorderColor = DirectorXAccents.Mauve,
                 unfocusedBorderColor = semanticColors.cardStroke,
                 focusedTextColor = semanticColors.text,
                 unfocusedTextColor = semanticColors.text,
-                cursorColor = ClearCutAccents.Mauve,
-                focusedLabelColor = ClearCutAccents.Mauve,
+                cursorColor = DirectorXAccents.Mauve,
+                focusedLabelColor = DirectorXAccents.Mauve,
                 unfocusedLabelColor = semanticColors.subtext
             ),
             maxLines = 3,
@@ -697,13 +697,13 @@ private fun CaptionEditForm(
             CaptionMetric(
                 title = stringResource(R.string.caption_start_metric),
                 value = formatSeconds((startTime * 1000f).toLong()),
-                accent = ClearCutAccents.Blue,
+                accent = DirectorXAccents.Blue,
                 modifier = Modifier.widthIn(min = 132.dp)
             )
             CaptionMetric(
                 title = stringResource(R.string.caption_end_metric),
                 value = formatSeconds((endTime * 1000f).toLong()),
-                accent = ClearCutAccents.Green,
+                accent = DirectorXAccents.Green,
                 modifier = Modifier.widthIn(min = 132.dp)
             )
         }
@@ -712,14 +712,14 @@ private fun CaptionEditForm(
             label = stringResource(R.string.caption_start_time),
             value = startTime,
             valueRange = 0f..(clipDurationMs / 1000f),
-            accent = ClearCutAccents.Blue,
+            accent = DirectorXAccents.Blue,
             onValueChange = { startTime = it.coerceAtMost(endTime) }
         )
         CaptionSlider(
             label = stringResource(R.string.caption_end_time),
             value = endTime,
             valueRange = 0f..(clipDurationMs / 1000f),
-            accent = ClearCutAccents.Green,
+            accent = DirectorXAccents.Green,
             onValueChange = { endTime = it.coerceAtLeast(startTime) }
         )
 
@@ -742,8 +742,8 @@ private fun CaptionEditForm(
                         onClick = { styleType = type },
                         label = { Text(stringResource(type.displayNameRes())) },
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = ClearCutAccents.Mauve.copy(alpha = 0.18f),
-                            selectedLabelColor = ClearCutAccents.Mauve,
+                            selectedContainerColor = DirectorXAccents.Mauve.copy(alpha = 0.18f),
+                            selectedLabelColor = DirectorXAccents.Mauve,
                             containerColor = semanticColors.panelRaised,
                             labelColor = semanticColors.subtext
                         )
@@ -756,7 +756,7 @@ private fun CaptionEditForm(
             label = stringResource(R.string.caption_font_size),
             value = fontSize,
             valueRange = 16f..72f,
-            accent = ClearCutAccents.Mauve,
+            accent = DirectorXAccents.Mauve,
             onValueChange = { fontSize = it },
             valueFormatter = { "${it.toInt()} pt" }
         )
@@ -764,7 +764,7 @@ private fun CaptionEditForm(
             label = stringResource(R.string.panel_caption_position_y),
             value = positionY,
             valueRange = 0.1f..0.95f,
-            accent = ClearCutAccents.Yellow,
+            accent = DirectorXAccents.Yellow,
             onValueChange = { positionY = it },
             valueFormatter = { "%.0f%%".format(it * 100f) }
         )
@@ -802,7 +802,7 @@ private fun CaptionEditForm(
                     },
                     enabled = text.isNotBlank(),
                     modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = ClearCutAccents.Mauve),
+                    colors = ButtonDefaults.buttonColors(containerColor = DirectorXAccents.Mauve),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Text(text = stringResource(R.string.panel_caption_save))
@@ -841,7 +841,7 @@ private fun CaptionEditForm(
                     },
                     enabled = text.isNotBlank(),
                     modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(containerColor = ClearCutAccents.Mauve),
+                    colors = ButtonDefaults.buttonColors(containerColor = DirectorXAccents.Mauve),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Text(text = stringResource(R.string.panel_caption_save))
@@ -860,7 +860,7 @@ private fun CaptionSlider(
     onValueChange: (Float) -> Unit,
     valueFormatter: (Float) -> String = { "%.1fs".format(it) }
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),

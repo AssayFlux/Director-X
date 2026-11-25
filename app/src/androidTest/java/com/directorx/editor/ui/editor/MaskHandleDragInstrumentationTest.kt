@@ -14,7 +14,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.directorx.editor.model.Mask
 import com.directorx.editor.model.MaskPoint
 import com.directorx.editor.model.MaskType
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -64,7 +64,7 @@ class MaskHandleDragInstrumentationTest {
     }
 
     private fun drag(from: (Float, Float) -> Offset, to: (Float, Float) -> Offset) {
-        val overlay = compose.onNodeWithTag(ClearCutTestTags.MASK_PREVIEW_OVERLAY)
+        val overlay = compose.onNodeWithTag(DirectorXTestTags.MASK_PREVIEW_OVERLAY)
         val size = overlay.fetchSemanticsNode().size
         val start = from(size.width.toFloat(), size.height.toFloat())
         val end = to(size.width.toFloat(), size.height.toFloat())

@@ -30,9 +30,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.directorx.editor.R
-import com.directorx.editor.ui.ClearCutTestTags
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.DirectorXTestTags
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 
 @Composable
 internal fun TrimNumericInputRow(
@@ -45,7 +45,7 @@ internal fun TrimNumericInputRow(
     onTrimDragEnded: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     var startText by remember(clipId) {
         mutableStateOf(formatTrimTime(trimStartMs))
     }
@@ -92,7 +92,7 @@ internal fun TrimNumericInputRow(
         Text(
             text = stringResource(R.string.timeline_trim_in),
             style = MaterialTheme.typography.labelSmall,
-            color = ClearCutAccents.Peach
+            color = DirectorXAccents.Peach
         )
         OutlinedTextField(
             value = startText,
@@ -121,17 +121,17 @@ internal fun TrimNumericInputRow(
                     }
                     if (!focus.isFocused) startText = formatTrimTime(trimStartMs)
                 }
-                .testTag(ClearCutTestTags.TIMELINE_TRIM_START)
+                .testTag(DirectorXTestTags.TIMELINE_TRIM_START)
                 .semantics { contentDescription = trimStartDescription },
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = ClearCutAccents.Peach,
+                focusedBorderColor = DirectorXAccents.Peach,
                 unfocusedBorderColor = semanticColors.surface
             )
         )
         Text(
             text = stringResource(R.string.timeline_trim_out),
             style = MaterialTheme.typography.labelSmall,
-            color = ClearCutAccents.Peach
+            color = DirectorXAccents.Peach
         )
         OutlinedTextField(
             value = endText,
@@ -160,10 +160,10 @@ internal fun TrimNumericInputRow(
                     }
                     if (!focus.isFocused) endText = formatTrimTime(trimEndMs)
                 }
-                .testTag(ClearCutTestTags.TIMELINE_TRIM_END)
+                .testTag(DirectorXTestTags.TIMELINE_TRIM_END)
                 .semantics { contentDescription = trimEndDescription },
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = ClearCutAccents.Peach,
+                focusedBorderColor = DirectorXAccents.Peach,
                 unfocusedBorderColor = semanticColors.surface
             )
         )

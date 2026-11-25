@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate ClearCut's baseline profile and record the managed-device metrics."""
+"""Generate Director X's baseline profile and record the managed-device metrics."""
 
 from __future__ import annotations
 
