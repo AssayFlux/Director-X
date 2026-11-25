@@ -783,9 +783,9 @@ fun EditorScreen(
             } else {
                 0.dp
             }
-        // Scroll only when the measured minimum stack cannot fit. This keeps the
-        // preview flexible on normal/large phones, while protecting short windows
-        // and large-font layouts from clipping the timeline or bottom tool rail.
+        // Reserve the preview minimum plus the timeline's full allowed height,
+        // scaled toolbar/rail, and system-inset margin. Scroll before the weighted
+        // preview can be squeezed below its intended size by a tall timeline.
         val minimumEditorContentHeight = scaledToolbarHeight +
             previewMinHeight + timelineMaxHeight + measuredBottomToolRailHeight + 48.dp
         val scrollEditorContent = !isImmersivePreview &&
