@@ -37,7 +37,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.directorx.editor.R
-import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXChromeIconButton
 import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
@@ -240,7 +240,7 @@ fun PremiumPanelIconButton(
     val resolvedContainer = if (containerColor == Color.Unspecified) colors.panelHighest else containerColor
     val resolvedTint = if (tint == Color.Unspecified) colors.subtext else tint
 
-    ClearCutChromeIconButton(
+    DirectorXChromeIconButton(
         icon = icon,
         contentDescription = contentDescription,
         onClick = onClick,
