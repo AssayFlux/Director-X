@@ -50,8 +50,8 @@ import com.directorx.editor.engine.MediaSequenceCandidate
 import com.directorx.editor.engine.MediaSequenceOrder
 import com.directorx.editor.engine.moveMediaSequenceItem
 import com.directorx.editor.engine.orderMediaSequence
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 import com.directorx.editor.ui.theme.TouchTarget
@@ -111,7 +111,7 @@ internal fun MediaSequenceReviewDialog(
     onConfirm: () -> Unit,
     onCancel: () -> Unit,
 ) {
-    val colors = LocalClearCutColors.current
+    val colors = LocalDirectorXColors.current
     AlertDialog(
         onDismissRequest = onCancel,
         containerColor = colors.panelHighest,
@@ -125,7 +125,7 @@ internal fun MediaSequenceReviewDialog(
                 Icon(
                     imageVector = Icons.Default.LibraryAdd,
                     contentDescription = null,
-                    tint = ClearCutAccents.Mauve,
+                    tint = DirectorXAccents.Mauve,
                     modifier = Modifier.size(24.dp),
                 )
                 Spacer(Modifier.width(Spacing.sm))
@@ -173,7 +173,7 @@ internal fun MediaSequenceReviewDialog(
                                 )
                             },
                             colors = FilterChipDefaults.filterChipColors(
-                                selectedContainerColor = ClearCutAccents.Mauve.copy(alpha = 0.22f),
+                                selectedContainerColor = DirectorXAccents.Mauve.copy(alpha = 0.22f),
                                 selectedLabelColor = colors.text,
                             ),
                         )
@@ -232,7 +232,7 @@ internal fun MediaSequenceReviewDialog(
                                 Text(
                                     text = "${index + 1}",
                                     style = MaterialTheme.typography.labelLarge,
-                                    color = ClearCutAccents.Mauve,
+                                    color = DirectorXAccents.Mauve,
                                     modifier = Modifier.width(24.dp),
                                 )
                                 Icon(
