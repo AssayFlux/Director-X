@@ -55,8 +55,8 @@ import com.directorx.editor.engine.SilenceDetectionEngine.CutProposal
 import com.directorx.editor.engine.SilenceDetectionEngine.ProposalCategory
 import com.directorx.editor.model.Clip
 import com.directorx.editor.model.Track
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
 import com.directorx.editor.ui.theme.Radius
 import java.util.Locale
 
@@ -241,19 +241,19 @@ fun CutAssistantReviewPanel(
                     horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.End),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    ClearCutSecondaryButton(
+                    DirectorXSecondaryButton(
                         text = stringResource(R.string.cut_assistant_reject_all),
                         onClick = onRejectAll,
                         icon = Icons.Default.Close,
                         modifier = Modifier.widthIn(min = 128.dp)
                     )
-                    ClearCutSecondaryButton(
+                    DirectorXSecondaryButton(
                         text = stringResource(R.string.cut_assistant_accept_all),
                         onClick = onAcceptAll,
                         icon = Icons.Default.Check,
                         modifier = Modifier.widthIn(min = 128.dp)
                     )
-                    ClearCutPrimaryButton(
+                    DirectorXPrimaryButton(
                         text = stringResource(R.string.cut_assistant_apply_selected, acceptedCount),
                         onClick = onApply,
                         icon = Icons.Default.ContentCut,
@@ -348,7 +348,7 @@ private fun CutAssistantTuningCard(
             steps = 9,
         )
 
-        ClearCutSecondaryButton(
+        DirectorXSecondaryButton(
             text = stringResource(R.string.cut_assistant_reanalyze),
             onClick = { onReanalyze(adjustedConfig) },
             enabled = isDirty,
@@ -398,7 +398,7 @@ private fun CutAssistantEmptyState(
                 )
             }
         }
-        ClearCutSecondaryButton(
+        DirectorXSecondaryButton(
             text = stringResource(R.string.done),
             onClick = onClose,
             modifier = Modifier.fillMaxWidth()
