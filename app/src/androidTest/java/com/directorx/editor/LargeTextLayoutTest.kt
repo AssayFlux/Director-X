@@ -76,8 +76,9 @@ class LargeTextLayoutTest {
                     DirectorXTestTags.EDITOR_EMPTY_ADD_MEDIA,
                 ),
             )
+            val expectedPreviewHeight = if (fontScale >= 2.5f) 380.dp else 290.dp
             compose.onNodeWithTag(DirectorXTestTags.EDITOR_PREVIEW_PANEL)
-                .assertHeightIsAtLeast(180.dp)
+                .assertHeightIsAtLeast(expectedPreviewHeight)
             compose.onNodeWithTag(DirectorXTestTags.EDITOR_TOP_BAR)
                 .assertHeightIsAtLeast(if (fontScale >= 2.5f) 100.dp else 70.dp)
 
