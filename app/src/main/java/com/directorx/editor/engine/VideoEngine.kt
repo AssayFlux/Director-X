@@ -566,7 +566,9 @@ class VideoEngine @Inject constructor(
             // composition is assigned/prepared. Preserve the final scrub position
             // and replay it immediately after prepare() instead of calling into
             // Media3's not-yet-created CompositionPlayerInternal (which NPEs).
-            pendingPreviewSeekPositionMs = clampedPositionMs
+            // The current plan may still be the empty placeholder, so retain the
+            // requested non-negative position and clamp against the new plan later.
+            pendingPreviewSeekPositionMs = positionMs.coerceAtLeast(0L)
             AppLog.d(TAG, "Deferring preview seek until the composition is prepared")
             return
         }
