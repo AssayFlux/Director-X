@@ -59,10 +59,10 @@ import androidx.compose.ui.graphics.graphicsLayer
 import com.directorx.editor.engine.ExportState
 import com.directorx.editor.model.*
 import com.directorx.editor.ui.DirectorXTestTags
-import com.directorx.editor.ui.theme.ClearCutDialogIcon
+import com.directorx.editor.ui.theme.DirectorXDialogIcon
 import com.directorx.editor.ui.theme.DirectorXChromeIconButton
-import com.directorx.editor.ui.theme.ClearCutPrimaryButton
-import com.directorx.editor.ui.theme.ClearCutSecondaryButton
+import com.directorx.editor.ui.theme.DirectorXPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 import com.directorx.editor.ui.theme.TouchTarget
@@ -1381,7 +1381,7 @@ private fun EditorTopBar(
         AlertDialog(
             onDismissRequest = { showSaveTemplateDialog = false },
             icon = {
-                ClearCutDialogIcon(
+                DirectorXDialogIcon(
                     icon = Icons.Default.Save,
                     accent = DirectorXAccents.Mauve
                 )
@@ -1415,7 +1415,7 @@ private fun EditorTopBar(
                 )
             },
             confirmButton = {
-                ClearCutPrimaryButton(
+                DirectorXPrimaryButton(
                     text = stringResource(R.string.editor_save),
                     onClick = {
                         onSaveTemplate(trimmedTemplateName)
@@ -1426,7 +1426,7 @@ private fun EditorTopBar(
                 )
             },
             dismissButton = {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.editor_cancel),
                     onClick = { showSaveTemplateDialog = false }
                 )
@@ -1445,7 +1445,7 @@ private fun EditorTopBar(
         AlertDialog(
             onDismissRequest = { showRenameDialog = false },
             icon = {
-                ClearCutDialogIcon(
+                DirectorXDialogIcon(
                     icon = Icons.Default.Edit,
                     accent = DirectorXAccents.Rosewater
                 )
@@ -1481,7 +1481,7 @@ private fun EditorTopBar(
                 )
             },
             confirmButton = {
-                ClearCutPrimaryButton(
+                DirectorXPrimaryButton(
                     text = stringResource(R.string.editor_save),
                     onClick = {
                         onRename(trimmedNameText)
@@ -1492,7 +1492,7 @@ private fun EditorTopBar(
                 )
             },
             dismissButton = {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.editor_cancel),
                     onClick = { showRenameDialog = false }
                 )
@@ -1510,7 +1510,7 @@ private fun EditorTopBar(
         AlertDialog(
             onDismissRequest = { showCutListDialog = false },
             icon = {
-                ClearCutDialogIcon(
+                DirectorXDialogIcon(
                     icon = Icons.Default.ContentPaste,
                     accent = DirectorXAccents.Peach
                 )
@@ -1545,7 +1545,7 @@ private fun EditorTopBar(
                 )
             },
             confirmButton = {
-                ClearCutPrimaryButton(
+                DirectorXPrimaryButton(
                     text = stringResource(R.string.cut_list_paste_apply),
                     onClick = {
                         onApplyCutList(cutListText)
@@ -1556,7 +1556,7 @@ private fun EditorTopBar(
                 )
             },
             dismissButton = {
-                ClearCutSecondaryButton(
+                DirectorXSecondaryButton(
                     text = stringResource(R.string.editor_cancel),
                     onClick = { showCutListDialog = false }
                 )
