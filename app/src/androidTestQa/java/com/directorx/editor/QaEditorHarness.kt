@@ -23,7 +23,7 @@ import com.directorx.editor.engine.db.ProjectDatabase
 import com.directorx.editor.model.Clip
 import com.directorx.editor.model.Project
 import com.directorx.editor.model.TrackType
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
@@ -96,11 +96,11 @@ internal class QaEditorHarness(
             compose.activity.intent = launchIntent
         }
         compose.waitForIdle()
-        waitForTag(ClearCutTestTags.EDITOR_SCREEN)
+        waitForTag(DirectorXTestTags.EDITOR_SCREEN)
         dismissTutorialIfPresent()
         projectId = awaitProject().id
         val clip = videoClips(awaitState { videoClips(it).size == 1 }).single()
-        waitForTag(ClearCutTestTags.TIMELINE_CLIP_PREFIX + clip.id)
+        waitForTag(DirectorXTestTags.TIMELINE_CLIP_PREFIX + clip.id)
         compose.waitForIdle()
         return clip
     }
@@ -124,7 +124,7 @@ internal class QaEditorHarness(
         .flatMap { it.clips }
 
     fun clipNode(clip: Clip): SemanticsNode =
-        compose.onNodeWithTag(ClearCutTestTags.TIMELINE_CLIP_PREFIX + clip.id).fetchSemanticsNode()
+        compose.onNodeWithTag(DirectorXTestTags.TIMELINE_CLIP_PREFIX + clip.id).fetchSemanticsNode()
 
     /**
      * Pixels per millisecond the timeline is drawn at, read off the clip block: the
@@ -135,7 +135,7 @@ internal class QaEditorHarness(
 
     /** Runs touch input in root coordinates, so a gesture can start anywhere on the editor. */
     fun touchInRoot(block: TouchInjectionScope.(toLocal: (Offset) -> Offset) -> Unit) {
-        val screen = compose.onNodeWithTag(ClearCutTestTags.EDITOR_SCREEN)
+        val screen = compose.onNodeWithTag(DirectorXTestTags.EDITOR_SCREEN)
         val origin = screen.fetchSemanticsNode().positionInRoot
         screen.performTouchInput { block { point -> point - origin } }
         compose.waitForIdle()
@@ -155,35 +155,35 @@ internal class QaEditorHarness(
      * only exists once there is something to undo, so a missing item reads as empty.
      */
     fun undoHistory(): List<String> {
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_OVERFLOW).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_OVERFLOW).performClick()
         compose.waitForIdle()
-        if (compose.onAllNodesWithTag(ClearCutTestTags.EDITOR_VERSION_HISTORY).fetchSemanticsNodes().isEmpty()) {
+        if (compose.onAllNodesWithTag(DirectorXTestTags.EDITOR_VERSION_HISTORY).fetchSemanticsNodes().isEmpty()) {
             // Dismiss the Compose DropdownMenu through its own anchor. Espresso.pressBack()
             // may select the popup's unfocused Android sub-window on API 35 emulators.
-            compose.onNodeWithTag(ClearCutTestTags.EDITOR_OVERFLOW).performClick()
+            compose.onNodeWithTag(DirectorXTestTags.EDITOR_OVERFLOW).performClick()
             compose.waitForIdle()
             return emptyList()
         }
-        compose.onNodeWithTag(ClearCutTestTags.EDITOR_VERSION_HISTORY).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.EDITOR_VERSION_HISTORY).performClick()
         compose.waitForIdle()
         // A freshly imported fixture may not create an undo entry. The panel can
         // still open successfully, so treat an empty entry list as an empty
         // history instead of waiting for a row that cannot exist.
         val descriptions = compose
-            .onAllNodesWithTag(ClearCutTestTags.UNDO_HISTORY_ENTRY_DESCRIPTION, useUnmergedTree = true)
+            .onAllNodesWithTag(DirectorXTestTags.UNDO_HISTORY_ENTRY_DESCRIPTION, useUnmergedTree = true)
             .fetchSemanticsNodes()
             .map { node ->
                 node.config.getOrNull(SemanticsProperties.Text)?.joinToString("") { it.text }.orEmpty()
             }
-        compose.onNodeWithTag(ClearCutTestTags.UNDO_HISTORY_CLOSE).performClick()
+        compose.onNodeWithTag(DirectorXTestTags.UNDO_HISTORY_CLOSE).performClick()
         // Assert the editor's actual panel state rather than waiting for an
         // AnimatedVisibility child to disappear from the semantics tree. The
         // transition may retain its closing content briefly after state changes.
         compose.waitUntil(timeoutMillis = 5_000L) {
-            compose.onNodeWithTag(ClearCutTestTags.EDITOR_SCREEN)
+            compose.onNodeWithTag(DirectorXTestTags.EDITOR_SCREEN)
                 .fetchSemanticsNode()
                 .config
-                .getOrNull(ClearCutTestTags.OPEN_PANEL_IDS)?.contains("UNDO_HISTORY") == false
+                .getOrNull(DirectorXTestTags.OPEN_PANEL_IDS)?.contains("UNDO_HISTORY") == false
         }
         compose.waitForIdle()
         return descriptions
@@ -199,11 +199,11 @@ internal class QaEditorHarness(
     private fun dismissTutorialIfPresent() {
         runCatching {
             compose.waitUntil(timeoutMillis = 2_000L) {
-                compose.onAllNodesWithTag(ClearCutTestTags.TUTORIAL_SKIP).fetchSemanticsNodes().isNotEmpty()
+                compose.onAllNodesWithTag(DirectorXTestTags.TUTORIAL_SKIP).fetchSemanticsNodes().isNotEmpty()
             }
         }
-        if (compose.onAllNodesWithTag(ClearCutTestTags.TUTORIAL_SKIP).fetchSemanticsNodes().isNotEmpty()) {
-            compose.onNodeWithTag(ClearCutTestTags.TUTORIAL_SKIP).performClick()
+        if (compose.onAllNodesWithTag(DirectorXTestTags.TUTORIAL_SKIP).fetchSemanticsNodes().isNotEmpty()) {
+            compose.onNodeWithTag(DirectorXTestTags.TUTORIAL_SKIP).performClick()
         }
     }
 
