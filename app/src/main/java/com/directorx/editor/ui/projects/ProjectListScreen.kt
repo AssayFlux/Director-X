@@ -67,7 +67,7 @@ import com.directorx.editor.ui.editor.PremiumSnackbarHost
 import com.directorx.editor.ui.editor.ToastSeverity
 import com.directorx.editor.ui.editor.inferSeverity
 import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXChromeIconButton
 import com.directorx.editor.ui.theme.ClearCutDialogIcon
 import com.directorx.editor.ui.theme.ClearCutFilterChip
 import com.directorx.editor.ui.theme.ClearCutMetricPill
@@ -802,7 +802,7 @@ private fun ProjectHomeHero(
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.weight(1f))
-            ClearCutChromeIconButton(
+            DirectorXChromeIconButton(
                 icon = Icons.Default.Settings,
                 contentDescription = stringResource(R.string.projects_settings),
                 onClick = onSettings,
@@ -858,7 +858,7 @@ private fun ProjectHomeHero(
                 },
                 trailingIcon = {
                     if (searchQuery.isNotEmpty()) {
-                        ClearCutChromeIconButton(
+                        DirectorXChromeIconButton(
                             icon = Icons.Default.Clear,
                             contentDescription = stringResource(R.string.projects_clear),
                             onClick = onClearSearch,
@@ -1577,7 +1577,7 @@ private fun ProjectCard(
                     }
 
                     Box {
-                        ClearCutChromeIconButton(
+                        DirectorXChromeIconButton(
                             icon = Icons.Default.MoreVert,
                             contentDescription = stringResource(R.string.projects_more_cd),
                             onClick = { showOverflowMenu = true },
@@ -1983,7 +1983,7 @@ private fun TrashedProjectCard(
                 }
             }
             Row(horizontalArrangement = Arrangement.spacedBy(Spacing.xs)) {
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = Icons.Default.RestoreFromTrash,
                     contentDescription = stringResource(R.string.trash_restore_cd),
                     onClick = onRestore,
@@ -1991,7 +1991,7 @@ private fun TrashedProjectCard(
                     containerColor = ClearCutAccents.Green.copy(alpha = 0.08f),
                     borderColor = ClearCutAccents.Green.copy(alpha = 0.18f)
                 )
-                ClearCutChromeIconButton(
+                DirectorXChromeIconButton(
                     icon = Icons.Default.DeleteForever,
                     contentDescription = stringResource(R.string.trash_delete_forever_cd),
                     onClick = onDeleteForever,
