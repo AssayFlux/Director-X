@@ -30,7 +30,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.directorx.editor.R
-import com.directorx.editor.ui.ClearCutTestTags
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.theme.ClearCutAccents
 import com.directorx.editor.ui.theme.LocalClearCutColors
 
@@ -121,7 +121,7 @@ internal fun TrimNumericInputRow(
                     }
                     if (!focus.isFocused) startText = formatTrimTime(trimStartMs)
                 }
-                .testTag(ClearCutTestTags.TIMELINE_TRIM_START)
+                .testTag(DirectorXTestTags.TIMELINE_TRIM_START)
                 .semantics { contentDescription = trimStartDescription },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = ClearCutAccents.Peach,
@@ -160,7 +160,7 @@ internal fun TrimNumericInputRow(
                     }
                     if (!focus.isFocused) endText = formatTrimTime(trimEndMs)
                 }
-                .testTag(ClearCutTestTags.TIMELINE_TRIM_END)
+                .testTag(DirectorXTestTags.TIMELINE_TRIM_END)
                 .semantics { contentDescription = trimEndDescription },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = ClearCutAccents.Peach,
