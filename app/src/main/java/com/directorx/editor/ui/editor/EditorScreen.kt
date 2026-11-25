@@ -60,7 +60,7 @@ import com.directorx.editor.engine.ExportState
 import com.directorx.editor.model.*
 import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.theme.ClearCutDialogIcon
-import com.directorx.editor.ui.theme.ClearCutChromeIconButton
+import com.directorx.editor.ui.theme.DirectorXChromeIconButton
 import com.directorx.editor.ui.theme.ClearCutPrimaryButton
 import com.directorx.editor.ui.theme.ClearCutSecondaryButton
 import com.directorx.editor.ui.theme.Radius
