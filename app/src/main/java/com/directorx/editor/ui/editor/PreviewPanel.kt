@@ -354,28 +354,29 @@ fun PreviewPanel(
                             }
                         }
 
-                        // Keep one PlayerView mounted for the lifetime of the preview. Removing
-                        // the AndroidView for a timeline gap, still image, or transient error
-                        // destroys its SurfaceView while the hardware codec is active. On some
-                        // Samsung/Qualcomm devices that detach blocks until Media3 raises
-                        // TIMEOUT_OPERATION_DETACH_SURFACE and the preview becomes unrecoverable.
-                        AndroidView(
-                            factory = { ctx ->
-                                PlayerView(ctx).apply {
-                                    useController = false
-                                    setShowBuffering(PlayerView.SHOW_BUFFERING_NEVER)
-                                    onPlayerViewReady(this)
-                                }
-                            },
-                            update = { playerView ->
-                                if (playerView.player !== previewPlayer) playerView.player = previewPlayer
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-                                    (playerView.videoSurfaceView as? SurfaceView)
-                                        ?.setDesiredHdrHeadroom(desiredPreviewHdrHeadroom)
-                                }
-                            },
-                            modifier = Modifier.fillMaxSize()
-                        )
+                        // Keep one PlayerView mounted for the lifetime of a non-empty preview.
+                        // Removing it for a timeline gap, still image, or transient error destroys
+                        // its SurfaceView while the hardware codec is active. An empty project has
+                        // no decoder/surface to preserve, so do not mount Android controls there.
+                        if (totalDurationMs > 0L) {
+                            AndroidView(
+                                factory = { ctx ->
+                                    PlayerView(ctx).apply {
+                                        useController = false
+                                        setShowBuffering(PlayerView.SHOW_BUFFERING_NEVER)
+                                        onPlayerViewReady(this)
+                                    }
+                                },
+                                update = { playerView ->
+                                    if (playerView.player !== previewPlayer) playerView.player = previewPlayer
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                                        (playerView.videoSurfaceView as? SurfaceView)
+                                            ?.setDesiredHdrHeadroom(desiredPreviewHdrHeadroom)
+                                    }
+                                },
+                                modifier = Modifier.fillMaxSize()
+                            )
+                        }
 
                         when {
                             hasPlaybackError -> {
