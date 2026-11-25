@@ -1,7 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.ClearCutAccents
-import com.directorx.editor.ui.theme.LocalClearCutColors
+import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -48,13 +48,13 @@ fun SmartReframePanel(
     onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val isCompactGrid = LocalConfiguration.current.screenWidthDp < 430
     PremiumEditorPanel(
         title = stringResource(R.string.smart_reframe_title),
         subtitle = stringResource(R.string.smart_reframe_subtitle),
         icon = Icons.Default.Crop,
-        accent = ClearCutAccents.Mauve,
+        accent = DirectorXAccents.Mauve,
         onClose = onClose,
         closeContentDescription = stringResource(R.string.smart_reframe_close_cd),
         modifier = modifier,
@@ -63,13 +63,13 @@ fun SmartReframePanel(
             if (isProcessing) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(18.dp),
-                    color = ClearCutAccents.Mauve,
+                    color = DirectorXAccents.Mauve,
                     strokeWidth = 2.dp
                 )
             }
         }
     ) {
-        PremiumPanelCard(accent = ClearCutAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -97,11 +97,11 @@ fun SmartReframePanel(
                 ) {
                     PremiumPanelPill(
                         text = currentAspect.label,
-                        accent = ClearCutAccents.Mauve
+                        accent = DirectorXAccents.Mauve
                     )
                     PremiumPanelPill(
                         text = if (isProcessing) stringResource(R.string.smart_reframe_processing) else stringResource(R.string.smart_reframe_targets_count, reframeOptions.size),
-                        accent = if (isProcessing) ClearCutAccents.Peach else ClearCutAccents.Blue
+                        accent = if (isProcessing) DirectorXAccents.Peach else DirectorXAccents.Blue
                     )
                 }
             }
@@ -109,7 +109,7 @@ fun SmartReframePanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = ClearCutAccents.Blue) {
+        PremiumPanelCard(accent = DirectorXAccents.Blue) {
             Text(
                 text = stringResource(R.string.smart_reframe_destination_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -149,9 +149,9 @@ private fun SmartReframeCard(
     previewMaxSize: Dp,
     modifier: Modifier = Modifier
 ) {
-    val semanticColors = LocalClearCutColors.current
+    val semanticColors = LocalDirectorXColors.current
     val platformLabel = stringResource(option.platformResId)
-    val accent = if (isSelected) ClearCutAccents.Mauve else ClearCutAccents.Blue
+    val accent = if (isSelected) DirectorXAccents.Mauve else DirectorXAccents.Blue
     val previewRatio = option.ratio.toFloat()
     val (previewWidth, previewHeight) = computePreviewDimensions(previewRatio, previewMaxSize)
 
