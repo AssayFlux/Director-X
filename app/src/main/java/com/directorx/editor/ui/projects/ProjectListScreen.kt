@@ -1302,7 +1302,7 @@ private fun ProjectTemplateShortcut(
         Icon(
             imageVector = template.icon,
             contentDescription = null,
-            tint = template.accentColor,
+            tint = template.appearanceAccentColor(),
             modifier = Modifier.size(22.dp)
         )
         Text(
