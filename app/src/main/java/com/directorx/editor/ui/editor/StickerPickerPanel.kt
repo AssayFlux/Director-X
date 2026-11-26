@@ -378,6 +378,7 @@ private fun StickerTile(
     }
 }
 
+@Composable
 private fun stickerAccent(category: StickerCategory): androidx.compose.ui.graphics.Color = when (category) {
     StickerCategory.EMOJI -> DirectorXAccents.Yellow
     StickerCategory.SHAPES -> DirectorXAccents.Sapphire
