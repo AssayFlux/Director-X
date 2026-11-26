@@ -1,6 +1,5 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.DirectorXAccents
 import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -99,7 +98,7 @@ private fun CompactSidebarHeader(projectName: String) {
         Icon(
             imageVector = Icons.Default.VideoLibrary,
             contentDescription = null,
-            tint = DirectorXAccents.Sky,
+            tint = semanticColors.accent,
             modifier = Modifier.size(22.dp)
         )
     }
@@ -148,16 +147,16 @@ private fun QuickActionsBlock(viewModel: EditorViewModel, compact: Boolean = fal
                 fontWeight = FontWeight.Bold
             )
         }
-        SidebarAction(icon = Icons.Default.Add, label = stringResource(R.string.editor_add_media), tint = DirectorXAccents.Blue, compact = compact) {
+        SidebarAction(icon = Icons.Default.Add, label = stringResource(R.string.editor_add_media), tint = semanticColors.accent, compact = compact) {
             viewModel.showMediaPicker()
         }
-        SidebarAction(icon = Icons.Default.Videocam, label = stringResource(R.string.desktop_sidebar_record), tint = DirectorXAccents.Green, compact = compact) {
+        SidebarAction(icon = Icons.Default.Videocam, label = stringResource(R.string.desktop_sidebar_record), tint = semanticColors.success, compact = compact) {
             viewModel.showMediaPicker()
         }
-        SidebarAction(icon = Icons.Default.FileDownload, label = stringResource(R.string.editor_export), tint = DirectorXAccents.Rosewater, compact = compact) {
+        SidebarAction(icon = Icons.Default.FileDownload, label = stringResource(R.string.editor_export), tint = semanticColors.accentSecondary, compact = compact) {
             viewModel.showExportSheet()
         }
-        SidebarAction(icon = Icons.Default.AutoAwesome, label = stringResource(R.string.v369_features_label), tint = DirectorXAccents.Mauve, compact = compact) {
+        SidebarAction(icon = Icons.Default.AutoAwesome, label = stringResource(R.string.v369_features_label), tint = semanticColors.accentTertiary, compact = compact) {
             viewModel.showV369Features()
         }
     }
