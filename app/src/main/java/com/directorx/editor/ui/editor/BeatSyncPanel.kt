@@ -45,6 +45,7 @@ fun BeatSyncPanel(
     onClose: () -> Unit
 ) {
     val semanticColors = LocalDirectorXColors.current
+    val beatMarkerAccent = DirectorXAccents.Peach
     val hasBeats = beatMarkers.isNotEmpty()
     val isCompactActions = LocalConfiguration.current.screenWidthDp < 430
     val avgBpm = remember(beatMarkers) {
@@ -287,7 +288,7 @@ fun BeatSyncPanel(
                             beatMarkers.forEach { beatMs ->
                                 val x = (beatMs.toFloat() / totalDurationMs) * size.width
                                 drawLine(
-                                    color = DirectorXAccents.Peach,
+                                    color = beatMarkerAccent,
                                     start = Offset(x, 8f),
                                     end = Offset(x, size.height - 8f),
                                     strokeWidth = 4f
