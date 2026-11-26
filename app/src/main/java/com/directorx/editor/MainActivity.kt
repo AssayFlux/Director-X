@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.graphics.drawable.ColorDrawable
 import android.provider.OpenableColumns
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -123,8 +124,12 @@ class MainActivity : ComponentActivity() {
                     )
                     insetsController.isAppearanceLightStatusBars = lightSystemBarIcons
                     insetsController.isAppearanceLightNavigationBars = lightSystemBarIcons
-                    this@MainActivity.window.statusBarColor = appearanceColors.background.toArgb()
-                    this@MainActivity.window.navigationBarColor = appearanceColors.background.toArgb()
+                    val systemBarBackground = appearanceColors.background.toArgb()
+                    this@MainActivity.window.statusBarColor = systemBarBackground
+                    this@MainActivity.window.navigationBarColor = systemBarBackground
+                    // Edge-to-edge bars are transparent on current Android versions;
+                    // keep the window behind them in sync with the selected palette too.
+                    this@MainActivity.window.setBackgroundDrawable(ColorDrawable(systemBarBackground))
                 }
                 val navController = rememberNavController()
                 val currentBackStackEntry by navController.currentBackStackEntryAsState()
