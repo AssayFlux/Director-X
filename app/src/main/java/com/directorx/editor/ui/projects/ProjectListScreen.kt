@@ -810,20 +810,6 @@ private fun ProjectHomeHero(
             )
         }
 
-        ProjectActionRow(
-            primaryLabel = stringResource(R.string.projects_new_project),
-            primaryIcon = Icons.Default.Add,
-            onPrimary = onCreateProject,
-            secondaryLabel = stringResource(R.string.project_document_import_confirm),
-            secondaryIcon = Icons.Default.FileOpen,
-            onSecondary = onImportTemplate,
-            enabled = actionsEnabled,
-            primaryTestTag = DirectorXTestTags.PROJECTS_CREATE_PROJECT,
-            secondaryTestTag = DirectorXTestTags.PROJECTS_IMPORT_TEMPLATE
-        )
-
-        HorizontalDivider(color = LocalDirectorXColors.current.cardStroke)
-
         Column(verticalArrangement = Arrangement.spacedBy(Spacing.sm)) {
             Text(
                 text = stringResource(R.string.projects_ready_title),
@@ -838,6 +824,20 @@ private fun ProjectHomeHero(
                 modifier = Modifier.widthIn(max = 520.dp)
             )
         }
+
+        ProjectActionRow(
+            primaryLabel = stringResource(R.string.projects_new_project),
+            primaryIcon = Icons.Default.Add,
+            onPrimary = onCreateProject,
+            secondaryLabel = stringResource(R.string.project_document_import_confirm),
+            secondaryIcon = Icons.Default.FileOpen,
+            onSecondary = onImportTemplate,
+            enabled = actionsEnabled,
+            primaryTestTag = DirectorXTestTags.PROJECTS_CREATE_PROJECT,
+            secondaryTestTag = DirectorXTestTags.PROJECTS_IMPORT_TEMPLATE
+        )
+
+        HorizontalDivider(color = LocalDirectorXColors.current.cardStroke)
 
         if (showSearch) {
             OutlinedTextField(
@@ -1382,6 +1382,7 @@ private fun ProjectTemplateLibraryRow(
 }
 
 @Composable
+@Composable
 private fun ProjectActionRow(
     primaryLabel: String,
     primaryIcon: androidx.compose.ui.graphics.vector.ImageVector,
@@ -1393,13 +1394,12 @@ private fun ProjectActionRow(
     primaryTestTag: String? = null,
     secondaryTestTag: String? = null
 ) {
-    // Keep the two primary dashboard actions vertically stacked at every
-    // width. Matching full-width constraints make their left/right edges
-    // symmetrical and prevent the import action becoming cramped on phones,
-    // large text settings, or narrow split-screen layouts.
-    Column(
+    // Equal weighted actions keep the dashboard balanced; both share the same
+    // height and width so neither action looks secondary by accident.
+    Row(
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(Spacing.sm)
+        horizontalArrangement = Arrangement.spacedBy(Spacing.md),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         DirectorXPrimaryButton(
             text = primaryLabel,
@@ -1407,7 +1407,7 @@ private fun ProjectActionRow(
             onClick = onPrimary,
             enabled = enabled,
             modifier = Modifier
-                .fillMaxWidth()
+                .weight(1f)
                 .then(primaryTestTag?.let { Modifier.testTag(it) } ?: Modifier)
         )
         DirectorXSecondaryButton(
@@ -1415,14 +1415,13 @@ private fun ProjectActionRow(
             icon = secondaryIcon,
             onClick = onSecondary,
             modifier = Modifier
-                .fillMaxWidth()
+                .weight(1f)
                 .then(secondaryTestTag?.let { Modifier.testTag(it) } ?: Modifier),
             contentColor = LocalDirectorXColors.current.text,
             enabled = enabled
         )
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 private fun ProjectCard(
