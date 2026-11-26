@@ -220,6 +220,7 @@ private fun MetaLine(label: String, value: String, accent: Color = Color.Unspeci
     }
 }
 
+@Composable
 private fun sectionAccent(section: Section): Color = when (section) {
     Section.CLOUD_AND_TELEMETRY -> DirectorXAccents.Peach
     Section.ON_DEVICE_COLLECTED -> DirectorXAccents.Sky
