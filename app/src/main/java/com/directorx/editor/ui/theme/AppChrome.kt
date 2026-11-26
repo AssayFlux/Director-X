@@ -1,6 +1,7 @@
 package com.directorx.editor.ui.theme
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -19,7 +20,6 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.requiredSizeIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -40,7 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -106,6 +106,11 @@ fun DirectorXPrimaryButton(
         animationSpec = tween(durationMillis = Motion.DurationFast, easing = Motion.StandardEasing),
         label = "primaryButtonContainer"
     )
+    val buttonScale by animateFloatAsState(
+        targetValue = if (enabled && pressed) 0.985f else 1f,
+        animationSpec = tween(durationMillis = Motion.DurationFast, easing = Motion.StandardEasing),
+        label = "primaryButtonScale"
+    )
     Button(
         onClick = onClick,
         enabled = enabled,
@@ -119,6 +124,10 @@ fun DirectorXPrimaryButton(
         ),
         contentPadding = PaddingValues(horizontal = Spacing.lg, vertical = Spacing.sm),
         modifier = modifier
+            .graphicsLayer {
+                scaleX = buttonScale
+                scaleY = buttonScale
+            }
             .semantics { contentDescription = text }
             .defaultMinSize(minWidth = TouchTarget.minimum, minHeight = TouchTarget.minimum)
             // Material buttons can be measured below the accessibility minimum when
@@ -176,6 +185,11 @@ fun DirectorXSecondaryButton(
         animationSpec = tween(durationMillis = Motion.DurationFast, easing = Motion.StandardEasing),
         label = "secondaryButtonBorder"
     )
+    val buttonScale by animateFloatAsState(
+        targetValue = if (enabled && pressed) 0.985f else 1f,
+        animationSpec = Motion.fast(),
+        label = "secondaryButtonScale"
+    )
     OutlinedButton(
         onClick = onClick,
         enabled = enabled,
@@ -190,6 +204,10 @@ fun DirectorXSecondaryButton(
         ),
         contentPadding = PaddingValues(horizontal = Spacing.lg, vertical = Spacing.sm),
         modifier = modifier
+            .graphicsLayer {
+                scaleX = buttonScale
+                scaleY = buttonScale
+            }
             .semantics(mergeDescendants = true) { contentDescription = text }
             .defaultMinSize(minWidth = TouchTarget.minimum, minHeight = TouchTarget.minimum)
     ) {
@@ -366,6 +384,11 @@ fun DirectorXChromeIconButton(
         animationSpec = tween(durationMillis = Motion.DurationFast, easing = Motion.StandardEasing),
         label = "chromeIconButtonTint"
     )
+    val buttonScale by animateFloatAsState(
+        targetValue = if (enabled && pressed) 0.965f else 1f,
+        animationSpec = Motion.fast(),
+        label = "chromeIconButtonScale"
+    )
     Box(
         modifier = modifier
             .then(buttonModifier)
@@ -389,7 +412,11 @@ fun DirectorXChromeIconButton(
     ) {
         Surface(
             modifier = Modifier
-                .requiredSize(size)
+                .size(size)
+                .graphicsLayer {
+                    scaleX = buttonScale
+                    scaleY = buttonScale
+                }
                 .clearAndSetSemantics { },
             color = animatedContainer,
             shape = shape,
