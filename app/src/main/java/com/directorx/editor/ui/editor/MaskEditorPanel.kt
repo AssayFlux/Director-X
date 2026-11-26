@@ -712,6 +712,7 @@ fun MaskPreviewOverlay(
     onMaskDragStarted: () -> Unit = {},
     onMaskDragEnded: () -> Unit = {}
 ) {
+    val maskAccent = DirectorXAccents.Mauve
     val drawingPoints = remember { mutableStateListOf<Offset>() }
     var draggedPointIndex by remember { mutableIntStateOf(-1) }
     // The gesture coroutine launches once per selection; `masks` captured at
@@ -809,7 +810,7 @@ fun MaskPreviewOverlay(
     ) {
         masks.forEach { mask ->
             val isSelected = mask.id == selectedMaskId
-            val color = if (isSelected) DirectorXAccents.Mauve else DirectorXAccents.Mauve.copy(alpha = 0.3f)
+            val color = if (isSelected) maskAccent else maskAccent.copy(alpha = 0.3f)
 
             when (mask.type) {
                 MaskType.RECTANGLE -> {
@@ -916,7 +917,7 @@ fun MaskPreviewOverlay(
             drawingPoints.forEachIndexed { idx, pt ->
                 if (idx == 0) path.moveTo(pt.x, pt.y) else path.lineTo(pt.x, pt.y)
             }
-            drawPath(path, DirectorXAccents.Mauve, style = Stroke(2f))
+            drawPath(path, maskAccent, style = Stroke(2f))
         }
     }
 }
