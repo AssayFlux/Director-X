@@ -133,7 +133,7 @@ fun DirectorXPrimaryButton(
             // Material buttons can be measured below the accessibility minimum when
             // their parent has a tight height constraint. Require the actual clickable
             // surface to stay at least 48dp tall, not just its preferred minimum.
-            .requiredSizeIn(minHeight = TouchTarget.minimum)
+            .requiredSizeIn(minHeight = TouchTarget.minimum + 4.dp)
     ) {
         if (icon != null) {
             Icon(
@@ -210,6 +210,7 @@ fun DirectorXSecondaryButton(
             }
             .semantics(mergeDescendants = true) { contentDescription = text }
             .defaultMinSize(minWidth = TouchTarget.minimum, minHeight = TouchTarget.minimum)
+            .requiredSizeIn(minWidth = TouchTarget.minimum + 4.dp, minHeight = TouchTarget.minimum + 4.dp)
     ) {
         if (icon != null) {
             Icon(
