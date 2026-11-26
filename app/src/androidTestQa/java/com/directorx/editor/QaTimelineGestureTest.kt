@@ -3,6 +3,7 @@ package com.directorx.editor
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.doubleClick
+import androidx.compose.ui.test.click
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
