@@ -49,6 +49,26 @@ class SemanticThemeSourcePolicyTest {
     }
 
     @Test
+    fun primaryAppSurfacesUseAppearanceAccentsInsteadOfFixedCategoryColors() {
+        val root = locateRepoRoot()
+        val appearanceDrivenSurfaces = listOf(
+            "app/src/main/java/com/directorx/editor/ui/settings/SettingsScreen.kt",
+            "app/src/main/java/com/directorx/editor/ui/projects/ProjectListScreen.kt",
+            "app/src/main/java/com/directorx/editor/ui/mediapicker/MediaPicker.kt",
+            "app/src/main/java/com/directorx/editor/ui/export/ExportSheet.kt",
+            "app/src/main/java/com/directorx/editor/ui/editor/PreviewPanel.kt",
+            "app/src/main/java/com/directorx/editor/ui/editor/DesktopSidebar.kt",
+        )
+        appearanceDrivenSurfaces.forEach { relativePath ->
+            val source = File(root, relativePath).readText()
+            assertFalse(
+                "$relativePath still uses fixed category accents for appearance-driven UI.",
+                "DirectorXAccents." in source,
+            )
+        }
+    }
+
+    @Test
     fun roundedGeometryStaysWithinTheTwelveDpScale() {
         val root = locateRepoRoot()
         val uiRoot = File(root, "app/src/main/java/com/directorx/editor/ui")
