@@ -171,6 +171,7 @@ data class DirectorXSemanticColors(
     val disabledText: Color,
     val accent: Color,
     val accentSecondary: Color,
+    val accentTertiary: Color,
     val success: Color,
     val warning: Color,
     val danger: Color,
@@ -230,26 +231,40 @@ object DirectorXThemeDefaults {
         else -> mode
     }
 
-    fun colorSchemeFor(resolvedMode: AppearanceMode) : androidx.compose.material3.ColorScheme {
+    private fun readableOnColor(background: Color, preferred: Color): Color {
+        if (contrastRatio(preferred, background) >= 4.5) return preferred
+        return if (contrastRatio(Color.Black, background) >= contrastRatio(Color.White, background)) {
+            Color.Black
+        } else {
+            Color.White
+        }
+    }
+
+    fun colorSchemeFor(resolvedMode: AppearanceMode): androidx.compose.material3.ColorScheme {
         val p = palette(resolveMode(resolvedMode))
-        val onAccent = if (contrastRatio(p.text,p.accent) >= 4.5) p.text else Color.White
+        val onPrimary = readableOnColor(p.accent, p.text)
+        val onSecondary = readableOnColor(p.secondary, p.text)
+        val onTertiary = readableOnColor(p.tertiary, p.text)
+        val error = if (p.dark) Color(0xFFFF8A80) else Color(0xFFB3261E)
+        val onError = readableOnColor(error, p.text)
         return if (p.dark) androidx.compose.material3.darkColorScheme(
-            primary=p.accent,onPrimary=if (contrastRatio(Color.Black,p.accent)>contrastRatio(Color.White,p.accent)) Color.Black else Color.White,
-            secondary=p.secondary,onSecondary=Color(0xFF101418),tertiary=p.tertiary,onTertiary=Color(0xFF101418),
-            background=p.canvas,onBackground=p.text,surface=p.panel,onSurface=p.text,
-            surfaceVariant=p.raised,onSurfaceVariant=p.subtext,outline=p.subtext,outlineVariant=p.highest,
-            error=Color(0xFFFF8A80),onError=Color(0xFF2B0906),
-            surfaceContainerLowest=p.canvas,surfaceContainerLow=p.panel,surfaceContainer=p.panel,
-            surfaceContainerHigh=p.raised,surfaceContainerHighest=p.highest
+            primary = p.accent, onPrimary = onPrimary,
+            secondary = p.secondary, onSecondary = onSecondary,
+            tertiary = p.tertiary, onTertiary = onTertiary,
+            background = p.canvas, onBackground = p.text, surface = p.panel, onSurface = p.text,
+            surfaceVariant = p.raised, onSurfaceVariant = p.subtext, outline = p.subtext, outlineVariant = p.highest,
+            error = error, onError = onError,
+            surfaceContainerLowest = p.canvas, surfaceContainerLow = p.panel, surfaceContainer = p.panel,
+            surfaceContainerHigh = p.raised, surfaceContainerHighest = p.highest
         ) else lightColorScheme(
-            primary=p.accent,onPrimary=onAccent,primaryContainer=p.highest,onPrimaryContainer=p.text,
-            secondary=p.secondary,onSecondary=Color.White,secondaryContainer=p.raised,onSecondaryContainer=p.text,
-            tertiary=p.tertiary,onTertiary=Color.White,tertiaryContainer=p.highest,onTertiaryContainer=p.text,
-            error=Color(0xFFB3261E),onError=Color.White,background=p.canvas,onBackground=p.text,
-            surface=p.canvas,onSurface=p.text,surfaceVariant=p.panel,onSurfaceVariant=p.subtext,
-            outline=p.subtext,outlineVariant=p.highest,inverseSurface=p.text,inverseOnSurface=p.canvas,
-            surfaceContainerLowest=p.canvas,surfaceContainerLow=p.canvas,surfaceContainer=p.panel,
-            surfaceContainerHigh=p.raised,surfaceContainerHighest=p.highest
+            primary = p.accent, onPrimary = onPrimary, primaryContainer = p.highest, onPrimaryContainer = p.text,
+            secondary = p.secondary, onSecondary = onSecondary, secondaryContainer = p.raised, onSecondaryContainer = p.text,
+            tertiary = p.tertiary, onTertiary = onTertiary, tertiaryContainer = p.highest, onTertiaryContainer = p.text,
+            error = error, onError = onError, background = p.canvas, onBackground = p.text,
+            surface = p.canvas, onSurface = p.text, surfaceVariant = p.panel, onSurfaceVariant = p.subtext,
+            outline = p.subtext, outlineVariant = p.highest, inverseSurface = p.text, inverseOnSurface = p.canvas,
+            surfaceContainerLowest = p.canvas, surfaceContainerLow = p.canvas, surfaceContainer = p.panel,
+            surfaceContainerHigh = p.raised, surfaceContainerHighest = p.highest
         )
     }
 
@@ -263,7 +278,8 @@ object DirectorXThemeDefaults {
             mode=mode,highContrast=hc,background=p.canvas,backgroundMid=p.panel,panel=p.panel,
             panelRaised=p.raised,panelHighest=p.highest,cardStroke=stroke,cardStrokeStrong=if(hc) text else p.subtext,
             text=text,subtext=sub,subtextStrong=p.subtext,disabledText=if(hc) Color(0xFF4B4238) else p.subtext,
-            accent=p.accent,accentSecondary=p.secondary,success=Color(0xFF47734B),warning=Color(0xFF946B12),
+            accent=p.accent,accentSecondary=p.secondary,accentTertiary=p.tertiary,
+            success=Color(0xFF47734B),warning=Color(0xFF946B12),
             danger=Color(0xFFB3261E),focusRing=if(hc) text else p.accent,canvas=p.canvas,
             selectedSurface=p.raised,disabledSurface=p.panel,surfaceBase=p.canvas,surfaceLow=p.panel,
             surface=p.panel,surfaceHigh=p.raised,overlay=stroke,overlayStrong=text,onAccent=if(contrastRatio(text,p.accent)>=4.5) text else Color.White
