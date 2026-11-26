@@ -118,7 +118,7 @@ fun DirectorXPrimaryButton(
         shape = RoundedCornerShape(Radius.md),
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
-            contentColor = if (pressed) Color(0xFFF5F0E6) else colors.onAccent,
+            contentColor = colors.onAccent,
             disabledContainerColor = containerColor,
             disabledContentColor = colors.disabledText
         ),
@@ -139,14 +139,14 @@ fun DirectorXPrimaryButton(
             Icon(
                 imageVector = icon,
                 contentDescription = null,
-                tint = if (!enabled) colors.disabledText else if (pressed) Color(0xFFF5F0E6) else colors.onAccent,
+                tint = if (!enabled) colors.disabledText else colors.onAccent,
                 modifier = Modifier.size(18.dp)
             )
             androidx.compose.foundation.layout.Spacer(modifier = Modifier.width(Spacing.sm))
         }
         Text(
             text = text,
-            color = if (!enabled) colors.disabledText else if (pressed) Color(0xFFF5F0E6) else colors.onAccent,
+            color = if (!enabled) colors.disabledText else colors.onAccent,
             style = MaterialTheme.typography.labelLarge,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -169,7 +169,7 @@ fun DirectorXSecondaryButton(
     val pressed by interactionSource.collectIsPressedAsState()
     val containerColor by animateColorAsState(
         targetValue = when {
-            !enabled -> Mocha.Surface1.copy(alpha = 0.28f)
+            !enabled -> colors.disabledSurface.copy(alpha = 0.28f)
             pressed -> colors.panelHighest.copy(alpha = if (colors.highContrast) 0.96f else 0.66f)
             else -> colors.panelHighest.copy(alpha = if (colors.highContrast) 0.88f else 0.42f)
         },
