@@ -176,6 +176,9 @@ internal class QaEditorHarness(
                 node.config.getOrNull(SemanticsProperties.Text)?.joinToString("") { it.text }.orEmpty()
             }
         compose.onNodeWithTag(DirectorXTestTags.UNDO_HISTORY_CLOSE).performClick()
+        // Flush the close callback and AnimatedVisibility transition before polling
+        // the state-backed semantics; waitUntil alone does not advance the test clock.
+        compose.waitForIdle()
         // Verify the user-visible panel has actually closed. BottomSheetSlot
         // animates its exit, so wait for the close control to leave the semantics
         // tree instead of depending on an internal panel-state test property.
