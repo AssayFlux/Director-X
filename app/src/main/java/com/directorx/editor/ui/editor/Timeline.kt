@@ -712,7 +712,7 @@ fun Timeline(
                     tracks.forEach { track ->
                         key(track.id) {
                             val currentTrackHeight = timelineTrackHeight(track, isCompactTimeline, fontScale = density.fontScale)
-                            val trackColor = trackAccentColor(track.type)
+                            val trackColor = trackAccentColor(track.type, semanticColors)
                             var trackMenuExpanded by remember(track.id) { mutableStateOf(false) }
                             val selectedAudioClip = if (track.type == TrackType.AUDIO) {
                                 track.clips.firstOrNull { it.id == selectedClipId }
@@ -1318,7 +1318,7 @@ fun Timeline(
                     for (track in tracks) {
                     val currentTrackHeight = timelineTrackHeight(track, isCompactTimeline, fontScale = density.fontScale)
                     key(track.id) {
-                        val trackColor = trackAccentColor(track.type)
+                        val trackColor = trackAccentColor(track.type, semanticColors)
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
