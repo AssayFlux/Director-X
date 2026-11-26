@@ -1431,6 +1431,11 @@ private fun SettingsNotificationPermissionRow(
     }
     val badgeText = stringResource(status.badgeResId)
     val description = stringResource(status.descriptionResId)
+    val statusAccent = when (status) {
+        NotificationPermissionSettingsStatus.Enabled -> LocalDirectorXColors.current.success
+        NotificationPermissionSettingsStatus.Off -> LocalDirectorXColors.current.warning
+        NotificationPermissionSettingsStatus.NotRequired -> LocalDirectorXColors.current.accent
+    }
 
     SettingsTile(
         icon = if (status == NotificationPermissionSettingsStatus.Off) {
@@ -1438,7 +1443,7 @@ private fun SettingsNotificationPermissionRow(
         } else {
             Icons.Default.NotificationsActive
         },
-        accent = status.accent,
+        accent = statusAccent,
         label = stringResource(R.string.settings_export_notifications_row),
         description = description,
         onClick = { openAppNotificationSettings(context) },
@@ -1446,7 +1451,7 @@ private fun SettingsNotificationPermissionRow(
     ) {
         SettingsStatusBadge(
             text = badgeText,
-            accent = status.accent
+            accent = statusAccent
         )
         Icon(
             imageVector = Icons.AutoMirrored.Filled.OpenInNew,
@@ -1460,22 +1465,18 @@ private fun SettingsNotificationPermissionRow(
 private enum class NotificationPermissionSettingsStatus(
     val badgeResId: Int,
     val descriptionResId: Int,
-    val accent: androidx.compose.ui.graphics.Color
 ) {
     Enabled(
         badgeResId = R.string.settings_export_notifications_enabled,
         descriptionResId = R.string.settings_export_notifications_enabled_description,
-        accent = LocalDirectorXColors.current.success
     ),
     Off(
         badgeResId = R.string.settings_export_notifications_off,
         descriptionResId = R.string.settings_export_notifications_off_description,
-        accent = LocalDirectorXColors.current.warning
     ),
     NotRequired(
         badgeResId = R.string.settings_export_notifications_not_required,
         descriptionResId = R.string.settings_export_notifications_not_required_description,
-        accent = LocalDirectorXColors.current.accent
     )
 }
 
