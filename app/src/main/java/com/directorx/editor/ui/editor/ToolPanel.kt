@@ -672,7 +672,8 @@ fun EffectsPanel(
         icon = Icons.Default.AutoFixHigh,
         accent = accent,
         onClose = onClose,
-        modifier = modifier.heightIn(max = 360.dp)
+        modifier = modifier.heightIn(max = 360.dp),
+        scrollable = true
     ) {
         PremiumPanelCard(accent = accent) {
             Row(
@@ -887,13 +888,17 @@ fun EffectAdjustmentPanel(
     val semanticColors = LocalDirectorXColors.current
     val accent = effectAccent(effect.type.category)
 
-    PremiumEditorPanel(
+    BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
+        PremiumEditorPanel(
         title = effect.type.displayName,
         subtitle = stringResource(R.string.panel_effect_adjust_subtitle),
         icon = effectIcon(effect.type.category),
         accent = accent,
         onClose = onClose,
-        modifier = modifier,
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(max = maxHeight * 0.72f),
+        scrollable = true,
         headerActions = {
             PremiumPanelIconButton(
                 icon = if (effect.enabled) Icons.Default.Visibility else Icons.Default.VisibilityOff,
@@ -936,6 +941,7 @@ fun EffectAdjustmentPanel(
                 }
             }
         }
+    }
     }
 }
 
