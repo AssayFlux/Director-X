@@ -1,6 +1,7 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.DirectorXAccents
+import com.directorx.editor.ui.theme.DirectorXAccentRole
+import com.directorx.editor.ui.theme.resolveColor
 import com.directorx.editor.ui.theme.LocalDirectorXColors
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -72,11 +73,11 @@ data class AiToolConfig(
     @StringRes val nameResId: Int,
     @StringRes val descriptionResId: Int,
     val icon: ImageVector,
-    val color: Color,
+    val accentRole: DirectorXAccentRole,
     val requiresClip: Boolean = true,
     @StringRes val readinessResId: Int = R.string.ai_tool_status_ready,
     @StringRes val readinessHintResId: Int = R.string.ai_tool_ready_hint,
-    val readinessAccent: Color = DirectorXAccents.Green
+    val readinessAccentRole: DirectorXAccentRole = DirectorXAccentRole.GREEN
 )
 
 val aiTools = listOf(
@@ -85,140 +86,140 @@ val aiTools = listOf(
         R.string.ai_tool_cut_assistant,
         R.string.ai_tool_cut_assistant_desc,
         Icons.Default.ContentCut,
-        DirectorXAccents.Peach,
+        DirectorXAccentRole.PEACH,
         requiresClip = false,
         readinessResId = R.string.ai_tool_status_review,
         readinessHintResId = R.string.ai_tool_hint_review,
-        readinessAccent = DirectorXAccents.Peach
+        readinessAccentRole = DirectorXAccentRole.PEACH
     ),
     AiToolConfig(
         "auto_captions",
         R.string.ai_tool_auto_captions,
         R.string.ai_tool_auto_captions_desc,
         Icons.Default.ClosedCaption,
-        DirectorXAccents.Blue,
+        DirectorXAccentRole.BLUE,
         readinessResId = R.string.ai_tool_status_whisper,
         readinessHintResId = R.string.ai_tool_hint_whisper_optional,
-        readinessAccent = DirectorXAccents.Blue
+        readinessAccentRole = DirectorXAccentRole.BLUE
     ),
     AiToolConfig(
         "remove_bg",
         R.string.ai_tool_remove_bg,
         R.string.ai_tool_remove_bg_desc,
         Icons.Default.Wallpaper,
-        DirectorXAccents.Green,
+        DirectorXAccentRole.GREEN,
         readinessResId = R.string.ai_tool_status_fallback,
         readinessHintResId = R.string.ai_tool_hint_segmentation_fallback,
-        readinessAccent = DirectorXAccents.Teal
+        readinessAccentRole = DirectorXAccentRole.TEAL
     ),
     AiToolConfig(
         "bg_replace",
         R.string.tool_replace_bg,
         R.string.ai_tool_bg_replace_desc,
         Icons.Default.PhotoFilter,
-        DirectorXAccents.Lavender,
+        DirectorXAccentRole.LAVENDER,
         readinessResId = R.string.ai_tool_status_model_gated,
         readinessHintResId = R.string.ai_tool_hint_model_required,
-        readinessAccent = DirectorXAccents.Peach
+        readinessAccentRole = DirectorXAccentRole.PEACH
     ),
     AiToolConfig(
         "scene_detect",
         R.string.ai_tool_scene_detect,
         R.string.ai_tool_scene_detect_desc,
         Icons.Default.ContentCut,
-        DirectorXAccents.Peach
+        DirectorXAccentRole.PEACH
     ),
     AiToolConfig(
         "track_motion",
         R.string.ai_tool_track_motion,
         R.string.ai_tool_track_motion_desc,
         Icons.Default.GpsFixed,
-        DirectorXAccents.Mauve
+        DirectorXAccentRole.MAUVE
     ),
     AiToolConfig(
         "face_track",
         R.string.tool_face_track,
         R.string.ai_tool_face_track_desc,
         Icons.Default.Face,
-        DirectorXAccents.Mauve
+        DirectorXAccentRole.MAUVE
     ),
     AiToolConfig(
         "smart_crop",
         R.string.ai_tool_smart_crop,
         R.string.ai_tool_smart_crop_desc,
         Icons.Default.Crop,
-        DirectorXAccents.Teal
+        DirectorXAccentRole.TEAL
     ),
     AiToolConfig(
         "auto_color",
         R.string.ai_tool_auto_color,
         R.string.ai_tool_auto_color_desc,
         Icons.Default.Palette,
-        DirectorXAccents.Yellow
+        DirectorXAccentRole.YELLOW
     ),
     AiToolConfig(
         "stabilize",
         R.string.ai_tool_stabilize,
         R.string.ai_tool_stabilize_desc,
         Icons.Default.Straighten,
-        DirectorXAccents.Sapphire
+        DirectorXAccentRole.SAPPHIRE
     ),
     AiToolConfig(
         "denoise",
         R.string.ai_tool_denoise,
         R.string.ai_tool_denoise_desc,
         Icons.AutoMirrored.Filled.VolumeOff,
-        DirectorXAccents.Flamingo
+        DirectorXAccentRole.FLAMINGO
     ),
     AiToolConfig(
         "video_upscale",
         R.string.ai_tool_ai_upscale,
         R.string.ai_tool_ai_upscale_desc,
         Icons.Default.ZoomIn,
-        DirectorXAccents.Rosewater,
+        DirectorXAccentRole.ROSEWATER,
         readinessResId = R.string.ai_tool_status_model_gated,
         readinessHintResId = R.string.ai_tool_hint_model_required,
-        readinessAccent = DirectorXAccents.Peach
+        readinessAccentRole = DirectorXAccentRole.PEACH
     ),
     AiToolConfig(
         "frame_interp",
         R.string.tool_frame_interp,
         R.string.ai_tool_frame_interp_desc,
         Icons.Default.SlowMotionVideo,
-        DirectorXAccents.Sky,
+        DirectorXAccentRole.SKY,
         readinessResId = R.string.ai_tool_status_model_gated,
         readinessHintResId = R.string.ai_tool_hint_model_required,
-        readinessAccent = DirectorXAccents.Peach
+        readinessAccentRole = DirectorXAccentRole.PEACH
     ),
     AiToolConfig(
         "ai_background",
         R.string.ai_tool_ai_background,
         R.string.ai_tool_ai_background_desc,
         Icons.Default.PhotoFilter,
-        DirectorXAccents.Lavender,
+        DirectorXAccentRole.LAVENDER,
         readinessResId = R.string.ai_tool_status_model_gated,
         readinessHintResId = R.string.ai_tool_hint_model_required,
-        readinessAccent = DirectorXAccents.Peach
+        readinessAccentRole = DirectorXAccentRole.PEACH
     ),
     AiToolConfig(
         "ai_stabilize",
         R.string.ai_tool_ai_stabilize,
         R.string.ai_tool_ai_stabilize_desc,
         Icons.Default.Straighten,
-        DirectorXAccents.Sky,
+        DirectorXAccentRole.SKY,
         readinessResId = R.string.ai_tool_status_ready,
         readinessHintResId = R.string.ai_tool_hint_stabilize_local,
-        readinessAccent = DirectorXAccents.Teal
+        readinessAccentRole = DirectorXAccentRole.TEAL
     ),
     AiToolConfig(
         "ai_style_transfer",
         R.string.ai_tool_style_transfer,
         R.string.ai_tool_style_transfer_desc,
         Icons.Default.Style,
-        DirectorXAccents.Maroon,
+        DirectorXAccentRole.MAROON,
         readinessResId = R.string.ai_tool_status_model_gated,
         readinessHintResId = R.string.ai_tool_hint_model_required,
-        readinessAccent = DirectorXAccents.Peach
+        readinessAccentRole = DirectorXAccentRole.PEACH
     )
 )
 
@@ -270,12 +271,12 @@ fun AiToolsPanel(
         title = stringResource(R.string.ai_tools_title),
         subtitle = "Stage on-device assists, model downloads, and clip-aware magic.",
         icon = Icons.Default.AutoAwesome,
-        accent = DirectorXAccents.Mauve,
+        accent = DirectorXAccentRole.MAUVE,
         onClose = onClose,
         modifier = modifier,
         scrollable = true
     ) {
-        PremiumPanelCard(accent = DirectorXAccents.Mauve) {
+        PremiumPanelCard(accent = DirectorXAccentRole.MAUVE) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -307,7 +308,7 @@ fun AiToolsPanel(
                 ) {
                     PremiumPanelPill(
                         text = "${readyTools.size} ready",
-                        accent = DirectorXAccents.Mauve
+                        accent = DirectorXAccentRole.MAUVE
                     )
                     PremiumPanelPill(
                         text = if (hasSelectedClip) {
@@ -315,11 +316,11 @@ fun AiToolsPanel(
                         } else {
                             stringResource(R.string.ai_tools_awaiting_clip)
                         },
-                        accent = if (hasSelectedClip) DirectorXAccents.Green else DirectorXAccents.Peach
+                        accent = if (hasSelectedClip) DirectorXAccentRole.GREEN else DirectorXAccentRole.PEACH
                     )
                     PremiumPanelPill(
                         text = stringResource(R.string.ai_on_device),
-                        accent = DirectorXAccents.Blue
+                        accent = DirectorXAccentRole.BLUE
                     )
                 }
             }
@@ -327,7 +328,7 @@ fun AiToolsPanel(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = DirectorXAccents.Sapphire) {
+        PremiumPanelCard(accent = DirectorXAccentRole.SAPPHIRE) {
             Text(
                 text = stringResource(R.string.ai_stabilization_profiles_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -490,7 +491,7 @@ fun AiToolsPanel(
             val normalizedProgress = processingProgress.coerceIn(0f, 1f)
 
             PremiumPanelCard(
-                accent = DirectorXAccents.Mauve,
+                accent = DirectorXAccentRole.MAUVE,
                 modifier = Modifier.semantics {
                     liveRegion = LiveRegionMode.Polite
                 }
@@ -520,14 +521,14 @@ fun AiToolsPanel(
                                     .fillMaxWidth()
                                     .height(5.dp)
                                     .clip(RoundedCornerShape(Radius.sm)),
-                                color = DirectorXAccents.Mauve,
+                                color = DirectorXAccentRole.MAUVE,
                                 trackColor = semanticColors.surface
                             )
                         }
                     } else {
                         CircularProgressIndicator(
                             modifier = Modifier.size(22.dp),
-                            color = DirectorXAccents.Mauve,
+                            color = DirectorXAccentRole.MAUVE,
                             strokeWidth = 2.dp
                         )
                         Column(modifier = Modifier.weight(1f)) {
@@ -547,7 +548,7 @@ fun AiToolsPanel(
                     DirectorXSecondaryButton(
                         text = stringResource(R.string.cancel),
                         onClick = onCancelProcessing,
-                        contentColor = DirectorXAccents.Red,
+                        contentColor = DirectorXAccentRole.RED,
                         icon = Icons.Default.Close,
                         modifier = Modifier.widthIn(min = 112.dp)
                     )
@@ -560,7 +561,7 @@ fun AiToolsPanel(
         AiToolSection(
             title = stringResource(R.string.ai_tools_ready_now),
             description = stringResource(R.string.ai_tools_ready_now_description),
-            accent = DirectorXAccents.Blue,
+            accent = DirectorXAccentRole.BLUE,
             tools = readyTools,
             toolsEnabled = true,
             processingTool = processingTool,
@@ -573,7 +574,7 @@ fun AiToolsPanel(
             AiToolSection(
                 title = stringResource(R.string.ai_tools_needs_clip),
                 description = stringResource(R.string.ai_tools_needs_clip_description),
-                accent = DirectorXAccents.Peach,
+                accent = DirectorXAccentRole.PEACH,
                 tools = lockedTools,
                 toolsEnabled = false,
                 processingTool = processingTool,
@@ -628,7 +629,7 @@ private fun StabilizationPreviewDialog(
         icon = {
             DirectorXDialogIcon(
                 icon = Icons.Default.Straighten,
-                accent = DirectorXAccents.Sapphire,
+                accent = DirectorXAccentRole.SAPPHIRE,
             )
         },
         title = {
@@ -685,7 +686,7 @@ private fun StabilizationProfileImportDialog(
         icon = {
             DirectorXDialogIcon(
                 icon = Icons.Default.Straighten,
-                accent = if (profile != null) DirectorXAccents.Sapphire else DirectorXAccents.Red,
+                accent = if (profile != null) DirectorXAccentRole.SAPPHIRE else DirectorXAccentRole.RED,
             )
         },
         title = {
@@ -723,7 +724,7 @@ private fun StabilizationProfileImportDialog(
                 validation.warnings.forEach { warning ->
                     Text(
                         text = warning,
-                        color = DirectorXAccents.Peach,
+                        color = DirectorXAccentRole.PEACH,
                         style = MaterialTheme.typography.bodySmall,
                     )
                 }
@@ -836,7 +837,7 @@ private fun AiModelRemovalConfirmDialog(
         icon = {
             DirectorXDialogIcon(
                 icon = Icons.Default.Delete,
-                accent = DirectorXAccents.Red
+                accent = DirectorXAccentRole.RED
             )
         },
         title = {
@@ -858,7 +859,7 @@ private fun AiModelRemovalConfirmDialog(
                 text = stringResource(R.string.ai_model_remove_confirm),
                 onClick = onConfirm,
                 icon = Icons.Default.Delete,
-                contentColor = DirectorXAccents.Red
+                contentColor = DirectorXAccentRole.RED
             )
         },
         dismissButton = {
@@ -990,7 +991,7 @@ private fun ModelStatusCard(
                     DirectorXSecondaryButton(
                         text = secondaryActionLabel,
                         onClick = onSecondaryAction,
-                        contentColor = DirectorXAccents.Red,
+                        contentColor = DirectorXAccentRole.RED,
                         icon = Icons.Default.Delete,
                         modifier = Modifier.widthIn(min = 112.dp)
                     )
@@ -1021,7 +1022,7 @@ private fun AiToolCard(
         border = BorderStroke(
             1.dp,
             when {
-                isProcessing -> tool.color.copy(alpha = 0.55f)
+                isProcessing -> tool.accentRole.resolveColor().copy(alpha = 0.55f)
                 isEnabled -> semanticColors.cardStrokeStrong
                 else -> semanticColors.cardStroke
             }
@@ -1044,9 +1045,9 @@ private fun AiToolCard(
                     verticalAlignment = Alignment.Top
                 ) {
                     Surface(
-                        color = tool.color.copy(alpha = 0.16f),
+                        color = tool.accentRole.resolveColor().copy(alpha = 0.16f),
                         shape = RoundedCornerShape(12.dp),
-                        border = BorderStroke(1.dp, tool.color.copy(alpha = 0.2f))
+                        border = BorderStroke(1.dp, tool.accentRole.resolveColor().copy(alpha = 0.2f))
                     ) {
                         Box(
                             modifier = Modifier.size(44.dp),
@@ -1055,14 +1056,14 @@ private fun AiToolCard(
                             if (isProcessing) {
                                 CircularProgressIndicator(
                                     modifier = Modifier.size(20.dp),
-                                    color = tool.color,
+                                    color = tool.accentRole.resolveColor(),
                                     strokeWidth = 2.dp
                                 )
                             } else {
                                 Icon(
                                     imageVector = tool.icon,
                                     contentDescription = stringResource(tool.nameResId),
-                                    tint = if (isEnabled) tool.color else semanticColors.surfaceHigh,
+                                    tint = if (isEnabled) tool.accentRole.resolveColor() else semanticColors.surfaceHigh,
                                     modifier = Modifier.size(22.dp)
                                 )
                             }
@@ -1076,9 +1077,9 @@ private fun AiToolCard(
                             else -> stringResource(R.string.ai_tool_status_clip_required)
                         },
                         accent = when {
-                            isProcessing -> tool.color
-                            isEnabled -> tool.readinessAccent
-                            else -> DirectorXAccents.Peach
+                            isProcessing -> tool.accentRole.resolveColor()
+                            isEnabled -> tool.readinessAccentRole.resolveColor()
+                            else -> DirectorXAccentRole.PEACH
                         }
                     )
                 }
@@ -1105,7 +1106,7 @@ private fun AiToolCard(
                         stringResource(R.string.ai_tool_locked_hint)
                     },
                     style = MaterialTheme.typography.labelMedium,
-                    color = if (isEnabled) tool.color else semanticColors.overlayStrong,
+                    color = if (isEnabled) tool.accentRole.resolveColor() else semanticColors.overlayStrong,
                     textAlign = TextAlign.Start
                 )
             }
@@ -1117,9 +1118,9 @@ private fun AiToolCard(
 private fun modelAccent(state: WhisperModelState): Color {
     val semanticColors = LocalDirectorXColors.current
     return when (state) {
-        WhisperModelState.READY -> DirectorXAccents.Blue
-        WhisperModelState.DOWNLOADING -> DirectorXAccents.Yellow
-        WhisperModelState.ERROR -> DirectorXAccents.Red
+        WhisperModelState.READY -> DirectorXAccentRole.BLUE
+        WhisperModelState.DOWNLOADING -> DirectorXAccentRole.YELLOW
+        WhisperModelState.ERROR -> DirectorXAccentRole.RED
         WhisperModelState.NOT_DOWNLOADED -> semanticColors.surfaceHigh
     }
 }
@@ -1128,9 +1129,9 @@ private fun modelAccent(state: WhisperModelState): Color {
 private fun segmentationAccent(state: SegmentationModelState): Color {
     val semanticColors = LocalDirectorXColors.current
     return when (state) {
-        SegmentationModelState.READY -> DirectorXAccents.Green
-        SegmentationModelState.DOWNLOADING -> DirectorXAccents.Yellow
-        SegmentationModelState.ERROR -> DirectorXAccents.Red
+        SegmentationModelState.READY -> DirectorXAccentRole.GREEN
+        SegmentationModelState.DOWNLOADING -> DirectorXAccentRole.YELLOW
+        SegmentationModelState.ERROR -> DirectorXAccentRole.RED
         SegmentationModelState.NOT_DOWNLOADED -> semanticColors.surfaceHigh
     }
 }
@@ -1139,9 +1140,9 @@ private fun segmentationAccent(state: SegmentationModelState): Color {
 private fun inpaintingAccent(state: InpaintingModelState): Color {
     val semanticColors = LocalDirectorXColors.current
     return when (state) {
-        InpaintingModelState.READY -> DirectorXAccents.Mauve
-        InpaintingModelState.DOWNLOADING -> DirectorXAccents.Yellow
-        InpaintingModelState.ERROR -> DirectorXAccents.Red
+        InpaintingModelState.READY -> DirectorXAccentRole.MAUVE
+        InpaintingModelState.DOWNLOADING -> DirectorXAccentRole.YELLOW
+        InpaintingModelState.ERROR -> DirectorXAccentRole.RED
         InpaintingModelState.NOT_DOWNLOADED -> semanticColors.surfaceHigh
     }
 }
