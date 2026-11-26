@@ -202,7 +202,7 @@ fun DirectorXSecondaryButton(
             disabledContainerColor = containerColor,
             disabledContentColor = colors.disabledText
         ),
-        contentPadding = PaddingValues(horizontal = Spacing.lg, vertical = Spacing.sm),
+        contentPadding = PaddingValues(horizontal = Spacing.lg, vertical = 16.dp),
         modifier = modifier
             .graphicsLayer {
                 scaleX = buttonScale
