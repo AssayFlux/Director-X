@@ -574,6 +574,8 @@ private fun SpeedCurveCanvas(
     val currentOnDragChanged by rememberUpdatedState(onDragChanged)
     val currentOnDragEnded by rememberUpdatedState(onDragEnded)
     val semanticColors = LocalDirectorXColors.current
+    val curveAccent = DirectorXAccents.Peach
+    val selectedPointAccent = DirectorXAccents.Yellow
 
     val canvasDescription = stringResource(R.string.speed_curve_canvas_cd)
     androidx.compose.foundation.Canvas(
@@ -676,15 +678,15 @@ private fun SpeedCurveCanvas(
             val y = (1f - (speed - minSpeed) / speedRange) * h
             if (i == 0) path.moveTo(x, y) else path.lineTo(x, y)
         }
-        drawPath(path, DirectorXAccents.Peach, style = Stroke(2.5f))
+        drawPath(path, curveAccent, style = Stroke(2.5f))
 
         curve.points.forEachIndexed { i, point ->
             val px = point.position * w
             val py = (1f - (point.speed - minSpeed) / speedRange) * h
             if (i == selectedIndex) {
-                drawCircle(DirectorXAccents.Yellow, 14f, Offset(px, py))
+                drawCircle(selectedPointAccent, 14f, Offset(px, py))
             }
-            drawCircle(DirectorXAccents.Peach, 8f, Offset(px, py))
+            drawCircle(curveAccent, 8f, Offset(px, py))
             drawCircle(Color.White, 5f, Offset(px, py))
         }
     }
