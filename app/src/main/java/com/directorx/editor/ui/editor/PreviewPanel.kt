@@ -973,6 +973,7 @@ fun formatTimestamp(ms: Long): String {
 
 @Composable
 private fun CompositionGuidesOverlay() {
+    val semanticColors = LocalDirectorXColors.current
     val guideColor = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.3f)
     val safeZoneColor = semanticColors.warning.copy(alpha = 0.25f)
     androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
