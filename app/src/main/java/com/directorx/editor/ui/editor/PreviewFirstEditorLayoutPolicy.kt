@@ -36,7 +36,8 @@ object PreviewFirstEditorLayoutPolicy {
         openPanels: Set<PanelId>,
         selectedEffectActive: Boolean,
         bottomToolPanelExpanded: Boolean,
-        timelineEditGestureActive: Boolean
+        timelineEditGestureActive: Boolean,
+        fontScale: Float = 1f
     ): Decision {
         val previewCritical = clipSelected && (
             timelineEditGestureActive ||
@@ -65,7 +66,12 @@ object PreviewFirstEditorLayoutPolicy {
             bottomToolExpanded = effectiveBottomExpanded
         )
         val timelineMin = timelineRange.first.coerceAtMost(timelineBudget)
-        val timelineMax = timelineRange.second.coerceIn(timelineMin, timelineBudget)
+        // Large accessibility text needs more vertical room for the timeline's
+        // summary, toolbar, track labels, and 48dp controls. The editor's outer
+        // content becomes scrollable at this size, so let the timeline grow
+        // instead of squeezing its clickable children into clipped rows.
+        val fontScaleExtra = ((fontScale.coerceIn(1f, 3f) - 1f) * 90f).toInt()
+        val timelineMax = timelineRange.second.coerceIn(timelineMin, timelineBudget) + fontScaleExtra
         return Decision(
             previewCritical = previewCritical,
             lockBottomToolArea = lockBottomToolArea,
