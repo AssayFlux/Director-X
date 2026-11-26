@@ -291,7 +291,7 @@ fun TextTemplateGallery(
             builtInTextTemplates.filter { it.category == selectedCategory }
         }
     }
-    val visibleAnimatedTemplates = remember(selectedCategory) {
+    val visibleAnimatedTemplates = remember(selectedCategory, semanticColors) {
         if (selectedCategory == null) {
             animatedTemplates
         } else {
