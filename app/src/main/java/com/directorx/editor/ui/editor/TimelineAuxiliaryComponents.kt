@@ -62,10 +62,19 @@ internal fun TimelineThumbnailStrip(
     }
 }
 
-internal fun timelineTrackHeight(track: Track, compact: Boolean): Dp = when {
-    track.isCollapsed -> if (compact) 56.dp else 64.dp
-    compact -> track.trackHeight.coerceAtLeast(108).dp
-    else -> track.trackHeight.coerceAtLeast(120).dp
+internal fun timelineTrackHeight(
+    track: Track,
+    compact: Boolean,
+    fontScale: Float = 1f,
+): Dp {
+    val scale = fontScale.coerceIn(1f, 3f)
+    val expandedContentHeight = (29f * scale + 56f).dp
+    val collapsedContentHeight = (16f * scale + 8f).dp
+    return when {
+        track.isCollapsed -> maxOf(if (compact) 56.dp else 64.dp, collapsedContentHeight)
+        compact -> maxOf(track.trackHeight.coerceAtLeast(108).dp, expandedContentHeight)
+        else -> maxOf(track.trackHeight.coerceAtLeast(120).dp, expandedContentHeight)
+    }
 }
 
 // Allocation-free clip lookup for drag handlers — they fire per pointer event
