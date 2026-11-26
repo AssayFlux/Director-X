@@ -796,7 +796,7 @@ fun EditorScreen(
         // outside the viewport without enabling the editor's scroll container.
         val scaledMultiSelectActionHeight = if (state.selectedClipIds.size > 1) {
             with(LocalDensity.current) {
-                28.sp.toDp() + 2 * maxOf(48.dp, 14.sp.toDp() + 16.dp) + 44.dp
+                28.sp.toDp() + maxOf(48.dp, 14.sp.toDp() + 16.dp) * 2 + 44.dp
             }
         } else {
             0.dp
@@ -1130,7 +1130,6 @@ fun EditorScreen(
                         }
                     }
                 }
-            }
 
                 if (state.compoundNavDepth > 0) {
                     CompoundNavBreadcrumb(
