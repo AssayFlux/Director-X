@@ -179,9 +179,9 @@ private fun SidebarAction(
             )
             .padding(horizontal = if (compact) 0.dp else Spacing.sm, vertical = if (compact) 0.dp else Spacing.sm)
             .clip(RoundedCornerShape(Radius.md))
+            .requiredSizeIn(minWidth = TouchTarget.minimum, minHeight = TouchTarget.minimum)
             .background(tint.copy(alpha = 0.06f))
             .clickable(role = Role.Button, onClick = onClick)
-            .requiredSizeIn(minWidth = TouchTarget.minimum, minHeight = TouchTarget.minimum)
             .semantics { contentDescription = label },
         horizontalArrangement = if (compact) Arrangement.Center else Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically
