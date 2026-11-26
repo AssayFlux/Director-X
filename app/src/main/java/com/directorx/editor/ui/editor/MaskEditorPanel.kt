@@ -68,6 +68,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -713,6 +714,7 @@ fun MaskPreviewOverlay(
     onMaskDragEnded: () -> Unit = {}
 ) {
     val maskAccent = DirectorXAccents.Mauve
+    val maskPointHitRadiusPx = with(LocalDensity.current) { 24.dp.toPx() }
     val drawingPoints = remember { mutableStateListOf<Offset>() }
     var draggedPointIndex by remember { mutableIntStateOf(-1) }
     // The gesture coroutine launches once per selection; `masks` captured at
@@ -728,7 +730,7 @@ fun MaskPreviewOverlay(
         modifier = modifier
             .fillMaxSize()
             .testTag(DirectorXTestTags.MASK_PREVIEW_OVERLAY)
-            .pointerInput(selectedMaskId) {
+            .pointerInput(selectedMaskId, maskPointHitRadiusPx) {
                 if (selectedMaskId == null) return@pointerInput
                 val maskType = currentMasks.find { it.id == selectedMaskId }?.type
                     ?: return@pointerInput
@@ -762,7 +764,7 @@ fun MaskPreviewOverlay(
                                 val startOffset = down.position
                                 val mask = currentMasks.find { it.id == selectedMaskId }
                                     ?: return@detectDragGestures
-                                val hitRadius = 30f
+                                val hitRadius = maskPointHitRadiusPx
                                 var bestIdx = -1
                                 var bestDist = Float.MAX_VALUE
                                 mask.points.forEachIndexed { idx, point ->

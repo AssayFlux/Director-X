@@ -45,6 +45,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
@@ -584,6 +585,7 @@ internal fun CurveCanvas(
     onDragEnded: () -> Unit = {}
 ) {
     val semanticColors = LocalDirectorXColors.current
+    val keyframeHitRadiusPx = with(LocalDensity.current) { 24.dp.toPx() }
     if (clipDurationMs <= 0L) return
 
     // pointerInput must NOT key on the state the gesture mutates: every move
@@ -602,7 +604,7 @@ internal fun CurveCanvas(
     fun androidx.compose.ui.input.pointer.PointerInputScope.hitTestKeyframe(
         offset: Offset
     ): Keyframe? {
-        val hitRadius = 20f
+        val hitRadius = keyframeHitRadiusPx
         var nearest: Keyframe? = null
         var nearestDistance = Float.MAX_VALUE
         for (keyframe in currentKeyframes) {
@@ -706,7 +708,7 @@ internal fun CurveCanvas(
     androidx.compose.foundation.Canvas(
         modifier = modifier
             .testTag(DirectorXTestTags.KEYFRAME_CURVE_CANVAS)
-            .pointerInput(Unit) {
+            .pointerInput(keyframeHitRadiusPx) {
                 detectTapGestures(
                     onTap = { offset ->
                         currentOnKeyframeSelected(hitTestKeyframe(offset))
@@ -720,7 +722,7 @@ internal fun CurveCanvas(
                     }
                 )
             }
-            .pointerInput(Unit) {
+            .pointerInput(keyframeHitRadiusPx) {
                 var dragging = false
                 var grabbedIndex = -1
                 detectDragGestures(

@@ -113,7 +113,7 @@ internal fun TrimNumericInputRow(
             textStyle = MaterialTheme.typography.bodySmall.copy(color = semanticColors.text),
             modifier = Modifier
                 .weight(1f)
-                .height(42.dp)
+                .height(48.dp)
                 .onFocusChanged { focus ->
                     if (!focus.isFocused && startEditActive) {
                         startEditActive = false
@@ -152,7 +152,7 @@ internal fun TrimNumericInputRow(
             textStyle = MaterialTheme.typography.bodySmall.copy(color = semanticColors.text),
             modifier = Modifier
                 .weight(1f)
-                .height(42.dp)
+                .height(48.dp)
                 .onFocusChanged { focus ->
                     if (!focus.isFocused && endEditActive) {
                         endEditActive = false

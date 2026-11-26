@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
@@ -63,6 +64,8 @@ fun TransformOverlay(
     var startScaleX by remember { mutableFloatStateOf(1f) }
     var startScaleY by remember { mutableFloatStateOf(1f) }
     var startRotation by remember { mutableFloatStateOf(0f) }
+    // Keep the drawn handles compact; make only their drag hit regions density-aware.
+    val handleHitRadiusPx = with(LocalDensity.current) { 24.dp.toPx() }
 
     // DrawScope is not composable; resolve the selected appearance's accents
     // here and capture them for the overlay renderer.
@@ -175,7 +178,7 @@ fun TransformOverlay(
     Canvas(
         modifier = modifier
             .fillMaxSize()
-            .pointerInput(positionX, positionY, scaleX, scaleY, rotation, previewWidth, previewHeight) {
+            .pointerInput(positionX, positionY, scaleX, scaleY, rotation, previewWidth, previewHeight, handleHitRadiusPx) {
                 detectTransformGesturesWithLifecycle(
                     onGestureStart = {
                         isDragging = true
@@ -214,7 +217,7 @@ fun TransformOverlay(
                     }
                 )
             }
-            .pointerInput(positionX, positionY, scaleX, scaleY, rotation, previewWidth, previewHeight) {
+            .pointerInput(positionX, positionY, scaleX, scaleY, rotation, previewWidth, previewHeight, handleHitRadiusPx) {
                 detectDragGestures(
                     orientationLock = null,
                     onDragStart = { down, _, _ ->
@@ -250,12 +253,12 @@ fun TransformOverlay(
                         val rotatePos = Offset(centerX, centerY - hh - ROTATE_HANDLE_DISTANCE)
 
                         activeHandle = when {
-                            offset.distTo(corners[0]) < HANDLE_RADIUS * 3 -> HandleType.SCALE_TL
-                            offset.distTo(corners[1]) < HANDLE_RADIUS * 3 -> HandleType.SCALE_TR
-                            offset.distTo(corners[2]) < HANDLE_RADIUS * 3 -> HandleType.SCALE_BR
-                            offset.distTo(corners[3]) < HANDLE_RADIUS * 3 -> HandleType.SCALE_BL
-                            offset.distTo(rotatePos) < HANDLE_RADIUS * 3 -> HandleType.ROTATE
-                            offset.distTo(Offset(centerX, centerY)) < HANDLE_RADIUS * 3 -> HandleType.ANCHOR
+                            offset.distTo(corners[0]) < handleHitRadiusPx -> HandleType.SCALE_TL
+                            offset.distTo(corners[1]) < handleHitRadiusPx -> HandleType.SCALE_TR
+                            offset.distTo(corners[2]) < handleHitRadiusPx -> HandleType.SCALE_BR
+                            offset.distTo(corners[3]) < handleHitRadiusPx -> HandleType.SCALE_BL
+                            offset.distTo(rotatePos) < handleHitRadiusPx -> HandleType.ROTATE
+                            offset.distTo(Offset(centerX, centerY)) < handleHitRadiusPx -> HandleType.ANCHOR
                             isInsideBounds(offset, centerX, centerY, hw, hh) -> HandleType.MOVE
                             else -> HandleType.NONE
                         }

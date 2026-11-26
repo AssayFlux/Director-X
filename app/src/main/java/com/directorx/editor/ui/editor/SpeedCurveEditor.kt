@@ -53,6 +53,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -576,15 +577,16 @@ private fun SpeedCurveCanvas(
     val semanticColors = LocalDirectorXColors.current
     val curveAccent = DirectorXAccents.Peach
     val selectedPointAccent = DirectorXAccents.Yellow
+    val pointHitRadiusPx = with(LocalDensity.current) { 24.dp.toPx() }
 
     val canvasDescription = stringResource(R.string.speed_curve_canvas_cd)
     androidx.compose.foundation.Canvas(
         modifier = modifier
             .semantics { contentDescription = canvasDescription }
-            .pointerInput(Unit) {
+            .pointerInput(pointHitRadiusPx) {
                 detectTapGestures(
                     onTap = { offset ->
-                        val hitRadius = 30f
+                        val hitRadius = pointHitRadiusPx
                         var bestIdx = -1
                         var bestDist = hitRadius * hitRadius
                         for (i in currentCurve.points.indices) {
@@ -611,12 +613,12 @@ private fun SpeedCurveCanvas(
                     }
                 )
             }
-            .pointerInput(Unit) {
+            .pointerInput(pointHitRadiusPx) {
                 detectDragGestures(
                     orientationLock = null,
                     onDragStart = { down, _, _ ->
                         val offset = down.position
-                        val hitRadius = 30f
+                        val hitRadius = pointHitRadiusPx
                         var bestIdx = -1
                         var bestDist = hitRadius * hitRadius
                         for (i in currentCurve.points.indices) {

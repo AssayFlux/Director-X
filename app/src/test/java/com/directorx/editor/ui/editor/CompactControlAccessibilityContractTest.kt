@@ -47,6 +47,31 @@ class CompactControlAccessibilityContractTest {
         assertTrue(source.contains(".size(26.dp)"))
     }
 
+    @Test
+    fun timeline_trim_inputs_meet_the_48dp_touch_height() {
+        val source = locate("app/src/main/java/com/directorx/editor/ui/editor/TimelineTrimControls.kt").readText()
+
+        assertTrue(source.contains(".height(48.dp)"))
+        assertTrue(!source.contains(".height(42.dp)"))
+    }
+
+    @Test
+    fun canvas_gesture_hit_regions_use_density_aware_24dp_radii() {
+        val speed = locate("app/src/main/java/com/directorx/editor/ui/editor/SpeedCurveEditor.kt").readText()
+        val mask = locate("app/src/main/java/com/directorx/editor/ui/editor/MaskEditorPanel.kt").readText()
+        val keyframes = locate("app/src/main/java/com/directorx/editor/ui/editor/KeyframeCurveEditor.kt").readText()
+        val transform = locate("app/src/main/java/com/directorx/editor/ui/editor/TransformOverlay.kt").readText()
+
+        assertTrue(speed.contains("with(LocalDensity.current) { 24.dp.toPx() }"))
+        assertTrue(mask.contains("with(LocalDensity.current) { 24.dp.toPx() }"))
+        assertTrue(keyframes.contains("with(LocalDensity.current) { 24.dp.toPx() }"))
+        assertTrue(transform.contains("with(LocalDensity.current) { 24.dp.toPx() }"))
+        assertTrue(!speed.contains("val hitRadius = 30f"))
+        assertTrue(!mask.contains("val hitRadius = 30f"))
+        assertTrue(!keyframes.contains("val hitRadius = 20f"))
+        assertTrue(!transform.contains("HANDLE_RADIUS * 3"))
+    }
+
     private fun locate(relativePath: String): File {
         var current = File(requireNotNull(System.getProperty("user.dir"))).absoluteFile
         repeat(8) {
