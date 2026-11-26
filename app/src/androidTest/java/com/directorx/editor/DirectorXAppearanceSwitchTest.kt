@@ -68,8 +68,8 @@ class DirectorXAppearanceSwitchTest {
         composeRule.onNodeWithTag("appearance-mode").assertTextEquals("MIDNIGHT_CINEMA")
         val midnightAccent = DirectorXThemeDefaults.colorsFor(AppearanceMode.MIDNIGHT_CINEMA).accent.toString()
         composeRule.onNodeWithTag("appearance-accent").assertTextEquals(midnightAccent)
-        composeRule.onNodeWithTag("appearance-status-tag").assertExists()
-        composeRule.onNodeWithTag("appearance-filter-chip").assertExists()
+        composeRule.onNodeWithText("Ready").assertTextEquals("Ready")
+        composeRule.onNodeWithText("Selected").assertTextEquals("Selected")
 
         composeRule.onNodeWithText("Switch appearance").performClick()
 
@@ -77,7 +77,7 @@ class DirectorXAppearanceSwitchTest {
         val forestAccent = DirectorXThemeDefaults.colorsFor(AppearanceMode.FOREST_ATELIER).accent.toString()
         composeRule.onNodeWithTag("appearance-accent").assertTextEquals(forestAccent)
         assertNotEquals("The selected appearance must replace the semantic accent.", midnightAccent, forestAccent)
-        composeRule.onNodeWithTag("appearance-status-tag").assertExists()
-        composeRule.onNodeWithTag("appearance-filter-chip").assertExists()
+        composeRule.onNodeWithText("Ready").assertTextEquals("Ready")
+        composeRule.onNodeWithText("Selected").assertTextEquals("Selected")
     }
 }
