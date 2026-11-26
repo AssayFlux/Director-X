@@ -43,7 +43,6 @@ data class ProjectTemplateUI(
     val descriptionResId: Int,
     val category: TemplateCategory,
     val icon: ImageVector,
-    val accentColor: Color = Color.Unspecified,
     val aspectRatio: AspectRatio,
     val tracks: List<TrackType>,
     val suggestedDurationResId: Int
