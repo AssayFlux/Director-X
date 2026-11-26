@@ -102,6 +102,32 @@ class DirectorXAppearancePolicyTest {
     }
 
     @Test
+    fun everyAppearanceProvidesDistinctSemanticAccentsAndReadableActionLabels() {
+        DirectorXThemeDefaults.availableThemes.forEach { mode ->
+            val colors = DirectorXThemeDefaults.colorsFor(mode)
+            assertTrue("$mode must expose a distinct secondary accent", colors.accent != colors.accentSecondary)
+            assertTrue("$mode must expose a distinct tertiary accent", colors.accentTertiary != colors.accent)
+            assertTrue(
+                "$mode primary action label is not readable",
+                DirectorXThemeDefaults.contrastRatio(colors.onAccent, colors.accent) >= 4.5,
+            )
+
+            val scheme = DirectorXThemeDefaults.colorSchemeFor(mode)
+            listOf(
+                scheme.onPrimary to scheme.primary,
+                scheme.onSecondary to scheme.secondary,
+                scheme.onTertiary to scheme.tertiary,
+                scheme.onError to scheme.error,
+            ).forEach { (foreground, background) ->
+                assertTrue(
+                    "$mode has an unreadable Material action label on $background",
+                    DirectorXThemeDefaults.contrastRatio(foreground, background) >= 4.5,
+                )
+            }
+        }
+    }
+
+    @Test
     fun radiusTokensStayWithinProfessionalGeometryCap() {
         listOf(Radius.xs, Radius.sm, Radius.md, Radius.lg, Radius.xl, Radius.xxl).forEach { radius ->
             assertTrue("Radius token exceeded 12dp: $radius", radius.value <= 12f)
