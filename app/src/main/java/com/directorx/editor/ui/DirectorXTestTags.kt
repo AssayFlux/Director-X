@@ -36,6 +36,7 @@ object DirectorXTestTags {
     const val UNDO_HISTORY_ENTRY_DESCRIPTION = "undoHistory.entry.description"
     const val UNDO_HISTORY_CLOSE = "undoHistory.close"
     const val KEYFRAME_CURVE_CANVAS = "keyframes.curveCanvas"
+    const val KEYFRAME_EDITOR_CLOSE = "keyframes.close"
     const val KEYFRAME_PROPERTY_PREFIX = "keyframes.property."
     const val MASK_PREVIEW_OVERLAY = "masks.previewOverlay"
     const val EDITOR_TOOL_TAB_PREFIX = "editor.toolTab."
