@@ -51,6 +51,9 @@ internal fun TimelineOverviewBar(
     onScrollTo: (Long) -> Unit
 ) {
     val semanticColors = LocalDirectorXColors.current
+    val trackAccentColors = tracks.associate { track -> track.id to trackAccentColor(track.type) }
+    val viewportAccent = DirectorXAccents.Sky
+    val playheadAccent = DirectorXAccents.Rosewater
     val overviewHeight = 22.dp
     var widthPx by remember { mutableFloatStateOf(0f) }
     val overviewContentDescription = stringResource(R.string.cd_timeline_overview)
@@ -95,7 +98,7 @@ internal fun TimelineOverviewBar(
             val totalF = currentTotalDurationMs.toFloat()
 
             tracks.forEach { track ->
-                val barColor = trackAccentColor(track.type).copy(alpha = 0.55f)
+                val barColor = (trackAccentColors[track.id] ?: semanticColors.accentSecondary).copy(alpha = 0.55f)
                 track.clips.forEach { clip ->
                     val shiftedStartMs = track.effectiveTimelineStartMs(clip)
                     val shiftedEndMs = track.effectiveTimelineEndMs(clip)
