@@ -761,6 +761,7 @@ private fun DocumentReportLine(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun ProjectHomeHero(
     searchQuery: String,
@@ -809,6 +810,18 @@ private fun ProjectHomeHero(
             )
         }
 
+        ProjectActionRow(
+            primaryLabel = stringResource(R.string.projects_new_project),
+            primaryIcon = Icons.Default.Add,
+            onPrimary = onCreateProject,
+            secondaryLabel = stringResource(R.string.project_document_import_confirm),
+            secondaryIcon = Icons.Default.FileOpen,
+            onSecondary = onImportTemplate,
+            enabled = actionsEnabled,
+            primaryTestTag = DirectorXTestTags.PROJECTS_CREATE_PROJECT,
+            secondaryTestTag = DirectorXTestTags.PROJECTS_IMPORT_TEMPLATE
+        )
+
         HorizontalDivider(color = LocalDirectorXColors.current.cardStroke)
 
         Column(verticalArrangement = Arrangement.spacedBy(Spacing.sm)) {
@@ -825,17 +838,6 @@ private fun ProjectHomeHero(
                 modifier = Modifier.widthIn(max = 520.dp)
             )
         }
-
-        ProjectActionRow(
-            primaryLabel = stringResource(R.string.projects_new_project),
-            primaryIcon = Icons.Default.Add,
-            onPrimary = onCreateProject,
-            secondaryLabel = stringResource(R.string.project_document_import_confirm),
-            secondaryIcon = Icons.Default.FileOpen,
-            onSecondary = onImportTemplate,
-            enabled = actionsEnabled,
-            primaryTestTag = DirectorXTestTags.PROJECTS_CREATE_PROJECT
-        )
 
         if (showSearch) {
             OutlinedTextField(
@@ -1531,21 +1533,26 @@ private fun ProjectCard(
                             overflow = TextOverflow.Ellipsis
                         )
 
-                        Row(
+                        FlowRow(
+                            modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalArrangement = Arrangement.spacedBy(2.dp)
                         ) {
-                            Text(projectDuration, color = LocalDirectorXColors.current.accentTertiary, style = MaterialTheme.typography.labelMedium)
-                            VerticalDivider(
-                                modifier = Modifier.height(14.dp),
-                                color = LocalDirectorXColors.current.cardStrokeStrong
+                            Text(
+                                projectDuration,
+                                color = LocalDirectorXColors.current.accentTertiary,
+                                style = MaterialTheme.typography.labelMedium
                             )
-                            Text(project.resolution.label, color = LocalDirectorXColors.current.subtext, style = MaterialTheme.typography.labelMedium)
-                            VerticalDivider(
-                                modifier = Modifier.height(14.dp),
-                                color = LocalDirectorXColors.current.cardStrokeStrong
+                            Text(
+                                project.resolution.label,
+                                color = LocalDirectorXColors.current.subtext,
+                                style = MaterialTheme.typography.labelMedium
                             )
-                            Text(project.timelineTimebase.frameRateLabel, color = LocalDirectorXColors.current.subtext, style = MaterialTheme.typography.labelMedium)
+                            Text(
+                                project.timelineTimebase.frameRateLabel,
+                                color = LocalDirectorXColors.current.subtext,
+                                style = MaterialTheme.typography.labelMedium
+                            )
                         }
 
                         Text(

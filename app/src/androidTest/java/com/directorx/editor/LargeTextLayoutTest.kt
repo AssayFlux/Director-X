@@ -132,6 +132,24 @@ class LargeTextLayoutTest {
 
     private fun openBlankEditor() {
         compose.waitUntilAtLeastOneExists(DirectorXTestTags.PROJECTS_SCREEN)
+        val dashboardBounds = compose.onNodeWithTag(DirectorXTestTags.PROJECTS_SCREEN)
+            .fetchSemanticsNode()
+            .boundsInWindow
+        listOf(
+            DirectorXTestTags.PROJECTS_CREATE_PROJECT,
+            DirectorXTestTags.PROJECTS_IMPORT_TEMPLATE
+        ).forEach { tag ->
+            val action = compose.onNodeWithTag(tag).assertIsDisplayed()
+            val bounds = action.fetchSemanticsNode().boundsInWindow
+            check(
+                bounds.left >= dashboardBounds.left - 1f &&
+                    bounds.top >= dashboardBounds.top - 1f &&
+                    bounds.right <= dashboardBounds.right + 1f &&
+                    bounds.bottom <= dashboardBounds.bottom + 1f
+            ) {
+                "Dashboard action is outside the initial viewport: $tag=$bounds root=$dashboardBounds"
+            }
+        }
         compose.onNodeWithTag(DirectorXTestTags.PROJECTS_CREATE_PROJECT)
             .performScrollTo()
             .assertIsDisplayed()
@@ -187,6 +205,9 @@ class LargeTextLayoutTest {
         requiredActionTags: List<String>,
     ) {
         compose.onNodeWithTag(rootTag).assertIsDisplayed()
+        val rootBounds = compose.onNodeWithTag(rootTag)
+            .fetchSemanticsNode()
+            .boundsInWindow
         val bounds = requiredActionTags.map { tag ->
             val interactions = compose.onAllNodesWithTag(tag)
             val nodes = interactions.fetchSemanticsNodes(atLeastOneRootRequired = true)
@@ -199,7 +220,16 @@ class LargeTextLayoutTest {
                 interaction.performScrollTo()
             }
             interaction.assertIsDisplayed()
-            tag to interaction.fetchSemanticsNode().boundsInWindow
+            val actionBounds = interaction.fetchSemanticsNode().boundsInWindow
+            check(
+                actionBounds.left >= rootBounds.left - 1f &&
+                    actionBounds.top >= rootBounds.top - 1f &&
+                    actionBounds.right <= rootBounds.right + 1f &&
+                    actionBounds.bottom <= rootBounds.bottom + 1f
+            ) {
+                "Required action is outside its screen bounds: $tag=$actionBounds root=$rootBounds"
+            }
+            tag to actionBounds
         }
         bounds.forEachIndexed { index, first ->
             bounds.drop(index + 1).forEach { second ->

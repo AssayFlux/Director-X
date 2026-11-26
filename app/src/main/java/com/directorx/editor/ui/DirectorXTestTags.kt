@@ -6,6 +6,7 @@ object DirectorXTestTags {
     val OPEN_PANEL_IDS = SemanticsPropertyKey<Set<String>>("OpenPanelIds")
     const val PROJECTS_SCREEN = "projects.screen"
     const val PROJECTS_CREATE_PROJECT = "projects.createProject"
+    const val PROJECTS_IMPORT_TEMPLATE = "projects.importTemplate"
     const val PROJECTS_TEMPLATES = "projects.templates"
     const val PROJECT_CARD_PREFIX = "projects.card."
     const val PROJECTS_SETTINGS = "projects.settings"

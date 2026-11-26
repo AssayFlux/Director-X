@@ -791,6 +791,26 @@ fun EditorScreen(
         val scaledActionRowHeight = with(LocalDensity.current) {
             maxOf(62.dp, 19.dp + 3.dp + 10.sp.toDp() + 16.dp)
         }
+        // These optional rows are rendered between the preview and timeline.
+        // Include their scaled heights so they cannot push the timeline/tool rail
+        // outside the viewport without enabling the editor's scroll container.
+        val scaledMultiSelectActionHeight = if (state.selectedClipIds.size > 1) {
+            with(LocalDensity.current) {
+                28.sp.toDp() + 2 * maxOf(48.dp, 14.sp.toDp() + 16.dp) + 44.dp
+            }
+        } else {
+            0.dp
+        }
+        val scaledCompoundBreadcrumbHeight = if (state.compoundNavDepth > 0) {
+            with(LocalDensity.current) { maxOf(48.dp, 16.sp.toDp() + 24.dp) }
+        } else {
+            0.dp
+        }
+        val optionalEditorChromeSpacing = when {
+            scaledMultiSelectActionHeight > 0.dp && scaledCompoundBreadcrumbHeight > 0.dp -> 16.dp
+            scaledMultiSelectActionHeight > 0.dp || scaledCompoundBreadcrumbHeight > 0.dp -> 8.dp
+            else -> 0.dp
+        }
         val effectiveBottomToolPanelExpanded =
             isToolPanelExpanded && !previewFirstLayout.lockBottomToolArea
         val measuredBottomToolRailHeight = previewFirstLayout.bottomToolRailHeightDp.dp +
@@ -804,7 +824,13 @@ fun EditorScreen(
         // scaled toolbar/rail, and system-inset margin. Scroll before the weighted
         // preview can be squeezed below its intended size by a tall timeline.
         val minimumEditorContentHeight = scaledToolbarHeight +
-            requiredPreviewHeight + timelineMaxHeight + measuredBottomToolRailHeight + 48.dp
+            requiredPreviewHeight +
+            scaledMultiSelectActionHeight +
+            scaledCompoundBreadcrumbHeight +
+            optionalEditorChromeSpacing +
+            timelineMaxHeight +
+            measuredBottomToolRailHeight +
+            48.dp
         val scrollEditorContent = !isImmersivePreview &&
             screenHeightDp.dp < minimumEditorContentHeight
         Column(
@@ -976,112 +1002,130 @@ fun EditorScreen(
             }
 
             if (!isImmersivePreview) {
-                // Multi-select action bar
+                // Multi-select actions wrap independently of the selection summary.
+                // This keeps Delete, Paste Effects, and Cancel usable at large text
+                // scales instead of squeezing them into one horizontal line.
                 if (state.selectedClipIds.size > 1) {
-                Surface(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 8.dp),
-                    color = Color.Transparent,
-                    shape = RoundedCornerShape(Radius.xl),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, DirectorXAccents.Peach.copy(alpha = 0.2f))
-                ) {
-                    Row(
+                    Surface(
                         modifier = Modifier
-                            .background(
-                                MaterialTheme.colorScheme.surfaceContainerHigh
-                            )
-                            .padding(horizontal = 14.dp, vertical = 10.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                            .fillMaxWidth()
+                            .padding(horizontal = 12.dp, vertical = 8.dp),
+                        color = Color.Transparent,
+                        shape = RoundedCornerShape(Radius.xl),
+                        border = androidx.compose.foundation.BorderStroke(
+                            1.dp,
+                            DirectorXAccents.Peach.copy(alpha = 0.2f)
+                        )
                     ) {
                         Column(
-                            modifier = Modifier.weight(1f),
-                            verticalArrangement = Arrangement.spacedBy(2.dp)
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                                .padding(horizontal = 14.dp, vertical = 10.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            Text(
-                                text = stringResource(R.string.editor_selection),
-                                color = DirectorXAccents.Peach,
-                                style = MaterialTheme.typography.labelSmall
-                            )
-                            Text(
-                                text = stringResource(R.string.editor_selected_count, state.selectedClipIds.size),
-                                color = semanticColors.text,
-                                style = MaterialTheme.typography.titleSmall
-                            )
-                        }
-                        Surface(
-                            shape = RoundedCornerShape(10.dp),
-                            color = DirectorXAccents.Red.copy(alpha = 0.14f),
-                            border = androidx.compose.foundation.BorderStroke(1.dp, DirectorXAccents.Red.copy(alpha = 0.2f))
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .defaultMinSize(minHeight = TouchTarget.minimum)
-                                    .clickable(onClick = viewModel::deleteMultiSelectedClips)
-                                    .padding(horizontal = 12.dp, vertical = 8.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    Icons.Default.Delete,
-                                    contentDescription = stringResource(R.string.editor_delete_selected),
-                                    tint = DirectorXAccents.Red,
-                                    modifier = Modifier.size(16.dp)
-                                )
-                                Spacer(Modifier.width(6.dp))
+                            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                                 Text(
-                                    text = stringResource(R.string.editor_delete),
-                                    color = DirectorXAccents.Red,
-                                    style = MaterialTheme.typography.labelLarge
+                                    text = stringResource(R.string.editor_selection),
+                                    color = DirectorXAccents.Peach,
+                                    style = MaterialTheme.typography.labelSmall
+                                )
+                                Text(
+                                    text = stringResource(
+                                        R.string.editor_selected_count,
+                                        state.selectedClipIds.size
+                                    ),
+                                    color = semanticColors.text,
+                                    style = MaterialTheme.typography.titleSmall
                                 )
                             }
-                        }
-                        if (state.copiedEffects.isNotEmpty()) {
-                            Spacer(Modifier.width(6.dp))
-                            Surface(
-                                shape = RoundedCornerShape(10.dp),
-                                color = DirectorXAccents.Mauve.copy(alpha = 0.14f),
-                                border = androidx.compose.foundation.BorderStroke(1.dp, DirectorXAccents.Mauve.copy(alpha = 0.2f))
+                            FlowRow(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                verticalArrangement = Arrangement.spacedBy(6.dp)
                             ) {
-                                Row(
-                                    modifier = Modifier
-                                        .defaultMinSize(minHeight = TouchTarget.minimum)
-                                        .clickable(onClick = viewModel::copyEffectsToSelectedClips)
-                                        .padding(horizontal = 12.dp, vertical = 8.dp),
-                                    verticalAlignment = Alignment.CenterVertically
+                                Surface(
+                                    shape = RoundedCornerShape(10.dp),
+                                    color = DirectorXAccents.Red.copy(alpha = 0.14f),
+                                    border = androidx.compose.foundation.BorderStroke(
+                                        1.dp,
+                                        DirectorXAccents.Red.copy(alpha = 0.2f)
+                                    )
                                 ) {
-                                    Icon(
-                                        Icons.Default.ContentPaste,
-                                        contentDescription = stringResource(R.string.tool_paste_effects),
-                                        tint = DirectorXAccents.Mauve,
-                                        modifier = Modifier.size(16.dp)
-                                    )
-                                    Spacer(Modifier.width(6.dp))
-                                    Text(
-                                        text = stringResource(R.string.editor_paste_fx),
-                                        color = DirectorXAccents.Mauve,
-                                        style = MaterialTheme.typography.labelLarge
-                                    )
+                                    Row(
+                                        modifier = Modifier
+                                            .defaultMinSize(minHeight = TouchTarget.minimum)
+                                            .clickable(onClick = viewModel::deleteMultiSelectedClips)
+                                            .padding(horizontal = 12.dp, vertical = 8.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Icon(
+                                            Icons.Default.Delete,
+                                            contentDescription = stringResource(R.string.editor_delete_selected),
+                                            tint = DirectorXAccents.Red,
+                                            modifier = Modifier.size(16.dp)
+                                        )
+                                        Spacer(Modifier.width(6.dp))
+                                        Text(
+                                            text = stringResource(R.string.editor_delete),
+                                            color = DirectorXAccents.Red,
+                                            style = MaterialTheme.typography.labelLarge
+                                        )
+                                    }
                                 }
-                            }
-                        }
-                        Spacer(Modifier.width(8.dp))
-                        Surface(
-                            shape = RoundedCornerShape(10.dp),
-                            color = semanticColors.surfaceLow.copy(alpha = 0.7f),
-                            border = androidx.compose.foundation.BorderStroke(1.dp, semanticColors.cardStroke)
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .defaultMinSize(minHeight = TouchTarget.minimum)
-                                    .clickable(onClick = viewModel::clearMultiSelect)
-                                    .padding(horizontal = 12.dp, vertical = 8.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.editor_cancel),
-                                    color = semanticColors.subtext,
-                                    style = MaterialTheme.typography.labelLarge
-                                )
+                                if (state.copiedEffects.isNotEmpty()) {
+                                    Surface(
+                                        shape = RoundedCornerShape(10.dp),
+                                        color = DirectorXAccents.Mauve.copy(alpha = 0.14f),
+                                        border = androidx.compose.foundation.BorderStroke(
+                                            1.dp,
+                                            DirectorXAccents.Mauve.copy(alpha = 0.2f)
+                                        )
+                                    ) {
+                                        Row(
+                                            modifier = Modifier
+                                                .defaultMinSize(minHeight = TouchTarget.minimum)
+                                                .clickable(onClick = viewModel::copyEffectsToSelectedClips)
+                                                .padding(horizontal = 12.dp, vertical = 8.dp),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Icon(
+                                                Icons.Default.ContentPaste,
+                                                contentDescription = stringResource(R.string.tool_paste_effects),
+                                                tint = DirectorXAccents.Mauve,
+                                                modifier = Modifier.size(16.dp)
+                                            )
+                                            Spacer(Modifier.width(6.dp))
+                                            Text(
+                                                text = stringResource(R.string.editor_paste_fx),
+                                                color = DirectorXAccents.Mauve,
+                                                style = MaterialTheme.typography.labelLarge
+                                            )
+                                        }
+                                    }
+                                }
+                                Surface(
+                                    shape = RoundedCornerShape(10.dp),
+                                    color = semanticColors.surfaceLow.copy(alpha = 0.7f),
+                                    border = androidx.compose.foundation.BorderStroke(
+                                        1.dp,
+                                        semanticColors.cardStroke
+                                    )
+                                ) {
+                                    Row(
+                                        modifier = Modifier
+                                            .defaultMinSize(minHeight = TouchTarget.minimum)
+                                            .clickable(onClick = viewModel::clearMultiSelect)
+                                            .padding(horizontal = 12.dp, vertical = 8.dp),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(
+                                            text = stringResource(R.string.editor_cancel),
+                                            color = semanticColors.subtext,
+                                            style = MaterialTheme.typography.labelLarge
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
