@@ -238,9 +238,10 @@ class QaTimelineGestureTest {
         // content column. Scrolling it has no parent Scroll semantics and fails
         // on API 35/37; click the visible header action directly.
         compose.onNodeWithTag(DirectorXTestTags.KEYFRAME_EDITOR_CLOSE)
-            .performClick()
-        // waitUntil polls wall time; let Compose apply the close callback and finish
-        // the AnimatedVisibility transition before checking the panel state.
+            .performTouchInput { click(center) }
+        // Exercise the actual touch target (not only its semantics action), then
+        // advance the Compose clock so the exit transition can finish deterministically.
+        compose.mainClock.advanceTimeBy(500L)
         compose.waitForIdle()
         compose.waitUntil(timeoutMillis = 5_000L) {
             val openPanels = compose.onNodeWithTag(DirectorXTestTags.EDITOR_SCREEN)
