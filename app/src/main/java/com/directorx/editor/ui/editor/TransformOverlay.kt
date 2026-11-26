@@ -64,6 +64,12 @@ fun TransformOverlay(
     var startScaleY by remember { mutableFloatStateOf(1f) }
     var startRotation by remember { mutableFloatStateOf(0f) }
 
+    // DrawScope is not composable; resolve the selected appearance's accents
+    // here and capture them for the overlay renderer.
+    val alignmentAccent = DirectorXAccents.Green
+    val guideAccent = DirectorXAccents.Mauve
+    val anchorAccent = DirectorXAccents.Peach
+
     val accessibilityState = stringResource(
         R.string.transform_accessibility_state,
         positionX,
