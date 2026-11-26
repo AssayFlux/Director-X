@@ -117,12 +117,12 @@ internal fun TimelineOverviewBar(
             val vStartF = (scrollOffsetMs.toFloat() / totalF).coerceIn(0f, 1f)
             val vWidthF = (currentVisibleDurationMs.toFloat() / totalF).coerceIn(0.01f, 1f)
             drawRect(
-                color = DirectorXAccents.Sky.copy(alpha = 0.25f),
+                color = viewportAccent.copy(alpha = 0.25f),
                 topLeft = Offset(vStartF * size.width, 0f),
                 size = Size(vWidthF * size.width, size.height)
             )
             drawRect(
-                color = DirectorXAccents.Sky,
+                color = viewportAccent,
                 topLeft = Offset(vStartF * size.width, 0f),
                 size = Size(vWidthF * size.width, size.height),
                 style = Stroke(width = 1.6f)
@@ -130,7 +130,7 @@ internal fun TimelineOverviewBar(
 
             val playheadF = (playheadMs.toFloat() / totalF).coerceIn(0f, 1f)
             drawLine(
-                color = DirectorXAccents.Rosewater,
+                color = playheadAccent,
                 start = Offset(playheadF * size.width, 0f),
                 end = Offset(playheadF * size.width, size.height),
                 strokeWidth = 1.4f
