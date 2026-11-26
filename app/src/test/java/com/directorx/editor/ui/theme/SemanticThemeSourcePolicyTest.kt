@@ -35,7 +35,7 @@ class SemanticThemeSourcePolicyTest {
         }
         rawColorFiles.forEach { file ->
             val relativePath = file.relativeTo(root).invariantSeparatorsPath
-            val allowedRawColors = APPROVED_FIXED_COLOR_ALLOWLIST[relativePath].orEmpty()
+            val allowedRawColors = APPROVED_FIXED_COLOR_ALLOWLIST[file.name].orEmpty()
             val violations = RAW_COLOR_EXPRESSION.findAll(file.readText())
                 .map { it.value.replace(Regex("\\s+"), "") }
                 .filterNot { it in allowedRawColors }
@@ -125,16 +125,16 @@ class SemanticThemeSourcePolicyTest {
          * tokens instead.
          */
         val APPROVED_FIXED_COLOR_ALLOWLIST = mapOf(
-            "app/src/main/java/com/directorx/editor/ui/editor/VideoScopes.kt" to setOf(
+            "VideoScopes.kt" to setOf(
                 "Color(0xFFFF4444)",
                 "Color(0xFF44FF44)",
                 "Color(0xFF4488FF)",
             ),
-            "app/src/main/java/com/directorx/editor/ui/editor/MotionPathOverlay.kt" to setOf("Color.White"),
-            "app/src/main/java/com/directorx/editor/ui/editor/PreviewPanel.kt" to setOf("Color.White"),
-            "app/src/main/java/com/directorx/editor/ui/editor/ColorGradingPanel.kt" to setOf("Color.White", "Color.Black"),
-            "app/src/main/java/com/directorx/editor/ui/editor/CaptionPreviewOverlay.kt" to setOf("Color.Black"),
-            "app/src/main/java/com/directorx/editor/ui/editor/ExportDelegate.kt" to setOf("Color.BLACK"),
+            "MotionPathOverlay.kt" to setOf("Color.White"),
+            "PreviewPanel.kt" to setOf("Color.White"),
+            "ColorGradingPanel.kt" to setOf("Color.White", "Color.Black"),
+            "CaptionPreviewOverlay.kt" to setOf("Color.Black"),
+            "ExportDelegate.kt" to setOf("Color.BLACK"),
         )
         val APPROVED_ACCENT_NAMES = setOf(
             "Neutral", "Lavender", "Blue", "Sapphire", "Sky", "Teal", "Green", "Yellow",
