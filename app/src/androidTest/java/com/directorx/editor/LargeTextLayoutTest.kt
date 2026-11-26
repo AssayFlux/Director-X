@@ -168,6 +168,9 @@ class LargeTextLayoutTest {
     }
 
     private fun waitForPanelClosed(panel: PanelId) {
+        // The click updates state before AnimatedVisibility removes the sheet.
+        // Advance Compose's test clock so the state-backed root semantics is fresh.
+        compose.waitForIdle()
         compose.waitUntil(timeoutMillis = 5_000L) {
             compose.onNodeWithTag(DirectorXTestTags.EDITOR_SCREEN)
                 .fetchSemanticsNode()
