@@ -103,6 +103,12 @@ class DirectorXAppearancePolicyTest {
 
     @Test
     fun everyAppearanceProvidesDistinctSemanticAccentsAndReadableActionLabels() {
+        val statusPalettes = DirectorXThemeDefaults.availableThemes.map { mode ->
+            val colors = DirectorXThemeDefaults.colorsFor(mode)
+            listOf(colors.success, colors.warning, colors.danger)
+        }
+        assertEquals("Status accents must be derived from each selected appearance.", 10, statusPalettes.distinct().size)
+
         DirectorXThemeDefaults.availableThemes.forEach { mode ->
             val colors = DirectorXThemeDefaults.colorsFor(mode)
             assertTrue("$mode must expose a distinct secondary accent", colors.accent != colors.accentSecondary)
