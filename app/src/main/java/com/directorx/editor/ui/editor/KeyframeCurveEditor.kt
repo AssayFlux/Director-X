@@ -135,6 +135,7 @@ fun KeyframeCurveEditor(
         modifier = modifier,
         scrollable = true,
         closeContentDescription = stringResource(R.string.panel_keyframes_close_cd),
+        closeButtonTestTag = DirectorXTestTags.KEYFRAME_EDITOR_CLOSE,
         headerActions = {
             androidx.compose.foundation.layout.Box {
                 PremiumPanelIconButton(
