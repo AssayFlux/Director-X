@@ -208,6 +208,7 @@ private data class BlendModeSection(
     val modes: List<BlendMode>
 )
 
+@Composable
 private fun blendModeSections(): List<BlendModeSection> = listOf(
     BlendModeSection(
         title = "Foundation",
