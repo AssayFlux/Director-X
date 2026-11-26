@@ -1702,8 +1702,21 @@ fun ExportSheet(
                         )
                     }
                 }
+                val selectedTemplateLabel = when (config.filenameTemplate) {
+                    "{name}" -> R.string.export_filename_name
+                    "{name}_{date}" -> R.string.export_filename_name_date
+                    "{name}_{date}_{time}" -> R.string.export_filename_name_timestamp
+                    "{name}_{res}_{fps}" -> R.string.export_filename_name_specs
+                    "{name}_{preset}" -> R.string.export_filename_name_preset
+                    "{name}_{duration}" -> R.string.export_filename_name_duration
+                    "{name}_{sizeMB}" -> R.string.export_filename_name_size
+                    else -> R.string.export_filename_name
+                }
                 Text(
-                    text = stringResource(R.string.export_current_filename_template, config.filenameTemplate),
+                    text = stringResource(
+                        R.string.export_current_filename_template,
+                        stringResource(selectedTemplateLabel)
+                    ),
                     color = semanticColors.subtext,
                     style = MaterialTheme.typography.bodySmall
                 )
