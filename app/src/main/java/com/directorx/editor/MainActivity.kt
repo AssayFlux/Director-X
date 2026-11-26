@@ -26,11 +26,14 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.SideEffect
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.navigation.compose.NavHost
@@ -41,6 +44,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
+import androidx.core.view.WindowCompat
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -60,6 +64,7 @@ import com.directorx.editor.ui.projects.ProjectListScreen
 import com.directorx.editor.ui.settings.SettingsScreen
 import com.directorx.editor.ui.theme.AssayFluxLogo
 import com.directorx.editor.ui.theme.DirectorXTheme
+import com.directorx.editor.ui.theme.LocalDirectorXColors
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -107,6 +112,20 @@ class MainActivity : ComponentActivity() {
         setContent {
             val settings by settingsRepository.settings.collectAsStateWithLifecycle(initialValue = AppSettings())
             DirectorXTheme(appearanceMode = settings.appearanceMode) {
+                val appearanceColors = LocalDirectorXColors.current
+                SideEffect {
+                    // Edge-to-edge system bars must follow the selected appearance,
+                    // not the device's unrelated light/dark system setting.
+                    val lightSystemBarIcons = appearanceColors.background.luminance() > 0.5f
+                    val insetsController = WindowCompat.getInsetsController(
+                        this@MainActivity.window,
+                        this@MainActivity.window.decorView,
+                    )
+                    insetsController.isAppearanceLightStatusBars = lightSystemBarIcons
+                    insetsController.isAppearanceLightNavigationBars = lightSystemBarIcons
+                    this@MainActivity.window.statusBarColor = appearanceColors.background.toArgb()
+                    this@MainActivity.window.navigationBarColor = appearanceColors.background.toArgb()
+                }
                 val navController = rememberNavController()
                 val currentBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = currentBackStackEntry?.destination?.route
