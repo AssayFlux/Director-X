@@ -36,6 +36,7 @@ EXPECTED_TESTS = frozenset(
         "com.directorx.editor.LargeTextLayoutTest.fontScale300_desktopSurfacesRemainUsable",
         "com.directorx.editor.LargeTextLayoutTest.fontScale300_largeScreenSurfacesRemainUsable",
         "com.directorx.editor.LargeTextLayoutTest.fontScale300_phoneSurfacesRemainUsable",
+        "com.directorx.editor.ui.editor.EffectAdjustmentPanelLayoutTest.narrowShortViewportKeepsEveryEffectParameterReachable",
         "com.directorx.editor.engine.AudioOnlyExportContractTest.audioOnlyExportProducesTrackVerifiedM4a",
         "com.directorx.editor.engine.AudioOnlyExportContractTest.verifierRejectsRequestedVideoCodecMismatch",
         "com.directorx.editor.engine.AudioOnlyExportContractTest.verifierRejectsVideoOutputWhenAudioOnlyExpected",
