@@ -111,10 +111,10 @@ internal fun TimelineTextActionChip(
     val colors = LocalDirectorXColors.current
     Surface(
         modifier = Modifier
-            .clickable(role = Role.Button, onClick = onClick)
-            // The minimum must be inside clickable; otherwise only the text's
-            // intrinsic height is exposed as the touch target.
-            .requiredHeightIn(min = TouchTarget.minimum),
+            // Apply the minimum before clickable so the actual action node—not
+            // just its outer layout—has the full 48dp hit height.
+            .requiredHeightIn(min = TouchTarget.minimum)
+            .clickable(role = Role.Button, onClick = onClick),
         color = colors.panelHighest,
         shape = RoundedCornerShape(Radius.sm),
         border = BorderStroke(1.dp, if (colors.highContrast) colors.cardStrokeStrong else colors.cardStroke)
