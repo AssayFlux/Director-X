@@ -299,6 +299,7 @@ fun EditorScreen(
     val previewFirstLayout = remember(
         adaptiveLayoutDecision.paneMode,
         screenHeightDp,
+        configuration.fontScale,
         isCompactEditorHeight,
         isClipMode,
         state.currentTool,
@@ -316,7 +317,8 @@ fun EditorScreen(
             openPanels = state.panel.panels.openPanels,
             selectedEffectActive = state.selectedEffectId != null,
             bottomToolPanelExpanded = isToolPanelExpanded,
-            timelineEditGestureActive = isTimelineEditGestureActive
+            timelineEditGestureActive = isTimelineEditGestureActive,
+            fontScale = configuration.fontScale
         )
     }
     val isTrimInteractionActive = isTrimToolActive || isTimelineEditGestureActive
