@@ -44,71 +44,86 @@ data class ProjectTemplateUI(
     val descriptionResId: Int,
     val category: TemplateCategory,
     val icon: ImageVector,
-    val accentColor: Color,
+    val accentColor: Color = Color.Unspecified,
     val aspectRatio: AspectRatio,
     val tracks: List<TrackType>,
     val suggestedDurationResId: Int
 )
 
+
+@Composable
+internal fun ProjectTemplateUI.appearanceAccentColor(): Color {
+    val colors = LocalDirectorXColors.current
+    return when (category) {
+        TemplateCategory.BLANK -> colors.subtext
+        TemplateCategory.VLOG -> colors.accentTertiary
+        TemplateCategory.TUTORIAL -> colors.accentSecondary
+        TemplateCategory.SHORT_FORM -> colors.accent
+        TemplateCategory.CINEMATIC -> colors.warning
+        TemplateCategory.SLIDESHOW -> colors.success
+        TemplateCategory.PROMO -> colors.accentTertiary
+    }
+}
+
 val projectTemplates = listOf(
     ProjectTemplateUI(
         id = "blank", nameResId = R.string.template_blank_name, descriptionResId = R.string.template_blank_desc,
-        category = TemplateCategory.BLANK, icon = Icons.Default.Add, accentColor = DirectorXAccents.Neutral,
+        category = TemplateCategory.BLANK, icon = Icons.Default.Add,
         aspectRatio = AspectRatio.RATIO_16_9, tracks = listOf(TrackType.VIDEO, TrackType.AUDIO),
         suggestedDurationResId = R.string.template_blank_duration
     ),
     ProjectTemplateUI(
         id = "vlog", nameResId = R.string.template_vlog_name, descriptionResId = R.string.template_vlog_desc,
-        category = TemplateCategory.VLOG, icon = Icons.Default.Videocam, accentColor = DirectorXAccents.Mauve,
+        category = TemplateCategory.VLOG, icon = Icons.Default.Videocam,
         aspectRatio = AspectRatio.RATIO_16_9,
         tracks = listOf(TrackType.VIDEO, TrackType.VIDEO, TrackType.AUDIO, TrackType.TEXT),
         suggestedDurationResId = R.string.template_vlog_duration
     ),
     ProjectTemplateUI(
         id = "tutorial", nameResId = R.string.template_tutorial_name, descriptionResId = R.string.template_tutorial_desc,
-        category = TemplateCategory.TUTORIAL, icon = Icons.Default.School, accentColor = DirectorXAccents.Blue,
+        category = TemplateCategory.TUTORIAL, icon = Icons.Default.School,
         aspectRatio = AspectRatio.RATIO_16_9,
         tracks = listOf(TrackType.VIDEO, TrackType.OVERLAY, TrackType.AUDIO, TrackType.TEXT),
         suggestedDurationResId = R.string.template_tutorial_duration
     ),
     ProjectTemplateUI(
         id = "short_tiktok", nameResId = R.string.template_short_tiktok_name, descriptionResId = R.string.template_short_tiktok_desc,
-        category = TemplateCategory.SHORT_FORM, icon = Icons.Default.PhoneAndroid, accentColor = DirectorXAccents.Red,
+        category = TemplateCategory.SHORT_FORM, icon = Icons.Default.PhoneAndroid,
         aspectRatio = AspectRatio.RATIO_9_16,
         tracks = listOf(TrackType.VIDEO, TrackType.AUDIO, TrackType.TEXT),
         suggestedDurationResId = R.string.template_short_tiktok_duration
     ),
     ProjectTemplateUI(
         id = "short_reel", nameResId = R.string.template_reel_name, descriptionResId = R.string.template_reel_desc,
-        category = TemplateCategory.SHORT_FORM, icon = Icons.Default.CameraRoll, accentColor = DirectorXAccents.Peach,
+        category = TemplateCategory.SHORT_FORM, icon = Icons.Default.CameraRoll,
         aspectRatio = AspectRatio.RATIO_9_16,
         tracks = listOf(TrackType.VIDEO, TrackType.AUDIO, TrackType.AUDIO, TrackType.TEXT),
         suggestedDurationResId = R.string.template_reel_duration
     ),
     ProjectTemplateUI(
         id = "cinematic", nameResId = R.string.template_cinematic_name, descriptionResId = R.string.template_cinematic_desc,
-        category = TemplateCategory.CINEMATIC, icon = Icons.Default.Movie, accentColor = DirectorXAccents.Yellow,
+        category = TemplateCategory.CINEMATIC, icon = Icons.Default.Movie,
         aspectRatio = AspectRatio.RATIO_21_9,
         tracks = listOf(TrackType.VIDEO, TrackType.VIDEO, TrackType.AUDIO, TrackType.AUDIO, TrackType.TEXT),
         suggestedDurationResId = R.string.template_cinematic_duration
     ),
     ProjectTemplateUI(
         id = "slideshow", nameResId = R.string.template_slideshow_name, descriptionResId = R.string.template_slideshow_desc,
-        category = TemplateCategory.SLIDESHOW, icon = Icons.Default.PhotoLibrary, accentColor = DirectorXAccents.Green,
+        category = TemplateCategory.SLIDESHOW, icon = Icons.Default.PhotoLibrary,
         aspectRatio = AspectRatio.RATIO_16_9,
         tracks = listOf(TrackType.VIDEO, TrackType.AUDIO, TrackType.TEXT),
         suggestedDurationResId = R.string.template_slideshow_duration
     ),
     ProjectTemplateUI(
         id = "promo", nameResId = R.string.template_promo_name, descriptionResId = R.string.template_promo_desc,
-        category = TemplateCategory.PROMO, icon = Icons.Default.Campaign, accentColor = DirectorXAccents.Teal,
+        category = TemplateCategory.PROMO, icon = Icons.Default.Campaign,
         aspectRatio = AspectRatio.RATIO_16_9,
         tracks = listOf(TrackType.VIDEO, TrackType.OVERLAY, TrackType.AUDIO, TrackType.TEXT),
         suggestedDurationResId = R.string.template_promo_duration
     ),
     ProjectTemplateUI(
         id = "square_social", nameResId = R.string.template_square_name, descriptionResId = R.string.template_square_desc,
-        category = TemplateCategory.PROMO, icon = Icons.Default.CropSquare, accentColor = DirectorXAccents.Blue,
+        category = TemplateCategory.PROMO, icon = Icons.Default.CropSquare,
         aspectRatio = AspectRatio.RATIO_1_1,
         tracks = listOf(TrackType.VIDEO, TrackType.AUDIO, TrackType.TEXT),
         suggestedDurationResId = R.string.template_square_duration
@@ -117,7 +132,6 @@ val projectTemplates = listOf(
         id = "custom_canvas", nameResId = R.string.template_custom_canvas_name,
         descriptionResId = R.string.template_custom_canvas_desc,
         category = TemplateCategory.BLANK, icon = Icons.Default.CropSquare,
-        accentColor = DirectorXAccents.Neutral,
         aspectRatio = AspectRatio.CUSTOM,
         tracks = listOf(TrackType.VIDEO, TrackType.AUDIO),
         suggestedDurationResId = R.string.template_blank_duration
@@ -486,7 +500,7 @@ private fun ProjectTemplateCard(
                     Icon(
                         template.icon,
                         null,
-                        tint = template.accentColor,
+                        tint = template.appearanceAccentColor(),
                         modifier = Modifier.size(22.dp)
                     )
                 }
