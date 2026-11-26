@@ -63,7 +63,9 @@ class PreviewSurfaceRecoveryTest {
         assertTrue(source.contains("if (playerView.player !== previewPlayer) playerView.player = previewPlayer"))
         // Issue #54: the engine swaps out a player whose compositor has ended, and
         // the view has to follow it rather than keep rendering the released one.
-        assertTrue(source.contains("remember(engine, playerGeneration) { engine.getPlayer() }"))
+        assertTrue(source.contains("remember(engine, playerGeneration, totalDurationMs > 0L)"))
+        assertTrue(source.contains("if (totalDurationMs > 0L) engine.getPlayer() else null"))
+        assertTrue(source.contains("if (totalDurationMs > 0L && previewPlayer != null)"))
         assertFalse(source.contains("else -> {\n                                AndroidView("))
     }
 

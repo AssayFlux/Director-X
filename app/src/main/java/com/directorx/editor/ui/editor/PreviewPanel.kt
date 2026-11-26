@@ -85,6 +85,7 @@ import com.directorx.editor.model.TextOverlay
 import com.directorx.editor.ui.theme.DirectorXChromeIconButton
 import com.directorx.editor.ui.theme.DirectorXPrimaryButton
 import com.directorx.editor.ui.theme.Radius
+import com.directorx.editor.ui.theme.TouchTarget
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -331,11 +332,16 @@ fun PreviewPanel(
                         // The engine replaces a player whose compositor has ended (issue #54),
                         // so the listener and the PlayerView follow the current instance.
                         val playerGeneration by engine.previewPlayerGeneration.collectAsState()
-                        val previewPlayer = remember(engine, playerGeneration) { engine.getPlayer() }
+                        // A blank project has no preview composition or PlayerView. Do not
+                        // allocate a CompositionPlayer (and its playback thread/codec lease)
+                        // just to register a listener; the first non-empty timeline creates it.
+                        val previewPlayer = remember(engine, playerGeneration, totalDurationMs > 0L) {
+                            if (totalDurationMs > 0L) engine.getPlayer() else null
+                        }
                         DisposableEffect(previewPlayer) {
                             // Capture the player reference once; reuse on dispose to avoid
                             // attaching/removing on different player instances if engine state changes.
-                            val capturedPlayer = previewPlayer
+                            val capturedPlayer = previewPlayer ?: return@DisposableEffect onDispose {}
                             hasPlaybackError = false
                             val listener = object : Player.Listener {
                                 override fun onPlaybackStateChanged(state: Int) {
@@ -358,7 +364,7 @@ fun PreviewPanel(
                         // Removing it for a timeline gap, still image, or transient error destroys
                         // its SurfaceView while the hardware codec is active. An empty project has
                         // no decoder/surface to preserve, so do not mount Android controls there.
-                        if (totalDurationMs > 0L) {
+                        if (totalDurationMs > 0L && previewPlayer != null) {
                             AndroidView(
                                 factory = { ctx ->
                                     PlayerView(ctx).apply {
@@ -604,7 +610,11 @@ fun PreviewPanel(
                     containerColor = if (isLooping) DirectorXAccents.Sky.copy(alpha = 0.14f) else Color.Transparent,
                     borderColor = Color.Transparent,
                     shape = RoundedCornerShape(Radius.sm),
-                    size = 40.dp,
+                    size = TouchTarget.minimum,
+                    // The native accessibility bounds are clipped at the preview
+                    // row's left inset on compact layouts. Keep the icon visual at
+                    // 48dp while giving its clickable surface enough width.
+                    buttonModifier = Modifier.width(64.dp),
                     iconSize = 19.dp,
                 )
                 Spacer(modifier = Modifier.weight(1f))
@@ -616,7 +626,7 @@ fun PreviewPanel(
                     containerColor = Color.Transparent,
                     borderColor = Color.Transparent,
                     shape = RoundedCornerShape(Radius.sm),
-                    size = 40.dp,
+                    size = TouchTarget.minimum,
                     iconSize = 20.dp,
                 )
                 DirectorXChromeIconButton(
@@ -631,7 +641,7 @@ fun PreviewPanel(
                     containerColor = DirectorXAccents.Sky,
                     borderColor = DirectorXAccents.Sky.copy(alpha = 0.72f),
                     shape = RoundedCornerShape(Radius.sm),
-                    size = 44.dp,
+                    size = TouchTarget.minimum,
                     iconSize = 22.dp,
                 )
                 DirectorXChromeIconButton(
@@ -642,7 +652,7 @@ fun PreviewPanel(
                     containerColor = Color.Transparent,
                     borderColor = Color.Transparent,
                     shape = RoundedCornerShape(Radius.sm),
-                    size = 40.dp,
+                    size = TouchTarget.minimum,
                     iconSize = 20.dp,
                 )
                 Spacer(modifier = Modifier.weight(1f))

@@ -179,6 +179,9 @@ internal fun playbackSessionNeedsReset(
     playbackState == Player.STATE_IDLE || playbackState == Player.STATE_ENDED ||
     (playbackState == Player.STATE_BUFFERING && !playbackRequested)
 
+/** A CompositionPlayer cannot service seeks until prepare() has created its internal player. */
+internal fun canSeekPreviewPlayer(compositionPrepared: Boolean): Boolean = compositionPrepared
+
 internal fun canCoalesceAdjacentPreviewCuts(left: Clip, right: Clip): Boolean =
     left.timelineEndMs == right.timelineStartMs &&
         left.trimEndMs == right.trimStartMs &&
@@ -259,6 +262,13 @@ class VideoEngine @Inject constructor(
     )
 
     private var player: CompositionPlayer? = null
+    // getPlayer() is also used to attach the preview surface before a project
+    // composition is assigned. CompositionPlayer.seekTo() dereferences its
+    // CompositionPlayerInternal, which is created by setComposition(); seeking
+    // before that point throws a NullPointerException inside Media3. We wait
+    // until prepare() completes before allowing any seek into the new session.
+    private var previewCompositionPrepared = false
+    private var pendingPreviewSeekPositionMs: Long? = null
     private var playerLease: CodecLease<Unit>? = null
     private var playerListener: Player.Listener? = null
 
@@ -438,6 +448,7 @@ class VideoEngine @Inject constructor(
                 val previewAudioAttributes = DirectorXAudioFocusPolicy.buildPreviewAttributes()
                 logAndroid15LoudnessIntegration("Preview")
                 val graphWatch = EndOfInputWatchingVideoGraphFactory(MultipleInputVideoGraph.Factory())
+                previewCompositionPrepared = false
                 player = CompositionPlayer.Builder(context)
                     .setLoadControl(loadControl)
                     .setVideoGraphFactory(graphWatch)
@@ -529,6 +540,7 @@ class VideoEngine @Inject constructor(
         previewTracks = tracks
         previewMissingClipIds = missingClipIds
         previewConfig = config
+        previewCompositionPrepared = false
         previewCompositionPlan = PreviewCompositionPlan.create(tracks)
         val composition = buildPreviewComposition(
             plan = previewCompositionPlan,
@@ -540,12 +552,31 @@ class VideoEngine @Inject constructor(
         p.setComposition(composition, startPositionMs.coerceIn(0L, previewCompositionPlan.durationMs))
         setPreviewSpeed(1f)
         p.prepare()
+        previewCompositionPrepared = true
+        val pendingSeek = pendingPreviewSeekPositionMs
+        pendingPreviewSeekPositionMs = null
+        if (pendingSeek != null) {
+            p.seekTo(pendingSeek.coerceIn(0L, previewCompositionPlan.durationMs))
+        }
         if (resumePlayback) p.play()
     }
 
     fun seekTo(positionMs: Long) {
-        if (renewSpentPreviewPlayer(positionMs)) return
-        player?.seekTo(positionMs.coerceIn(0L, previewCompositionPlan.durationMs))
+        val clampedPositionMs = positionMs.coerceIn(0L, previewCompositionPlan.durationMs)
+        if (!canSeekPreviewPlayer(previewCompositionPrepared)) {
+            // A surface can create a CompositionPlayer before a project composition
+            // is assigned. If that player exists, preserve the final scrub position
+            // and replay it after prepare(); if no player exists, EditorViewModel's
+            // playhead state is the source of truth used by the later prepareTimeline().
+            if (player != null) {
+                // The current plan may still be empty; clamp against the new plan later.
+                pendingPreviewSeekPositionMs = positionMs.coerceAtLeast(0L)
+            }
+            AppLog.d(TAG, "Deferring preview seek until the composition is prepared")
+            return
+        }
+        if (renewSpentPreviewPlayer(clampedPositionMs)) return
+        player?.seekTo(clampedPositionMs)
     }
 
     /** Swaps a spent preview player for a fresh one prepared at [positionMs]. */
@@ -569,6 +600,10 @@ class VideoEngine @Inject constructor(
     fun play() { player?.play() }
 
     fun playFromTimelinePosition(positionMs: Long, restartSession: Boolean = false) {
+        if (!canSeekPreviewPlayer(previewCompositionPrepared)) {
+            AppLog.w(TAG, "Ignoring playback request before a preview composition has been prepared")
+            return
+        }
         if (renewSpentPreviewPlayer(positionMs)) {
             player?.play()
             return

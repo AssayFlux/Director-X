@@ -51,7 +51,7 @@ internal class QaEditorHarness(
         get() = targetContext.resources.displayMetrics.density
 
     val touchSlopPx: Float
-        get() = ViewConfiguration.get(targetContext).scaledTouchSlop.toFloat()
+        get() = ViewConfiguration.get(compose.activity).scaledTouchSlop.toFloat()
 
     fun setUp() {
         assertTrue("QA editor tests must run against the QA build type", BuildConfig.QA_TIMELINE_HARNESS_ENABLED)
@@ -176,14 +176,13 @@ internal class QaEditorHarness(
                 node.config.getOrNull(SemanticsProperties.Text)?.joinToString("") { it.text }.orEmpty()
             }
         compose.onNodeWithTag(DirectorXTestTags.UNDO_HISTORY_CLOSE).performClick()
-        // Assert the editor's actual panel state rather than waiting for an
-        // AnimatedVisibility child to disappear from the semantics tree. The
-        // transition may retain its closing content briefly after state changes.
+        // Verify the user-visible panel has actually closed. BottomSheetSlot
+        // animates its exit, so wait for the close control to leave the semantics
+        // tree instead of depending on an internal panel-state test property.
         compose.waitUntil(timeoutMillis = 5_000L) {
-            compose.onNodeWithTag(DirectorXTestTags.EDITOR_SCREEN)
-                .fetchSemanticsNode()
-                .config
-                .getOrNull(DirectorXTestTags.OPEN_PANEL_IDS)?.contains("UNDO_HISTORY") == false
+            compose.onAllNodesWithTag(DirectorXTestTags.UNDO_HISTORY_CLOSE)
+                .fetchSemanticsNodes()
+                .isEmpty()
         }
         compose.waitForIdle()
         return descriptions
