@@ -283,7 +283,7 @@ fun TextTemplateGallery(
     val semanticColors = LocalDirectorXColors.current
     var selectedCategory by remember { mutableStateOf<TextTemplateCategory?>(null) }
     var showAnimated by remember { mutableStateOf(false) }
-    val animatedTemplates = remember { animatedTextTemplates() }
+    val animatedTemplates = animatedTextTemplates()
     val visibleStaticTemplates = remember(selectedCategory) {
         if (selectedCategory == null) {
             builtInTextTemplates
@@ -518,7 +518,7 @@ fun TextTemplateGallery(
                         R.string.panel_text_template_category_format,
                         selectedCategory?.displayName ?: stringResource(R.string.panel_text_template_all)
                     ),
-                    accent = selectedCategory?.let(::templateCategoryAccent) ?: DirectorXAccents.Sky
+                    accent = selectedCategory?.let { templateCategoryAccent(it) } ?: DirectorXAccents.Sky
                 )
             }
         }
@@ -879,6 +879,7 @@ private data class AnimatedTextTemplateDefinition(
     }
 }
 
+@Composable
 private fun animatedTextTemplates(): List<AnimatedTextTemplateDefinition> = listOf(
     AnimatedTextTemplateDefinition(
         id = "anim_lower_third_slide",
@@ -970,6 +971,7 @@ private fun animatedTextTemplates(): List<AnimatedTextTemplateDefinition> = list
     )
 )
 
+@Composable
 private fun templateCategoryAccent(category: TextTemplateCategory): Color = when (category) {
     TextTemplateCategory.LOWER_THIRD -> DirectorXAccents.Sapphire
     TextTemplateCategory.TITLE_CARD -> DirectorXAccents.Yellow
