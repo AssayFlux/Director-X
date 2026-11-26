@@ -642,7 +642,7 @@ private fun VUMeter(
         val rightColor = when {
             smoothedRight > 0.9f -> semanticColors.danger
             smoothedRight > 0.7f -> semanticColors.warning
-            else -> DirectorXAccents.Green
+            else -> semanticColors.success
         }
         drawRect(
             color = rightColor,
