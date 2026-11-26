@@ -266,6 +266,7 @@ private fun ScopeLoadingState() {
     }
 }
 
+@Composable
 private fun ScopeType.accent(): Color = when (this) {
     ScopeType.HISTOGRAM -> DirectorXAccents.Peach
     ScopeType.WAVEFORM -> DirectorXAccents.Blue
