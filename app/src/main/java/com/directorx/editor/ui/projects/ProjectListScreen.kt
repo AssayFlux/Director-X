@@ -1190,7 +1190,7 @@ private fun ProjectEmptyState(
                     style = MaterialTheme.typography.labelLarge
                 )
             }
-            projectTemplates.chunked(3).forEach { rowTemplates ->
+            projectTemplates.chunked(2).forEach { rowTemplates ->
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(Spacing.sm)
@@ -1204,7 +1204,7 @@ private fun ProjectEmptyState(
                         )
                     }
 
-                    repeat(3 - rowTemplates.size) {
+                    repeat(2 - rowTemplates.size) {
                         Spacer(modifier = Modifier.weight(1f))
                     }
                 }
@@ -1291,7 +1291,7 @@ private fun ProjectTemplateShortcut(
         modifier = modifier
             .height(88.dp)
             .background(
-                color = template.accentColor.copy(alpha = 0.09f),
+                color = template.appearanceAccentColor().copy(alpha = 0.09f),
                 shape = RoundedCornerShape(Radius.md)
             )
             .clickable(enabled = enabled, role = Role.Button, onClick = onClick)
