@@ -505,7 +505,7 @@ private fun ProjectTemplateCard(
                 }
                 Text(
                     template.aspectRatio.label,
-                    color = template.accentColor,
+                    color = template.appearanceAccentColor(),
                     style = MaterialTheme.typography.labelSmall,
                     modifier = Modifier
                         .background(LocalDirectorXColors.current.canvas.copy(alpha = 0.16f), RoundedCornerShape(10.dp))
@@ -539,7 +539,7 @@ private fun ProjectTemplateCard(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                TemplateBadge(text = category, accent = template.accentColor)
+                TemplateBadge(text = category, accent = template.appearanceAccentColor())
                 TemplateBadge(text = stringResource(template.suggestedDurationResId), accent = LocalDirectorXColors.current.subtext)
                 TemplateBadge(text = stringResource(R.string.template_tracks_format, template.tracks.size), accent = LocalDirectorXColors.current.subtext)
             }
