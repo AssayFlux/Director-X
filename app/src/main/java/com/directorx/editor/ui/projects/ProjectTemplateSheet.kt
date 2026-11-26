@@ -28,7 +28,6 @@ import com.directorx.editor.R
 import com.directorx.editor.engine.UserTemplate
 import com.directorx.editor.model.*
 import com.directorx.editor.ui.DirectorXTestTags
-import com.directorx.editor.ui.theme.DirectorXAccents
 import com.directorx.editor.ui.theme.LocalDirectorXColors
 import com.directorx.editor.ui.theme.DirectorXChromeIconButton
 import com.directorx.editor.ui.theme.DirectorXDialogIcon
