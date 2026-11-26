@@ -282,7 +282,7 @@ object DirectorXThemeDefaults {
             success=Color(0xFF47734B),warning=Color(0xFF946B12),
             danger=Color(0xFFB3261E),focusRing=if(hc) text else p.accent,canvas=p.canvas,
             selectedSurface=p.raised,disabledSurface=p.panel,surfaceBase=p.canvas,surfaceLow=p.panel,
-            surface=p.panel,surfaceHigh=p.raised,overlay=stroke,overlayStrong=text,onAccent=if(contrastRatio(text,p.accent)>=4.5) text else Color.White
+            surface=p.panel,surfaceHigh=p.raised,overlay=stroke,overlayStrong=text,onAccent=readableOnColor(p.accent,text)
         )
     }
 
