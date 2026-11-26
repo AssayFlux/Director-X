@@ -338,6 +338,7 @@ fun KeyframeCurveEditor(
                     clipDurationMs = clipDurationMs,
                     playheadMs = playheadMs,
                     activeProperties = activeProperties,
+                    propertyColors = propertyColors,
                     selectedKeyframe = selectedKeyframe,
                     onKeyframeSelected = { selectedKeyframe = it },
                     onKeyframeMoved = { keyframe, newTime, newValue ->
@@ -573,6 +574,7 @@ internal fun CurveCanvas(
     clipDurationMs: Long,
     playheadMs: Long,
     activeProperties: Set<KeyframeProperty>,
+    propertyColors: Map<KeyframeProperty, Color>,
     selectedKeyframe: Keyframe?,
     onKeyframeSelected: (Keyframe?) -> Unit,
     onKeyframeMoved: (Keyframe, Long, Float) -> Unit,
