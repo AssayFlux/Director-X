@@ -239,6 +239,9 @@ class QaTimelineGestureTest {
         // on API 35/37; click the visible header action directly.
         compose.onNodeWithContentDescription(editor.targetContext.getString(R.string.panel_keyframes_close_cd))
             .performClick()
+        // waitUntil polls wall time; let Compose apply the close callback and finish
+        // the AnimatedVisibility transition before checking the panel state.
+        compose.waitForIdle()
         compose.waitUntil(timeoutMillis = 5_000L) {
             val openPanels = compose.onNodeWithTag(DirectorXTestTags.EDITOR_SCREEN)
                 .fetchSemanticsNode()
