@@ -146,6 +146,7 @@ private fun severityLabel(s: Severity): String = stringResource(
     }
 )
 
+@Composable
 private fun severityColor(s: Severity): Color = when (s) {
     // Severity rank: REQUIRED is the strongest disclosure ask. Use Peach so
     // it reads as "attention" without escalating to error-red, which would
