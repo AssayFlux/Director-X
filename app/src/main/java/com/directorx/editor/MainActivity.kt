@@ -71,6 +71,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -111,7 +112,17 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            val settings by settingsRepository.settings.collectAsStateWithLifecycle(initialValue = AppSettings())
+            val cachedAppearanceMode = remember { settingsRepository.cachedAppearanceMode() }
+            val settings by settingsRepository.settings.collectAsStateWithLifecycle(
+                initialValue = AppSettings(appearanceMode = cachedAppearanceMode)
+            )
+            // Seed the synchronous startup cache from DataStore after its first read.
+            // Future launches can render the user's saved appearance on the first
+            // Compose frame instead of briefly showing the default cream palette.
+            LaunchedEffect(Unit) {
+                val persistedSettings = settingsRepository.settings.first()
+                settingsRepository.cacheAppearanceMode(persistedSettings.appearanceMode)
+            }
             DirectorXTheme(appearanceMode = settings.appearanceMode) {
                 val appearanceColors = LocalDirectorXColors.current
                 SideEffect {

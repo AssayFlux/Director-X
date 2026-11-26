@@ -238,9 +238,10 @@ fun DirectorXStatusTag(
     icon: ImageVector? = null
 ) {
     val colors = LocalDirectorXColors.current
+    val controlColors = DirectorXThemeDefaults.accentControlColors(colors, accent)
     Surface(
         modifier = modifier,
-        color = accent.copy(alpha = if (colors.highContrast) 0.26f else 0.12f),
+        color = controlColors.container,
         shape = RoundedCornerShape(Radius.xs),
         border = BorderStroke(1.dp, accent.copy(alpha = if (colors.highContrast) 0.95f else 0.2f))
     ) {
@@ -253,13 +254,13 @@ fun DirectorXStatusTag(
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    tint = accent,
+                    tint = controlColors.content,
                     modifier = Modifier.size(13.dp)
                 )
             }
             Text(
                 text = text,
-                color = accent,
+                color = controlColors.content,
                 style = MaterialTheme.typography.labelMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -288,6 +289,7 @@ fun DirectorXFilterChip(
 ) {
     val colors = LocalDirectorXColors.current
     val resolvedAccent = if (accent == Color.Unspecified) colors.accent else accent
+    val controlColors = DirectorXThemeDefaults.accentControlColors(colors, resolvedAccent)
     FilterChip(
         selected = selected,
         enabled = enabled,
@@ -327,9 +329,9 @@ fun DirectorXFilterChip(
         colors = FilterChipDefaults.filterChipColors(
             containerColor = colors.panelHighest,
             labelColor = colors.subtext,
-            selectedContainerColor = if (colors.highContrast) resolvedAccent else resolvedAccent.copy(alpha = 0.16f),
-            selectedLabelColor = if (colors.highContrast) Mocha.Crust else resolvedAccent,
-            selectedLeadingIconColor = if (colors.highContrast) Mocha.Crust else resolvedAccent
+            selectedContainerColor = controlColors.container,
+            selectedLabelColor = controlColors.content,
+            selectedLeadingIconColor = controlColors.content
         ),
         border = FilterChipDefaults.filterChipBorder(
             enabled = enabled,

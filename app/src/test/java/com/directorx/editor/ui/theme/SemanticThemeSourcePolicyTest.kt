@@ -16,12 +16,10 @@ class SemanticThemeSourcePolicyTest {
         val files = sourceRoots.flatMap { directory ->
             directory.walkTopDown().filter { it.isFile && it.extension == "kt" }.toList()
         }
-        val rawColorFiles = listOf("editor", "projects", "settings").flatMap { area ->
-            File(root, "app/src/main/java/com/directorx/editor/ui/$area")
-                .walkTopDown()
-                .filter { it.isFile && it.extension == "kt" }
-                .toList()
-        }
+        // Audit every feature area above, including export and media-picker. The
+        // explicit allowlist below is reserved for signal/content/preview colors whose
+        // meaning must not change with the UI appearance.
+        val rawColorFiles = files
 
         assertTrue("Expected feature source files to audit.", files.isNotEmpty())
         files.forEach { file ->
@@ -36,13 +34,14 @@ class SemanticThemeSourcePolicyTest {
             }
         }
         rawColorFiles.forEach { file ->
-            val allowedRawColors = INSTRUMENT_COLOR_ALLOWLIST[file.name].orEmpty()
-            val violations = RAW_COLOR_LITERAL.findAll(file.readText())
-                .map { it.value }
+            val relativePath = file.relativeTo(root).invariantSeparatorsPath
+            val allowedRawColors = APPROVED_FIXED_COLOR_ALLOWLIST[relativePath].orEmpty()
+            val violations = RAW_COLOR_EXPRESSION.findAll(file.readText())
+                .map { it.value.replace(Regex("\\s+"), "") }
                 .filterNot { it in allowedRawColors }
                 .toList()
             assertTrue(
-                "${file.relativeTo(root)} contains non-content-driven raw color literals: $violations",
+                "$relativePath contains non-content-driven raw color expressions: $violations",
                 violations.isEmpty(),
             )
         }
@@ -108,7 +107,9 @@ class SemanticThemeSourcePolicyTest {
     private companion object {
         const val RAW_MOCHA_IMPORT = "import com.directorx.editor.ui.theme.Mocha"
         val APPROVED_ACCENT = Regex("DirectorXAccents\\.([A-Za-z0-9_]+)")
-        val RAW_COLOR_LITERAL = Regex("Color\\(0x[0-9A-Fa-f]+\\)")
+        val RAW_COLOR_EXPRESSION = Regex(
+            """Color\s*\(\s*0x[0-9A-Fa-f]+\s*\)|Color\.(?:White|Black|WHITE|BLACK)\b"""
+        )
         val BLOCK_COMMENT = Regex("/\\*.*?\\*/", RegexOption.DOT_MATCHES_ALL)
         val LINE_COMMENT = Regex("//[^\\r\\n]*")
         val ROUNDED_CORNER_CALL = Regex(
@@ -123,12 +124,17 @@ class SemanticThemeSourcePolicyTest {
          * and content-control colour must resolve through semantic, accent, or content
          * tokens instead.
          */
-        val INSTRUMENT_COLOR_ALLOWLIST = mapOf(
-            "VideoScopes.kt" to setOf(
+        val APPROVED_FIXED_COLOR_ALLOWLIST = mapOf(
+            "app/src/main/java/com/directorx/editor/ui/editor/VideoScopes.kt" to setOf(
                 "Color(0xFFFF4444)",
                 "Color(0xFF44FF44)",
                 "Color(0xFF4488FF)",
             ),
+            "app/src/main/java/com/directorx/editor/ui/editor/MotionPathOverlay.kt" to setOf("Color.White"),
+            "app/src/main/java/com/directorx/editor/ui/editor/PreviewPanel.kt" to setOf("Color.White"),
+            "app/src/main/java/com/directorx/editor/ui/editor/ColorGradingPanel.kt" to setOf("Color.White", "Color.Black"),
+            "app/src/main/java/com/directorx/editor/ui/editor/CaptionPreviewOverlay.kt" to setOf("Color.Black"),
+            "app/src/main/java/com/directorx/editor/ui/editor/ExportDelegate.kt" to setOf("Color.BLACK"),
         )
         val APPROVED_ACCENT_NAMES = setOf(
             "Neutral", "Lavender", "Blue", "Sapphire", "Sky", "Teal", "Green", "Yellow",

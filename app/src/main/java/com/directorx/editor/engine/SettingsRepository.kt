@@ -21,6 +21,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 private const val SETTINGS_DATASTORE_NAME = "clearcut_settings"
+private const val APPEARANCE_BOOTSTRAP_PREFS = "directorx_appearance_bootstrap"
+private const val APPEARANCE_BOOTSTRAP_KEY = "appearance_mode"
 
 data class AppSettings(
     val defaultResolution: Resolution = Resolution.FHD_1080P,
@@ -131,6 +133,14 @@ internal object SettingsPreferenceKeys {
     val MEDIA_PIPE_CONSENT_VERSION = intPreferencesKey("mediapipe_consent_version")
 }
 
+private fun parseAppearanceMode(value: String?): AppearanceMode = when (value) {
+    "DARK" -> AppearanceMode.PRIMARY_BRAND
+    "HIGH_CONTRAST_DARK" -> AppearanceMode.HIGH_CONTRAST
+    else -> value?.enumOrNull<AppearanceMode>()
+        ?.takeIf { it != AppearanceMode.DARK && it != AppearanceMode.HIGH_CONTRAST_DARK }
+        ?: AppearanceMode.PRIMARY_BRAND
+}
+
 internal fun mapPreferencesToAppSettings(prefs: Preferences): AppSettings = AppSettings(
     defaultResolution = prefs[SettingsPreferenceKeys.RESOLUTION]?.enumOrNull<Resolution>() ?: Resolution.FHD_1080P,
     defaultFrameRate = prefs[SettingsPreferenceKeys.FRAME_RATE]?.takeIf { it in 1..120 } ?: 30,
@@ -164,13 +174,7 @@ internal fun mapPreferencesToAppSettings(prefs: Preferences): AppSettings = AppS
     includeDiagnosticTimelineShape = prefs[SettingsPreferenceKeys.INCLUDE_DIAGNOSTIC_TIMELINE_SHAPE] ?: false,
     includeDiagnosticRawErrorText = prefs[SettingsPreferenceKeys.INCLUDE_DIAGNOSTIC_RAW_ERROR_TEXT] ?: false,
     includeDiagnosticHeapDump = prefs[SettingsPreferenceKeys.INCLUDE_DIAGNOSTIC_HEAP_DUMP] ?: false,
-    appearanceMode = when (prefs[SettingsPreferenceKeys.APPEARANCE_MODE]) {
-        "DARK" -> AppearanceMode.PRIMARY_BRAND
-        "HIGH_CONTRAST_DARK" -> AppearanceMode.HIGH_CONTRAST
-        else -> prefs[SettingsPreferenceKeys.APPEARANCE_MODE]?.enumOrNull<AppearanceMode>()
-            ?.takeIf { it in AppearanceMode.entries && it != AppearanceMode.DARK && it != AppearanceMode.HIGH_CONTRAST_DARK }
-            ?: AppearanceMode.PRIMARY_BRAND
-    },
+    appearanceMode = parseAppearanceMode(prefs[SettingsPreferenceKeys.APPEARANCE_MODE]),
     updateCheckEnabled = prefs[SettingsPreferenceKeys.UPDATE_CHECK_ENABLED] ?: false,
     mediaPipeConsentVersion = prefs[SettingsPreferenceKeys.MEDIA_PIPE_CONSENT_VERSION]?.takeIf { it >= 0 } ?: 0,
 )
@@ -209,6 +213,7 @@ private inline fun <reified T : Enum<T>> String.enumOrNull(): T? =
 class SettingsRepository internal constructor(
     private val dataStore: DataStore<Preferences>,
     private val resetReportStore: SettingsResetReportStore,
+    private val applicationContext: Context? = null,
 ) {
     @Inject
     constructor(
@@ -217,6 +222,7 @@ class SettingsRepository internal constructor(
     ) : this(
         dataStore = createDirectorXSettingsDataStore(context, resetReportStore),
         resetReportStore = resetReportStore,
+        applicationContext = context.applicationContext,
     )
 
     private val data: Flow<Preferences> = dataStore.data
@@ -230,6 +236,26 @@ class SettingsRepository internal constructor(
 
     val settings: Flow<AppSettings> = data
         .map(::mapPreferencesToAppSettings)
+
+    /**
+     * A tiny synchronous mirror used only to choose the first Compose appearance.
+     * DataStore remains the source of truth; the mirror is refreshed from its first
+     * emission and whenever the user changes appearance.
+     */
+    fun cachedAppearanceMode(): AppearanceMode {
+        val stored = applicationContext
+            ?.getSharedPreferences(APPEARANCE_BOOTSTRAP_PREFS, Context.MODE_PRIVATE)
+            ?.getString(APPEARANCE_BOOTSTRAP_KEY, null)
+        return parseAppearanceMode(stored)
+    }
+
+    fun cacheAppearanceMode(value: AppearanceMode) {
+        applicationContext
+            ?.getSharedPreferences(APPEARANCE_BOOTSTRAP_PREFS, Context.MODE_PRIVATE)
+            ?.edit()
+            ?.putString(APPEARANCE_BOOTSTRAP_KEY, value.name)
+            ?.apply()
+    }
 
     suspend fun updateResolution(value: Resolution) {
         dataStore.edit { it[SettingsPreferenceKeys.RESOLUTION] = value.name }
@@ -363,6 +389,7 @@ class SettingsRepository internal constructor(
 
     suspend fun updateAppearanceMode(value: AppearanceMode) {
         dataStore.edit { it[SettingsPreferenceKeys.APPEARANCE_MODE] = value.name }
+        cacheAppearanceMode(value)
     }
 
     suspend fun updateUpdateCheckEnabled(value: Boolean) {

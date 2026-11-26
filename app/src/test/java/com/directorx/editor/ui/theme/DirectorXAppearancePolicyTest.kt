@@ -134,6 +134,32 @@ class DirectorXAppearancePolicyTest {
     }
 
     @Test
+    fun compactStatusMetricAndFilterChromeMeetWcagAcrossEveryAppearance() {
+        DirectorXThemeDefaults.availableThemes.forEach { mode ->
+            val colors = DirectorXThemeDefaults.colorsFor(mode)
+            val status = DirectorXThemeDefaults.accentControlColors(colors, colors.success)
+            val metric = DirectorXThemeDefaults.accentControlColors(colors, colors.warning)
+            val filter = DirectorXThemeDefaults.accentControlColors(colors, colors.accent)
+
+            listOf("status" to status, "metric" to metric, "filter" to filter).forEach { (name, pair) ->
+                assertTrue(
+                    "$mode $name foreground does not meet WCAG AA on its selected surface",
+                    DirectorXThemeDefaults.contrastRatio(pair.content, pair.container) >= 4.5,
+                )
+                assertEquals(colors.selectedSurface, pair.container)
+                assertEquals(colors.text, pair.content)
+            }
+        }
+
+        val legacyHighContrast = DirectorXThemeDefaults.colorsFor(AppearanceMode.HIGH_CONTRAST_DARK)
+        val highContrastPair = DirectorXThemeDefaults.accentControlColors(legacyHighContrast, legacyHighContrast.accent)
+        assertTrue(
+            "Legacy high-contrast compact chrome must remain readable",
+            DirectorXThemeDefaults.contrastRatio(highContrastPair.content, highContrastPair.container) >= 4.5,
+        )
+    }
+
+    @Test
     fun radiusTokensStayWithinProfessionalGeometryCap() {
         listOf(Radius.xs, Radius.sm, Radius.md, Radius.lg, Radius.xl, Radius.xxl).forEach { radius ->
             assertTrue("Radius token exceeded 12dp: $radius", radius.value <= 12f)

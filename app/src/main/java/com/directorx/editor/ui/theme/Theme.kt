@@ -243,6 +243,12 @@ data class DirectorXSemanticColors(
     val onAccent: Color,
 )
 
+data class DirectorXAccentControlColors(
+    val container: Color,
+    val content: Color,
+    val accent: Color,
+)
+
 val LocalDirectorXColors = staticCompositionLocalOf {
     DirectorXThemeDefaults.colorsFor(AppearanceMode.DARK)
 }
@@ -294,6 +300,21 @@ object DirectorXThemeDefaults {
             Color.White
         }
     }
+
+    /**
+     * Shared selected-state colors for compact chrome. The selected surface is
+     * independent of the accent hue, while the accent remains available for borders
+     * and other non-text identity cues. This keeps small labels readable in every
+     * appearance, including high-contrast compatibility modes.
+     */
+    fun accentControlColors(
+        colors: DirectorXSemanticColors,
+        accent: Color,
+    ): DirectorXAccentControlColors = DirectorXAccentControlColors(
+        container = colors.selectedSurface,
+        content = colors.text,
+        accent = accent,
+    )
 
     fun colorSchemeFor(resolvedMode: AppearanceMode): androidx.compose.material3.ColorScheme {
         val p = palette(resolveMode(resolvedMode))
