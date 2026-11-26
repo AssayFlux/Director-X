@@ -1,7 +1,6 @@
 package com.directorx.editor.ui.theme
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -40,7 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.graphicsLayer
+
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -175,6 +174,196 @@ fun DirectorXSecondaryButton(
         },
         animationSpec = tween(durationMillis = Motion.DurationFast, easing = Motion.StandardEasing),
         label = "secondaryButtonBorder"
+    )
+    OutlinedButton(
+        onClick = onClick,
+        enabled = enabled,
+        interactionSource = interactionSource,
+        shape = RoundedCornerShape(Radius.md),
+        border = BorderStroke(1.dp, borderColor),
+        colors = ButtonDefaults.outlinedButtonColors(
+            containerColor = containerColor,
+            contentColor = resolvedContentColor,
+            disabledContainerColor = containerColor,
+            disabledContentColor = colors.disabledText
+        ),
+        contentPadding = PaddingValues(horizontal = Spacing.lg, vertical = Spacing.sm),
+        modifier = modifier
+            .semantics(mergeDescendants = true) { contentDescription = text }
+            .defaultMinSize(minWidth = TouchTarget.minimum, minHeight = TouchTarget.minimum)
+    ) {
+        if (icon != null) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = if (enabled) resolvedContentColor else colors.disabledText,
+                modifier = Modifier.size(18.dp)
+            )
+            androidx.compose.foundation.layout.Spacer(modifier = Modifier.width(Spacing.sm))
+        }
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelLarge,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+}
+
+@Composable
+fun DirectorXStatusTag(
+    text: String,
+    accent: Color,
+    modifier: Modifier = Modifier,
+    icon: ImageVector? = null
+) {
+    val colors = LocalDirectorXColors.current
+    Surface(
+        modifier = modifier,
+        color = accent.copy(alpha = if (colors.highContrast) 0.26f else 0.12f),
+        shape = RoundedCornerShape(Radius.xs),
+        border = BorderStroke(1.dp, accent.copy(alpha = if (colors.highContrast) 0.95f else 0.2f))
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = Spacing.sm, vertical = 6.dp),
+            horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (icon != null) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = accent,
+                    modifier = Modifier.size(13.dp)
+                )
+            }
+            Text(
+                text = text,
+                color = accent,
+                style = MaterialTheme.typography.labelMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}
+
+@Composable
+fun DirectorXMetricPill(
+    text: String,
+    accent: Color,
+    modifier: Modifier = Modifier,
+    icon: ImageVector? = null
+) = DirectorXStatusTag(text = text, accent = accent, modifier = modifier, icon = icon)
+
+@Composable
+fun DirectorXFilterChip(
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    accent: Color = Color.Unspecified,
+    enabled: Boolean = true,
+    icon: ImageVector? = null
+) {
+    val colors = LocalDirectorXColors.current
+    val resolvedAccent = if (accent == Color.Unspecified) colors.accent else accent
+    FilterChip(
+        selected = selected,
+        enabled = enabled,
+        onClick = onClick,
+        modifier = modifier.defaultMinSize(minWidth = TouchTarget.minimum, minHeight = TouchTarget.minimum),
+        label = {
+            // Keep the minimum inside FilterChip's clickable surface. Applying
+            // it only to the outer modifier can enlarge layout without enlarging
+            // the accessibility hit target.
+            Box(
+                modifier = Modifier.requiredSizeIn(
+                    minWidth = TouchTarget.minimum,
+                    minHeight = TouchTarget.minimum,
+                ),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.labelMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        },
+        leadingIcon = if (icon != null) {
+            {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
+        } else {
+            null
+        },
+        shape = RoundedCornerShape(Radius.sm),
+        colors = FilterChipDefaults.filterChipColors(
+            containerColor = colors.panelHighest,
+            labelColor = colors.subtext,
+            selectedContainerColor = if (colors.highContrast) resolvedAccent else resolvedAccent.copy(alpha = 0.16f),
+            selectedLabelColor = if (colors.highContrast) Mocha.Crust else resolvedAccent,
+            selectedLeadingIconColor = if (colors.highContrast) Mocha.Crust else resolvedAccent
+        ),
+        border = FilterChipDefaults.filterChipBorder(
+            enabled = enabled,
+            selected = selected,
+            borderColor = colors.cardStroke,
+            selectedBorderColor = if (colors.highContrast) colors.cardStrokeStrong else resolvedAccent.copy(alpha = 0.34f)
+        )
+    )
+}
+
+@Composable
+fun DirectorXChromeIconButton(
+    icon: ImageVector,
+    contentDescription: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified,
+    containerColor: Color = Color.Unspecified,
+    borderColor: Color = Color.Unspecified,
+    shape: Shape = RoundedCornerShape(Radius.md),
+    size: Dp = TouchTarget.minimum,
+    iconSize: Dp = 18.dp,
+    enabled: Boolean = true,
+    buttonModifier: Modifier = Modifier
+) {
+    val colors = LocalDirectorXColors.current
+    val interactionSource = remember { MutableInteractionSource() }
+    val pressed by interactionSource.collectIsPressedAsState()
+    val resolvedContainer = if (containerColor == Color.Unspecified) colors.panelHighest else containerColor
+    val resolvedBorder = if (borderColor == Color.Unspecified) colors.cardStroke else borderColor
+    val resolvedTint = if (tint == Color.Unspecified) colors.subtext else tint
+    val animatedContainer by animateColorAsState(
+        targetValue = when {
+            !enabled -> colors.panelRaised.copy(alpha = 0.46f)
+            pressed -> resolvedContainer.copy(alpha = if (colors.highContrast) 1f else 0.88f)
+            else -> resolvedContainer
+        },
+        animationSpec = tween(durationMillis = Motion.DurationFast, easing = Motion.StandardEasing),
+        label = "chromeIconButtonContainer"
+    )
+    val animatedBorder by animateColorAsState(
+        targetValue = when {
+            !enabled -> colors.cardStroke.copy(alpha = 0.46f)
+            pressed -> if (colors.highContrast) colors.cardStrokeStrong else resolvedTint.copy(alpha = 0.48f)
+            colors.highContrast && borderColor == Color.Unspecified -> colors.cardStrokeStrong
+            else -> resolvedBorder
+        },
+        animationSpec = tween(durationMillis = Motion.DurationFast, easing = Motion.StandardEasing),
+        label = "chromeIconButtonBorder"
+    )
+    val animatedTint by animateColorAsState(
+        targetValue = if (enabled) resolvedTint else colors.disabledText.copy(alpha = 0.72f),
+        animationSpec = tween(durationMillis = Motion.DurationFast, easing = Motion.StandardEasing),
+        label = "chromeIconButtonTint"
     )
     Box(
         modifier = modifier
