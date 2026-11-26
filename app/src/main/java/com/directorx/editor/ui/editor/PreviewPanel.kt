@@ -1,6 +1,5 @@
 package com.directorx.editor.ui.editor
 
-import com.directorx.editor.ui.theme.DirectorXAccents
 import com.directorx.editor.ui.theme.LocalDirectorXColors
 import android.graphics.Bitmap
 import android.os.Build
@@ -480,9 +479,9 @@ fun PreviewPanel(
                                     icon = Icons.Default.GridOn,
                                     contentDescription = stringResource(R.string.preview_composition_guides),
                                     onClick = onToggleCompositionGuides,
-                                    tint = if (showCompositionGuides) DirectorXAccents.Sky else semanticColors.subtext.copy(alpha = 0.9f),
-                                    containerColor = if (showCompositionGuides) DirectorXAccents.Sky.copy(alpha = 0.22f) else semanticColors.background.copy(alpha = 0.72f),
-                                    borderColor = if (showCompositionGuides) DirectorXAccents.Sky.copy(alpha = 0.6f) else semanticColors.cardStroke,
+                                    tint = if (showCompositionGuides) semanticColors.accent else semanticColors.subtext.copy(alpha = 0.9f),
+                                    containerColor = if (showCompositionGuides) semanticColors.accent.copy(alpha = 0.22f) else semanticColors.background.copy(alpha = 0.72f),
+                                    borderColor = if (showCompositionGuides) semanticColors.accent.copy(alpha = 0.6f) else semanticColors.cardStroke,
                                     shape = RoundedCornerShape(Radius.md),
                                 )
                                 if (hasActiveEffects) {
@@ -490,9 +489,9 @@ fun PreviewPanel(
                                         icon = Icons.Default.Compare,
                                         contentDescription = stringResource(R.string.preview_compare),
                                         onClick = onToggleSplitPreview,
-                                        tint = if (isSplitPreviewEnabled) DirectorXAccents.Teal else semanticColors.subtext.copy(alpha = 0.9f),
-                                        containerColor = if (isSplitPreviewEnabled) DirectorXAccents.Teal.copy(alpha = 0.3f) else semanticColors.background.copy(alpha = 0.72f),
-                                        borderColor = if (isSplitPreviewEnabled) DirectorXAccents.Teal.copy(alpha = 0.6f) else semanticColors.cardStroke,
+                                        tint = if (isSplitPreviewEnabled) semanticColors.accentSecondary else semanticColors.subtext.copy(alpha = 0.9f),
+                                        containerColor = if (isSplitPreviewEnabled) semanticColors.accentSecondary.copy(alpha = 0.3f) else semanticColors.background.copy(alpha = 0.72f),
+                                        borderColor = if (isSplitPreviewEnabled) semanticColors.accentSecondary.copy(alpha = 0.6f) else semanticColors.cardStroke,
                                         shape = RoundedCornerShape(Radius.md),
                                     )
                                 }
@@ -502,7 +501,7 @@ fun PreviewPanel(
                         if (isBuffering && isPlaybackRequested && totalDurationMs > 0 && !showGapState) {
                             CircularProgressIndicator(
                                 modifier = Modifier.size(36.dp),
-                                color = DirectorXAccents.Sky,
+                                color = semanticColors.accent,
                                 strokeWidth = 3.dp
                             )
                         }
@@ -541,14 +540,14 @@ fun PreviewPanel(
                                     verticalArrangement = Arrangement.Center
                                 ) {
                                     Surface(
-                                        color = DirectorXAccents.Sky.copy(alpha = 0.12f),
+                                        color = semanticColors.accent.copy(alpha = 0.12f),
                                         shape = RoundedCornerShape(Radius.md),
-                                        border = androidx.compose.foundation.BorderStroke(1.dp, DirectorXAccents.Sky.copy(alpha = 0.22f))
+                                        border = androidx.compose.foundation.BorderStroke(1.dp, semanticColors.accent.copy(alpha = 0.22f))
                                     ) {
                                         Icon(
                                             Icons.Default.VideoLibrary,
                                             contentDescription = stringResource(R.string.cd_preview_empty),
-                                            tint = DirectorXAccents.Sky,
+                                            tint = semanticColors.accent,
                                             modifier = Modifier
                                                 .padding(10.dp)
                                                 .size(24.dp)
@@ -606,8 +605,8 @@ fun PreviewPanel(
                         if (isLooping) R.string.preview_disable_loop else R.string.preview_enable_loop
                     ),
                     onClick = onToggleLoop,
-                    tint = if (isLooping) DirectorXAccents.Sky else semanticColors.subtext,
-                    containerColor = if (isLooping) DirectorXAccents.Sky.copy(alpha = 0.14f) else Color.Transparent,
+                    tint = if (isLooping) semanticColors.accent else semanticColors.subtext,
+                    containerColor = if (isLooping) semanticColors.accent.copy(alpha = 0.14f) else Color.Transparent,
                     borderColor = Color.Transparent,
                     shape = RoundedCornerShape(Radius.sm),
                     size = TouchTarget.minimum,
@@ -637,9 +636,9 @@ fun PreviewPanel(
                         stringResource(R.string.preview_play)
                     },
                     onClick = onTogglePlayback,
-                    tint = semanticColors.background,
-                    containerColor = DirectorXAccents.Sky,
-                    borderColor = DirectorXAccents.Sky.copy(alpha = 0.72f),
+                    tint = semanticColors.onAccent,
+                    containerColor = semanticColors.accent,
+                    borderColor = semanticColors.accent.copy(alpha = 0.72f),
                     shape = RoundedCornerShape(Radius.sm),
                     size = TouchTarget.minimum,
                     iconSize = 22.dp,
@@ -699,7 +698,7 @@ private fun BoxScope.PreviewImageOverlay(
             Box(Modifier.size(32.dp), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(22.dp),
-                    color = DirectorXAccents.Mauve,
+                    color = semanticColors.accentTertiary,
                     strokeWidth = 2.dp,
                 )
             }
@@ -713,7 +712,7 @@ private fun BoxScope.PreviewImageOverlay(
                 Icon(
                     Icons.Default.BrokenImage,
                     contentDescription = stringResource(R.string.cd_preview_image_overlay_missing),
-                    tint = DirectorXAccents.Rosewater,
+                    tint = semanticColors.accentTertiary,
                     modifier = Modifier
                         .padding(10.dp)
                         .size(22.dp),
@@ -741,14 +740,14 @@ private fun PreviewGapState(
             verticalArrangement = Arrangement.Center
         ) {
             Surface(
-                color = DirectorXAccents.Mauve.copy(alpha = 0.14f),
+                color = semanticColors.accentTertiary.copy(alpha = 0.14f),
                 shape = CircleShape,
-                border = androidx.compose.foundation.BorderStroke(1.dp, DirectorXAccents.Mauve.copy(alpha = 0.22f))
+                border = androidx.compose.foundation.BorderStroke(1.dp, semanticColors.accentTertiary.copy(alpha = 0.22f))
             ) {
                 Icon(
                     Icons.Default.Timeline,
                     contentDescription = stringResource(R.string.preview_gap_title),
-                    tint = DirectorXAccents.Rosewater,
+                    tint = semanticColors.accentTertiary,
                     modifier = Modifier
                         .padding(16.dp)
                         .size(24.dp)
@@ -777,7 +776,7 @@ private fun PreviewGapState(
                 Button(
                     onClick = { onJumpToContent(jumpToContentMs) },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = DirectorXAccents.Rosewater,
+                        containerColor = semanticColors.accentTertiary,
                         contentColor = semanticColors.background
                     ),
                     shape = RoundedCornerShape(Radius.xl)
@@ -809,14 +808,14 @@ private fun PreviewUnavailableState() {
             verticalArrangement = Arrangement.Center
         ) {
             Surface(
-                color = DirectorXAccents.Mauve.copy(alpha = 0.14f),
+                color = semanticColors.accentTertiary.copy(alpha = 0.14f),
                 shape = CircleShape,
-                border = androidx.compose.foundation.BorderStroke(1.dp, DirectorXAccents.Mauve.copy(alpha = 0.22f))
+                border = androidx.compose.foundation.BorderStroke(1.dp, semanticColors.accentTertiary.copy(alpha = 0.22f))
             ) {
                 Icon(
                     Icons.Default.BrokenImage,
                     contentDescription = stringResource(R.string.preview_unavailable_title),
-                    tint = DirectorXAccents.Rosewater,
+                    tint = semanticColors.accentTertiary,
                     modifier = Modifier
                         .padding(16.dp)
                         .size(24.dp)
@@ -846,7 +845,7 @@ private fun PreviewPlaybackErrorState(onOpenMediaManager: () -> Unit) {
     Card(
         modifier = Modifier.padding(16.dp),
         colors = CardDefaults.cardColors(containerColor = semanticColors.panel.copy(alpha = 0.96f)),
-        border = androidx.compose.foundation.BorderStroke(1.dp, DirectorXAccents.Red.copy(alpha = 0.7f)),
+        border = androidx.compose.foundation.BorderStroke(1.dp, semanticColors.danger.copy(alpha = 0.7f)),
         shape = RoundedCornerShape(Radius.xl),
     ) {
         Column(
@@ -857,7 +856,7 @@ private fun PreviewPlaybackErrorState(onOpenMediaManager: () -> Unit) {
             Icon(
                 Icons.Default.BrokenImage,
                 contentDescription = null,
-                tint = DirectorXAccents.Red,
+                tint = semanticColors.danger,
                 modifier = Modifier.size(26.dp),
             )
             Text(
@@ -875,7 +874,7 @@ private fun PreviewPlaybackErrorState(onOpenMediaManager: () -> Unit) {
             Button(
                 onClick = onOpenMediaManager,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = DirectorXAccents.Sky,
+                    containerColor = semanticColors.accent,
                     contentColor = semanticColors.background,
                 ),
                 shape = RoundedCornerShape(Radius.xl),
@@ -975,7 +974,7 @@ fun formatTimestamp(ms: Long): String {
 @Composable
 private fun CompositionGuidesOverlay() {
     val guideColor = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.3f)
-    val safeZoneColor = DirectorXAccents.Yellow.copy(alpha = 0.25f)
+    val safeZoneColor = semanticColors.warning.copy(alpha = 0.25f)
     androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
         val w = size.width
         val h = size.height
@@ -1104,7 +1103,7 @@ private fun BoxScope.SplitPreviewOverlay(
             ) {
                 Text(
                     stringResource(R.string.preview_compare_original),
-                    color = DirectorXAccents.Teal,
+                    color = semanticColors.accentSecondary,
                     style = MaterialTheme.typography.labelSmall,
                     modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                 )
@@ -1115,7 +1114,7 @@ private fun BoxScope.SplitPreviewOverlay(
             ) {
                 Text(
                     stringResource(R.string.preview_compare_edited),
-                    color = DirectorXAccents.Rosewater,
+                    color = semanticColors.accentTertiary,
                     style = MaterialTheme.typography.labelSmall,
                     modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                 )
@@ -1133,8 +1132,8 @@ private fun BoxScope.SplitPreviewOverlay(
                 .height(24.dp),
             colors = SliderDefaults.colors(
                 thumbColor = semanticColors.text,
-                activeTrackColor = DirectorXAccents.Teal.copy(alpha = 0.5f),
-                inactiveTrackColor = DirectorXAccents.Rosewater.copy(alpha = 0.5f)
+                activeTrackColor = semanticColors.accentSecondary.copy(alpha = 0.5f),
+                inactiveTrackColor = semanticColors.accentTertiary.copy(alpha = 0.5f)
             )
         )
     }
