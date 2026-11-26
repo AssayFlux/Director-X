@@ -628,9 +628,9 @@ private fun VUMeter(
 
         val leftHeight = h * smoothedLeft
         val leftColor = when {
-            smoothedLeft > 0.9f -> DirectorXAccents.Red
-            smoothedLeft > 0.7f -> DirectorXAccents.Yellow
-            else -> DirectorXAccents.Green
+            smoothedLeft > 0.9f -> semanticColors.danger
+            smoothedLeft > 0.7f -> semanticColors.warning
+            else -> semanticColors.success
         }
         drawRect(
             color = leftColor,
@@ -640,8 +640,8 @@ private fun VUMeter(
 
         val rightHeight = h * smoothedRight
         val rightColor = when {
-            smoothedRight > 0.9f -> DirectorXAccents.Red
-            smoothedRight > 0.7f -> DirectorXAccents.Yellow
+            smoothedRight > 0.9f -> semanticColors.danger
+            smoothedRight > 0.7f -> semanticColors.warning
             else -> DirectorXAccents.Green
         }
         drawRect(
@@ -973,6 +973,7 @@ private fun AudioEffectType.displayNameRes(): Int = when (this) {
     AudioEffectType.NOTCH -> R.string.mixer_effect_notch
 }
 
+@Composable
 private fun TrackType.mixerAccent(): Color = when (this) {
     TrackType.VIDEO -> DirectorXAccents.Blue
     TrackType.AUDIO -> DirectorXAccents.Green
