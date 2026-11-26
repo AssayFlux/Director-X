@@ -574,7 +574,7 @@ internal fun CurveCanvas(
     clipDurationMs: Long,
     playheadMs: Long,
     activeProperties: Set<KeyframeProperty>,
-    propertyColors: Map<KeyframeProperty, Color>,
+    propertyColors: Map<KeyframeProperty, Color> = emptyMap(),
     selectedKeyframe: Keyframe?,
     onKeyframeSelected: (Keyframe?) -> Unit,
     onKeyframeMoved: (Keyframe, Long, Float) -> Unit,
