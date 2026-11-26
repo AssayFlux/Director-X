@@ -122,7 +122,7 @@ fun DirectorXPrimaryButton(
             disabledContainerColor = containerColor,
             disabledContentColor = colors.disabledText
         ),
-        contentPadding = PaddingValues(horizontal = Spacing.lg, vertical = Spacing.sm),
+        contentPadding = PaddingValues(horizontal = Spacing.lg, vertical = 16.dp),
         modifier = modifier
             .graphicsLayer {
                 scaleX = buttonScale
@@ -392,18 +392,18 @@ fun DirectorXChromeIconButton(
     Box(
         modifier = modifier
             .then(buttonModifier)
+            // Constrain the clickable node itself. Putting the size modifier after
+            // clickable only enlarges its parent layout, leaving a smaller hit target.
+            .requiredSizeIn(
+                minWidth = TouchTarget.minimum,
+                minHeight = TouchTarget.minimum,
+            )
             .clickable(
                 interactionSource = interactionSource,
                 indication = LocalIndication.current,
                 enabled = enabled,
                 role = Role.Button,
                 onClick = onClick,
-            )
-            // Apply the minimum inside clickable so the semantics/hit region,
-            // not only the visual layout, receives the full 48dp minimum.
-            .requiredSizeIn(
-                minWidth = TouchTarget.minimum,
-                minHeight = TouchTarget.minimum,
             )
             .semantics(mergeDescendants = true) {
                 this.contentDescription = contentDescription
