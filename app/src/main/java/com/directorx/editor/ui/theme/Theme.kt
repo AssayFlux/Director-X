@@ -61,23 +61,54 @@ object Mocha {
  * identity, but structural chrome and readable content must use
  * [LocalDirectorXColors] so the high-contrast cream scheme can strengthen them.
  */
+/**
+ * Theme-reactive accent roles for feature surfaces.
+ *
+ * These are composable on purpose: a feature's icon, badge, graph, and panel
+ * accent must follow the selected appearance instead of retaining the default
+ * Mocha swatches after the rest of the UI changes theme.
+ */
 object DirectorXAccents {
-    /** Stable neutral accent for content that is defined outside composition. */
-    val Neutral = Mocha.Subtext0
-    val Lavender = Mocha.Lavender
-    val Blue = Mocha.Blue
-    val Sapphire = Mocha.Sapphire
-    val Sky = Mocha.Sky
-    val Teal = Mocha.Teal
-    val Green = Mocha.Green
-    val Yellow = Mocha.Yellow
-    val Peach = Mocha.Peach
-    val Maroon = Mocha.Maroon
-    val Red = Mocha.Red
-    val Mauve = Mocha.Mauve
-    val Pink = Mocha.Pink
-    val Flamingo = Mocha.Flamingo
-    val Rosewater = Mocha.Rosewater
+    val Neutral: Color
+        @Composable get() = LocalDirectorXColors.current.subtext
+    val Lavender: Color
+        @Composable get() = blendAccent(LocalDirectorXColors.current.accentTertiary, LocalDirectorXColors.current.accentSecondary, 0.22f)
+    val Blue: Color
+        @Composable get() = LocalDirectorXColors.current.accentSecondary
+    val Sapphire: Color
+        @Composable get() = blendAccent(LocalDirectorXColors.current.accentSecondary, LocalDirectorXColors.current.accent, 0.18f)
+    val Sky: Color
+        @Composable get() = LocalDirectorXColors.current.accent
+    val Teal: Color
+        @Composable get() = blendAccent(LocalDirectorXColors.current.accentSecondary, LocalDirectorXColors.current.accentTertiary, 0.38f)
+    val Green: Color
+        @Composable get() = LocalDirectorXColors.current.success
+    val Yellow: Color
+        @Composable get() = LocalDirectorXColors.current.warning
+    val Peach: Color
+        @Composable get() = blendAccent(LocalDirectorXColors.current.accent, LocalDirectorXColors.current.accentTertiary, 0.32f)
+    val Maroon: Color
+        @Composable get() = blendAccent(LocalDirectorXColors.current.accentTertiary, LocalDirectorXColors.current.accent, 0.24f)
+    val Red: Color
+        @Composable get() = LocalDirectorXColors.current.danger
+    val Mauve: Color
+        @Composable get() = LocalDirectorXColors.current.accentTertiary
+    val Pink: Color
+        @Composable get() = blendAccent(LocalDirectorXColors.current.accentTertiary, LocalDirectorXColors.current.accentSecondary, 0.28f)
+    val Flamingo: Color
+        @Composable get() = blendAccent(LocalDirectorXColors.current.accentTertiary, LocalDirectorXColors.current.accent, 0.36f)
+    val Rosewater: Color
+        @Composable get() = blendAccent(LocalDirectorXColors.current.panelRaised, LocalDirectorXColors.current.accent, 0.12f)
+}
+
+private fun blendAccent(first: Color, second: Color, fraction: Float): Color {
+    val amount = fraction.coerceIn(0f, 1f)
+    return Color(
+        red = first.red + (second.red - first.red) * amount,
+        green = first.green + (second.green - first.green) * amount,
+        blue = first.blue + (second.blue - first.blue) * amount,
+        alpha = first.alpha + (second.alpha - first.alpha) * amount,
+    )
 }
 
 
@@ -279,8 +310,10 @@ object DirectorXThemeDefaults {
             panelRaised=p.raised,panelHighest=p.highest,cardStroke=stroke,cardStrokeStrong=if(hc) text else p.subtext,
             text=text,subtext=sub,subtextStrong=p.subtext,disabledText=if(hc) Color(0xFF4B4238) else p.subtext,
             accent=p.accent,accentSecondary=p.secondary,accentTertiary=p.tertiary,
-            success=Color(0xFF47734B),warning=Color(0xFF946B12),
-            danger=Color(0xFFB3261E),focusRing=if(hc) text else p.accent,canvas=p.canvas,
+            success=blendAccent(Color(0xFF47734B), p.secondary, 0.24f),
+            warning=blendAccent(Color(0xFF946B12), p.accent, 0.22f),
+            danger=blendAccent(Color(0xFFB3261E), p.tertiary, 0.22f),
+            focusRing=if(hc) text else p.accent,canvas=p.canvas,
             selectedSurface=p.raised,disabledSurface=p.panel,surfaceBase=p.canvas,surfaceLow=p.panel,
             surface=p.panel,surfaceHigh=p.raised,overlay=stroke,overlayStrong=text,onAccent=readableOnColor(p.accent,text)
         )
