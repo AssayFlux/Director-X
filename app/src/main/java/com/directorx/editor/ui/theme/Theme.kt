@@ -101,6 +101,30 @@ object DirectorXAccents {
         @Composable get() = blendAccent(LocalDirectorXColors.current.panelRaised, LocalDirectorXColors.current.accent, 0.12f)
 }
 
+enum class DirectorXAccentRole {
+    NEUTRAL, LAVENDER, BLUE, SAPPHIRE, SKY, TEAL, GREEN, YELLOW,
+    PEACH, MAROON, RED, MAUVE, PINK, FLAMINGO, ROSEWATER
+}
+
+@Composable
+fun DirectorXAccentRole.resolveColor(): Color = when (this) {
+    DirectorXAccentRole.NEUTRAL -> DirectorXAccents.Neutral
+    DirectorXAccentRole.LAVENDER -> DirectorXAccents.Lavender
+    DirectorXAccentRole.BLUE -> DirectorXAccents.Blue
+    DirectorXAccentRole.SAPPHIRE -> DirectorXAccents.Sapphire
+    DirectorXAccentRole.SKY -> DirectorXAccents.Sky
+    DirectorXAccentRole.TEAL -> DirectorXAccents.Teal
+    DirectorXAccentRole.GREEN -> DirectorXAccents.Green
+    DirectorXAccentRole.YELLOW -> DirectorXAccents.Yellow
+    DirectorXAccentRole.PEACH -> DirectorXAccents.Peach
+    DirectorXAccentRole.MAROON -> DirectorXAccents.Maroon
+    DirectorXAccentRole.RED -> DirectorXAccents.Red
+    DirectorXAccentRole.MAUVE -> DirectorXAccents.Mauve
+    DirectorXAccentRole.PINK -> DirectorXAccents.Pink
+    DirectorXAccentRole.FLAMINGO -> DirectorXAccents.Flamingo
+    DirectorXAccentRole.ROSEWATER -> DirectorXAccents.Rosewater
+}
+
 private fun blendAccent(first: Color, second: Color, fraction: Float): Color {
     val amount = fraction.coerceIn(0f, 1f)
     return Color(
