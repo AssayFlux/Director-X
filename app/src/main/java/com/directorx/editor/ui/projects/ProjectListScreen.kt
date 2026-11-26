@@ -1391,53 +1391,33 @@ private fun ProjectActionRow(
     primaryTestTag: String? = null,
     secondaryTestTag: String? = null
 ) {
-    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-        val stackActions = maxWidth < 400.dp
-        if (stackActions) {
-            Column(verticalArrangement = Arrangement.spacedBy(Spacing.sm)) {
-                DirectorXPrimaryButton(
-                    text = primaryLabel,
-                    icon = primaryIcon,
-                    onClick = onPrimary,
-                    enabled = enabled,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .then(primaryTestTag?.let { Modifier.testTag(it) } ?: Modifier)
-                )
-                DirectorXSecondaryButton(
-                    text = secondaryLabel,
-                    icon = secondaryIcon,
-                    onClick = onSecondary,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .then(secondaryTestTag?.let { Modifier.testTag(it) } ?: Modifier),
-                    contentColor = LocalDirectorXColors.current.text,
-                    enabled = enabled
-                )
-            }
-        } else {
-            Row(horizontalArrangement = Arrangement.spacedBy(Spacing.sm)) {
-                DirectorXPrimaryButton(
-                    text = primaryLabel,
-                    icon = primaryIcon,
-                    onClick = onPrimary,
-                    enabled = enabled,
-                    modifier = Modifier
-                        .weight(1.15f)
-                        .then(primaryTestTag?.let { Modifier.testTag(it) } ?: Modifier)
-                )
-                DirectorXSecondaryButton(
-                    text = secondaryLabel,
-                    icon = secondaryIcon,
-                    onClick = onSecondary,
-                    modifier = Modifier
-                        .weight(1f)
-                        .then(secondaryTestTag?.let { Modifier.testTag(it) } ?: Modifier),
-                    contentColor = LocalDirectorXColors.current.text,
-                    enabled = enabled
-                )
-            }
-        }
+    // Keep the two primary dashboard actions vertically stacked at every
+    // width. Matching full-width constraints make their left/right edges
+    // symmetrical and prevent the import action becoming cramped on phones,
+    // large text settings, or narrow split-screen layouts.
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(Spacing.sm)
+    ) {
+        DirectorXPrimaryButton(
+            text = primaryLabel,
+            icon = primaryIcon,
+            onClick = onPrimary,
+            enabled = enabled,
+            modifier = Modifier
+                .fillMaxWidth()
+                .then(primaryTestTag?.let { Modifier.testTag(it) } ?: Modifier)
+        )
+        DirectorXSecondaryButton(
+            text = secondaryLabel,
+            icon = secondaryIcon,
+            onClick = onSecondary,
+            modifier = Modifier
+                .fillMaxWidth()
+                .then(secondaryTestTag?.let { Modifier.testTag(it) } ?: Modifier),
+            contentColor = LocalDirectorXColors.current.text,
+            enabled = enabled
+        )
     }
 }
 
