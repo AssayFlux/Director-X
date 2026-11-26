@@ -76,7 +76,7 @@ class Api37QaClassifierTest(unittest.TestCase):
             if ".FcpxmlDeviceParserInstrumentationTest." in test_id
         }
 
-        self.assertEqual(len(run_api37_qa.EXPECTED_TESTS), 37)
+        self.assertEqual(len(run_api37_qa.EXPECTED_TESTS), 39)
         self.assertEqual(len(gesture_tests), 7)
         self.assertEqual(len(fcpxml_tests), 3)
         self.assertIn(
