@@ -135,6 +135,14 @@ fun Timeline(
     engine: VideoEngine
 ) {
     val semanticColors = LocalDirectorXColors.current
+    val accentPeach = DirectorXAccents.Peach
+    val accentRed = DirectorXAccents.Red
+    val accentSky = DirectorXAccents.Sky
+    val accentYellow = DirectorXAccents.Yellow
+    val accentMauve = DirectorXAccents.Mauve
+    val accentRosewater = DirectorXAccents.Rosewater
+    val accentPink = DirectorXAccents.Pink
+    val accentBlue = DirectorXAccents.Blue
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     val isCompactTimeline = screenWidth < 430.dp
     val density = LocalDensity.current
@@ -589,7 +597,7 @@ fun Timeline(
                                 markerCountLabel,
                             )
                         },
-                        color = if (isTrimMode) DirectorXAccents.Peach else semanticColors.subtext,
+                        color = if (isTrimMode) accentPeach else semanticColors.subtext,
                         style = MaterialTheme.typography.labelSmall,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -607,14 +615,14 @@ fun Timeline(
                         .fillMaxWidth()
                         .padding(horizontal = chromePadding)
                         .clip(RoundedCornerShape(Radius.lg))
-                        .background(DirectorXAccents.Peach.copy(alpha = 0.12f))
-                        .border(1.dp, DirectorXAccents.Peach.copy(alpha = 0.18f), RoundedCornerShape(Radius.lg))
+                        .background(accentPeach.copy(alpha = 0.12f))
+                        .border(1.dp, accentPeach.copy(alpha = 0.18f), RoundedCornerShape(Radius.lg))
                         .padding(horizontal = 12.dp, vertical = 7.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         stringResource(R.string.timeline_trim_mode_hint),
-                        color = DirectorXAccents.Peach,
+                        color = accentPeach,
                         style = MaterialTheme.typography.labelMedium
                     )
                 }
@@ -647,14 +655,14 @@ fun Timeline(
                         .fillMaxWidth()
                         .padding(horizontal = chromePadding)
                         .clip(RoundedCornerShape(Radius.lg))
-                        .background(DirectorXAccents.Peach.copy(alpha = 0.12f))
-                        .border(1.dp, DirectorXAccents.Peach.copy(alpha = 0.18f), RoundedCornerShape(Radius.lg))
+                        .background(accentPeach.copy(alpha = 0.12f))
+                        .border(1.dp, accentPeach.copy(alpha = 0.18f), RoundedCornerShape(Radius.lg))
                         .padding(horizontal = 12.dp, vertical = 7.dp),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = rangeHint,
-                        color = DirectorXAccents.Peach,
+                        color = accentPeach,
                         style = MaterialTheme.typography.labelMedium,
                     )
                 }
@@ -1224,18 +1232,18 @@ fun Timeline(
                                 val right = maxOf(rangeStartPx, rangeEndPx).coerceIn(0f, size.width)
                                 if (right > left) {
                                     drawRect(
-                                        color = DirectorXAccents.Peach.copy(alpha = 0.28f),
+                                        color = accentPeach.copy(alpha = 0.28f),
                                         topLeft = Offset(left, 0f),
                                         size = Size(right - left, size.height),
                                     )
                                     drawLine(
-                                        color = DirectorXAccents.Peach,
+                                        color = accentPeach,
                                         start = Offset(left, 0f),
                                         end = Offset(left, size.height),
                                         strokeWidth = 2.dp.toPx(),
                                     )
                                     drawLine(
-                                        color = DirectorXAccents.Peach,
+                                        color = accentPeach,
                                         start = Offset(right, 0f),
                                         end = Offset(right, size.height),
                                         strokeWidth = 2.dp.toPx(),
@@ -1694,9 +1702,9 @@ fun Timeline(
                                     var isClipContentVisible by remember(clip.id) { mutableStateOf(true) }
                                     val clipBackgroundColor = remember(isSelected, isMultiSelected, isClipMissing, clipColor) {
                                         when {
-                                            isClipMissing -> DirectorXAccents.Red.copy(alpha = 0.38f)
+                                            isClipMissing -> accentRed.copy(alpha = 0.38f)
                                             isSelected -> clipColor.copy(alpha = 0.64f)
-                                            isMultiSelected -> DirectorXAccents.Peach.copy(alpha = 0.58f)
+                                            isMultiSelected -> accentPeach.copy(alpha = 0.58f)
                                             else -> clipColor.copy(alpha = 0.44f)
                                         }
                                     }
@@ -1713,10 +1721,10 @@ fun Timeline(
                                                 Modifier.border(
                                                     if (isClipMissing) 2.dp else if (isSelected) 2.dp else 1.dp,
                                                     when {
-                                                        isClipMissing -> DirectorXAccents.Red.copy(alpha = 0.85f)
+                                                        isClipMissing -> accentRed.copy(alpha = 0.85f)
                                                         isSelected -> clipColor
-                                                        isKeyboardFocused -> DirectorXAccents.Sky.copy(alpha = 0.95f)
-                                                        isMultiSelected -> DirectorXAccents.Peach.copy(alpha = 0.85f)
+                                                        isKeyboardFocused -> accentSky.copy(alpha = 0.95f)
+                                                        isMultiSelected -> accentPeach.copy(alpha = 0.85f)
                                                         else -> clipColor.copy(alpha = 0.25f)
                                                     },
                                                     RoundedCornerShape(Radius.xs)
@@ -1966,7 +1974,7 @@ fun Timeline(
                                                     }
                                                     drawPath(
                                                         path,
-                                                        DirectorXAccents.Yellow,
+                                                        accentYellow,
                                                         style = Stroke(width = 1.5f)
                                                     )
                                                     // Draw keyframe dots on envelope (zero-duration guard above protects the divide).
@@ -1974,7 +1982,7 @@ fun Timeline(
                                                     volumeKfs.forEach { kf ->
                                                         val x = (kf.timeOffsetMs.toFloat() / durF) * size.width
                                                         val y = size.height * (1f - (kf.value / 2f).coerceIn(0f, 1f))
-                                                        drawCircle(DirectorXAccents.Yellow, 3f, Offset(x, y))
+                                                        drawCircle(accentYellow, 3f, Offset(x, y))
                                                     }
                                                 }
                                             }
@@ -1995,7 +2003,7 @@ fun Timeline(
                                                 Canvas(modifier = Modifier.fillMaxSize()) {
                                                     val step = 12f * density.density
                                                     val stroke = 1.2f * density.density
-                                                    val lineColor = DirectorXAccents.Red.copy(alpha = 0.25f)
+                                                    val lineColor = accentRed.copy(alpha = 0.25f)
                                                     var x = -size.height
                                                     while (x < size.width + size.height) {
                                                         drawLine(
@@ -2010,7 +2018,7 @@ fun Timeline(
                                                 Icon(
                                                     imageVector = Icons.Default.BrokenImage,
                                                     contentDescription = stringResource(R.string.cd_clip_source_missing),
-                                                    tint = DirectorXAccents.Red.copy(alpha = 0.7f),
+                                                    tint = accentRed.copy(alpha = 0.7f),
                                                     modifier = Modifier.size(18.dp)
                                                 )
                                             }
@@ -2037,7 +2045,7 @@ fun Timeline(
                                                     Spacer(modifier = Modifier.width(6.dp))
                                                     TimelineClipBadge(
                                                         text = formatSpeedLabel(clip.speed),
-                                                        accent = DirectorXAccents.Yellow,
+                                                        accent = accentYellow,
                                                         compact = compactClipBadges
                                                     )
                                                 }
@@ -2054,7 +2062,7 @@ fun Timeline(
                                                     Spacer(modifier = Modifier.width(6.dp))
                                                     TimelineClipBadge(
                                                         text = stringResource(R.string.timeline_effect_count_badge, clip.effects.size),
-                                                        accent = DirectorXAccents.Mauve,
+                                                        accent = accentMauve,
                                                         compact = compactClipBadges
                                                     )
                                                 }
@@ -2077,13 +2085,13 @@ fun Timeline(
                                                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                                                     TimelineClipBadge(
                                                         text = formatTimelineDurationLabel(clip.durationMs),
-                                                        accent = DirectorXAccents.Sky,
+                                                        accent = accentSky,
                                                         compact = compactClipBadges
                                                     )
                                                     if (showKeyframeBadge) {
                                                         TimelineClipBadge(
                                                             text = stringResource(R.string.timeline_keyframe_count_badge, clip.keyframes.size),
-                                                            accent = DirectorXAccents.Rosewater,
+                                                            accent = accentRosewater,
                                                             compact = compactClipBadges
                                                         )
                                                     }
@@ -2164,14 +2172,14 @@ fun Timeline(
                                                     .width(with(density) { transWidthPx.coerceAtLeast(8f).toDp() })
                                                     .fillMaxHeight()
                                                     .background(
-                                                        DirectorXAccents.Yellow.copy(alpha = 0.5f)
+                                                        accentYellow.copy(alpha = 0.5f)
                                                     )
                                             ) {
                                                 // Transition type icon
                                                 Icon(
                                                     imageVector = Icons.Filled.SwapHoriz,
                                                     contentDescription = null,
-                                                    tint = DirectorXAccents.Yellow,
+                                                    tint = accentYellow,
                                                     modifier = Modifier
                                                         .align(Alignment.CenterStart)
                                                         .padding(start = 1.dp)
@@ -2189,7 +2197,7 @@ fun Timeline(
                                                     .width(with(density) { transOutWidthPx.coerceAtLeast(8f).toDp() })
                                                     .fillMaxHeight()
                                                     .background(
-                                                        DirectorXAccents.Yellow.copy(alpha = 0.5f)
+                                                        accentYellow.copy(alpha = 0.5f)
                                                     )
                                             )
                                         }
@@ -2203,7 +2211,7 @@ fun Timeline(
                                                     val x = (kf.timeOffsetMs / clipDuration) * size.width
                                                     if (x in 0f..size.width) {
                                                         drawCircle(
-                                                            color = DirectorXAccents.Pink,
+                                                            color = accentPink,
                                                             radius = 3f,
                                                             center = Offset(x, size.height - 6f)
                                                         )
@@ -2227,7 +2235,7 @@ fun Timeline(
                                             .fillMaxHeight()
                                     ) {
                                         drawRect(
-                                            color = DirectorXAccents.Yellow.copy(alpha = 0.25f),
+                                            color = accentYellow.copy(alpha = 0.25f),
                                             size = Size(1f * density.density, size.height)
                                         )
                                     }
@@ -2291,7 +2299,7 @@ fun Timeline(
                                                 .fillMaxHeight()
                                         ) {
                                             drawRect(
-                                                color = DirectorXAccents.Blue,
+                                                color = accentBlue,
                                                 size = Size(2f * density.density, size.height)
                                             )
                                             // Draw small diamond indicators at top and bottom
@@ -2303,7 +2311,7 @@ fun Timeline(
                                                 lineTo(size.width / 2 - diamondSize, diamondSize)
                                                 close()
                                             }
-                                            drawPath(topDiamond, DirectorXAccents.Blue)
+                                            drawPath(topDiamond, accentBlue)
                                             val bottomDiamond = Path().apply {
                                                 moveTo(size.width / 2, size.height)
                                                 lineTo(size.width / 2 + diamondSize, size.height - diamondSize)
@@ -2311,7 +2319,7 @@ fun Timeline(
                                                 lineTo(size.width / 2 - diamondSize, size.height - diamondSize)
                                                 close()
                                             }
-                                            drawPath(bottomDiamond, DirectorXAccents.Blue)
+                                            drawPath(bottomDiamond, accentBlue)
                                         }
                                     }
                                 }
@@ -2328,7 +2336,7 @@ fun Timeline(
                                         .fillMaxHeight()
                                 ) {
                                     drawRect(
-                                        color = DirectorXAccents.Sky,
+                                        color = accentSky,
                                         size = Size(2f * density.density, size.height)
                                     )
                                 }
@@ -2353,7 +2361,7 @@ fun Timeline(
                             lineTo(size.width, 0f)
                             close()
                         }
-                        drawPath(path, DirectorXAccents.Sky)
+                        drawPath(path, accentSky)
                     }
                 }
             }
