@@ -348,17 +348,17 @@ fun TransformOverlay(
 
         // Center guides (crosshair when near center)
         if (abs(positionX) < 0.02f) {
-            drawLine(DirectorXAccents.Green.copy(alpha = 0.4f), Offset(size.width / 2f, 0f), Offset(size.width / 2f, size.height), 1f)
+            drawLine(alignmentAccent.copy(alpha = 0.4f), Offset(size.width / 2f, 0f), Offset(size.width / 2f, size.height), 1f)
         }
         if (abs(positionY) < 0.02f) {
-            drawLine(DirectorXAccents.Green.copy(alpha = 0.4f), Offset(0f, size.height / 2f), Offset(size.width, size.height / 2f), 1f)
+            drawLine(alignmentAccent.copy(alpha = 0.4f), Offset(0f, size.height / 2f), Offset(size.width, size.height / 2f), 1f)
         }
 
         // Draw within rotation context
         rotate(rotation, pivot = Offset(centerX, centerY)) {
             // Bounding box
             drawRect(
-                DirectorXAccents.Mauve.copy(alpha = 0.6f),
+                guideAccent.copy(alpha = 0.6f),
                 topLeft = Offset(centerX - hw, centerY - hh),
                 size = androidx.compose.ui.geometry.Size(baseWidth, baseHeight),
                 style = Stroke(width = 1.5f)
@@ -367,13 +367,13 @@ fun TransformOverlay(
             // Dashed diagonals (when scaling)
             if (activeHandle.isScale()) {
                 drawLine(
-                    DirectorXAccents.Mauve.copy(alpha = 0.2f),
+                    guideAccent.copy(alpha = 0.2f),
                     Offset(centerX - hw, centerY - hh),
                     Offset(centerX + hw, centerY + hh),
                     1f
                 )
                 drawLine(
-                    DirectorXAccents.Mauve.copy(alpha = 0.2f),
+                    guideAccent.copy(alpha = 0.2f),
                     Offset(centerX + hw, centerY - hh),
                     Offset(centerX - hw, centerY + hh),
                     1f
@@ -389,7 +389,7 @@ fun TransformOverlay(
             )
             corners.forEach { corner ->
                 drawCircle(Color.White, HANDLE_RADIUS + 1f, corner)
-                drawCircle(DirectorXAccents.Mauve, HANDLE_RADIUS, corner)
+                drawCircle(guideAccent, HANDLE_RADIUS, corner)
             }
 
             // Edge midpoint handles
@@ -401,31 +401,31 @@ fun TransformOverlay(
             )
             midpoints.forEach { mid ->
                 drawCircle(Color.White, HANDLE_RADIUS * 0.6f + 1f, mid)
-                drawCircle(DirectorXAccents.Mauve.copy(alpha = 0.7f), HANDLE_RADIUS * 0.6f, mid)
+                drawCircle(guideAccent.copy(alpha = 0.7f), HANDLE_RADIUS * 0.6f, mid)
             }
 
             // Rotation handle (line + circle above top center)
             val rotateStart = Offset(centerX, centerY - hh)
             val rotateEnd = Offset(centerX, centerY - hh - ROTATE_HANDLE_DISTANCE)
-            drawLine(DirectorXAccents.Mauve.copy(alpha = 0.6f), rotateStart, rotateEnd, 1.5f)
+            drawLine(guideAccent.copy(alpha = 0.6f), rotateStart, rotateEnd, 1.5f)
             drawCircle(Color.White, HANDLE_RADIUS + 1f, rotateEnd)
-            drawCircle(DirectorXAccents.Mauve, HANDLE_RADIUS, rotateEnd)
+            drawCircle(guideAccent, HANDLE_RADIUS, rotateEnd)
             // Rotation arrow icon
             val arrowPath = Path().apply {
                 moveTo(rotateEnd.x - 5f, rotateEnd.y - 2f)
                 lineTo(rotateEnd.x, rotateEnd.y - 6f)
                 lineTo(rotateEnd.x + 5f, rotateEnd.y - 2f)
             }
-            drawPath(arrowPath, DirectorXAccents.Mauve, style = Stroke(1.5f))
+            drawPath(arrowPath, guideAccent, style = Stroke(1.5f))
 
             // Anchor point (center crosshair)
             val anchorPos = Offset(
                 centerX - hw + anchorX * baseWidth,
                 centerY - hh + anchorY * baseHeight
             )
-            drawCircle(DirectorXAccents.Peach.copy(alpha = 0.5f), 4f, anchorPos)
-            drawLine(DirectorXAccents.Peach.copy(alpha = 0.5f), Offset(anchorPos.x - 8f, anchorPos.y), Offset(anchorPos.x + 8f, anchorPos.y), 1f)
-            drawLine(DirectorXAccents.Peach.copy(alpha = 0.5f), Offset(anchorPos.x, anchorPos.y - 8f), Offset(anchorPos.x, anchorPos.y + 8f), 1f)
+            drawCircle(anchorAccent.copy(alpha = 0.5f), 4f, anchorPos)
+            drawLine(anchorAccent.copy(alpha = 0.5f), Offset(anchorPos.x - 8f, anchorPos.y), Offset(anchorPos.x + 8f, anchorPos.y), 1f)
+            drawLine(anchorAccent.copy(alpha = 0.5f), Offset(anchorPos.x, anchorPos.y - 8f), Offset(anchorPos.x, anchorPos.y + 8f), 1f)
         }
 
         // Info label
