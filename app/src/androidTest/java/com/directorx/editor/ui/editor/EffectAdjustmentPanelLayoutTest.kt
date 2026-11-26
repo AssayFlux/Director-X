@@ -27,6 +27,30 @@ class EffectAdjustmentPanelLayoutTest {
     val compose = createComposeRule()
 
     @Test
+    fun effectsLibraryRemainsScrollableInCompactViewport() {
+        compose.setContent {
+            DirectorXTheme(appearanceMode = AppearanceMode.PRIMARY_BRAND) {
+                Box(
+                    modifier = Modifier
+                        .width(280.dp)
+                        .height(300.dp),
+                ) {
+                    EffectsPanel(
+                        selectedClip = null,
+                        onAddEffect = {},
+                        onClose = {},
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                    )
+                }
+            }
+        }
+
+        compose.onNodeWithTag("premium-editor-panel-scroll-content")
+            .assertHasScrollAction()
+        compose.onNodeWithText("Effects").assertIsDisplayed()
+    }
+
+    @Test
     fun narrowShortViewportKeepsEveryEffectParameterReachable() {
         compose.setContent {
             DirectorXTheme(appearanceMode = AppearanceMode.PRIMARY_BRAND) {
