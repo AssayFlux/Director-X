@@ -51,7 +51,7 @@ internal class QaEditorHarness(
         get() = targetContext.resources.displayMetrics.density
 
     val touchSlopPx: Float
-        get() = ViewConfiguration.get(targetContext).scaledTouchSlop.toFloat()
+        get() = ViewConfiguration.get(compose.activity).scaledTouchSlop.toFloat()
 
     fun setUp() {
         assertTrue("QA editor tests must run against the QA build type", BuildConfig.QA_TIMELINE_HARNESS_ENABLED)
