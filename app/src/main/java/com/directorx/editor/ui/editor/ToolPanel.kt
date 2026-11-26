@@ -666,13 +666,16 @@ fun EffectsPanel(
         } ?: emptyList()
     }
 
-    PremiumEditorPanel(
+    BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
+        PremiumEditorPanel(
         title = stringResource(R.string.tool_effects),
         subtitle = stringResource(R.string.panel_effects_subtitle),
         icon = Icons.Default.AutoFixHigh,
         accent = accent,
         onClose = onClose,
-        modifier = modifier.heightIn(max = 360.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(max = minOf(360.dp, maxHeight * 0.82f)),
         scrollable = true
     ) {
         PremiumPanelCard(accent = accent) {
@@ -870,6 +873,7 @@ fun EffectsPanel(
                     }
                 }
             }
+        }
         }
     }
 }
