@@ -144,6 +144,7 @@ fun PremiumEditorPanel(
                     .fillMaxWidth()
                     .weight(1f, fill = true)
                     .then(scrollModifier)
+                    .testTag("premium-editor-panel-scroll-content")
             } else {
                 Modifier.fillMaxWidth()
             },
