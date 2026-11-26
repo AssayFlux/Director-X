@@ -969,20 +969,47 @@ fun EffectSlider(
         modifier = Modifier.fillMaxWidth()
     ) {
         Column(modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = label,
-                    color = semanticColors.subtextStrong,
-                    style = MaterialTheme.typography.labelLarge
-                )
-                Text(
-                    text = formatEffectValue(safeValue, rangeStart, rangeEnd),
-                    color = DirectorXAccents.Rosewater,
-                    style = MaterialTheme.typography.labelLarge
-                )
+            BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+                val formattedValue = formatEffectValue(safeValue, rangeStart, rangeEnd)
+                if (maxWidth < 300.dp) {
+                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                        Text(
+                            text = label,
+                            color = semanticColors.subtextStrong,
+                            style = MaterialTheme.typography.labelLarge,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        Text(
+                            text = formattedValue,
+                            color = DirectorXAccents.Rosewater,
+                            style = MaterialTheme.typography.labelLarge,
+                            maxLines = 1
+                        )
+                    }
+                } else {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Text(
+                            text = label,
+                            modifier = Modifier.weight(1f),
+                            color = semanticColors.subtextStrong,
+                            style = MaterialTheme.typography.labelLarge,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        Text(
+                            text = formattedValue,
+                            color = DirectorXAccents.Rosewater,
+                            style = MaterialTheme.typography.labelLarge,
+                            maxLines = 1,
+                            textAlign = TextAlign.End
+                        )
+                    }
+                }
             }
             Spacer(modifier = Modifier.height(6.dp))
             Slider(
