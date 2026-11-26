@@ -43,6 +43,8 @@ fun AudioPanel(
     onClose: () -> Unit
 ) {
     val semanticColors = LocalDirectorXColors.current
+    val waveformAccent = DirectorXAccents.Green
+    val fadeAccent = DirectorXAccents.Mauve
     PremiumEditorPanel(
         title = stringResource(R.string.audio_title),
         subtitle = stringResource(R.string.panel_audio_subtitle),
@@ -132,9 +134,9 @@ fun AudioPanel(
                         .background(semanticColors.panel)
                         .padding(horizontal = 8.dp, vertical = 10.dp)
                 ) {
-                    drawWaveform(waveform, DirectorXAccents.Green)
+                    drawWaveform(waveform, waveformAccent)
                     if (clip.fadeInMs > 0 || clip.fadeOutMs > 0) {
-                        drawFadeEnvelope(clip.fadeInMs, clip.fadeOutMs, clip.durationMs.coerceAtLeast(1L), DirectorXAccents.Mauve)
+                        drawFadeEnvelope(clip.fadeInMs, clip.fadeOutMs, clip.durationMs.coerceAtLeast(1L), fadeAccent)
                     }
                 }
             } else {
