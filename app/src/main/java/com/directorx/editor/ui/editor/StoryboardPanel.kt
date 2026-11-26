@@ -227,6 +227,7 @@ fun StoryboardPanel(
     }
 }
 
+@Composable
 private fun statusColor(status: StoryboardCardStatus) = when (status) {
     StoryboardCardStatus.PLANNED -> DirectorXAccents.Yellow
     StoryboardCardStatus.FILMED -> DirectorXAccents.Blue
