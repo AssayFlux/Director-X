@@ -1,7 +1,6 @@
 package com.directorx.editor.ui.mediapicker
 
 import android.app.Activity
-import com.directorx.editor.ui.theme.DirectorXAccents
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -588,7 +587,7 @@ fun MediaPickerSheet(
         title = stringResource(R.string.media_picker_title),
         subtitle = stringResource(R.string.media_picker_subtitle),
         icon = Icons.Default.PermMedia,
-        accent = DirectorXAccents.Blue,
+        accent = LocalDirectorXColors.current.accent,
         onClose = {
             cancelSequenceReview()
             cancelActiveOperation()
@@ -619,7 +618,7 @@ fun MediaPickerSheet(
             Spacer(modifier = Modifier.height(12.dp))
         }
 
-        PremiumPanelCard(accent = DirectorXAccents.Blue) {
+        PremiumPanelCard(accent = LocalDirectorXColors.current.accent) {
             Text(
                 text = stringResource(R.string.media_picker_library_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -634,11 +633,11 @@ fun MediaPickerSheet(
                 horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
                 verticalArrangement = Arrangement.spacedBy(Spacing.sm)
             ) {
-                PremiumPanelPill(text = librarySourceLabel, accent = DirectorXAccents.Blue)
-                PremiumPanelPill(text = stringResource(R.string.media_picker_source_audio), accent = DirectorXAccents.Peach)
+                PremiumPanelPill(text = librarySourceLabel, accent = LocalDirectorXColors.current.accent)
+                PremiumPanelPill(text = stringResource(R.string.media_picker_source_audio), accent = LocalDirectorXColors.current.accentTertiary)
                 PremiumPanelPill(
                     text = stringResource(R.string.media_picker_source_kept_local),
-                    accent = DirectorXAccents.Teal
+                    accent = LocalDirectorXColors.current.accentSecondary
                 )
             }
 
@@ -646,7 +645,7 @@ fun MediaPickerSheet(
                 icon = Icons.Default.Videocam,
                 label = stringResource(R.string.media_picker_video),
                 description = stringResource(R.string.media_picker_video_description),
-                color = DirectorXAccents.Blue,
+                color = LocalDirectorXColors.current.accent,
                 enabled = actionsEnabled,
                 onClick = {
                     if (usePhotoPicker) {
@@ -664,7 +663,7 @@ fun MediaPickerSheet(
                 icon = Icons.Default.Image,
                 label = stringResource(R.string.media_picker_image),
                 description = stringResource(R.string.media_picker_image_description),
-                color = DirectorXAccents.Green,
+                color = LocalDirectorXColors.current.success,
                 enabled = actionsEnabled,
                 onClick = {
                     if (usePhotoPicker) {
@@ -682,7 +681,7 @@ fun MediaPickerSheet(
                 icon = Icons.Default.MusicNote,
                 label = stringResource(R.string.media_picker_audio),
                 description = stringResource(R.string.media_picker_audio_description),
-                color = DirectorXAccents.Peach,
+                color = LocalDirectorXColors.current.accentTertiary,
                 enabled = actionsEnabled,
                 onClick = {
                     pendingMediaType = "audio"
@@ -711,7 +710,7 @@ fun MediaPickerSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(min = TouchTarget.minimum),
-                contentColor = DirectorXAccents.Mauve,
+                contentColor = LocalDirectorXColors.current.accentTertiary,
                 enabled = actionsEnabled
             )
             Text(
@@ -723,7 +722,7 @@ fun MediaPickerSheet(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        PremiumPanelCard(accent = DirectorXAccents.Red) {
+        PremiumPanelCard(accent = LocalDirectorXColors.current.danger) {
             Text(
                 text = stringResource(R.string.media_picker_capture_title),
                 style = MaterialTheme.typography.titleMedium,
@@ -743,7 +742,7 @@ fun MediaPickerSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(min = TouchTarget.minimum),
-                contentColor = DirectorXAccents.Red,
+                contentColor = LocalDirectorXColors.current.danger,
                 enabled = actionsEnabled
             )
         }
@@ -775,7 +774,7 @@ private fun MediaImportStatusCard(
         null
     }
     PremiumPanelCard(
-        accent = DirectorXAccents.Mauve,
+        accent = LocalDirectorXColors.current.accentTertiary,
         modifier = Modifier.semantics { liveRegion = LiveRegionMode.Polite }
     ) {
         Row(
@@ -787,13 +786,13 @@ private fun MediaImportStatusCard(
                 CircularProgressIndicator(
                     progress = { batchProgress },
                     modifier = Modifier.size(24.dp),
-                    color = DirectorXAccents.Mauve,
+                    color = LocalDirectorXColors.current.accentTertiary,
                     strokeWidth = 2.dp,
                 )
             } else {
                 CircularProgressIndicator(
                     modifier = Modifier.size(24.dp),
-                    color = DirectorXAccents.Mauve,
+                    color = LocalDirectorXColors.current.accentTertiary,
                     strokeWidth = 2.dp,
                 )
             }
@@ -828,7 +827,7 @@ private fun MediaImportStatusCard(
                     .fillMaxWidth()
                     .height(5.dp)
                     .clip(RoundedCornerShape(Radius.sm)),
-                color = DirectorXAccents.Mauve,
+                color = LocalDirectorXColors.current.accentTertiary,
                 trackColor = semanticColors.surface,
             )
         } else {
@@ -837,7 +836,7 @@ private fun MediaImportStatusCard(
                     .fillMaxWidth()
                     .height(5.dp)
                     .clip(RoundedCornerShape(Radius.sm)),
-                color = DirectorXAccents.Mauve,
+                color = LocalDirectorXColors.current.accentTertiary,
                 trackColor = semanticColors.surface,
             )
         }
