@@ -1772,6 +1772,7 @@ private fun TransformMetricCard(
     }
 }
 
+@Composable
 private fun effectAccent(category: EffectCategory): Color = when (category) {
     EffectCategory.COLOR -> DirectorXAccents.Sapphire
     EffectCategory.FILTER -> DirectorXAccents.Mauve
