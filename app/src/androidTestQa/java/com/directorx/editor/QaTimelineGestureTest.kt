@@ -237,7 +237,7 @@ class QaTimelineGestureTest {
         // The close action is in the fixed panel header, outside the scrollable
         // content column. Scrolling it has no parent Scroll semantics and fails
         // on API 35/37; click the visible header action directly.
-        compose.onNodeWithContentDescription(editor.targetContext.getString(R.string.panel_keyframes_close_cd))
+        compose.onNodeWithTag(DirectorXTestTags.KEYFRAME_EDITOR_CLOSE)
             .performClick()
         // waitUntil polls wall time; let Compose apply the close callback and finish
         // the AnimatedVisibility transition before checking the panel state.
