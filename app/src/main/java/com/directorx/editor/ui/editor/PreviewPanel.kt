@@ -611,6 +611,10 @@ fun PreviewPanel(
                     borderColor = Color.Transparent,
                     shape = RoundedCornerShape(Radius.sm),
                     size = TouchTarget.minimum,
+                    // The native accessibility bounds are clipped at the preview
+                    // row's left inset on compact layouts. Keep the icon visual at
+                    // 48dp while giving its clickable surface enough width.
+                    buttonModifier = Modifier.width(64.dp),
                     iconSize = 19.dp,
                 )
                 Spacer(modifier = Modifier.weight(1f))
