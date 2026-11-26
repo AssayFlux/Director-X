@@ -59,22 +59,6 @@ import com.directorx.editor.model.KeyframeInterpolation
 import com.directorx.editor.model.KeyframeProperty
 import java.util.Locale
 
-@Composable
-private fun keyframePropertyColor(property: KeyframeProperty): Color = when (property) {
-    KeyframeProperty.POSITION_X -> DirectorXAccents.Red
-    KeyframeProperty.POSITION_Y -> DirectorXAccents.Green
-    KeyframeProperty.SCALE_X -> DirectorXAccents.Blue
-    KeyframeProperty.SCALE_Y -> DirectorXAccents.Teal
-    KeyframeProperty.ROTATION -> DirectorXAccents.Yellow
-    KeyframeProperty.OPACITY -> DirectorXAccents.Mauve
-    KeyframeProperty.VOLUME -> DirectorXAccents.Peach
-    KeyframeProperty.ANCHOR_X -> DirectorXAccents.Red.copy(alpha = 0.5f)
-    KeyframeProperty.ANCHOR_Y -> DirectorXAccents.Green.copy(alpha = 0.5f)
-    KeyframeProperty.MASK_FEATHER -> DirectorXAccents.Teal.copy(alpha = 0.5f)
-    KeyframeProperty.MASK_EXPANSION -> DirectorXAccents.Blue.copy(alpha = 0.5f)
-    KeyframeProperty.MASK_OPACITY -> DirectorXAccents.Mauve.copy(alpha = 0.5f)
-}
-
 private val CORE_KEYFRAME_PROPERTIES = listOf(
     KeyframeProperty.POSITION_X,
     KeyframeProperty.POSITION_Y,
@@ -106,6 +90,22 @@ fun KeyframeCurveEditor(
     onKeyframeDragEnded: () -> Unit = {}
 ) {
     val semanticColors = LocalDirectorXColors.current
+    // Resolve appearance-specific colors during composition so draw callbacks
+    // only capture immutable Color values and never read CompositionLocals.
+    val propertyColors = mapOf(
+        KeyframeProperty.POSITION_X to DirectorXAccents.Red,
+        KeyframeProperty.POSITION_Y to DirectorXAccents.Green,
+        KeyframeProperty.SCALE_X to DirectorXAccents.Blue,
+        KeyframeProperty.SCALE_Y to DirectorXAccents.Teal,
+        KeyframeProperty.ROTATION to DirectorXAccents.Yellow,
+        KeyframeProperty.OPACITY to DirectorXAccents.Mauve,
+        KeyframeProperty.VOLUME to DirectorXAccents.Peach,
+        KeyframeProperty.ANCHOR_X to DirectorXAccents.Red.copy(alpha = 0.5f),
+        KeyframeProperty.ANCHOR_Y to DirectorXAccents.Green.copy(alpha = 0.5f),
+        KeyframeProperty.MASK_FEATHER to DirectorXAccents.Teal.copy(alpha = 0.5f),
+        KeyframeProperty.MASK_EXPANSION to DirectorXAccents.Blue.copy(alpha = 0.5f),
+        KeyframeProperty.MASK_OPACITY to DirectorXAccents.Mauve.copy(alpha = 0.5f),
+    )
     var selectedKeyframe by remember { mutableStateOf<Keyframe?>(null) }
     var showPresets by remember { mutableStateOf(false) }
 
@@ -116,7 +116,7 @@ fun KeyframeCurveEditor(
     }
 
     val currentSelection = selectedKeyframe
-    val selectionAccent = selectedKeyframe?.let { keyframePropertyColor(it.property) } ?: DirectorXAccents.Mauve
+    val selectionAccent = selectedKeyframe?.let { propertyColors[it.property] } ?: DirectorXAccents.Mauve
     val activeKeyframeCount = keyframes.count { it.property in activeProperties }
     val summaryBody = when {
         activeProperties.isEmpty() -> stringResource(R.string.panel_keyframes_summary_empty)
@@ -280,7 +280,7 @@ fun KeyframeCurveEditor(
             ) {
                 CORE_KEYFRAME_PROPERTIES.forEach { property ->
                     val isActive = property in activeProperties
-                    val chipAccent = keyframePropertyColor(property) ?: semanticColors.text
+                    val chipAccent = propertyColors[property] ?: semanticColors.text
                     FilterChip(
                         selected = isActive,
                         onClick = { onPropertyToggled(property) },
@@ -432,7 +432,7 @@ fun KeyframeCurveEditor(
                             R.string.panel_keyframes_value_format,
                             formatKeyframeValue(keyframe.value)
                         ),
-                        accent = keyframePropertyColor(keyframe.property) ?: selectionAccent
+                        accent = propertyColors[keyframe.property] ?: selectionAccent
                     )
                     PremiumPanelPill(
                         text = stringResource(
@@ -452,7 +452,7 @@ fun KeyframeCurveEditor(
 
                 Text(
                     text = keyframe.property.displayLabel(),
-                    color = keyframePropertyColor(keyframe.property) ?: semanticColors.text,
+                    color = propertyColors[keyframe.property] ?: semanticColors.text,
                     style = MaterialTheme.typography.labelLarge
                 )
 
@@ -553,11 +553,11 @@ fun KeyframeCurveEditor(
                         colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
                             focusedTextColor = semanticColors.text,
                             unfocusedTextColor = semanticColors.text,
-                            focusedBorderColor = keyframePropertyColor(keyframe.property) ?: selectionAccent,
+                            focusedBorderColor = propertyColors[keyframe.property] ?: selectionAccent,
                             unfocusedBorderColor = semanticColors.surface,
-                            focusedLabelColor = keyframePropertyColor(keyframe.property) ?: selectionAccent,
+                            focusedLabelColor = propertyColors[keyframe.property] ?: selectionAccent,
                             unfocusedLabelColor = semanticColors.subtext,
-                            cursorColor = keyframePropertyColor(keyframe.property) ?: selectionAccent
+                            cursorColor = propertyColors[keyframe.property] ?: selectionAccent
                         ),
                         textStyle = MaterialTheme.typography.bodyMedium
                     )
@@ -777,7 +777,7 @@ internal fun CurveCanvas(
             val propertyKeyframes = keyframes.filter { it.property == property }.sortedBy { it.timeOffsetMs }
             if (propertyKeyframes.size < 2) return@forEach
 
-            val color = keyframePropertyColor(property) ?: semanticColors.text
+            val color = propertyColors[property] ?: semanticColors.text
             val range = getPropertyRange(property)
             val rangeSpan = range.second - range.first
 
@@ -797,7 +797,7 @@ internal fun CurveCanvas(
 
         keyframes.forEach { keyframe ->
             if (keyframe.property !in activeProperties) return@forEach
-            val color = keyframePropertyColor(keyframe.property) ?: semanticColors.text
+            val color = propertyColors[keyframe.property] ?: semanticColors.text
             val range = getPropertyRange(keyframe.property)
             val x = (keyframe.timeOffsetMs.toFloat() / clipDurationMs) * width
             val y = (1f - (keyframe.value - range.first) / (range.second - range.first)) * height
