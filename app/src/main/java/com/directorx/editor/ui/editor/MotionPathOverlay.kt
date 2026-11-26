@@ -31,6 +31,12 @@ fun MotionPathOverlay(
 
     if (posXKeyframes.size < 2 && posYKeyframes.size < 2) return
 
+    // Resolve appearance tokens during composition; the draw lambda itself is
+    // deliberately non-composable and only consumes these immutable colors.
+    val pathAccent = DirectorXAccents.Yellow
+    val pointAccent = DirectorXAccents.Mauve
+    val currentAccent = DirectorXAccents.Red
+
     Canvas(modifier = modifier.fillMaxSize()) {
         val w = size.width
         val h = size.height
