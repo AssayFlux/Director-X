@@ -34,9 +34,7 @@ fun SpeedPresetsPanel(
     modifier: Modifier = Modifier
 ) {
     val semanticColors = LocalDirectorXColors.current
-    val sections = remember {
-        speedPresetSections()
-    }
+    val sections = speedPresetSections()
 
     PremiumEditorPanel(
         title = stringResource(R.string.panel_speed_presets_title),
@@ -226,6 +224,7 @@ private data class SpeedPresetSection(
     val presets: List<SpeedPresetType>
 )
 
+@Composable
 private fun speedPresetSections(): List<SpeedPresetSection> = listOf(
     SpeedPresetSection(
         titleRes = R.string.panel_speed_presets_cinematic_title,
