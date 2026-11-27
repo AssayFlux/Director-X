@@ -191,6 +191,7 @@ internal fun TimelineExchangeReportDialog(
     onDismiss: () -> Unit,
     onShare: () -> Unit = {},
     onSaveCopy: () -> Unit = {},
+    onApplyImport: () -> Unit = {},
 ) {
     val semanticColors = LocalDirectorXColors.current
     val accent = when {
@@ -217,7 +218,14 @@ internal fun TimelineExchangeReportDialog(
             TimelineExchangeReportBody(feedback = feedback, accent = accent)
         },
         confirmButton = {
-            if (feedback.succeeded && feedback.outputFilePath != null) {
+            if (feedback.succeeded && feedback.timelineImport != null) {
+                DirectorXPrimaryButton(
+                    text = stringResource(R.string.timeline_exchange_apply),
+                    onClick = onApplyImport,
+                    icon = Icons.Default.Check,
+                    modifier = Modifier.testTag(DirectorXTestTags.TIMELINE_EXCHANGE_APPLY),
+                )
+            } else if (feedback.succeeded && feedback.outputFilePath != null) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
@@ -243,7 +251,7 @@ internal fun TimelineExchangeReportDialog(
                 )
             }
         },
-        dismissButton = if (feedback.succeeded && feedback.outputFilePath != null) {
+        dismissButton = if (feedback.succeeded && (feedback.outputFilePath != null || feedback.timelineImport != null)) {
             {
                 DirectorXSecondaryButton(
                     text = stringResource(R.string.done),
