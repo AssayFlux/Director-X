@@ -3454,4 +3454,12 @@
     <string name="vm_timeline_import_applied_toast">Línea de tiempo importada. Puedes deshacer este cambio desde el editor.</string>
     <string name="vm_timeline_import_not_ready">Esta importación de línea de tiempo no está lista. Resuelve primero los problemas que la bloquean.</string>
     <string name="vm_timeline_import_document_failed">Director X no pudo crear un documento seguro para importar la línea de tiempo.</string>
+    <string name="vm_timeline_import_choose_readable">Elige un documento legible desde el selector de archivos del sistema.</string>
+    <string name="vm_timeline_import_unsupported">Archivo de línea de tiempo no compatible. Elige .otio, .fcpxml, .edl o .clearcut-edl.json.</string>
+    <string name="vm_timeline_import_preview_failed">Director X no pudo previsualizar este archivo de línea de tiempo.</string>
+    <string name="vm_timeline_export_unavailable">La exportación de línea de tiempo ya no está disponible. Expórtala de nuevo.</string>
+    <string name="vm_timeline_export_share_chooser">Compartir archivo de línea de tiempo</string>
+    <string name="vm_timeline_export_share_failed">Director X no pudo compartir este archivo de línea de tiempo.</string>
+    <string name="vm_timeline_export_saved">Guardado %1$s</string>
+    <string name="vm_timeline_export_save_failed">Director X no pudo guardar el archivo de línea de tiempo en esa ubicación.</string>
 </resources>
