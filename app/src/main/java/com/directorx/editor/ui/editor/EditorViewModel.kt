@@ -451,7 +451,8 @@ data class TimelineExchangeFeedback(
     val title: String,
     val body: String,
     val outputFileName: String?,
-    val report: TimelineExchangeValidator.Report
+    val report: TimelineExchangeValidator.Report,
+    val outputFilePath: String? = null,
 )
 
 @HiltViewModel
@@ -5134,6 +5135,7 @@ class EditorViewModel @Inject constructor(
                             body = "The file was written, but the receiving editor may need manual cleanup.",
                             outputFileName = file.name,
                             report = result.report,
+                            outputFilePath = file.absolutePath,
                         )
                     )
                 }
@@ -6525,6 +6527,71 @@ class EditorViewModel @Inject constructor(
 
     fun dismissTimelineExchangeFeedback() {
         _state.update { it.copyMedia { media -> media.copy(timelineExchangeFeedback = null) } }
+    }
+
+    /** Share the last successfully generated interchange file through Android's chooser. */
+    fun shareTimelineExchangeExport() {
+        val feedback = _state.value.timelineExchangeFeedback
+        val file = feedback?.outputFilePath?.let(::File)?.takeIf { it.isFile }
+        if (file == null) {
+            showToast("The timeline export is no longer available. Export it again.")
+            return
+        }
+        runCatching {
+            val uri = androidx.core.content.FileProvider.getUriForFile(
+                appContext,
+                "${appContext.packageName}.fileprovider",
+                file,
+            )
+            val mimeType = timelineExchangeMimeType(file.extension)
+            val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                type = mimeType
+                putExtra(Intent.EXTRA_STREAM, uri)
+                clipData = android.content.ClipData.newUri(appContext.contentResolver, file.name, uri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            appContext.startActivity(
+                Intent.createChooser(sendIntent, "Share timeline file")
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            )
+        }.onFailure { error ->
+            AppLog.e("EditorViewModel", "Timeline export share failed", error)
+            showToast("Director X could not share this timeline file.")
+        }
+    }
+
+    /** Copy the generated interchange document to a user-selected SAF destination. */
+    fun saveTimelineExchangeExport(destination: Uri) {
+        val feedback = _state.value.timelineExchangeFeedback
+        val source = feedback?.outputFilePath?.let(::File)?.takeIf { it.isFile }
+        if (source == null) {
+            showToast("The timeline export is no longer available. Export it again.")
+            return
+        }
+        viewModelScope.launch {
+            val result = runCatching {
+                withContext(Dispatchers.IO) {
+                    val output = appContext.contentResolver.openOutputStream(destination, "wt")
+                        ?: error("Unable to open the selected destination")
+                    source.inputStream().buffered().use { input ->
+                        output.buffered().use { target -> input.copyTo(target) }
+                    }
+                }
+            }
+            result.onSuccess {
+                showToast("Saved ${source.name}")
+            }.onFailure { error ->
+                AppLog.e("EditorViewModel", "Timeline export save-copy failed", error)
+                showToast("Director X could not save the timeline file to that location.")
+            }
+        }
+    }
+
+    private fun timelineExchangeMimeType(extension: String): String = when (extension.lowercase()) {
+        "otio", "json" -> "application/json"
+        "fcpxml", "xml" -> "application/xml"
+        "edl" -> "text/plain"
+        else -> "application/octet-stream"
     }
 
     fun insertFreezeFrame() {
