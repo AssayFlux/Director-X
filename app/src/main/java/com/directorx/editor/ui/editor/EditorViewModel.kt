@@ -5125,20 +5125,22 @@ class EditorViewModel @Inject constructor(
         }
 
         val file = requireNotNull(outputFile)
-        if (result.report.issues.isNotEmpty()) {
-            _state.update {
-                it.copyMedia { media ->
-                    media.copy(
-                        timelineExchangeFeedback = TimelineExchangeFeedback(
-                            succeeded = true,
-                            title = "$formatName exported with notes",
-                            body = "The file was written, but the receiving editor may need manual cleanup.",
-                            outputFileName = file.name,
-                            report = result.report,
-                            outputFilePath = file.absolutePath,
-                        )
+        _state.update {
+            it.copyMedia { media ->
+                media.copy(
+                    timelineExchangeFeedback = TimelineExchangeFeedback(
+                        succeeded = true,
+                        title = if (result.report.issues.isEmpty()) "$formatName exported" else "$formatName exported with notes",
+                        body = if (result.report.issues.isEmpty()) {
+                            "Your timeline file is ready. Save a copy to a location you choose or share it with another app."
+                        } else {
+                            "The file was written, but the receiving editor may need manual cleanup."
+                        },
+                        outputFileName = file.name,
+                        report = result.report,
+                        outputFilePath = file.absolutePath,
                     )
-                }
+                )
             }
         }
         val tail = if (result.report.warnings.isNotEmpty()) " (${result.report.summary})" else ""
