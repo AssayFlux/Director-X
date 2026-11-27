@@ -246,6 +246,7 @@ fun BoxScope.EditorUtilityPanelHost(
             feedback = feedback,
             onDismiss = viewModel::dismissTimelineExchangeFeedback,
             onShare = viewModel::shareTimelineExchangeExport,
+            onApplyImport = { feedback.timelineImport?.let(viewModel::applyTimelineExchangeImport) },
             onSaveCopy = {
                 timelineExportSaveLauncher.launch(
                     feedback.outputFileName ?: "Director-X-Timeline.${feedback.report.format.extension.removePrefix(".")}"
