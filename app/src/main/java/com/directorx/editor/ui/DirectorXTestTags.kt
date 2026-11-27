@@ -59,6 +59,8 @@ object DirectorXTestTags {
     const val EXPORT_CLOSE = "export.close"
     const val EXPORT_PRIMARY_ACTION = "export.primaryAction"
     const val TIMELINE_EXCHANGE_IMPORT = "timelineExchange.import"
+    const val TIMELINE_EXCHANGE_SAVE_COPY = "timelineExchange.saveCopy"
+    const val TIMELINE_EXCHANGE_SHARE = "timelineExchange.share"
 
     const val MEDIA_MANAGER_PANEL = "mediaManager.panel"
     const val MEDIA_MANAGER_CLOSE = "mediaManager.close"
