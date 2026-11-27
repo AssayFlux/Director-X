@@ -135,24 +135,31 @@ class LargeTextLayoutTest {
         val dashboardBounds = compose.onNodeWithTag(DirectorXTestTags.PROJECTS_SCREEN)
             .fetchSemanticsNode()
             .boundsInWindow
+        // At extreme font scales the hero's intro can push the action row
+        // below the initial viewport. Scroll the row into view before checking
+        // both equal-width actions; do not mistake expected large-text scrolling
+        // for a zero-sized or inaccessible button.
+        compose.onNodeWithTag(DirectorXTestTags.PROJECTS_CREATE_PROJECT)
+            .performScrollTo()
+            .assertIsDisplayed()
         listOf(
             DirectorXTestTags.PROJECTS_CREATE_PROJECT,
             DirectorXTestTags.PROJECTS_IMPORT_TEMPLATE
         ).forEach { tag ->
-            val action = compose.onNodeWithTag(tag).assertIsDisplayed()
-            val bounds = action.fetchSemanticsNode().boundsInWindow
+            val bounds = compose.onNodeWithTag(tag)
+                .assertIsDisplayed()
+                .fetchSemanticsNode()
+                .boundsInWindow
             check(
                 bounds.left >= dashboardBounds.left - 1f &&
                     bounds.top >= dashboardBounds.top - 1f &&
                     bounds.right <= dashboardBounds.right + 1f &&
                     bounds.bottom <= dashboardBounds.bottom + 1f
             ) {
-                "Dashboard action is outside the initial viewport: $tag=$bounds root=$dashboardBounds"
+                "Dashboard action is outside the visible viewport after scrolling: $tag=$bounds root=$dashboardBounds"
             }
         }
         compose.onNodeWithTag(DirectorXTestTags.PROJECTS_CREATE_PROJECT)
-            .performScrollTo()
-            .assertIsDisplayed()
             .performClick()
         compose.waitUntilAtLeastOneExists(DirectorXTestTags.TEMPLATE_SHEET)
         compose.onNodeWithTag(DirectorXTestTags.TEMPLATE_GRID)
