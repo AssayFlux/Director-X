@@ -400,8 +400,8 @@ fun DirectorXChromeIconButton(
             // Constrain the clickable node itself. Putting the size modifier after
             // clickable only enlarges its parent layout, leaving a smaller hit target.
             .requiredSizeIn(
-                minWidth = TouchTarget.minimum + 4.dp,
-                minHeight = TouchTarget.minimum + 4.dp,
+                minWidth = TouchTarget.minimum,
+                minHeight = TouchTarget.minimum,
             )
             .clickable(
                 interactionSource = interactionSource,
