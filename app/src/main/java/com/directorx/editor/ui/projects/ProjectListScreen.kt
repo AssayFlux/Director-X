@@ -1409,14 +1409,13 @@ private fun ProjectActionRow(
                 .weight(1f)
                 .then(primaryTestTag?.let { Modifier.testTag(it) } ?: Modifier)
         )
-        DirectorXSecondaryButton(
+        DirectorXPrimaryButton(
             text = secondaryLabel,
             icon = secondaryIcon,
             onClick = onSecondary,
             modifier = Modifier
                 .weight(1f)
                 .then(secondaryTestTag?.let { Modifier.testTag(it) } ?: Modifier),
-            contentColor = LocalDirectorXColors.current.text,
             enabled = enabled
         )
     }
