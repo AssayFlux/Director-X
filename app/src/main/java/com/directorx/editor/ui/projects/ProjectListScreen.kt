@@ -1382,7 +1382,6 @@ private fun ProjectTemplateLibraryRow(
 }
 
 @Composable
-@Composable
 private fun ProjectActionRow(
     primaryLabel: String,
     primaryIcon: androidx.compose.ui.graphics.vector.ImageVector,
