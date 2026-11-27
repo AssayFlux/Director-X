@@ -57,6 +57,7 @@ import androidx.core.content.FileProvider
 import androidx.core.content.ContextCompat
 import com.directorx.editor.BuildConfig
 import com.directorx.editor.R
+import com.directorx.editor.engine.AppearanceMode
 import com.directorx.editor.engine.EncoderCapabilityProbe
 import com.directorx.editor.engine.AppSettings
 import com.directorx.editor.engine.PrivacyDashboard
