@@ -38,7 +38,10 @@ class IncomingDocumentImportRouter @Inject constructor(
     private val stylePackManager: StylePackManager,
     private val stabilizationProfileManager: StabilizationProfileManager,
 ) {
-    suspend fun preview(item: IncomingDocumentItem): IncomingDocumentImportPreview = withContext(Dispatchers.IO) {
+    suspend fun preview(
+        item: IncomingDocumentItem,
+        mediaRelocation: Map<String, Uri> = emptyMap(),
+    ): IncomingDocumentImportPreview = withContext(Dispatchers.IO) {
         val readability = validateReadable(item)
         if (readability != null) return@withContext readability
 
@@ -54,7 +57,7 @@ class IncomingDocumentImportRouter @Inject constructor(
             IncomingDocumentKind.TIMELINE_OTIO,
             IncomingDocumentKind.TIMELINE_FCPXML,
             IncomingDocumentKind.TIMELINE_EDL,
-            IncomingDocumentKind.EDIT_DECISION_JSON -> previewTimelineImport(item)
+            IncomingDocumentKind.EDIT_DECISION_JSON -> previewTimelineImport(item, mediaRelocation)
             IncomingDocumentKind.CAPTION_SRT,
             IncomingDocumentKind.CAPTION_WEBVTT -> previewCaptionImport(item)
         }
@@ -368,7 +371,10 @@ class IncomingDocumentImportRouter @Inject constructor(
         )
     }
 
-    private suspend fun previewTimelineImport(item: IncomingDocumentItem): IncomingDocumentImportPreview {
+    private suspend fun previewTimelineImport(
+        item: IncomingDocumentItem,
+        mediaRelocation: Map<String, Uri>,
+    ): IncomingDocumentImportPreview {
         val format = when (item.kind) {
             IncomingDocumentKind.TIMELINE_OTIO -> TimelineImportEngine.Format.OTIO
             IncomingDocumentKind.TIMELINE_FCPXML -> TimelineImportEngine.Format.FCPXML
@@ -377,7 +383,7 @@ class IncomingDocumentImportRouter @Inject constructor(
             else -> null
         } ?: return invalid(item, "Unknown timeline interchange format.")
         val fidelity = timelineImportEngine.roundTripFidelity(format)
-        val result = timelineImportEngine.import(item.uri, format = format)
+        val result = timelineImportEngine.import(item.uri, format = format, mediaRelocation = mediaRelocation)
         val report = result.fidelityReport
         val reportIssues = report?.issues.orEmpty().map { issue ->
             "${issue.severity.name.lowercase().replaceFirstChar { it.uppercase() }}: ${issue.message}"
@@ -424,7 +430,7 @@ class IncomingDocumentImportRouter @Inject constructor(
             ),
             warnings = (result.warnings + reportIssues).distinct(),
             canImportNow = false,
-            timelineImport = result.takeIf { it.readyForAtomicCommit },
+            timelineImport = result,
         )
     }
 
