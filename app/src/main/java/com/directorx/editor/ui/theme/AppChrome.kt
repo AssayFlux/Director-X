@@ -92,7 +92,8 @@ fun DirectorXPrimaryButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    contentPadding: PaddingValues = PaddingValues(horizontal = Spacing.lg, vertical = 16.dp)
 ) {
     val colors = LocalDirectorXColors.current
     val interactionSource = remember { MutableInteractionSource() }
