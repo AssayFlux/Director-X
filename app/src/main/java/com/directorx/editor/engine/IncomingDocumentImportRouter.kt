@@ -403,8 +403,7 @@ class IncomingDocumentImportRouter @Inject constructor(
             body = if (schemaTooNew) {
                 "This edit-decision file was rejected before any timeline state was created. Export it with a compatible Director X schema version."
             } else {
-                "Director X parsed the timeline and prepared an atomic editor commit without mutating project state. " +
-                    "Open an editor project to apply it after the report and any relinks are accepted."
+                "Director X parsed the timeline without changing project data. Review the report and resolve any missing media, then choose Apply to replace the active timeline as one undoable edit."
             },
             details = baseDetails(item) + listOf(
                 "Expected fidelity: ${fidelity.displayName}",
