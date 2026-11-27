@@ -264,6 +264,8 @@
     <string name="export_chapter_markers_description">Include chapter markers in supported timeline exports.</string>
     <string name="export_timeline_exchange">Timeline Exchange</string>
     <string name="export_timeline_exchange_description">Hand the edit off to another timeline tool without committing to a media render.</string>
+    <string name="export_timeline_import">Import timeline</string>
+    <string name="export_timeline_import_description">Choose an OTIO, FCPXML, EDL, or Director X edit-decision file to inspect before applying.</string>
     <string name="export_save_to_gallery_cd">Save to gallery</string>
     <string name="export_studio_quality">Studio quality</string>
     <string name="export_great_for_youtube">Great for YouTube/social</string>
@@ -3718,4 +3720,21 @@
     <string name="color_grading_plus_required">Advanced colour grading and LUT imports are available with Director X Plus or Pro.</string>
     <string name="export_tier_adjusted_to_limit">Director X %1$s export adjusted to %2$s.</string>
     <string name="batch_export_pro_required">Batch export is available with Director X Pro.</string>
+    <string name="timeline_exchange_save_copy">Save a copy</string>
+    <string name="timeline_exchange_share">Share</string>
+    <string name="timeline_exchange_apply">Apply to timeline</string>
+    <string name="timeline_exchange_relink_media">Relink missing media</string>
+    <string name="vm_timeline_import_applied_toast">Timeline imported. You can undo this change from the editor.</string>
+    <string name="vm_timeline_import_not_ready">This timeline import is not ready to apply. Resolve its blocking issues first.</string>
+    <string name="vm_timeline_import_document_failed">Director X could not create a safe timeline import document.</string>
+    <string name="vm_timeline_import_choose_readable">Choose a readable document from the system file picker.</string>
+    <string name="vm_timeline_import_unsupported">Unsupported timeline file. Choose .otio, .fcpxml, .edl, or .clearcut-edl.json.</string>
+    <string name="vm_timeline_import_preview_failed">Director X could not preview this timeline file.</string>
+    <string name="vm_timeline_export_unavailable">The timeline export is no longer available. Export it again.</string>
+    <string name="vm_timeline_export_share_chooser">Share timeline file</string>
+    <string name="vm_timeline_export_share_failed">Director X could not share this timeline file.</string>
+    <string name="vm_timeline_export_saved">Saved %1$s</string>
+    <string name="vm_timeline_export_save_failed">Director X could not save the timeline file to that location.</string>
+    <string name="vm_timeline_relink_invalid_source">Choose a local media document from the system file picker.</string>
+    <string name="vm_timeline_relink_permission_failed">Director X could not keep access to that media file. Choose it again from the system file picker.</string>
 </resources>

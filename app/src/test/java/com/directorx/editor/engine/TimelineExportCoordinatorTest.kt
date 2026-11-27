@@ -162,6 +162,34 @@ class TimelineExportCoordinatorTest {
         }
     }
 
+    @Test
+    fun markerLossIsReportedForFormatsThatDoNotSerializeTimelineMarkers() {
+        val validator = TimelineExchangeValidator()
+        val marker = TimelineMarker(id = "chapter-1", timeMs = 250L, label = "Opening")
+
+        listOf(
+            TimelineExchangeEngine.TimelineExchangeFormat.OTIO,
+            TimelineExchangeEngine.TimelineExchangeFormat.FCPXML,
+            TimelineExchangeEngine.TimelineExchangeFormat.EDL_CMX3600,
+        ).forEach { format ->
+            val report = validator.validateExport(
+                format = format,
+                tracks = listOf(videoTrack()),
+                textOverlays = emptyList(),
+                timelineMarkers = listOf(marker),
+            )
+            assertTrue("$format should disclose marker loss", report.warnings.any { it.path == "Timeline markers" })
+        }
+
+        val portableJson = validator.validateExport(
+            format = TimelineExchangeEngine.TimelineExchangeFormat.EDIT_DECISION_JSON,
+            tracks = listOf(videoTrack()),
+            textOverlays = emptyList(),
+            timelineMarkers = listOf(marker),
+        )
+        assertFalse(portableJson.warnings.any { it.path == "Timeline markers" })
+    }
+
     private fun videoTrack() = Track(
         id = "video",
         type = TrackType.VIDEO,

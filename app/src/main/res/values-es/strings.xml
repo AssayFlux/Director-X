@@ -3445,4 +3445,23 @@
     <string name="color_grading_plus_required">La gradación de color avanzada y la importación de LUT están disponibles con Director X Plus o Pro.</string>
     <string name="export_tier_adjusted_to_limit">La exportación de Director X %1$s se ajustó a %2$s.</string>
     <string name="batch_export_pro_required">La exportación por lotes está disponible con Director X Pro.</string>
+    <string name="export_timeline_import">Importar línea de tiempo</string>
+    <string name="export_timeline_import_description">Elige un archivo OTIO, FCPXML, EDL o de decisiones de edición de Director X para revisarlo antes de aplicarlo.</string>
+    <string name="timeline_exchange_save_copy">Guardar una copia</string>
+    <string name="timeline_exchange_share">Compartir</string>
+    <string name="timeline_exchange_apply">Aplicar a la línea de tiempo</string>
+    <string name="timeline_exchange_relink_media">Volver a vincular medios ausentes</string>
+    <string name="vm_timeline_import_applied_toast">Línea de tiempo importada. Puedes deshacer este cambio desde el editor.</string>
+    <string name="vm_timeline_import_not_ready">Esta importación de línea de tiempo no está lista. Resuelve primero los problemas que la bloquean.</string>
+    <string name="vm_timeline_import_document_failed">Director X no pudo crear un documento seguro para importar la línea de tiempo.</string>
+    <string name="vm_timeline_import_choose_readable">Elige un documento legible desde el selector de archivos del sistema.</string>
+    <string name="vm_timeline_import_unsupported">Archivo de línea de tiempo no compatible. Elige .otio, .fcpxml, .edl o .clearcut-edl.json.</string>
+    <string name="vm_timeline_import_preview_failed">Director X no pudo previsualizar este archivo de línea de tiempo.</string>
+    <string name="vm_timeline_export_unavailable">La exportación de línea de tiempo ya no está disponible. Expórtala de nuevo.</string>
+    <string name="vm_timeline_export_share_chooser">Compartir archivo de línea de tiempo</string>
+    <string name="vm_timeline_export_share_failed">Director X no pudo compartir este archivo de línea de tiempo.</string>
+    <string name="vm_timeline_export_saved">Guardado %1$s</string>
+    <string name="vm_timeline_export_save_failed">Director X no pudo guardar el archivo de línea de tiempo en esa ubicación.</string>
+    <string name="vm_timeline_relink_invalid_source">Elige un documento multimedia local desde el selector de archivos del sistema.</string>
+    <string name="vm_timeline_relink_permission_failed">Director X no pudo conservar el acceso a ese archivo multimedia. Vuelve a elegirlo desde el selector de archivos del sistema.</string>
 </resources>

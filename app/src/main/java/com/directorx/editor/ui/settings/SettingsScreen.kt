@@ -28,6 +28,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -56,8 +57,8 @@ import androidx.core.content.FileProvider
 import androidx.core.content.ContextCompat
 import com.directorx.editor.BuildConfig
 import com.directorx.editor.R
-import com.directorx.editor.engine.EncoderCapabilityProbe
 import com.directorx.editor.engine.AppearanceMode
+import com.directorx.editor.engine.EncoderCapabilityProbe
 import com.directorx.editor.engine.AppSettings
 import com.directorx.editor.engine.PrivacyDashboard
 import com.directorx.editor.engine.ThumbnailCachePolicy
@@ -840,10 +841,19 @@ fun SettingsScreen(
                         .padding(top = 14.dp),
                     horizontalAlignment = Alignment.End
                 ) {
+                    val signatureIsDarkAppearance = LocalDirectorXColors.current.mode in setOf(
+                        AppearanceMode.MIDNIGHT_CINEMA,
+                        AppearanceMode.GRAPHITE_LUXE,
+                    )
                     Image(
                         painter = painterResource(R.drawable.assayflux_signature),
                         contentDescription = "Md Safarujjaman's signature",
                         contentScale = ContentScale.Fit,
+                        colorFilter = if (signatureIsDarkAppearance) {
+                            ColorFilter.tint(LocalDirectorXColors.current.subtextStrong)
+                        } else {
+                            null
+                        },
                         modifier = Modifier
                             .width(112.dp)
                             .height(56.dp)

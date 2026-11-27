@@ -2,7 +2,7 @@ name: Android full verification
 
 on:
   push:
-    branches: [Alpha]
+    branches: [Alpha, Beta]
   pull_request:
     branches: [Alpha]
   workflow_dispatch:

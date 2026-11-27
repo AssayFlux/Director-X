@@ -258,6 +258,7 @@ fun BoxScope.EditorPrimaryPanelHost(
             onExportFcpxml = viewModel::exportToFcpxml,
             onExportEdl = viewModel::exportToEdl,
             onExportEditDecisionJson = viewModel::exportToEditDecisionJson,
+            onImportTimeline = viewModel::previewTimelineExchangeImport,
             onCaptureFrame = viewModel::captureFrame,
             onExportSubtitles = { format -> viewModel.exportSubtitles(format) },
             onClearAiUsageLedger = viewModel::clearAiUsageLedger,

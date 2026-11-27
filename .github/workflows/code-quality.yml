@@ -2,7 +2,7 @@ name: Code quality and security analysis
 
 on:
   push:
-    branches: [Alpha]
+    branches: [Alpha, Beta]
   pull_request:
     branches: [Alpha]
   schedule:

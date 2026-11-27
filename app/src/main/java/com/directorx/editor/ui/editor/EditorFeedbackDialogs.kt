@@ -7,6 +7,8 @@ import com.directorx.editor.ui.theme.LocalDirectorXColors
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -16,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.IosShare
 import androidx.compose.material.icons.filled.ReportProblem
@@ -26,6 +29,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -34,6 +38,8 @@ import com.directorx.editor.R
 import com.directorx.editor.engine.TimelineExchangeValidator
 import com.directorx.editor.ui.theme.DirectorXDialogIcon
 import com.directorx.editor.ui.theme.DirectorXPrimaryButton
+import com.directorx.editor.ui.theme.DirectorXSecondaryButton
+import com.directorx.editor.ui.DirectorXTestTags
 import com.directorx.editor.ui.theme.Radius
 import com.directorx.editor.ui.theme.Spacing
 
@@ -182,7 +188,11 @@ private fun BackupImportReportBody(
 @Composable
 internal fun TimelineExchangeReportDialog(
     feedback: TimelineExchangeFeedback,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    onShare: () -> Unit = {},
+    onSaveCopy: () -> Unit = {},
+    onApplyImport: () -> Unit = {},
+    onRelinkMedia: () -> Unit = {},
 ) {
     val semanticColors = LocalDirectorXColors.current
     val accent = when {
@@ -209,12 +219,54 @@ internal fun TimelineExchangeReportDialog(
             TimelineExchangeReportBody(feedback = feedback, accent = accent)
         },
         confirmButton = {
-            DirectorXPrimaryButton(
-                text = stringResource(R.string.done),
-                onClick = onDismiss,
-                icon = Icons.Default.Check
-            )
+            if (feedback.timelineImport?.unresolvedMediaUris?.isNotEmpty() == true) {
+                DirectorXPrimaryButton(
+                    text = stringResource(R.string.timeline_exchange_relink_media),
+                    onClick = onRelinkMedia,
+                    icon = Icons.Default.Check,
+                    modifier = Modifier.testTag(DirectorXTestTags.TIMELINE_EXCHANGE_RELINK),
+                )
+            } else if (feedback.succeeded && feedback.timelineImport?.readyForAtomicCommit == true) {
+                DirectorXPrimaryButton(
+                    text = stringResource(R.string.timeline_exchange_apply),
+                    onClick = onApplyImport,
+                    icon = Icons.Default.Check,
+                    modifier = Modifier.testTag(DirectorXTestTags.TIMELINE_EXCHANGE_APPLY),
+                )
+            } else if (feedback.succeeded && feedback.outputFilePath != null) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
+                ) {
+                    DirectorXPrimaryButton(
+                        text = stringResource(R.string.timeline_exchange_save_copy),
+                        onClick = onSaveCopy,
+                        icon = Icons.Default.Download,
+                        modifier = Modifier.weight(1f).testTag(DirectorXTestTags.TIMELINE_EXCHANGE_SAVE_COPY),
+                    )
+                    DirectorXSecondaryButton(
+                        text = stringResource(R.string.timeline_exchange_share),
+                        onClick = onShare,
+                        icon = Icons.Default.IosShare,
+                        modifier = Modifier.weight(1f).testTag(DirectorXTestTags.TIMELINE_EXCHANGE_SHARE),
+                    )
+                }
+            } else {
+                DirectorXPrimaryButton(
+                    text = stringResource(R.string.done),
+                    onClick = onDismiss,
+                    icon = Icons.Default.Check,
+                )
+            }
         },
+        dismissButton = if (feedback.outputFilePath != null || (feedback.timelineImport != null && (feedback.succeeded || feedback.timelineImport.unresolvedMediaUris.isNotEmpty()))) {
+            {
+                DirectorXSecondaryButton(
+                    text = stringResource(R.string.done),
+                    onClick = onDismiss,
+                )
+            }
+        } else null,
         containerColor = semanticColors.panelHighest,
         titleContentColor = semanticColors.text,
         textContentColor = semanticColors.subtext,

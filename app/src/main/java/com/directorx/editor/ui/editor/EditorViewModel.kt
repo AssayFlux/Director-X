@@ -48,6 +48,10 @@ import com.directorx.editor.engine.ConnectivityObserver
 import com.directorx.editor.engine.IncomingDocumentImportRouter
 import com.directorx.editor.engine.IncomingDocumentIntentParser
 import com.directorx.editor.engine.IncomingDocumentItem
+import com.directorx.editor.engine.IncomingDocumentKind
+import com.directorx.editor.engine.IncomingDocumentImportStatus
+import com.directorx.editor.engine.TimelineExchangeEngine
+import com.directorx.editor.engine.TimelineImportEngine
 import com.directorx.editor.engine.TextBasedEditEngine
 import com.directorx.editor.engine.AutoChapterEngine
 import com.directorx.editor.engine.TalkingHeadFramingEngine
@@ -448,7 +452,11 @@ data class TimelineExchangeFeedback(
     val title: String,
     val body: String,
     val outputFileName: String?,
-    val report: TimelineExchangeValidator.Report
+    val report: TimelineExchangeValidator.Report,
+    val outputFilePath: String? = null,
+    val timelineImport: TimelineImportEngine.ImportResult? = null,
+    val timelineImportSource: IncomingDocumentItem? = null,
+    val timelineImportRelocations: Map<String, Uri> = emptyMap(),
 )
 
 @HiltViewModel
@@ -4344,8 +4352,6 @@ class EditorViewModel @Inject constructor(
             return
         }
 
-        saveUndoState("Speaker auto-switch")
-
         val primaryTrack = videoTracks.first()
         val primaryClips = primaryTrack.clips.sortedBy { it.timelineStartMs }
         if (primaryClips.isEmpty()) return
@@ -4358,11 +4364,16 @@ class EditorViewModel @Inject constructor(
             val sourceClip = sourceTrack.clips.firstOrNull {
                 it.timelineStartMs <= cut.timelineMs && it.timelineEndMs > cut.timelineMs
             } ?: continue
+            val sourceStartMs = sourceClip.trimStartMs
+            val sourceEndMs = sourceClip.trimEndMs
+            if (sourceEndMs <= sourceStartMs) continue
 
-            val trimStart = (cut.timelineMs - sourceClip.timelineStartMs + sourceClip.trimStartMs)
-                .coerceIn(sourceClip.trimStartMs, sourceClip.trimEndMs - 100L)
-            val trimEnd = ((nextCutMs - sourceClip.timelineStartMs) + sourceClip.trimStartMs)
-                .coerceIn(trimStart + 100L, sourceClip.trimEndMs)
+            // A one-millisecond floor keeps short source clips valid; the old
+            // fixed 100 ms coerceIn bounds could throw when a source was shorter.
+            val trimStart = (cut.timelineMs - sourceClip.timelineStartMs + sourceStartMs)
+                .coerceIn(sourceStartMs, sourceEndMs - 1L)
+            val trimEnd = ((nextCutMs - sourceClip.timelineStartMs) + sourceStartMs)
+                .coerceIn(trimStart + 1L, sourceEndMs)
 
             newClips += sourceClip.copy(
                 id = java.util.UUID.randomUUID().toString(),
@@ -4373,6 +4384,7 @@ class EditorViewModel @Inject constructor(
         }
 
         if (newClips.isEmpty()) return
+        saveUndoState("Speaker auto-switch")
 
         _state.update { s ->
             val updatedTracks = s.tracks.map { track ->
@@ -4930,6 +4942,122 @@ class EditorViewModel @Inject constructor(
         }
     }
 
+    /** Open a read-only timeline interchange preview from the editor's Exchange panel. */
+    fun previewTimelineExchangeImport(uri: Uri, mediaRelocation: Map<String, Uri> = emptyMap()) {
+        if (uri.scheme != "content") {
+            showToast(text(R.string.vm_timeline_import_choose_readable), ToastSeverity.Warning)
+            return
+        }
+        viewModelScope.launch {
+            val item = timelineImportItem(uri)
+            if (item == null) {
+                showToast(text(R.string.vm_timeline_import_unsupported), ToastSeverity.Warning)
+                return@launch
+            }
+            runCatching {
+                appContext.contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION,
+                )
+            }
+            val preview = runCatching {
+                withContext(Dispatchers.IO) { incomingDocumentImportRouter.preview(item, mediaRelocation) }
+            }.getOrElse { error ->
+                AppLog.e("EditorViewModel", "Timeline import preview failed", error)
+                showToast(text(R.string.vm_timeline_import_preview_failed), ToastSeverity.Error)
+                return@launch
+            }
+            val format = when (item.kind) {
+                IncomingDocumentKind.TIMELINE_OTIO -> TimelineExchangeEngine.TimelineExchangeFormat.OTIO
+                IncomingDocumentKind.TIMELINE_FCPXML -> TimelineExchangeEngine.TimelineExchangeFormat.FCPXML
+                IncomingDocumentKind.TIMELINE_EDL -> TimelineExchangeEngine.TimelineExchangeFormat.EDL_CMX3600
+                IncomingDocumentKind.EDIT_DECISION_JSON -> TimelineExchangeEngine.TimelineExchangeFormat.EDIT_DECISION_JSON
+                else -> return@launch
+            }
+            val issues = buildList {
+                preview.details.forEach { detail ->
+                    add(TimelineExchangeValidator.Issue(
+                        severity = TimelineExchangeValidator.Severity.INFO,
+                        path = item.displayName,
+                        message = detail,
+                    ))
+                }
+                preview.warnings.forEach { warning ->
+                    add(TimelineExchangeValidator.Issue(
+                        severity = TimelineExchangeValidator.Severity.WARNING,
+                        path = item.displayName,
+                        message = warning,
+                    ))
+                }
+                if (preview.status != IncomingDocumentImportStatus.READY) {
+                    add(TimelineExchangeValidator.Issue(
+                        severity = TimelineExchangeValidator.Severity.ERROR,
+                        path = item.displayName,
+                        message = preview.body,
+                    ))
+                }
+            }
+            val canParse = preview.status == IncomingDocumentImportStatus.READY
+            _state.update { state ->
+                state.copyMedia { media ->
+                    media.copy(
+                        timelineExchangeFeedback = TimelineExchangeFeedback(
+                            succeeded = canParse,
+                            title = preview.title,
+                            body = preview.body + when {
+                                preview.timelineImport?.readyForAtomicCommit == true -> "\n\nReview the report, then choose Apply to replace this project's timeline as one undoable edit."
+                                preview.timelineImport?.unresolvedMediaUris?.isNotEmpty() == true -> "\n\nRelink each missing source to a local media file before applying. No project data has been changed."
+                                else -> "\n\nNo project data has been changed. Resolve the reported issues before importing."
+                            },
+                            outputFileName = null,
+                            timelineImport = preview.timelineImport,
+                            timelineImportSource = item,
+                            timelineImportRelocations = mediaRelocation,
+                            report = TimelineExchangeValidator.Report(
+                                format = format,
+                                direction = TimelineExchangeValidator.Direction.IMPORT,
+                                issues = issues,
+                            ),
+                        ),
+                    )
+                }
+            }
+        }
+    }
+
+    private fun timelineImportItem(uri: Uri): IncomingDocumentItem? {
+        val displayName = resolveMediaDisplayName(appContext, uri)
+            ?.substringAfterLast('/')
+            ?.substringAfterLast('\\')
+            ?.trim()
+            ?.takeIf { it.isNotBlank() }
+            ?: uri.lastPathSegment?.substringAfterLast('/')?.trim()?.takeIf { it.isNotBlank() }
+            ?: return null
+        val kind = IncomingDocumentIntentParser.classify(displayName, null)
+            ?.takeIf {
+                it == IncomingDocumentKind.TIMELINE_OTIO ||
+                    it == IncomingDocumentKind.TIMELINE_FCPXML ||
+                    it == IncomingDocumentKind.TIMELINE_EDL ||
+                    it == IncomingDocumentKind.EDIT_DECISION_JSON
+            }
+            ?: return null
+        val sizeBytes = runCatching {
+            appContext.contentResolver.query(uri, arrayOf(OpenableColumns.SIZE), null, null, null)?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    val index = cursor.getColumnIndex(OpenableColumns.SIZE)
+                    if (index >= 0 && !cursor.isNull(index)) cursor.getLong(index) else null
+                } else null
+            }
+        }.getOrNull()
+        return IncomingDocumentItem(
+            uri = uri,
+            kind = kind,
+            displayName = displayName,
+            mimeType = runCatching { appContext.contentResolver.getType(uri) }.getOrNull(),
+            sizeBytes = sizeBytes,
+        )
+    }
+
     fun exportToOtio() = exportTimeline(TimelineExportCoordinator.Format.OTIO)
 
     fun exportToFcpxml() = exportTimeline(TimelineExportCoordinator.Format.FCPXML)
@@ -5012,19 +5140,22 @@ class EditorViewModel @Inject constructor(
         }
 
         val file = requireNotNull(outputFile)
-        if (result.report.issues.isNotEmpty()) {
-            _state.update {
-                it.copyMedia { media ->
-                    media.copy(
-                        timelineExchangeFeedback = TimelineExchangeFeedback(
-                            succeeded = true,
-                            title = "$formatName exported with notes",
-                            body = "The file was written, but the receiving editor may need manual cleanup.",
-                            outputFileName = file.name,
-                            report = result.report,
-                        )
+        _state.update {
+            it.copyMedia { media ->
+                media.copy(
+                    timelineExchangeFeedback = TimelineExchangeFeedback(
+                        succeeded = true,
+                        title = if (result.report.issues.isEmpty()) "$formatName exported" else "$formatName exported with notes",
+                        body = if (result.report.issues.isEmpty()) {
+                            "Your timeline file is ready. Save a copy to a location you choose or share it with another app."
+                        } else {
+                            "The file was written, but the receiving editor may need manual cleanup."
+                        },
+                        outputFileName = file.name,
+                        report = result.report,
+                        outputFilePath = file.absolutePath,
                     )
-                }
+                )
             }
         }
         val tail = if (result.report.warnings.isNotEmpty()) " (${result.report.summary})" else ""
@@ -6413,6 +6544,143 @@ class EditorViewModel @Inject constructor(
 
     fun dismissTimelineExchangeFeedback() {
         _state.update { it.copyMedia { media -> media.copy(timelineExchangeFeedback = null) } }
+    }
+
+    /** Relink the next missing source in the currently previewed interchange document. */
+    fun relinkTimelineExchangeImportMedia(replacementUri: Uri) {
+        val feedback = _state.value.timelineExchangeFeedback ?: return
+        val sourceItem = feedback.timelineImportSource ?: return
+        val missingSource = feedback.timelineImport?.unresolvedMediaUris?.firstOrNull() ?: return
+        if (replacementUri.scheme != "content") {
+            showToast(text(R.string.vm_timeline_relink_invalid_source), ToastSeverity.Warning)
+            return
+        }
+        val persistedPermission = runCatching {
+            appContext.contentResolver.takePersistableUriPermission(
+                replacementUri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION,
+            )
+        }
+        if (persistedPermission.isFailure) {
+            showToast(text(R.string.vm_timeline_relink_permission_failed), ToastSeverity.Warning)
+            return
+        }
+        val previouslyRelinkedSources = feedback.timelineImportRelocations
+            .filterValues { it.toString() == missingSource }
+            .keys
+        val relocations = if (previouslyRelinkedSources.isEmpty()) {
+            feedback.timelineImportRelocations + (missingSource to replacementUri)
+        } else {
+            feedback.timelineImportRelocations + previouslyRelinkedSources.associateWith { replacementUri }
+        }
+        previewTimelineExchangeImport(sourceItem.uri, relocations)
+    }
+
+    /**
+     * Atomically replace the active project's timeline with a validated interchange result.
+     * The project identity and non-timeline editor data remain intact; the canonical
+     * ProjectDocument boundary is used to construct the imported timeline payload.
+     */
+    fun applyTimelineExchangeImport(result: TimelineImportEngine.ImportResult) {
+        if (!result.readyForAtomicCommit) {
+            showToast(text(R.string.vm_timeline_import_not_ready), ToastSeverity.Warning)
+            return
+        }
+        val before = _state.value
+        val document = result.toProjectDocument(
+            targetProject = before.project,
+            playheadMs = before.playheadMs,
+        )
+        if (document == null) {
+            showToast(text(R.string.vm_timeline_import_document_failed), ToastSeverity.Error)
+            return
+        }
+        val importedState = document.state
+        val importedTracks = ensureEditorTracks(importedState.tracks)
+        val firstTrack = importedTracks.firstOrNull { it.clips.isNotEmpty() } ?: importedTracks.firstOrNull()
+        val firstClip = firstTrack?.clips?.firstOrNull()
+        saveUndoState("Import timeline")
+        _state.update { current ->
+            recalculateDuration(
+                current.copy(
+                    tracks = importedTracks,
+                    textOverlays = importedState.textOverlays,
+                    timelineMarkers = importedState.timelineMarkers,
+                    playheadMs = importedState.playheadMs,
+                    selectedTrackId = firstTrack?.id,
+                    selectedClipId = firstClip?.id,
+                    selectedClipIds = firstClip?.let { setOf(it.id) }.orEmpty(),
+                )
+            ).copyMedia { media -> media.copy(timelineExchangeFeedback = null) }
+        }
+        rebuildPlayerTimeline()
+        saveProject()
+        showToast(text(R.string.vm_timeline_import_applied_toast))
+    }
+
+    /** Share the last successfully generated interchange file through Android's chooser. */
+    fun shareTimelineExchangeExport() {
+        val feedback = _state.value.timelineExchangeFeedback
+        val file = feedback?.outputFilePath?.let(::File)?.takeIf { it.isFile }
+        if (file == null) {
+            showToast(text(R.string.vm_timeline_export_unavailable))
+            return
+        }
+        runCatching {
+            val uri = androidx.core.content.FileProvider.getUriForFile(
+                appContext,
+                "${appContext.packageName}.fileprovider",
+                file,
+            )
+            val mimeType = timelineExchangeMimeType(file.extension)
+            val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                type = mimeType
+                putExtra(Intent.EXTRA_STREAM, uri)
+                clipData = android.content.ClipData.newUri(appContext.contentResolver, file.name, uri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+            appContext.startActivity(
+                Intent.createChooser(sendIntent, appContext.getString(R.string.vm_timeline_export_share_chooser))
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            )
+        }.onFailure { error ->
+            AppLog.e("EditorViewModel", "Timeline export share failed", error)
+            showToast(text(R.string.vm_timeline_export_share_failed))
+        }
+    }
+
+    /** Copy the generated interchange document to a user-selected SAF destination. */
+    fun saveTimelineExchangeExport(destination: Uri) {
+        val feedback = _state.value.timelineExchangeFeedback
+        val source = feedback?.outputFilePath?.let(::File)?.takeIf { it.isFile }
+        if (source == null) {
+            showToast(text(R.string.vm_timeline_export_unavailable))
+            return
+        }
+        viewModelScope.launch {
+            val result = runCatching {
+                withContext(Dispatchers.IO) {
+                    val target = appContext.contentResolver.openOutputStream(destination, "wt")
+                        ?: error("Unable to open the selected destination")
+                    target.buffered().use { output ->
+                        source.inputStream().buffered().use { input -> input.copyTo(output) }
+                    }
+                }
+            }
+            result.onSuccess {
+                showToast(text(R.string.vm_timeline_export_saved, source.name))
+            }.onFailure { error ->
+                AppLog.e("EditorViewModel", "Timeline export save-copy failed", error)
+                showToast(text(R.string.vm_timeline_export_save_failed))
+            }
+        }
+    }
+
+    private fun timelineExchangeMimeType(extension: String): String = when (extension.lowercase()) {
+        "otio", "json" -> "application/json"
+        "fcpxml", "xml" -> "application/xml"
+        "edl" -> "text/plain"
+        else -> "application/octet-stream"
     }
 
     fun insertFreezeFrame() {

@@ -62,6 +62,16 @@ fun BoxScope.EditorUtilityPanelHost(
 ) {
     val semanticColors = LocalDirectorXColors.current
     val restorableSnapshot by viewModel.restorableSnapshot.collectAsStateWithLifecycle()
+    val timelineExportSaveLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/octet-stream")
+    ) { uri ->
+        uri?.let(viewModel::saveTimelineExchangeExport)
+    }
+    val timelineImportRelinkLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        uri?.let(viewModel::relinkTimelineExchangeImportMedia)
+    }
 
     restorableSnapshot?.let { snapshot ->
         AlertDialog(
@@ -239,7 +249,15 @@ fun BoxScope.EditorUtilityPanelHost(
     state.timelineExchangeFeedback?.let { feedback ->
         TimelineExchangeReportDialog(
             feedback = feedback,
-            onDismiss = viewModel::dismissTimelineExchangeFeedback
+            onDismiss = viewModel::dismissTimelineExchangeFeedback,
+            onShare = viewModel::shareTimelineExchangeExport,
+            onApplyImport = { feedback.timelineImport?.let(viewModel::applyTimelineExchangeImport) },
+            onRelinkMedia = { timelineImportRelinkLauncher.launch(arrayOf("*/*")) },
+            onSaveCopy = {
+                timelineExportSaveLauncher.launch(
+                    feedback.outputFileName ?: "Director-X-Timeline.${feedback.report.format.extension.removePrefix(".")}"
+                )
+            }
         )
     }
 
