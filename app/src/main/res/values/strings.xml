@@ -3720,4 +3720,8 @@
     <string name="color_grading_plus_required">Advanced colour grading and LUT imports are available with Director X Plus or Pro.</string>
     <string name="export_tier_adjusted_to_limit">Director X %1$s export adjusted to %2$s.</string>
     <string name="batch_export_pro_required">Batch export is available with Director X Pro.</string>
+    <string name="timeline_exchange_save_copy">Save a copy</string>
+    <string name="timeline_exchange_share">Share</string>
+    <string name="timeline_exchange_apply">Apply to timeline</string>
+    <string name="vm_timeline_import_applied_toast">Timeline imported. You can undo this change from the editor.</string>
 </resources>
