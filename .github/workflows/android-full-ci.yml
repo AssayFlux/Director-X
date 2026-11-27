@@ -71,6 +71,8 @@ jobs:
           python3 scripts/validate_distribution_readiness.py --self-test
           python3 scripts/validate_distribution_readiness.py
           python3 scripts/verify_otio_exports.py --self-test
+          python3 scripts/check_apk_size.py --self-test
+          python3 scripts/check_16kb_alignment.py --self-test
       - name: Verify native SBOM and provenance
         run: bash ./gradlew --no-daemon :app:generateNativeSbom
       - name: Verify resolved dependency advisory floors
@@ -148,8 +150,7 @@ jobs:
           if-no-files-found: ignore
 
   managed-device-instrumentation:
-    # Deferred until engineering PRs are integrated into Alpha.
-    # Exercise device and artifact lanes on pull requests as well as Alpha pushes.
+    # Run on Alpha pull requests and Alpha/Beta pushes as part of full acceptance.
     name: Android instrumentation & room migration tests
     runs-on: ubuntu-24.04
     timeout-minutes: 85
@@ -203,8 +204,7 @@ jobs:
           retention-days: 7
 
   api37-managed-device:
-    # Deferred until engineering PRs are integrated into Alpha.
-    # Exercise device and artifact lanes on pull requests as well as Alpha pushes.
+    # Run on Alpha pull requests and Alpha/Beta pushes as part of full acceptance.
     name: Android API 37 managed device acceptance
     runs-on: ubuntu-24.04
     timeout-minutes: 120
