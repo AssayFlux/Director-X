@@ -1763,41 +1763,39 @@ fun ExportSheet(
             description = stringResource(R.string.export_timeline_exchange_description),
             accent = LocalDirectorXColors.current.accent
         ) {
-            Column(
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(Spacing.sm)
+                horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
+                verticalAlignment = Alignment.CenterVertically
             ) {
+                val exchangeButtonPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp)
                 DirectorXSecondaryButton(
                     text = stringResource(R.string.export_otio),
                     onClick = onExportOtio,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = TouchTarget.minimum),
-                    contentColor = LocalDirectorXColors.current.accent
+                    modifier = Modifier.weight(1f).height(TouchTarget.minimum),
+                    contentColor = LocalDirectorXColors.current.accent,
+                    contentPadding = exchangeButtonPadding
                 )
                 DirectorXSecondaryButton(
                     text = stringResource(R.string.export_fcpxml),
                     onClick = onExportFcpxml,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = TouchTarget.minimum),
-                    contentColor = LocalDirectorXColors.current.accent
+                    modifier = Modifier.weight(1f).height(TouchTarget.minimum),
+                    contentColor = LocalDirectorXColors.current.accent,
+                    contentPadding = exchangeButtonPadding
                 )
                 DirectorXSecondaryButton(
                     text = stringResource(R.string.export_edl),
                     onClick = onExportEdl,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = TouchTarget.minimum),
-                    contentColor = LocalDirectorXColors.current.accent
+                    modifier = Modifier.weight(1f).height(TouchTarget.minimum),
+                    contentColor = LocalDirectorXColors.current.accent,
+                    contentPadding = exchangeButtonPadding
                 )
                 DirectorXSecondaryButton(
                     text = stringResource(R.string.export_edit_decision_json),
                     onClick = onExportEditDecisionJson,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = TouchTarget.minimum),
-                    contentColor = LocalDirectorXColors.current.accent
+                    modifier = Modifier.weight(1f).height(TouchTarget.minimum),
+                    contentColor = LocalDirectorXColors.current.accent,
+                    contentPadding = exchangeButtonPadding
                 )
             }
         }
