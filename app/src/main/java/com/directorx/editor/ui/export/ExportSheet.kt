@@ -1770,13 +1770,17 @@ fun ExportSheet(
                 DirectorXSecondaryButton(
                     text = stringResource(R.string.export_otio),
                     onClick = onExportOtio,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .heightIn(min = TouchTarget.minimum),
                     contentColor = LocalDirectorXColors.current.accent
                 )
                 DirectorXSecondaryButton(
                     text = stringResource(R.string.export_fcpxml),
                     onClick = onExportFcpxml,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .heightIn(min = TouchTarget.minimum),
                     contentColor = LocalDirectorXColors.current.accent
                 )
             }
@@ -1788,13 +1792,17 @@ fun ExportSheet(
                 DirectorXSecondaryButton(
                     text = stringResource(R.string.export_edl),
                     onClick = onExportEdl,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .heightIn(min = TouchTarget.minimum),
                     contentColor = LocalDirectorXColors.current.accent
                 )
                 DirectorXSecondaryButton(
                     text = stringResource(R.string.export_edit_decision_json),
                     onClick = onExportEditDecisionJson,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .heightIn(min = TouchTarget.minimum),
                     contentColor = LocalDirectorXColors.current.accent
                 )
             }
