@@ -576,7 +576,9 @@ fun PreviewPanel(
                                         text = stringResource(R.string.editor_add_media),
                                         onClick = onAddMedia,
                                         icon = Icons.Default.Add,
-                                        modifier = Modifier.testTag(DirectorXTestTags.EDITOR_EMPTY_ADD_MEDIA)
+                                        modifier = Modifier
+                                            .testTag(DirectorXTestTags.EDITOR_EMPTY_ADD_MEDIA)
+                                            .requiredHeight(56.dp)
                                     )
                                 }
                             }

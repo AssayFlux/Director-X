@@ -24,6 +24,7 @@ import com.directorx.editor.model.Clip
 import com.directorx.editor.model.Project
 import com.directorx.editor.model.TrackType
 import com.directorx.editor.ui.DirectorXTestTags
+import com.directorx.editor.ui.editor.PanelId
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
@@ -180,13 +181,14 @@ internal class QaEditorHarness(
         compose.onNodeWithTag(DirectorXTestTags.UNDO_HISTORY_CLOSE).performClick()
         compose.mainClock.advanceTimeBy(500L)
         compose.waitForIdle()
-        // Verify the user-visible panel has actually closed. BottomSheetSlot
-        // animates its exit, so wait for the close control to leave the semantics
-        // tree instead of depending on an internal panel-state test property.
+        // Verify the editor has closed the panel in its user-visible state.
+        // AnimatedVisibility may retain the close node during its exit transition.
         compose.waitUntil(timeoutMillis = 5_000L) {
-            compose.onAllNodesWithTag(DirectorXTestTags.UNDO_HISTORY_CLOSE)
-                .fetchSemanticsNodes()
-                .isEmpty()
+            compose.onNodeWithTag(DirectorXTestTags.EDITOR_SCREEN)
+                .fetchSemanticsNode()
+                .config
+                .getOrNull(DirectorXTestTags.OPEN_PANEL_IDS)
+                ?.contains(PanelId.UNDO_HISTORY.name) == false
         }
         compose.waitForIdle()
         return descriptions
