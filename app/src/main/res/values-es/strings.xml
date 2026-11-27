@@ -3451,4 +3451,6 @@
     <string name="timeline_exchange_share">Compartir</string>
     <string name="timeline_exchange_apply">Aplicar a la línea de tiempo</string>
     <string name="vm_timeline_import_applied_toast">Línea de tiempo importada. Puedes deshacer este cambio desde el editor.</string>
+    <string name="vm_timeline_import_not_ready">Esta importación de línea de tiempo no está lista. Resuelve primero los problemas que la bloquean.</string>
+    <string name="vm_timeline_import_document_failed">Director X no pudo crear un documento seguro para importar la línea de tiempo.</string>
 </resources>
