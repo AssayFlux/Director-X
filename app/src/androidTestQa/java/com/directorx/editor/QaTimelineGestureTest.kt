@@ -235,8 +235,9 @@ class QaTimelineGestureTest {
 
     private fun closeKeyframePanel() {
         // The close action is in the fixed panel header, outside the scrollable
-        // content column. Invoke its accessible action, then advance the exit
-        // transition before checking the panel state.
+        // content column. Close it through its accessible action, then advance the
+        // exit transition before checking the panel state.
+        compose.onNodeWithTag(DirectorXTestTags.KEYFRAME_EDITOR_CLOSE).performClick()
         compose.mainClock.advanceTimeBy(500L)
         compose.waitForIdle()
         compose.waitUntil(timeoutMillis = 5_000L) {
