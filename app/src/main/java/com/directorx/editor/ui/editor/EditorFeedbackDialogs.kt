@@ -223,7 +223,7 @@ internal fun TimelineExchangeReportDialog(
                 DirectorXPrimaryButton(
                     text = stringResource(R.string.timeline_exchange_relink_media),
                     onClick = onRelinkMedia,
-                    icon = Icons.Default.Link,
+                    icon = Icons.Default.Refresh,
                     modifier = Modifier.testTag(DirectorXTestTags.TIMELINE_EXCHANGE_RELINK),
                 )
             } else if (feedback.succeeded && feedback.timelineImport?.readyForAtomicCommit == true) {
