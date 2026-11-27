@@ -5012,7 +5012,7 @@ class EditorViewModel @Inject constructor(
     private fun timelineImportItem(uri: Uri): IncomingDocumentItem? {
         val displayName = resolveMediaDisplayName(appContext, uri)
             ?.substringAfterLast('/')
-            ?.substringAfterLast(92.toChar())
+            ?.substringAfterLast('\\')
             ?.trim()
             ?.takeIf { it.isNotBlank() }
             ?: uri.lastPathSegment?.substringAfterLast('/')?.trim()?.takeIf { it.isNotBlank() }
