@@ -122,7 +122,7 @@ fun DirectorXPrimaryButton(
             disabledContainerColor = containerColor,
             disabledContentColor = colors.disabledText
         ),
-        contentPadding = PaddingValues(horizontal = Spacing.lg, vertical = 16.dp),
+        contentPadding = contentPadding,
         modifier = modifier
             .graphicsLayer {
                 scaleX = buttonScale
@@ -161,7 +161,8 @@ fun DirectorXSecondaryButton(
     modifier: Modifier = Modifier,
     icon: ImageVector? = null,
     contentColor: Color = Color.Unspecified,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    contentPadding: PaddingValues = PaddingValues(horizontal = Spacing.lg, vertical = 16.dp)
 ) {
     val colors = LocalDirectorXColors.current
     val resolvedContentColor = if (contentColor == Color.Unspecified) colors.text else contentColor
