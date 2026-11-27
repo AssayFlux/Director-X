@@ -264,6 +264,8 @@
     <string name="export_chapter_markers_description">Include chapter markers in supported timeline exports.</string>
     <string name="export_timeline_exchange">Timeline Exchange</string>
     <string name="export_timeline_exchange_description">Hand the edit off to another timeline tool without committing to a media render.</string>
+    <string name="export_timeline_import">Import timeline</string>
+    <string name="export_timeline_import_description">Choose an OTIO, FCPXML, EDL, or Director X edit-decision file to inspect before applying.</string>
     <string name="export_save_to_gallery_cd">Save to gallery</string>
     <string name="export_studio_quality">Studio quality</string>
     <string name="export_great_for_youtube">Great for YouTube/social</string>
