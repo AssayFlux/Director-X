@@ -4352,8 +4352,6 @@ class EditorViewModel @Inject constructor(
             return
         }
 
-        saveUndoState("Speaker auto-switch")
-
         val primaryTrack = videoTracks.first()
         val primaryClips = primaryTrack.clips.sortedBy { it.timelineStartMs }
         if (primaryClips.isEmpty()) return
@@ -4366,11 +4364,16 @@ class EditorViewModel @Inject constructor(
             val sourceClip = sourceTrack.clips.firstOrNull {
                 it.timelineStartMs <= cut.timelineMs && it.timelineEndMs > cut.timelineMs
             } ?: continue
+            val sourceStartMs = sourceClip.trimStartMs
+            val sourceEndMs = sourceClip.trimEndMs
+            if (sourceEndMs <= sourceStartMs) continue
 
-            val trimStart = (cut.timelineMs - sourceClip.timelineStartMs + sourceClip.trimStartMs)
-                .coerceIn(sourceClip.trimStartMs, sourceClip.trimEndMs - 100L)
-            val trimEnd = ((nextCutMs - sourceClip.timelineStartMs) + sourceClip.trimStartMs)
-                .coerceIn(trimStart + 100L, sourceClip.trimEndMs)
+            // A one-millisecond floor keeps short source clips valid; the old
+            // fixed 100 ms coerceIn bounds could throw when a source was shorter.
+            val trimStart = (cut.timelineMs - sourceClip.timelineStartMs + sourceStartMs)
+                .coerceIn(sourceStartMs, sourceEndMs - 1L)
+            val trimEnd = ((nextCutMs - sourceClip.timelineStartMs) + sourceStartMs)
+                .coerceIn(trimStart + 1L, sourceEndMs)
 
             newClips += sourceClip.copy(
                 id = java.util.UUID.randomUUID().toString(),
@@ -4381,6 +4384,7 @@ class EditorViewModel @Inject constructor(
         }
 
         if (newClips.isEmpty()) return
+        saveUndoState("Speaker auto-switch")
 
         _state.update { s ->
             val updatedTracks = s.tracks.map { track ->
