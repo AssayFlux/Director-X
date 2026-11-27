@@ -578,7 +578,7 @@ fun PreviewPanel(
                                         icon = Icons.Default.Add,
                                         modifier = Modifier
                                             .testTag(DirectorXTestTags.EDITOR_EMPTY_ADD_MEDIA)
-                                            .requiredHeightIn(min = 56.dp)
+                                            .requiredHeight(56.dp)
                                     )
                                 }
                             }
