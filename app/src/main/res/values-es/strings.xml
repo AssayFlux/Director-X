@@ -3445,4 +3445,10 @@
     <string name="color_grading_plus_required">La gradación de color avanzada y la importación de LUT están disponibles con Director X Plus o Pro.</string>
     <string name="export_tier_adjusted_to_limit">La exportación de Director X %1$s se ajustó a %2$s.</string>
     <string name="batch_export_pro_required">La exportación por lotes está disponible con Director X Pro.</string>
+    <string name="export_timeline_import">Importar línea de tiempo</string>
+    <string name="export_timeline_import_description">Elige un archivo OTIO, FCPXML, EDL o de decisiones de edición de Director X para revisarlo antes de aplicarlo.</string>
+    <string name="timeline_exchange_save_copy">Guardar una copia</string>
+    <string name="timeline_exchange_share">Compartir</string>
+    <string name="timeline_exchange_apply">Aplicar a la línea de tiempo</string>
+    <string name="vm_timeline_import_applied_toast">Línea de tiempo importada. Puedes deshacer este cambio desde el editor.</string>
 </resources>
