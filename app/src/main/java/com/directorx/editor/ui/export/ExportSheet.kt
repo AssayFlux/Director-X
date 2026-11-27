@@ -250,11 +250,18 @@ fun ExportSheet(
     onExportFcpxml: () -> Unit = {},
     onExportEdl: () -> Unit = {},
     onExportEditDecisionJson: () -> Unit = {},
+    onImportTimeline: (Uri) -> Unit = {},
     onExportSubtitles: (SubtitleFormat) -> Unit = {},
     onCaptureFrame: () -> Unit = {},
     onClearAiUsageLedger: () -> Unit = {},
     onClose: () -> Unit
 ) {
+    val timelineImportLauncher = androidx.activity.compose.rememberLauncherForActivityResult(
+        contract = androidx.activity.result.contract.ActivityResultContracts.OpenDocument()
+    ) { uri: Uri? ->
+        uri?.let(onImportTimeline)
+    }
+
     var timingNowMs by remember { mutableLongStateOf(System.currentTimeMillis()) }
     LaunchedEffect(exportState, exportStartTime) {
         timingNowMs = System.currentTimeMillis()
@@ -1763,6 +1770,20 @@ fun ExportSheet(
             description = stringResource(R.string.export_timeline_exchange_description),
             accent = LocalDirectorXColors.current.accent
         ) {
+            DirectorXPrimaryButton(
+                text = stringResource(R.string.export_timeline_import),
+                onClick = { timelineImportLauncher.launch(arrayOf("*/*")) },
+                icon = Icons.Default.FileUpload,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(TouchTarget.minimum + 4.dp)
+                    .testTag(DirectorXTestTags.TIMELINE_EXCHANGE_IMPORT)
+            )
+            Text(
+                text = stringResource(R.string.export_timeline_import_description),
+                color = LocalDirectorXColors.current.subtext,
+                style = MaterialTheme.typography.bodySmall
+            )
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
