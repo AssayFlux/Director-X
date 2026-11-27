@@ -77,9 +77,19 @@ class TimelineExchangeValidator @Inject constructor() {
         format: TimelineExchangeFormat,
         tracks: List<Track>,
         textOverlays: List<TextOverlay>,
-        frameRate: Int = 30
+        frameRate: Int = 30,
+        timelineMarkers: List<com.directorx.editor.model.TimelineMarker> = emptyList(),
     ): Report {
         val issues = mutableListOf<Issue>()
+
+        if (timelineMarkers.isNotEmpty() && format != TimelineExchangeFormat.EDIT_DECISION_JSON) {
+            issues += Issue(
+                severity = Severity.WARNING,
+                path = "Timeline markers",
+                message = "${timelineMarkers.size} timeline marker(s) are not represented by the ${format.displayName} exporter.",
+                suggestedFix = "Export Director X edit-decision JSON as well to preserve marker positions and labels.",
+            )
+        }
 
         if (!format.canExport) {
             issues += Issue(
