@@ -6541,7 +6541,7 @@ class EditorViewModel @Inject constructor(
      */
     fun applyTimelineExchangeImport(result: TimelineImportEngine.ImportResult) {
         if (!result.readyForAtomicCommit) {
-            showToast("This timeline import is not ready to apply. Resolve its blocking issues first.", ToastSeverity.Warning)
+            showToast(text(R.string.vm_timeline_import_not_ready), ToastSeverity.Warning)
             return
         }
         val before = _state.value
@@ -6550,12 +6550,12 @@ class EditorViewModel @Inject constructor(
             playheadMs = before.playheadMs,
         )
         if (document == null) {
-            showToast("Director X could not create a safe timeline import document.", ToastSeverity.Error)
+            showToast(text(R.string.vm_timeline_import_document_failed), ToastSeverity.Error)
             return
         }
         val importedState = document.state
         val importedTracks = ensureEditorTracks(importedState.tracks)
-        val firstTrack = importedTracks.firstOrNull()
+        val firstTrack = importedTracks.firstOrNull { it.clips.isNotEmpty() } ?: importedTracks.firstOrNull()
         val firstClip = firstTrack?.clips?.firstOrNull()
         saveUndoState("Import timeline")
         _state.update { current ->
