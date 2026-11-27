@@ -6553,7 +6553,14 @@ class EditorViewModel @Inject constructor(
                 Intent.FLAG_GRANT_READ_URI_PERMISSION,
             )
         }
-        val relocations = feedback.timelineImportRelocations + (missingSource to replacementUri)
+        val previouslyRelinkedSources = feedback.timelineImportRelocations
+            .filterValues { it.toString() == missingSource }
+            .keys
+        val relocations = if (previouslyRelinkedSources.isEmpty()) {
+            feedback.timelineImportRelocations + (missingSource to replacementUri)
+        } else {
+            feedback.timelineImportRelocations + previouslyRelinkedSources.associateWith { replacementUri }
+        }
         previewTimelineExchangeImport(sourceItem.uri, relocations)
     }
 
