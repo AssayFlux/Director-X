@@ -4942,7 +4942,7 @@ class EditorViewModel @Inject constructor(
         viewModelScope.launch {
             val item = timelineImportItem(uri)
             if (item == null) {
-                showToast("Unsupported timeline file. Choose .otio, .fcpxml, .edl, or .dxedit.", ToastSeverity.Warning)
+                showToast("Unsupported timeline file. Choose .otio, .fcpxml, .edl, or .clearcut-edl.json.", ToastSeverity.Warning)
                 return@launch
             }
             runCatching {
