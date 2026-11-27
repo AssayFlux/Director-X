@@ -61,6 +61,9 @@ class DirectorXSmokeTest {
 
         compose.onNodeWithTag(DirectorXTestTags.EDITOR_EXPORT).assertIsDisplayed().performClick()
         compose.onNodeWithTag(DirectorXTestTags.EXPORT_SHEET).assertIsDisplayed()
+        compose.onNodeWithTag(DirectorXTestTags.TIMELINE_EXCHANGE_IMPORT)
+            .performScrollTo()
+            .assertIsDisplayed()
         compose.assertAccessibilityChecksPass()
         compose.onNodeWithTag(DirectorXTestTags.EXPORT_CLOSE).performClick()
 
