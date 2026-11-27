@@ -259,7 +259,7 @@ internal fun TimelineExchangeReportDialog(
                 )
             }
         },
-        dismissButton = if (feedback.outputFilePath != null || feedback.timelineImport != null) {
+        dismissButton = if (feedback.outputFilePath != null || (feedback.timelineImport != null && (feedback.succeeded || feedback.timelineImport.unresolvedMediaUris.isNotEmpty()))) {
             {
                 DirectorXSecondaryButton(
                     text = stringResource(R.string.done),
