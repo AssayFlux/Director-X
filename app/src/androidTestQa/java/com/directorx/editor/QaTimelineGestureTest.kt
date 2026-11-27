@@ -3,7 +3,6 @@ package com.directorx.editor
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.doubleClick
-import androidx.compose.ui.test.click
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
@@ -236,12 +235,8 @@ class QaTimelineGestureTest {
 
     private fun closeKeyframePanel() {
         // The close action is in the fixed panel header, outside the scrollable
-        // content column. Scrolling it has no parent Scroll semantics and fails
-        // on API 35/37; click the visible header action directly.
-        compose.onNodeWithTag(DirectorXTestTags.KEYFRAME_EDITOR_CLOSE)
-            .performTouchInput { click(center) }
-        // Exercise the actual touch target (not only its semantics action), then
-        // advance the Compose clock so the exit transition can finish deterministically.
+        // content column. Invoke its accessible action, then advance the exit
+        // transition before checking the panel state.
         compose.mainClock.advanceTimeBy(500L)
         compose.waitForIdle()
         compose.waitUntil(timeoutMillis = 5_000L) {
