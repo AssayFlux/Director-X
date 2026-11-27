@@ -6547,11 +6547,19 @@ class EditorViewModel @Inject constructor(
         val feedback = _state.value.timelineExchangeFeedback ?: return
         val sourceItem = feedback.timelineImportSource ?: return
         val missingSource = feedback.timelineImport?.unresolvedMediaUris?.firstOrNull() ?: return
-        runCatching {
+        if (replacementUri.scheme != "content") {
+            showToast(text(R.string.vm_timeline_relink_invalid_source), ToastSeverity.Warning)
+            return
+        }
+        val persistedPermission = runCatching {
             appContext.contentResolver.takePersistableUriPermission(
                 replacementUri,
                 Intent.FLAG_GRANT_READ_URI_PERMISSION,
             )
+        }
+        if (persistedPermission.isFailure) {
+            showToast(text(R.string.vm_timeline_relink_permission_failed), ToastSeverity.Warning)
+            return
         }
         val previouslyRelinkedSources = feedback.timelineImportRelocations
             .filterValues { it.toString() == missingSource }
