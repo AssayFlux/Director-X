@@ -1763,15 +1763,15 @@ fun ExportSheet(
             description = stringResource(R.string.export_timeline_exchange_description),
             accent = LocalDirectorXColors.current.accent
         ) {
-            Row(
+            Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(Spacing.sm)
+                verticalArrangement = Arrangement.spacedBy(Spacing.sm)
             ) {
                 DirectorXSecondaryButton(
                     text = stringResource(R.string.export_otio),
                     onClick = onExportOtio,
                     modifier = Modifier
-                        .weight(1f)
+                        .fillMaxWidth()
                         .heightIn(min = TouchTarget.minimum),
                     contentColor = LocalDirectorXColors.current.accent
                 )
@@ -1779,21 +1779,15 @@ fun ExportSheet(
                     text = stringResource(R.string.export_fcpxml),
                     onClick = onExportFcpxml,
                     modifier = Modifier
-                        .weight(1f)
+                        .fillMaxWidth()
                         .heightIn(min = TouchTarget.minimum),
                     contentColor = LocalDirectorXColors.current.accent
                 )
-            }
-            Spacer(modifier = Modifier.height(Spacing.sm))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(Spacing.sm)
-            ) {
                 DirectorXSecondaryButton(
                     text = stringResource(R.string.export_edl),
                     onClick = onExportEdl,
                     modifier = Modifier
-                        .weight(1f)
+                        .fillMaxWidth()
                         .heightIn(min = TouchTarget.minimum),
                     contentColor = LocalDirectorXColors.current.accent
                 )
@@ -1801,7 +1795,7 @@ fun ExportSheet(
                     text = stringResource(R.string.export_edit_decision_json),
                     onClick = onExportEditDecisionJson,
                     modifier = Modifier
-                        .weight(1f)
+                        .fillMaxWidth()
                         .heightIn(min = TouchTarget.minimum),
                     contentColor = LocalDirectorXColors.current.accent
                 )
