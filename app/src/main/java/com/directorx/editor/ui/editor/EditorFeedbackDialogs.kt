@@ -192,6 +192,7 @@ internal fun TimelineExchangeReportDialog(
     onShare: () -> Unit = {},
     onSaveCopy: () -> Unit = {},
     onApplyImport: () -> Unit = {},
+    onRelinkMedia: () -> Unit = {},
 ) {
     val semanticColors = LocalDirectorXColors.current
     val accent = when {
@@ -218,7 +219,14 @@ internal fun TimelineExchangeReportDialog(
             TimelineExchangeReportBody(feedback = feedback, accent = accent)
         },
         confirmButton = {
-            if (feedback.succeeded && feedback.timelineImport != null) {
+            if (feedback.timelineImport?.unresolvedMediaUris?.isNotEmpty() == true) {
+                DirectorXPrimaryButton(
+                    text = stringResource(R.string.timeline_exchange_relink_media),
+                    onClick = onRelinkMedia,
+                    icon = Icons.Default.Link,
+                    modifier = Modifier.testTag(DirectorXTestTags.TIMELINE_EXCHANGE_RELINK),
+                )
+            } else if (feedback.succeeded && feedback.timelineImport?.readyForAtomicCommit == true) {
                 DirectorXPrimaryButton(
                     text = stringResource(R.string.timeline_exchange_apply),
                     onClick = onApplyImport,
