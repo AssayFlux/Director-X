@@ -48,6 +48,9 @@ import com.directorx.editor.engine.ConnectivityObserver
 import com.directorx.editor.engine.IncomingDocumentImportRouter
 import com.directorx.editor.engine.IncomingDocumentIntentParser
 import com.directorx.editor.engine.IncomingDocumentItem
+import com.directorx.editor.engine.IncomingDocumentKind
+import com.directorx.editor.engine.IncomingDocumentImportStatus
+import com.directorx.editor.engine.TimelineExchangeEngine
 import com.directorx.editor.engine.TextBasedEditEngine
 import com.directorx.editor.engine.AutoChapterEngine
 import com.directorx.editor.engine.TalkingHeadFramingEngine
@@ -4928,6 +4931,115 @@ class EditorViewModel @Inject constructor(
                 showToast(text(R.string.editor_archive_export_failed_toast))
             }
         }
+    }
+
+    /** Open a read-only timeline interchange preview from the editor's Exchange panel. */
+    fun previewTimelineExchangeImport(uri: Uri) {
+        if (uri.scheme != "content") {
+            showToast("Choose a readable document from the system file picker.", ToastSeverity.Warning)
+            return
+        }
+        viewModelScope.launch {
+            val item = timelineImportItem(uri)
+            if (item == null) {
+                showToast("Unsupported timeline file. Choose .otio, .fcpxml, .edl, or .dxedit.", ToastSeverity.Warning)
+                return@launch
+            }
+            runCatching {
+                appContext.contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION,
+                )
+            }
+            val preview = runCatching {
+                withContext(Dispatchers.IO) { incomingDocumentImportRouter.preview(item) }
+            }.getOrElse { error ->
+                AppLog.e("EditorViewModel", "Timeline import preview failed", error)
+                showToast("Director X could not preview this timeline file.", ToastSeverity.Error)
+                return@launch
+            }
+            val format = when (item.kind) {
+                IncomingDocumentKind.TIMELINE_OTIO -> TimelineExchangeEngine.TimelineExchangeFormat.OTIO
+                IncomingDocumentKind.TIMELINE_FCPXML -> TimelineExchangeEngine.TimelineExchangeFormat.FCPXML
+                IncomingDocumentKind.TIMELINE_EDL -> TimelineExchangeEngine.TimelineExchangeFormat.EDL_CMX3600
+                IncomingDocumentKind.EDIT_DECISION_JSON -> TimelineExchangeEngine.TimelineExchangeFormat.EDIT_DECISION_JSON
+                else -> return@launch
+            }
+            val issues = buildList {
+                preview.details.forEach { detail ->
+                    add(TimelineExchangeValidator.Issue(
+                        severity = TimelineExchangeValidator.Severity.INFO,
+                        path = item.displayName,
+                        message = detail,
+                    ))
+                }
+                preview.warnings.forEach { warning ->
+                    add(TimelineExchangeValidator.Issue(
+                        severity = TimelineExchangeValidator.Severity.WARNING,
+                        path = item.displayName,
+                        message = warning,
+                    ))
+                }
+                if (preview.status != IncomingDocumentImportStatus.READY) {
+                    add(TimelineExchangeValidator.Issue(
+                        severity = TimelineExchangeValidator.Severity.ERROR,
+                        path = item.displayName,
+                        message = preview.body,
+                    ))
+                }
+            }
+            val canParse = preview.status == IncomingDocumentImportStatus.READY
+            _state.update { state ->
+                state.copyMedia { media ->
+                    media.copy(
+                        timelineExchangeFeedback = TimelineExchangeFeedback(
+                            succeeded = canParse,
+                            title = preview.title,
+                            body = preview.body + "\\n\\nNo project data has been changed. Applying an imported timeline is not available in this stage.",
+                            outputFileName = null,
+                            report = TimelineExchangeValidator.Report(
+                                format = format,
+                                direction = TimelineExchangeValidator.Direction.IMPORT,
+                                issues = issues,
+                            ),
+                        ),
+                    )
+                }
+            }
+        }
+    }
+
+    private fun timelineImportItem(uri: Uri): IncomingDocumentItem? {
+        val displayName = resolveMediaDisplayName(appContext, uri)
+            ?.substringAfterLast('/')
+            ?.substringAfterLast('\\\\')
+            ?.trim()
+            ?.takeIf { it.isNotBlank() }
+            ?: uri.lastPathSegment?.substringAfterLast('/')?.trim()?.takeIf { it.isNotBlank() }
+            ?: return null
+        val kind = IncomingDocumentIntentParser.classify(displayName, null)
+            ?.takeIf {
+                it == IncomingDocumentKind.TIMELINE_OTIO ||
+                    it == IncomingDocumentKind.TIMELINE_FCPXML ||
+                    it == IncomingDocumentKind.TIMELINE_EDL ||
+                    it == IncomingDocumentKind.EDIT_DECISION_JSON
+            }
+            ?: return null
+        val sizeBytes = runCatching {
+            appContext.contentResolver.query(uri, arrayOf(OpenableColumns.SIZE), null, null, null)?.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    val index = cursor.getColumnIndex(OpenableColumns.SIZE)
+                    if (index >= 0 && !cursor.isNull(index)) cursor.getLong(index) else null
+                } else null
+            }
+        }.getOrNull()
+        return IncomingDocumentItem(
+            uri = uri,
+            kind = kind,
+            displayName = displayName,
+            mimeType = runCatching { appContext.contentResolver.getType(uri) }.getOrNull(),
+            sizeBytes = sizeBytes,
+        )
     }
 
     fun exportToOtio() = exportTimeline(TimelineExportCoordinator.Format.OTIO)
