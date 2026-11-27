@@ -64,6 +64,7 @@ class TimelineExportCoordinator @Inject constructor(
             tracks = request.tracks,
             textOverlays = request.textOverlays,
             frameRate = request.frameRate,
+            timelineMarkers = request.timelineMarkers,
         )
         if (!report.canProceed) {
             return@withContext Result(format = request.format, report = report)
