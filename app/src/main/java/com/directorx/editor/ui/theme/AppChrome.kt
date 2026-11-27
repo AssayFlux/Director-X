@@ -107,11 +107,6 @@ fun DirectorXPrimaryButton(
         animationSpec = tween(durationMillis = Motion.DurationFast, easing = Motion.StandardEasing),
         label = "primaryButtonContainer"
     )
-    val buttonScale by animateFloatAsState(
-        targetValue = if (enabled && pressed) 0.985f else 1f,
-        animationSpec = tween(durationMillis = Motion.DurationFast, easing = Motion.StandardEasing),
-        label = "primaryButtonScale"
-    )
     Button(
         onClick = onClick,
         enabled = enabled,
@@ -125,10 +120,9 @@ fun DirectorXPrimaryButton(
         ),
         contentPadding = contentPadding,
         modifier = modifier
-            .graphicsLayer {
-                scaleX = buttonScale
-                scaleY = buttonScale
-            }
+            // Keep the clickable semantics bounds at their full measured size.
+            // Scaling the Material Button itself shrinks its reported touch target
+            // while pressed (48dp becomes <48dp), which fails accessibility checks.
             .semantics { contentDescription = text }
             .defaultMinSize(minWidth = TouchTarget.minimum, minHeight = TouchTarget.minimum)
             // Material buttons can be measured below the accessibility minimum when

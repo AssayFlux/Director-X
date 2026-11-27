@@ -106,6 +106,7 @@ research/
 !docs/models.md
 !docs/privacy-policy.md
 !docs/play-data-safety.md
+!docs/ENGINEERING_STATUS.md
 CODEX_CHANGELOG.md
 AGENTS.md
 .codex/
