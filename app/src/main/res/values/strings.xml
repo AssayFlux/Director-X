@@ -3735,4 +3735,6 @@
     <string name="vm_timeline_export_share_failed">Director X could not share this timeline file.</string>
     <string name="vm_timeline_export_saved">Saved %1$s</string>
     <string name="vm_timeline_export_save_failed">Director X could not save the timeline file to that location.</string>
+    <string name="vm_timeline_relink_invalid_source">Choose a local media document from the system file picker.</string>
+    <string name="vm_timeline_relink_permission_failed">Director X could not keep access to that media file. Choose it again from the system file picker.</string>
 </resources>
