@@ -3724,4 +3724,6 @@
     <string name="timeline_exchange_share">Share</string>
     <string name="timeline_exchange_apply">Apply to timeline</string>
     <string name="vm_timeline_import_applied_toast">Timeline imported. You can undo this change from the editor.</string>
+    <string name="vm_timeline_import_not_ready">This timeline import is not ready to apply. Resolve its blocking issues first.</string>
+    <string name="vm_timeline_import_document_failed">Director X could not create a safe timeline import document.</string>
 </resources>
