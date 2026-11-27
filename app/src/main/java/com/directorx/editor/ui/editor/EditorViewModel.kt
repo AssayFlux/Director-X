@@ -6573,7 +6573,7 @@ class EditorViewModel @Inject constructor(
         }
         rebuildPlayerTimeline()
         saveProject()
-        showToast("Timeline imported. You can undo this change from the editor.")
+        showToast(text(R.string.vm_timeline_import_applied_toast))
     }
 
     /** Share the last successfully generated interchange file through Android's chooser. */
