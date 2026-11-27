@@ -4995,7 +4995,7 @@ class EditorViewModel @Inject constructor(
                         timelineExchangeFeedback = TimelineExchangeFeedback(
                             succeeded = canParse,
                             title = preview.title,
-                            body = preview.body + "\\n\\nNo project data has been changed. Applying an imported timeline is not available in this stage.",
+                            body = preview.body + "\n\nNo project data has been changed. Applying an imported timeline is not available in this stage.",
                             outputFileName = null,
                             report = TimelineExchangeValidator.Report(
                                 format = format,
@@ -5012,7 +5012,7 @@ class EditorViewModel @Inject constructor(
     private fun timelineImportItem(uri: Uri): IncomingDocumentItem? {
         val displayName = resolveMediaDisplayName(appContext, uri)
             ?.substringAfterLast('/')
-            ?.substringAfterLast('\\\\')
+            ?.substringAfterLast(92.toChar())
             ?.trim()
             ?.takeIf { it.isNotBlank() }
             ?: uri.lastPathSegment?.substringAfterLast('/')?.trim()?.takeIf { it.isNotBlank() }
