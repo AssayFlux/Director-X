@@ -3727,4 +3727,12 @@
     <string name="vm_timeline_import_applied_toast">Timeline imported. You can undo this change from the editor.</string>
     <string name="vm_timeline_import_not_ready">This timeline import is not ready to apply. Resolve its blocking issues first.</string>
     <string name="vm_timeline_import_document_failed">Director X could not create a safe timeline import document.</string>
+    <string name="vm_timeline_import_choose_readable">Choose a readable document from the system file picker.</string>
+    <string name="vm_timeline_import_unsupported">Unsupported timeline file. Choose .otio, .fcpxml, .edl, or .clearcut-edl.json.</string>
+    <string name="vm_timeline_import_preview_failed">Director X could not preview this timeline file.</string>
+    <string name="vm_timeline_export_unavailable">The timeline export is no longer available. Export it again.</string>
+    <string name="vm_timeline_export_share_chooser">Share timeline file</string>
+    <string name="vm_timeline_export_share_failed">Director X could not share this timeline file.</string>
+    <string name="vm_timeline_export_saved">Saved %1$s</string>
+    <string name="vm_timeline_export_save_failed">Director X could not save the timeline file to that location.</string>
 </resources>
