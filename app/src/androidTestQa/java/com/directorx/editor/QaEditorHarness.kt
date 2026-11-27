@@ -176,9 +176,9 @@ internal class QaEditorHarness(
             .map { node ->
                 node.config.getOrNull(SemanticsProperties.Text)?.joinToString("") { it.text }.orEmpty()
             }
-        compose.onNodeWithTag(DirectorXTestTags.UNDO_HISTORY_CLOSE)
-            .performTouchInput { click(center) }
-        // Exercise the actual header hit target and advance its exit transition.
+        // Invoke the accessible close action rather than a raw coordinate tap;
+        // compact layouts and animated panel offsets can otherwise miss the target.
+        compose.onNodeWithTag(DirectorXTestTags.UNDO_HISTORY_CLOSE).performClick()
         compose.mainClock.advanceTimeBy(500L)
         compose.waitForIdle()
         // Verify the user-visible panel has actually closed. BottomSheetSlot
