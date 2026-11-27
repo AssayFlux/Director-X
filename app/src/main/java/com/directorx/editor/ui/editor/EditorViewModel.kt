@@ -51,6 +51,7 @@ import com.directorx.editor.engine.IncomingDocumentItem
 import com.directorx.editor.engine.IncomingDocumentKind
 import com.directorx.editor.engine.IncomingDocumentImportStatus
 import com.directorx.editor.engine.TimelineExchangeEngine
+import com.directorx.editor.engine.TimelineImportEngine
 import com.directorx.editor.engine.TextBasedEditEngine
 import com.directorx.editor.engine.AutoChapterEngine
 import com.directorx.editor.engine.TalkingHeadFramingEngine
@@ -453,6 +454,7 @@ data class TimelineExchangeFeedback(
     val outputFileName: String?,
     val report: TimelineExchangeValidator.Report,
     val outputFilePath: String? = null,
+    val timelineImport: TimelineImportEngine.ImportResult? = null,
 )
 
 @HiltViewModel
@@ -4996,8 +4998,9 @@ class EditorViewModel @Inject constructor(
                         timelineExchangeFeedback = TimelineExchangeFeedback(
                             succeeded = canParse,
                             title = preview.title,
-                            body = preview.body + "\n\nNo project data has been changed. Applying an imported timeline is not available in this stage.",
+                            body = preview.body + if (preview.timelineImport != null) "\n\nReview the report, then choose Apply to replace this project's timeline as one undoable edit." else "\n\nNo project data has been changed. Resolve the reported issues before importing.",
                             outputFileName = null,
+                            timelineImport = preview.timelineImport,
                             report = TimelineExchangeValidator.Report(
                                 format = format,
                                 direction = TimelineExchangeValidator.Direction.IMPORT,
@@ -6529,6 +6532,48 @@ class EditorViewModel @Inject constructor(
 
     fun dismissTimelineExchangeFeedback() {
         _state.update { it.copyMedia { media -> media.copy(timelineExchangeFeedback = null) } }
+    }
+
+    /**
+     * Atomically replace the active project's timeline with a validated interchange result.
+     * The project identity and non-timeline editor data remain intact; the canonical
+     * ProjectDocument boundary is used to construct the imported timeline payload.
+     */
+    fun applyTimelineExchangeImport(result: TimelineImportEngine.ImportResult) {
+        if (!result.readyForAtomicCommit) {
+            showToast("This timeline import is not ready to apply. Resolve its blocking issues first.", ToastSeverity.Warning)
+            return
+        }
+        val before = _state.value
+        val document = result.toProjectDocument(
+            targetProject = before.project,
+            playheadMs = before.playheadMs,
+        )
+        if (document == null) {
+            showToast("Director X could not create a safe timeline import document.", ToastSeverity.Error)
+            return
+        }
+        val importedState = document.state
+        val importedTracks = ensureEditorTracks(importedState.tracks)
+        val firstTrack = importedTracks.firstOrNull()
+        val firstClip = firstTrack?.clips?.firstOrNull()
+        saveUndoState("Import timeline")
+        _state.update { current ->
+            recalculateDuration(
+                current.copy(
+                    tracks = importedTracks,
+                    textOverlays = importedState.textOverlays,
+                    timelineMarkers = importedState.timelineMarkers,
+                    playheadMs = importedState.playheadMs,
+                    selectedTrackId = firstTrack?.id,
+                    selectedClipId = firstClip?.id,
+                    selectedClipIds = firstClip?.let { setOf(it.id) }.orEmpty(),
+                )
+            ).copyMedia { media -> media.copy(timelineExchangeFeedback = null) }
+        }
+        rebuildPlayerTimeline()
+        saveProject()
+        showToast("Timeline imported. You can undo this change from the editor.")
     }
 
     /** Share the last successfully generated interchange file through Android's chooser. */
