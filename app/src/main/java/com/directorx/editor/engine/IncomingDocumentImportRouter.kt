@@ -26,6 +26,7 @@ data class IncomingDocumentImportPreview(
     val warnings: List<String> = emptyList(),
     val canImportNow: Boolean = false,
     val captionImport: CaptionImportEngine.Preview? = null,
+    val timelineImport: TimelineImportEngine.ImportResult? = null,
 )
 
 @Singleton
@@ -423,7 +424,8 @@ class IncomingDocumentImportRouter @Inject constructor(
                 },
             ),
             warnings = (result.warnings + reportIssues).distinct(),
-            canImportNow = false,
+            canImportNow = result.readyForAtomicCommit,
+            timelineImport = result.takeIf { it.readyForAtomicCommit },
         )
     }
 
