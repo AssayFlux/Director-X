@@ -231,13 +231,13 @@ internal fun TimelineExchangeReportDialog(
                     horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
                 ) {
                     DirectorXPrimaryButton(
-                        text = "Save a copy",
+                        text = stringResource(R.string.timeline_exchange_save_copy),
                         onClick = onSaveCopy,
                         icon = Icons.Default.Download,
                         modifier = Modifier.weight(1f).testTag(DirectorXTestTags.TIMELINE_EXCHANGE_SAVE_COPY),
                     )
                     DirectorXSecondaryButton(
-                        text = "Share",
+                        text = stringResource(R.string.timeline_exchange_share),
                         onClick = onShare,
                         icon = Icons.Default.IosShare,
                         modifier = Modifier.weight(1f).testTag(DirectorXTestTags.TIMELINE_EXCHANGE_SHARE),
