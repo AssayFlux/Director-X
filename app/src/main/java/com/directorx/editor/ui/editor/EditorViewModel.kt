@@ -6650,7 +6650,7 @@ class EditorViewModel @Inject constructor(
         val feedback = _state.value.timelineExchangeFeedback
         val source = feedback?.outputFilePath?.let(::File)?.takeIf { it.isFile }
         if (source == null) {
-            showToast("The timeline export is no longer available. Export it again.")
+            showToast(text(R.string.vm_timeline_export_unavailable))
             return
         }
         viewModelScope.launch {
