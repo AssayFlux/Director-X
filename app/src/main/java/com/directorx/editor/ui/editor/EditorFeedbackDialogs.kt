@@ -103,40 +103,12 @@ internal fun BackupImportReportDialog(
             BackupImportReportBody(feedback = feedback, accent = accent)
         },
         confirmButton = {
-            if (feedback.succeeded && feedback.outputFilePath != null) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
-                ) {
-                    DirectorXPrimaryButton(
-                        text = "Save a copy",
-                        onClick = onSaveCopy,
-                        icon = Icons.Default.Download,
-                        modifier = Modifier.weight(1f).testTag(DirectorXTestTags.TIMELINE_EXCHANGE_SAVE_COPY),
-                    )
-                    DirectorXSecondaryButton(
-                        text = "Share",
-                        onClick = onShare,
-                        icon = Icons.Default.IosShare,
-                        modifier = Modifier.weight(1f).testTag(DirectorXTestTags.TIMELINE_EXCHANGE_SHARE),
-                    )
-                }
-            } else {
-                DirectorXPrimaryButton(
-                    text = stringResource(R.string.done),
-                    onClick = onDismiss,
-                    icon = Icons.Default.Check,
-                )
-            }
+            DirectorXPrimaryButton(
+                text = stringResource(R.string.done),
+                onClick = onDismiss,
+                icon = Icons.Default.Check
+            )
         },
-        dismissButton = if (feedback.succeeded && feedback.outputFilePath != null) {
-            {
-                DirectorXSecondaryButton(
-                    text = stringResource(R.string.done),
-                    onClick = onDismiss,
-                )
-            }
-        } else null,
         containerColor = semanticColors.panelHighest,
         titleContentColor = semanticColors.text,
         textContentColor = semanticColors.subtext,
@@ -245,12 +217,40 @@ internal fun TimelineExchangeReportDialog(
             TimelineExchangeReportBody(feedback = feedback, accent = accent)
         },
         confirmButton = {
-            DirectorXPrimaryButton(
-                text = stringResource(R.string.done),
-                onClick = onDismiss,
-                icon = Icons.Default.Check
-            )
+            if (feedback.succeeded && feedback.outputFilePath != null) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(Spacing.sm),
+                ) {
+                    DirectorXPrimaryButton(
+                        text = "Save a copy",
+                        onClick = onSaveCopy,
+                        icon = Icons.Default.Download,
+                        modifier = Modifier.weight(1f).testTag(DirectorXTestTags.TIMELINE_EXCHANGE_SAVE_COPY),
+                    )
+                    DirectorXSecondaryButton(
+                        text = "Share",
+                        onClick = onShare,
+                        icon = Icons.Default.IosShare,
+                        modifier = Modifier.weight(1f).testTag(DirectorXTestTags.TIMELINE_EXCHANGE_SHARE),
+                    )
+                }
+            } else {
+                DirectorXPrimaryButton(
+                    text = stringResource(R.string.done),
+                    onClick = onDismiss,
+                    icon = Icons.Default.Check,
+                )
+            }
         },
+        dismissButton = if (feedback.succeeded && feedback.outputFilePath != null) {
+            {
+                DirectorXSecondaryButton(
+                    text = stringResource(R.string.done),
+                    onClick = onDismiss,
+                )
+            }
+        } else null,
         containerColor = semanticColors.panelHighest,
         titleContentColor = semanticColors.text,
         textContentColor = semanticColors.subtext,
