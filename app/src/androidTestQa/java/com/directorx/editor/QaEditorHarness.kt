@@ -24,6 +24,7 @@ import com.directorx.editor.model.Clip
 import com.directorx.editor.model.Project
 import com.directorx.editor.model.TrackType
 import com.directorx.editor.ui.DirectorXTestTags
+import com.directorx.editor.ui.editor.PanelId
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertTrue
