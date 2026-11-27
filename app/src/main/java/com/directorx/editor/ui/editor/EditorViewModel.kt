@@ -455,6 +455,8 @@ data class TimelineExchangeFeedback(
     val report: TimelineExchangeValidator.Report,
     val outputFilePath: String? = null,
     val timelineImport: TimelineImportEngine.ImportResult? = null,
+    val timelineImportSource: IncomingDocumentItem? = null,
+    val timelineImportRelocations: Map<String, Uri> = emptyMap(),
 )
 
 @HiltViewModel
@@ -4937,7 +4939,7 @@ class EditorViewModel @Inject constructor(
     }
 
     /** Open a read-only timeline interchange preview from the editor's Exchange panel. */
-    fun previewTimelineExchangeImport(uri: Uri) {
+    fun previewTimelineExchangeImport(uri: Uri, mediaRelocation: Map<String, Uri> = emptyMap()) {
         if (uri.scheme != "content") {
             showToast("Choose a readable document from the system file picker.", ToastSeverity.Warning)
             return
@@ -4955,7 +4957,7 @@ class EditorViewModel @Inject constructor(
                 )
             }
             val preview = runCatching {
-                withContext(Dispatchers.IO) { incomingDocumentImportRouter.preview(item) }
+                withContext(Dispatchers.IO) { incomingDocumentImportRouter.preview(item, mediaRelocation) }
             }.getOrElse { error ->
                 AppLog.e("EditorViewModel", "Timeline import preview failed", error)
                 showToast("Director X could not preview this timeline file.", ToastSeverity.Error)
@@ -4998,9 +5000,15 @@ class EditorViewModel @Inject constructor(
                         timelineExchangeFeedback = TimelineExchangeFeedback(
                             succeeded = canParse,
                             title = preview.title,
-                            body = preview.body + if (preview.timelineImport != null) "\n\nReview the report, then choose Apply to replace this project's timeline as one undoable edit." else "\n\nNo project data has been changed. Resolve the reported issues before importing.",
+                            body = preview.body + when {
+                                preview.timelineImport?.readyForAtomicCommit == true -> "\n\nReview the report, then choose Apply to replace this project's timeline as one undoable edit."
+                                preview.timelineImport?.unresolvedMediaUris?.isNotEmpty() == true -> "\n\nRelink each missing source to a local media file before applying. No project data has been changed."
+                                else -> "\n\nNo project data has been changed. Resolve the reported issues before importing."
+                            },
                             outputFileName = null,
                             timelineImport = preview.timelineImport,
+                            timelineImportSource = item,
+                            timelineImportRelocations = mediaRelocation,
                             report = TimelineExchangeValidator.Report(
                                 format = format,
                                 direction = TimelineExchangeValidator.Direction.IMPORT,
@@ -6532,6 +6540,21 @@ class EditorViewModel @Inject constructor(
 
     fun dismissTimelineExchangeFeedback() {
         _state.update { it.copyMedia { media -> media.copy(timelineExchangeFeedback = null) } }
+    }
+
+    /** Relink the next missing source in the currently previewed interchange document. */
+    fun relinkTimelineExchangeImportMedia(replacementUri: Uri) {
+        val feedback = _state.value.timelineExchangeFeedback ?: return
+        val sourceItem = feedback.timelineImportSource ?: return
+        val missingSource = feedback.timelineImport?.unresolvedMediaUris?.firstOrNull() ?: return
+        runCatching {
+            appContext.contentResolver.takePersistableUriPermission(
+                replacementUri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION,
+            )
+        }
+        val relocations = feedback.timelineImportRelocations + (missingSource to replacementUri)
+        previewTimelineExchangeImport(sourceItem.uri, relocations)
     }
 
     /**
