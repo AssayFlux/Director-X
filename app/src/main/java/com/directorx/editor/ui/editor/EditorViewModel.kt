@@ -4941,13 +4941,13 @@ class EditorViewModel @Inject constructor(
     /** Open a read-only timeline interchange preview from the editor's Exchange panel. */
     fun previewTimelineExchangeImport(uri: Uri, mediaRelocation: Map<String, Uri> = emptyMap()) {
         if (uri.scheme != "content") {
-            showToast("Choose a readable document from the system file picker.", ToastSeverity.Warning)
+            showToast(text(R.string.vm_timeline_import_choose_readable), ToastSeverity.Warning)
             return
         }
         viewModelScope.launch {
             val item = timelineImportItem(uri)
             if (item == null) {
-                showToast("Unsupported timeline file. Choose .otio, .fcpxml, .edl, or .clearcut-edl.json.", ToastSeverity.Warning)
+                showToast(text(R.string.vm_timeline_import_unsupported), ToastSeverity.Warning)
                 return@launch
             }
             runCatching {
@@ -4960,7 +4960,7 @@ class EditorViewModel @Inject constructor(
                 withContext(Dispatchers.IO) { incomingDocumentImportRouter.preview(item, mediaRelocation) }
             }.getOrElse { error ->
                 AppLog.e("EditorViewModel", "Timeline import preview failed", error)
-                showToast("Director X could not preview this timeline file.", ToastSeverity.Error)
+                showToast(text(R.string.vm_timeline_import_preview_failed), ToastSeverity.Error)
                 return@launch
             }
             val format = when (item.kind) {
@@ -6611,7 +6611,7 @@ class EditorViewModel @Inject constructor(
         val feedback = _state.value.timelineExchangeFeedback
         val file = feedback?.outputFilePath?.let(::File)?.takeIf { it.isFile }
         if (file == null) {
-            showToast("The timeline export is no longer available. Export it again.")
+            showToast(text(R.string.vm_timeline_export_unavailable))
             return
         }
         runCatching {
@@ -6628,12 +6628,12 @@ class EditorViewModel @Inject constructor(
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
             appContext.startActivity(
-                Intent.createChooser(sendIntent, "Share timeline file")
+                Intent.createChooser(sendIntent, appContext.getString(R.string.vm_timeline_export_share_chooser))
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             )
         }.onFailure { error ->
             AppLog.e("EditorViewModel", "Timeline export share failed", error)
-            showToast("Director X could not share this timeline file.")
+            showToast(text(R.string.vm_timeline_export_share_failed))
         }
     }
 
@@ -6656,10 +6656,10 @@ class EditorViewModel @Inject constructor(
                 }
             }
             result.onSuccess {
-                showToast("Saved ${source.name}")
+                showToast(text(R.string.vm_timeline_export_saved, source.name))
             }.onFailure { error ->
                 AppLog.e("EditorViewModel", "Timeline export save-copy failed", error)
-                showToast("Director X could not save the timeline file to that location.")
+                showToast(text(R.string.vm_timeline_export_save_failed))
             }
         }
     }
