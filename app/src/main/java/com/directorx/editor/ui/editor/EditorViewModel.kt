@@ -6660,10 +6660,10 @@ class EditorViewModel @Inject constructor(
         viewModelScope.launch {
             val result = runCatching {
                 withContext(Dispatchers.IO) {
-                    val output = appContext.contentResolver.openOutputStream(destination, "wt")
+                    val target = appContext.contentResolver.openOutputStream(destination, "wt")
                         ?: error("Unable to open the selected destination")
-                    source.inputStream().buffered().use { input ->
-                        output.buffered().use { target -> input.copyTo(target) }
+                    target.buffered().use { output ->
+                        source.inputStream().buffered().use { input -> input.copyTo(output) }
                     }
                 }
             }
