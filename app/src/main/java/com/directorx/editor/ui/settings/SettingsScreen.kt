@@ -850,7 +850,7 @@ fun SettingsScreen(
                         contentDescription = "Md Safarujjaman's signature",
                         contentScale = ContentScale.Fit,
                         colorFilter = if (signatureIsDarkAppearance) {
-                            ColorFilter.tint(Color(0xFFC5CBD1))
+                            ColorFilter.tint(LocalDirectorXColors.current.subtextStrong)
                         } else {
                             null
                         },
