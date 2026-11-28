@@ -204,8 +204,7 @@ jobs:
           retention-days: 7
 
   api37-managed-device:
-    # Deferred until engineering PRs are integrated into Alpha.
-    # Exercise device and artifact lanes on pull requests as well as Alpha pushes.
+    # Run on Alpha pull requests and Alpha/Beta pushes as part of full acceptance.
     name: Android API 37 managed device acceptance
     runs-on: ubuntu-24.04
     timeout-minutes: 120
@@ -260,8 +259,7 @@ jobs:
           retention-days: 14
 
   qa-package:
-    # Deferred until engineering PRs are integrated into Alpha.
-    # Exercise device and artifact lanes on pull requests as well as Alpha pushes.
+    # Run on Alpha pull requests and Alpha/Beta pushes as part of full acceptance.
     name: QA apk assembly & native allignment
     runs-on: ubuntu-24.04
     timeout-minutes: 90
